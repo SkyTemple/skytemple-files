@@ -1,0 +1,144 @@
+# Creates BitStreams from KAO models.
+# file is 16-bytes aligned!
+from sys import maxsize
+
+import bitstring
+from bitstring import BitStream
+
+from skytemple_files.common.util import read_bytes
+from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN, KAO_FILE_BYTE_ALIGNMENT, \
+    KAO_IMG_PAL_B_SIZE
+
+DEBUG = False
+
+
+class KaoWriter:
+    def __init__(self, kao: Kao):
+        self.kao = kao
+        self.new_data = None
+        pass
+
+    def write(self, force_rebuild_all=False, update_kao=True) -> BitStream:
+        """
+        Builds a new kao file as a BitStream.
+        The entire Kao starting from the first modified image needs
+        to be rebuilt, because the game expects the images in order and seems to use
+        the TOC pointers to indicate the size of image chunks, so there can be
+        no empty spaces.
+
+        This also updates the data representation of the original kao, unless
+        update_kao is False.
+        """
+        from skytemple_files.common.types.file_types import FileType
+
+        # At worst all images are 848 bytes long - However assuming this would allocate over 300MB...
+        # Let's just use 10MB. BitStream will enlarge if necessary.
+        self.new_data = BitStream(80000000)
+        current_null_pointer = 0  # Undefined behavior if the first pointers are a NULL pointer!
+
+        # To increase overall performance, first find the index of the first modified image, we will start from
+        # there and just copy the rest
+        if not force_rebuild_all:
+            start_index = maxsize
+            start_subindex = maxsize
+            for i, si, k in self.kao.loaded_kaos_flat:
+                if k.modified:
+                    if update_kao:
+                        k.modified = False
+                    if i < start_index:
+                        start_index = i
+                        start_subindex = si
+
+            if start_index == maxsize:
+                if DEBUG:
+                    print(f"KaoWriter: Nothing changed, returning original")
+                # Nothing was changed
+                return self.kao.original_data
+            else:
+                # Copy image data from beginning to that point - this will also copy the old TOC but we will write over that
+                current_toc_offset = self.kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
+                pnt = read_bytes(self.kao.original_data, current_toc_offset, SUBENTRY_LEN).intle
+                if pnt < 0:
+                    current_image_offset = -pnt
+                else:
+                    current_image_offset = pnt
+                self.new_data[0:current_image_offset*8] = self.kao.original_data[0:current_image_offset*8]
+                if DEBUG:
+                    print(f"KaoWriter: First modified image: {start_index}, {start_subindex} "
+                          f"- will start at TOC {current_toc_offset} and img {current_image_offset}.")
+        else:
+            start_index = start_subindex = 0
+            size_toc = (self.kao.toc_len * SUBENTRIES * SUBENTRY_LEN)
+            current_toc_offset = self.kao.first_toc
+            current_image_offset = current_toc_offset + size_toc
+
+        # Rebuild KAO
+        for i in range(start_index, self.kao.toc_len):
+            for si in range(start_subindex, SUBENTRIES):
+                if self.kao.has_loaded(i, si):
+                    # Image is loaded, use image data for new pointer
+                    kao_image = self.kao.get(i, si)
+                    image_data_bs = kao_image.get_internal()
+                    image_data_start = 0
+                    image_data_end = int(len(image_data_bs) / 8)
+                else:
+                    # Image is not loaded, get image data directly, is faster than building KaoImage first
+                    pnt = read_bytes(self.kao.original_data, current_toc_offset, SUBENTRY_LEN).intle
+                    if pnt < 0:
+                        # Null pointer, write new null pointer
+                        if DEBUG:
+                            print(f"KaoWriter: Null pointer for {i},{si} at TOC {current_toc_offset}: "
+                                  f"Written NULL: {current_null_pointer}")
+                        # Write NULL pointer
+                        self._update_toc_entry(current_toc_offset, bitstring.pack(
+                            f'intle:{SUBENTRY_LEN * 8}', current_null_pointer
+                        ))
+                        current_toc_offset += SUBENTRY_LEN
+                        continue
+                    image_data_bs = self.kao.original_data
+                    image_data_start = pnt
+                    image_data_end = image_data_start + KAO_IMG_PAL_B_SIZE + FileType.AT4PX.cont_size(
+                        image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE
+                    )
+                # Update the TOC entry to point to the current image offset
+                self._update_toc_entry(current_toc_offset, bitstring.pack(
+                    f'intle:{SUBENTRY_LEN * 8}', current_image_offset
+                ))
+                #assert len(self.new_data) / 8 == current_size  # Size must not have changed
+                current_image_end = current_image_offset + (image_data_end - image_data_start)
+                # Write image data starting at current offset
+                self.new_data[current_image_offset*8:current_image_end*8] = image_data_bs[image_data_start*8:image_data_end*8]
+                #assert len(self.new_data) / 8 == current_size  # Size must not have changed
+                # Update NULL pointer
+                current_null_pointer = -current_image_end
+                if DEBUG:
+                    print(f"KaoWriter:    Writing image {i},{si} at TOC {current_toc_offset}: "
+                          f"Image at {current_image_offset}, size {current_image_offset}. "
+                          f"Resulting end: {current_image_end}. "
+                          f"Resulting NULL pointer: {current_null_pointer}")
+                current_image_offset = current_image_end
+                current_toc_offset += SUBENTRY_LEN
+
+            start_subindex = 0  # For all next passes always start with the first image of course!
+
+        # Cut off image buffer, but make sure it keeps being 16 byte aligned.
+        remainder = current_image_offset % KAO_FILE_BYTE_ALIGNMENT
+        if remainder > 0:
+            current_image_offset += KAO_FILE_BYTE_ALIGNMENT - remainder
+        current_size = int(len(self.new_data) / 8)
+        if current_image_offset > current_size:
+            self.new_data.append(BitStream((current_image_offset - current_size)*8))
+        else:
+            self.new_data = self.new_data[:current_image_offset * 8]
+
+        # Checks:
+        #(len(self.new_data) / 8, current_image_offset, len(self.new_data) / 8 < current_image_offset,
+        #(current_image_offset % 16), (len(self.new_data[:current_image_offset * 8]) / 8) % 16)
+
+        if update_kao:
+            self.kao.original_data = self.new_data
+
+        return self.new_data
+
+    def _update_toc_entry(self, offs, bs: BitStream):
+        self.new_data[offs*8:(offs+SUBENTRY_LEN)*8] = bs

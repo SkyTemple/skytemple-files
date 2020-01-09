@@ -1,0 +1,137 @@
+import bitstring
+from bitstring import BitStream
+
+from skytemple_files.common.util import read_bytes
+
+# Operations are encoded in command bytes (CMD):
+# PHASE 1
+CMD_1_ZERO_OUT      = 0x80  # All values below
+CMD_1_FILL_OUT      = 0x80  # All values equal/above until next
+CMD_1_COPY_BYTES    = 0xC0  # All values equal/above
+# PHASE 2
+CMD_2_SEEK_OFFSET   = 0x80  # All values below
+CMD_2_FILL_LOW      = 0x80  # All values equal/above until next
+CMD_2_COPY_LOW      = 0xC0  # All values equal/above
+
+
+DEBUG = False
+
+
+# noinspection PyAttributeOutsideInit
+class BpcTilemapDecompressor:
+    def __init__(self, compressed_data: BitStream, stop_when_size):
+        self.compressed_data = compressed_data
+        self.stop_when_size = stop_when_size
+        self.max_size = int(len(compressed_data) / 8)
+        self.reset()
+
+    def reset(self):
+        self.decompressed_data = BitStream(self.stop_when_size*8)
+        self.cursor = 0
+        self.bytes_written = 0
+        pass
+
+    def decompress(self) -> BitStream:
+        self.reset()
+        if DEBUG:
+            print(f"BPC tilemap decompression start....")
+
+        # Handle high bytes
+        while self.cursor < self.max_size and self.bytes_written < self.stop_when_size:
+            self._process_phase1()
+
+        if DEBUG:
+            print(f"End Phase 1. Begin Phase 2")
+
+        if self.bytes_written != self.stop_when_size:
+            raise ValueError(f"BPC Tilemap Decompressor: Phase1: End result length unexpected. "
+                             f"Should be {self.stop_when_size}, is {self.bytes_written} "
+                             f"Diff: {self.bytes_written - self.stop_when_size}")
+
+        self.bytes_written = 0
+
+        # Handle low bytes
+        while self.cursor < self.max_size and self.bytes_written < self.stop_when_size:
+            self._process_phase2()
+
+        if self.bytes_written != self.stop_when_size:
+            raise ValueError(f"BPC Tilemap Decompressor: Phase1: End result length unexpected. "
+                             f"Should be {self.stop_when_size}, is {self.bytes_written} "
+                             f"Diff: {self.bytes_written - self.stop_when_size}")
+
+        return self.decompressed_data
+
+    def _process_phase1(self):
+        if DEBUG:
+            cursor_before = self.cursor
+            wr_before = self.bytes_written
+        cmd = self._read()
+        if DEBUG:
+            print(f"cmd: {cmd:02x}")
+
+        if cmd < CMD_1_ZERO_OUT:
+            # cmd encodes how many 0 words to write
+            if DEBUG:
+                print(f"READ 0 - WRITE {cmd+1}")
+            for i in range(-1, cmd):
+                self._write(0)
+        elif CMD_1_FILL_OUT <= cmd < CMD_1_COPY_BYTES:
+            # cmd - CMD_1_FILL_OUT is the nb of words to write with the next byte as high byte
+            param = self._read() << 8
+            if DEBUG:
+                print(f"READ 1 - WRITE {cmd - (CMD_1_FILL_OUT-1)}")
+            for i in range(CMD_1_FILL_OUT-1, cmd):
+                self._write(param)
+        else:  # elif cmd > CMD_1_COPY_BYTES:
+            # cmd - CMD_1_COPY_BYTES is the nb of words to write with the sequence of bytes as high byte
+            if DEBUG:
+                print(f"READ {cmd - (CMD_1_COPY_BYTES-1)} - WRITE {cmd - (CMD_1_COPY_BYTES-1)}")
+            for i in range(CMD_1_COPY_BYTES-1, cmd):
+                param = self._read() << 8
+                self._write(param)
+
+        if DEBUG:
+            print(f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}")
+
+    def _process_phase2(self):
+        cmd = self._read()
+        if DEBUG:
+            print(f"cmd: {cmd:02x}")
+
+        if cmd < CMD_2_SEEK_OFFSET:
+            # We skip over the nb of words indicated by the cmd
+            if DEBUG:
+                print(f"READ 0 - WRITE {cmd+1}")
+            self.bytes_written += (cmd + 1) * 2
+            if self.bytes_written > self.stop_when_size:
+                raise ValueError("BPC Tilemap Decompressor: Reached EOF while writing decompressed data.")
+        elif CMD_2_SEEK_OFFSET <= cmd < CMD_2_COPY_LOW:
+            # cmd - CMD_2_SEEK_OFFSET is the nb of words to write with the next byte as low byte
+            value_at_pos = read_bytes(self.decompressed_data, self.bytes_written, 2).uintle
+            value_at_pos |= self._read()
+            if DEBUG:
+                print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
+            for i in range(CMD_2_SEEK_OFFSET-1, cmd):
+                self._write(value_at_pos)
+        else:  # elif cmd > CMD_2_COPY_LOW:
+            # cmd - CMD_2_COPY_LOW is the nb of words to write with the sequence of bytes as low byte
+            if DEBUG:
+                print(f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}")
+            for i in range(CMD_2_COPY_LOW-1, cmd):
+                value_at_pos = read_bytes(self.decompressed_data, self.bytes_written, 2).uintle
+                value_at_pos |= self._read()
+                self._write(value_at_pos)
+
+    def _read(self, bytes=1):
+        """Read a single byte and increase cursor"""
+        if self.cursor >= self.max_size:
+            raise ValueError("BPC Tilemap Decompressor: Reached EOF while reading compressed data.")
+        oc = self.cursor
+        self.cursor += bytes
+        return read_bytes(self.compressed_data, oc, bytes).uintle
+
+    def _write(self, pattern_to_write):
+        """Writes the pattern to the output as LE"""
+        self.decompressed_data.overwrite(bitstring.pack('uintle:16', pattern_to_write), self.bytes_written*8)
+        self.bytes_written += 2
+        pass

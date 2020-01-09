@@ -143,7 +143,7 @@ def kao_to_pil(kao: KaoImage) -> Image:
     from skytemple_files.common.types.file_types import FileType
 
     # Generates an array where every three entries a new color begins (r, g, b, r, g, b...)
-    uncompressed_image_data = FileType.AT4PX.unserialize(kao.compressed_img_data).decompress()
+    uncompressed_image_data = FileType.AT4PX.deserialize(kao.compressed_img_data).decompress()
 
     return uncompressed_kao_to_pil(kao.pal_data, uncompressed_image_data)
 

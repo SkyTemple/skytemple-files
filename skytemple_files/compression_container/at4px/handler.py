@@ -1,5 +1,3 @@
-from typing import List
-
 from bitstring import BitStream
 
 from skytemple_files.common.types.data_handler import DataHandler
@@ -9,7 +7,7 @@ from skytemple_files.compression_container.at4px.model import At4px
 
 class At4pxHandler(DataHandler[At4px]):
     @classmethod
-    def unserialize(cls, data: BitStream) -> At4px:
+    def deserialize(cls, data: BitStream, **kwargs) -> At4px:
         """Load a AT4PX container into a high-level representation"""
         if not cls.matches(data):
             raise ValueError("The provided data is not an AT4PX container.")
@@ -39,8 +37,3 @@ class At4pxHandler(DataHandler[At4px]):
             return str(read_bytes(data, byte_offset, 5).bytes, 'ascii') == 'AT4PX'
         except UnicodeDecodeError:
             return False
-
-    @classmethod
-    def coverage(cls, data: BitStream) -> List[BitStream]:
-        # todo
-        pass

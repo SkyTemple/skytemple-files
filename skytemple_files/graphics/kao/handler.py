@@ -1,5 +1,3 @@
-from typing import List
-
 from bitstring import BitStream
 
 from skytemple_files.common.types.data_handler import DataHandler
@@ -10,7 +8,7 @@ from skytemple_files.graphics.kao.writer import KaoWriter
 
 class KaoHandler(DataHandler[Kao]):
     @classmethod
-    def unserialize(cls, data: BitStream) -> Kao:
+    def deserialize(cls, data: BitStream, **kwargs) -> Kao:
         # First 160 bytes are padding
         first_toc = next(x for x, val in enumerate(data.cut(8)) if val.int != 0)
         assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
@@ -22,8 +20,3 @@ class KaoHandler(DataHandler[Kao]):
     @classmethod
     def serialize(cls, data: Kao) -> BitStream:
         return KaoWriter(data).write()
-
-    @classmethod
-    def coverage(cls, data: BitStream) -> List[BitStream]:
-        # todo
-        pass

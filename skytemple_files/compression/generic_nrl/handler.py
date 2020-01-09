@@ -1,14 +1,14 @@
-"""TODO: MERGE WITH GENERIC NRL"""
 from typing import Tuple
 
 from bitstring import BitStream
 
-from skytemple_files.compression.bma_layer_nrl.compressor import BmaLayerNrlCompressor
-from skytemple_files.compression.bma_layer_nrl.decompressor import BmaLayerNrlDecompressor
+from skytemple_files.compression.generic_nrl.compressor import GenericNrlCompressor
+from skytemple_files.compression.generic_nrl.decompressor import GenericNrlDecompressor
 
 
-class BmaLayerNrlHandler:
+class GenericNrlHandler:
     """
+    Generic version of the NRL compression algorithm. Uses 1 byte as input and output sizes.
     todo
     """
     @classmethod
@@ -16,9 +16,9 @@ class BmaLayerNrlHandler:
         """todo. Stops when stop_when_size bytes have been decompressed.
         Second return is compressed original size.
         """
-        return BmaLayerNrlDecompressor(compressed_data, stop_when_size).decompress()
+        return GenericNrlDecompressor(compressed_data, stop_when_size).decompress()
 
     @classmethod
     def compress(cls, uncompressed_data: BitStream) -> BitStream:
         """todo"""
-        return BmaLayerNrlCompressor(uncompressed_data).compress()
+        return GenericNrlCompressor(uncompressed_data).compress()

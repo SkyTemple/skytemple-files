@@ -18,9 +18,7 @@ class BmaCollisionRleDecompressor:
         self.reset()
 
     def reset(self):
-        # For currently unknown reason, some BMAs have extra trailing tiles...
-        # so we buffer x2
-        self.decompressed_data = BitStream(self.stop_when_size*8*2)
+        self.decompressed_data = BitStream(self.stop_when_size*8)
         #self.decompressed_data = BitStream()
         self.cursor = 0
         self.bytes_written = 0
@@ -35,9 +33,7 @@ class BmaCollisionRleDecompressor:
         while self.cursor < self.max_size and self.bytes_written < self.stop_when_size:
             self._process()
 
-        # TODO: For currently unknown reasons, some maps have more
-        #       chunks/meta tiles then they should have. That's why we only check <
-        if self.bytes_written < self.stop_when_size:
+        if self.bytes_written != self.stop_when_size:
             raise ValueError(f"BMA Collision RLE Decompressor: End result length unexpected. "
                              f"Should be {self.stop_when_size}, is {self.bytes_written} "
                              f"Diff: {self.bytes_written - self.stop_when_size}")

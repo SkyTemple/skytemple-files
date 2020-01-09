@@ -19,27 +19,25 @@ possible_values_for_unk7 = {}
 
 for i, l in enumerate(bg_list.level):
     maps = [
-        'P01P01A',  # OK: Map with collision
-        'T00P03',   # OK: Map with an odd amount of chunks in width
-        'D01P11B',  # OK: Map with an odd amount of chunks in width and collision
-        'G01P03A',  #     Map with unk6 != 0
-        'D01P41A',  #     Map with weird collision for no reason?
-        'D06P11A',  #     Map weirdly broken (layer 2 and onwards maybe? - Alignment?)
-        'D08P11A',  #     Broken map with odd amount of chunks and width AND height
-        'D17P31A',  #     Completly destroyed (with odd amount of chunks and width AND height)
-        'D22P11A',  #     Broken collision (with odd amount of chunks and width AND height)
-        'P19P02A',  # OK: Map with odd amount of chunks in height and collision
-        'H01P99A',  #     Map with an odd amount of chunks in width and collision, completely broken
+        #'P01P01A',  # OK: Map with collision
+        #'T00P03',   # OK: Map with an odd amount of chunks in width
+        #'D01P11B',  # OK: Map with an odd amount of chunks in width and collision
+        'G01P03A',  # OK:  Map with unk6 != 0
+        #'D01P41A',  # OK: Map with weird collision for no reason?
+        #'D06P11A',  # OK: Map weirdly broken (layer 2 and onwards maybe? - Alignment?)
+        #'D08P11A',  # OK: Broken map with odd amount of chunks and width AND height
+        #'D17P31A',  # OK: Weird lower layer. 2nd BPA seems to be the issue
+        #'D22P11A',  # OK: Broken collision (with odd amount of chunks and width AND height)
+        #'P19P02A',  # OK: Map with odd amount of chunks in height and collision
+        #'H01P99A',  # OK: Weird lower layer. 2nd BPA seems to be the issue
     ]
     #if l.bma_name not in maps:
     #    continue
-    if l.bma_name != 'H01P99A':
-        continue
     try:
         filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', l.bma_name.replace('/', '_'))
         # S05P01A : Logos
         bma = l.get_bma(rom)
-        print(f"{i} - {l.bma_name}: {bma}")
+        print(f"{i} - {l.bma_name}: {bma} - BG List: {l}")
         try:
             assert bma.map_width_camera == bma.map_width_meta * bma.tiling_width
             assert bma.map_height_camera == bma.map_height_meta * bma.tiling_height
@@ -74,21 +72,25 @@ for i, l in enumerate(bg_list.level):
         for i, f in enumerate(frames):
             f.save(filename_h + '.' + str(i) + '.png')
     except (ValueError, AssertionError, NotImplementedError, SystemError) as ex:
-        print(f"error for {l.bma_name}:")
-        print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
+        print(f"error for {l.bma_name}: {repr(ex)}")
+        #print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
 
+exit()
 print("=====")
 print(f"Possible values for unk6: {possible_values_for_unk6.keys()}")
 print(f"Possible values for unk6: {possible_values_for_unk7.keys()}")
 
 print("-----")
-print("Levels with unk6=0")
-for l in possible_values_for_unk6[0]:
-    # P01P01A
+print("Levels with unk7=0")
+for l in possible_values_for_unk7[0]:
     print(l.dbg_name)
 
 print("-----")
-print("Levels with unk6=1")
-for l in possible_values_for_unk6[1]:
-    # G01P03A
+print("Levels with unk7=1")
+for l in possible_values_for_unk7[1]:
+    print(l.dbg_name)
+
+print("-----")
+print("Levels with unk7=2")
+for l in possible_values_for_unk7[2]:
     print(l.dbg_name)

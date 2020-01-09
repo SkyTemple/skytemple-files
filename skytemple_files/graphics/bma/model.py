@@ -1,7 +1,7 @@
 import math
 from typing import Tuple, List
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from bitstring import BitStream
 
 from skytemple_files.common.util import read_bytes, lcm
@@ -77,7 +77,12 @@ class Bma:
         #               Chunk = Meta Tile, source:
         #               https://projectpokemon.org/docs/mystery-dungeon-nds/rrt-background-format-r113/
         #
-        number_of_bytes_per_layer = math.ceil(self.map_width_meta * self.map_height_meta * 1.5)
+        number_of_bytes_per_layer = self.map_width_meta * self.map_height_meta * 1.5
+        # If the map width is odd, we have one extra tile per row:
+        if self.map_width_meta % 2 != 0:
+            number_of_bytes_per_layer += self.map_height_meta * 1.5
+        number_of_bytes_per_layer = math.ceil(number_of_bytes_per_layer)
+
         # Read first layer
         self.layer0, compressed_layer0_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
             data[0xC * 8:],
@@ -92,9 +97,20 @@ class Bma:
                 data[(0xC + compressed_layer0_size) * 8:],
                 stop_when_size=number_of_bytes_per_layer
             ))
+
+        offset_begin_next = 0xC + compressed_layer0_size + compressed_layer1_size
+        self.unknown_data_block = None
         if self.unk6:
-            # TODO IF SET THERE SEEMS TO BE ANOTHER UNKNOWN DATA BLOCK HERE.
-            raise NotImplementedError()
+            # Unknown data block in generic NRL for "chat places"?
+            # Seems to have something to do with counters? Like shop counters / NPC interactions.
+            # Theory from looking at the maps:
+            # It seems that if the player tries interact on these blocks, the game checks the other blocks for NPCs
+            # to interact with (as if the player were standing on them)
+            self.unknown_data_block, data_block_len = self._read_unknown_data_block(FileType.GENERIC_NRL.decompress(
+                data[offset_begin_next * 8:],
+                stop_when_size=self.map_width_meta * self.map_height_meta * self.tiling_width * self.tiling_height
+            ))
+            offset_begin_next += data_block_len
         self.collision = None
         if self.unk7 > 0:
             # Read level collision
@@ -113,11 +129,11 @@ class Bma:
             #
             number_of_bytes_for_col = self.map_width_meta * self.map_height_meta * self.tiling_width * self.tiling_height
             self.collision, collision_size = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
-                data[(0xC + compressed_layer0_size + compressed_layer1_size) * 8:],
+                data[offset_begin_next * 8:],
                 stop_when_size=number_of_bytes_for_col
             ))
             pass
-        print(f"Number bytes not read: {int(len(data) / 8) - (0xC + compressed_layer0_size + compressed_layer1_size + collision_size)}")
+        print(f"Number bytes not read: {int(len(data) / 8) - (offset_begin_next + collision_size)}")
 
     def __str__(self):
         return f"M: {self.map_width_camera}x{self.map_height_camera}, " \
@@ -163,7 +179,17 @@ class Bma:
             col.append(cv)
         return col, data[1]
 
-    def to_pil(self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa], include_collision=True) -> List[Image.Image]:
+    def _read_unknown_data_block(self, data: Tuple[BitStream, int]):
+        # TODO: There doesn't seem to be this XOR thing here?
+        unk = []
+        for i, chunk in enumerate(data[0].cut(8)):
+            unk.append(chunk.uint)
+        return unk, data[1]
+
+    def to_pil(
+            self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa],
+            include_collision=True, include_unknown_data_block=True
+    ) -> List[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
         frame. The palettes argument can be retrieved from the map's BPL (bpl.palettes).
@@ -189,8 +215,8 @@ class Bma:
         height_map = self.map_height_meta * meta_tile_height
 
         final_images = []
-        lower_layer = 0 if bpc.number_of_layers == 1 else 1
-        meta_tiles_lower = bpc.meta_tiles_animated_to_pil(lower_layer, palettes, bpas, 1)
+        lower_layer_bpc = 0 if bpc.number_of_layers == 1 else 1
+        meta_tiles_lower = bpc.meta_tiles_animated_to_pil(lower_layer_bpc, palettes, bpas, 1)
         for img in meta_tiles_lower:
             fimg = Image.new('P', (width_map, height_map))
             fimg.putpalette(img.getpalette())
@@ -234,9 +260,11 @@ class Bma:
                         mask=cropped_img_mask.convert('1')
                     )
 
+        final_images_were_rgb_converted = False
         if include_collision and self.unk7 > 0:
-            # time for some RGB action!
             for i, img in enumerate(final_images):
+                final_images_were_rgb_converted = True
+                # time for some RGB action!
                 final_images[i] = img.convert('RGB')
                 img = final_images[i]
                 draw = ImageDraw.Draw(img, 'RGBA')
@@ -248,5 +276,23 @@ class Bma:
                             (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
                             ((x+1) * BPC_TILE_DIM, (y+1) * BPC_TILE_DIM)
                         ), fill=(0xff, 0x00, 0x00, 0x40))
+
+        if include_unknown_data_block and self.unk6 > 0:
+            fnt = ImageFont.load_default()
+            for i, img in enumerate(final_images):
+                if not final_images_were_rgb_converted:
+                    final_images[i] = img.convert('RGB')
+                    img = final_images[i]
+                draw = ImageDraw.Draw(img, 'RGBA')
+                for j, unk in enumerate(self.unknown_data_block):
+                    x = j % (self.tiling_width * self.map_width_meta)
+                    y = math.floor(j / (self.tiling_width * self.map_width_meta))
+                    if unk > 0:
+                        draw.text(
+                            (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
+                            str(unk),
+                            font=fnt,
+                            fill=(0x00, 0xff, 0x00)
+                        )
 
         return final_images

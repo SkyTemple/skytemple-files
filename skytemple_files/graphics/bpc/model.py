@@ -211,22 +211,29 @@ class Bpc:
 
         bpa_animation_indices = [0, 0, 0, 0]
         frames = []
-        # There is one extra null tile between the BPC and BPA data.
-        # TODO: Also between each of the BPAs?
-        ldata.tiles.append(BitStream(BPC_PIXEL_BITLEN * BPC_TILE_DIM * BPC_TILE_DIM))
+
+        is_first_run_add_extra_tile = True
+
         while True:  # Ended by check at end (do while)
+            previous_end_of_tiles = ldata.number_tiles
             # For each frame: Insert all BPA current frame tiles into their slots
-            previous_end_of_tiles = ldata.number_tiles + 1
-            for bpaidx, bpa in enumerate(bpas):
-                ldata.tiles[previous_end_of_tiles:ldata.bpas[bpaidx]] = bpa.tiles_for_frame(
-                    bpa_animation_indices[bpaidx]
-                )[:ldata.bpas[bpaidx]]
-                previous_end_of_tiles += ldata.bpas[bpaidx]
+            for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
+                # There is one extra null tile between the BPC and each of the BPA data:
+                previous_end_of_tiles += 1
+                if is_first_run_add_extra_tile:
+                    ldata.tiles.append(BitStream(BPC_PIXEL_BITLEN * BPC_TILE_DIM * BPC_TILE_DIM))
+
+                # Add the BPA tiles for this frame to the set of BPC tiles:
+                new_end_of_tiles = previous_end_of_tiles + bpa.number_of_images
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+
+                previous_end_of_tiles = new_end_of_tiles
                 bpa_animation_indices[bpaidx] += 1
                 bpa_animation_indices[bpaidx] %= bpa.number_of_frames
 
             frames.append(self.meta_tiles_to_pil(layer, palettes, width_in_mtiles))
 
+            is_first_run_add_extra_tile = False
             # All animations have been played, we are done!
             if bpa_animation_indices == [0, 0, 0, 0]:
                 break
@@ -252,6 +259,34 @@ class Bpc:
     def get_meta_tile(self, layer: int, index: int) -> List[TilemapEntry]:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx:mtidx+9]
+
+    def get_bpas_for_layer(self, layer: int, possible_bpas_ordered: List[Bpa]) -> List[Bpa]:
+        """
+        This method returns a list of BPAs assigned to the BPC from an ordered list of possible candidates.
+        What is returned depends on the BPA mapping of the layer.
+
+        The way the game maps BPAs to BPC layers is really weird...
+        If a map has two BPAs assigned, you would assume, that each occupies a unique slot
+        in the BPA list for a layer. But they don't. Instead the four slot list is simply filled left to right.
+        Example: BPC has two BPAs with the following tile numbers: [64, 128].
+        Now the layers may have specs like this:  Layer1: [64, 0, 0, 0] - Layer2: [128, 0, 0, 0]
+        As you can see, BPAs are entirely just mapped by their number of tiles.
+        Now what happens when two BPAs of a BPC have the same index number? I don't know! But in this case
+        the method will return the first matching BPA passed in. Should a BPC layer contain multiple BPA
+        index counts of the same length, the next BPA with that number of tiles is added.
+        """
+        possible_bpas_ordered = possible_bpas_ordered.copy()
+        bpas = []
+        for bpa_tile_num in self.layers[layer].bpas:
+            if bpa_tile_num == 0:
+                continue
+            try:
+                match_idx = next((i for i, e in enumerate(possible_bpas_ordered) if e.number_of_images == bpa_tile_num))
+            except StopIteration as err:
+                raise ValueError(f"The list of possible BPAs doesn't contain a BPA with the number "
+                                 f"of tiles {bpa_tile_num}, as it's defined in the BPC's layer.") from err
+            bpas.append(possible_bpas_ordered.pop(match_idx))
+        return bpas
 
     def set_meta_tile(self, layer: int, index: int, new_tilemappings: List[TilemapEntry]):
         if len(new_tilemappings) < self.tiling_width * self.tiling_height:

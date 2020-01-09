@@ -2,6 +2,7 @@ from skytemple_files.compression.bma_collision_rle.handler import BmaCollisionRl
 from skytemple_files.compression.bma_layer_nrl.handler import BmaLayerNrlHandler
 from skytemple_files.compression.bpc_image.handler import BpcImageHandler
 from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
+from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
 from skytemple_files.graphics.bma.handler import BmaHandler
 from skytemple_files.graphics.bpa.handler import BpaHandler
@@ -29,3 +30,4 @@ class FileType:
     BMA_LAYER_NRL = BmaLayerNrlHandler
     BMA_COLLISION_RLE = BmaCollisionRleHandler
     BPA = BpaHandler
+    GENERIC_NRL = GenericNrlHandler

@@ -30,7 +30,7 @@ def main():
         #    continue
         # debug map: T00P01
         # crossroads: P01P01A
-        if filename != 'P01P01A':
+        if filename != 'D17P31A':
             continue
         try:
             filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
@@ -48,7 +48,6 @@ def main():
                   f"UP: {bpc._upper_layer_pointer} - "
                   f"LW: {bpc._lower_layer_pointer} - "
                   f"LayerSpec: {bpc.layers}")
-            print(f"Expected number of tilemap entries: {bma.map_width_camera * bma.map_height_camera}")
 
             # Palettes!
             palettes = bpl.palettes

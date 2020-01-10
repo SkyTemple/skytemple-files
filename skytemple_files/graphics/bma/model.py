@@ -40,20 +40,22 @@ class Bma:
         # so the game seems to be hardcoded to 3x3.
         self.tiling_width = read_bytes(data, 2).uint
         self.tiling_height = read_bytes(data, 3).uint
-        # Map width & height in meta tiles, so map.map_width_camera / map.tiling_width
+        # Map width & height in chunks, so map.map_width_camera / map.tiling_width
         # The only maps this is not true for are G01P08A. S01P01B, S15P05A, S15P05B, it seems they
         # are missing one tile in width (32x instead of 33x)
         # The game doesn't seem to care if this value is off by less than 3 (tiling_w/h).
-        self.map_width_meta = read_bytes(data, 4).uint
-        self.map_height_meta = read_bytes(data, 5).uint
+        # But NOTE that this has consequences for the collision and unknown data layers! See notes at collision
+        # below!
+        self.map_width_chunks = read_bytes(data, 4).uint
+        self.map_height_chunks = read_bytes(data, 5).uint
         # Through tests against the BPC, it was determined that unk5 is the number of layers:
         # It seems to be ignored by the game, however
         self.number_of_layers = read_bytes(data, 6, 2).uintle
         # Some kind of boolean flag? Seems to control if there is a third data block between
-        # layer data and collision
+        # layer data and collision - Seems to be related to NPC conversations, see below.
         self.unk6 = read_bytes(data, 8, 2).uintle
-        # has collision....? - boolean? but can also be 0x0002, so ehhhhh?
-        self.unk7 = read_bytes(data, 0xA, 2).uintle
+        # Some maps weirdly have 0x02 here and then have two collision layers, but they always seem redundant?
+        self.number_of_collision_layers = read_bytes(data, 0xA, 2).uintle
 
         # in p01p01a: 0xc - 0x27: Layer 1 header? 0xc messes everthing up. after that each row? 27 rows...?
         #             0xc -> 0xc8 = 200
@@ -63,7 +65,7 @@ class Bma:
         #             SEEMS TO BE NRL ENCODING:
         #                   2x12 bits of information stored in 3 bytes. C8 ->
         #                       Copy next and repeat 8 types (=9). 3x9=27!
-        #               Decompressed length = (map_width_meta*map_height_meta*12)/8
+        #               Decompressed length = (map_width_chunks*map_height_chunks*12)/8
         #                   = 513
         #               27 / 1,5 = 18! So the first set contains each tile for each row.
         #
@@ -74,13 +76,13 @@ class Bma:
         #               These values are xor'ed with the respective indices of the previous
         #               row to get the actual indices of the chunks in the current row.
         #               The first row assumes all previous indices were 0."
-        #               Chunk = Meta Tile, source:
+        #               source:
         #               https://projectpokemon.org/docs/mystery-dungeon-nds/rrt-background-format-r113/
         #
-        number_of_bytes_per_layer = self.map_width_meta * self.map_height_meta * 1.5
+        number_of_bytes_per_layer = self.map_width_chunks * self.map_height_chunks * 1.5
         # If the map width is odd, we have one extra tile per row:
-        if self.map_width_meta % 2 != 0:
-            number_of_bytes_per_layer += self.map_height_meta * 1.5
+        if self.map_width_chunks % 2 != 0:
+            number_of_bytes_per_layer += self.map_height_chunks * 1.5
         number_of_bytes_per_layer = math.ceil(number_of_bytes_per_layer)
 
         # Read first layer
@@ -108,11 +110,14 @@ class Bma:
             # to interact with (as if the player were standing on them)
             self.unknown_data_block, data_block_len = self._read_unknown_data_block(FileType.GENERIC_NRL.decompress(
                 data[offset_begin_next * 8:],
-                stop_when_size=self.map_width_meta * self.map_height_meta * self.tiling_width * self.tiling_height
+                # It is unknown what size calculation is actually used here in game, see notes below for collision
+                # (search for 'NOTE!!!')
+                # We assume it's the same as for the collision.
+                stop_when_size=self.map_width_camera * self.map_height_camera
             ))
             offset_begin_next += data_block_len
         self.collision = None
-        if self.unk7 > 0:
+        if self.number_of_collision_layers > 0:
             # Read level collision
             # The collision is stored like this:
             # RLE:
@@ -127,38 +132,47 @@ class Bma:
             # this is the same principle as for the layer tile indices.
             # False (0) = Walktru; True (1) = Solid
             #
-            number_of_bytes_for_col = self.map_width_meta * self.map_height_meta * self.tiling_width * self.tiling_height
+            # NOTE!!! Tests have shown, that the collision layers use map_width_camera and map_height_camera
+            #         instead of map_width/height_chunks * tiling_width/height. The map that proves this is G01P08A!
+            number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
             self.collision, collision_size = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
                 data[offset_begin_next * 8:],
                 stop_when_size=number_of_bytes_for_col
             ))
-            pass
-        print(f"Number bytes not read: {int(len(data) / 8) - (offset_begin_next + collision_size)}")
+            offset_begin_next += collision_size
+        self.collision2 = None
+        if self.number_of_collision_layers > 1:
+            # A second collision layer...?
+            number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
+            self.collision2, collision_size2 = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
+                data[offset_begin_next * 8:],
+                stop_when_size=number_of_bytes_for_col
+            ))
 
     def __str__(self):
         return f"M: {self.map_width_camera}x{self.map_height_camera}, " \
                f"T: {self.tiling_width}x{self.tiling_height} - " \
-               f"MM: {self.map_width_meta}x{self.map_height_meta} - " \
-               f"L: {self.number_of_layers} -   " \
-               f"unk6: 0x{self.unk6:04x}, " \
-               f"unk7: 0x{self.unk7:04x}"
+               f"MM: {self.map_width_chunks}x{self.map_height_chunks} - " \
+               f"L: {self.number_of_layers} - " \
+               f"Col: 0x{self.number_of_collision_layers} - " \
+               f"unk6: 0x{self.unk6:04x}"
 
     def _read_layer(self, data: Tuple[BitStream, int]):
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
-        previous_row_values = [0 for _ in range(0, self.map_width_meta)]
+        previous_row_values = [0 for _ in range(0, self.map_width_chunks)]
         layer = []
-        max_tiles = self.map_width_meta * self.map_height_meta
+        max_tiles = self.map_width_chunks * self.map_height_chunks
         i = 0
         skipped_on_prev = True
         for chunk in data[0].cut(12):
             if i >= max_tiles:
                 # this happens if there is a leftover 12bit word.
                 break
-            index_in_row = i % self.map_width_meta
+            index_in_row = i % self.map_width_chunks
             # If the map width is odd, there is one extra chunk at the end of every row,
             # we remove this chunk.
             # TODO: DO NOT FORGET TO ADD THEM BACK DURING SERIALIZATION
-            if not skipped_on_prev and index_in_row == 0 and self.map_width_meta % 2 != 0:
+            if not skipped_on_prev and index_in_row == 0 and self.map_width_chunks % 2 != 0:
                 skipped_on_prev = True
                 continue
             skipped_on_prev = False
@@ -170,10 +184,10 @@ class Bma:
 
     def _read_collision(self, data: Tuple[BitStream, int]):
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
-        previous_row_values = [False for _ in range(0, self.map_width_meta * self.tiling_width)]
+        previous_row_values = [False for _ in range(0, self.map_width_camera)]
         col = []
         for i, chunk in enumerate(data[0].cut(8)):
-            index_in_row = i % (self.map_width_meta * self.tiling_width)
+            index_in_row = i % self.map_width_camera
             cv = bool(chunk.uint ^ int(previous_row_values[index_in_row]))
             previous_row_values[index_in_row] = cv
             col.append(cv)
@@ -208,60 +222,60 @@ class Bma:
         TODO: This is soooo awfully slow right now. Good place to start profiling. (hint: it's mostly BitSreams fault...)
         """
 
-        meta_tile_width = BPC_TILE_DIM * self.tiling_width
-        meta_tile_height = BPC_TILE_DIM * self.tiling_height
+        chunk_width = BPC_TILE_DIM * self.tiling_width
+        chunk_height = BPC_TILE_DIM * self.tiling_height
 
-        width_map = self.map_width_meta * meta_tile_width
-        height_map = self.map_height_meta * meta_tile_height
+        width_map = self.map_width_chunks * chunk_width
+        height_map = self.map_height_chunks * chunk_height
 
         final_images = []
         lower_layer_bpc = 0 if bpc.number_of_layers == 1 else 1
-        meta_tiles_lower = bpc.meta_tiles_animated_to_pil(lower_layer_bpc, palettes, bpas, 1)
-        for img in meta_tiles_lower:
+        chunks_lower = bpc.chunks_animated_to_pil(lower_layer_bpc, palettes, bpas, 1)
+        for img in chunks_lower:
             fimg = Image.new('P', (width_map, height_map))
             fimg.putpalette(img.getpalette())
 
             # yes. self.layer0 is always the LOWER layer! It's the opposite from BPC
             for i, mt_idx in enumerate(self.layer0):
-                x = i % self.map_width_meta
-                y = math.floor(i / self.map_width_meta)
+                x = i % self.map_width_chunks
+                y = math.floor(i / self.map_width_chunks)
                 fimg.paste(
-                    img.crop((0, mt_idx * meta_tile_width, meta_tile_width, mt_idx * meta_tile_width + meta_tile_height)),
-                    (x * meta_tile_width, y * meta_tile_height)
+                    img.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height)),
+                    (x * chunk_width, y * chunk_height)
                 )
 
             final_images.append(fimg)
 
         if bpc.number_of_layers > 1:
             # Overlay higher layer tiles
-            meta_tiles_higher = bpc.meta_tiles_animated_to_pil(0, palettes, bpas, 1)
-            len_lower = len(meta_tiles_lower)
-            len_higher = len(meta_tiles_higher)
+            chunks_higher = bpc.chunks_animated_to_pil(0, palettes, bpas, 1)
+            len_lower = len(chunks_lower)
+            len_higher = len(chunks_higher)
             if len_higher != len_lower:
                 # oh fun! We are missing animations for one of the layers, let's stretch to the lowest common multiple
                 lm = lcm(len_higher, len_lower)
                 for i in range(len_lower, lm):
                     final_images.append(final_images[i % len_lower].copy())
                 for i in range(len_higher, lm):
-                    meta_tiles_higher.append(meta_tiles_higher[i % len_higher].copy())
+                    chunks_higher.append(chunks_higher[i % len_higher].copy())
 
-            for j, img in enumerate(meta_tiles_higher):
+            for j, img in enumerate(chunks_higher):
                 fimg = final_images[j]
                 for i, mt_idx in enumerate(self.layer1):
-                    x = i % self.map_width_meta
-                    y = math.floor(i / self.map_width_meta)
+                    x = i % self.map_width_chunks
+                    y = math.floor(i / self.map_width_chunks)
 
-                    cropped_img = img.crop((0, mt_idx * meta_tile_width, meta_tile_width, mt_idx * meta_tile_width + meta_tile_height))
+                    cropped_img = img.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height))
                     cropped_img_mask = cropped_img.copy()
                     cropped_img_mask.putpalette(MASK_PAL)
                     fimg.paste(
                         cropped_img,
-                        (x * meta_tile_width, y * meta_tile_height),
+                        (x * chunk_width, y * chunk_height),
                         mask=cropped_img_mask.convert('1')
                     )
 
         final_images_were_rgb_converted = False
-        if include_collision and self.unk7 > 0:
+        if include_collision and self.number_of_collision_layers > 0:
             for i, img in enumerate(final_images):
                 final_images_were_rgb_converted = True
                 # time for some RGB action!
@@ -269,13 +283,23 @@ class Bma:
                 img = final_images[i]
                 draw = ImageDraw.Draw(img, 'RGBA')
                 for j, col in enumerate(self.collision):
-                    x = j % (self.tiling_width * self.map_width_meta)
-                    y = math.floor(j / (self.tiling_width * self.map_width_meta))
+                    x = j % self.map_width_camera
+                    y = math.floor(j / self.map_width_camera)
                     if col:
                         draw.rectangle((
                             (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
                             ((x+1) * BPC_TILE_DIM, (y+1) * BPC_TILE_DIM)
                         ), fill=(0xff, 0x00, 0x00, 0x40))
+                # Second collision layer
+                if self.number_of_collision_layers > 1:
+                    for j, col in enumerate(self.collision2):
+                        x = j % self.map_width_camera
+                        y = math.floor(j / self.map_width_camera)
+                        if col:
+                            draw.ellipse((
+                                (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
+                                ((x+1) * BPC_TILE_DIM, (y+1) * BPC_TILE_DIM)
+                            ), fill=(0x00, 0x00, 0xff, 0x40))
 
         if include_unknown_data_block and self.unk6 > 0:
             fnt = ImageFont.load_default()
@@ -285,8 +309,8 @@ class Bma:
                     img = final_images[i]
                 draw = ImageDraw.Draw(img, 'RGBA')
                 for j, unk in enumerate(self.unknown_data_block):
-                    x = j % (self.tiling_width * self.map_width_meta)
-                    y = math.floor(j / (self.tiling_width * self.map_width_meta))
+                    x = j % self.map_width_camera
+                    y = math.floor(j / self.map_width_camera)
                     if unk > 0:
                         draw.text(
                             (x * BPC_TILE_DIM, y * BPC_TILE_DIM),

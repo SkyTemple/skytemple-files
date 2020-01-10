@@ -22,13 +22,13 @@ class BpcLayer:
         # There must be 4 BPAs. (0 for not used)
         assert len(bpas) == 4
         self.bpas = bpas
-        self.meta_tilemap_len = tilemap_len
+        self.chunk_tilemap_len = tilemap_len
         # May also be set from outside after creation:
         self.tiles = tiles
         self.tilemap = tilemap
 
     def __repr__(self):
-        return f"<#T{self.number_tiles} #TM{self.meta_tilemap_len} - BPA: [{self.bpas}]>"
+        return f"<#T{self.number_tiles} #TM{self.chunk_tilemap_len} - BPA: [{self.bpas}]>"
 
 
 class Bpc:
@@ -36,8 +36,8 @@ class Bpc:
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
-        meta tiles using a tile mapping.
-        These meta tiles are referenced in the BMA tile to build the actual image.
+        chunks using a tile mapping.
+        These chunks are referenced in the BMA tile to build the actual image.
         The tiling sizes are also stored in the BMA file.
         Each tile mapping is aso asigned a palette number. The palettes are stored in the BPL
         file for the map background and always contain 16 colors.
@@ -87,8 +87,8 @@ class Bpc:
         self.layers[0].tilemap = self._read_tilemap_data(FileType.BPC_TILEMAP.decompress(
             data[start_tile_map_1*8:end_of_layer_data_bits],
             # TODO: It's not documented yet that the 9 used here in the docs by psy_commando is actually the
-            #       size of the meta tiles.
-            stop_when_size=(self.layers[0].meta_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
+            #       size of the chunks.
+            stop_when_size=(self.layers[0].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
         ))
 
         if self.number_of_layers > 1:
@@ -104,7 +104,7 @@ class Bpc:
             # Read the second layer tilemap
             self.layers[1].tilemap = self._read_tilemap_data(FileType.BPC_TILEMAP.decompress(
                 data[start_tile_map_2*8:],
-                stop_when_size=(self.layers[1].meta_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
+                stop_when_size=(self.layers[1].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
             ))
 
     def _read_tile_data(self, data: Tuple[BitStream, int]):
@@ -118,32 +118,32 @@ class Bpc:
     def _read_tilemap_data(self, data: BitStream):
         """Handles the decompressed tile data returned by the BPC_TILEMAP decompressor."""
         tilemap = []
-        # The first meta-tile is not stored, but is always empty
+        # The first chunk is not stored, but is always empty
         for i in range(0, self.tiling_width*self.tiling_height):
             tilemap.append(TilemapEntry.from_bytes(0))
         for i, entry in enumerate(data.cut(BPC_TILEMAP_BITLEN, 0)):
             tilemap.append(TilemapEntry.from_bytes(entry.uintle))
         return tilemap
 
-    def meta_tiles_to_pil(self, layer: int, palettes: List[List[int]], width_in_mtiles=20) -> Image.Image:
+    def chunks_to_pil(self, layer: int, palettes: List[List[int]], width_in_mtiles=20) -> Image.Image:
         """
-        Convert all meta tiles of the BPC to one big PIL image.
-        The meta tiles are all placed next to each other.
+        Convert all chunks of the BPC to one big PIL image.
+        The chunks are all placed next to each other.
         The resulting image has one large palette with all palettes merged together.
 
         To get the palettes, use the data from the BPL file for this map background:
 
-        >>> bpc.meta_tiles_to_pil(bpl.palettes)
+        >>> bpc.chunks_to_pil(bpl.palettes)
 
-        The first meta-tile is a NULL tile. It is always empty, even when re-imported.
+        The first chunk is a NULL tile. It is always empty, even when re-imported.
 
-        Does NOT export BPA tiles. Meta tiles that reference BPA tiles are replaced with empty tiles. You will see
+        Does NOT export BPA tiles. Chunks that reference BPA tiles are replaced with empty tiles. You will see
         warnings by the tiled_image module when this is the case.
-        The mapping to BPA tiles has to be done programmatically using set_tile or set_meta_tile.
+        The mapping to BPA tiles has to be done programmatically using set_tile or set_chunk.
 
         """
         width = width_in_mtiles * self.tiling_width * BPC_TILE_DIM
-        height = math.ceil(self.layers[layer].meta_tilemap_len / width_in_mtiles) * self.tiling_height * BPC_TILE_DIM
+        height = math.ceil(self.layers[layer].chunk_tilemap_len / width_in_mtiles) * self.tiling_height * BPC_TILE_DIM
         return to_pil(
             self.layers[layer].tilemap, self.layers[layer].tiles, palettes, BPC_TILE_DIM,
             width, height, self.tiling_width, self.tiling_height
@@ -179,14 +179,14 @@ class Bpc:
             dummy_tile_map, self.layers[layer].tiles, palettes, BPC_TILE_DIM, width, height
         )
 
-    def meta_tiles_animated_to_pil(
+    def chunks_animated_to_pil(
             self, layer: int, palettes: List[List[int]], bpas: List[Bpa], width_in_mtiles=20
     ) -> List[Image.Image]:
         """
-        Exports meta tiles. For general notes see meta_tiles_to_pil.
+        Exports chunks. For general notes see chunks_to_pil.
 
         However this method also exports BPA animated tiles referenced in the tilemap. This means it returns
-        a set of images containing the meta tiles, including BPC tiles and BPA tiles. BPA tiles are animated, and
+        a set of images containing the chunks, including BPC tiles and BPA tiles. BPA tiles are animated, and
         each image contains one frame of the animation.
 
         The method does not care about frame speeds. Each step of animation is simply returned as a new image,
@@ -200,14 +200,14 @@ class Bpc:
         TODO: The speed can be increased SIGNIFICANTLY if we only re-render the changed
               animated tiles instead!
 
-        TODO: Move to a method to export single meta tiles and then merge them instead?
+        TODO: Move to a method to export single chunks and then merge them instead?
         """
         ldata = self.layers[layer]
         # First check if we even have BPAs to use
         is_using_bpa = len(bpas) > 0 and any(x > 0 for x in ldata.bpas)
         if not is_using_bpa:
-            # Simply build the single meta tile frame
-            return [self.meta_tiles_to_pil(layer, palettes, width_in_mtiles)]
+            # Simply build the single chunks frame
+            return [self.chunks_to_pil(layer, palettes, width_in_mtiles)]
 
         bpa_animation_indices = [0, 0, 0, 0]
         frames = []
@@ -231,7 +231,7 @@ class Bpc:
                 bpa_animation_indices[bpaidx] += 1
                 bpa_animation_indices[bpaidx] %= bpa.number_of_frames
 
-            frames.append(self.meta_tiles_to_pil(layer, palettes, width_in_mtiles))
+            frames.append(self.chunks_to_pil(layer, palettes, width_in_mtiles))
 
             is_first_run_add_extra_tile = False
             # All animations have been played, we are done!
@@ -243,11 +243,11 @@ class Bpc:
         return frames
 
     def pil_to_tiles(self, layer: int, image: Image.Image):
-        pass  # todo - replaces the tile data but doesn't change any tile mappings and so also no meta tiles
+        pass  # todo - replaces the tile data but doesn't change any tile mappings and so also no chunks
 
-    def pil_to_meta_tiles(self, layer: int, image: Image.Image):
-        pass  # todo - replaces the tile data AND all tile mappings - Used to create new meta tiles.
-              #        Works like BGP import. - "Unsets" BPA mappings however, because meta_tiles_to_pil contains
+    def pil_to_chunks(self, layer: int, image: Image.Image):
+        pass  # todo - replaces the tile data AND all tile mappings - Used to create new chunks.
+              #        Works like BGP import. - "Unsets" BPA mappings however, because chunks_to_pil contains
               #        no BPA.
 
     def get_tile(self, layer: int, index: int) -> TilemapEntry:
@@ -256,13 +256,13 @@ class Bpc:
     def set_tile(self, layer: int, index: int, tile_mapping: TilemapEntry):
         self.layers[layer].tilemap[index] = tile_mapping
 
-    def get_meta_tile(self, layer: int, index: int) -> List[TilemapEntry]:
+    def get_chunk(self, layer: int, index: int) -> List[TilemapEntry]:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx:mtidx+9]
 
     def get_bpas_for_layer(self, layer: int, possible_bpas_ordered: List[Bpa]) -> List[Bpa]:
         """
-        This method returns a list of BPAs assigned to the BPC from an ordered list of possible candidates.
+        This method returns a list of BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.
 
         The way the game maps BPAs to BPC layers is really weird...
@@ -288,9 +288,9 @@ class Bpc:
             bpas.append(possible_bpas_ordered.pop(match_idx))
         return bpas
 
-    def set_meta_tile(self, layer: int, index: int, new_tilemappings: List[TilemapEntry]):
+    def set_chunk(self, layer: int, index: int, new_tilemappings: List[TilemapEntry]):
         if len(new_tilemappings) < self.tiling_width * self.tiling_height:
-            raise ValueError(f"The new tilemapping for this meta tile must contain"
+            raise ValueError(f"The new tilemapping for this chunk must contain"
                              f"{self.tiling_width}x{self.tiling_height} tiles.")
         mtidx = index * self.tiling_width * self.tiling_height
         self.layers[layer].tilemap[mtidx:mtidx+9] = new_tilemappings

@@ -49,7 +49,7 @@ def to_pil(
     The resulting image has one large palette with all palettes merged together.
     If ignore_flip_bits is set, tiles are not flipped.
 
-    tiling_width/height control how many tiles form a meta-tile.
+    tiling_width/height control how many tiles form a chunk.
     """
     pil_img_data = BitStream(img_width * img_height * 8)
     img_width_in_tiles = int(img_width / tile_dim)
@@ -57,17 +57,17 @@ def to_pil(
     number_of_cols_per_pal = int(len(palettes[0]) / 3)
 
     for i in range(0, number_tiles):
-        tiles_in_meta = tiling_width * tiling_height
-        meta_x = math.floor(math.floor((i / tiles_in_meta)) % (img_width_in_tiles / tiling_width))
-        meta_y = math.floor(math.floor((i / tiles_in_meta)) / (img_width_in_tiles / tiling_width))
+        tiles_in_chunks = tiling_width * tiling_height
+        chunk_x = math.floor(math.floor((i / tiles_in_chunks)) % (img_width_in_tiles / tiling_width))
+        chunk_y = math.floor(math.floor((i / tiles_in_chunks)) / (img_width_in_tiles / tiling_width))
 
-        tile_x = (meta_x * tiling_width) + (i % tiling_width)
-        tile_y = (meta_y * tiling_height) + (math.floor(i / tiling_width) % tiling_height)
+        tile_x = (chunk_x * tiling_width) + (i % tiling_width)
+        tile_y = (chunk_y * tiling_height) + (math.floor(i / tiling_width) % tiling_height)
         tile_mapping = tilemap[i]
         try:
             tile_data = tiles[tile_mapping.idx]
         except IndexError:
-            # This happens when exporting a BPCs meta tiles without "loading" the BPAs, because the BPA tiles
+            # This happens when exporting a BPCs chunk without "loading" the BPAs, because the BPA tiles
             # take up slots after the BPC slots.
             warnings.warn(f'TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. '
                           f'Replaced with 0.')

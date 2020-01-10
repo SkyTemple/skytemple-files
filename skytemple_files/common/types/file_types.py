@@ -11,7 +11,7 @@ from skytemple_files.graphics.bpl.handler import BplHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression.px.handler import PxHandler
-from skytemple_files.unique.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 
 
 class FileType:

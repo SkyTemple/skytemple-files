@@ -1,4 +1,3 @@
-import math
 import os
 import traceback
 import time
@@ -6,8 +5,7 @@ import time
 from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.graphics.bpc.model import BPC_TILE_DIM
-from skytemple_files.unique.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 
 def main():
     os.makedirs(os.path.join(os.path.dirname(__file__), 'dbg_output'), exist_ok=True)
@@ -30,7 +28,7 @@ def main():
         #    continue
         # debug map: T00P01
         # crossroads: P01P01A
-        if filename != 'D17P31A':
+        if filename != 'V10P03C':
             continue
         try:
             filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
@@ -58,16 +56,16 @@ def main():
                 # Save tiles!
                 bpc.tiles_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.tiles.png')
                 prf(f'saving tiles for {filename}')
-                # Save meta tiles!
-                #bpc.meta_tiles_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.png')
-                #prf(f'saving meta tiles for {filename}')
-                # Saving animated meta tiles!
+                # Save chunks!
+                #bpc.chunks_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.png')
+                #prf(f'saving chunks for {filename}')
+                # Saving animated chunks!
                 # Default for only one frame, doesn't really matter
                 duration = 1000
                 if len(bpas) > 0:
                     # Assuming the game runs 60 FPS.
                     duration = round(1000 / 60 * bpas[0].frame_info[0].unk1)
-                frames = bpc.meta_tiles_animated_to_pil(n, palettes, bpas)
+                frames = bpc.chunks_animated_to_pil(n, palettes, bpas)
                 frames[0].save(
                     filename_h + '.' + str(n) + '.gif',
                     save_all=True,
@@ -76,7 +74,7 @@ def main():
                     loop=0,
                     optimize=False
                 )
-                prf(f'saving animated meta tiles for {filename}')
+                prf(f'saving animated chunks for {filename}')
 
         except BaseException as ex:
             prf(f'error for {filename}')

@@ -1,9 +1,6 @@
 import os
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
-
-from skytemple_files.unique.bg_list_dat.handler import BgListDatHandler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 

@@ -3,7 +3,7 @@ import os
 from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.unique.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.graphics.bg_list_dat import BgListDatHandler
 
 os.makedirs(os.path.join(os.path.dirname(__file__), 'dbg_output'), exist_ok=True)
 

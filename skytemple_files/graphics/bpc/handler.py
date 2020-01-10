@@ -10,8 +10,8 @@ class BpcHandler(DataHandler[Bpc]):
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
-        meta tiles using a tile mapping.
-        These meta tiles are referenced in the BMA tile to build the actual image.
+        chunks using a tile mapping.
+        These chunks are referenced in the BMA tile to build the actual image.
         The tiling sizes are also stored in the BMA file.
         Each tile mapping is aso asigned a palette number. The palettes are stored in the BPL
         file for the map background and always contain 16 colors.

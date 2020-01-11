@@ -37,8 +37,8 @@ for i, l in enumerate(bg_list.level):
         #'D31P11A',
         #'D79P11A'
     ]
-    if l.bma_name not in maps:
-        continue
+    #if l.bma_name not in maps:
+    #    continue
     try:
         filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', l.bma_name.replace('/', '_'))
         # S05P01A : Logos

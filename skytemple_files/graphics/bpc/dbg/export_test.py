@@ -28,8 +28,8 @@ def main():
         #    continue
         # debug map: T00P01
         # crossroads: P01P01A
-        if filename != 'V10P03C':
-            continue
+        #if filename != 'V10P03C':
+        #    continue
         try:
             filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
 

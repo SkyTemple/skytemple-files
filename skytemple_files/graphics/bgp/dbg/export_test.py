@@ -2,7 +2,6 @@ import math
 import os
 from time import time
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
@@ -20,12 +19,12 @@ for filename in get_files_from_rom_with_extension(rom, 'bgp'):
     print("Processing " + filename)
     filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
 
-    bin = BitStream(rom.getFileByName(filename))
+    bin = rom.getFileByName(filename)
     with open(filename_h, 'wb') as f:
         tb = time()
         d = FileType.AT4PX.deserialize(bin).decompress()
         print(f"Decrompressing this takes {time() - tb}s.")
-        f.write(d.bytes)
+        f.write(d)
 
     bgp = BgpHandler.deserialize(bin)
 

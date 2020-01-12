@@ -2,16 +2,14 @@ import math
 from typing import Tuple, List
 
 from PIL import Image
-from bitstring import BitStream
 
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil, to_pil_tiled
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil
+from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
-from skytemple_files.graphics.bpl.model import Bpl
 
 BPC_PIXEL_BITLEN = 4
 BPC_TILE_DIM = 8
-BPC_TILEMAP_BITLEN = 16
+BPC_TILEMAP_BYTELEN = 2
 
 
 class BpcLayer:
@@ -32,7 +30,7 @@ class BpcLayer:
 
 
 class Bpc:
-    def __init__(self, data: BitStream, tiling_width: int, tiling_height: int):
+    def __init__(self, data: bytes, tiling_width: int, tiling_height: int):
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
@@ -43,13 +41,15 @@ class Bpc:
         file for the map background and always contain 16 colors.
         """
         from skytemple_files.common.types.file_types import FileType
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
 
         self.tiling_width = tiling_width
         self.tiling_height = tiling_height
 
         # Only stored for debug. They are not updated, only regenerated when serialized:
-        self._upper_layer_pointer = read_bytes(data, 0, 2).uintle
-        self._lower_layer_pointer = read_bytes(data, 2, 2).uintle
+        self._upper_layer_pointer = read_uintle(data, 0, 2)
+        self._lower_layer_pointer = read_uintle(data, 2, 2)
 
         self.number_of_layers = 2 if self._lower_layer_pointer > 0 else 1
 
@@ -57,24 +57,24 @@ class Bpc:
         # for these layers. The layers are completed by a BMA file that comes with this BPC file!
         # The BMA contains tiling w/h and w/h of the map. See bg_list.dat for mapping.
         self.layers = []
-        for layer_spec in data.cut(12*8, 4*8, None, self.number_of_layers):
+        for layer_spec in iter_bytes(data, 12, 4, 4 + (12 * self.number_of_layers)):
             bpas = [
-                read_bytes(layer_spec, 2, 2).uintle,
-                read_bytes(layer_spec, 4, 2).uintle,
-                read_bytes(layer_spec, 6, 2).uintle,
-                read_bytes(layer_spec, 8, 2).uintle
+                read_uintle(layer_spec, 2, 2),
+                read_uintle(layer_spec, 4, 2),
+                read_uintle(layer_spec, 6, 2),
+                read_uintle(layer_spec, 8, 2)
             ]
             self.layers.append(BpcLayer(
-                number_tiles=read_bytes(layer_spec, 0, 2).uintle,
-                tilemap_len=read_bytes(layer_spec, 10, 2).uintle,
+                number_tiles=read_uintle(layer_spec, 0, 2),
+                tilemap_len=read_uintle(layer_spec, 10, 2),
                 bpas=bpas
             ))
 
         # Read the first layer image data
-        end_of_layer_data_bits = self._lower_layer_pointer*8 if self._lower_layer_pointer > 0 else None
+        end_of_layer_data = self._lower_layer_pointer if self._lower_layer_pointer > 0 else None
         self.layers[0].tiles, compressed_tile_size_1 = self._read_tile_data(FileType.BPC_IMAGE.decompress(
             # We don't know when the compressed data ends, but at least it can't go into the next layer
-            data[self._upper_layer_pointer*8:end_of_layer_data_bits],
+            data[self._upper_layer_pointer:end_of_layer_data],
             stop_when_size=self.layers[0].number_tiles * 32
         ))
         assert len(self.layers[0].tiles) - 1 == self.layers[0].number_tiles
@@ -85,7 +85,7 @@ class Bpc:
 
         # Read the first layer tilemap
         self.layers[0].tilemap = self._read_tilemap_data(FileType.BPC_TILEMAP.decompress(
-            data[start_tile_map_1*8:end_of_layer_data_bits],
+            data[start_tile_map_1:end_of_layer_data],
             # TODO: It's not documented yet that the 9 used here in the docs by psy_commando is actually the
             #       size of the chunks.
             stop_when_size=(self.layers[0].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
@@ -94,7 +94,7 @@ class Bpc:
         if self.number_of_layers > 1:
             # Read the second layer image data
             self.layers[1].tiles, compressed_tile_size_2 = self._read_tile_data(FileType.BPC_IMAGE.decompress(
-                data[self._lower_layer_pointer*8:],
+                data[self._lower_layer_pointer:],
                 stop_when_size=self.layers[1].number_tiles * 32
             ))
             start_tile_map_2 = self._lower_layer_pointer + compressed_tile_size_2
@@ -103,26 +103,27 @@ class Bpc:
                 start_tile_map_2 += 1
             # Read the second layer tilemap
             self.layers[1].tilemap = self._read_tilemap_data(FileType.BPC_TILEMAP.decompress(
-                data[start_tile_map_2*8:],
+                data[start_tile_map_2:],
                 stop_when_size=(self.layers[1].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
             ))
 
-    def _read_tile_data(self, data: Tuple[BitStream, int]):
+    def _read_tile_data(self, data: Tuple[bytes, int]):
         """Handles the decompressed tile data returned by the BPC_IMAGE decompressor."""
+        n_bytes = int(BPC_TILE_DIM * BPC_TILE_DIM / 2)
         # The first tile is not stored, but is always empty
-        tiles = [BitStream(BPC_PIXEL_BITLEN * BPC_TILE_DIM * BPC_TILE_DIM)]
-        for tile in data[0].cut(BPC_PIXEL_BITLEN * BPC_TILE_DIM * BPC_TILE_DIM):
-            tiles.append(tile)
+        tiles = [bytearray(n_bytes)]
+        for tile in iter_bytes(data[0], n_bytes):
+            tiles.append(bytearray(tile))
         return tiles, data[1]
 
-    def _read_tilemap_data(self, data: BitStream):
+    def _read_tilemap_data(self, data: bytes):
         """Handles the decompressed tile data returned by the BPC_TILEMAP decompressor."""
         tilemap = []
         # The first chunk is not stored, but is always empty
         for i in range(0, self.tiling_width*self.tiling_height):
             tilemap.append(TilemapEntry.from_bytes(0))
-        for i, entry in enumerate(data.cut(BPC_TILEMAP_BITLEN, 0)):
-            tilemap.append(TilemapEntry.from_bytes(entry.uintle))
+        for i, entry in enumerate(iter_bytes(data, BPC_TILEMAP_BYTELEN)):
+            tilemap.append(TilemapEntry.from_bytes(int.from_bytes(entry, 'little')))
         return tilemap
 
     def chunks_to_pil(self, layer: int, palettes: List[List[int]], width_in_mtiles=20) -> Image.Image:
@@ -221,7 +222,7 @@ class Bpc:
                 # There is one extra null tile between the BPC and each of the BPA data:
                 previous_end_of_tiles += 1
                 if is_first_run_add_extra_tile:
-                    ldata.tiles.append(BitStream(BPC_PIXEL_BITLEN * BPC_TILE_DIM * BPC_TILE_DIM))
+                    ldata.tiles.append(bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2)))
 
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_images

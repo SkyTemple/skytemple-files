@@ -1,7 +1,5 @@
 from typing import Tuple
 
-from bitstring import BitStream
-
 from skytemple_files.compression.generic_nrl.compressor import GenericNrlCompressor
 from skytemple_files.compression.generic_nrl.decompressor import GenericNrlDecompressor
 
@@ -12,13 +10,13 @@ class GenericNrlHandler:
     todo
     """
     @classmethod
-    def decompress(cls, compressed_data: BitStream, stop_when_size: int) -> Tuple[BitStream, int]:
+    def decompress(cls, compressed_data: bytes, stop_when_size: int) -> Tuple[bytes, int]:
         """todo. Stops when stop_when_size bytes have been decompressed.
         Second return is compressed original size.
         """
         return GenericNrlDecompressor(compressed_data, stop_when_size).decompress()
 
     @classmethod
-    def compress(cls, uncompressed_data: BitStream) -> BitStream:
+    def compress(cls, uncompressed_data: bytes) -> bytes:
         """todo"""
         return GenericNrlCompressor(uncompressed_data).compress()

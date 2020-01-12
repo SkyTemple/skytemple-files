@@ -2,10 +2,7 @@
 # file is 16-bytes aligned!
 from sys import maxsize
 
-import bitstring
-from bitstring import BitStream
-
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN, KAO_FILE_BYTE_ALIGNMENT, \
     KAO_IMG_PAL_B_SIZE
 
@@ -18,7 +15,7 @@ class KaoWriter:
         self.new_data = None
         pass
 
-    def write(self, force_rebuild_all=False, update_kao=True) -> BitStream:
+    def write(self, force_rebuild_all=False, update_kao=True) -> bytes:
         """
         Builds a new kao file as a BitStream.
         The entire Kao starting from the first modified image needs
@@ -32,8 +29,8 @@ class KaoWriter:
         from skytemple_files.common.types.file_types import FileType
 
         # At worst all images are 848 bytes long - However assuming this would allocate over 300MB...
-        # Let's just use 10MB. BitStream will enlarge if necessary.
-        self.new_data = BitStream(80000000)
+        # Let's just use 10MB. We will enlarge if necessary.
+        self.new_data = bytearray(80000000)
         current_null_pointer = 0  # Undefined behavior if the first pointers are a NULL pointer!
 
         # To increase overall performance, first find the index of the first modified image, we will start from
@@ -57,12 +54,12 @@ class KaoWriter:
             else:
                 # Copy image data from beginning to that point - this will also copy the old TOC but we will write over that
                 current_toc_offset = self.kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
-                pnt = read_bytes(self.kao.original_data, current_toc_offset, SUBENTRY_LEN).intle
+                pnt = read_sintle(self.kao.original_data, current_toc_offset, SUBENTRY_LEN)
                 if pnt < 0:
                     current_image_offset = -pnt
                 else:
                     current_image_offset = pnt
-                self.new_data[0:current_image_offset*8] = self.kao.original_data[0:current_image_offset*8]
+                self.new_data[0:current_image_offset] = self.kao.original_data[0:current_image_offset]
                 if DEBUG:
                     print(f"KaoWriter: First modified image: {start_index}, {start_subindex} "
                           f"- will start at TOC {current_toc_offset} and img {current_image_offset}.")
@@ -80,19 +77,17 @@ class KaoWriter:
                     kao_image = self.kao.get(i, si)
                     image_data_bs = kao_image.get_internal()
                     image_data_start = 0
-                    image_data_end = int(len(image_data_bs) / 8)
+                    image_data_end = len(image_data_bs)
                 else:
                     # Image is not loaded, get image data directly, is faster than building KaoImage first
-                    pnt = read_bytes(self.kao.original_data, current_toc_offset, SUBENTRY_LEN).intle
+                    pnt = read_sintle(self.kao.original_data, current_toc_offset, SUBENTRY_LEN)
                     if pnt < 0:
                         # Null pointer, write new null pointer
                         if DEBUG:
                             print(f"KaoWriter: Null pointer for {i},{si} at TOC {current_toc_offset}: "
                                   f"Written NULL: {current_null_pointer}")
                         # Write NULL pointer
-                        self._update_toc_entry(current_toc_offset, bitstring.pack(
-                            f'intle:{SUBENTRY_LEN * 8}', current_null_pointer
-                        ))
+                        self._update_toc_entry(current_toc_offset, current_null_pointer.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                         current_toc_offset += SUBENTRY_LEN
                         continue
                     image_data_bs = self.kao.original_data
@@ -101,13 +96,11 @@ class KaoWriter:
                         image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE
                     )
                 # Update the TOC entry to point to the current image offset
-                self._update_toc_entry(current_toc_offset, bitstring.pack(
-                    f'intle:{SUBENTRY_LEN * 8}', current_image_offset
-                ))
+                self._update_toc_entry(current_toc_offset, current_image_offset.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                 #assert len(self.new_data) / 8 == current_size  # Size must not have changed
                 current_image_end = current_image_offset + (image_data_end - image_data_start)
                 # Write image data starting at current offset
-                self.new_data[current_image_offset*8:current_image_end*8] = image_data_bs[image_data_start*8:image_data_end*8]
+                self.new_data[current_image_offset:current_image_end] = image_data_bs[image_data_start:image_data_end]
                 #assert len(self.new_data) / 8 == current_size  # Size must not have changed
                 # Update NULL pointer
                 current_null_pointer = -current_image_end
@@ -125,20 +118,16 @@ class KaoWriter:
         remainder = current_image_offset % KAO_FILE_BYTE_ALIGNMENT
         if remainder > 0:
             current_image_offset += KAO_FILE_BYTE_ALIGNMENT - remainder
-        current_size = int(len(self.new_data) / 8)
+        current_size = len(self.new_data)
         if current_image_offset > current_size:
-            self.new_data.append(BitStream((current_image_offset - current_size)*8))
+            self.new_data += bytearray(current_image_offset - current_size)
         else:
-            self.new_data = self.new_data[:current_image_offset * 8]
-
-        # Checks:
-        #(len(self.new_data) / 8, current_image_offset, len(self.new_data) / 8 < current_image_offset,
-        #(current_image_offset % 16), (len(self.new_data[:current_image_offset * 8]) / 8) % 16)
+            self.new_data = self.new_data[:current_image_offset]
 
         if update_kao:
             self.kao.original_data = self.new_data
 
         return self.new_data
 
-    def _update_toc_entry(self, offs, bs: BitStream):
-        self.new_data[offs*8:(offs+SUBENTRY_LEN)*8] = bs
+    def _update_toc_entry(self, offs, bs: bytes):
+        self.new_data[offs:offs+SUBENTRY_LEN] = bs

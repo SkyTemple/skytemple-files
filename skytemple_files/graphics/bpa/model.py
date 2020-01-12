@@ -2,10 +2,9 @@ import math
 from typing import List
 
 from PIL import Image
-from bitstring import BitStream
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 BPA_PIXEL_BITLEN = 4
 BPA_TILE_DIM = 8
@@ -21,35 +20,33 @@ class BpaFrameInfo:
 
 
 class Bpa:
-    def __init__(self, data: BitStream):
-        self.number_of_images = read_bytes(data, 0, 2).uintle
-        self.number_of_frames = read_bytes(data, 2, 2).uintle
+    def __init__(self, data: bytes):
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+        self.number_of_images = read_uintle(data, 0, 2)
+        self.number_of_frames = read_uintle(data, 2, 2)
 
         # Read image header
         self.frame_info = []
         for i in range(0, self.number_of_frames):
             self.frame_info.append(BpaFrameInfo(
-                read_bytes(data, 4 + i*4, 2).uintle,
-                read_bytes(data, 4 + i*4 + 2, 2).uintle,
+                read_uintle(data, 4 + i*4, 2),
+                read_uintle(data, 4 + i*4 + 2, 2),
             ))
         end_header = 4 + self.number_of_frames * 4
 
         self.dbg_images = []
 
         self.tiles = []
-        for i, tile in enumerate(data.cut(
-                BPA_PIXEL_BITLEN * BPA_TILE_DIM * BPA_TILE_DIM,
-                end_header*8,
-                None,
-                self.number_of_frames * self.number_of_images
-        )):
-            self.tiles.append(tile)
+        slice_size = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
+        for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_images))):
+            self.tiles.append(bytearray(tile))
 
     def __str__(self):
         return f"Idx: {self.number_of_images}, " \
                f"#c: {self.number_of_frames}"
 
-    def get_tile(self, tile_idx, frame_idx) -> BitStream:
+    def get_tile(self, tile_idx, frame_idx) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
         return self.tiles[frame_idx * self.number_of_images + tile_idx]
 

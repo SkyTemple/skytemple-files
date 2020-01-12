@@ -2,7 +2,6 @@ import os
 import traceback
 import time
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
@@ -15,7 +14,7 @@ def main():
     rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
     prf('opening rom')
 
-    bin = BitStream(rom.getFileByName('MAP_BG/bg_list.dat'))
+    bin = rom.getFileByName('MAP_BG/bg_list.dat')
     prf('loading level list')
     bg_list = BgListDatHandler.deserialize(bin)
     prf('deserializing level list')
@@ -76,7 +75,7 @@ def main():
                 )
                 prf(f'saving animated chunks for {filename}')
 
-        except BaseException as ex:
+        except (ValueError, AssertionError, NotImplementedError, SystemError) as ex:
             prf(f'error for {filename}')
             print(f"error for {filename}:")
             print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))

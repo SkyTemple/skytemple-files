@@ -2,10 +2,9 @@ import os
 from pathlib import PurePosixPath
 from typing import List, Union
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 from skytemple_files.graphics.bma.model import Bma
 from skytemple_files.graphics.bpc.model import Bpc
 from skytemple_files.graphics.bpl.model import Bpl
@@ -76,28 +75,31 @@ class BgListEntry:
             )))
         return bpas
 
-    def _get_file(self, filename, rom_or_directory_root) -> BitStream:
+    def _get_file(self, filename, rom_or_directory_root) -> bytes:
         if isinstance(rom_or_directory_root, NintendoDSRom):
-            return BitStream(rom_or_directory_root.getFileByName(filename))
+            return rom_or_directory_root.getFileByName(filename)
         elif isinstance(rom_or_directory_root, str):
             with open(os.path.join(rom_or_directory_root, filename), 'rb') as f:
                 data = f.read()
-            return BitStream(data)
+            return data
         raise ValueError("Provided rom_or_directory is neither a string nor a NintendoDSRom.")
 
 
 class BgList:
-    def __init__(self, data: BitStream):
+    def __init__(self, data: bytes):
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+
         self.level: List[BgListEntry] = []
-        for entry in data.cut(11*8*8):
+        for entry in iter_bytes(data, 11*8):
             bpas = []
-            for potential_bpa in entry.cut(8*8, 24*8, 88*8):
-                if potential_bpa.uint != 0:
-                    bpas.append(potential_bpa.bytes.rstrip(b'\0').decode('ascii'))
+            for potential_bpa in iter_bytes(entry, 8, 24, 88):
+                if bytes(potential_bpa)[0] != 0:
+                    bpas.append(bytes(potential_bpa).rstrip(b'\0').decode('ascii'))
 
             self.level.append(BgListEntry(
-                read_bytes(entry, 0, 8).bytes.rstrip(b'\0').decode('ascii'),
-                read_bytes(entry, 8, 8).bytes.rstrip(b'\0').decode('ascii'),
-                read_bytes(entry, 16, 8).bytes.rstrip(b'\0').decode('ascii'),
+                read_bytes(bytes(entry), 0, 8).rstrip(b'\0').decode('ascii'),
+                read_bytes(bytes(entry), 8, 8).rstrip(b'\0').decode('ascii'),
+                read_bytes(bytes(entry), 16, 8).rstrip(b'\0').decode('ascii'),
                 bpas
             ))

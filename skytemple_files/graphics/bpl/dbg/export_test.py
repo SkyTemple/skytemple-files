@@ -1,6 +1,5 @@
 import os
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_files_from_rom_with_extension
@@ -15,7 +14,7 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 for filename in get_files_from_rom_with_extension(rom, 'bpl'):
     filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
 
-    bin = BitStream(rom.getFileByName(filename))
+    bin = rom.getFileByName(filename)
     bpl = BplHandler.deserialize(bin)
 
     # Print debug information about palette

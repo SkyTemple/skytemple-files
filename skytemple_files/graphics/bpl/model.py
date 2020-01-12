@@ -1,8 +1,6 @@
 from typing import List
 
-from bitstring import BitStream
-
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 # Length of a palette in colors. Color 0 is auto-generated (transparent)
 BPL_PAL_LEN = 15
@@ -30,12 +28,15 @@ class BplAnimationSpec:
 
 
 class Bpl:
-    def __init__(self, data: BitStream):
-        self.number_palettes = read_bytes(data, 0, 2).uintle
+    def __init__(self, data: bytes):
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+
+        self.number_palettes = read_uintle(data, 0, 2)
 
         # The second 2 byte value should just be a boolean
         #assert 0 <= read_bytes(data, 2, 2).uintle <= 1
-        self.has_palette_animation = read_bytes(data, 2, 2).uintle
+        self.has_palette_animation = read_uintle(data, 2, 2)
 
         # Read palettes:
         pal_end = 4 + (self.number_palettes * BPL_PAL_SIZE)
@@ -43,8 +44,8 @@ class Bpl:
         self.palettes = []
         self.current_palette = [0, 0, 0]  # Transparent first color - to be removed during serialization!
         colors_read_for_current_palette = 0
-        for pal_entry in data.cut(8 * BPL_PAL_ENTRY_LEN, 4 * 8, pal_end * 8):
-            r, g, b, unk = pal_entry.bytes
+        for pal_entry in iter_bytes(data, BPL_PAL_ENTRY_LEN, 4, pal_end):
+            r, g, b, unk = pal_entry
             self.current_palette.append(r)
             self.current_palette.append(g)
             self.current_palette.append(b)
@@ -57,7 +58,7 @@ class Bpl:
 
         # If the second flag is set (has_second_color_table) then there should be
         # more data. Otherwise not!
-        #assert int(len(data) / 8) - pal_end == 0 if not self.has_second_color_table else int(len(data) / 8) - pal_end > 0
+        #assert len(data) - pal_end == 0 if not self.has_second_color_table else len(data) - pal_end > 0
 
         # Mapped 1:1 with self.palettes, if exists:
         self.animation_specs: List[BplAnimationSpec] = []
@@ -73,10 +74,10 @@ class Bpl:
 
             # Read color index table
             cit_end = pal_end + self.number_palettes * BPL_COL_INDEX_ENTRY_LEN
-            for entry in data.cut(BPL_COL_INDEX_ENTRY_LEN * 8, pal_end * 8, cit_end * 8):
+            for entry in iter_bytes(data, BPL_COL_INDEX_ENTRY_LEN, pal_end, cit_end):
                 self.animation_specs.append(BplAnimationSpec(
-                    unk3=read_bytes(entry, 0, 2).uintle,
-                    color_index=read_bytes(entry, 2, 4).uintle
+                    unk3=read_uintle(entry, 0, 2),
+                    color_index=read_uintle(entry, 2, 4)
                 ))
 
             # Read color table 2
@@ -84,7 +85,7 @@ class Bpl:
             # TODO: The file may have padding at the end to make it 16-byte aligned.
             #       However we will probably solve that by only allowing a number of
             #       palette entries dividable by 16. Rest can be 0-colors=padding.
-            for col in data.cut(BPL_PAL_ENTRY_LEN * 8, cit_end * 8):
-                r, g, b, unk = col.bytes
+            for col in iter_bytes(data, BPL_PAL_ENTRY_LEN, cit_end):
+                r, g, b, unk = col
                 self.animation_palette.append([r, g, b])
                 assert unk == 0x00

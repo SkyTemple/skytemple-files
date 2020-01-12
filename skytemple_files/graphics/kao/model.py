@@ -2,10 +2,9 @@ import math
 
 import warnings
 from PIL import Image
-from bitstring import BitStream
-from typing import Union, Tuple, List
+from typing import Union, Tuple
 
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
@@ -17,7 +16,10 @@ KAO_FILE_BYTE_ALIGNMENT = 16  # The size of the kao file has to be divisble by t
 
 
 class KaoImage:
-    def __init__(self, whole_kao_data: BitStream, start_pnt: int):
+    def __init__(self, whole_kao_data: bytes, start_pnt: int):
+        if not isinstance(whole_kao_data, memoryview):
+            whole_kao_data = memoryview(whole_kao_data)
+
         """Construct a KaoImage using a raw image buffer (16 color palette, followed by AT4PX)"""
         from skytemple_files.common.types.file_types import FileType
 
@@ -36,9 +38,9 @@ class KaoImage:
         return self.as_pil
 
     def size(self):
-        return KAO_IMG_PAL_B_SIZE + int(len(self.compressed_img_data) / 8)
+        return KAO_IMG_PAL_B_SIZE + len(self.compressed_img_data)
 
-    def get_internal(self) -> BitStream:
+    def get_internal(self) -> bytes:
         """Returns the portrait as 16 color palette followed by AT4PX compressed image data"""
         return self.pal_data + self.compressed_img_data
 
@@ -61,7 +63,10 @@ class KaoImage:
 
 
 class Kao:
-    def __init__(self, data: BitStream, first_toc: int, toc_len: int):
+    def __init__(self, data: bytes, first_toc: int, toc_len: int):
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+
         self.original_data = data
         self.first_toc = first_toc
         self.toc_len = toc_len
@@ -76,7 +81,7 @@ class Kao:
             raise ValueError(f"The subindex requested must be between 0 and {SUBENTRIES}")
         if self.loaded_kaos[index][subindex] is None:
             start_toc_entry = self.first_toc + (index * SUBENTRIES * SUBENTRY_LEN) + subindex * SUBENTRY_LEN
-            pnt = read_bytes(self.original_data, start_toc_entry, SUBENTRY_LEN).intle
+            pnt = read_sintle(self.original_data, start_toc_entry, SUBENTRY_LEN)
             if pnt < 0:
                 # NULL pointer
                 return None
@@ -148,20 +153,13 @@ def kao_to_pil(kao: KaoImage) -> Image:
     return uncompressed_kao_to_pil(kao.pal_data, uncompressed_image_data)
 
 
-def uncompressed_kao_to_pil(pal_data, uncompressed_image_data):
-    pal = [x.uint for x in pal_data.cut(8)]
-
+def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data):
     # The images are made up of 25 8x8 tiles stored linearly in the data, but to be arranged
     # as 5x5 "meta-pixels".
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
-    pil_img_data = BitStream(img_dim * img_dim * 8)
+    pil_img_data = bytearray(img_dim * img_dim)
 
-    for idx, pix in enumerate(uncompressed_image_data.cut(KAO_IMG_PIXEL_DEPTH)):
-        # The endianess is wrong, so this is fun...
-        if idx % 2 == 0:
-            idx += 1
-        else:
-            idx -= 1
+    for idx, pix in enumerate(iter_bytes_4bit_le(uncompressed_image_data)):
         # yikes... the mappings below can probably be simplified a lot
         tile_id = math.floor(idx / (KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM))
         tile_x = tile_id % KAO_IMG_IMG_DIM
@@ -175,17 +173,17 @@ def uncompressed_kao_to_pil(pal_data, uncompressed_image_data):
         result_y = tile_y * KAO_IMG_METAPIXELS_DIM + in_tile_y
         nidx = result_y * img_dim + result_x
         # print(f"{tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} -> {result_x}x{result_y}={nidx}")
-        pil_img_data[nidx*8:nidx*8+8] = pix.uint
+        pil_img_data[nidx] = pix
 
-    assert len(pil_img_data) == img_dim * img_dim * 8
-    im = Image.frombuffer('P', (img_dim, img_dim), pil_img_data.bytes, 'raw', 'P', 0, 1)
+    assert len(pil_img_data) == img_dim * img_dim
+    im = Image.frombuffer('P', (img_dim, img_dim), pil_img_data, 'raw', 'P', 0, 1)
 
-    im.putpalette(pal)
+    im.putpalette(pal_data)
 
     return im
 
 
-def pil_to_kao(pil: Image) -> Tuple[BitStream, BitStream]:
+def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     """Converts a PIL image (with a 16 bit palette) to a kao palette and at4px compressed image data"""
     from skytemple_files.common.types.file_types import FileType
 
@@ -196,34 +194,33 @@ def pil_to_kao(pil: Image) -> Tuple[BitStream, BitStream]:
         raise ValueError('Can not convert PIL image to Kao: Palette must contain 16 RGB colors.')
     if pil.width != img_dim or pil.height != img_dim:
         raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
-    new_palette = BitStream(pil.palette.palette)
+    new_palette = bytearray(pil.palette.palette)
 
     # We have to cut the image back into this annoying tiling format :(
-    new_img_size = int(img_dim * img_dim) * KAO_IMG_PIXEL_DEPTH
-    new_img = BitStream(new_img_size)
-    raw_pil_image = BitStream(pil.tobytes('raw', 'P'))
-    for idx, pix in enumerate(raw_pil_image.cut(8)):
-        # pixels are stored low nibble first, then high:
-        if idx % 2 == 0:
-            idx += 1
-        else:
-            idx -= 1
-        x = idx % img_dim
-        y = int(idx / img_dim)
+    new_img_size = int(img_dim * img_dim / 2)
+    new_img = bytearray(new_img_size)
+    raw_pil_image = pil.tobytes('raw', 'P')
+    the_two_px_to_write = [0, 0]
+    for idx, pix in enumerate(raw_pil_image):
+        # We store 2 bytes as one... in LE
+        the_two_px_to_write[idx % 2] = pix
+        if idx % 2 == 1:
+            # -1 because we are always processing 2 px at the same time
+            x =( idx-1) % img_dim
+            y = int((idx-1) / img_dim)
 
-        tile_x = math.floor(x / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
-        tile_y = math.floor(y / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
-        tile_id = tile_y * KAO_IMG_IMG_DIM + tile_x
+            tile_x = math.floor(x / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
+            tile_y = math.floor(y / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
+            tile_id = tile_y * KAO_IMG_IMG_DIM + tile_x
 
-        in_tile_x = x - KAO_IMG_METAPIXELS_DIM * tile_x
-        in_tile_y = y - KAO_IMG_METAPIXELS_DIM * tile_y
-        idx_in_tile = in_tile_y * KAO_IMG_METAPIXELS_DIM + in_tile_x
+            in_tile_x = x - KAO_IMG_METAPIXELS_DIM * tile_x
+            in_tile_y = y - KAO_IMG_METAPIXELS_DIM * tile_y
+            idx_in_tile = in_tile_y * KAO_IMG_METAPIXELS_DIM + in_tile_x
 
-        nidx = tile_id * KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM + idx_in_tile
-        # print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
-        new_img[nidx*4:nidx*4+4] = pix.uint
-    # new_img size must not change, this can only happen if the loop before was wrong.
-    assert len(new_img) == new_img_size
+            nidx = int((tile_id * KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM + idx_in_tile) / 2)
+            #print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
+            # Little endian:
+            new_img[nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
 
     # You can check if this works correctly, by checking if the reverse action returns the
     # correct image again:

@@ -1,16 +1,15 @@
 # directly based off https://github.com/PsyCommando/ppmdu/blob/master/src/ppmdu/fmts/px_compression.cpp
 from collections import deque
 
-from bitstring import BitStream
 from enum import Enum
 from typing import Tuple
 
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN, PX_LOOKBACK_BUFFER_SIZE, PX_MAX_MATCH_SEQLEN, \
     PX_NB_POSSIBLE_SEQUENCES_LEN, PX_NB_POSSIBLE_SEQ_LEN
 
 
-DEBUG = False
+DEBUG = True
 
 
 class Operation(Enum):
@@ -66,13 +65,15 @@ class MatchingSeq:
 
 # noinspection PyAttributeOutsideInit
 class PxCompressor:
-    def __init__(self, uncompressed_data: BitStream, compression_level=PXCompLevel.LEVEL_3, should_search_first=True):
+    def __init__(self, uncompressed_data: bytes, compression_level=PXCompLevel.LEVEL_3, should_search_first=True):
+        if not isinstance(uncompressed_data, memoryview):
+            uncompressed_data = memoryview(uncompressed_data)
         self.uncompressed_data = uncompressed_data
         self.compression_level = compression_level
         self.should_search_first = should_search_first
         self.reset()
         # Calculate the size of the input
-        self.input_size = int(len(self.uncompressed_data) / 8)
+        self.input_size = len(self.uncompressed_data)
 
     def reset(self):
         self.control_flags = None
@@ -84,7 +85,7 @@ class PxCompressor:
         self.cursor = 0
         self.output_cursor = 0
 
-    def compress(self) -> Tuple[BitStream, BitStream]:
+    def compress(self) -> Tuple[bytes, bytes]:
         """Compresses the input data"""
         self.reset()
 
@@ -100,8 +101,7 @@ class PxCompressor:
         # Worst case, we got 1 more bytes per 8 bytes.
         # And if we're not divisible by 8, add an extra
         # yte for the last command byte !
-        self.compressed_data = BitStream(8 * (self.input_size + int(self.input_size / 8)
-                                              + (1 if self.input_size % 8 != 0 else 0)))
+        self.compressed_data = bytearray(self.input_size + self.input_size + (1 if self.input_size % 8 != 0 else 0))
 
         # Set by default those two possible matching sequence length, given we want 99% of the time to
         # have those 2 to cover the gap between the 2 bytes to 1 algorithm and the string search, and also get
@@ -182,7 +182,7 @@ class PxCompressor:
 
         else:  # Level 0
             # If all else fails, add the byte as-is
-            b = read_bytes(self.uncompressed_data, self.cursor).uint
+            b = read_uintle(self.uncompressed_data, self.cursor)
             myoperation.type = Operation.COPY_ASIS
             myoperation.highnybble = (b >> 4) & 0x0F
             myoperation.lownybble = b & 0x0F
@@ -200,7 +200,7 @@ class PxCompressor:
         both_bytes = 0
         for i in [1, 0]:
             if l_cursor < self.input_size:
-                both_bytes |= read_bytes(self.uncompressed_data, l_cursor).uint << 8 * i
+                both_bytes |= read_uintle(self.uncompressed_data, l_cursor) << 8 * i
                 l_cursor += 1
             else:
                 return False
@@ -224,7 +224,7 @@ class PxCompressor:
         # Read 4 nibbles from the input
         for i in [0, 2]:
             if l_cursor < self.input_size:
-                b = read_bytes(self.uncompressed_data, l_cursor).uint
+                b = read_uintle(self.uncompressed_data, l_cursor)
                 nibbles[i] = (b >> 4) & 0x0F
                 nibbles[i+1] = b & 0x0F
                 l_cursor += 1
@@ -336,14 +336,14 @@ class PxCompressor:
 
         cur_search_pos = searchbeg
         while cur_search_pos < searchend:
-            fnd_tpl = self.uncompressed_data.find(
+            fnd_tpl = self.uncompressed_data.tobytes().find(
                 read_bytes(self.uncompressed_data, tofindbeg, seq_to_find_short_end - tofindbeg),
-                cur_search_pos * 8, searchend * 8, True
+                cur_search_pos, searchend
             )
-            if len(fnd_tpl) <= 0:
+            if fnd_tpl == -1:
                 cur_search_pos = searchend
             else:
-                cur_search_pos = int(fnd_tpl[0] / 8)
+                cur_search_pos = fnd_tpl
 
             if cur_search_pos != searchend:
                 nbmatches = self._count_equal_consecutive_elem(
@@ -394,29 +394,29 @@ class PxCompressor:
         Outputs into the output buffer at position self.output_cursor the compressed
         form of the operation passed in parameter!
         """
-        insert_pos = self.output_cursor * 8
+        insert_pos = self.output_cursor
         if operation.type == Operation.COPY_ASIS:
-            self.compressed_data[insert_pos:insert_pos+8] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
+            self.compressed_data[insert_pos] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
             if DEBUG:
-                print(f"Writing as is {self.compressed_data[insert_pos:insert_pos+8].uint:>08b}")
+                print(f"Writing as is {self.compressed_data[insert_pos]:>08b}")
         elif operation.type == Operation.COPY_SEQUENCE:
-            self.compressed_data[insert_pos:insert_pos+8] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
+            self.compressed_data[insert_pos] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
-            self.compressed_data[insert_pos+8:insert_pos+16] = operation.nextbytevalue
+            self.compressed_data[insert_pos+1] = operation.nextbytevalue
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
             if DEBUG:
-                print(f"Writing copy seq {self.compressed_data[insert_pos:insert_pos+8].uint:>08b} + {self.compressed_data[insert_pos+8:insert_pos+16].uint:>08b}")
+                print(f"Writing copy seq {self.compressed_data[insert_pos]:>08b} + {self.compressed_data[insert_pos+1]:>08b}")
         else:
-            flag = self.control_flags[4+operation.type.value*8:8+operation.type.value*8].uint
-            self.compressed_data[insert_pos:insert_pos+8] = (flag << 4) | operation.lownybble
+            flag = self.control_flags[operation.type.value]
+            self.compressed_data[insert_pos] = (flag << 4) | operation.lownybble
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
             if DEBUG:
-                print(f"Writing compression {self.compressed_data[insert_pos:insert_pos+8].uint:>08b}")
+                print(f"Writing compression {self.compressed_data[insert_pos]:>08b}")
 
     def _build_ctrl_flags_list(self):
         """
@@ -436,14 +436,14 @@ class PxCompressor:
         # Build our flag list, based on the allowed length values!
         # We only have 16 possible values to contain lengths and control flags..
 
-        self.control_flags = BitStream(9*8)
+        self.control_flags = bytearray(9)
         # Pos to insert a ctrl flag at
         itctrlflaginsert = 0
         for flagval in range(0, 0xF):
             if flagval not in self.high_nibble_lenghts_possible:
-                if itctrlflaginsert < len(self.control_flags) / 8:
+                if itctrlflaginsert < len(self.control_flags):
                     # Flag value is not taken ! So go ahead and make it a control flag value !
-                    self.control_flags[itctrlflaginsert*8:itctrlflaginsert*8+8] = flagval
+                    self.control_flags[itctrlflaginsert] = flagval
                     itctrlflaginsert += 1
 
     def _output_all_operations(self):
@@ -467,7 +467,7 @@ class PxCompressor:
                 print(f"Writing command byte {command_byte:>08b}")
 
             # Output command byte
-            self.compressed_data[self.output_cursor*8:self.output_cursor*8+8] = command_byte
+            self.compressed_data[self.output_cursor] = command_byte
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
 
@@ -478,7 +478,7 @@ class PxCompressor:
                 self._output_an_operation(self.pending_operations.popleft())
 
         # After we're done, shrink down the BitStream, and remove all the extra space
-        self.compressed_data = self.compressed_data[:self.output_cursor * 8]
+        self.compressed_data = self.compressed_data[:self.output_cursor]
 
     @staticmethod
     def _adv_as_much_as_possible(iter, itend, displacement):
@@ -497,7 +497,7 @@ class PxCompressor:
         :return:
         """
         count = 0
-        while first_1 != last_1 and first_2 != last_2 and read_bytes(self.uncompressed_data, first_1).uint == read_bytes(self.uncompressed_data, first_2).uint:
+        while first_1 != last_1 and first_2 != last_2 and read_uintle(self.uncompressed_data, first_1) == read_uintle(self.uncompressed_data, first_2):
             count += 1
             first_1 += 1
             first_2 += 1

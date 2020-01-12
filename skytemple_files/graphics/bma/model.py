@@ -2,9 +2,8 @@ import math
 from typing import Tuple, List
 
 from PIL import Image, ImageDraw, ImageFont
-from bitstring import BitStream
 
-from skytemple_files.common.util import read_bytes, lcm
+from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
 
@@ -31,31 +30,33 @@ MASK_PAL *= 16
 
 
 class Bma:
-    def __init__(self, data: BitStream):
+    def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
 
-        self.map_width_camera = read_bytes(data, 0).uint
-        self.map_height_camera = read_bytes(data, 1).uint
+        self.map_width_camera = read_uintle(data, 0)
+        self.map_height_camera = read_uintle(data, 1)
         # ALL game maps have the same values here. Changing them does nothing,
         # so the game seems to be hardcoded to 3x3.
-        self.tiling_width = read_bytes(data, 2).uint
-        self.tiling_height = read_bytes(data, 3).uint
+        self.tiling_width = read_uintle(data, 2)
+        self.tiling_height = read_uintle(data, 3)
         # Map width & height in chunks, so map.map_width_camera / map.tiling_width
         # The only maps this is not true for are G01P08A. S01P01B, S15P05A, S15P05B, it seems they
         # are missing one tile in width (32x instead of 33x)
         # The game doesn't seem to care if this value is off by less than 3 (tiling_w/h).
         # But NOTE that this has consequences for the collision and unknown data layers! See notes at collision
         # below!
-        self.map_width_chunks = read_bytes(data, 4).uint
-        self.map_height_chunks = read_bytes(data, 5).uint
+        self.map_width_chunks = read_uintle(data, 4)
+        self.map_height_chunks = read_uintle(data, 5)
         # Through tests against the BPC, it was determined that unk5 is the number of layers:
         # It seems to be ignored by the game, however
-        self.number_of_layers = read_bytes(data, 6, 2).uintle
+        self.number_of_layers = read_uintle(data, 6, 2)
         # Some kind of boolean flag? Seems to control if there is a third data block between
         # layer data and collision - Seems to be related to NPC conversations, see below.
-        self.unk6 = read_bytes(data, 8, 2).uintle
+        self.unk6 = read_uintle(data, 8, 2)
         # Some maps weirdly have 0x02 here and then have two collision layers, but they always seem redundant?
-        self.number_of_collision_layers = read_bytes(data, 0xA, 2).uintle
+        self.number_of_collision_layers = read_uintle(data, 0xA, 2)
 
         # in p01p01a: 0xc - 0x27: Layer 1 header? 0xc messes everthing up. after that each row? 27 rows...?
         #             0xc -> 0xc8 = 200
@@ -79,15 +80,15 @@ class Bma:
         #               source:
         #               https://projectpokemon.org/docs/mystery-dungeon-nds/rrt-background-format-r113/
         #
-        number_of_bytes_per_layer = self.map_width_chunks * self.map_height_chunks * 1.5
+        number_of_bytes_per_layer = self.map_width_chunks * self.map_height_chunks * 2
         # If the map width is odd, we have one extra tile per row:
         if self.map_width_chunks % 2 != 0:
-            number_of_bytes_per_layer += self.map_height_chunks * 1.5
+            number_of_bytes_per_layer += self.map_height_chunks * 2
         number_of_bytes_per_layer = math.ceil(number_of_bytes_per_layer)
 
         # Read first layer
         self.layer0, compressed_layer0_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
-            data[0xC * 8:],
+            data[0xC:],
             stop_when_size=number_of_bytes_per_layer
         ))
         self.layer1 = None
@@ -96,7 +97,7 @@ class Bma:
         if self.number_of_layers > 1:
             # Read second layer
             self.layer1, compressed_layer1_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
-                data[(0xC + compressed_layer0_size) * 8:],
+                data[0xC + compressed_layer0_size:],
                 stop_when_size=number_of_bytes_per_layer
             ))
 
@@ -109,7 +110,7 @@ class Bma:
             # It seems that if the player tries interact on these blocks, the game checks the other blocks for NPCs
             # to interact with (as if the player were standing on them)
             self.unknown_data_block, data_block_len = self._read_unknown_data_block(FileType.GENERIC_NRL.decompress(
-                data[offset_begin_next * 8:],
+                data[offset_begin_next:],
                 # It is unknown what size calculation is actually used here in game, see notes below for collision
                 # (search for 'NOTE!!!')
                 # We assume it's the same as for the collision.
@@ -136,7 +137,7 @@ class Bma:
             #         instead of map_width/height_chunks * tiling_width/height. The map that proves this is G01P08A!
             number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
             self.collision, collision_size = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
-                data[offset_begin_next * 8:],
+                data[offset_begin_next:],
                 stop_when_size=number_of_bytes_for_col
             ))
             offset_begin_next += collision_size
@@ -145,7 +146,7 @@ class Bma:
             # A second collision layer...?
             number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
             self.collision2, collision_size2 = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
-                data[offset_begin_next * 8:],
+                data[offset_begin_next:],
                 stop_when_size=number_of_bytes_for_col
             ))
 
@@ -154,17 +155,18 @@ class Bma:
                f"T: {self.tiling_width}x{self.tiling_height} - " \
                f"MM: {self.map_width_chunks}x{self.map_height_chunks} - " \
                f"L: {self.number_of_layers} - " \
-               f"Col: 0x{self.number_of_collision_layers} - " \
+               f"Col: {self.number_of_collision_layers} - " \
                f"unk6: 0x{self.unk6:04x}"
 
-    def _read_layer(self, data: Tuple[BitStream, int]):
+    def _read_layer(self, data: Tuple[bytes, int]):
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [0 for _ in range(0, self.map_width_chunks)]
         layer = []
         max_tiles = self.map_width_chunks * self.map_height_chunks
         i = 0
         skipped_on_prev = True
-        for chunk in data[0].cut(12):
+        for chunk in iter_bytes(data[0], 2):
+            chunk = int.from_bytes(chunk, 'little')
             if i >= max_tiles:
                 # this happens if there is a leftover 12bit word.
                 break
@@ -176,28 +178,28 @@ class Bma:
                 skipped_on_prev = True
                 continue
             skipped_on_prev = False
-            cv = chunk.uint ^ previous_row_values[index_in_row]
+            cv = chunk ^ previous_row_values[index_in_row]
             previous_row_values[index_in_row] = cv
             layer.append(cv)
             i += 1
         return layer, data[1]
 
-    def _read_collision(self, data: Tuple[BitStream, int]):
+    def _read_collision(self, data: Tuple[bytes, int]):
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [False for _ in range(0, self.map_width_camera)]
         col = []
-        for i, chunk in enumerate(data[0].cut(8)):
+        for i, chunk in enumerate(data[0]):
             index_in_row = i % self.map_width_camera
-            cv = bool(chunk.uint ^ int(previous_row_values[index_in_row]))
+            cv = bool(chunk ^ int(previous_row_values[index_in_row]))
             previous_row_values[index_in_row] = cv
             col.append(cv)
         return col, data[1]
 
-    def _read_unknown_data_block(self, data: Tuple[BitStream, int]):
+    def _read_unknown_data_block(self, data: Tuple[bytes, int]):
         # TODO: There doesn't seem to be this XOR thing here?
         unk = []
-        for i, chunk in enumerate(data[0].cut(8)):
-            unk.append(chunk.uint)
+        for i, chunk in enumerate(data[0]):
+            unk.append(chunk)
         return unk, data[1]
 
     def to_pil(
@@ -218,8 +220,6 @@ class Bma:
 
         TODO: The speed can be increased SIGNIFICANTLY if we only re-render the changed
               animated tiles instead!
-
-        TODO: This is soooo awfully slow right now. Good place to start profiling. (hint: it's mostly BitSreams fault...)
         """
 
         chunk_width = BPC_TILE_DIM * self.tiling_width

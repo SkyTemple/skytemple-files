@@ -1,7 +1,4 @@
-import bitstring
-from bitstring import BitStream
-
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 # Operations are encoded in command bytes (CMD):
 # PHASE 1
@@ -19,19 +16,19 @@ DEBUG = False
 
 # noinspection PyAttributeOutsideInit
 class BpcTilemapDecompressor:
-    def __init__(self, compressed_data: BitStream, stop_when_size):
+    def __init__(self, compressed_data: bytes, stop_when_size):
         self.compressed_data = compressed_data
         self.stop_when_size = stop_when_size
-        self.max_size = int(len(compressed_data) / 8)
+        self.max_size = len(compressed_data)
         self.reset()
 
     def reset(self):
-        self.decompressed_data = BitStream(self.stop_when_size*8)
+        self.decompressed_data = bytearray(self.stop_when_size)
         self.cursor = 0
         self.bytes_written = 0
         pass
 
-    def decompress(self) -> BitStream:
+    def decompress(self) -> bytes:
         self.reset()
         if DEBUG:
             print(f"BPC tilemap decompression start....")
@@ -107,7 +104,7 @@ class BpcTilemapDecompressor:
                 raise ValueError("BPC Tilemap Decompressor: Reached EOF while writing decompressed data.")
         elif CMD_2_SEEK_OFFSET <= cmd < CMD_2_COPY_LOW:
             # cmd - CMD_2_SEEK_OFFSET is the nb of words to write with the next byte as low byte
-            value_at_pos = read_bytes(self.decompressed_data, self.bytes_written, 2).uintle
+            value_at_pos = read_uintle(self.decompressed_data, self.bytes_written, 2)
             value_at_pos |= self._read()
             if DEBUG:
                 print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
@@ -118,7 +115,7 @@ class BpcTilemapDecompressor:
             if DEBUG:
                 print(f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}")
             for i in range(CMD_2_COPY_LOW-1, cmd):
-                value_at_pos = read_bytes(self.decompressed_data, self.bytes_written, 2).uintle
+                value_at_pos = read_uintle(self.decompressed_data, self.bytes_written, 2)
                 value_at_pos |= self._read()
                 self._write(value_at_pos)
 
@@ -128,10 +125,10 @@ class BpcTilemapDecompressor:
             raise ValueError("BPC Tilemap Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += bytes
-        return read_bytes(self.compressed_data, oc, bytes).uintle
+        return read_uintle(self.compressed_data, oc, bytes)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""
-        self.decompressed_data.overwrite(bitstring.pack('uintle:16', pattern_to_write), self.bytes_written*8)
+        self.decompressed_data[self.bytes_written:self.bytes_written+2] = pattern_to_write.to_bytes(2, 'little')
         self.bytes_written += 2
         pass

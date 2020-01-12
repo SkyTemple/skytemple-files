@@ -1,12 +1,10 @@
-from bitstring import BitStream
-
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bpc.model import Bpc
 
 
 class BpcHandler(DataHandler[Bpc]):
     @classmethod
-    def deserialize(cls, data: BitStream, tiling_width=3, tiling_height=3, **kwargs) -> Bpc:
+    def deserialize(cls, data: bytes, tiling_width=3, tiling_height=3, **kwargs) -> Bpc:
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
@@ -21,6 +19,6 @@ class BpcHandler(DataHandler[Bpc]):
         return Bpc(data, tiling_width, tiling_height)
 
     @classmethod
-    def serialize(cls, data: Bpc) -> BitStream:
+    def serialize(cls, data: Bpc) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         pass  # todo

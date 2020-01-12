@@ -1,9 +1,6 @@
 from typing import Tuple
 
-import bitstring
-from bitstring import BitStream
-
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 # Operations are encoded in command bytes (CMD):
 CMD_ZERO_OUT      = 0x80  # All values below
@@ -16,20 +13,19 @@ DEBUG = False
 
 # noinspection PyAttributeOutsideInit
 class GenericNrlDecompressor:
-    def __init__(self, compressed_data: BitStream, stop_when_size):
+    def __init__(self, compressed_data: bytes, stop_when_size):
         self.compressed_data = compressed_data
         self.stop_when_size = stop_when_size
-        self.max_size = int(len(compressed_data) / 8)
+        self.max_size = len(compressed_data)
         self.reset()
 
     def reset(self):
-        self.decompressed_data = BitStream(self.stop_when_size*8)
-        #self.decompressed_data = BitStream()
+        self.decompressed_data = bytearray(self.stop_when_size)
         self.cursor = 0
         self.bytes_written = 0
         pass
 
-    def decompress(self) -> Tuple[BitStream, int]:
+    def decompress(self) -> Tuple[bytes, int]:
         self.reset()
         if DEBUG:
             print(f"Generic NRL decompression start....")
@@ -43,7 +39,7 @@ class GenericNrlDecompressor:
                              f"Should be {self.stop_when_size}, is {self.bytes_written} "
                              f"Diff: {self.bytes_written - self.stop_when_size}")
 
-        return self.decompressed_data[:self.bytes_written*8], self.cursor
+        return self.decompressed_data[:self.bytes_written], self.cursor
 
     def _process(self):
         if DEBUG:
@@ -83,10 +79,9 @@ class GenericNrlDecompressor:
             raise ValueError("Generic NRL Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += 1
-        return read_bytes(self.compressed_data, oc).uint
+        return read_uintle(self.compressed_data, oc)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as byte"""
-        #self.decompressed_data.append(bitstring.pack('uint:8', pattern_to_write))
-        self.decompressed_data.overwrite(bitstring.pack('uint:8', pattern_to_write), self.bytes_written*8)
+        self.decompressed_data[self.bytes_written] = pattern_to_write
         self.bytes_written += 1

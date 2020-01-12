@@ -1,7 +1,6 @@
 import os
 import traceback
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
@@ -12,7 +11,7 @@ os.makedirs(dbg_output, exist_ok=True)
 
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
-bin = BitStream(rom.getFileByName('MAP_BG/bg_list.dat'))
+bin = rom.getFileByName('MAP_BG/bg_list.dat')
 bg_list = BgListDatHandler.deserialize(bin)
 
 for i, l in enumerate(bg_list.level):

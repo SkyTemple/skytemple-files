@@ -1,6 +1,5 @@
 import os
 
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
@@ -10,7 +9,7 @@ os.makedirs(os.path.join(os.path.dirname(__file__), 'dbg_output'), exist_ok=True
 
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
-bin = BitStream(rom.getFileByName('MAP_BG/bg_list.dat'))
+bin = rom.getFileByName('MAP_BG/bg_list.dat')
 bg_list = BgListDatHandler.deserialize(bin)
 
 possible_values_for_unk6 = {}
@@ -18,7 +17,7 @@ possible_values_for_unk7 = {}
 
 for i, l in enumerate(bg_list.level):
     maps = [
-        #'P01P01A',  # OK: Map with collision
+        'P01P01A',  # OK: Map with collision
         #'T00P03',   # OK: Map with an odd amount of chunks in width
         #'D01P11B',  # OK: Map with an odd amount of chunks in width and collision
         #'G01P03A',  # OK: Map with unk6 != 0
@@ -30,8 +29,8 @@ for i, l in enumerate(bg_list.level):
         #'P19P02A',  # OK: Map with odd amount of chunks in height and collision
         #'H01P99A',  # OK: Weird lower layer. 2nd BPA seems to be the issue
         #'G01P08A',  # OK: Wrong collision length. Why? [reason was failed dimension assertion, see model]
-        'V10P03C',  #     broken tiles?
-        'D28P32A',  #     broken tiles?
+        #'V10P03C',  #     broken tiles?
+        #'D28P32A',  #     broken tiles?
         #'P17P02A',  # OK: For below: Collision is 0x0002
         #'D47P11A',
         #'D31P11A',

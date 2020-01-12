@@ -1,8 +1,6 @@
 from typing import Tuple
 
-import bitstring
-from bitstring import BitStream
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 # Operations are encoded in command bytes (CMD):
 # BASE OPERATIONS
@@ -28,16 +26,16 @@ DEBUG = False
 
 
 class BpcImageDecompressor:
-    def __init__(self, compressed_data: BitStream, stop_when_size: int):
+    def __init__(self, compressed_data: bytes, stop_when_size: int):
         self.compressed_data = compressed_data
         self.stop_when_size = stop_when_size
         # Input size
-        self.max_size = int(len(self.compressed_data) / 8)
+        self.max_size = len(self.compressed_data)
         self.reset()
 
     # noinspection PyAttributeOutsideInit
     def reset(self):
-        self.decompressed_data = BitStream(self.stop_when_size*8)
+        self.decompressed_data = bytearray(self.stop_when_size)
 
         # todo
         self.has_leftover = False
@@ -60,7 +58,7 @@ class BpcImageDecompressor:
         # Used to keep track of when to end
         self.bytes_written = 0
 
-    def decompress(self) -> Tuple[BitStream, int]:
+    def decompress(self) -> Tuple[bytes, int]:
         """Returns the decompressed data and the size of the read, compressed data"""
         self.reset()
         if DEBUG:
@@ -211,7 +209,7 @@ class BpcImageDecompressor:
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""
-        self.decompressed_data.overwrite(bitstring.pack('uintle:16', pattern_to_write), self.bytes_written*8)
+        self.decompressed_data[self.bytes_written:self.bytes_written+2] = pattern_to_write.to_bytes(2, 'little')
         self.bytes_written += 2
         pass
 
@@ -223,5 +221,5 @@ class BpcImageDecompressor:
             print("r", end="")
         oc = self.cursor
         self.cursor += bytes
-        return read_bytes(self.compressed_data, oc, bytes).uintle
+        return read_uintle(self.compressed_data, oc, bytes)
 

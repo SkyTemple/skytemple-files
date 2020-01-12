@@ -1,7 +1,6 @@
 import os
 
 from PIL import Image
-from bitstring import BitStream
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.kao.handler import KaoHandler
@@ -11,7 +10,7 @@ dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 rom = NintendoDSRom.fromFile(os.path.join(dir, 'skyworkcopy.nds'))
 
 kao_data = rom.getFileByName('FONT/kaomado.kao')
-kao = KaoHandler.deserialize(BitStream(kao_data))
+kao = KaoHandler.deserialize(kao_data)
 #kao.get(427, 0).get().show()
 with open(os.path.join(dir, 'kaomado.kao'), 'wb') as f:
     f.write(kao_data)
@@ -30,7 +29,7 @@ rom.saveToFile(os.path.join(dir, 'skyworkcopy_edit.nds'))
 
 # Test
 kao_data = rom.getFileByName('FONT/kaomado.kao')
-kao = KaoHandler.deserialize(BitStream(kao_data))
+kao = KaoHandler.deserialize(kao_data)
 kao.get(427, 0).get().show()
 kao.get(427, 2).get().show()
 

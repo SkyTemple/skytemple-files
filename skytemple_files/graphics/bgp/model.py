@@ -1,12 +1,9 @@
-import math
-from itertools import chain
-from typing import Tuple, List
+from typing import List
 
 from PIL import Image
-from bitstring import BitStream
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, to_pil_tiled
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 
 BGP_RES_WIDTH = 256
 BGP_RES_HEIGHT = 192
@@ -15,7 +12,7 @@ BGP_PAL_ENTRY_LEN = 4
 BGP_PAL_UNKNOWN4_COLOR_VAL = 0x80
 # The palette is actually a list of smaller palettes. Each palette has this many colors:
 BGP_PAL_NUMBER_COLORS = 16
-BGP_TILEMAP_ENTRY_BITLEN = 16
+BGP_TILEMAP_ENTRY_BYTELEN = 2
 BGP_PIXEL_BITLEN = 4
 BGP_TILE_DIM = 8
 BGP_RES_WIDTH_IN_TILES = int(BGP_RES_WIDTH / BGP_TILE_DIM)
@@ -26,22 +23,23 @@ BGP_TOTAL_NUMBER_TILES = BGP_RES_WIDTH_IN_TILES * BGP_RES_HEIGHT_IN_TILES
 
 class BgpHeader:
     """Header for a Bgp Image"""
-    def __init__(self, data: BitStream, offset=0):
-        self.palette_begin = read_bytes(data, offset, 4).uintle
+    def __init__(self, data: bytes, offset=0):
+        self.palette_begin = read_uintle(data, offset, 4)
         if self.palette_begin != BGP_HEADER_LENGTH:
             raise ValueError("Invalid BGP image: Palette pointer too low.")
-        self.palette_length = read_bytes(data, offset + 4, 4).uintle
-        self.tiles_begin = read_bytes(data, offset + 8, 4).uintle
-        self.tiles_length = read_bytes(data, offset + 12, 4).uintle
-        self.tilemap_data_begin = read_bytes(data, offset + 16, 4).uintle
-        self.tilemap_data_length = read_bytes(data, offset + 20, 4).uintle
-        self.unknown3 = read_bytes(data, offset + 24, 4).uintle
-        self.unknown4 = read_bytes(data, offset + 28, 4).uintle
+        self.palette_length = read_uintle(data, offset + 4, 4)
+        self.tiles_begin = read_uintle(data, offset + 8, 4)
+        self.tiles_length = read_uintle(data, offset + 12, 4)
+        self.tilemap_data_begin = read_uintle(data, offset + 16, 4)
+        self.tilemap_data_length = read_uintle(data, offset + 20, 4)
+        self.unknown3 = read_uintle(data, offset + 24, 4)
+        self.unknown4 = read_uintle(data, offset + 28, 4)
 
 
 class Bgp:
-    def __init__(self, data: BitStream):
-        self.data = data
+    def __init__(self, data: bytes):
+        if not isinstance(data, memoryview):
+            self.data = memoryview(data)
         self.header = BgpHeader(self.data)
         self._extract_palette()
         self._extract_tilemap()
@@ -54,8 +52,8 @@ class Bgp:
         self.palettes = []
         self.current_palette = []
         colors_read_for_current_palette = 0
-        for pal_entry in self.data.cut(8 * BGP_PAL_ENTRY_LEN, self.header.palette_begin * 8, pal_end * 8):
-            r, g, b, unk = pal_entry.bytes
+        for pal_entry in iter_bytes(self.data, BGP_PAL_ENTRY_LEN, self.header.palette_begin, pal_end):
+            r, g, b, unk = pal_entry
             self.current_palette.append(r)
             self.current_palette.append(g)
             self.current_palette.append(b)
@@ -68,10 +66,10 @@ class Bgp:
     def _extract_tilemap(self):
         tilemap_end = self.header.tilemap_data_begin + self.header.tilemap_data_length
         self.tilemap = []
-        for i, entry in enumerate(self.data.cut(BGP_TILEMAP_ENTRY_BITLEN, self.header.tilemap_data_begin * 8, tilemap_end * 8)):
+        for i, entry in enumerate(iter_bytes(self.data, BGP_TILEMAP_ENTRY_BYTELEN, self.header.tilemap_data_begin, tilemap_end)):
             # NOTE: There will likely be more than 768 (BGP_TOTAL_NUMBER_TILES) tiles. Why is unknown, but the
             #       rest is just zero padding.
-            self.tilemap.append(TilemapEntry.from_bytes(entry.uintle))
+            self.tilemap.append(TilemapEntry.from_bytes(int.from_bytes(entry, 'little')))
         if len(self.tilemap) < BGP_TOTAL_NUMBER_TILES:
             raise ValueError(f"Invalid BGP image: Too few tiles ({len(self.tilemap)}) in tile mapping."
                              f"Must be at least {BGP_TOTAL_NUMBER_TILES}.")
@@ -79,10 +77,10 @@ class Bgp:
     def _extract_tiles(self):
         self.tiles = []
         tiles_end = self.header.tiles_begin + self.header.tiles_length
-        for tile in self.data.cut(BGP_PIXEL_BITLEN * BGP_TILE_DIM * BGP_TILE_DIM, self.header.tiles_begin * 8,
-                                  tiles_end * 8):
+        # (8 / BGP_PIXEL_BITLEN) = 8 / 4 = 2
+        for tile in iter_bytes(self.data, int(BGP_TILE_DIM * BGP_TILE_DIM / 2), self.header.tiles_begin, tiles_end):
             # NOTE: Again, the number of tiles is probably bigger than BGP_TOTAL_NUMBER_TILES... (zero padding)
-            self.tiles.append(tile)
+            self.tiles.append(bytearray(tile))
         if len(self.tiles) < BGP_TOTAL_NUMBER_TILES:
             raise ValueError(f"Invalid BGP image: Too few tiles ({len(self.tiles)}) in tile data."
                              f"Must be at least {BGP_TOTAL_NUMBER_TILES}.")
@@ -97,7 +95,7 @@ class Bgp:
         For dimension calculating, see the constants of this module.
         """
         return to_pil(
-            self.tilemap, self.tiles, self.palettes, BGP_TILE_DIM, BGP_RES_WIDTH, BGP_RES_HEIGHT, 1, 1, ignore_flip_bits
+            self.tilemap[:BGP_TOTAL_NUMBER_TILES], self.tiles, self.palettes, BGP_TILE_DIM, BGP_RES_WIDTH, BGP_RES_HEIGHT, 1, 1, ignore_flip_bits
         )
 
     def to_pil_tiled(self, ignore_flip_bits=False) -> List[Image.Image]:
@@ -109,7 +107,7 @@ class Bgp:
         768 tiles are returned, for dimension calculating, see the constants of this module.
         """
         return to_pil_tiled(
-            self.tilemap, self.tiles, self.palettes, BGP_TILE_DIM, ignore_flip_bits
+            self.tilemap[:BGP_TOTAL_NUMBER_TILES], self.tiles, self.palettes, BGP_TILE_DIM, ignore_flip_bits
         )
 
     def from_pil(self, pil: Image.Image, force_import=False) -> None:

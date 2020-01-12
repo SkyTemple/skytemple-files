@@ -1,14 +1,11 @@
-import bitstring
-from bitstring import BitStream
-
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import *
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN
 
 
 DEBUG = False
 
 
-def compute_four_nibbles_pattern(idx_ctrl_flags, low_nibble):
+def compute_four_nibbles_pattern(idx_ctrl_flags, low_nibble) -> bytes:
     # The index of the control flag defines modifies one or more nibbles to modify.
     if idx_ctrl_flags == 0:
         # In this case, all our 4 nibbles have the value of the "low_nibble" as their value
@@ -33,11 +30,11 @@ def compute_four_nibbles_pattern(idx_ctrl_flags, low_nibble):
         byte1 = ns[0] << 4 | ns[1]
         byte2 = ns[2] << 4 | ns[3]
 
-    return bitstring.pack('uint:8, uint:8', byte1, byte2)
+    return bytes([byte1, byte2])
 
 
 class PxDecompressor:
-    def __init__(self, compressed_data: BitStream, flags: BitStream):
+    def __init__(self, compressed_data: bytes, flags: bytes):
         self.compressed_data = compressed_data
         self.flags = flags
         self.reset()
@@ -45,20 +42,14 @@ class PxDecompressor:
     # noinspection PyAttributeOutsideInit
     def reset(self):
         self.cursor = 0
-        self.uncompressed_data = BitStream()
+        self.uncompressed_data = bytearray()
 
-    def decompress(self) -> BitStream:
+    def decompress(self) -> bytes:
         self.reset()
         # Let's get started!
         if DEBUG:
             print("Starting PX decomp.")
-            print("Here are the first 20 bytes:")
-            for byte in self.compressed_data.cut(8, 0, 20*8):
-                print(f"{byte.uint:>08b}")
-            print("Here are our control flags (lower nibbles are checked:")
-            for idx, byte in enumerate(self.flags.cut(8)):
-                print(f"{idx}: {byte.uint:>08b}")
-        c_data_len = int(len(self.compressed_data) / 8)
+        c_data_len = len(self.compressed_data)
         if DEBUG:
             print(f"Bytes in input: {c_data_len}")
         while self.cursor < c_data_len:
@@ -68,12 +59,12 @@ class PxDecompressor:
     def _handle_control_byte(self, c_data_len):
         ctrl_byte = self._read_next_byte()
         if DEBUG:
-            print(f"HANDLE CONTROL BYTE: {ctrl_byte.uint:>08b}")
+            print(f"HANDLE CONTROL BYTE: {ctrl_byte:>08b}")
 
-        for ctrl_bit in ctrl_byte.cut(1):
+        for ctrl_bit in iter_bits(ctrl_byte):
             if self.cursor >= c_data_len:
                 break
-            if ctrl_bit.uint == 1:
+            if ctrl_bit == 1:
                 if DEBUG:
                     print(f"> Handling uncompressed.")
                 self.uncompressed_data.append(self._read_next_byte())
@@ -84,8 +75,8 @@ class PxDecompressor:
 
     def _handle_special_case(self):
         next_byte = self._read_next_byte()
-        high_nibble = (next_byte.uint >> 4) & 0xF
-        low_nibble = next_byte.uint & 0xF
+        high_nibble = (next_byte >> 4) & 0xF
+        low_nibble = next_byte & 0xF
 
         idx_ctrl_flags = self._matches_flags(high_nibble)
         if DEBUG:
@@ -99,9 +90,9 @@ class PxDecompressor:
         pass
 
     def _read_next_byte(self):
-        b = read_bytes(self.compressed_data, self.cursor)
+        b = read_uintle(self.compressed_data, self.cursor)
         if DEBUG:
-            print(f"IDX {int(self.cursor)} - READING BYTE: {b.uint:>08b}")
+            print(f"IDX {int(self.cursor)} - READING BYTE: {b:>08b}")
         self.cursor += 1
         return b
 
@@ -111,8 +102,8 @@ class PxDecompressor:
         The flags are assumed to be in the lower half of each self.flags byte.
         Returns index or False
         """
-        for idx, byte in enumerate(self.flags.cut(8)):
-            nbl = byte.uint & 0xF
+        for idx, byte in enumerate(self.flags):
+            nbl = byte & 0xF
             if nbl == high_nibble:
                 return idx
         return False
@@ -122,15 +113,15 @@ class PxDecompressor:
         two_bytes = compute_four_nibbles_pattern(idx_ctrl_flags, low_nibble)
         if DEBUG:
             print(f"> Inserting by byte pattern: {two_bytes}")
-        self.uncompressed_data.append(two_bytes)
+        self.uncompressed_data += two_bytes
         pass
 
     def _copy_sequence(self, low_nibble, high_nibble):
         # In this case, we append a a sequence from a previous position in the decompressed data.
         # High half-byte is length of sequence copied over
         # Low half-byte is part of the position of the sequence
-        offset = (-0x1000 + (low_nibble << 8)) | self._read_next_byte().uint
-        outcurbyte = int(len(self.uncompressed_data) / 8)
+        offset = (-0x1000 + (low_nibble << 8)) | self._read_next_byte()
+        outcurbyte = len(self.uncompressed_data)
         if offset < -outcurbyte:
             raise ValueError(f"Sequence to copy out of bound! Expected max. {-self.cursor} but got {offset}. "
                              f"Either the data to decompress is not valid PX compressed data, or "
@@ -141,7 +132,5 @@ class PxDecompressor:
         bytes_to_copy = high_nibble + PX_MIN_MATCH_SEQLEN
         if DEBUG:
             print(f"> Copying {bytes_to_copy} from offset: {offset}")
-        self.uncompressed_data.append(
-            read_bytes(self.uncompressed_data, copy_pos, bytes_to_copy)
-        )
+        self.uncompressed_data += read_bytes(self.uncompressed_data, copy_pos, bytes_to_copy)
         pass

@@ -5,7 +5,8 @@ from itertools import chain
 from typing import List, Tuple
 
 from PIL import Image
-from bitstring import BitStream
+
+from skytemple_files.common.util import iter_bytes_4bit_le
 
 
 class TilemapEntry:
@@ -37,7 +38,7 @@ class TilemapEntry:
 
 
 def to_pil(
-        tilemap: List[TilemapEntry], tiles: List[BitStream], palettes: List[List[int]],
+        tilemap: List[TilemapEntry], tiles: List[bytes], palettes: List[List[int]],
         tile_dim: int,
         img_width: int, img_height: int,
         tiling_width=1, tiling_height=1,
@@ -51,7 +52,7 @@ def to_pil(
 
     tiling_width/height control how many tiles form a chunk.
     """
-    pil_img_data = BitStream(img_width * img_height * 8)
+    pil_img_data = bytearray(img_width * img_height)
     img_width_in_tiles = int(img_width / tile_dim)
     number_tiles = len(tilemap)
     number_of_cols_per_pal = int(len(palettes[0]) / 3)
@@ -74,13 +75,8 @@ def to_pil(
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
         pal_start_offset = number_of_cols_per_pal * tile_mapping.pal_idx
-        for idx, pal in enumerate(tile_data.cut(4)):
-            # Little Endian
-            if idx % 2 == 0:
-                idx += 1
-            else:
-                idx -= 1
-            real_pal = pal_start_offset + pal.uint
+        for idx, pal in enumerate(iter_bytes_4bit_le(tile_data)):
+            real_pal = pal_start_offset + pal
             x_in_tile, y_in_tile = _px_pos_flipped(
                 idx % tile_dim, math.floor(idx / tile_dim), tile_dim, tile_dim,
                 tile_mapping.flip_x and not ignore_flip_bits, tile_mapping.flip_y and not ignore_flip_bits
@@ -89,17 +85,17 @@ def to_pil(
             real_y = tile_y * tile_dim + y_in_tile
             nidx = real_y * img_width + real_x
             #print(f"{i} : {tile_x}x{tile_y} -- {x_in_tile}x{y_in_tile} -> {real_x}x{real_y}={nidx}")
-            pil_img_data[nidx*8:nidx*8+8] = real_pal
+            pil_img_data[nidx] = real_pal
     #assert len(pil_img_data) == dim_w * dim_h * 8
 
-    im = Image.frombuffer('P', (img_width, img_height), pil_img_data.bytes, 'raw', 'P', 0, 1)
+    im = Image.frombuffer('P', (img_width, img_height), pil_img_data, 'raw', 'P', 0, 1)
 
     im.putpalette(chain.from_iterable(palettes))
     return im
 
 
 def to_pil_tiled(
-        tilemap: List[TilemapEntry], in_tiles: List[BitStream], palettes: List[List[int]],
+        tilemap: List[TilemapEntry], in_tiles: List[bytes], palettes: List[List[int]],
         tile_dim: int,
         ignore_flip_bits=False
 ) -> List[Image.Image]:
@@ -112,23 +108,18 @@ def to_pil_tiled(
     number_tiles = len(tilemap)
 
     for i in range(0, number_tiles):
-        pil_img_data = BitStream(tile_dim * tile_dim * 8)
+        pil_img_data = bytearray(tile_dim * tile_dim)
         tile_mapping = tilemap[i]
         tile_data = in_tiles[tile_mapping.idx]
-        for idx, pal in enumerate(tile_data.cut(4)):
-            # Little Endian
-            if idx % 2 == 0:
-                idx += 1
-            else:
-                idx -= 1
+        for idx, pal in enumerate(iter_bytes_4bit_le(tile_data)):
             real_x, real_y = _px_pos_flipped(
                 idx % tile_dim, math.floor(idx / tile_dim), tile_dim, tile_dim,
                 tile_mapping.flip_x and not ignore_flip_bits, tile_mapping.flip_y and not ignore_flip_bits
             )
             nidx = real_y * tile_dim + real_x
-            pil_img_data[nidx*8:nidx*8+8] = pal.uint
+            pil_img_data[nidx] = pal
 
-        im = Image.frombuffer('P', (tile_dim, tile_dim), pil_img_data.bytes, 'raw', 'P', 0, 1)
+        im = Image.frombuffer('P', (tile_dim, tile_dim), pil_img_data, 'raw', 'P', 0, 1)
         im.putpalette(palettes[tile_mapping.pal_idx])
         tiles.append(im)
 

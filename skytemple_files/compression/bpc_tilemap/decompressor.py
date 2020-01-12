@@ -1,15 +1,5 @@
 from skytemple_files.common.util import *
-
-# Operations are encoded in command bytes (CMD):
-# PHASE 1
-CMD_1_ZERO_OUT      = 0x80  # All values below
-CMD_1_FILL_OUT      = 0x80  # All values equal/above until next
-CMD_1_COPY_BYTES    = 0xC0  # All values equal/above
-# PHASE 2
-CMD_2_SEEK_OFFSET   = 0x80  # All values below
-CMD_2_FILL_LOW      = 0x80  # All values equal/above until next
-CMD_2_COPY_LOW      = 0xC0  # All values equal/above
-
+from skytemple_files.compression.bpc_tilemap import *
 
 DEBUG = False
 
@@ -39,6 +29,7 @@ class BpcTilemapDecompressor:
 
         if DEBUG:
             print(f"End Phase 1. Begin Phase 2")
+            print(f"Cursor begin phase 2: {self.cursor}")
 
         if self.bytes_written != self.stop_when_size:
             raise ValueError(f"BPC Tilemap Decompressor: Phase1: End result length unexpected. "
@@ -52,7 +43,7 @@ class BpcTilemapDecompressor:
             self._process_phase2()
 
         if self.bytes_written != self.stop_when_size:
-            raise ValueError(f"BPC Tilemap Decompressor: Phase1: End result length unexpected. "
+            raise ValueError(f"BPC Tilemap Decompressor: Phase2: End result length unexpected. "
                              f"Should be {self.stop_when_size}, is {self.bytes_written} "
                              f"Diff: {self.bytes_written - self.stop_when_size}")
 

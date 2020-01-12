@@ -1,12 +1,7 @@
 from typing import Tuple
 
 from skytemple_files.common.util import *
-
-# Operations are encoded in command bytes (CMD):
-CMD_ZERO_OUT      = 0x80  # All values below
-CMD_FILL_OUT      = 0x80  # All values equal/above until next
-CMD_COPY_BYTES    = 0xC0  # All values equal/above
-
+from skytemple_files.compression.generic_nrl import CMD_ZERO_OUT, CMD_COPY_BYTES, CMD_FILL_OUT
 
 DEBUG = False
 
@@ -62,7 +57,7 @@ class GenericNrlDecompressor:
                 print(f"READ 1 - WRITE {cmd - (CMD_FILL_OUT-1)}")
             for i in range(CMD_FILL_OUT-1, cmd):
                 self._write(param)
-        else:  # elif cmd > CMD_1_COPY_BYTES:
+        else:  # elif cmd > CMD_COPY_BYTES:
             # cmd - CMD_COPY_BYTES. Copy the next byte and repeat.
             if DEBUG:
                 print(f"READ {(cmd - (CMD_COPY_BYTES-1))} - WRITE {(cmd - (CMD_COPY_BYTES-1))}")

@@ -1,25 +1,7 @@
 from typing import Tuple
 
+from skytemple_files.compression.bpc_image import *
 from skytemple_files.common.util import *
-
-# Operations are encoded in command bytes (CMD):
-# BASE OPERATIONS
-CMD_CP_FROM_POS                         = 0x80  # All values below: Copy from pos
-# We build and copy a pattern:
-CMD_CYCLE_PATTERN_AND_CP                = 0xE0  # All values equal/above
-CMD_USE_LAST_PATTERN_AND_CP             = 0xC0  # All values equal/above until next
-CMD_LOAD_BYTE_AS_PATTERN_AND_CP         = 0x80  # All values equal/above until next
-
-# SPECIAL OPERATIONS (ALl values equal)
-# Base operations, but the number of bytes to copy is stored in the next byte, not the CMD
-CMD_CYCLE_PATTERN_AND_CP__NEXT          = 0xFF
-CMD_USE_LAST_PATTERN_AND_CP__NEXT       = 0xDF
-CMD_LOAD_BYTE_AS_PATTERN_AND_CP__NEXT   = 0xBF
-CMD_CP_FROM_POS__NEXT                   = 0x7E
-# In list for if:
-CMD__NEXT = [CMD_CP_FROM_POS__NEXT, CMD_CYCLE_PATTERN_AND_CP__NEXT, CMD_LOAD_BYTE_AS_PATTERN_AND_CP__NEXT, CMD_USE_LAST_PATTERN_AND_CP__NEXT]
-# Like above, but with the next 16-bit LE int:
-CMD_COPY__NEXT__LE_16                   = 0x7F
 
 
 DEBUG = False
@@ -69,7 +51,7 @@ class BpcImageDecompressor:
 
         if self.bytes_written != self.stop_when_size:
             raise ValueError(f"BPC Image Decompressor: End result length unexpected. "
-                             f"Should be {self.stop_when_size}, is {self.bytes_written}"
+                             f"Should be {self.stop_when_size}, is {self.bytes_written}. "
                              f"Diff: {self.bytes_written - self.stop_when_size}")
 
         return self.decompressed_data, self.cursor - initial_cursor
@@ -100,7 +82,7 @@ class BpcImageDecompressor:
         # This leftover exists because we are always working with words (= 2 bytes).
         # Keep in mind, that the number of bytes to write, is actually one lower than it should actually be. On odd
         # numbers there are supposed to be one word written more. Because we are always writing two words,
-        # this is the case. However if there is an even amount of number_of_bytes_to_output, we are no actually missing
+        # this is the case. However if there is an even amount of number_of_bytes_to_output, we are actually missing
         # one written byte because the ACTUAL amount of bytes to write is actually one higher.
         # So we need to "fill" the boundaries like this.
         # This is also why we decrease the number_of_bytes_to_output in the _read_nb_words_to_output

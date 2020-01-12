@@ -20,10 +20,11 @@ for i, l in enumerate(bg_list.level):
     try:
         bpl = l.get_bpl(rom)
 
-        for j, bpa in enumerate(l.get_bpas(rom)):
-            print(f"{i},{j} (bma: {l.bma_name}) - {l.bpa_names[j]}: {bpa}")  # - BPC LayerSpec: {bpc.layers}
+        for j, bpa in enumerate(l.get_bpas(rom, True)):
+            if bpa is not None:
+                print(f"{i},{j} (bma: {l.bma_name}) - {l.bpa_names[j]}: {bpa}")  # - BPC LayerSpec: {bpc.layers}
 
-            bpa.tiles_to_pil(bpl.palettes[0]).save(os.path.join(dbg_output, f'{l.bpa_names[j]}.png'))
+                bpa.tiles_to_pil(bpl.palettes[0]).save(os.path.join(dbg_output, f'{l.bpa_names[j]}.png'))
 
     except (ValueError, AssertionError, SystemError) as ex:
         print(f"error for {l.bma_name}:")

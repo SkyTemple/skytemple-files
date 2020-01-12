@@ -1,5 +1,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bg_list_dat.model import BgList
+from skytemple_files.graphics.bg_list_dat.writer import BgListWriter
 
 
 class BgListDatHandler(DataHandler[BgList]):
@@ -9,4 +10,4 @@ class BgListDatHandler(DataHandler[BgList]):
 
     @classmethod
     def serialize(cls, data: BgList) -> bytes:
-        pass  # todo
+        return BgListWriter(data).write()

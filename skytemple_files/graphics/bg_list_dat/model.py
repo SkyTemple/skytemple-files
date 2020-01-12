@@ -18,12 +18,14 @@ BPA_EXT = '.bpa'
 
 class BgListEntry:
     def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[str]):
+        # ALL names can only be 1-8 character ASCII strings with only uppercase
+        # letters. This is checked during serialization in the writer.
         self.bpl_name = bpl_name
         self.bpc_name = bpc_name
         self.bma_name = bma_name
         self.bpa_names = bpa_names
         # There can only be 8 BPAs. There isn't more space!
-        assert len(bpa_names) <= 8
+        assert len(bpa_names) == 8
 
     def __str__(self):
         return f"BPL: {self.bpl_name}, BPC: {self.bpc_name}, BMA: {self.bma_name}, BPAs: {self.bpa_names}"
@@ -61,18 +63,22 @@ class BgListEntry:
             rom_or_directory_root
         ))
 
-    def get_bpas(self, rom_or_directory_root: Union[str, NintendoDSRom]):
+    def get_bpas(self, rom_or_directory_root: Union[str, NintendoDSRom], include_none=False):
         """
         Returns a list of BPA models that are referenced in this entry.
         Can be serialized with the BPA DataHandler. Original filenames in self.bpa_names.
+        If include_none is True, all BPA slots are returned, in order, even empty ones (None).
         """
         from skytemple_files.common.types.file_types import FileType
         bpas = []
         for bpa_name in self.bpa_names:
-            bpas.append(FileType.BPA.deserialize(self._get_file(
-                str(PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)),
-                rom_or_directory_root
-            )))
+            if bpa_name is not None:
+                bpas.append(FileType.BPA.deserialize(self._get_file(
+                    str(PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)),
+                    rom_or_directory_root
+                )))
+            elif include_none:
+                bpas.append(None)
         return bpas
 
     def _get_file(self, filename, rom_or_directory_root) -> bytes:
@@ -86,6 +92,7 @@ class BgListEntry:
 
 
 class BgList:
+    """BgList model. To edit entries, manipulate the levels list."""
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -96,6 +103,8 @@ class BgList:
             for potential_bpa in iter_bytes(entry, 8, 24, 88):
                 if bytes(potential_bpa)[0] != 0:
                     bpas.append(bytes(potential_bpa).rstrip(b'\0').decode('ascii'))
+                else:
+                    bpas.append(None)
 
             self.level.append(BgListEntry(
                 read_bytes(bytes(entry), 0, 8).rstrip(b'\0').decode('ascii'),

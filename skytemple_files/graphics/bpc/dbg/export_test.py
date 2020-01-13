@@ -56,8 +56,8 @@ def main():
                 bpc.tiles_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.tiles.png')
                 prf(f'saving tiles for {filename}')
                 # Save chunks!
-                #bpc.chunks_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.png')
-                #prf(f'saving chunks for {filename}')
+                bpc.chunks_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.png')
+                prf(f'saving chunks for {filename}')
                 # Saving animated chunks!
                 # Default for only one frame, doesn't really matter
                 duration = 1000

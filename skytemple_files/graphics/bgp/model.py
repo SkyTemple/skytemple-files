@@ -125,10 +125,6 @@ class Bgp:
         the force_import flag.
 
         The image must have the size 256x192. For dimension calculating, see the constants of this module.
-
-        Currently all tiles are imported as-is, without checking if the same or a flipped
-        version of a tile already exists. So basically no "compression" in image size is done
-        by re-using tiles.
         """
         self.tiles, self.tilemap, self.palettes = from_pil(
             pil, BGP_PAL_NUMBER_COLORS, BGP_MAX_PAL, BGP_TILE_DIM, BGP_RES_WIDTH,

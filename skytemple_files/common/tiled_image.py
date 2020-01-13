@@ -2,7 +2,7 @@
 import math
 import warnings
 from itertools import chain
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from PIL import Image
 
@@ -12,6 +12,10 @@ from skytemple_files.common.util import iter_bytes_4bit_le
 class TilemapEntry:
     def __init__(self, idx, flip_x, flip_y, pal_idx):
         self.idx = idx
+        if idx > 0x3FF:
+            raise ValueError(f"Tile Mapping can not be processed. The tile number referenced ({idx}) is bigger "
+                             f"than the maximum ({0x3FF}). If you are importing an image, please try to have "
+                             f"less unique tiles.")
         self.flip_x = flip_x
         self.flip_y = flip_y
         self.pal_idx = pal_idx
@@ -134,7 +138,7 @@ def to_pil_tiled(
 def from_pil(
         pil: Image.Image, single_palette_size: int, max_nb_palettes: int, tile_dim: int,
         img_width: int,  img_height: int,
-        tiling_width=1, tiling_height=1, force_import=False
+        tiling_width=1, tiling_height=1, force_import=False, optimize=True
 ) -> Tuple[List[bytearray], List[TilemapEntry], List[List[int]]]:
     """
     Modify the image data in the tiled image by importing the passed PIL.
@@ -148,9 +152,8 @@ def from_pil(
     the color is replaced with 0 of the palette (transparent). This is controlled by
     the force_import flag.
 
-    Currently all tiles are imported as-is, without checking if the same or a flipped
-    version of a tile already exists. So basically no "compression" in image size is done
-    by re-using tiles.
+    If optimize is True, we check each read tile, if this tile or a flipped version already exists in the data set,
+    if so we re-use the tile.
 
     Returns (tiles, tile mappings, palettes)
     """
@@ -179,7 +182,6 @@ def from_pil(
         cur_palette.append(col)
 
     raw_pil_image = pil.tobytes('raw', 'P')
-    single_tile_pixel_size = tile_dim * tile_dim
     number_of_tiles = int(len(raw_pil_image) / tile_dim / tile_dim)
 
     tiles: List[bytearray] = [None for _ in range(0, number_of_tiles)]
@@ -191,38 +193,35 @@ def from_pil(
 
     already_initialised_tiles = []
 
-    # TODO: Doesn't actually take tiling_width and tiling_height into account right now, I already
-    #       have enough headaches for now
     for idx, pix in enumerate(raw_pil_image):
         # Only calculate position for first pixel in two pixel pair (it's always the even one)
         if idx % 2 == 0:
-            x =idx % img_width
+            x = idx % img_width
             y = int(idx / img_width)
 
-            tile_x = math.floor(x / tile_dim)
-            tile_y = math.floor(y / tile_dim)
-            tile_id = tile_y * int(img_width / tile_dim) + tile_x
+            # I'm so sorry for this, if someone wants to rewrite this, please go ahead!
+            chunk_x = math.floor(x / (tile_dim * tiling_width))
+            chunk_y = math.floor(y / (tile_dim * tiling_height))
+            tiles_up_to_current_chunk_y = int(img_width / tile_dim * chunk_y * tiling_height)
 
-            in_tile_x = x - tile_dim * tile_x
-            in_tile_y = y - tile_dim * tile_y
+            tile_x = (chunk_x * tiling_width * tiling_height) + (math.floor(x / tile_dim) - (chunk_x * tiling_width))
+            tile_y = (chunk_y * tiling_height) + (math.floor(y / tile_dim) - (chunk_y * tiling_height))
+            tile_id = tiles_up_to_current_chunk_y + ((tile_y - tiling_height * chunk_y) * tiling_width) + tile_x
+
+            in_tile_x = x - tile_dim * math.floor(x / tile_dim)
+            in_tile_y = y - tile_dim * math.floor(y / tile_dim)
             idx_in_tile = in_tile_y * tile_dim + in_tile_x
 
-            nidx = int(idx_in_tile/ 2)
-            #print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
+            nidx = int(idx_in_tile / 2)
+            #print(f"{idx}@{x}x{y}: {tile_id} : [chunk {chunk_x}x{chunk_y}] "
+            #      f"{tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
 
             if tile_id not in already_initialised_tiles:
                 already_initialised_tiles.append(tile_id)
-                # Begin a new tile and tile mapping
-                # Get the palette index from the first pixel
-                current_tile_palette_index = math.floor(pix / single_palette_size)
+                # Begin a new tile
                 tiles[tile_id] = bytearray(int(tile_dim * tile_dim / 2))
-                tile_palette_indices[tile_id] = current_tile_palette_index
-                tilemap[tile_id] = TilemapEntry(
-                    idx=tile_id,
-                    pal_idx=current_tile_palette_index,
-                    flip_x=False,
-                    flip_y=False
-                )
+                # Get the palette index from the first pixel
+                tile_palette_indices[tile_id] = math.floor(pix / single_palette_size)
 
         # The "real" value is the value of the color in the currently used palette of the tile
         real_pix = pix - (tile_palette_indices[tile_id] * single_palette_size)
@@ -246,7 +245,59 @@ def from_pil(
             # Little endian:
             tiles[tile_id][nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
 
-    return tiles, tilemap, palettes
+    final_tiles: List[bytearray] = []
+    len_final_tiles = 0
+    # Create tilemap and optimize tiles list
+    for tile_id, tile in enumerate(tiles):
+        reusable_tile_idx = None
+        flip_x = False
+        flip_y = False
+        if optimize:
+            reusable_tile_idx, flip_x, flip_y = _search_for_tile(final_tiles, tile, tile_dim)
+        if reusable_tile_idx is not None:
+            tile_id_to_use = reusable_tile_idx
+        else:
+            final_tiles.append(tile)
+            tile_id_to_use = len_final_tiles
+            len_final_tiles += 1
+        tilemap[tile_id] = TilemapEntry(
+            idx=tile_id_to_use,
+            pal_idx=tile_palette_indices[tile_id],
+            flip_x=flip_x,
+            flip_y=flip_y
+        )
+
+    return final_tiles, tilemap, palettes
+
+
+def _search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
+    """
+    Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
+    TODO: Currently doesn't check flipped tiles!
+    """
+    for i, tile_in_tiles in enumerate(tiles):
+        if tile_in_tiles == tile:
+            return i, False, False
+        x_flipped = _flip_tile_x(tile_in_tiles, tile_dim)
+        if x_flipped == tile:
+            return i, True, False
+        if _flip_tile_y(tile_in_tiles, tile_dim) == tile:
+            return i, False, True
+        if _flip_tile_y(x_flipped, tile_dim) == tile:
+            return i, True, True
+    return None, False, False
+
+
+def _flip_tile_x(tile: bytes, tile_dim):
+    """Flip all pixels in tile on the x-axis"""
+    # todo
+    return tile
+
+
+def _flip_tile_y(tile: bytes, tile_dim):
+    """Flip all pixels in tile on the y-axis"""
+    # todo
+    return tile
 
 
 def _px_pos_flipped(x, y, w, h, flip_x, flip_y) -> Tuple[int, int]:

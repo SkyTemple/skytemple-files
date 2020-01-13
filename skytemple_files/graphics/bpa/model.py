@@ -83,7 +83,7 @@ class Bpa:
         """
         tiles, _, __ = from_pil(
             image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPA_TILE_DIM,
-            image.width, image.height
+            image.width, image.height, optimize=False
         )
         self.tiles = []
         self.number_of_frames = int(image.width / BPA_TILE_DIM)

@@ -28,6 +28,7 @@ with open(os.path.join(base_dir, 'dh', 'ph.png'), 'rb') as f:
     img = Image.open(f)
 
     for filename in file_list:
+        filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
         print("Processing " + filename)
 
         bin_before = rom.getFileByName(filename)
@@ -36,6 +37,7 @@ with open(os.path.join(base_dir, 'dh', 'ph.png'), 'rb') as f:
         bgp.from_pil(img)
         img_after = bgp.to_pil()
         bin_after = BgpHandler.serialize(bgp)
+        bgp.to_pil().save(filename_h + '.png')
 
         rom.setFileByName(filename, bin_after)
 

@@ -250,14 +250,32 @@ class Bpc:
         """
         self.layers[layer].tiles, _, __ = from_pil(
             image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
-            image.width, image.height
+            image.width, image.height, optimize=False
         )
         self.layers[layer].number_tiles = len(self.layers[layer].tiles) - 1
 
-    def pil_to_chunks(self, layer: int, image: Image.Image):
-        pass  # todo - replaces the tile data AND all tile mappings - Used to create new chunks.
-              #        Works like BGP import. - "Unsets" BPA mappings however, because chunks_to_pil contains
-              #        no BPA.
+    def pil_to_chunks(self, layer: int, image: Image.Image, force_import=True) -> List[List[int]]:
+        """
+        Imports chunks. Format same as for chunks_to_pil.
+        Replaces tiles, tile mappings and therefor also chunks.
+        "Unsets" BPA assignments! BPAs have to be manually re-assigned by using set_tile or set_chunk. BPA
+        indices are stored after BPC tile indices.
+
+        The PIL must have a palette containing the 16 sub-palettes with 16 colors each (256 colors).
+
+        If a pixel in a tile uses a color outside of it's 16 color range, an error is thrown or
+        the color is replaced with 0 of the palette (transparent). This is controlled by
+        the force_import flag.
+
+        Returns the palettes stored in the image for further processing (eg. replacing the BPL palettes).
+        """
+        self.layers[layer].tiles, self.layers[layer].tilemap, palettes = from_pil(
+            image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
+            image.width, image.height, 3, 3, force_import
+        )
+        self.layers[layer].number_tiles = len(self.layers[layer].tiles) - 1
+        self.layers[layer].chunk_tilemap_len = int(len(self.layers[layer].tilemap) / self.tiling_width / self.tiling_height)
+        return palettes
 
     def get_tile(self, layer: int, index: int) -> TilemapEntry:
         return self.layers[layer].tilemap[index]

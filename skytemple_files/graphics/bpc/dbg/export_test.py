@@ -11,7 +11,7 @@ def main():
 
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
     prf('opening rom')
 
     bin = rom.getFileByName('MAP_BG/bg_list.dat')
@@ -27,8 +27,8 @@ def main():
         #    continue
         # debug map: T00P01
         # crossroads: P01P01A
-        #if filename != 'V10P03C':
-        #    continue
+        if filename != 'P01P01A':
+            continue
         try:
             filename_h = os.path.join(os.path.dirname(__file__), 'dbg_output', filename.replace('/', '_'))
 

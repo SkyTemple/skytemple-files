@@ -1,11 +1,12 @@
 import math
-from typing import Tuple, List
+from typing import Tuple
 
 from PIL import Image
 
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
+from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 BPC_PIXEL_BITLEN = 4
 BPC_TILE_DIM = 8
@@ -15,7 +16,6 @@ BPC_TILEMAP_BYTELEN = 2
 class BpcLayer:
     def __init__(self, number_tiles, bpas, tilemap_len, tiles=None, tilemap=None):
         # The actual number of tiles is one lower
-        # TODO: Remember to add 1 during seri.
         self.number_tiles = number_tiles - 1
         # There must be 4 BPAs. (0 for not used)
         assert len(bpas) == 4
@@ -79,7 +79,7 @@ class Bpc:
         ))
         assert len(self.layers[0].tiles) - 1 == self.layers[0].number_tiles
         start_tile_map_1 = self._upper_layer_pointer + compressed_tile_size_1
-        # start_tile_map_1 is 2 bytes-aligned TODO: Don't forget for serialization!
+        # start_tile_map_1 is 2 bytes-aligned
         if start_tile_map_1 % 2 != 0:
             start_tile_map_1 += 1
 
@@ -88,7 +88,7 @@ class Bpc:
             data[start_tile_map_1:end_of_layer_data],
             # TODO: It's not documented yet that the 9 used here in the docs by psy_commando is actually the
             #       size of the chunks.
-            stop_when_size=(self.layers[0].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
+            stop_when_size=(self.layers[0].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * BPC_TILEMAP_BYTELEN
         ))
 
         if self.number_of_layers > 1:
@@ -104,7 +104,7 @@ class Bpc:
             # Read the second layer tilemap
             self.layers[1].tilemap = self._read_tilemap_data(FileType.BPC_TILEMAP.decompress(
                 data[start_tile_map_2:],
-                stop_when_size=(self.layers[1].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * 2
+                stop_when_size=(self.layers[1].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * BPC_TILEMAP_BYTELEN
             ))
 
     def _read_tile_data(self, data: Tuple[bytes, int]):
@@ -121,9 +121,9 @@ class Bpc:
         tilemap = []
         # The first chunk is not stored, but is always empty
         for i in range(0, self.tiling_width*self.tiling_height):
-            tilemap.append(TilemapEntry.from_bytes(0))
+            tilemap.append(TilemapEntry.from_int(0))
         for i, entry in enumerate(iter_bytes(data, BPC_TILEMAP_BYTELEN)):
-            tilemap.append(TilemapEntry.from_bytes(int.from_bytes(entry, 'little')))
+            tilemap.append(TilemapEntry.from_int(int.from_bytes(entry, 'little')))
         return tilemap
 
     def chunks_to_pil(self, layer: int, palettes: List[List[int]], width_in_mtiles=20) -> Image.Image:
@@ -166,7 +166,7 @@ class Bpc:
 
         # create a dummy tile map containing all the tiles
         dummy_tile_map = []
-        for i in range(0, self.layers[layer].number_tiles):
+        for i in range(0, self.layers[layer].number_tiles+1):
             dummy_tile_map.append(TilemapEntry(
                 idx=i,
                 pal_idx=single_palette if single_palette is not None else self._get_palette_for_tile(layer, i),
@@ -174,7 +174,7 @@ class Bpc:
                 flip_y=False
             ))
         width = width_in_tiles * BPC_TILE_DIM
-        height = math.ceil(self.layers[layer].number_tiles / width_in_tiles) * BPC_TILE_DIM
+        height = math.ceil((self.layers[layer].number_tiles+1) / width_in_tiles) * BPC_TILE_DIM
 
         return to_pil(
             dummy_tile_map, self.layers[layer].tiles, palettes, BPC_TILE_DIM, width, height
@@ -244,7 +244,15 @@ class Bpc:
         return frames
 
     def pil_to_tiles(self, layer: int, image: Image.Image):
-        pass  # todo - replaces the tile data but doesn't change any tile mappings and so also no chunks
+        """
+        Imports tiles that are in a format as described in the documentation for tiles_to_pil.
+        Tile mappings, chunks and palettes are not updated.
+        """
+        self.layers[layer].tiles, _, __ = from_pil(
+            image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
+            image.width, image.height
+        )
+        self.layers[layer].number_tiles = len(self.layers[layer].tiles) - 1
 
     def pil_to_chunks(self, layer: int, image: Image.Image):
         pass  # todo - replaces the tile data AND all tile mappings - Used to create new chunks.

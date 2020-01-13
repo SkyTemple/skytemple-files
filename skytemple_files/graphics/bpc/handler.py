@@ -1,5 +1,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bpc.model import Bpc
+from skytemple_files.graphics.bpc.writer import BpcWriter
 
 
 class BpcHandler(DataHandler[Bpc]):
@@ -20,5 +21,4 @@ class BpcHandler(DataHandler[Bpc]):
 
     @classmethod
     def serialize(cls, data: Bpc) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        pass  # todo
+        return BpcWriter(data).write()

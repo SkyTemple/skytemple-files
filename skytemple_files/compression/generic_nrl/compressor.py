@@ -66,6 +66,7 @@ class GenericNrlCompressor:
                 if DEBUG:
                     print(f"CMD_ZERO_OUT")
                 # CMD_ZERO_OUT
+                assert repeats < CMD_ZERO_OUT
                 cmd_byte = repeats
                 self._write(cmd_byte)
             else:

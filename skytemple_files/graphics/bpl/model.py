@@ -4,6 +4,10 @@ from skytemple_files.common.util import *
 
 # Length of a palette in colors. Color 0 is auto-generated (transparent)
 BPL_PAL_LEN = 15
+# Actual colors in an image, (including the color 0)
+BPL_IMG_PAL_LEN = BPL_PAL_LEN + 1
+# Maximum number of palettes
+BPL_MAX_PAL = 16
 # Number of color bytes per palette entry. Fourth is always 0x00.
 BPL_PAL_ENTRY_LEN = 4
 # Size of a single palette in bytes

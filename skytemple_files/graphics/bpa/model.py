@@ -1,10 +1,10 @@
 import math
-from typing import List
 
 from PIL import Image
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry
+from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 BPA_PIXEL_BITLEN = 4
 BPA_TILE_DIM = 8
@@ -34,8 +34,6 @@ class Bpa:
                 read_uintle(data, 4 + i*4 + 2, 2),
             ))
         end_header = 4 + self.number_of_frames * 4
-
-        self.dbg_images = []
 
         self.tiles = []
         slice_size = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
@@ -76,6 +74,34 @@ class Bpa:
         return to_pil(
             dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
         )
+
+    def pil_to_tiles(self, image: Image.Image):
+        """
+        Converts a PIL image back to the BPA.
+        The format is expected to be the same as tiles_to_pil. This means, that
+        each rows of tiles is one image set and each column is one frame.
+        """
+        tiles, _, __ = from_pil(
+            image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPA_TILE_DIM,
+            image.width, image.height
+        )
+        self.tiles = []
+        self.number_of_frames = int(image.width / BPA_TILE_DIM)
+        self.number_of_images = int(image.height / BPA_TILE_DIM)
+
+        # We need to re-order the tiles to actually save them
+        for frame_idx in range(0, self.number_of_frames):
+            for tile_idx in range(0, self.number_of_images):
+                self.tiles.append(tiles[tile_idx * self.number_of_frames + frame_idx])
+
+        # Correct frame info size
+        len_finfo = len(self.frame_info)
+        if len_finfo > self.number_of_frames:
+            self.frame_info = self.frame_info[:self.number_of_frames]
+        elif len_finfo < self.number_of_frames:
+            for i in range(len_finfo, self.number_of_frames):
+                # If the length is shorter, we just copy the last entry
+                self.frame_info.append(self.frame_info[len_finfo-1])
 
     def tiles_for_frame(self, frame):
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""

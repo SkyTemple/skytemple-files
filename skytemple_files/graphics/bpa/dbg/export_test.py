@@ -9,7 +9,7 @@ base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 dbg_output = os.path.join(os.path.dirname(__file__), 'dbg_output')
 os.makedirs(dbg_output, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
 
 bin = rom.getFileByName('MAP_BG/bg_list.dat')
 bg_list = BgListDatHandler.deserialize(bin)

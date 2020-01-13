@@ -229,9 +229,9 @@ def from_pil(
         if real_pix > single_palette_size or real_pix < 0:
             # The color is out of range!
             if not force_import:
-                raise ValueError(f"an not convert PIL image to PMD tiled image: "
-                                 f"The color ({pix}, from palette {math.floor(pix / single_palette_size)}) used by "
-                                 f"pixel {x+idx % 2}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
+                raise ValueError(f"Can not convert PIL image to PMD tiled image: "
+                                 f"The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
+                                 f"pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
                                  f"Expected are colors from palette {tile_palette_indices[tile_id]} ("
                                  f"{tile_palette_indices[tile_id] * single_palette_size} - "
                                  f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")

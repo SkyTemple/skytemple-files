@@ -13,22 +13,22 @@ BPL_PAL_ENTRY_LEN = 4
 # Size of a single palette in bytes
 BPL_PAL_SIZE = BPL_PAL_LEN * BPL_PAL_ENTRY_LEN
 BPL_COL_INDEX_ENTRY_LEN = 4
+# The value of the fourth color
+BPL_FOURTH_COLOR = 0x00
 
 
 class BplAnimationSpec:
 
-    def __init__(self, unk3, color_index):
+    def __init__(self, unk3, unk4):
         # TODO: My palette animation assumption doesn't work with these values.
         #       Value 1 goes from 0-16 and 2 from 0 to at least 63.
         #       ...there are only 16 colors in the palettes. However maybe the first value
         #       is actually the color index and 16 is a special value (cycle entire palette?)?
-        # May also be speed and not delay.
-        self.delay = unk3
-        # Index in the original palette that will be cycled.
-        self.color_index = color_index
+        self.unk3 = unk3
+        self.unk4 = unk4
 
     def __repr__(self):
-        return f"<{self.delay},{self.color_index}>"
+        return f"<{self.unk3},{self.unk4}>"
 
 
 class Bpl:
@@ -53,7 +53,7 @@ class Bpl:
             self.current_palette.append(r)
             self.current_palette.append(g)
             self.current_palette.append(b)
-            assert unk == 0x00
+            assert unk == BPL_FOURTH_COLOR
             colors_read_for_current_palette += 1
             if colors_read_for_current_palette >= 15:
                 self.palettes.append(self.current_palette)
@@ -81,7 +81,7 @@ class Bpl:
             for entry in iter_bytes(data, BPL_COL_INDEX_ENTRY_LEN, pal_end, cit_end):
                 self.animation_specs.append(BplAnimationSpec(
                     unk3=read_uintle(entry, 0, 2),
-                    color_index=read_uintle(entry, 2, 4)
+                    unk4=read_uintle(entry, 2, 4)
                 ))
 
             # Read color table 2
@@ -92,4 +92,4 @@ class Bpl:
             for col in iter_bytes(data, BPL_PAL_ENTRY_LEN, cit_end):
                 r, g, b, unk = col
                 self.animation_palette.append([r, g, b])
-                assert unk == 0x00
+                assert unk == BPL_FOURTH_COLOR

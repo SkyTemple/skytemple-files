@@ -94,7 +94,7 @@ def iter_bits(number: int):
 
 def iter_bytes(data: bytes, slice_size, start=0, end=None):
     if end is None:
-        end = len(data) - start
+        end = len(data)
     _check_memoryview(data)
     for i in range(start, end, slice_size):
         yield data[i: i + slice_size]

@@ -8,6 +8,8 @@ from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
 
 # Mask palette used for image composition
+from skytemple_files.graphics.bpl.model import Bpl
+
 MASK_PAL = [
     0x00, 0x00, 0x00,
     0xff, 0xff, 0xff,
@@ -87,15 +89,16 @@ class Bma:
         number_of_bytes_per_layer = math.ceil(number_of_bytes_per_layer)
 
         # Read first layer
+        #print(f"r> layer 0x{0xC:02x}")
         self.layer0, compressed_layer0_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
             data[0xC:],
             stop_when_size=number_of_bytes_per_layer
         ))
         self.layer1 = None
         compressed_layer1_size = 0
-        collision_size = 0
         if self.number_of_layers > 1:
             # Read second layer
+            #print(f"r> layer 0x{0xC + compressed_layer0_size:02x}")
             self.layer1, compressed_layer1_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
                 data[0xC + compressed_layer0_size:],
                 stop_when_size=number_of_bytes_per_layer
@@ -109,6 +112,7 @@ class Bma:
             # Theory from looking at the maps:
             # It seems that if the player tries interact on these blocks, the game checks the other blocks for NPCs
             # to interact with (as if the player were standing on them)
+            #print(f"r> unk   0x{offset_begin_next:02x}")
             self.unknown_data_block, data_block_len = self._read_unknown_data_block(FileType.GENERIC_NRL.decompress(
                 data[offset_begin_next:],
                 # It is unknown what size calculation is actually used here in game, see notes below for collision
@@ -135,6 +139,7 @@ class Bma:
             #
             # NOTE!!! Tests have shown, that the collision layers use map_width_camera and map_height_camera
             #         instead of map_width/height_chunks * tiling_width/height. The map that proves this is G01P08A!
+            #print(f"r> col   0x{offset_begin_next:02x}")
             number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
             self.collision, collision_size = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
                 data[offset_begin_next:],
@@ -173,7 +178,6 @@ class Bma:
             index_in_row = i % self.map_width_chunks
             # If the map width is odd, there is one extra chunk at the end of every row,
             # we remove this chunk.
-            # TODO: DO NOT FORGET TO ADD THEM BACK DURING SERIALIZATION
             if not skipped_on_prev and index_in_row == 0 and self.map_width_chunks % 2 != 0:
                 skipped_on_prev = True
                 continue
@@ -202,6 +206,51 @@ class Bma:
             unk.append(chunk)
         return unk, data[1]
 
+    def to_pil_single_layer(
+            self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa], layer: int
+    ) -> Image.Image:
+        """
+        Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
+        Exported is a single frame.
+
+        The list of bpas must be the one contained in the bg_list. It needs to contain 8 slots, with empty
+        slots being None.
+
+        0: lower layer
+        1: upper layer
+
+        Example, of how to export and then import again using images:
+            >>> l_upper = bma.to_pil_single_layer(bpc, bpl.palettes, bpas, 1)
+            >>> l_lower = bma.to_pil_single_layer(bpc, bpl.palettes, bpas, 0)
+            >>> bma.from_pil(bpc, bpl, l_lower, l_upper)
+        """
+        chunk_width = BPC_TILE_DIM * self.tiling_width
+        chunk_height = BPC_TILE_DIM * self.tiling_height
+
+        width_map = self.map_width_chunks * chunk_width
+        height_map = self.map_height_chunks * chunk_height
+
+        if layer == 0:
+            bma_layer = self.layer0
+            bpc_layer_id = 0 if bpc.number_of_layers == 1 else 1
+        else:
+            bma_layer = self.layer1
+            bpc_layer_id = 0
+
+        chunks = bpc.chunks_animated_to_pil(bpc_layer_id, palettes, bpas, 1)[0]
+        fimg = Image.new('P', (width_map, height_map))
+        fimg.putpalette(chunks.getpalette())
+
+        for i, mt_idx in enumerate(bma_layer):
+            x = i % self.map_width_chunks
+            y = math.floor(i / self.map_width_chunks)
+            fimg.paste(
+                chunks.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height)),
+                (x * chunk_width, y * chunk_height)
+            )
+
+        return fimg
+
     def to_pil(
             self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa],
             include_collision=True, include_unknown_data_block=True
@@ -218,8 +267,10 @@ class Bma:
         Does not include palette animations. You can apply them by switching out the palettes of the PIL
         using the information provided by the BPL.
 
-        TODO: The speed can be increased SIGNIFICANTLY if we only re-render the changed
-              animated tiles instead!
+        The list of bpas must be the one contained in the bg_list. It needs to contain 8 slots, with empty
+        slots being None.
+
+        TODO: The speed can be increased if we only re-render the changed animated tiles instead!
         """
 
         chunk_width = BPC_TILE_DIM * self.tiling_width
@@ -320,3 +371,29 @@ class Bma:
                         )
 
         return final_images
+
+    def from_pil(self, bpc: Bpc, bpl: Bpl, lower_layer_img: Image.Image, upper_layer_img: Image.Image = None, force_import=False):
+        """
+        Import an entire map from one or two images (for each layer).
+        Changes all tiles, tilemappings and chunks in the BPC and re-writes the two layer mappings of the BMA.
+        Imports the palettes of the image to the BPL. The palettes of the images passed into this method must
+        be identical.
+
+        The passed PIL will be split into separate tiles and the tile's palette index in the tile mapping for this
+        coordinate is determined by the first pixel value of each tile in the PIL. The PIL
+        must have a palette containing up to 16 sub-palettes with 16 colors each (256 colors).
+
+        If a pixel in a tile uses a color outside of it's 16 color range, an error is thrown or
+        the color is replaced with 0 of the palette (transparent). This is controlled by
+        the force_import flag.
+
+        Does not import animations. BPA tiles must be manually mapped to the tilemappings of the BPC after the import.
+        BPL palette animations are not modified.
+
+        The input images must have the same dimensions as the BMA (same dimensions as to_pil_single_layer would export).
+        The input image can have a different number of layers, than the BMA. BPC and BMA layers are changed accordingly.
+
+        BMA collision and data layer are not modified.
+        """
+        pass  # todo: Replaces BPL palettes, BPC tiles, BPC chunks and tilemappings. No animations.
+              #       Used for visual maps

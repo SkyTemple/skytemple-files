@@ -63,11 +63,11 @@ class BgListEntry:
             rom_or_directory_root
         ))
 
-    def get_bpas(self, rom_or_directory_root: Union[str, NintendoDSRom], include_none=False):
+    def get_bpas(self, rom_or_directory_root: Union[str, NintendoDSRom]):
         """
         Returns a list of BPA models that are referenced in this entry.
         Can be serialized with the BPA DataHandler. Original filenames in self.bpa_names.
-        If include_none is True, all BPA slots are returned, in order, even empty ones (None).
+        All BPA slots are returned, in order, even empty ones (None).
         """
         from skytemple_files.common.types.file_types import FileType
         bpas = []
@@ -77,7 +77,7 @@ class BgListEntry:
                     str(PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)),
                     rom_or_directory_root
                 )))
-            elif include_none:
+            else:
                 bpas.append(None)
         return bpas
 

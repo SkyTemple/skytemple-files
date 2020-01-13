@@ -198,10 +198,10 @@ class Bpc:
         Does not include palette animations. You can apply them by switching out the palettes of the PIL
         using the information provided by the BPL.
 
-        TODO: The speed can be increased SIGNIFICANTLY if we only re-render the changed
-              animated tiles instead!
+        The list of bpas must be the one contained in the bg_list. It needs to contain 8 slots, with empty
+        slots being None.
 
-        TODO: Move to a method to export single chunks and then merge them instead?
+        TODO: The speed can be increased if we only re-render the changed animated tiles instead!
         """
         ldata = self.layers[layer]
         # First check if we even have BPAs to use
@@ -287,33 +287,24 @@ class Bpc:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx:mtidx+9]
 
-    def get_bpas_for_layer(self, layer: int, possible_bpas_ordered: List[Bpa]) -> List[Bpa]:
+    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: List[Bpa]) -> List[Bpa]:
         """
-        This method returns a list of BPAs assigned to the BPC layer from an ordered list of possible candidates.
+        This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.
 
-        The way the game maps BPAs to BPC layers is really weird...
-        If a map has two BPAs assigned, you would assume, that each occupies a unique slot
-        in the BPA list for a layer. But they don't. Instead the four slot list is simply filled left to right.
-        Example: BPC has two BPAs with the following tile numbers: [64, 128].
-        Now the layers may have specs like this:  Layer1: [64, 0, 0, 0] - Layer2: [128, 0, 0, 0]
-        As you can see, BPAs are entirely just mapped by their number of tiles.
-        Now what happens when two BPAs of a BPC have the same index number? I don't know! But in this case
-        the method will return the first matching BPA passed in. Should a BPC layer contain multiple BPA
-        index counts of the same length, the next BPA with that number of tiles is added.
+        The bg_list.dat contains a list of 8 BPAs. The first four are for layer 0, the next four for layer 1.
+
+        This method asserts, that the number of tiles stored in the layer for the BPA, matches the data in the BPA!
         """
-        possible_bpas_ordered = possible_bpas_ordered.copy()
-        bpas = []
-        for bpa_tile_num in self.layers[layer].bpas:
-            if bpa_tile_num == 0:
-                continue
-            try:
-                match_idx = next((i for i, e in enumerate(possible_bpas_ordered) if e.number_of_images == bpa_tile_num))
-            except StopIteration as err:
-                raise ValueError(f"The list of possible BPAs doesn't contain a BPA with the number "
-                                 f"of tiles {bpa_tile_num}, as it's defined in the BPC's layer.") from err
-            bpas.append(possible_bpas_ordered.pop(match_idx))
-        return bpas
+        bpas = bpas_from_bg_list[layer*4:(layer*4)+4]
+        not_none_bpas = []
+        for i, bpa in enumerate(bpas):
+            if bpa is not None:
+                assert self.layers[layer].bpas[i] == bpa.number_of_images
+                not_none_bpas.append(bpa)
+            else:
+                assert self.layers[layer].bpas[i] == 0
+        return not_none_bpas
 
     def set_chunk(self, layer: int, index: int, new_tilemappings: List[TilemapEntry]):
         if len(new_tilemappings) < self.tiling_width * self.tiling_height:

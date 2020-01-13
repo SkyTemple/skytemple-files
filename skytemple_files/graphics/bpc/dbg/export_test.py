@@ -51,6 +51,7 @@ def main():
 
             prf(f'setting up for {filename} image export, including BPA load')
             bpas = l.get_bpas(rom)
+            non_none_bpas = [b for b in bpas if b is not None]
             for n in range(0, bpc.number_of_layers):
                 # Save tiles!
                 bpc.tiles_to_pil(n, palettes).save(filename_h + '.' + str(n) + '.tiles.png')
@@ -61,9 +62,9 @@ def main():
                 # Saving animated chunks!
                 # Default for only one frame, doesn't really matter
                 duration = 1000
-                if len(bpas) > 0:
+                if len(non_none_bpas) > 0:
                     # Assuming the game runs 60 FPS.
-                    duration = round(1000 / 60 * bpas[0].frame_info[0].unk1)
+                    duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].unk1)
                 frames = bpc.chunks_animated_to_pil(n, palettes, bpas)
                 frames[0].save(
                     filename_h + '.' + str(n) + '.gif',

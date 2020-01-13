@@ -8,7 +8,7 @@ from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(os.path.join(os.path.dirname(__file__), 'dbg_output'), exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
 
 bin = rom.getFileByName('MAP_BG/bg_list.dat')
 bg_list = BgListDatHandler.deserialize(bin)
@@ -57,15 +57,22 @@ for i, l in enumerate(bg_list.level):
         possible_values_for_unk7[bma.number_of_collision_layers].append(bma)
         setattr(bma, 'dbg_name', l.bma_name)
 
-        # Saving animated map!
         bpas = l.get_bpas(rom)
+        non_none_bpas = [b for b in bpas if b is not None]
         bpc = l.get_bpc(rom)
         bpl = l.get_bpl(rom)
+
+        # Saving single frames
+        bma.to_pil_single_layer(bpc, bpl.palettes, bpas, 0).save(filename_h + '_LOWER.png')
+        if bma.number_of_layers > 1:
+            bma.to_pil_single_layer(bpc, bpl.palettes, bpas, 1).save(filename_h + '_HIGHER.png')
+
+        # Saving animated map!
         # Default for only one frame, doesn't really matter
         duration = 1000
-        if len(bpas) > 0:
+        if len(non_none_bpas) > 0:
             # Assuming the game runs 60 FPS.
-            duration = round(1000 / 60 * bpas[0].frame_info[0].unk1)
+            duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].unk1)
         frames = bma.to_pil(bpc, bpl.palettes, bpas)
         frames[0].save(
             filename_h + '.webp',

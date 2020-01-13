@@ -20,7 +20,7 @@ for i, l in enumerate(bg_list.level):
     try:
         bpl = l.get_bpl(rom)
 
-        for j, bpa in enumerate(l.get_bpas(rom, True)):
+        for j, bpa in enumerate(l.get_bpas(rom)):
             if bpa is not None:
                 print(f"{i},{j} (bma: {l.bma_name}) - {l.bpa_names[j]}: {bpa}")  # - BPC LayerSpec: {bpc.layers}
 

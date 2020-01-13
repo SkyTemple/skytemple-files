@@ -9,7 +9,7 @@ from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN, PX_LOOKBACK_BUFF
     PX_NB_POSSIBLE_SEQUENCES_LEN, PX_NB_POSSIBLE_SEQ_LEN
 
 
-DEBUG = True
+DEBUG = False
 
 
 class Operation(Enum):

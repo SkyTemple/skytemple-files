@@ -1,8 +1,6 @@
-from typing import List
-
 from PIL import Image
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry, to_pil_tiled
+from skytemple_files.common.tiled_image import to_pil, TilemapEntry, to_pil_tiled, from_pil
 from skytemple_files.common.util import *
 
 BGP_RES_WIDTH = 256
@@ -12,18 +10,23 @@ BGP_PAL_ENTRY_LEN = 4
 BGP_PAL_UNKNOWN4_COLOR_VAL = 0x80
 # The palette is actually a list of smaller palettes. Each palette has this many colors:
 BGP_PAL_NUMBER_COLORS = 16
+# The maximum number of palettes supported
+BGP_MAX_PAL = 16
 BGP_TILEMAP_ENTRY_BYTELEN = 2
 BGP_PIXEL_BITLEN = 4
 BGP_TILE_DIM = 8
 BGP_RES_WIDTH_IN_TILES = int(BGP_RES_WIDTH / BGP_TILE_DIM)
 BGP_RES_HEIGHT_IN_TILES = int(BGP_RES_HEIGHT / BGP_TILE_DIM)
 BGP_TOTAL_NUMBER_TILES = BGP_RES_WIDTH_IN_TILES * BGP_RES_HEIGHT_IN_TILES
+# All BPGs have this many tiles and tilemapping entries for some reason
+BGP_TOTAL_NUMBER_TILES_ACTUALLY = 1024
 # NOTE: Tile 0 is always 0x0.
 
 
 class BgpHeader:
     """Header for a Bgp Image"""
     def __init__(self, data: bytes, offset=0):
+        # WARNING: The pointers and lengths are not updated after creation. The writer re-generates them.
         self.palette_begin = read_uintle(data, offset, 4)
         if self.palette_begin != BGP_HEADER_LENGTH:
             raise ValueError("Invalid BGP image: Palette pointer too low.")
@@ -69,7 +72,7 @@ class Bgp:
         for i, entry in enumerate(iter_bytes(self.data, BGP_TILEMAP_ENTRY_BYTELEN, self.header.tilemap_data_begin, tilemap_end)):
             # NOTE: There will likely be more than 768 (BGP_TOTAL_NUMBER_TILES) tiles. Why is unknown, but the
             #       rest is just zero padding.
-            self.tilemap.append(TilemapEntry.from_bytes(int.from_bytes(entry, 'little')))
+            self.tilemap.append(TilemapEntry.from_int(int.from_bytes(entry, 'little')))
         if len(self.tilemap) < BGP_TOTAL_NUMBER_TILES:
             raise ValueError(f"Invalid BGP image: Too few tiles ({len(self.tilemap)}) in tile mapping."
                              f"Must be at least {BGP_TOTAL_NUMBER_TILES}.")
@@ -127,7 +130,15 @@ class Bgp:
         version of a tile already exists. So basically no "compression" in image size is done
         by re-using tiles.
         """
-        pass  # todo [in tiled_image.py]
+        self.tiles, self.tilemap, self.palettes = from_pil(
+            pil, BGP_PAL_NUMBER_COLORS, BGP_MAX_PAL, BGP_TILE_DIM, BGP_RES_WIDTH,
+            BGP_RES_HEIGHT, 1, 1, force_import
+        )
+        # Fill up the tiles and tilemaps to 1024, which seems to be the required default
+        for _ in range(len(self.tiles), BGP_TOTAL_NUMBER_TILES_ACTUALLY):
+            self.tiles.append(bytearray(int(BGP_TILE_DIM * BGP_TILE_DIM / 2)))
+        for _ in range(len(self.tilemap), BGP_TOTAL_NUMBER_TILES_ACTUALLY):
+            self.tilemap.append(TilemapEntry.from_int(0))
 
     def from_pil_tiled(self, pils: List[Image.Image]) -> None:
         """

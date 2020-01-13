@@ -7,7 +7,7 @@ ALLOWED_CHARS = set(string.digits + string.ascii_uppercase)
 MAX_LEN = 8
 
 
-class BgListWriter():
+class BgListWriter:
     def __init__(self, model: BgList):
         self.model = model
         self.data = None

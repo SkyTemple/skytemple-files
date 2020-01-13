@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from ndspy.rom import NintendoDSRom
 
@@ -17,7 +18,7 @@ possible_values_for_unk7 = {}
 
 for i, l in enumerate(bg_list.level):
     maps = [
-        'P01P01A',  # OK: Map with collision
+        #'P01P01A',  # OK: Map with collision
         #'T00P03',   # OK: Map with an odd amount of chunks in width
         #'D01P11B',  # OK: Map with an odd amount of chunks in width and collision
         #'G01P03A',  # OK: Map with unk6 != 0
@@ -76,13 +77,13 @@ for i, l in enumerate(bg_list.level):
         )
         for i, f in enumerate(frames):
             f.save(filename_h + '.' + str(i) + '.png')
-    except (ValueError, AssertionError, NotImplementedError, SystemError) as ex:
+    except (NotImplementedError, SystemError) as ex:
         print(f"error for {l.bma_name}: {repr(ex)}")
-        #print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
+        print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
 
 print("=====")
 print(f"Possible values for unk6: {possible_values_for_unk6.keys()}")
-print(f"Possible values for unk6: {possible_values_for_unk7.keys()}")
+print(f"Possible values for unk7: {possible_values_for_unk7.keys()}")
 
 print("-----")
 print("Levels with unk7=0")

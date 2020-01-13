@@ -1,5 +1,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bgp.model import Bgp
+from skytemple_files.graphics.bgp.writer import BgpWriter
 
 
 class BgpHandler(DataHandler[Bgp]):
@@ -11,4 +12,8 @@ class BgpHandler(DataHandler[Bgp]):
     @classmethod
     def serialize(cls, data: Bgp) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        pass  # todo
+        return FileType.AT4PX.serialize(
+            FileType.AT4PX.compress(
+                BgpWriter(data).write()
+            )
+        )

@@ -53,6 +53,34 @@ def read_sintbe(data: bytes, start=0, length=1) -> int:
     return int.from_bytes(data[start:(start+length)], byteorder='big', signed=True)
 
 
+def write_uintle(data: bytes, to_write: int, start=0, length=1):
+    """
+    Write an unsiged integer in little endian to the bytes-like mutable object at the given position.
+    """
+    data[start:start+length] = to_write.to_bytes(length, byteorder='little', signed=False)
+
+
+def write_sintle(data: bytes, to_write: int, start=0, length=1):
+    """
+    Write an signed integer in little endian to the bytes-like mutable object at the given position.
+    """
+    data[start:start+length] = to_write.to_bytes(length, byteorder='little', signed=True)
+
+
+def write_uintbe(data: bytes, to_write: int, start=0, length=1):
+    """
+    Write an unsiged integer in big endian to the bytes-like mutable object at the given position.
+    """
+    data[start:start+length] = to_write.to_bytes(length, byteorder='big', signed=False)
+
+
+def write_sintbe(data: bytes, to_write: int, start=0, length=1):
+    """
+    Write an signed integer in big endian to the bytes-like mutable object at the given position.
+    """
+    data[start:start+length] = to_write.to_bytes(length, byteorder='big', signed=True)
+
+
 def iter_bits(number: int):
     """Iterate over the bits of a byte, starting with the high bit"""
     bit = 0x80

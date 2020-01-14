@@ -86,10 +86,27 @@ class Bpl:
 
             # Read color table 2
             # We don't know the length, so read until EOF
-            # TODO: The file may have padding at the end to make it 16-byte aligned.
-            #       However we will probably solve that by only allowing a number of
-            #       palette entries dividable by 16. Rest can be 0-colors=padding.
             for col in iter_bytes(data, BPL_PAL_ENTRY_LEN, cit_end):
                 r, g, b, unk = col
                 self.animation_palette.append([r, g, b])
                 assert unk == BPL_FOURTH_COLOR
+
+    def import_palettes(self, palettes: List[List[int]]):
+        """
+        Replace all palettes with the ones passed in
+        Animated palette is not changed, but the number of spec entries is adjusted.
+        """
+        assert len(palettes) <= BPL_MAX_PAL
+        nb_pal_old = self.number_palettes
+        self.number_palettes = len(palettes)
+        self.palettes = palettes
+        if self.has_palette_animation:
+            if self.number_palettes < nb_pal_old:
+                # Remove the extra spec entries
+                self.animation_specs = self.animation_specs[:self.number_palettes]
+            elif self.number_palettes > nb_pal_old:
+                # Add missing spec entries
+                for _ in range(nb_pal_old, self.number_palettes):
+                    self.animation_specs.append(BplAnimationSpec(
+                        unk3=0, unk4=0
+                    ))

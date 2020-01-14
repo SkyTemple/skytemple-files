@@ -24,6 +24,11 @@ class TilemapEntry:
         return f"{self.idx} - {self.pal_idx} - {self.to_int():>016b} - " \
                f"{'x' if self.flip_x else ''}{'y' if self.flip_y else ''}"
 
+    def __eq__(self, other):
+        if isinstance(other, TilemapEntry):
+            return self.to_int() == other.to_int()
+        return False
+
     def to_int(self):
         """Converts tile map entry back into the byte format used by game"""
         xf = 1 if self.flip_x else 0
@@ -253,7 +258,7 @@ def from_pil(
         flip_x = False
         flip_y = False
         if optimize:
-            reusable_tile_idx, flip_x, flip_y = _search_for_tile(final_tiles, tile, tile_dim)
+            reusable_tile_idx, flip_x, flip_y = search_for_tile(final_tiles, tile, tile_dim)
         if reusable_tile_idx is not None:
             tile_id_to_use = reusable_tile_idx
         else:
@@ -270,7 +275,20 @@ def from_pil(
     return final_tiles, tilemap, palettes
 
 
-def _search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
+def search_for_chunk(chunk, tile_mappings):
+    """
+    In the provided list of tile mappings, find an existing chunk.
+    Returns the position of the first tile of the chunk or None if not found.
+    The chunk dimensions are derived from the passed chunk.
+    """
+    tiles_in_chunk = len(chunk)
+    for chk_fst_tile_idx in range(0, len(tile_mappings), tiles_in_chunk):
+        if chunk == tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]:
+            return chk_fst_tile_idx
+    return None
+
+
+def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     TODO: Currently doesn't check flipped tiles!

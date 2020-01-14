@@ -142,7 +142,6 @@ class BmaWriter:
         Converts the unknown data layer back into bytes
         Every row is NRL encoded separately, because the game decodes the rows separately!
         """
-        # TODO: EVERY ROW HAS TO BE SEPARATELY NRL ENCODED
         from skytemple_files.common.types.file_types import FileType
 
         size = self.model.map_width_camera * self.model.map_height_camera

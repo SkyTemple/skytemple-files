@@ -287,6 +287,38 @@ class Bpc:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx:mtidx+9]
 
+    def import_tiles(self, layer: int, tiles: List[bytearray], contains_null_tile=False):
+        """
+        Replace the tiles of the specified layer.
+        If contains_null_tile is False, the null tile is added to the list, at the beginning.
+        """
+        if not contains_null_tile:
+            tiles = [bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))] + tiles
+        self.layers[layer].tiles = tiles
+        self.layers[layer].number_tiles = len(tiles) - 1
+
+    def import_tile_mappings(
+            self, layer: int, tile_mappings: List[TilemapEntry],
+            contains_null_chunk=False, correct_tile_ids=True
+    ):
+        """
+        Replace the tile mappings of the specified layer.
+        If contains_null_tile is False, the null chunk is added to the list, at the beginning.
+
+        If correct_tile_ids is True, then the tile id of tile_mappings is also increased by one. Use this,
+        if you previously used import_tiles with contains_null_tile=False
+        """
+        nb_tiles_in_chunk = self.tiling_width * self.tiling_height
+        if correct_tile_ids:
+            for entry in tile_mappings:
+                if not contains_null_chunk:
+                    entry.idx += 1
+        if not contains_null_chunk:
+            tile_mappings = [TilemapEntry.from_int(0) for _ in range(0, nb_tiles_in_chunk)] + tile_mappings
+        self.layers[layer].tilemap = tile_mappings
+        self.layers[layer].chunk_tilemap_len = int(len(tile_mappings) / self.tiling_width / self.tiling_height)
+
+
     def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: List[Bpa]) -> List[Bpa]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
@@ -312,6 +344,27 @@ class Bpc:
                              f"{self.tiling_width}x{self.tiling_height} tiles.")
         mtidx = index * self.tiling_width * self.tiling_height
         self.layers[layer].tilemap[mtidx:mtidx+9] = new_tilemappings
+
+    def remove_upper_layer(self):
+        """Remove the upper layer. Silently does nothing when it doesn't."""
+        if self.number_of_layers == 1:
+            return
+        self.number_of_layers = 1
+        self.layers[0] = self.layers[1]
+        del self.layers[1]
+
+    def add_upper_layer(self):
+        """Add an upper layer. Silently does nothing when it already exists."""
+        if self.number_of_layers == 2:
+            return
+        self.number_of_layers = 2
+        self.layers[1] = self.layers[0]
+        self.layers[0] = BpcLayer(
+            number_tiles=0,
+            tilemap_len=0,
+            bpas=[0, 0, 0, 0]
+        )
+
 
     def _get_palette_for_tile(self, layer, i):
         """Returns the first found palette of the tile with idx i. Or 0"""

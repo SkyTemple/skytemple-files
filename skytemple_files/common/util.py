@@ -85,11 +85,11 @@ def iter_bits(number: int):
     """Iterate over the bits of a byte, starting with the high bit"""
     bit = 0x80
     while bit > 0:
-       if number & bit:
-           yield 1
-       else:
-           yield 0
-       bit >>= 1
+        if number & bit:
+            yield 1
+        else:
+            yield 0
+        bit >>= 1
 
 
 def iter_bytes(data: bytes, slice_size, start=0, end=None):

@@ -12,10 +12,10 @@ class BpaWriter:
     def write(self) -> bytes:
         # 4 byte header + animation info for each + images
         self.data = bytearray(
-            4 + (self.model.number_of_frames * 4) + int(self.model.number_of_images * self.model.number_of_frames / 2)
+            4 + (self.model.number_of_frames * 4) + int(self.model.number_of_tiles * self.model.number_of_frames / 2)
         )
 
-        self._write_16uintle(self.model.number_of_images)
+        self._write_16uintle(self.model.number_of_tiles)
         self._write_16uintle(self.model.number_of_frames)
 
         assert self.model.number_of_frames == len(self.model.frame_info)

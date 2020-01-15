@@ -462,7 +462,7 @@ class Bma:
         bpl.import_palettes(palettes)
 
     def remove_upper_layer(self):
-        """Remove the upper layer. Silently does nothing when it doesn't."""
+        """Remove the upper layer. Silently does nothing when it doesn't exist."""
         if self.number_of_layers == 1:
             return
         self.number_of_layers = 1

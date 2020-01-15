@@ -40,13 +40,14 @@ class BpcWriter:
         # 4 byte header + layer specs + layer data
         self.data = bytearray(end_of_layer_specs + length_of_first_layer + length_of_second_layer)
 
-        # upper layer pointer
-        self._write_16uintle(end_of_layer_specs)
-        # lower layer pointer ( if two layers )
+        # upper layer pointer ( if two layers )
+        # & lower layer pointer
         if self.model.number_of_layers > 1:
+            self._write_16uintle(end_of_layer_specs)
             self._write_16uintle(end_of_layer_specs + length_of_first_layer)
         else:
             self._write_16uintle(0)
+            self._write_16uintle(end_of_layer_specs)
 
         # for each layer specs:
         for i in range(0, self.model.number_of_layers):

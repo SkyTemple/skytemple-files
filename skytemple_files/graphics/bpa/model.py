@@ -23,7 +23,7 @@ class Bpa:
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.number_of_images = read_uintle(data, 0, 2)
+        self.number_of_tiles = read_uintle(data, 0, 2)
         self.number_of_frames = read_uintle(data, 2, 2)
 
         # Read image header
@@ -37,16 +37,16 @@ class Bpa:
 
         self.tiles = []
         slice_size = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
-        for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_images))):
+        for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_tiles))):
             self.tiles.append(bytearray(tile))
 
     def __str__(self):
-        return f"Idx: {self.number_of_images}, " \
+        return f"Idx: {self.number_of_tiles}, " \
                f"#c: {self.number_of_frames}"
 
     def get_tile(self, tile_idx, frame_idx) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
-        return self.tiles[frame_idx * self.number_of_images + tile_idx]
+        return self.tiles[frame_idx * self.number_of_tiles + tile_idx]
 
     def tiles_to_pil(self, palette: List[int]) -> Image.Image:
         """
@@ -55,15 +55,15 @@ class Bpa:
         """
         dummy_tile_map = []
         width_in_tiles = self.number_of_frames
-        etr = self.number_of_frames * self.number_of_images
+        etr = self.number_of_frames * self.number_of_tiles
 
         # create a dummy tile map containing all the tiles
         # The tiles in the BPA are stored so, that each tile of the each frame is next
         # to each other. So the second frame of the first tile is at self.number_of_images + 1.
-        for tile_idx in range(0, self.number_of_images):
+        for tile_idx in range(0, self.number_of_tiles):
             for frame_idx in range(0, self.number_of_frames):
                 dummy_tile_map.append(TilemapEntry(
-                    idx=frame_idx * self.number_of_images + tile_idx,
+                    idx=frame_idx * self.number_of_tiles + tile_idx,
                     pal_idx=0,
                     flip_x=False,
                     flip_y=False
@@ -87,11 +87,11 @@ class Bpa:
         )
         self.tiles = []
         self.number_of_frames = int(image.width / BPA_TILE_DIM)
-        self.number_of_images = int(image.height / BPA_TILE_DIM)
+        self.number_of_tiles = int(image.height / BPA_TILE_DIM)
 
         # We need to re-order the tiles to actually save them
         for frame_idx in range(0, self.number_of_frames):
-            for tile_idx in range(0, self.number_of_images):
+            for tile_idx in range(0, self.number_of_tiles):
                 self.tiles.append(tiles[tile_idx * self.number_of_frames + frame_idx])
 
         # Correct frame info size
@@ -105,4 +105,4 @@ class Bpa:
 
     def tiles_for_frame(self, frame):
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
-        return self.tiles[frame * self.number_of_images:]
+        return self.tiles[frame * self.number_of_tiles:]

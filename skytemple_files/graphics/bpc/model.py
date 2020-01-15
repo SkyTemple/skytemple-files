@@ -20,6 +20,8 @@ class BpcLayer:
         # There must be 4 BPAs. (0 for not used)
         assert len(bpas) == 4
         self.bpas = bpas
+        # TODO: Incosistent with number_tiles. If we want to be consistent we also have to subtract
+        #       1 here or remove the -1 above.
         self.chunk_tilemap_len = tilemap_len
         # May also be set from outside after creation:
         self.tiles = tiles
@@ -225,7 +227,7 @@ class Bpc:
                     ldata.tiles.append(bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2)))
 
                 # Add the BPA tiles for this frame to the set of BPC tiles:
-                new_end_of_tiles = previous_end_of_tiles + bpa.number_of_images
+                new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
                 ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
 
                 previous_end_of_tiles = new_end_of_tiles
@@ -332,7 +334,7 @@ class Bpc:
         not_none_bpas = []
         for i, bpa in enumerate(bpas):
             if bpa is not None:
-                assert self.layers[layer].bpas[i] == bpa.number_of_images
+                assert self.layers[layer].bpas[i] == bpa.number_of_tiles
                 not_none_bpas.append(bpa)
             else:
                 assert self.layers[layer].bpas[i] == 0

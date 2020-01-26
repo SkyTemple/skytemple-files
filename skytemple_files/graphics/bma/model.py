@@ -373,8 +373,8 @@ class Bma:
         return final_images
 
     def from_pil(
-            self, bpc: Bpc, bpl: Bpl, lower_img: Image.Image, upper_img: Image.Image = None,
-            force_import=False, delete_layers_if_no_upper_img=True
+            self, bpc: Bpc, bpl: Bpl, lower_img: Image.Image = None, upper_img: Image.Image = None,
+            force_import=False
     ):
         """
         Import an entire map from one or two images (for each layer).
@@ -396,33 +396,30 @@ class Bma:
         The input images must have the same dimensions as the BMA (same dimensions as to_pil_single_layer would export).
         The input image can have a different number of layers, than the BMA. BPC and BMA layers are changed accordingly.
 
-        If no upper_img is provided but the BMA currently has an upper layer, it is deleted.
-        If you don't want the layer deleted, pass delete_layers_if_no_upper_img=False.
-
         BMA collision and data layer are not modified.
         """
         expected_width = self.tiling_width * self.map_width_chunks * BPC_TILE_DIM
         expected_height = self.tiling_height * self.map_height_chunks * BPC_TILE_DIM
-        if lower_img.width != expected_width or (False if upper_img is None else upper_img.width != expected_width):
+        if (False if lower_img is None else lower_img.width != expected_width) \
+                or (False if upper_img is None else upper_img.width != expected_width):
             raise ValueError(f"Can not import map background: Width of both images must match the current map width: "
                              f"{expected_width}px")
-        if lower_img.height != expected_height or (False if upper_img is None else upper_img.height != expected_height):
+        if (False if lower_img is None else lower_img.height != expected_height) \
+                or (False if upper_img is None else upper_img.height != expected_height):
             raise ValueError(f"Can not import map background: Height of both images must match the current map height: "
                              f"{expected_height}px")
-        if upper_img is not None and lower_img.getpalette() != upper_img.getpalette():
+        if upper_img is not None and lower_img is not None and lower_img.getpalette() != upper_img.getpalette():
             raise ValueError(f"Can not import map background: The palettes of both images passed in must be the same.")
 
         # Adjust layer numbers
-        number_of_layers = 1 if upper_img is None else 2
-        if number_of_layers < self.number_of_layers and delete_layers_if_no_upper_img:
-            self.remove_upper_layer()
-            bpc.remove_upper_layer()
-        elif number_of_layers > self.number_of_layers:
+        number_of_layers = 2 if upper_img is not None else 1
+        low_map_idx = 0 if lower_img is not None else 1
+        if number_of_layers > self.number_of_layers:
             self.add_upper_layer()
             bpc.add_upper_layer()
 
         # Import tiles, tile mappings and chunks mappings
-        for layer_idx in range(0, number_of_layers):
+        for layer_idx in range(low_map_idx, number_of_layers):
             if layer_idx == 0:
                 bpc_layer_id = 0 if bpc.number_of_layers == 1 else 1
                 img = lower_img

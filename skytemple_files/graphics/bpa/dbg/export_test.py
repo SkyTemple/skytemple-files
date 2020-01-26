@@ -26,6 +26,16 @@ for i, l in enumerate(bg_list.level):
 
                 bpa.tiles_to_pil(bpl.palettes[0]).save(os.path.join(dbg_output, f'{l.bpa_names[j]}.png'))
 
+                frames = bpa.tiles_to_pil_separate(bpl.palettes[0])
+                frames[0].save(
+                    os.path.join(dbg_output, f'{l.bpa_names[j]}.gif'),
+                    save_all=True,
+                    append_images=frames[1:],
+                    duration=(1000 / 60) * bpa.frame_info[0].unk1,
+                    loop=0,
+                    optimize=False
+                )
+
     except (ValueError, AssertionError, SystemError) as ex:
         print(f"error for {l.bma_name}:")
         print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))

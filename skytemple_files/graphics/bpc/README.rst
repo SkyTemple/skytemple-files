@@ -27,10 +27,10 @@ size is known and must be passed as the stopping size to the decompression algor
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
 | Offset  | Length | Type                  | Name                  | Description                                                 |
 +=========+========+=======================+=======================+=============================================================+
-| 0x0000  | 2      | uint16le              | Upper Layer Pointer   | Pointer to "Upper Layer Tiles". May be 0, in this case the  |
-|         |        |                       |                       | map only has a lower layer.                                 |
+| 0x0000  | 2      | uint16le              | Upper Layer Pointer   | Pointer to "Upper Layer Tiles".                                 |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
-| 0x0002  | 2      | uint16le              | Lower Layer Pointer   | Pointer to "Lower Layer Tiles".                             |
+| 0x0002  | 2      | uint16le              | Lower Layer Pointer   | Pointer to "Lower Layer Tiles". May be 0, in this case the  |
+|         |        |                       |                       | map only has a lower layer and 0x00 actually points to that |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
 | 0x0004  | Varies | Array                 | 1-2 `Layer Specs`_    | Settings for each layer.                                    |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
@@ -143,10 +143,9 @@ After reading this data block, 9 null tile mappings must be inserted to index 0-
 BPA tiles
 ~~~~~~~~~
 Tile Mappings can reference tiles, that are not part of the BPC layer's `Layer Data`_. These tiles are BPA_ tiles.
-To draw the tile mappings insert all of the layer's BPA_ tiles at the end of the BPC tiles. But make sure to keep a padding
-of 1 tile between the BPC tiles and all BPA_ tiles.
+To draw the tile mappings insert all of the layer's BPA_ tiles at the end of the BPC tiles.
 
-Example: BPC has 20 tiles. BPA1 has 4 tiles. BPC tiles go from 0-19. BPA1 tiles go from 21-24.
+Example: BPC has 20 tiles. BPA1 has 4 tiles. BPC tiles go from 0-19. BPA1 tiles go from 20-23.
 
 Credits
 -------

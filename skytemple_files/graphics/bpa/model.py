@@ -66,7 +66,8 @@ class Bpa:
                     idx=frame_idx * self.number_of_tiles + tile_idx,
                     pal_idx=0,
                     flip_x=False,
-                    flip_y=False
+                    flip_y=False,
+                    ignore_too_large=True
                 ))
         width = width_in_tiles * BPA_TILE_DIM
         height = math.ceil(etr / width_in_tiles) * BPA_TILE_DIM
@@ -74,6 +75,32 @@ class Bpa:
         return to_pil(
             dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
         )
+
+    def tiles_to_pil_separate(self, palette, width_in_tiles=20) -> List[Image.Image]:
+        """
+        Exports the BPA as an image, where each row of 8x8 tiles is the
+        animation set for a single tile. The 16 color palette passed is used to color the image.
+        """
+        dummy_tile_map = []
+
+        # create a dummy tile map containing all the tiles
+        for tile_idx in range(0, self.number_of_tiles * self.number_of_frames):
+            dummy_tile_map.append(TilemapEntry(
+                idx=tile_idx,
+                pal_idx=0,
+                flip_x=False,
+                flip_y=False,
+                ignore_too_large=True
+            ))
+        width = width_in_tiles * BPA_TILE_DIM
+        height = math.ceil(self.number_of_tiles / width_in_tiles) * BPA_TILE_DIM
+
+        images = []
+        for frame_start in range(0, self.number_of_tiles * self.number_of_frames, self.number_of_tiles):
+            images.append(to_pil(
+                dummy_tile_map[frame_start:frame_start+self.number_of_tiles], self.tiles, [palette], BPA_TILE_DIM, width, height
+            ))
+        return images
 
     def pil_to_tiles(self, image: Image.Image):
         """

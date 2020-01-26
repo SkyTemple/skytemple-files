@@ -15,7 +15,12 @@ for filename in get_files_from_rom_with_extension(rom, 'bpc'):
     print(f"Processing {filename} ({bpc_before.number_of_layers})")
 
     bin_after = BpcHandler.serialize(bpc_before)
-    bpc_after = BpcHandler.deserialize(bin_after)
+
+    rom.setFileByName(filename, bin_after)
+    #rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+    #rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+
+    bpc_after = BpcHandler.deserialize(rom.getFileByName(filename))
 
     assert bpc_before.number_of_layers == bpc_after.number_of_layers
     for layer in range(0, bpc_before.number_of_layers):
@@ -34,6 +39,9 @@ for filename in get_files_from_rom_with_extension(rom, 'bpc'):
     assert len(bin_after) % 2 == 0
     assert bpc_after._lower_layer_pointer % 2 == 0
     assert bpc_after._upper_layer_pointer % 2 == 0
+
+    bin_after2 = BpcHandler.serialize(bpc_before)
+    assert bin_after == bin_after2
 
     rom.setFileByName(filename, bin_after)
 

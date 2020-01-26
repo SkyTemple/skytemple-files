@@ -25,7 +25,7 @@ class BpcLayer:
         self.chunk_tilemap_len = tilemap_len
         # May also be set from outside after creation:
         self.tiles = tiles
-        self.tilemap = tilemap
+        self.tilemap: List[TilemapEntry] = tilemap
 
     def __repr__(self):
         return f"<#T{self.number_tiles} #TM{self.chunk_tilemap_len} - BPA: [{self.bpas}]>"
@@ -215,16 +215,11 @@ class Bpc:
         bpa_animation_indices = [0, 0, 0, 0]
         frames = []
 
-        is_first_run_add_extra_tile = True
-
+        orig_len = len(ldata.tiles)
         while True:  # Ended by check at end (do while)
-            previous_end_of_tiles = ldata.number_tiles
+            previous_end_of_tiles = orig_len
             # For each frame: Insert all BPA current frame tiles into their slots
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
-                # There is one extra null tile between the BPC and each of the BPA data:
-                previous_end_of_tiles += 1
-                if is_first_run_add_extra_tile:
-                    ldata.tiles.append(bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2)))
 
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
@@ -235,14 +230,12 @@ class Bpc:
                 bpa_animation_indices[bpaidx] %= bpa.number_of_frames
 
             frames.append(self.chunks_to_pil(layer, palettes, width_in_mtiles))
-
-            is_first_run_add_extra_tile = False
             # All animations have been played, we are done!
             if bpa_animation_indices == [0, 0, 0, 0]:
                 break
 
         # RESET the layer's tiles to NOT include the BPA tiles!
-        ldata.tiles = ldata.tiles[:ldata.number_tiles]
+        ldata.tiles = ldata.tiles[:orig_len]
         return frames
 
     def pil_to_tiles(self, layer: int, image: Image.Image):
@@ -320,7 +313,6 @@ class Bpc:
         self.layers[layer].tilemap = tile_mappings
         self.layers[layer].chunk_tilemap_len = int(len(tile_mappings) / self.tiling_width / self.tiling_height)
 
-
     def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: List[Bpa]) -> List[Bpa]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
@@ -366,7 +358,6 @@ class Bpc:
             tilemap_len=0,
             bpas=[0, 0, 0, 0]
         )
-
 
     def _get_palette_for_tile(self, layer, i):
         """Returns the first found palette of the tile with idx i. Or 0"""

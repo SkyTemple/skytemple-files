@@ -10,9 +10,9 @@ from skytemple_files.common.util import iter_bytes_4bit_le
 
 
 class TilemapEntry:
-    def __init__(self, idx, flip_x, flip_y, pal_idx):
+    def __init__(self, idx, flip_x, flip_y, pal_idx, ignore_too_large=False):
         self.idx = idx
-        if idx > 0x3FF:
+        if idx > 0x3FF and not ignore_too_large:
             raise ValueError(f"Tile Mapping can not be processed. The tile number referenced ({idx}) is bigger "
                              f"than the maximum ({0x3FF}). If you are importing an image, please try to have "
                              f"less unique tiles.")
@@ -240,6 +240,13 @@ def from_pil(
                                  f"{tile_palette_indices[tile_id] * single_palette_size} - "
                                  f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")
             # Just set the color to 0 instead if invalid...
+            else:
+                warnings.warn(f"Can not reliably convert PIL image to PMD tiled image: "
+                              f"The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
+                              f"pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
+                              f"Expected are colors from palette {tile_palette_indices[tile_id]} ("
+                              f"{tile_palette_indices[tile_id] * single_palette_size} - "
+                              f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")
             real_pix = 0
 
         # We store 2 bytes as one... in LE
@@ -308,14 +315,22 @@ def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool
 
 def _flip_tile_x(tile: bytes, tile_dim):
     """Flip all pixels in tile on the x-axis"""
-    # todo
-    return tile
+    tile_flipped = bytearray(len(tile))
+    for i, b in enumerate(tile):
+        row_idx = (i * 2) % tile_dim
+        col_idx = math.floor((i * 2) / tile_dim)
+        tile_flipped[int((col_idx * tile_dim + (tile_dim - 1 - row_idx)) / 2)] = ((b & 0x0F) << 4 | (b & 0xF0) >> 4)
+    return tile_flipped
 
 
 def _flip_tile_y(tile: bytes, tile_dim):
     """Flip all pixels in tile on the y-axis"""
-    # todo
-    return tile
+    tile_flipped = bytearray(len(tile))
+    for i, b in enumerate(tile):
+        row_idx = (i * 2) % tile_dim
+        col_idx = math.floor((i * 2) / tile_dim)
+        tile_flipped[int(((tile_dim - 1 - col_idx) * tile_dim + row_idx) / 2)] = b
+    return tile_flipped
 
 
 def _px_pos_flipped(x, y, w, h, flip_x, flip_y) -> Tuple[int, int]:

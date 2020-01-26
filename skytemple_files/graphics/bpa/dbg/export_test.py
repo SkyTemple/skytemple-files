@@ -31,7 +31,7 @@ for i, l in enumerate(bg_list.level):
                     os.path.join(dbg_output, f'{l.bpa_names[j]}.gif'),
                     save_all=True,
                     append_images=frames[1:],
-                    duration=(1000 / 60) * bpa.frame_info[0].unk1,
+                    duration=(1000 / 60) * bpa.frame_info[0].duration_per_frame,
                     loop=0,
                     optimize=False
                 )

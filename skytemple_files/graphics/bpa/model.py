@@ -11,9 +11,9 @@ BPA_TILE_DIM = 8
 
 
 class BpaFrameInfo:
-    def __init__(self, unk1, unk2):
+    def __init__(self, duration_per_frame, unk2):
         # speed?
-        self.unk1 = unk1
+        self.duration_per_frame = duration_per_frame
         # always 0?
         self.unk2 = unk2
         assert self.unk2 == 0
@@ -129,6 +129,10 @@ class Bpa:
             for i in range(len_finfo, self.number_of_frames):
                 # If the length is shorter, we just copy the last entry
                 self.frame_info.append(self.frame_info[len_finfo-1])
+
+    def pil_to_tiles_separate(self, images: List[Image.Image]):
+        """TODO"""
+        raise NotImplementedError("This is not implemented yet! Sorry!")
 
     def tiles_for_frame(self, frame):
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""

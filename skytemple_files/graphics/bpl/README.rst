@@ -34,6 +34,7 @@ File Format
 +---------+--------+-----------+-----------------------------+-------------------------------------------------------------+
 |         | Varies | Array of  | Animation Palette           | An unknown amount of animation colors. The colors end at the|
 |         |        | RGBx      |                             | end of the file. RGBx again, 4th color byte is always 0x00. |
+|         |        |           |                             | 15 colors make one "frame" of animation (no transparent)    |
 +---------+--------+-----------+-----------------------------+-------------------------------------------------------------+
 
 Animation Specification
@@ -44,9 +45,10 @@ but they probably control the speed and which color(s?) to change.
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
 | Offset  | Length | Type      | Name                | Description                                                 |
 +=========+========+===========+=====================+=============================================================+
-| 0x00    | 2      | uint16le  | unk3                | Unknown.                                                    |
+| 0x00    | 2      | uint16le  | duration_per_frame  | Time in game frames to hold a single palette frame for      |
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
-| 0x02    | 2      | uint16le  | unk4                | Unknown.                                                    |
+| 0x02    | 2      | uint16le  | number_of_frames    | Number of frames. This is also usually the length of frames |
+|         |        |           |                     | in animation palette, but it can also be less.              |
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
 
 Credits

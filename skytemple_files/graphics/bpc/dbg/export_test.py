@@ -64,7 +64,7 @@ def main():
                 duration = 1000
                 if len(non_none_bpas) > 0:
                     # Assuming the game runs 60 FPS.
-                    duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].unk1)
+                    duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].duration_per_frame)
                 frames = bpc.chunks_animated_to_pil(n, palettes, bpas)
                 frames[0].save(
                     filename_h + '.' + str(n) + '.gif',

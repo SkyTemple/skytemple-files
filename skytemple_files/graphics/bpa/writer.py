@@ -20,7 +20,7 @@ class BpaWriter:
 
         assert self.model.number_of_frames == len(self.model.frame_info)
         for finfo in self.model.frame_info:
-            self._write_16uintle(finfo.unk1)
+            self._write_16uintle(finfo.duration_per_frame)
             self._write_16uintle(finfo.unk2)
 
         # Tiles

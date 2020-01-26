@@ -19,16 +19,12 @@ BPL_FOURTH_COLOR = 0x00
 
 class BplAnimationSpec:
 
-    def __init__(self, unk3, unk4):
-        # TODO: My palette animation assumption doesn't work with these values.
-        #       Value 1 goes from 0-16 and 2 from 0 to at least 63.
-        #       ...there are only 16 colors in the palettes. However maybe the first value
-        #       is actually the color index and 16 is a special value (cycle entire palette?)?
-        self.unk3 = unk3
-        self.unk4 = unk4
+    def __init__(self, duration_per_frame, number_of_frames):
+        self.duration_per_frame = duration_per_frame
+        self.number_of_frames = number_of_frames
 
     def __repr__(self):
-        return f"<{self.unk3},{self.unk4}>"
+        return f"<{self.duration_per_frame},{self.number_of_frames}>"
 
 
 class Bpl:
@@ -67,29 +63,29 @@ class Bpl:
         # Mapped 1:1 with self.palettes, if exists:
         self.animation_specs: List[BplAnimationSpec] = []
 
-        # Extra colors
-        # Format: [ [r,g,b], ...]
+        # Extra colors - Palette animation
+        # Format: [ [r,g,b,r,g,b,r,g,b,r,g,b...], ...]
+        # Only 15 colors per frame!
         self.animation_palette = []
         if self.has_palette_animation:
-            # My current guess is that these extra colors are part of a palette animation process!!
-            # unk3 might be the delay between color changes! Color index is then actually the index
-            # of the color in the PALETTE to change NOT from the extra color table!
-            # I named the variables with this assumption in mind for now
-
             # Read color index table
             cit_end = pal_end + self.number_palettes * BPL_COL_INDEX_ENTRY_LEN
             for entry in iter_bytes(data, BPL_COL_INDEX_ENTRY_LEN, pal_end, cit_end):
                 self.animation_specs.append(BplAnimationSpec(
-                    unk3=read_uintle(entry, 0, 2),
-                    unk4=read_uintle(entry, 2, 4)
+                    duration_per_frame=read_uintle(entry, 0, 2),
+                    number_of_frames=read_uintle(entry, 2, 2)
                 ))
 
             # Read color table 2
             # We don't know the length, so read until EOF
-            for col in iter_bytes(data, BPL_PAL_ENTRY_LEN, cit_end):
+            current_ani_pal = []
+            for i, col in enumerate(iter_bytes(data, BPL_PAL_ENTRY_LEN, cit_end)):
                 r, g, b, unk = col
-                self.animation_palette.append([r, g, b])
+                current_ani_pal += [r, g, b]
                 assert unk == BPL_FOURTH_COLOR
+                if (i + 1) % BPL_PAL_LEN == 0:
+                    self.animation_palette.append(current_ani_pal)
+                    current_ani_pal = []
 
     def import_palettes(self, palettes: List[List[int]]):
         """
@@ -108,5 +104,28 @@ class Bpl:
                 # Add missing spec entries
                 for _ in range(nb_pal_old, self.number_palettes):
                     self.animation_specs.append(BplAnimationSpec(
-                        unk3=0, unk4=0
+                        duration_per_frame=0, number_of_frames=0
                     ))
+
+    def apply_palette_animations(self, frame: int) -> List[List[int]]:
+        """
+        Returns a modified copy of self.palettes.
+
+        This copy is modified to have colors swapped out for the current frame of palette animation.
+        The information for this is stored in self.animation_specs and the animation palette in
+        self.animation_palette.
+
+        Only available if self.has_palette_animation.
+
+        The maximum number of frames is the length of self.animation_palette
+        """
+        # todo
+        f_palettes = []
+        for i, spec in enumerate(self.animation_specs):
+            if spec.number_of_frames > 0:
+                actual_frame_for_pal = frame % spec.number_of_frames
+                pal_for_frame = self.animation_palette[actual_frame_for_pal]
+                f_palettes.append([0, 0, 0] + pal_for_frame)
+            else:
+                f_palettes.append(self.palettes[i])
+        return f_palettes

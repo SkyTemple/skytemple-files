@@ -135,3 +135,70 @@ def _check_memoryview(data):
 def lcm(x, y):
     from math import gcd
     return x * y // gcd(x, y)
+
+
+def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
+    """
+    Works with a list of lists of rgb color palettes and returns a modified copy.
+
+    Returns a list that does not contain duplicate colors. This is done by slightly changing
+    the color values of duplicate colors.
+    """
+    # List of single RGB colors
+    already_collected_colors = []
+    out = []
+    for palette in inp:
+        out_p = []
+        out.append(out_p)
+        for color_idx in range(0, len(palette), 3):
+            color = palette[color_idx:color_idx+3]
+            new_color = _mpcu__check(color, already_collected_colors)
+            already_collected_colors.append(new_color)
+            out_p += new_color
+
+    return out
+
+
+def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], change_next=0, change_amount=1) -> List[int]:
+    if color not in already_collected_colors:
+        return color
+    else:
+        # Try to find a unique color
+        # Yes I didn't really think all that much when writing this and it doesn't even cover all possibilities.
+        if change_next == 0:
+            # r + 1
+            new_color = [color[0] + change_amount, color[1]                , color[2]                ]
+        elif change_next == 1:
+            # g + 1
+            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]                ]
+        elif change_next == 2:
+            # b + 1
+            new_color = [color[0]                , color[1] - change_amount, color[2] + change_amount]
+        elif change_next == 3:
+            # gb + 1
+            new_color = [color[0]                , color[1] + change_amount, color[2]]
+        elif change_next == 4:
+            # rgb + 1
+            new_color = [color[0] + change_amount, color[1]                , color[2]]
+        elif change_next == 5:
+            # rg + 1
+            new_color = [color[0]                , color[1]                , color[2] - change_amount]
+        elif change_next == 6:
+            # b - 1
+            new_color = [color[0] - change_amount, color[1] - change_amount, color[2] - change_amount]
+            if new_color[2] < 0:
+                new_color[2] = 0
+        elif change_next == 7:
+            # g - 1
+            new_color = [color[0]                , color[1] - change_amount, color[2] + change_amount]
+            if new_color[1] < 0:
+                new_color[1] = 0
+        else:
+            # r - 1
+            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]                ]
+            if new_color[0] < 0:
+                new_color[0] = 0
+        new_change_next = (change_next + 1) % 8
+        if new_change_next == 0:
+            change_amount += 1
+        return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)

@@ -67,7 +67,7 @@ def main():
                 duration = 1000
                 if len(bpas) > 0:
                     # Assuming the game runs 60 FPS.
-                    duration = round(1000 / 60 * bpas[0].frame_info[0].unk1)
+                    duration = round(1000 / 60 * bpas[0].frame_info[0].duration_per_frame)
                 time_9_before_bma_export = time.time()
                 frames = bma.to_pil(bpc, bpl.palettes, bpas)
 

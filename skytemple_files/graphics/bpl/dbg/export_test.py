@@ -30,7 +30,7 @@ for filename in get_files_from_rom_with_extension(rom, 'bpl'):
     #    rgb = bytes(bytearray(chain.from_iterable(bpl.extra_colors)))
     #    for e in bpl.extra_color_index_table:
     #        if e.color_index != 0:
-    #            im = Image.frombuffer('RGB', (e.unk3, e.color_index), rgb, 'raw', 'RGB', 0, 1)
+    #            im = Image.frombuffer('RGB', (e.duration_per_frame, e.color_index), rgb, 'raw', 'RGB', 0, 1)
     #            im.resize((im.size[0]*16, im.size[1]*16)).show()
 
     # Convert BPL to image

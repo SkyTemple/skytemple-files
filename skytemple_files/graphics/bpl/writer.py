@@ -38,15 +38,16 @@ class BplWriter:
         if self.model.has_palette_animation:
             # Palette Animation Spec
             for spec in self.model.animation_specs:
-                self._write_16uintle(spec.unk3)
-                self._write_16uintle(spec.unk4)
+                self._write_16uintle(spec.duration_per_frame)
+                self._write_16uintle(spec.number_of_frames)
 
             # Palette Animation Palette
-            for color_list in self.model.animation_palette:
-                for color in color_list:
+            for frame in self.model.animation_palette:
+                for i, color in enumerate(frame):
                     self._write_byte(color)
-                # Insert the fourth color
-                self._write_byte(BPL_FOURTH_COLOR)
+                    if i % 3 == 2:
+                        # Insert the fourth color
+                        self._write_byte(BPL_FOURTH_COLOR)
 
         return self.data
 

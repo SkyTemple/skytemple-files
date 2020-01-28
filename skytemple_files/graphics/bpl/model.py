@@ -119,7 +119,7 @@ class Bpl:
 
         The maximum number of frames is the length of self.animation_palette
         """
-        # todo
+        # TODO: First frame is missing: No change!
         f_palettes = []
         for i, spec in enumerate(self.animation_specs):
             if spec.number_of_frames > 0:

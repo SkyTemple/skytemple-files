@@ -186,18 +186,17 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         elif change_next == 6:
             # b - 1
             new_color = [color[0] - change_amount, color[1] - change_amount, color[2] - change_amount]
-            if new_color[2] < 0:
-                new_color[2] = 0
         elif change_next == 7:
             # g - 1
             new_color = [color[0]                , color[1] - change_amount, color[2] + change_amount]
-            if new_color[1] < 0:
-                new_color[1] = 0
         else:
             # r - 1
             new_color = [color[0] - change_amount, color[1] + change_amount, color[2]                ]
-            if new_color[0] < 0:
-                new_color[0] = 0
+        for i in [0, 1, 2]:
+            if new_color[i] < 0:
+                new_color[i] = 0
+            elif new_color[i] > 255:
+                new_color[i] = 255
         new_change_next = (change_next + 1) % 8
         if new_change_next == 0:
             change_amount += 1

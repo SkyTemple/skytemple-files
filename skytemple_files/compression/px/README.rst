@@ -55,5 +55,5 @@ Based on following documentations:
 .. _psy_commando:                   https://github.com/PsyCommando/
 .. _Zhorken:                        https://github.com/Zhorken
 
-.. _AT4PX:                          https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/compression_container/at4px
-.. _PKDPX:                          https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/compression_container/pkdpx
+.. _AT4PX:                          https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression_container/at4px
+.. _PKDPX:                          https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression_container/pkdpx

@@ -75,7 +75,7 @@ Based on following documentations:
 
 .. _psy_commando:                   https://github.com/PsyCommando/
 
-.. _BPC:                            https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/graphics/bpc
-.. _BMA:                            https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/graphics/bma
-.. _BPA:                            https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/graphics/bpa
-.. _BPL:                            https://github.com/Parakoopa/skytemple_files/blob/master/skytemple_files/graphics/bpl
+.. _BPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpc
+.. _BMA:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bma
+.. _BPA:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpa
+.. _BPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpl

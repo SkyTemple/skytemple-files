@@ -30,6 +30,9 @@ from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression.px.handler import PxHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.script.lsd.handler import LsdHandler
+from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
+from skytemple_files.script.ssb.handler import SsbHandler
 
 
 class FileType:
@@ -50,3 +53,8 @@ class FileType:
     BPA = BpaHandler
     GENERIC_NRL = GenericNrlHandler
     STR = StrHandler
+    LSD = LsdHandler
+    SSA = SsaHandler
+    SSE = SsaHandler
+    SSS = SsaHandler
+    SSB = SsbHandler

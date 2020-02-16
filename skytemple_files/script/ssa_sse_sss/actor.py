@@ -14,12 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
-LEN_LAYER_ENTRY = 20
-ACTOR_ENTRY_LEN = 16
-OBJECT_ENTRY_LEN = 20
-PERFORMERS_ENTRY_LEN = 20
-EVENTS_ENTRY_LEN = 16
-POS_MARKER_ENTRY_LEN = 16
-UNK10_ENTRY_LEN = 8
-TRIGGER_ENTRY_LEN = 8
+
+class SsaActor:
+    def __init__(self, actor_id, pos: SsaPosition, script_id, unkE):
+        self.actor_id = actor_id
+        self.pos = pos
+        self.script_id = script_id
+        self.unkE = unkE
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __str__(self):
+        return f"SsaActor<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

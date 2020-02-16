@@ -15,11 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-LEN_LAYER_ENTRY = 20
-ACTOR_ENTRY_LEN = 16
-OBJECT_ENTRY_LEN = 20
-PERFORMERS_ENTRY_LEN = 20
-EVENTS_ENTRY_LEN = 16
-POS_MARKER_ENTRY_LEN = 16
-UNK10_ENTRY_LEN = 8
-TRIGGER_ENTRY_LEN = 8
+
+class SsaTrigger:
+    def __init__(self, coroutine_id, unk2, unk3, script_id):
+        self.coroutine_id = coroutine_id
+        self.unk2 = unk2
+        self.unk3 = unk3
+        self.script_id = script_id
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __str__(self):
+        return f"SsaTrigger<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

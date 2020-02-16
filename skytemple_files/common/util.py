@@ -143,6 +143,11 @@ def _get_files_from_rom_with_extension__recursion(path: str, folder: Folder, ext
     return files
 
 
+def get_rom_folder(rom: NintendoDSRom, path: str) -> Folder:
+    """Returns the folder in the ROM."""
+    return rom.filenames.subfolder(path)
+
+
 def _check_memoryview(data):
     """Check if data is actually a memory view object and if not warn. Only used for testing, otherwise does nothing."""
     if DEBUG and not isinstance(data, memoryview):
@@ -154,6 +159,7 @@ def lcm(x, y):
     return x * y // gcd(x, y)
 
 
+# TODO: Remove here, move to new colors.py
 def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
     """
     Works with a list of lists of rgb color palettes and returns a modified copy.

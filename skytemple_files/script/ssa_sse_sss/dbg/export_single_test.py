@@ -29,7 +29,7 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
 script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
-map_name = 'P01P01A'
+map_name = 'D01P11A'
 sse_name = SCRIPT_DIR + '/' + map_name + '/' + 'enter.sse'
 
 bin_before = rom.getFileByName(sse_name)
@@ -39,28 +39,28 @@ print("=====================")
 print(f"--- enter.sse ---")
 print(f"Header: {sse.header}")
 print(f"LayerList:")
-for l in sse.layer_list:
-    print(f"    {l}")
+for i, l in enumerate(sse.layer_list):
+    print(f"    Layer {i}:")
+    print(f"        Actors:")
+    for e in l.actors:
+        print(f"            {e}")
+    print(f"        Objects:")
+    for e in l.objects:
+        print(f"            {e}")
+    print(f"        Performers:")
+    for e in l.performers:
+        print(f"            {e}")
+    print(f"        Events:")
+    for e in l.events:
+        print(f"            {e}")
+    print(f"        Unk10:")
+    for e in l.unk10s:
+        print(f"            {e}")
 print(f"Triggers:")
 for e in sse.triggers:
     print(f"    {e}")
-print(f"Actors:")
-for e in sse.actors:
-    print(f"    {e}")
-print(f"Objects:")
-for e in sse.objects:
-    print(f"    {e}")
-print(f"Performers:")
-for e in sse.performers:
-    print(f"    {e}")
-print(f"Events:")
-for e in sse.events:
-    print(f"    {e}")
 print(f"PositionMarkers:")
 for e in sse.position_markers:
-    print(f"    {e}")
-print(f"Unk10:")
-for e in sse.unk10:
     print(f"    {e}")
 
 #bin_after = SsaHandler.serialize(ssa)

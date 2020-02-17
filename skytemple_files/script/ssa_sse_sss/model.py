@@ -21,7 +21,7 @@ from skytemple_files.script.ssa_sse_sss import LEN_LAYER_ENTRY, TRIGGER_ENTRY_LE
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.event import SsaEvent
 from skytemple_files.script.ssa_sse_sss.header import SsaHeader
-from skytemple_files.script.ssa_sse_sss.layer_info import SsaLayerInfo
+from skytemple_files.script.ssa_sse_sss.layer import SsaLayer
 from skytemple_files.script.ssa_sse_sss.object import SsaObject
 from skytemple_files.script.ssa_sse_sss.performer import SsaPerformer
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
@@ -37,13 +37,18 @@ class Ssa:
 
         self.header = self._init_header(data)
         self.layer_list = self._init_layer_list(data)
+
         self.triggers = self._init_triggers(data)
-        self.actors = self._init_actors(data)
-        self.objects = self._init_objects(data)
-        self.performers = self._init_performers(data)
-        self.events = self._init_events(data)
         self.position_markers = self._init_position_markers(data)
-        self.unk10 = self._init_unk10(data)
+
+        actors = self._init_actors(data)
+        objects = self._init_objects(data)
+        performers = self._init_performers(data)
+        events = self._init_events(data)
+        unk10 = self._init_unk10(data)
+
+        for layer in self.layer_list:
+            layer.fill_data(actors, objects, performers, events, unk10)
 
     def _init_header(self, data):
         # All offsets/pointers must be multiplied by 2, since they're counting 16 bits words and not bytes!
@@ -64,7 +69,7 @@ class Ssa:
         for i in range(0, self.header.layer_count):
             offset = self.header.layer_list_pointer + (i * LEN_LAYER_ENTRY)
             # All pointers in this list are multiplied by 2, see _init_header info above why
-            lst.append(SsaLayerInfo(
+            lst.append(SsaLayer(
                 header=self.header,
                 actors_count=read_uintle(data, offset + 0x0, 2),
                 actors_pointer=read_uintle(data, offset + 0x2, 2) * 2,

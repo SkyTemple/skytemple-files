@@ -34,7 +34,6 @@ for filename in get_files_from_rom_with_extension(rom, 'str'):
 
     #cc = ['↑', '↓']
     cc = ['ª', 'º']
-    from skytemple_files.data.str.codec import _special_characters
     for i, string in enumerate(str.strings):
         if 16792 < i >= 16322:
             print(f"{i} {string}")

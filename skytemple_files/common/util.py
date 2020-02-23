@@ -224,3 +224,13 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         if new_change_next == 0:
             change_amount += 1
         return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)
+
+
+class AutoString:
+    """Utility base class, that implements convenient __str__ and __repr__ based on object attributes."""
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v is not None})}>"

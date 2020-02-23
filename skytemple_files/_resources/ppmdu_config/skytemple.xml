@@ -1,0 +1,21 @@
+<PMD2>
+  <!--=======================================================================-->
+  <!--SkyTemple specific PPMDU Configuration File-->
+  <!--=======================================================================-->
+  <!--Overrides some part of the ppmdu default configuration-->
+  <!--SkyTemple supports merging existing keys with it's parser. See documentation of xml_reader.-->
+  <GameEditions merge_strategy="key" merge_key="id">
+    <!--At the time of writing these are actually the same values as for ppmdu, but just to be future-proof...-->
+    <Game id="EoS_NA" issupported="true"/>
+    <Game id="EoD_NA" issupported="false"/>
+    <Game id="EoT_NA" issupported="false"/>
+
+    <Game id="EoS_EU" issupported="true"/>
+    <Game id="EoD_EU" issupported="false"/>
+    <Game id="EoT_EU" issupported="false"/>
+
+    <Game id="EoS_JP" issupported="false"/>
+    <Game id="EoD_JP" issupported="false"/>
+    <Game id="EoT_JP" issupported="false"/>
+  </GameEditions>
+</PMD2>

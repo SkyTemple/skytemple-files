@@ -70,11 +70,13 @@ class Pmd2StringIndexData(AutoString):
 
 class Pmd2Data(AutoString):
     def __init__(self,
+                 game_edition: str,
                  game_editions: List[Pmd2GameEdition],
                  game_constants: Dict[str, int],
                  binaries: List[Pmd2Binary],
                  string_index_data: Pmd2StringIndexData,
                  script_data: Pmd2ScriptData):
+        self.game_edition = game_edition
         self.game_editions: Dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
         self.binaries = binaries

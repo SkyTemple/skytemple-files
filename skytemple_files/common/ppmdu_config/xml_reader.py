@@ -141,6 +141,7 @@ class Pmd2XmlReader:
                 script_data = self._parse_script_data(e)
 
         return Pmd2Data(
+            self._game_edition,
             game_editions,
             game_constants,
             binaries,

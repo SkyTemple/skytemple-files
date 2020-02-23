@@ -14,20 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import warnings
+
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptObject
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
-class SsaObject:
-    def __init__(self, object_id, unk4, unk6, pos: SsaPosition, script_id, unk12):
-        self.object_id = object_id
+class SsaObject(AutoString):
+    def __init__(self, scriptdata: Pmd2ScriptData, object_id, unk4, unk6, pos: SsaPosition, script_id, unk12):
+        try:
+            self.object = scriptdata.objects__by_id[object_id]
+        except KeyError:
+            warnings.warn(f"[SsaActor]: Unknown object id: {object_id}")
+            self.object = Pmd2ScriptObject(object_id, 0, 0, 0, 'UNKNOWN')
         self.unk4 = unk4
         self.unk6 = unk6
         self.pos = pos
         self.script_id = script_id
         self.unk12 = unk12
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaObject<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

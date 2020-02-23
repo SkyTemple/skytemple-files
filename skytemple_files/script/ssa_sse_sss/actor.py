@@ -14,18 +14,20 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import warnings
+
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptEntity
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
-class SsaActor:
-    def __init__(self, actor_id, pos: SsaPosition, script_id, unkE):
-        self.actor_id = actor_id
+class SsaActor(AutoString):
+    def __init__(self, scriptdata: Pmd2ScriptData, actor_id, pos: SsaPosition, script_id, unkE):
+        try:
+            self.actor = scriptdata.level_entities__by_id[actor_id]
+        except KeyError:
+            warnings.warn(f"[SsaActor]: Unknown actor id: {actor_id}")
+            self.actor = Pmd2ScriptEntity(actor_id, 0, 'UNKNOWN', 0, 0, 0)
         self.pos = pos
         self.script_id = script_id
         self.unkE = unkE
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaActor<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

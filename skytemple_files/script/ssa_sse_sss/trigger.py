@@ -14,17 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import warnings
+
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptRoutine
+from skytemple_files.common.util import AutoString
 
 
-class SsaTrigger:
-    def __init__(self, coroutine_id, unk2, unk3, script_id):
-        self.coroutine_id = coroutine_id
+class SsaTrigger(AutoString):
+    def __init__(self, scriptdata: Pmd2ScriptData, coroutine_id, unk2, unk3, script_id):
+        try:
+            self.coroutine = scriptdata.common_routine_info__by_id[coroutine_id]
+        except KeyError:
+            warnings.warn(f"[SsaActor]: Unknown coroutine id: {coroutine_id}")
+            self.actor = Pmd2ScriptRoutine(coroutine_id, 0, 'UNKNOWN')
         self.unk2 = unk2
         self.unk3 = unk3
         self.script_id = script_id
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaTrigger<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

@@ -14,11 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss import TRIGGER_ENTRY_LEN
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
-class SsaEvent:
+class SsaEvent(AutoString):
     def __init__(self, trigger_width, trigger_height, trigger_pointer, trigger_table_start, pos: SsaPosition, unkE):
         self.trigger_width = trigger_width
         self.trigger_height = trigger_height
@@ -26,9 +27,3 @@ class SsaEvent:
         # direction must be none!
         self.pos = pos
         self.unkE = unkE
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaEvent<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

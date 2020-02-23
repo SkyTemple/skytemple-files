@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import *
 from skytemple_files.script.ssa_sse_sss import LEN_LAYER_ENTRY, TRIGGER_ENTRY_LEN, ACTOR_ENTRY_LEN, OBJECT_ENTRY_LEN, \
     PERFORMERS_ENTRY_LEN, EVENTS_ENTRY_LEN, POS_MARKER_ENTRY_LEN, UNK10_ENTRY_LEN
@@ -31,9 +31,11 @@ from skytemple_files.script.ssa_sse_sss.unk10 import SsaUnk10
 
 
 class Ssa:
-    def __init__(self, data: bytes):
+    def __init__(self, scriptdata: Pmd2ScriptData, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
+
+        self._scriptdata = scriptdata
 
         self.header = self._init_header(data)
         self.layer_list = self._init_layer_list(data)
@@ -89,6 +91,7 @@ class Ssa:
         if self.header.trigger_pointer is not None:
             for entry in iter_bytes(data, TRIGGER_ENTRY_LEN, self.header.trigger_pointer, self.header.trigger_end_pointer):
                 lst.append(SsaTrigger(
+                    scriptdata=self._scriptdata,
                     coroutine_id=read_uintle(entry, 0x0, 2),
                     unk2=read_uintle(entry, 0x2, 2),
                     unk3=read_uintle(entry, 0x4, 2),
@@ -101,8 +104,10 @@ class Ssa:
         if self.header.actor_pointer is not None:
             for entry in iter_bytes(data, ACTOR_ENTRY_LEN, self.header.actor_pointer, self.header.actor_end_pointer):
                 lst.append(SsaActor(
+                    scriptdata=self._scriptdata,
                     actor_id=read_uintle(entry, 0x0, 2),
                     pos=SsaPosition(
+                        scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
                         x_pos=read_uintle(entry, 0x4, 2),
                         y_pos=read_uintle(entry, 0x6, 2),
@@ -119,10 +124,12 @@ class Ssa:
         if self.header.object_pointer is not None:
             for entry in iter_bytes(data, OBJECT_ENTRY_LEN, self.header.object_pointer, self.header.object_end_pointer):
                 lst.append(SsaObject(
+                    scriptdata=self._scriptdata,
                     object_id=read_uintle(entry, 0x0, 2),
                     unk4=read_uintle(entry, 0x4, 2),
                     unk6=read_uintle(entry, 0x6, 2),
                     pos=SsaPosition(
+                        scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
                         x_pos=read_uintle(entry, 0x8, 2),
                         y_pos=read_uintle(entry, 0xA, 2),
@@ -143,6 +150,7 @@ class Ssa:
                     unk4=read_uintle(entry, 0x4, 2),
                     unk6=read_uintle(entry, 0x6, 2),
                     pos=SsaPosition(
+                        scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
                         x_pos=read_uintle(entry, 0x8, 2),
                         y_pos=read_uintle(entry, 0xA, 2),
@@ -164,6 +172,7 @@ class Ssa:
                     trigger_pointer=read_uintle(entry, 0xC, 2) * 2,
                     trigger_table_start=self.header.trigger_pointer,
                     pos=SsaPosition(
+                        scriptdata=self._scriptdata,
                         x_pos=read_uintle(entry, 0x4, 2),
                         y_pos=read_uintle(entry, 0x6, 2),
                         x_offset=read_uintle(entry, 0x8, 2),

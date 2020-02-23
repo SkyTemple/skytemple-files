@@ -14,7 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import warnings
 from enum import Enum
+from typing import Union, Tuple
+
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
+from skytemple_files.common.util import AutoString
 
 
 class Direction(Enum):
@@ -29,8 +34,8 @@ class Direction(Enum):
     DOWN_RIGHT = 8
 
 
-class SsaPosition:
-    def __init__(self, x_pos, y_pos, x_offset, y_offset, direction=None):
+class SsaPosition(AutoString):
+    def __init__(self, scriptdata: Pmd2ScriptData, x_pos, y_pos, x_offset, y_offset, direction=None):
         """
         Common SSA position specification. Direction is optional if not applicable.
         """
@@ -40,12 +45,10 @@ class SsaPosition:
         self.x_offset = x_offset
         self.y_offset = y_offset
 
-        self.direction = None
+        self.direction: Union[Tuple[int, str], None] = None
         if direction is not None:
-            self.direction = Direction(direction)
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaPosition<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"
+            try:
+                self.direction = (direction, scriptdata.directions__by_id[direction])
+            except KeyError:
+                warnings.warn(f"[SsaActor]: Unknown direction id: {direction}")
+                self.direction = (direction, 'UNKNOWN')

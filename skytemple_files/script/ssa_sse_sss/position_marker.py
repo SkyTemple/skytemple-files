@@ -14,9 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.util import AutoString
 
 
-class SsaPositionMarker:
+class SsaPositionMarker(AutoString):
     def __init__(self, unk0, unk2, unk4, unk6, unk8, unkA, unkC, unkE):
         self.unk0 = unk0
         self.unk2 = unk2
@@ -26,9 +27,3 @@ class SsaPositionMarker:
         self.unkA = unkA
         self.unkC = unkC
         self.unkE = unkE
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaPositionMarker<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"

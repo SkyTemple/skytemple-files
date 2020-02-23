@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List
 
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss import ACTOR_ENTRY_LEN, OBJECT_ENTRY_LEN, PERFORMERS_ENTRY_LEN, \
     EVENTS_ENTRY_LEN, UNK10_ENTRY_LEN
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
@@ -26,7 +27,7 @@ from skytemple_files.script.ssa_sse_sss.performer import SsaPerformer
 from skytemple_files.script.ssa_sse_sss.unk10 import SsaUnk10
 
 
-class SsaLayer:
+class SsaLayer(AutoString):
     """
     A single layer of an SSA file.
     """
@@ -97,9 +98,3 @@ class SsaLayer:
             self.events = all_events[self._events_first_offset:(self._events_first_offset+self._events_count)]
         if self._unk10_block_count > 0:
             self.unk10s = all_unk10s[self._unk10_block_first_offset:(self._unk10_block_first_offset + self._unk10_block_count)]
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaLayer<{str({k:v for k,v in self.__dict__.items() if v is not None and not k[0] == '_'})}>"

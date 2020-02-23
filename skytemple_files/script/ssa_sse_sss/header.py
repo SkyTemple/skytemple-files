@@ -14,8 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.util import AutoString
 
-class SsaHeader:
+
+class SsaHeader(AutoString):
     """
     The header of a read SSA file.
     Only contains information used during read-in of the data. Not used for saving.
@@ -56,9 +58,3 @@ class SsaHeader:
         self.unk10_pointer = unk10_pointer if unk10_pointer != layer_list_pointer else None
         if self.unk10_pointer is not None:
             self.unk10_end_pointer = layer_list_pointer
-
-    def __repr__(self):
-        return str(self.__dict__)
-
-    def __str__(self):
-        return f"SsaHeader<{str({k:v for k,v in self.__dict__.items() if v is not None})}>"

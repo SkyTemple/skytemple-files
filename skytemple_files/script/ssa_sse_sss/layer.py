@@ -91,7 +91,7 @@ class SsaLayer(AutoString):
         if self._actors_count > 0:
             self.actors = all_actors[self._actors_first_offset:(self._actors_first_offset+self._actors_count)]
         if self._objects_count > 0:
-            self.objects = all_objects[self._actors_first_offset:(self._objects_first_offset+self._objects_count)]
+            self.objects = all_objects[self._objects_first_offset:(self._objects_first_offset+self._objects_count)]
         if self._performers_count > 0:
             self.performers = all_performers[self._performers_first_offset:(self._performers_first_offset+self._performers_count)]
         if self._events_count > 0:

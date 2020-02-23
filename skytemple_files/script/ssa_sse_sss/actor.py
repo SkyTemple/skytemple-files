@@ -26,7 +26,7 @@ class SsaActor(AutoString):
         try:
             self.actor = scriptdata.level_entities__by_id[actor_id]
         except KeyError:
-            warnings.warn(f"[SsaActor]: Unknown actor id: {actor_id}")
+            warnings.warn(f"[{self.__class__.__name__}]: Unknown actor id: {actor_id}")
             self.actor = Pmd2ScriptEntity(actor_id, 0, 'UNKNOWN', 0, 0, 0)
         self.pos = pos
         self.script_id = script_id

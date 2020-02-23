@@ -26,7 +26,7 @@ class SsaObject(AutoString):
         try:
             self.object = scriptdata.objects__by_id[object_id]
         except KeyError:
-            warnings.warn(f"[SsaActor]: Unknown object id: {object_id}")
+            warnings.warn(f"[{self.__class__.__name__}]: Unknown object id: {object_id}")
             self.object = Pmd2ScriptObject(object_id, 0, 0, 0, 'UNKNOWN')
         self.unk4 = unk4
         self.unk6 = unk6

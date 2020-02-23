@@ -15,14 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.util import AutoString
+from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
 class SsaPositionMarker(AutoString):
-    def __init__(self, unk0, unk2, unk4, unk6, unk8, unkA, unkC, unkE):
-        self.unk0 = unk0
-        self.unk2 = unk2
-        self.unk4 = unk4
-        self.unk6 = unk6
+    def __init__(self, pos: SsaPosition, unk8, unkA, unkC, unkE):
+        self.pos = pos
         self.unk8 = unk8
         self.unkA = unkA
         self.unkC = unkC

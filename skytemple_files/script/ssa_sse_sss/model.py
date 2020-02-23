@@ -38,7 +38,7 @@ class Ssa:
         self._scriptdata = scriptdata
 
         self.header = self._init_header(data)
-        self.layer_list = self._init_layer_list(data)
+        self.layer_list: List[SsaLayer] = self._init_layer_list(data)
 
         self.triggers = self._init_triggers(data)
         self.position_markers = self._init_position_markers(data)
@@ -115,7 +115,7 @@ class Ssa:
                         y_offset=read_uintle(entry, 0xA, 2),
                     ),
                     script_id=read_sintle(entry, 0xC, 2),
-                    unkE=read_uintle(entry, 0xE, 2),
+                    unkE=read_sintle(entry, 0xE, 2),
                 ))
         return lst
 
@@ -126,8 +126,8 @@ class Ssa:
                 lst.append(SsaObject(
                     scriptdata=self._scriptdata,
                     object_id=read_uintle(entry, 0x0, 2),
-                    unk4=read_uintle(entry, 0x4, 2),
-                    unk6=read_uintle(entry, 0x6, 2),
+                    unk4=read_sintle(entry, 0x4, 2),
+                    unk6=read_sintle(entry, 0x6, 2),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
@@ -137,7 +137,7 @@ class Ssa:
                         y_offset=read_uintle(entry, 0xE, 2),
                     ),
                     script_id=read_sintle(entry, 0x10, 2),
-                    unk12=read_uintle(entry, 0x12, 2),
+                    unk12=read_sintle(entry, 0x12, 2),
                 ))
         return lst
 
@@ -147,8 +147,8 @@ class Ssa:
             for entry in iter_bytes(data, PERFORMERS_ENTRY_LEN, self.header.performer_pointer, self.header.performer_end_pointer):
                 lst.append(SsaPerformer(
                     type=read_uintle(entry, 0x0, 2),
-                    unk4=read_uintle(entry, 0x4, 2),
-                    unk6=read_uintle(entry, 0x6, 2),
+                    unk4=read_sintle(entry, 0x4, 2),
+                    unk6=read_sintle(entry, 0x6, 2),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
@@ -157,8 +157,8 @@ class Ssa:
                         x_offset=read_uintle(entry, 0xC, 2),
                         y_offset=read_uintle(entry, 0xE, 2),
                     ),
-                    unk10=read_uintle(entry, 0x10, 2),
-                    unk12=read_uintle(entry, 0x12, 2),
+                    unk10=read_sintle(entry, 0x10, 2),
+                    unk12=read_sintle(entry, 0x12, 2),
                 ))
         return lst
 
@@ -187,14 +187,18 @@ class Ssa:
         if self.header.position_marker_pointer is not None:
             for entry in iter_bytes(data, POS_MARKER_ENTRY_LEN, self.header.position_marker_pointer, self.header.position_marker_end_pointer):
                 lst.append(SsaPositionMarker(
-                    unk0=read_uintle(entry, 0x0, 2),
-                    unk2=read_uintle(entry, 0x2, 2),
-                    unk4=read_uintle(entry, 0x4, 2),
-                    unk6=read_uintle(entry, 0x6, 2),
-                    unk8=read_uintle(entry, 0x8, 2),
-                    unkA=read_uintle(entry, 0xA, 2),
-                    unkC=read_uintle(entry, 0xC, 2),
-                    unkE=read_uintle(entry, 0xE, 2)
+                    pos=SsaPosition(
+                        scriptdata=self._scriptdata,
+                        direction=None,
+                        x_pos=read_uintle(entry, 0x0, 2),
+                        y_pos=read_uintle(entry, 0x2, 2),
+                        x_offset=read_uintle(entry, 0x4, 2),
+                        y_offset=read_uintle(entry, 0x6, 2),
+                    ),
+                    unk8=read_sintle(entry, 0x8, 2),
+                    unkA=read_sintle(entry, 0xA, 2),
+                    unkC=read_sintle(entry, 0xC, 2),
+                    unkE=read_sintle(entry, 0xE, 2)
                 ))
         return lst
 
@@ -203,9 +207,9 @@ class Ssa:
         if self.header.unk10_pointer is not None:
             for entry in iter_bytes(data, UNK10_ENTRY_LEN, self.header.unk10_pointer, self.header.unk10_end_pointer):
                 lst.append(SsaUnk10(
-                    unk0=read_uintle(entry, 0x0, 2),
-                    unk2=read_uintle(entry, 0x2, 2),
-                    unk4=read_uintle(entry, 0x4, 2),
-                    unk6=read_uintle(entry, 0x6, 2)
+                    unk0=read_sintle(entry, 0x0, 2),
+                    unk2=read_sintle(entry, 0x2, 2),
+                    unk4=read_sintle(entry, 0x4, 2),
+                    unk6=read_sintle(entry, 0x6, 2)
                 ))
         return lst

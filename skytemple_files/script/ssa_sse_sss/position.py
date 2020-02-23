@@ -15,23 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import warnings
-from enum import Enum
 from typing import Union, Tuple
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString
 
 
-class Direction(Enum):
-    """SSA Direction"""
-    DOWN = 1
-    DOWN_LEFT = 2
-    LEFT = 3
-    UP_LEFT = 4
-    UP = 5
-    UP_RIGHT = 6
-    RIGHT = 7
-    DOWN_RIGHT = 8
+TILE_SIZE = 8
 
 
 class SsaPosition(AutoString):
@@ -39,8 +29,8 @@ class SsaPosition(AutoString):
         """
         Common SSA position specification. Direction is optional if not applicable.
         """
-        self.x_pos = x_pos
-        self.y_pos = y_pos
+        self.x_relative = x_pos
+        self.y_relative = y_pos
 
         self.x_offset = x_offset
         self.y_offset = y_offset
@@ -50,5 +40,23 @@ class SsaPosition(AutoString):
             try:
                 self.direction = (direction, scriptdata.directions__by_id[direction])
             except KeyError:
-                warnings.warn(f"[SsaActor]: Unknown direction id: {direction}")
+                warnings.warn(f"[{self.__class__.__name__}]: Unknown direction id: {direction}")
                 self.direction = (direction, 'UNKNOWN')
+
+    @property
+    def x_absolute(self):
+        offset = 0
+        if self.x_offset == 2 or self.x_offset == 3:
+            offset = 4
+        elif self.x_offset > 4:
+            offset = 16
+        return self.x_relative * TILE_SIZE + offset
+
+    @property
+    def y_absolute(self):
+        offset = 0
+        if self.y_offset == 2 or self.y_offset == 3:
+            offset = 4
+        elif self.y_offset > 4:
+            offset = 16
+        return self.y_relative * TILE_SIZE + offset

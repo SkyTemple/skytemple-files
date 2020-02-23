@@ -233,6 +233,7 @@ class Pmd2XmlReader:
                     elif e.tag == 'LevelList':
                         for e_level in e:
                             level_list.append(Pmd2ScriptLevel(
+                                self._xml_int(e_level.attrib['_id']),
                                 self._xml_int(e_level.attrib['mapid']),
                                 e_level.attrib['name'],
                                 self._xml_int(e_level.attrib['mapty']) if 'mapty' in e_level.attrib else None,

@@ -25,8 +25,8 @@ class SsaTrigger(AutoString):
         try:
             self.coroutine = scriptdata.common_routine_info__by_id[coroutine_id]
         except KeyError:
-            warnings.warn(f"[SsaActor]: Unknown coroutine id: {coroutine_id}")
-            self.actor = Pmd2ScriptRoutine(coroutine_id, 0, 'UNKNOWN')
+            warnings.warn(f"[{self.__class__.__name__}]: Unknown coroutine id: {coroutine_id}")
+            self.coroutine = Pmd2ScriptRoutine(coroutine_id, 0, 'UNKNOWN')
         self.unk2 = unk2
         self.unk3 = unk3
         self.script_id = script_id

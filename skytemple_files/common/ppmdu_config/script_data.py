@@ -69,7 +69,8 @@ class Pmd2ScriptSpriteEffect(AutoString):
 
 
 class Pmd2ScriptLevel(AutoString):
-    def __init__(self, mapid: int, name: str, mapty: int, unk2: int, unk4: int):
+    def __init__(self, id: int, mapid: int, name: str, mapty: int, unk2: int, unk4: int):
+        self.id = id
         self.mapid = mapid
         self.name = name
         self.mapty = mapty
@@ -267,7 +268,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def level_list__by_id(self):
-        return {o.mapid: o for o in self.level_list}
+        return {o.id: o for o in self.level_list}
 
     @property
     def level_list__by_name(self):

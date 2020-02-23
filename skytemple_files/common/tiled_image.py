@@ -315,7 +315,6 @@ def search_for_chunk(chunk, tile_mappings):
 def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
-    TODO: Currently doesn't check flipped tiles!
     """
     for i, tile_in_tiles in enumerate(tiles):
         if tile_in_tiles == tile:

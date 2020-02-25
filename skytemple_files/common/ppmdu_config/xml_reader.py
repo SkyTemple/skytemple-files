@@ -161,6 +161,7 @@ class Pmd2XmlReader:
         sprite_effects = []
         level_list = []
         lives_entities = []
+        op_codes = []
         for e_game in script_root:
             if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
                ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
@@ -251,6 +252,17 @@ class Pmd2XmlReader:
                                 self._xml_int(e_ent.attrib['unk3']),
                                 self._xml_int(e_ent.attrib['unk4'])
                             ))
+                    ###########################
+                    elif e.tag == 'OpCodes':
+                        for e_code in e:
+                            op_codes.append(Pmd2ScriptOpCode(
+                                self._xml_int(e_code.attrib['id']),
+                                e_code.attrib['name'],
+                                self._xml_int(e_code.attrib['params']),
+                                self._xml_int(e_code.attrib['unk1']),
+                                self._xml_int(e_code.attrib['unk2']),
+                                self._xml_int(e_code.attrib['unk3'])
+                            ))
         return Pmd2ScriptData(
             game_variables_table,
             objects_list,
@@ -262,7 +274,8 @@ class Pmd2XmlReader:
             process_specials,
             sprite_effects,
             level_list,
-            lives_entities
+            lives_entities,
+            op_codes
         )
 
     @staticmethod
@@ -333,8 +346,8 @@ class XmlCombiner:
                         matching_element_in_one.attrib[key] = value
             if len(el) > 0:
                 # Recursion
-                merge_config = self.read_merge_config(el) or None
-                self.combine_element(matching_element_in_one, el, merge_config)
+                new_merge_config = self.read_merge_config(el) or None
+                self.combine_element(matching_element_in_one, el, new_merge_config)
 
     def read_merge_config(self, r):
         if 'merge_strategy' in r.attrib:

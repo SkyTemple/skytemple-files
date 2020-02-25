@@ -292,6 +292,7 @@ _shift_jis_characters = {
 _decode_shift_jis_characters = {ord(v): k for k, v in _shift_jis_characters.items()}
 
 PMD2_STR_ENCODER = 'pmd2str'
+was_init = False
 
 
 def pmd2_encode(text: str) -> Tuple[bytes, int]:
@@ -350,4 +351,7 @@ def pmd2_codec_search_function(encoding_name):
 
 
 def init():
-    codecs.register(pmd2_codec_search_function)
+    global was_init
+    if not was_init:
+        codecs.register(pmd2_codec_search_function)
+        was_init = True

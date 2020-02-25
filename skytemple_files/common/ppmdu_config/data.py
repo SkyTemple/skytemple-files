@@ -24,6 +24,23 @@ from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString
 
 
+GAME_VERSION_EOT = 'EoT'
+GAME_VERSION_EOD = 'EoD'
+GAME_VERSION_EOS = 'EoS'
+
+GAME_REGION_US = 'US'
+GAME_REGION_EU = 'EU'
+GAME_REGION_JP = 'JP'
+
+
+LANG_JP = 'japanese'
+LANG_EN = 'english'
+LANG_FR = 'french'
+LANG_DE = 'german'
+LANG_IT = 'italian'
+LANG_SP = 'spanish'
+
+
 class Pmd2GameEdition(AutoString):
     def __init__(self, id: str, gamecode: str, region: str, arm9off14: int, defaultlang: str, issupported: bool):
         self.id = id
@@ -77,6 +94,8 @@ class Pmd2Data(AutoString):
                  string_index_data: Pmd2StringIndexData,
                  script_data: Pmd2ScriptData):
         self.game_edition = game_edition
+        self.game_version = game_edition.split('_')[0]
+        self.game_region = game_edition.split('_')[1]
         self.game_editions: Dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
         self.binaries = binaries

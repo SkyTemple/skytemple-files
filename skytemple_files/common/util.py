@@ -16,11 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import warnings
-from typing import List
+from typing import List, Tuple
 
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common import string_codec
 
 DEBUG = False
 
@@ -68,6 +69,21 @@ def read_sintbe(data: bytes, start=0, length=1) -> int:
     """
     _check_memoryview(data)
     return int.from_bytes(data[start:(start+length)], byteorder='big', signed=True)
+
+
+def read_var_length_string(data: bytes, start=0) -> Tuple[int, str]:
+    """Reads a zero terminated string of characters. """
+    string_codec.init()
+    bytes_of_string = bytearray()
+    current_byte = -1
+    cursor = start
+    while current_byte != 0:
+        current_byte = data[cursor]
+        cursor += 1
+        if current_byte != 0:
+            bytes_of_string.append(current_byte)
+
+    return cursor - start, str(bytes_of_string, string_codec.PMD2_STR_ENCODER)
 
 
 def write_uintle(data: bytes, to_write: int, start=0, length=1):

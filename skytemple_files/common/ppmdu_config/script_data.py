@@ -88,6 +88,16 @@ class Pmd2ScriptEntity(AutoString):
         self.unk4 = unk4
 
 
+class Pmd2ScriptOpCode(AutoString):
+    def __init__(self, id: int, name: str, params: int, unk1: int, unk2: int, unk3: int):
+        self.id = id
+        self.name = name
+        self.params = params
+        self.unk1 = unk1
+        self.unk2 = unk2
+        self.unk3 = unk3
+
+
 class Pmd2ScriptData(AutoString):
     """TODO: Cache the __by_xyz properties."""
     def __init__(self,
@@ -101,7 +111,8 @@ class Pmd2ScriptData(AutoString):
                  process_special_ids: List[Pmd2ScriptSpecial],
                  sprite_effect_ids: List[Pmd2ScriptSpriteEffect],
                  level_list: List[Pmd2ScriptLevel],
-                 level_entity_table: List[Pmd2ScriptEntity]):
+                 level_entity_table: List[Pmd2ScriptEntity],
+                 op_codes: List[Pmd2ScriptOpCode]):
         self._game_variables = game_variables_table
         self._objects = objects_list
         self._face_names = face_names
@@ -113,6 +124,7 @@ class Pmd2ScriptData(AutoString):
         self._sprite_effects = sprite_effect_ids
         self._level_list = level_list
         self._level_entities = level_entity_table
+        self._op_codes = op_codes
 
     @property
     def game_variables(self):
@@ -289,3 +301,19 @@ class Pmd2ScriptData(AutoString):
     @property
     def level_entities__by_name(self):
         return {o.name: o for o in self.level_entities}
+
+    @property
+    def op_codes(self):
+        return self._op_codes
+
+    @level_entities.setter
+    def level_entities(self, value):
+        self._op_codes = value
+
+    @property
+    def op_codes__by_id(self):
+        return {o.id: o for o in self.op_codes}
+
+    @property
+    def op_codes__by_name(self):
+        return {o.name: o for o in self.op_codes}

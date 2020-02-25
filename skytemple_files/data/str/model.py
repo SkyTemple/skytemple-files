@@ -14,14 +14,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.string_codec import PMD2_STR_ENCODER
 from skytemple_files.common.util import *
-from skytemple_files.data.str.codec import init, PMD2_STR_ENCODER
 
 
 class Str:
-    init()
-
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -42,16 +39,7 @@ class Str:
 
     @staticmethod
     def _read_string(data, pnt):
-        bytes_of_string = bytearray()
-        current_byte = -1
-        cursor = pnt
-        while current_byte != 0:
-            current_byte = data[cursor]
-            cursor += 1
-            if current_byte != 0:
-                bytes_of_string.append(current_byte)
-
-        return str(bytes_of_string, PMD2_STR_ENCODER)
+        return read_var_length_string(data, pnt)[1]
 
     def to_bytes(self):
         """Convert the string list back to bytes"""

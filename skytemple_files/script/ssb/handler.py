@@ -14,16 +14,26 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data
+from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
 from skytemple_files.script.ssb.model import Ssb
 from skytemple_files.script.ssb.writer import SsbWriter
 
 
 class SsbHandler(DataHandler[Ssb]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Ssb:
-        return Ssb(data)
+    def deserialize(cls, data: bytes, static_data: Pmd2Data = None, **kwargs) -> Ssb:
+        if static_data is None:
+            static_data = Pmd2XmlReader.load_default()
+        if static_data.game_region == GAME_REGION_EU:
+            ssb_header = SsbHeaderEu(data)
+        elif static_data.game_region == GAME_REGION_US:
+            ssb_header = SsbHeaderUs(data)
+        else:
+            raise ValueError(f"Unsupported game edition: {data.game_edition}")
+        return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data)
 
     @classmethod
     def serialize(cls, data: Ssb) -> bytes:

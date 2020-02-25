@@ -306,8 +306,8 @@ class Pmd2ScriptData(AutoString):
     def op_codes(self):
         return self._op_codes
 
-    @level_entities.setter
-    def level_entities(self, value):
+    @op_codes.setter
+    def op_codes(self, value):
         self._op_codes = value
 
     @property

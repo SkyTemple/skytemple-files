@@ -20,29 +20,38 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
-from skytemple_files.common.util import get_rom_folder
+from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
 from skytemple_files.script.ssb.handler import SsbHandler
 
+output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+os.makedirs(output_dir, exist_ok=True)
 
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
 script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
-map_name = 'D01P11A'
-ssb_name = SCRIPT_DIR + '/' + map_name + '/' + 'm24p1101.ssb'
 
-bin_before = rom.getFileByName(ssb_name)
-ssb = SsbHandler.deserialize(bin_before)
+for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
+    # Files that don't work right now:
+    print(file_name)
 
-print(ssb.header)
-print(f"number_of_routines: {len(ssb.routine_info)}")
-print(f"constants: {ssb.constants}")
-print(f"strings: {ssb.strings}")
-print(ssb.routine_info)
-for ops in ssb.routine_ops:
-    print(">>> Routine:")
-    op_cursor = 0
-    for op in ops:
-        print(f"{op_cursor:10}: {op}")
-        op_cursor += 2 + len(op.params) * 2
+    out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
+
+    bin_before = rom.getFileByName(file_name)
+    ssb = SsbHandler.deserialize(bin_before)
+
+    with open(out_file_name, 'w') as f:
+        lines = []
+        lines.append(str(ssb.header))
+        lines.append(f"number_of_routines: {len(ssb.routine_info)}")
+        lines.append(f"constants: {ssb.constants}")
+        lines.append(f"strings: {ssb.strings}")
+        lines.append(str(ssb.routine_info))
+        for ops in ssb.routine_ops:
+            lines.append(">>> Routine:")
+            op_cursor = 0
+            for op in ops:
+                lines.append(f"{op_cursor:10}: {op}")
+                op_cursor += 2 + len(op.params) * 2
+        f.writelines([l + '\n' for l in lines])

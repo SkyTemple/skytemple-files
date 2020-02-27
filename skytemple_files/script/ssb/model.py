@@ -65,7 +65,11 @@ class Ssb:
         cursor = self._read_routine_info(data, number_of_routines, cursor)
 
         for i, rtn in enumerate(self.routine_info):
-            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn.offset_start)
+            if i == number_of_routines - 1:
+                end_offset = start_of_const_table
+            else:
+                end_offset = begin_data_offset + self.routine_info[i + 1].offset_start
+            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn.offset_start, end_offset)
             self.routine_ops.append(read_ops)
 
         # We read all the routines, the cursor should be at the beginning of the const_table
@@ -134,15 +138,12 @@ class Ssb:
             cursor += 6
         return cursor
 
-    def _read_routine_op_codes(self, data, start_offset):
+    def _read_routine_op_codes(self, data, start_offset, end_offset):
         ops = []
-        read_end = False
         cursor = start_offset
-        while not read_end:
+        while cursor < end_offset:
             read_op, cursor = self._read_single_op_code(data, cursor)
             ops.append(read_op)
-            if read_op.op_code.id == 112:  # END
-                read_end = True
         return ops, cursor
 
     def _read_single_op_code(self, data, cursor):

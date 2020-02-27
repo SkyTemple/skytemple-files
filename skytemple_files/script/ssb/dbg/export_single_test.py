@@ -48,10 +48,10 @@ for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
         lines.append(f"constants: {ssb.constants}")
         lines.append(f"strings: {ssb.strings}")
         lines.append(str(ssb.routine_info))
-        for ops in ssb.routine_ops:
-            lines.append(">>> Routine:")
+        for i, ops in enumerate(ssb.routine_ops):
+            lines.append(f">>> Routine {i}:")
             op_cursor = 0
             for op in ops:
-                lines.append(f"{op_cursor:10}: {op}")
+                lines.append(f"{op.offset:10}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
                 op_cursor += 2 + len(op.params) * 2
         f.writelines([l + '\n' for l in lines])

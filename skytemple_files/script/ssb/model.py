@@ -34,7 +34,8 @@ class SsbRoutineType(Enum):
 
 
 class SsbOperation(AutoString):
-    def __init__(self, op_code: Pmd2ScriptOpCode, params: List[int]):
+    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: List[int]):
+        self.offset = offset
         self.op_code = op_code
         self.params = params
 
@@ -69,7 +70,7 @@ class Ssb:
                 end_offset = start_of_const_table
             else:
                 end_offset = begin_data_offset + self.routine_info[i + 1].offset_start
-            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn.offset_start, end_offset)
+            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn.offset_start, end_offset, begin_data_offset)
             self.routine_ops.append(read_ops)
 
         # We read all the routines, the cursor should be at the beginning of the const_table
@@ -138,15 +139,16 @@ class Ssb:
             cursor += 6
         return cursor
 
-    def _read_routine_op_codes(self, data, start_offset, end_offset):
+    def _read_routine_op_codes(self, data, start_offset, end_offset, len_header):
         ops = []
         cursor = start_offset
         while cursor < end_offset:
-            read_op, cursor = self._read_single_op_code(data, cursor)
+            read_op, cursor = self._read_single_op_code(data, cursor, len_header)
             ops.append(read_op)
         return ops, cursor
 
-    def _read_single_op_code(self, data, cursor):
+    def _read_single_op_code(self, data, cursor, len_header):
+        opcode_offset = int((cursor - len_header) / 2)
         op_code = self._scriptdata.op_codes__by_id[read_uintle(data, cursor, 2)]
         cursor += 2
         arguments = []
@@ -159,4 +161,4 @@ class Ssb:
             arguments.append(read_uintle(data, cursor, 2))
             cursor += 2
 
-        return SsbOperation(op_code, arguments), cursor
+        return SsbOperation(opcode_offset, op_code, arguments), cursor

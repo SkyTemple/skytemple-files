@@ -1159,16 +1159,16 @@
         </OpCode>
         <OpCode id="0x2b"  name="BranchEdit"                             params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
-          <Argument id="1" type="int" name="unk1"/>
+          <Argument id="1" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2c"  name="BranchExecuteSub"                       params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
-          <Argument id="1" type="int" name="unk1"/>
+          <Argument id="1" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2d"  name="BranchPerformance"                      params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
           <Argument id="1" type="int" name="unk1"/>
-          <Argument id="2" type="int" name="unk2"/>
+          <Argument id="2" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2e"  name="BranchScenarioNow"                      params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
@@ -1204,19 +1204,19 @@
           <Argument id="0" type="int" name="unk0"/>
           <Argument id="1" type="int" name="unk1"/>
           <Argument id="2" type="int" name="unk2"/>
-          <Argument id="3" type="int" name="unk3"/>
+          <Argument id="3" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x34"  name="BranchValue"                            params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
           <Argument id="1" type="int" name="unk1"/>
           <Argument id="2" type="int" name="unk2"/>
-          <Argument id="3" type="int" name="unk3"/>
+          <Argument id="3" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x35"  name="BranchVariable"                         params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
           <Argument id="1" type="int" name="unk1"/>
           <Argument id="2" type="int" name="unk2"/>
-          <Argument id="3" type="int" name="unk3"/>
+          <Argument id="3" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x36"  name="BranchVariation"                        params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="unk0"/>
@@ -1399,7 +1399,7 @@
         <OpCode id="0x69"  name="CaseVariable"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>
           <Argument id="1" type="int" name="unk1"/>
-          <Argument id="2" type="int" name="unk2"/>
+          <Argument id="2" type="int" name="jump_address"/>
         </OpCode>
         <OpCode id="0x6a"  name="debug_Assert"                           params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="int" name="unk0"/>

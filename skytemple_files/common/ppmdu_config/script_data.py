@@ -20,7 +20,7 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Dict
 
-from explorerscript.ssb_converting.ssb_decompiler import SsbOpCode, SsbCoroutine
+from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
 
 

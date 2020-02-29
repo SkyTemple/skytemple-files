@@ -16,9 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Dict
 
-from explorerscript.ssb_converting.ssb_decompiler import SsbOperation, SsbRoutineInfo, SsbRoutineType, \
-    SsbDecompiler, SsbOpParamConstant, SsbOpParamConstString, SsbOpParamLanguageString, SsbOpParam, ListOfSsbOpParam, \
-    SsbWarning
+from explorerscript.ssb_converting.ssb_decompiler import SsbDecompiler
+from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, SsbOpParamConstant, \
+    SsbOpParamConstString, SsbOpParamLanguageString, ListOfSsbOpParam, SsbOperation
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import AbstractSsbHeader
@@ -145,7 +145,8 @@ class Ssb:
 
     def to_explorerscript(self) -> str:
         return SsbDecompiler(
-            list(zip((x[1] for x in self.routine_info), self.get_filled_routine_ops())),
+            [x[1] for x in self.routine_info],
+            self.get_filled_routine_ops(),
             self._scriptdata.common_routine_info__by_id
         ).convert()
 

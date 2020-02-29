@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
-from typing import List, Union
+from typing import Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 
@@ -255,13 +255,21 @@ class Pmd2XmlReader:
                     ###########################
                     elif e.tag == 'OpCodes':
                         for e_code in e:
+                            arguments = []
+                            for e_argument in e_code:
+                                arguments.append(Pmd2ScriptOpCodeArgument(
+                                    self._xml_int(e_argument.attrib['id']),
+                                    e_argument.attrib['type'],
+                                    e_argument.attrib['name'],
+                                ))
                             op_codes.append(Pmd2ScriptOpCode(
                                 self._xml_int(e_code.attrib['id']),
                                 e_code.attrib['name'],
                                 self._xml_int(e_code.attrib['params']),
-                                self._xml_int(e_code.attrib['unk1']),
+                                self._xml_int(e_code.attrib['stringidx']),
                                 self._xml_int(e_code.attrib['unk2']),
-                                self._xml_int(e_code.attrib['unk3'])
+                                self._xml_int(e_code.attrib['unk3']),
+                                arguments
                             ))
         return Pmd2ScriptData(
             game_variables_table,

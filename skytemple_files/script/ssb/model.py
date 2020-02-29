@@ -14,38 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from enum import Enum
+from typing import Dict
 
+from explorerscript.ssb_converting.ssb_decompiler import SsbOperation, SsbRoutineInfo, SsbRoutineType, \
+    SsbDecompiler, SsbOpParamConstant, SsbOpParamConstString, SsbOpParamLanguageString, SsbOpParam, ListOfSsbOpParam, \
+    SsbWarning
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import AbstractSsbHeader
 
 
-class SsbRoutineType(Enum):
-    GENERIC = 1
-    UNK2 = 2
-    ACTOR = 3
-    OBJECT = 4
-    PERFORMER = 5
-    UNK6 = 6
-    UNK7 = 7
-    UNK8 = 8
-    COROUTINE = 9
-
-
-class SsbOperation(AutoString):
-    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: List[int]):
-        self.offset = offset
-        self.op_code = op_code
-        self.params = params
-
-
-class SsbRoutineInfo(AutoString):
-    def __init__(self, offset_start: int, type: SsbRoutineType, linked_to: int):
-        # ONLY used for reading in the data. THIS IS NOT UPDATED. Stored in bytes.
-        self.offset_start = offset_start
-        self.type = type
-        self.linked_to = linked_to
+class SkyTempleSsbOperation(SsbOperation):
+    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: ListOfSsbOpParam):
+        super().__init__(offset, op_code, params)
 
 
 class Ssb:
@@ -59,18 +40,18 @@ class Ssb:
         number_of_routines = read_uintle(data, begin_data_offset + 0x02, 2)
 
         self.header = header
-        self.routine_info = []
-        self.routine_ops = []
+        self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []  # Offset, RoutineInfo
+        self.routine_ops: List[List[SkyTempleSsbOperation]] = []
 
         cursor = begin_data_offset + 0x04
         cursor = self._read_routine_info(data, number_of_routines, cursor)
 
-        for i, rtn in enumerate(self.routine_info):
+        for i, (rtn_start_offset, _) in enumerate(self.routine_info):
             if i == number_of_routines - 1:
                 end_offset = start_of_const_table
             else:
-                end_offset = begin_data_offset + self.routine_info[i + 1].offset_start
-            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn.offset_start, end_offset, begin_data_offset)
+                end_offset = begin_data_offset + self.routine_info[i + 1][0]
+            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn_start_offset, end_offset, begin_data_offset)
             self.routine_ops.append(read_ops)
 
         # We read all the routines, the cursor should be at the beginning of the const_table
@@ -131,11 +112,10 @@ class Ssb:
 
     def _read_routine_info(self, data, number_of_routines, cursor):
         for i in range(0, number_of_routines):
-            self.routine_info.append(SsbRoutineInfo(
-                offset_start=read_uintle(data, cursor, 2) * 2,
+            self.routine_info.append((read_uintle(data, cursor, 2) * 2, SsbRoutineInfo(
                 type=SsbRoutineType(read_uintle(data, cursor + 2, 2)),
                 linked_to=read_uintle(data, cursor + 4, 2),
-            ))
+            )))
             cursor += 6
         return cursor
 
@@ -161,4 +141,87 @@ class Ssb:
             arguments.append(read_uintle(data, cursor, 2))
             cursor += 2
 
-        return SsbOperation(opcode_offset, op_code, arguments), cursor
+        return SkyTempleSsbOperation(opcode_offset, op_code, arguments), cursor
+
+    def to_explorerscript(self) -> str:
+        return SsbDecompiler(
+            list(zip((x[1] for x in self.routine_info), self.get_filled_routine_ops())),
+            self._scriptdata.common_routine_info__by_id
+        ).convert()
+
+    def get_filled_routine_ops(self):
+        """Returns self.routine_ops, but with constant strings, strings and constants from scriptdata filled out"""
+        rtns: List[List[SkyTempleSsbOperation]] = []
+        for rtn in self.routine_ops:
+            rtn_ops = []
+            for op in rtn:
+                # If there is at least one argument name / type defined for this operation's opcode,
+                # then we turn the list of params into a named argument list (dict)
+                use_named_arguments = len(op.op_code.arguments) > 0
+                if use_named_arguments:
+                    new_params = {}
+                    for i, param in enumerate(op.params):
+                        if i in op.op_code.arguments__by_id:
+                            argument_spec = op.op_code.arguments__by_id[i]
+                            if argument_spec.type == 'int':
+                                new_params[argument_spec.name] = param
+                            elif argument_spec.type == 'Entity':
+                                new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.level_entities__by_id[param].name)
+                            elif argument_spec.type == 'Object':
+                                new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.objects__by_id[param].name)
+                            elif argument_spec.type == 'Routine':
+                                new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.common_routine_info__by_id[param].name)
+                            elif argument_spec.type == 'Face':
+                                if param in self._scriptdata.face_names__by_id:
+                                    new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.face_names__by_id[param])
+                                else:
+                                    warnings.warn(f"Unknown face id: {param}", SsbWarning)
+                                    new_params[argument_spec.name] = param
+                            elif argument_spec.type == 'FaceMode':
+                                new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.face_position_modes__by_id[param])
+                            elif argument_spec.type == 'GameVar':
+                                new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.game_variables__by_id[param].name)
+                            elif argument_spec.type == 'Level':
+                                if param in self._scriptdata.level_list__by_id:
+                                    new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.level_list__by_id[param].name)
+                                else:
+                                    warnings.warn(f"Unknown level id: {param}", SsbWarning)
+                            elif argument_spec.type == 'Menu':
+                                if param in self._scriptdata.menus__by_id:
+                                    new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.menus__by_id[param].name)
+                                else:
+                                    warnings.warn(f"Unknown menu id: {param}", SsbWarning)
+                                    new_params[argument_spec.name] = param
+                            elif argument_spec.type == 'ProcessSpecial':
+                                if param in self._scriptdata.process_specials__by_id:
+                                    new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.process_specials__by_id[param].name)
+                                else:
+                                    new_params[argument_spec.name] = param
+                                    warnings.warn(f"Unknown special process id: {param}", SsbWarning)
+                            elif argument_spec.type == 'Direction':
+                                if param in self._scriptdata.directions__by_id:
+                                    new_params[argument_spec.name] = SsbOpParamConstant(self._scriptdata.directions__by_id[param])
+                                else:
+                                    new_params[argument_spec.name] = param
+                                    warnings.warn(f"Unknown direction id: {param}", SsbWarning)
+                            elif argument_spec.type == 'String':
+                                new_params[argument_spec.name] = SsbOpParamLanguageString(self.get_single_string(param - self.header.number_of_constants))
+                            elif argument_spec.type == 'ConstString':
+                                new_params[argument_spec.name] = SsbOpParamConstString(self.constants[param])
+                            else:
+                                raise RuntimeError(f"Unknown argument type '{argument_spec.type}'")
+                        else:
+                            raise RuntimeError(f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}")
+                else:
+                    new_params = op.params
+                new_op = SkyTempleSsbOperation(op.offset, op.op_code, new_params)
+                rtn_ops.append(new_op)
+            rtns.append(rtn_ops)
+        return rtns
+
+    def get_single_string(self, id: int) -> Dict[str, str]:
+        """Return a single string in all languages"""
+        res = {}
+        for key, strs in self.strings.items():
+            res[key] = strs[id]
+        return res

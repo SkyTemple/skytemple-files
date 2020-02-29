@@ -20,6 +20,7 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Dict
 
+from explorerscript.ssb_converting.ssb_decompiler import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
 
 
@@ -43,11 +44,10 @@ class Pmd2ScriptObject(AutoString):
         self.name = name
 
 
-class Pmd2ScriptRoutine(AutoString):
+class Pmd2ScriptRoutine(SsbCoroutine):
     def __init__(self, id: int, unk1: int, name: str):
-        self.id = id
+        super().__init__(id, name)
         self.unk1 = unk1
-        self.name = name
 
 
 class Pmd2ScriptMenu(AutoString):
@@ -88,14 +88,22 @@ class Pmd2ScriptEntity(AutoString):
         self.unk4 = unk4
 
 
-class Pmd2ScriptOpCode(AutoString):
-    def __init__(self, id: int, name: str, params: int, unk1: int, unk2: int, unk3: int):
+class Pmd2ScriptOpCodeArgument(AutoString):
+    def __init__(self, id: int, type: str, name: str):
         self.id = id
+        self.type = type
         self.name = name
+
+
+class Pmd2ScriptOpCode(SsbOpCode):
+    def __init__(self, id: int, name: str, params: int, stringidx: int, unk2: int, unk3: int, arguments: List[Pmd2ScriptOpCodeArgument]):
+        super().__init__(id, name)
         self.params = params
-        self.unk1 = unk1
+        self.stringidx = stringidx
         self.unk2 = unk2
         self.unk3 = unk3
+        self.arguments = arguments
+        self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
 
 
 class Pmd2ScriptData(AutoString):

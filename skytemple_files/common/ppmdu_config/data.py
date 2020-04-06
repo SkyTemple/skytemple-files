@@ -56,13 +56,51 @@ class Pmd2BinaryBlock(AutoString):
         self.name = name
         self.begin = begin
         self.end = end
+        self.parent = None
+
+    def add_parent(self, parent: 'Pmd2Binary'):
+        self.parent = parent
+
+    @property
+    def begin_absolute(self):
+        return self.parent.loadaddress + self.begin
+
+
+class Pmd2BinaryFunction(AutoString):
+    def __init__(self, name: str, begin: int):
+        self.name = name
+        self.begin = begin
+        self.parent = None
+
+    def add_parent(self, parent: 'Pmd2Binary'):
+        self.parent = parent
+
+    @property
+    def begin_absolute(self):
+        return self.parent.loadaddress + self.begin
+
+
+class Pmd2BinaryPointer(AutoString):
+    def __init__(self, name: str, begin: int):
+        self.name = name
+        self.begin = begin
+        self.parent = None
+
+    def add_parent(self, parent: 'Pmd2Binary'):
+        self.parent = parent
+
+    @property
+    def begin_absolute(self):
+        return self.parent.loadaddress + self.begin
 
 
 class Pmd2Binary(AutoString):
-    def __init__(self, filepath: str, loadaddress: int, blocks: List[Pmd2BinaryBlock]):
+    def __init__(self, filepath: str, loadaddress: int, blocks: List[Pmd2BinaryBlock], functions: List[Pmd2BinaryFunction], pointers: List[Pmd2BinaryPointer]):
         self.filepath = filepath
         self.loadaddress = loadaddress
-        self.blocks = blocks
+        self.blocks = {x.name: x for x in blocks}
+        self.functions = {x.name: x for x in functions}
+        self.pointers = {x.name: x for x in pointers}
 
 
 class Pmd2Language(AutoString):
@@ -98,7 +136,7 @@ class Pmd2Data(AutoString):
         self.game_region = game_edition.split('_')[1]
         self.game_editions: Dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
-        self.binaries = binaries
+        self.binaries = {x.filepath: x for x in binaries}
         self.string_index_data = string_index_data
         # asm patches constants currently not used
         self.script_data = script_data

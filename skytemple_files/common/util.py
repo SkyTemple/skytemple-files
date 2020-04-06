@@ -16,12 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import warnings
-from typing import List, Tuple
+from typing import List, Tuple, TYPE_CHECKING
 
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common import string_codec
+
+if TYPE_CHECKING:
+    from skytemple_files.common.ppmdu_config.data import Pmd2Data
+
 
 DEBUG = False
 
@@ -175,7 +179,6 @@ def lcm(x, y):
     return x * y // gcd(x, y)
 
 
-# TODO: Remove here, move to new colors.py
 def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
     """
     Works with a list of lists of rgb color palettes and returns a modified copy.
@@ -240,6 +243,28 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         if new_change_next == 0:
             change_amount += 1
         return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)
+
+
+def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
+    """
+    Returns the Pmd2Data for the given ROM.
+    If the ROM is not a valid and supported PMD EoS ROM, raises ValueError.
+    """
+    from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
+    data_general = Pmd2XmlReader.load_default()
+    game_code = rom.idCode.decode('ascii')
+
+    matched_edition = None
+    for edition_name, edition in data_general.game_editions.items():
+        if edition.issupported and edition.gamecode == game_code:
+            matched_edition = edition_name
+            break
+
+    if not matched_edition:
+        raise ValueError("This ROM is not supported by SkyTemple.")
+
+    # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
+    return Pmd2XmlReader.load_default(matched_edition)
 
 
 class AutoString:

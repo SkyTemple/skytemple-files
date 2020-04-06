@@ -295,7 +295,7 @@ PMD2_STR_ENCODER = 'pmd2str'
 was_init = False
 
 
-def pmd2_encode(text: str) -> Tuple[bytes, int]:
+def pmd2_encode(text: str, *args) -> Tuple[bytes, int]:
     bytearr = bytearray(len(text) * 2)
     cursor = 0
     for c in text:
@@ -314,7 +314,7 @@ def pmd2_encode(text: str) -> Tuple[bytes, int]:
     return bytes(bytearr[:cursor]), cursor
 
 
-def pmd2_decode(binary: bytes) -> Tuple[str, int]:
+def pmd2_decode(binary: bytes, *args) -> Tuple[str, int]:
     len_str = len(binary)
     str = ""
     current_is_special_character = False

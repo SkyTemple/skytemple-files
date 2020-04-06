@@ -18,19 +18,59 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from enum import Enum, IntEnum
 from typing import List, Dict
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
 
 
+class GameVariableType(IntEnum):
+    NULL = 0,
+    BIT = 1,
+    STRING = 2,  # Theory.
+    UINT8 = 3,
+    INT8 = 4,
+    UINT16 = 5,
+    INT16 = 6,
+    UINT32 = 7,
+    INT32 = 8,
+    SPECIAL = 9
+
+
+# XXX: I could have sworn, there was a way to get a enum instance by value...? But I can't find it.
+def game_variable_type_by_value(i: int) -> GameVariableType:
+    if i == 0:
+        return GameVariableType.NULL
+    if i == 1:
+        return GameVariableType.BIT
+    if i == 2:
+        return GameVariableType.STRING
+    if i == 3:
+        return GameVariableType.UINT8
+    if i == 4:
+        return GameVariableType.INT8
+    if i == 5:
+        return GameVariableType.UINT16
+    if i == 6:
+        return GameVariableType.INT16
+    if i == 7:
+        return GameVariableType.UINT32
+    if i == 8:
+        return GameVariableType.UINT32
+    if i == 9:
+        return GameVariableType.SPECIAL
+    raise ValueError(f"Unknown GameVariableType: {i}")
+
+
 class Pmd2ScriptGameVar(AutoString):
-    def __init__(self, type: int, unk1: int, memoffset: int, bitshift: int, unk3: int, unk4: int, name: str):
-        self.type = type
+    def __init__(self, id: int, type: int, unk1: int, memoffset: int, bitshift: int, nbvalues: int, unk4: int, name: str):
+        self.id: int = id
+        self.type: GameVariableType = game_variable_type_by_value(type)
         self.unk1 = unk1
         self.memoffset = memoffset
         self.bitshift = bitshift
-        self.unk3 = unk3
+        self.nbvalues = nbvalues
         self.unk4 = unk4
         self.name = name
 
@@ -106,6 +146,13 @@ class Pmd2ScriptOpCode(SsbOpCode):
         self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
 
 
+class Pmd2ScriptGroundStateStruct(AutoString):
+    def __init__(self, offset: int, entrylength: int, maxentries: int):
+        self.offset = offset
+        self.entrylength = entrylength
+        self.maxentries = maxentries
+
+
 class Pmd2ScriptData(AutoString):
     """TODO: Cache the __by_xyz properties."""
     def __init__(self,
@@ -120,7 +167,8 @@ class Pmd2ScriptData(AutoString):
                  sprite_effect_ids: List[Pmd2ScriptSpriteEffect],
                  level_list: List[Pmd2ScriptLevel],
                  level_entity_table: List[Pmd2ScriptEntity],
-                 op_codes: List[Pmd2ScriptOpCode]):
+                 op_codes: List[Pmd2ScriptOpCode],
+                 ground_state_structs: Dict[str, Pmd2ScriptGroundStateStruct]):
         self._game_variables = game_variables_table
         self._objects = objects_list
         self._face_names = face_names
@@ -133,6 +181,7 @@ class Pmd2ScriptData(AutoString):
         self._level_list = level_list
         self._level_entities = level_entity_table
         self._op_codes = op_codes
+        self._ground_state_structs = ground_state_structs
 
     @property
     def game_variables(self):
@@ -143,11 +192,11 @@ class Pmd2ScriptData(AutoString):
         self._game_variables = value
 
     @property
-    def game_variables__by_id(self):
-        return self.game_variables
+    def game_variables__by_id(self) -> Dict[int, Pmd2ScriptGameVar]:
+        return {var.id: var for var in self.game_variables}
 
     @property
-    def game_variables__by_name(self):
+    def game_variables__by_name(self) -> Dict[str, Pmd2ScriptGameVar]:
         return {var.name: var for var in self.game_variables}
 
     @property
@@ -325,3 +374,7 @@ class Pmd2ScriptData(AutoString):
     @property
     def op_codes__by_name(self):
         return {o.name: o for o in self.op_codes}
+
+    @property
+    def ground_state_structs(self):
+        return self._ground_state_structs

@@ -99,17 +99,40 @@ class Pmd2XmlReader:
                        ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
                         for e_binary in e_game:
                             blocks = []
-                            for e_block in e_binary:
-                                blocks.append(Pmd2BinaryBlock(
-                                    e_block.attrib['name'],
-                                    self._xml_int(e_block.attrib['beg']),
-                                    self._xml_int(e_block.attrib['end'])
-                                ))
-                            binaries.append(Pmd2Binary(
+                            fns = []
+                            pointers = []
+                            for e_node in e_binary:
+                                if e_node.tag == 'Block':
+                                    blocks.append(Pmd2BinaryBlock(
+                                        e_node.attrib['name'],
+                                        self._xml_int(e_node.attrib['beg']),
+                                        self._xml_int(e_node.attrib['end'])
+                                    ))
+                                elif e_node.tag == 'Fn':
+                                    fns.append(Pmd2BinaryFunction(
+                                        e_node.attrib['name'],
+                                        self._xml_int(e_node.attrib['beg'])
+                                    ))
+                                elif e_node.tag == 'Pointer':
+                                    pointers.append(Pmd2BinaryPointer(
+                                        e_node.attrib['name'],
+                                        self._xml_int(e_node.attrib['beg'])
+                                    ))
+                            bin = Pmd2Binary(
                                 e_binary.attrib['filepath'],
                                 self._xml_int(e_binary.attrib['loadaddress']),
-                                blocks
-                            ))
+                                blocks,
+                                fns,
+                                pointers
+                            )
+                            binaries.append(bin)
+                            for x in blocks:
+                                x.add_parent(bin)
+                            for x in fns:
+                                x.add_parent(bin)
+                            for x in pointers:
+                                x.add_parent(bin)
+
             ###########################
             elif e.tag == 'StringIndexData':
                 for e_game in e:
@@ -162,6 +185,7 @@ class Pmd2XmlReader:
         level_list = []
         lives_entities = []
         op_codes = []
+        ground_state_structs = {}
         for e_game in script_root:
             if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
                ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
@@ -169,13 +193,14 @@ class Pmd2XmlReader:
                 for e in e_game:
                     ###########################
                     if e.tag == 'GameVariablesTable' or e.tag == 'GameVariablesTableExtended':
-                        for e_var in e:
+                        for i, e_var in enumerate(e):
                             game_variables_table.append(Pmd2ScriptGameVar(
-                                e_var.attrib['type'],
+                                i if e.tag == 'GameVariablesTable' else i + 0x400,
+                                self._xml_int(e_var.attrib['type']),
                                 self._xml_int(e_var.attrib['unk1']),
                                 self._xml_int(e_var.attrib['memoffset']),
                                 self._xml_int(e_var.attrib['bitshift']),
-                                self._xml_int(e_var.attrib['unk3']),
+                                self._xml_int(e_var.attrib['nbvalues']),
                                 self._xml_int(e_var.attrib['unk4']),
                                 e_var.attrib['name']
                             ))
@@ -271,6 +296,13 @@ class Pmd2XmlReader:
                                 self._xml_int(e_code.attrib['unk3']),
                                 arguments
                             ))
+                    elif e.tag == 'GroundStateStructs':
+                        for e_code in e:
+                            ground_state_structs[e_code.tag] = Pmd2ScriptGroundStateStruct(
+                                self._xml_int(e_code.attrib['offset']),
+                                self._xml_int(e_code.attrib['entrylength']),
+                                self._xml_int(e_code.attrib['maxentries'])
+                            )
         return Pmd2ScriptData(
             game_variables_table,
             objects_list,
@@ -283,7 +315,8 @@ class Pmd2XmlReader:
             sprite_effects,
             level_list,
             lives_entities,
-            op_codes
+            op_codes,
+            ground_state_structs
         )
 
     @staticmethod

@@ -25,5 +25,5 @@ class StrHandler(DataHandler[Str]):
         return Str(data)
 
     @classmethod
-    def serialize(cls, data: Str) -> bytes:
+    def serialize(cls, data: Str, **kwargs) -> bytes:
         return data.to_bytes()

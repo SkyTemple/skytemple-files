@@ -35,6 +35,6 @@ class DataHandler(Generic[T], abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def serialize(cls, data: T) -> bytes:
-        """Converts the internal high-level representation back into a bit stream."""
+    def serialize(cls, data: T, **kwargs) -> bytes:
+        """Converts the internal high-level representation back into bytes."""
         pass

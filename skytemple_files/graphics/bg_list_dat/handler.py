@@ -26,5 +26,5 @@ class BgListDatHandler(DataHandler[BgList]):
         return BgList(data)
 
     @classmethod
-    def serialize(cls, data: BgList) -> bytes:
+    def serialize(cls, data: BgList, **kwargs) -> bytes:
         return BgListWriter(data).write()

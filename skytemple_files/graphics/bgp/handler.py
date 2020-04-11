@@ -27,7 +27,7 @@ class BgpHandler(DataHandler[Bgp]):
         return Bgp(FileType.AT4PX.deserialize(data).decompress())
 
     @classmethod
-    def serialize(cls, data: Bgp) -> bytes:
+    def serialize(cls, data: Bgp, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.AT4PX.serialize(
             FileType.AT4PX.compress(

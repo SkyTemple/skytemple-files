@@ -32,9 +32,13 @@ class SsbHandler(DataHandler[Ssb]):
         elif static_data.game_region == GAME_REGION_US:
             ssb_header = SsbHeaderUs(data)
         else:
-            raise ValueError(f"Unsupported game edition: {data.game_edition}")
+            raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
+
         return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data)
 
     @classmethod
-    def serialize(cls, data: Ssb) -> bytes:
-        return SsbWriter(data).write()
+    def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs) -> bytes:
+        if static_data is None:
+            static_data = Pmd2XmlReader.load_default()
+
+        return SsbWriter(data, static_data).write()

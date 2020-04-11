@@ -17,13 +17,22 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import OrderedDict as OrderedDictType
+from typing import OrderedDict as OrderedDictType, Optional
 
 from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE, LANG_JP
 from skytemple_files.common.util import *
 
 
+SSB_HEADER_US_LENGTH = 0x0C
+SSB_HEADER_EU_LENGTH = 0x12
+
+
 class AbstractSsbHeader(ABC):
+    @classmethod
+    @abstractmethod
+    def supported_langs(cls):
+        """Supported languages, in order as stored in ROM"""
+
     @property
     @abstractmethod
     def data_offset(self) -> int:
@@ -65,7 +74,10 @@ class AbstractSsbHeader(ABC):
 
 
 class SsbHeaderUs(AbstractSsbHeader):
-    def __init__(self, data: bytes):
+    def __init__(self, data: Optional[bytes]):
+        if data is None:
+            # Build mode.
+            return
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self._number_of_constants = read_uintle(data, 0x0, 2)
@@ -77,9 +89,13 @@ class SsbHeaderUs(AbstractSsbHeader):
         })
         self._unknown = read_uintle(data, 0xA, 2)
 
+    @classmethod
+    def supported_langs(cls):
+        return [LANG_EN]
+
     @property
     def data_offset(self) -> int:
-        return 0x0C
+        return SSB_HEADER_US_LENGTH
 
     @property
     def number_of_constants(self) -> int:
@@ -107,7 +123,10 @@ class SsbHeaderUs(AbstractSsbHeader):
 
 
 class SsbHeaderEu(AbstractSsbHeader):
-    def __init__(self, data: bytes):
+    def __init__(self, data: Optional[bytes]):
+        if data is None:
+            # Build mode.
+            return
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self._number_of_constants = read_uintle(data, 0x0, 2)
@@ -122,9 +141,13 @@ class SsbHeaderEu(AbstractSsbHeader):
             LANG_SP: read_uintle(data, 0x10, 2) * 2
         })
 
+    @classmethod
+    def supported_langs(cls):
+        return [LANG_EN, LANG_FR, LANG_DE, LANG_IT, LANG_SP]
+
     @property
     def data_offset(self) -> int:
-        return 0x12
+        return SSB_HEADER_EU_LENGTH
 
     @property
     def number_of_constants(self) -> int:

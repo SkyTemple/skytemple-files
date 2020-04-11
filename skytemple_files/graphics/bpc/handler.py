@@ -37,5 +37,5 @@ class BpcHandler(DataHandler[Bpc]):
         return Bpc(data, tiling_width, tiling_height)
 
     @classmethod
-    def serialize(cls, data: Bpc) -> bytes:
+    def serialize(cls, data: Bpc, **kwargs) -> bytes:
         return BpcWriter(data).write()

@@ -26,5 +26,5 @@ class BpaHandler(DataHandler[Bpa]):
         return Bpa(data)
 
     @classmethod
-    def serialize(cls, data: Bpa) -> bytes:
+    def serialize(cls, data: Bpa, **kwargs) -> bytes:
         return BpaWriter(data).write()

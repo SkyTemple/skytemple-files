@@ -14,12 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Dict
+from typing import Dict, Optional
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, SsbOpParamConstant, \
-    SsbOpParamConstString, SsbOpParamLanguageString, ListOfSsbOpParam, SsbOperation
+    SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
@@ -27,13 +27,33 @@ from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
 
 
+SSB_LEN_ROUTINE_INFO_ENTRY = 6
+SSB_PADDING_BEFORE_ROUTINE_INFO = 4
+
+
 class SkyTempleSsbOperation(SsbOperation):
-    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: ListOfSsbOpParam):
+    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: List[SsbOpParam]):
         super().__init__(offset, op_code, params)
 
 
 class Ssb:
-    def __init__(self, data: bytes, header: AbstractSsbHeader, begin_data_offset: int, scriptdata: Pmd2ScriptData):
+    @classmethod
+    def create_empty(cls):
+        return cls(None, None, None, None)
+
+    def __init__(
+            self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
+            begin_data_offset: Optional[int], scriptdata: Optional[Pmd2ScriptData]
+    ):
+        if data is None:
+            # Empty model mode, for the ScriptCompiler.
+            self.original_binary_data = bytes()
+            self.routine_info = []
+            self.routine_ops = []
+            self.constants = []
+            self.strings = []
+            return
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
@@ -45,19 +65,31 @@ class Ssb:
         start_of_const_table = begin_data_offset + (read_uintle(data, begin_data_offset + 0x00, 2) * 2)
         number_of_routines = read_uintle(data, begin_data_offset + 0x02, 2)
 
-        self.header = header
+        self._header = header
         self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []  # Offset, RoutineInfo
         self.routine_ops: List[List[SkyTempleSsbOperation]] = []
 
-        cursor = begin_data_offset + 0x04
+        cursor = begin_data_offset + SSB_PADDING_BEFORE_ROUTINE_INFO
         cursor = self._read_routine_info(data, number_of_routines, cursor)
 
+        alias_counter = 0
         for i, (rtn_start_offset, _) in enumerate(self.routine_info):
-            if i == number_of_routines - 1:
-                end_offset = start_of_const_table
+            if alias_counter > 0:
+                # process an alias of the previous routine
+                alias_counter -= 1
+                read_ops = []
             else:
-                end_offset = begin_data_offset + self.routine_info[i + 1][0]
-            read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn_start_offset, end_offset, begin_data_offset)
+                if i == number_of_routines - 1:
+                    end_offset = start_of_const_table
+                else:
+                    alias_i = i + 1
+                    end_offset = begin_data_offset + self.routine_info[alias_i][0]
+                    while begin_data_offset + rtn_start_offset == end_offset:
+                        # This is a set of aliases!
+                        alias_counter += 1
+                        alias_i += 1
+                        end_offset = begin_data_offset + self.routine_info[alias_i][0]
+                read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn_start_offset, end_offset, begin_data_offset)
             self.routine_ops.append(read_ops)
 
         # We read all the routines, the cursor should be at the beginning of the const_table
@@ -69,7 +101,7 @@ class Ssb:
         const_offset_table = []
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
-                # Actual offset is start_of_const_table + X - header.number_of_strings
+                # Actual offset is start_of_constble + X - header.number_of_strings_ta
                 start_of_const_table + read_uintle(data, i, 2) - (header.number_of_strings * 2)
             )
         self.constants = []
@@ -122,7 +154,7 @@ class Ssb:
                 type=SsbRoutineType(read_uintle(data, cursor + 2, 2)),
                 linked_to=read_uintle(data, cursor + 4, 2),
             )))
-            cursor += 6
+            cursor += SSB_LEN_ROUTINE_INFO_ENTRY
         return cursor
 
     def _read_routine_op_codes(self, data, start_offset, end_offset, len_header):
@@ -228,7 +260,7 @@ class Ssb:
                                     new_params[argument_spec.name] = param
                                     warnings.warn(f"Unknown direction id: {param}", SsbWarning)
                             elif argument_spec.type == 'String':
-                                new_params[argument_spec.name] = SsbOpParamLanguageString(self.get_single_string(param - self.header.number_of_constants))
+                                new_params[argument_spec.name] = SsbOpParamLanguageString(self.get_single_string(param - self._header.number_of_constants))
                             elif argument_spec.type == 'ConstString':
                                 new_params[argument_spec.name] = SsbOpParamConstString(self.constants[param])
                             else:

@@ -28,5 +28,5 @@ class SsaHandler(DataHandler[Ssa]):
         return Ssa(scriptdata, data)
 
     @classmethod
-    def serialize(cls, data: Ssa) -> bytes:
+    def serialize(cls, data: Ssa, **kwargs) -> bytes:
         return SsaWriter(data).write()

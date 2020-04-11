@@ -35,5 +35,5 @@ class KaoHandler(DataHandler[Kao]):
         return Kao(data, first_toc, toc_len)
 
     @classmethod
-    def serialize(cls, data: Kao) -> bytes:
+    def serialize(cls, data: Kao, **kwargs) -> bytes:
         return KaoWriter(data).write()

@@ -26,5 +26,5 @@ class BplHandler(DataHandler[Bpl]):
         return Bpl(data)
 
     @classmethod
-    def serialize(cls, data: Bpl) -> bytes:
+    def serialize(cls, data: Bpl, **kwargs) -> bytes:
         return BplWriter(data).write()

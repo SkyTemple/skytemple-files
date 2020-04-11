@@ -29,7 +29,7 @@ class At4pxHandler(DataHandler[At4px]):
         return At4px(data)
 
     @classmethod
-    def serialize(cls, data: At4px) -> bytes:
+    def serialize(cls, data: At4px, **kwargs) -> bytes:
         """Convert the high-level AT4PX representation back into a BitStream."""
         return data.to_bytes()
 

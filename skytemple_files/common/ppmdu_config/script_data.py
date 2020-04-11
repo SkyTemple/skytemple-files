@@ -144,6 +144,7 @@ class Pmd2ScriptOpCode(SsbOpCode):
         self.unk3 = unk3
         self.arguments = arguments
         self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
+        self.description = "This function has no description."  # todo
 
 
 class Pmd2ScriptGroundStateStruct(AutoString):
@@ -153,14 +154,32 @@ class Pmd2ScriptGroundStateStruct(AutoString):
         self.maxentries = maxentries
 
 
+class Pmd2ScriptFaceName(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
+class Pmd2ScriptFacePositionMode(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
+class Pmd2ScriptDirection(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
 class Pmd2ScriptData(AutoString):
     """TODO: Cache the __by_xyz properties."""
     def __init__(self,
                  game_variables_table: List[Pmd2ScriptGameVar],
                  objects_list: List[Pmd2ScriptObject],
-                 face_names: List[str],
-                 face_position_modes: List[str],
-                 directions: Dict[int, str],
+                 face_names: List[Pmd2ScriptFaceName],
+                 face_position_modes: List[Pmd2ScriptFacePositionMode],
+                 directions: Dict[int, Pmd2ScriptDirection],
                  common_routine_info: List[Pmd2ScriptRoutine],
                  menu_ids: List[Pmd2ScriptMenu],
                  process_special_ids: List[Pmd2ScriptSpecial],

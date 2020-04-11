@@ -216,16 +216,17 @@ class Pmd2XmlReader:
                             ))
                     ###########################
                     elif e.tag == 'FaceNames':
-                        for e_fn in e:
-                            face_names.append(e_fn.text)
+                        for i, e_fn in enumerate(e):
+                            face_names.append(Pmd2ScriptFaceName(i, e_fn.text))
                     ###########################
                     elif e.tag == 'FacePositionModes':
-                        for e_mode in e:
-                            face_position_modes.append(e_mode.text)
+                        for i, e_mode in enumerate(e):
+                            face_position_modes.append(Pmd2ScriptFacePositionMode(i, e_mode.text))
                     ###########################
                     elif e.tag == 'Directions':
                         for e_dir in e:
-                            directions[self._xml_int(e_dir.attrib['_id'])] = e_dir.text
+                            i = self._xml_int(e_dir.attrib['_id'])
+                            directions[i] = Pmd2ScriptDirection(i, e_dir.text)
                     ###########################
                     elif e.tag == 'CommonRoutineInfo':
                         for e_cri in e:

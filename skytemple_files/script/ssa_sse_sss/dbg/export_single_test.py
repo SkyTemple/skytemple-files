@@ -29,8 +29,8 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
 script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
-map_name = 'S02P01A'
-sse_name = SCRIPT_DIR + '/' + map_name + '/' + 'm00a01a.ssa'
+map_name = 'P01P01A'
+sse_name = SCRIPT_DIR + '/' + map_name + '/' + 'enter.sse'
 
 bin_before = rom.getFileByName(sse_name)
 sse = SsaHandler.deserialize(bin_before)

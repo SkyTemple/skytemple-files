@@ -958,7 +958,7 @@
 
         <Menu id="48" name="PersonalityTest" />
 
-        <Menu id="54" name="DungeonResult?" />
+        <Menu id="54" name="DungeonResult" /> <!-- ? -->
 
         <Menu id="60" name="GuildMiniGameScoreboard" />
 

@@ -17,7 +17,7 @@
 import warnings
 from typing import Union, Tuple
 
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptDirection
 from skytemple_files.common.util import AutoString
 
 
@@ -35,13 +35,13 @@ class SsaPosition(AutoString):
         self.x_offset = x_offset
         self.y_offset = y_offset
 
-        self.direction: Union[Tuple[int, str], None] = None
+        self.direction: Union[Pmd2ScriptDirection, None] = None
         if direction is not None:
             try:
-                self.direction = (direction, scriptdata.directions__by_id[direction])
+                self.direction = scriptdata.directions__by_id[direction]
             except KeyError:
                 warnings.warn(f"[{self.__class__.__name__}]: Unknown direction id: {direction}")
-                self.direction = (direction, 'UNKNOWN')
+                self.direction = Pmd2ScriptDirection(direction, 'UNKNOWN')
 
     @property
     def x_absolute(self):

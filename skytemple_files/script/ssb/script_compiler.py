@@ -1,0 +1,216 @@
+#  Copyright 2020 Parakoopa
+#
+#  This file is part of SkyTemple.
+#
+#  SkyTemple is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SkyTemple is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Tuple, Iterator, Dict, Callable
+
+from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbCoroutine, SsbRoutineType, \
+    SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString
+from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
+from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbCompiler as SsbScriptSsbCompiler
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU, GAME_REGION_US
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode
+from skytemple_files.script.ssb.constants import SsbConstant
+from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
+from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
+    SSB_PADDING_BEFORE_ROUTINE_INFO
+
+
+class ScriptCompiler:
+    """Compiles SSBScript or ExplorerScript into a SSB model"""
+    def __init__(self, rom_data: Pmd2Data):
+        self.rom_data = rom_data
+
+    def compile_ssbscript(self, ssb_script_src: str, callback_after_parsing: Callable = None) -> Ssb:
+        """
+        Compile SSBScript into a SSB model
+
+        :raises: ParseError: On parsing errors
+        :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes / constants)
+        """
+        base_compiler = SsbScriptSsbCompiler()
+        base_compiler.compile(ssb_script_src)
+
+        # Profiling callback
+        if callback_after_parsing:
+            callback_after_parsing()
+
+        return self.compile_structured(
+            base_compiler.routine_infos, base_compiler.routine_ops, base_compiler.named_coroutines
+        )
+
+    def compile_structured(
+            self,
+            routine_infos: List[SsbRoutineInfo],
+            routine_ops: List[List[SsbOperation]],
+            named_coroutines: List[str]
+    ) -> Ssb:
+        """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
+        model = Ssb.create_empty()
+        if len(routine_ops) != len(routine_ops) != len(named_coroutines):
+            raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")
+
+        # Build routines and opcodes.
+        if len(routine_ops) > 0:
+            header_class = SsbHeaderUs
+            if self.rom_data.game_region == GAME_REGION_EU:
+                header_class = SsbHeaderEu
+
+            built_strings: Dict[str, List[str]] = {lang: [] for lang in header_class.supported_langs()}
+            built_constants: List[str] = []
+
+            for i, r in enumerate(routine_infos):
+                if r is None:
+                    raise SsbCompilerError(f"Routine {i} not found.")
+
+            input_routine_structure: List[
+                Tuple[SsbRoutineInfo, str, List[SsbOperation]]
+            ] = list(zip(routine_infos, named_coroutines, routine_ops))
+
+            # The cursor position of the written routine opcodes.
+            # The opcodes start after the routine info, which has a fixed length, based on the number of routines.
+            opcode_cursor = SSB_LEN_ROUTINE_INFO_ENTRY * len(input_routine_structure) + SSB_PADDING_BEFORE_ROUTINE_INFO
+            # If it has any coroutines, they all have to be.
+            has_coroutines = routine_infos[0].type == SsbRoutineType.COROUTINE
+
+            # Run coroutine checks and sortings.
+            if has_coroutines:
+                # Assert, that the data contains all coroutines from the ROM schema and sort all three lists by this
+                if len(input_routine_structure) != len(self.rom_data.script_data.common_routine_info):
+                    raise SsbCompilerError(
+                        f"The script must contain exactly {len(self.rom_data.script_data.common_routine_info)} coroutines."
+                    )
+                if len(routine_infos) != len(set(named_coroutines)):
+                    raise SsbCompilerError(f"The script must not contain any duplicate coroutines.")
+                try:
+                    input_routine_structure = sorted(
+                        input_routine_structure, key=lambda k: self.rom_data.script_data.common_routine_info__by_name[k[1]].id
+                    )
+                except KeyError as err:
+                    raise SsbCompilerError(f"Unknown coroutine {err}") from err
+
+            # Build Routine Infos
+            built_routine_info_with_offset: List[Tuple[int, SsbRoutineInfo]] = []
+            built_routine_ops: List[List[SsbOperation]] = []
+            # A list of lists for ALL opcodes that maps all opcode indices to their memory address.
+            opcode_index_mem_offset_mapping: Dict[int, int] = {}
+            bytes_written_last_rtn = 0
+
+            for i, (input_info, _, input_ops) in enumerate(input_routine_structure):
+                if (
+                        has_coroutines and input_info.type != SsbRoutineType.COROUTINE
+                ) or (
+                        not has_coroutines and input_info.type == SsbRoutineType.COROUTINE
+                ):
+                    raise SsbCompilerError(f"Coroutines and regular routines can not be mixed in a script file.")
+
+                routine_start_cursor = opcode_cursor
+                # Build OPs
+                built_ops: List[SkyTempleSsbOperation] = []
+                if len(input_ops) == 0:
+                    # ALIAS ROUTINE. This alias the PREVIOUS routine
+                    routine_start_cursor = opcode_cursor - bytes_written_last_rtn
+                else:
+                    bytes_written_last_rtn = 0
+                    for in_op in input_ops:
+                        if in_op.op_code.name not in self.rom_data.script_data.op_codes__by_name:
+                            raise SsbCompilerError(f"Unknown operation {in_op.op_code.name}.")
+                        op_code: Pmd2ScriptOpCode = self.rom_data.script_data.op_codes__by_name[in_op.op_code.name]
+                        new_params: List[int] = []
+                        op_len = 2
+                        if op_code.params == -1:
+                            # Handle variable length opcode by inserting the number of opcodes as the first argument.
+                            # ... nothing to do here! Writing the first "meta-argument" for the number of arguments
+                            # is the job of the writer later!
+                            op_len += 2
+                            pass
+                        elif len(in_op.params) != op_code.params:
+                            raise SsbCompilerError(f"The number of parameters for {op_code.name} "
+                                                   f"must be {op_code.params}, is {len(in_op.params)}.")
+                        for param in in_op.params:
+                            new_params.append(self._parse_param(param, built_strings, built_constants))
+                            op_len += 2
+                        built_ops.append(SkyTempleSsbOperation(opcode_cursor, op_code, new_params))
+                        opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
+                        bytes_written_last_rtn += op_len
+                        opcode_cursor += op_len
+
+                # Find out the target for this routine if it's specified by name
+                if input_info.linked_to == -1:
+                    input_info.linked_to = SsbConstant(input_info.linked_to_name, self.rom_data.script_data).value.id
+
+                built_routine_info_with_offset.append((routine_start_cursor, input_info))
+                built_routine_ops.append(built_ops)
+
+            # Second pass: Update all jumps to their correct place and update string index positions
+            for built_routine in built_routine_ops:
+                for op in built_routine:
+                    if op.op_code.name in OPS_WITH_JUMP_TO_MEM_OFFSET:
+                        param_id = OPS_WITH_JUMP_TO_MEM_OFFSET[op.op_code.name]
+                        index_to_jump_to = op.params[param_id]
+                        op.params[param_id] = opcode_index_mem_offset_mapping[index_to_jump_to]
+                    for i, param in enumerate(op.params):
+                        if isinstance(param, StringIndexPlaceholder):
+                            # If the parameter is a reference to a language string, the length of the constants
+                            # has to be added, because the language strings are after the const strings.
+                            op.params[i] = len(built_constants) + int(param)
+
+            # Fill the model
+            model.routine_info = built_routine_info_with_offset
+            model.routine_ops = built_routine_ops
+            model.constants = built_constants
+            model.strings = built_strings
+
+        return model
+
+    def _parse_param(self, param: SsbOpParam, built_strings: Dict[str, List[str]], built_constants: List[str]) -> int:
+        if isinstance(param, int):
+            return param
+
+        if isinstance(param, SsbOpParamConstant):
+            try:
+                return SsbConstant(param.name, self.rom_data.script_data).value.id
+            except ValueError as err:
+                raise SsbCompilerError(str(err)) from err
+
+        if isinstance(param, SsbOpParamConstString):
+            i = len(built_constants)
+            built_constants.append(param.name)
+            return i
+
+        if isinstance(param, SsbOpParamLanguageString):
+            i = len(built_strings[next(iter(built_strings.keys()))])
+            if len(param.strings.keys()) == 1:
+                # Single language convenience mode, apply this to all languages.
+                only_value = param.strings[next(iter(param.strings.keys()))]
+                for lang in built_strings.keys():
+                    built_strings[lang].append(only_value)
+            else:
+                # Multi language regular case. All languages must be known.
+                for lang, string in param.strings.items():
+                    if lang not in built_strings:
+                        raise SsbCompilerError(f"Unknown language for string: {lang}")
+                    built_strings[lang].append(string)
+            return StringIndexPlaceholder(i)
+
+        raise SsbCompilerError(f"Invalid parameter supplied for an operation: {param}")
+
+
+class SsbCompilerError(Exception):
+    pass
+
+
+class StringIndexPlaceholder(int):
+    pass

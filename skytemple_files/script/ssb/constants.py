@@ -112,23 +112,23 @@ class SsbConstant(SsbOpParamConstant):
                 return cls._in_dict_insensitive(script_data.objects__by_name, constant_as_string[len(PREFIX_OBJECT):])
             elif constant_as_string.startswith(PREFIX_CORO):
                 return script_data.common_routine_info__by_name[constant_as_string[len(PREFIX_CORO):]]
-            elif constant_as_string.startswith(PREFIX_FACE):
-                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE):]]
             elif constant_as_string.startswith(PREFIX_FACE_POS):
                 return cls._in_dict_insensitive(script_data.face_position_modes__by_name, constant_as_string[len(PREFIX_FACE_POS):])
+            elif constant_as_string.startswith(PREFIX_FACE):
+                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE):]]
             elif constant_as_string.startswith(PREFIX_VAR):
                 return script_data.game_variables__by_name[constant_as_string[len(PREFIX_VAR):]]
             elif constant_as_string.startswith(PREFIX_LEVEL):
                 return script_data.level_list__by_name[constant_as_string[len(PREFIX_LEVEL):]]
             elif constant_as_string.startswith(PREFIX_MENU):
                 return cls._in_dict_insensitive(
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_MENU):]),
-                    script_data.menus__by_name
+                    script_data.menus__by_name,
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_MENU):])
                 )
             elif constant_as_string.startswith(PREFIX_PROCESS_SPECIAL):
                 return cls._in_dict_insensitive(
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_PROCESS_SPECIAL):]),
-                    script_data.process_specials__by_name
+                    script_data.process_specials__by_name,
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_PROCESS_SPECIAL):])
                 )
             elif constant_as_string.startswith(PREFIX_DIRECTION):
                 return cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
@@ -145,7 +145,7 @@ class SsbConstant(SsbOpParamConstant):
         return ''.join(word.title() for word in string.split('_'))
 
     @staticmethod
-    def _in_dict_insensitive(k: str, d: Dict[str, T]) -> T:
+    def _in_dict_insensitive(d: Dict[str, T], k: str) -> T:
         """Case insensitive access to a string indexed dict"""
         for dk, dv in d.items():
             if dk.lower() == k.lower():

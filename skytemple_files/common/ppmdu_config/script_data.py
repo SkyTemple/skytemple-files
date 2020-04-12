@@ -248,7 +248,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def face_names__by_name(self):
-        return {n: i for i, n in enumerate(self.face_names)}
+        return {n.name: n for n in self.face_names}
 
     @property
     def face_position_modes(self):
@@ -264,7 +264,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def face_position_modes__by_name(self):
-        return {n: i for i, n in enumerate(self.face_position_modes)}
+        return {n.name: n for n in self.face_position_modes}
 
     @property
     def directions(self):
@@ -280,7 +280,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def directions__by_name(self):
-        return {b: a for a, b in self.directions.items()}
+        return {b.name: b for b in self.directions.values()}
 
     @property
     def common_routine_info(self):

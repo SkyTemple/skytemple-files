@@ -45,6 +45,7 @@ class Ssb:
             self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
             begin_data_offset: Optional[int], scriptdata: Optional[Pmd2ScriptData]
     ):
+        # TODO: Way to retrieve the position markers?
         if data is None:
             # Empty model mode, for the ScriptCompiler.
             self.original_binary_data = bytes()
@@ -199,10 +200,13 @@ class Ssb:
 
     def add_linked_to_names_to_routine_ops(self):
         for _, r in self.routine_info:
-            if r.type == SsbRoutineType.ACTOR:
-                r.linked_to_name = SsbConstant.create_for(self._scriptdata.level_entities__by_id[r.linked_to]).name
-            elif r.type == SsbRoutineType.PERFORMER:
-                r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[r.linked_to]).name
+            try:
+                if r.type == SsbRoutineType.ACTOR:
+                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.level_entities__by_id[r.linked_to]).name
+                elif r.type == SsbRoutineType.OBJECT:
+                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[r.linked_to]).name
+            except KeyError:
+                pass
 
     def get_filled_routine_ops(self):
         """Returns self.routine_ops, but with constant strings, strings and constants from scriptdata filled out"""
@@ -241,6 +245,7 @@ class Ssb:
                                     new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.level_list__by_id[param])
                                 else:
                                     warnings.warn(f"Unknown level id: {param}", SsbWarning)
+                                    new_params[argument_spec.name] = param
                             elif argument_spec.type == 'Menu':
                                 if param in self._scriptdata.menus__by_id:
                                     new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.menus__by_id[param])

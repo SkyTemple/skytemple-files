@@ -18,6 +18,7 @@
 import os
 
 from ndspy.rom import NintendoDSRom
+from ndspy.code import loadOverlayTable
 
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
@@ -32,7 +33,6 @@ def main():
     rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        # Files that don't work right now:
         print(file_name)
 
         out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
@@ -42,7 +42,7 @@ def main():
 
         with open(out_file_name, 'w') as f:
             lines = []
-            lines.append(str(ssb.header))
+            lines.append(str(ssb._header))
             lines.append(f"number_of_routines: {len(ssb.routine_info)}")
             lines.append(f"constants: {ssb.constants}")
             lines.append(f"strings: {ssb.strings}")
@@ -51,7 +51,7 @@ def main():
                 lines.append(f">>> Routine {i}:")
                 op_cursor = 0
                 for op in ops:
-                    lines.append(f"{op.offset:10}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
+                    lines.append(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
                     op_cursor += 2 + len(op.params) * 2
             f.writelines([l + '\n' for l in lines])
 

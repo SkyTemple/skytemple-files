@@ -19,7 +19,7 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from enum import Enum, IntEnum
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
@@ -135,15 +135,29 @@ class Pmd2ScriptOpCodeArgument(AutoString):
         self.name = name
 
 
+class Pmd2ScriptOpCodeRepeatingArgumentGroup(AutoString):
+    def __init__(self, id: int, arguments: List[Pmd2ScriptOpCodeArgument]):
+        self.id = id
+        self.arguments = arguments
+
+    def __getitem__(self, item):
+        return self.arguments[item]
+
+
 class Pmd2ScriptOpCode(SsbOpCode):
-    def __init__(self, id: int, name: str, params: int, stringidx: int, unk2: int, unk3: int, arguments: List[Pmd2ScriptOpCodeArgument]):
+    def __init__(self,
+                 id: int, name: str, params: int,
+                 stringidx: int, unk2: int, unk3: int,
+                 arguments: List[Pmd2ScriptOpCodeArgument],
+                 repeating_argument_group: Optional[Pmd2ScriptOpCodeRepeatingArgumentGroup]):
         super().__init__(id, name)
         self.params = params
         self.stringidx = stringidx
         self.unk2 = unk2
         self.unk3 = unk3
-        self.arguments = arguments
+        self.arguments: List[Pmd2ScriptOpCodeArgument] = arguments
         self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
+        self.repeating_argument_group: Pmd2ScriptOpCodeRepeatingArgumentGroup = repeating_argument_group
         self.description = "This function has no description."  # todo
 
 
@@ -387,12 +401,17 @@ class Pmd2ScriptData(AutoString):
         self._op_codes = value
 
     @property
-    def op_codes__by_id(self):
+    def op_codes__by_id(self) -> Dict[int, Pmd2ScriptOpCode]:
         return {o.id: o for o in self.op_codes}
 
     @property
-    def op_codes__by_name(self):
-        return {o.name: o for o in self.op_codes}
+    def op_codes__by_name(self) -> Dict[str, List[Pmd2ScriptOpCode]]:
+        opcs = {}
+        for o in self._op_codes:
+            if o.name not in opcs:
+                opcs[o.name] = []
+            opcs[o.name].append(o)
+        return opcs
 
     @property
     def ground_state_structs(self):

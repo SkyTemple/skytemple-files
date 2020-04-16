@@ -282,12 +282,29 @@ class Pmd2XmlReader:
                     elif e.tag == 'OpCodes':
                         for e_code in e:
                             arguments = []
+                            repeating_argument_group = None
                             for e_argument in e_code:
-                                arguments.append(Pmd2ScriptOpCodeArgument(
-                                    self._xml_int(e_argument.attrib['id']),
-                                    e_argument.attrib['type'],
-                                    e_argument.attrib['name'],
-                                ))
+                                if e_argument.tag == 'Argument':
+                                    arguments.append(Pmd2ScriptOpCodeArgument(
+                                        self._xml_int(e_argument.attrib['id']),
+                                        e_argument.attrib['type'],
+                                        e_argument.attrib['name'],
+                                    ))
+                                elif e_argument.tag == 'RepeatingArgumentGroup':
+                                    arg_group_args = []
+                                    for e_arg_group_arg in e_argument:
+                                        arg_group_args.append(Pmd2ScriptOpCodeArgument(
+                                            # Arguments in repeating groups have no ids,
+                                            # they are ordered and repeating instead.
+                                            -1,
+                                            e_arg_group_arg.attrib['type'],
+                                            e_arg_group_arg.attrib['name'],
+                                        ))
+                                    repeating_argument_group = Pmd2ScriptOpCodeRepeatingArgumentGroup(
+                                        self._xml_int(e_argument.attrib['id']),
+                                        arg_group_args
+                                    )
+                            arguments = sorted(arguments, key=lambda a: a.id)
                             op_codes.append(Pmd2ScriptOpCode(
                                 self._xml_int(e_code.attrib['id']),
                                 e_code.attrib['name'],
@@ -295,7 +312,8 @@ class Pmd2XmlReader:
                                 self._xml_int(e_code.attrib['stringidx']),
                                 self._xml_int(e_code.attrib['unk2']),
                                 self._xml_int(e_code.attrib['unk3']),
-                                arguments
+                                arguments,
+                                repeating_argument_group
                             ))
                     elif e.tag == 'GroundStateStructs':
                         for e_code in e:

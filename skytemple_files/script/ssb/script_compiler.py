@@ -17,7 +17,7 @@
 from typing import Tuple, Iterator, Dict, Callable
 
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbCoroutine, SsbRoutineType, \
-    SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString
+    SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
 from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbCompiler as SsbScriptSsbCompiler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU, GAME_REGION_US
@@ -127,7 +127,17 @@ class ScriptCompiler:
                     for in_op in input_ops:
                         if in_op.op_code.name not in self.rom_data.script_data.op_codes__by_name:
                             raise SsbCompilerError(f"Unknown operation {in_op.op_code.name}.")
-                        op_code: Pmd2ScriptOpCode = self.rom_data.script_data.op_codes__by_name[in_op.op_code.name]
+                        op_codes: List[Pmd2ScriptOpCode] = self.rom_data.script_data.op_codes__by_name[in_op.op_code.name]
+                        if len(op_codes) > 1:
+                            # Can be either a variable length opcode or the "normal" variant.
+                            var_len_op_code = next(o for o in op_codes if o.params == -1)
+                            normal_op_code = next(o for o in op_codes if o.params != -1)
+                            if self._correct_param_list_len(in_op.params) == normal_op_code.params:
+                                op_code = normal_op_code
+                            else:
+                                op_code = var_len_op_code
+                        else:
+                            op_code = op_codes[0]
                         new_params: List[int] = []
                         op_len = 2
                         if op_code.params == -1:
@@ -136,12 +146,22 @@ class ScriptCompiler:
                             # is the job of the writer later!
                             op_len += 2
                             pass
-                        elif len(in_op.params) != op_code.params:
+                        elif self._correct_param_list_len(in_op.params) != op_code.params:
+                            # TODO: This might be a confusing count for end users in the case of position markers.
                             raise SsbCompilerError(f"The number of parameters for {op_code.name} "
-                                                   f"must be {op_code.params}, is {len(in_op.params)}.")
+                                                   f"must be {op_code.params}, is {self._correct_param_list_len(in_op.params)}.")
                         for param in in_op.params:
-                            new_params.append(self._parse_param(param, built_strings, built_constants))
-                            op_len += 2
+                            if isinstance(param, SsbOpParamPositionMarker):
+                                # Handle multi-argument case position markers
+                                new_params.append(param.x_offset)
+                                new_params.append(param.y_offset)
+                                new_params.append(param.x_relative)
+                                new_params.append(param.y_relative)
+                                op_len += 8
+                            else:
+                                # Handle the rest
+                                new_params.append(self._parse_param(param, built_strings, built_constants))
+                                op_len += 2
                         built_ops.append(SkyTempleSsbOperation(opcode_cursor, op_code, new_params))
                         opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
                         bytes_written_last_rtn += op_len
@@ -206,6 +226,17 @@ class ScriptCompiler:
             return StringIndexPlaceholder(i)
 
         raise SsbCompilerError(f"Invalid parameter supplied for an operation: {param}")
+
+    @staticmethod
+    def _correct_param_list_len(params: List[SsbOpParam]):
+        """Returns the correct length of a parameter list (positon markers count as 4"""
+        len = 0
+        for p in params:
+            if isinstance(p, SsbOpParamPositionMarker):
+                len += 4
+            else:
+                len += 1
+        return len
 
 
 class SsbCompilerError(Exception):

@@ -48,7 +48,7 @@ class SsaPosition(AutoString):
         offset = 0
         if self.x_offset == 2 or self.x_offset == 3:
             offset = 4
-        elif self.x_offset > 4:
+        elif self.x_offset >= 4:
             offset = 16
         return self.x_relative * TILE_SIZE + offset
 
@@ -57,6 +57,6 @@ class SsaPosition(AutoString):
         offset = 0
         if self.y_offset == 2 or self.y_offset == 3:
             offset = 4
-        elif self.y_offset > 4:
+        elif self.y_offset >= 4:
             offset = 16
         return self.y_relative * TILE_SIZE + offset

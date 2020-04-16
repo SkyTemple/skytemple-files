@@ -89,6 +89,7 @@ class SsbWriter:
                     self.write_uintle(data, len(op.params), self.bytes_written, 2)
                     self.bytes_written += 2
                 for param in op.params:
+                    param = param if param >= 0 else 0x10000 + param
                     self.write_uintle(data, param, self.bytes_written, 2)
                     self.bytes_written += 2
 

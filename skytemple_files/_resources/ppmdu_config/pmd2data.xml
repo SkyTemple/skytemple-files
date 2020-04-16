@@ -134,6 +134,7 @@
         <Block name="ScriptOpCodes"             beg="0x3C470" end="0x3D068"/>
         <Block name="GroundStatePntrs"          beg="0x48CB4" end="0x48CC8"/>
         <Pointer name="GroundStateMap"          beg="0x48C80"/>
+        <Pointer name="UnionallRAMAddress"      beg="0x48C64"/>
         <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>
         <Fn name="ScriptCommandParsing"         beg="0x1B24"/>
         <Fn name="GroundMainLoop"               beg="0xC534"/>

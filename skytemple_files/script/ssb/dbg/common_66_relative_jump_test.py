@@ -18,7 +18,6 @@
 import os
 
 from ndspy.rom import NintendoDSRom
-from ndspy.code import loadOverlayTable
 
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
@@ -30,30 +29,26 @@ def main():
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
-    for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        print(file_name)
+    file_name = 'SCRIPT/COMMON/unionall.ssb'
 
-        out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
+    # Files that don't work right now:
+    print(file_name)
 
-        bin_before = rom.getFileByName(file_name)
-        ssb = SsbHandler.deserialize(bin_before)
+    bin_before = rom.getFileByName(file_name)
+    ssb = SsbHandler.deserialize(bin_before)
 
-        with open(out_file_name, 'w') as f:
-            lines = []
-            lines.append(str(ssb._header))
-            lines.append(f"number_of_routines: {len(ssb.routine_info)}")
-            lines.append(f"constants: {ssb.constants}")
-            lines.append(f"strings: {ssb.strings}")
-            lines.append(str(ssb.routine_info))
-            for i, ops in enumerate(ssb.routine_ops):
-                lines.append(f">>> Routine {i}:")
-                op_cursor = 0
-                for op in ops:
-                    lines.append(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
-                    op_cursor += 2 + len(op.params) * 2
-            f.writelines([l + '\n' for l in lines])
+    target_point = 0x11BF
+
+    for i, ops in enumerate(ssb.routine_ops):
+        print(f">>> Routine {i}:")
+        for op in ops:
+            offset = target_point - op.offset
+            offset_two = target_point - int.from_bytes(op.offset.to_bytes(2, byteorder='little', signed=False), byteorder='little', signed=True)
+            for param in op.params:
+                if param == offset or param == offset_two:
+                    print(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {', '.join(hex(x) for x in op.params)}")
 
 
 if __name__ == '__main__':

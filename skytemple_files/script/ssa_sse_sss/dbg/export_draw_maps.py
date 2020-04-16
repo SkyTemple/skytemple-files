@@ -108,7 +108,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         text_x = 20
         draw.text((text_x, text_y), "Actors:", COLOR_ACTOR)
         for i, actor in enumerate(layer.actors):
-            triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTOR, actor.pos.direction[0])
+            triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTOR, actor.pos.direction.id)
             draw.text((actor.pos.x_absolute, actor.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
             actor_text = f"{i}: {actor.actor.name} - S:{actor.script_id}"
             draw.text((text_x, text_y + 10 + (i * 10)), actor_text, (0, 0, 0))
@@ -117,7 +117,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         text_x = 200
         draw.text((text_x, text_y), "Objects:", COLOR_OBJECTS)
         for i, object in enumerate(layer.objects):
-            triangle(draw, object.pos.x_absolute, object.pos.y_absolute, COLOR_OBJECTS, object.pos.direction[0])
+            triangle(draw, object.pos.x_absolute, object.pos.y_absolute, COLOR_OBJECTS, object.pos.direction.id)
             draw.text((object.pos.x_absolute, object.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
             object_text = f"{i}: {object.object.name} - S:{object.script_id} - Unks: ({object.unk4},{object.unk12})"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))
@@ -126,7 +126,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         text_x = 420
         draw.text((text_x, text_y), "Performers:", COLOR_PERFORMER)
         for i, performer in enumerate(layer.performers):
-            triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction[0])
+            triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction.id)
             draw.text((performer.pos.x_absolute, performer.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
             object_text = f"{i}: T:{performer.type} - Unks: ({performer.unk4},{performer.unk6},{performer.unk10},{performer.unk12})"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))
@@ -152,7 +152,10 @@ def process(rom, map_bg_entry, map_name, file_name):
                 pos_marker.pos.x_absolute + TILE_SIZE, pos_marker.pos.y_absolute + TILE_SIZE,
             ), COLOR_POS_MARKERS, (0, 0, 0))
             draw.text((pos_marker.pos.x_absolute, pos_marker.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
-            object_text = f"{i}: {pos_marker.unkA}-{pos_marker.unkC}-{pos_marker.unkE}"
+            object_text = f"{i}: " \
+                          f"@({pos_marker.pos.x_relative}[{pos_marker.pos.x_offset}], " \
+                          f"{pos_marker.pos.y_relative}[{pos_marker.pos.y_offset}) " \
+                          f"{pos_marker.unkA}-{pos_marker.unkC}-{pos_marker.unkE}"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))
 
         # Trigger

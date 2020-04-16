@@ -19,10 +19,11 @@ from typing import Dict, Optional
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, SsbOpParamConstant, \
-    SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam
+    SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam, SsbOpParamPositionMarker
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
+from skytemple_files.script.ssa_sse_sss.position_marker import SsaPositionMarker
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
 
@@ -45,7 +46,9 @@ class Ssb:
             self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
             begin_data_offset: Optional[int], scriptdata: Optional[Pmd2ScriptData]
     ):
-        # TODO: Way to retrieve the position markers?
+
+        self._scriptdata = scriptdata
+
         if data is None:
             # Empty model mode, for the ScriptCompiler.
             self.original_binary_data = bytes()
@@ -60,8 +63,6 @@ class Ssb:
 
         # WARNING: This is NOT updated by this model. Only the writer can update it.
         self.original_binary_data = bytes(data)
-
-        self._scriptdata = scriptdata
 
         start_of_const_table = begin_data_offset + (read_uintle(data, begin_data_offset + 0x00, 2) * 2)
         number_of_routines = read_uintle(data, begin_data_offset + 0x02, 2)
@@ -211,69 +212,82 @@ class Ssb:
     def get_filled_routine_ops(self):
         """Returns self.routine_ops, but with constant strings, strings and constants from scriptdata filled out"""
         rtns: List[List[SkyTempleSsbOperation]] = []
+        pos_marker_increment = 0
         for rtn in self.routine_ops:
             rtn_ops = []
             for op in rtn:
-                # If there is at least one argument name / type defined for this operation's opcode,
-                # then we turn the list of params into a named argument list (dict)
-                use_named_arguments = len(op.op_code.arguments) > 0
-                if use_named_arguments:
-                    new_params = {}
-                    for i, param in enumerate(op.params):
-                        if i in op.op_code.arguments__by_id:
-                            argument_spec = op.op_code.arguments__by_id[i]
-                            if argument_spec.type == 'int':
-                                new_params[argument_spec.name] = param
-                            elif argument_spec.type == 'Entity':
-                                new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.level_entities__by_id[param])
-                            elif argument_spec.type == 'Object':
-                                new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.objects__by_id[param])
-                            elif argument_spec.type == 'Routine':
-                                new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.common_routine_info__by_id[param])
-                            elif argument_spec.type == 'Face':
-                                if param in self._scriptdata.face_names__by_id:
-                                    new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.face_names__by_id[param])
-                                else:
-                                    warnings.warn(f"Unknown face id: {param}", SsbWarning)
-                                    new_params[argument_spec.name] = param
-                            elif argument_spec.type == 'FaceMode':
-                                new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.face_position_modes__by_id[param])
-                            elif argument_spec.type == 'GameVar':
-                                new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.game_variables__by_id[param])
-                            elif argument_spec.type == 'Level':
-                                if param in self._scriptdata.level_list__by_id:
-                                    new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.level_list__by_id[param])
-                                else:
-                                    warnings.warn(f"Unknown level id: {param}", SsbWarning)
-                                    new_params[argument_spec.name] = param
-                            elif argument_spec.type == 'Menu':
-                                if param in self._scriptdata.menus__by_id:
-                                    new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.menus__by_id[param])
-                                else:
-                                    warnings.warn(f"Unknown menu id: {param}", SsbWarning)
-                                    new_params[argument_spec.name] = param
-                            elif argument_spec.type == 'ProcessSpecial':
-                                if param in self._scriptdata.process_specials__by_id:
-                                    new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.process_specials__by_id[param])
-                                else:
-                                    new_params[argument_spec.name] = param
-                                    warnings.warn(f"Unknown special process id: {param}", SsbWarning)
-                            elif argument_spec.type == 'Direction':
-                                if param in self._scriptdata.directions__by_id:
-                                    new_params[argument_spec.name] = SsbConstant.create_for(self._scriptdata.directions__by_id[param])
-                                else:
-                                    new_params[argument_spec.name] = param
-                                    warnings.warn(f"Unknown direction id: {param}", SsbWarning)
-                            elif argument_spec.type == 'String':
-                                new_params[argument_spec.name] = SsbOpParamLanguageString(self.get_single_string(param - self._header.number_of_constants))
-                            elif argument_spec.type == 'ConstString':
-                                new_params[argument_spec.name] = SsbOpParamConstString(self.constants[param])
+                new_params = []
+                skip_arguments = 0
+                for i, param in enumerate(op.params):
+                    if skip_arguments > 0:
+                        skip_arguments -= 1
+                        continue
+                    argument_spec = self._get_argument_spec(op.op_code, i)
+                    if argument_spec is not None:
+                        if argument_spec.type == 'uint':
+                            new_params.append(param)
+                        elif argument_spec.type == 'sint':
+                            if param & 0x8000:
+                                param = -0x10000 + param
+                            new_params.append(param)
+                        elif argument_spec.type == 'Entity':
+                            new_params.append(SsbConstant.create_for(self._scriptdata.level_entities__by_id[param]))
+                        elif argument_spec.type == 'Object':
+                            new_params.append(SsbConstant.create_for(self._scriptdata.objects__by_id[param]))
+                        elif argument_spec.type == 'Routine':
+                            new_params.append(SsbConstant.create_for(self._scriptdata.common_routine_info__by_id[param]))
+                        elif argument_spec.type == 'Face':
+                            if param in self._scriptdata.face_names__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.face_names__by_id[param]))
                             else:
-                                raise RuntimeError(f"Unknown argument type '{argument_spec.type}'")
+                                warnings.warn(f"Unknown face id: {param}", SsbWarning)
+                                new_params.append(param)
+                        elif argument_spec.type == 'FaceMode':
+                            new_params.append(SsbConstant.create_for(self._scriptdata.face_position_modes__by_id[param]))
+                        elif argument_spec.type == 'GameVar':
+                            new_params.append(SsbConstant.create_for(self._scriptdata.game_variables__by_id[param]))
+                        elif argument_spec.type == 'Level':
+                            if param in self._scriptdata.level_list__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.level_list__by_id[param]))
+                            else:
+                                warnings.warn(f"Unknown level id: {param}", SsbWarning)
+                                new_params.append(param)
+                        elif argument_spec.type == 'Menu':
+                            if param in self._scriptdata.menus__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.menus__by_id[param]))
+                            else:
+                                warnings.warn(f"Unknown menu id: {param}", SsbWarning)
+                                new_params.append(param)
+                        elif argument_spec.type == 'ProcessSpecial':
+                            if param in self._scriptdata.process_specials__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.process_specials__by_id[param]))
+                            else:
+                                new_params.append(param)
+                                warnings.warn(f"Unknown special process id: {param}", SsbWarning)
+                        elif argument_spec.type == 'Direction':
+                            if param in self._scriptdata.directions__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.directions__by_id[param]))
+                            else:
+                                new_params.append(param)
+                                warnings.warn(f"Unknown direction id: {param}", SsbWarning)
+                        elif argument_spec.type == 'String':
+                            new_params.append(SsbOpParamLanguageString(self.get_single_string(param - self._header.number_of_constants)))
+                        elif argument_spec.type == 'ConstString':
+                            new_params.append(SsbOpParamConstString(self.constants[param]))
+                        elif argument_spec.type == 'PositionMark':
+                            x_offset = param
+                            y_offset = op.params[i + 1]
+                            x_relative = op.params[i + 2]
+                            y_relative = op.params[i + 3]
+                            new_params.append(SsbOpParamPositionMarker(
+                                f'm{pos_marker_increment}', x_offset, y_offset, x_relative, y_relative
+                            ))
+                            pos_marker_increment += 1
+                            skip_arguments = 3
                         else:
-                            raise RuntimeError(f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}")
-                else:
-                    new_params = op.params
+                            raise RuntimeError(f"Unknown argument type '{argument_spec.type}'")
+                    else:
+                        raise RuntimeError(f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}")
                 new_op = SkyTempleSsbOperation(op.offset, op.op_code, new_params)
                 rtn_ops.append(new_op)
             rtns.append(rtn_ops)
@@ -285,3 +299,16 @@ class Ssb:
         for key, strs in self.strings.items():
             res[key] = strs[id]
         return res
+
+    @staticmethod
+    def _get_argument_spec(op_code: Pmd2ScriptOpCode, i):
+        """Returns the spec for an argument at a given index, if defined. Also checks repeating arguments."""
+        # Maybe it's a repeating argument?
+        if op_code.repeating_argument_group is not None and op_code.repeating_argument_group.id <= i:
+            # Use repeating args
+            repeat_i = i - op_code.repeating_argument_group.id
+            index = repeat_i % len(op_code.repeating_argument_group.arguments)
+            return op_code.repeating_argument_group.arguments[index]
+        elif i in op_code.arguments__by_id:
+            return op_code.arguments__by_id[i]
+        return None

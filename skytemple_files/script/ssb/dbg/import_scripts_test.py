@@ -1,4 +1,4 @@
-"""Testing script for ExplorerScript."""
+"""Import ssb files from a rom directory back into the game."""
 #  Copyright 2020 Parakoopa
 #
 #  This file is part of SkyTemple.
@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
+import sys
 
 from ndspy.rom import NintendoDSRom
 
@@ -24,26 +25,20 @@ from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_
 from skytemple_files.script.ssb.handler import SsbHandler
 
 
-def main():
-    output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-    os.makedirs(output_dir, exist_ok=True)
-
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-
-    script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
+def main(rom_file, directory):
+    rom = NintendoDSRom.fromFile(rom_file)
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        print(file_name)
+        if os.path.exists(os.path.join(directory, file_name)):
+            print(file_name)
 
-        out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.exps')
+            with open(os.path.join(directory, file_name), 'rb') as f:
+                rom.setFileByName(file_name, f.read())
 
-        bin_before = rom.getFileByName(file_name)
-        ssb = SsbHandler.deserialize(bin_before)
-
-        with open(out_file_name, 'w') as f:
-            f.write(ssb.to_explorerscript())
+    rom.saveToFile(rom_file)
 
 
 if __name__ == '__main__':
-    main()
+    rom_file = sys.argv[1]
+    directory = sys.argv[2]
+    main(rom_file, directory)

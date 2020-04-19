@@ -24,7 +24,7 @@ from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
-from skytemple_files.graphics.bpl.model import Bpl, BPL_IMG_PAL_LEN, BPL_MAX_PAL
+from skytemple_files.graphics.bpl.model import Bpl, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
 
 # Mask palette used for image composition
 MASK_PAL = [
@@ -391,13 +391,15 @@ class Bma:
 
     def from_pil(
             self, bpc: Bpc, bpl: Bpl, lower_img: Image.Image = None, upper_img: Image.Image = None,
-            force_import=False
+            force_import=False, how_many_palettes_lower_layer=16
     ):
         """
         Import an entire map from one or two images (for each layer).
         Changes all tiles, tilemappings and chunks in the BPC and re-writes the two layer mappings of the BMA.
-        Imports the palettes of the image to the BPL. The palettes of the images passed into this method must
-        be identical.
+        Imports the palettes of the image to the BPL.
+        The palettes of the images passed into this method must either identical or can be merged.
+        The how_many_palettes_lower_layer parameter controls how many palettes
+        from the lower layer image will then be used.
 
         The passed PIL will be split into separate tiles and the tile's palette index in the tile mapping for this
         coordinate is determined by the first pixel value of each tile in the PIL. The PIL
@@ -425,8 +427,17 @@ class Bma:
                 or (False if upper_img is None else upper_img.height != expected_height):
             raise ValueError(f"Can not import map background: Height of both images must match the current map height: "
                              f"{expected_height}px")
-        if upper_img is not None and lower_img is not None and lower_img.getpalette() != upper_img.getpalette():
-            raise ValueError(f"Can not import map background: The palettes of both images passed in must be the same.")
+        upper_palette_palette_color_offset = 0
+        if upper_img is not None and lower_img is not None and how_many_palettes_lower_layer < BPL_MAX_PAL:
+            # Combine palettes
+            lower_palette = lower_img.getpalette()[:how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]
+            upper_palette = upper_img.getpalette()[:(BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]
+            new_palette = lower_palette + upper_palette
+            lower_img.putpalette(new_palette)
+            upper_img.putpalette(new_palette)
+            # We need to offset the colors in the upper image now, when we read it.
+            upper_palette_palette_color_offset = how_many_palettes_lower_layer
+
 
         # Adjust layer numbers
         number_of_layers = 2 if upper_img is not None else 1
@@ -440,13 +451,15 @@ class Bma:
             if layer_idx == 0:
                 bpc_layer_id = 0 if bpc.number_of_layers == 1 else 1
                 img = lower_img
+                palette_offset = 0
             else:
                 bpc_layer_id = 0
                 img = upper_img
+                palette_offset = upper_palette_palette_color_offset
 
             tiles, all_possible_tile_mappings, palettes = from_pil(
                 img, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
-                img.width, img.height, 3, 3, force_import
+                img.width, img.height, 3, 3, force_import, palette_offset=palette_offset
             )
             bpc.import_tiles(bpc_layer_id, tiles)
 

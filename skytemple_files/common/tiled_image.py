@@ -160,7 +160,7 @@ def to_pil_tiled(
 def from_pil(
         pil: Image.Image, single_palette_size: int, max_nb_palettes: int, tile_dim: int,
         img_width: int,  img_height: int,
-        tiling_width=1, tiling_height=1, force_import=False, optimize=True
+        tiling_width=1, tiling_height=1, force_import=False, optimize=True, palette_offset=0
 ) -> Tuple[List[bytearray], List[TilemapEntry], List[List[int]]]:
     """
     Modify the image data in the tiled image by importing the passed PIL.
@@ -176,6 +176,9 @@ def from_pil(
 
     If optimize is True, we check each read tile, if this tile or a flipped version already exists in the data set,
     if so we re-use the tile.
+
+    palette_offset can be used to offset all color values in the original PIL image by the number of x palettes,
+    in the case where palettes were merged.
 
     Returns (tiles, tile mappings, palettes)
     """
@@ -216,6 +219,7 @@ def from_pil(
     already_initialised_tiles = []
 
     for idx, pix in enumerate(raw_pil_image):
+        pix = pix + palette_offset * single_palette_size
         # Only calculate position for first pixel in two pixel pair (it's always the even one)
         if idx % 2 == 0:
             x = idx % img_width

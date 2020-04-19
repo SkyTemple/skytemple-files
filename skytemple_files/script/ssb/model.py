@@ -39,12 +39,12 @@ class SkyTempleSsbOperation(SsbOperation):
 
 class Ssb:
     @classmethod
-    def create_empty(cls):
-        return cls(None, None, None, None)
+    def create_empty(cls, scriptdata: Pmd2ScriptData):
+        return cls(None, None, None, scriptdata)
 
     def __init__(
             self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
-            begin_data_offset: Optional[int], scriptdata: Optional[Pmd2ScriptData]
+            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData
     ):
 
         self._scriptdata = scriptdata

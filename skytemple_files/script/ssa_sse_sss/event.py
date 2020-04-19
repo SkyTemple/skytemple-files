@@ -23,7 +23,11 @@ class SsaEvent(AutoString):
     def __init__(self, trigger_width, trigger_height, trigger_pointer, trigger_table_start, pos: SsaPosition, unkE):
         self.trigger_width = trigger_width
         self.trigger_height = trigger_height
-        self.trigger_id = int((trigger_pointer - trigger_table_start) / TRIGGER_ENTRY_LEN)
+        # If the table start is 0, switch to "set id mode"
+        if trigger_table_start == 0:
+            self.trigger_id = trigger_pointer
+        else:
+            self.trigger_id = int((trigger_pointer - trigger_table_start) / TRIGGER_ENTRY_LEN)
         # direction must be none!
         self.pos = pos
         self.unkE = unkE

@@ -55,7 +55,7 @@ class Ssa:
     def _init_header(self, data):
         # All offsets/pointers must be multiplied by 2, since they're counting 16 bits words and not bytes!
         return SsaHeader(
-            layer_count=read_uintle(data, 0x0, 2) * 2,
+            layer_count=read_uintle(data, 0x0, 2),
             layer_list_pointer=read_uintle(data, 0x2, 2) * 2,
             trigger_pointer=read_uintle(data, 0x4, 2) * 2,
             actor_pointer=read_uintle(data, 0x6, 2) * 2,

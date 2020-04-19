@@ -58,7 +58,7 @@ class ScriptCompiler:
             named_coroutines: List[str]
     ) -> Ssb:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
-        model = Ssb.create_empty()
+        model = Ssb.create_empty(self.rom_data.script_data)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
             raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")
 

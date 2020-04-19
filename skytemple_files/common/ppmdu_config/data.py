@@ -136,7 +136,7 @@ class Pmd2Data(AutoString):
         self.game_region = game_edition.split('_')[1]
         self.game_editions: Dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
-        self.binaries = {x.filepath: x for x in binaries}
+        self.binaries: Dict[str, Pmd2Binary] = {x.filepath: x for x in binaries}
         self.string_index_data = string_index_data
         # asm patches constants currently not used
         self.script_data = script_data

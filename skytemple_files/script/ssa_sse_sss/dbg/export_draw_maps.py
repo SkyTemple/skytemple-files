@@ -44,16 +44,18 @@ TXT_AREA_SIZE = 200
 MAP_WIDTH = 900
 
 loaded_map_bg_images = {}
-def main():
+def draw_maps_main():
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
 
     script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
     map_bg_entry_level_list = FileType.BG_LIST_DAT.deserialize(rom.getFileByName('MAP_BG/bg_list.dat')).level
 
     for script_map in script_info['maps'].values():
+        if script_map['name'] != 'G01P01A':
+            continue
         # Map BGs are NOT *actually* mapped 1:1 to scripts. They are loaded via Opcode. However it turns out, using the BPL name
         # is an easy way to map them.
         map_bg_entry = next(x for x in map_bg_entry_level_list if x.bpl_name == script_map['name'])
@@ -206,4 +208,4 @@ def triangle(draw, x, y, fill, direction):
 
 
 if __name__ == '__main__':
-    main()
+    draw_maps_main()

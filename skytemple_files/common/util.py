@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import bisect
 import warnings
 from typing import List, Tuple, TYPE_CHECKING
 
@@ -265,6 +265,30 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
 
     # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
     return Pmd2XmlReader.load_default(matched_edition)
+
+
+def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
+    """Create a file in the ROM using the requested filename"""
+    path_list = path.split('/')
+    dir_name = '/'.join(path_list[:-1])
+    file_name = path_list[-1]
+    folder: Folder = rom.filenames.subfolder(dir_name)
+    if folder is None:
+        raise ValueError(f"Folder {dir_name} does not exist.")
+    folder_first_file_id = folder.firstID
+    if file_name in folder.files:
+        raise ValueError(f"File {file_name} already exists in this folder.")
+    index_of_new_file = bisect.bisect(folder.files, file_name)
+    folder.files.insert(index_of_new_file, file_name)
+
+    def recursive_increment_folder_start_idx(rfolder: Folder, if_bigger_than):
+        if rfolder.firstID > if_bigger_than:
+            rfolder.firstID += 1
+        for _, sfolder in rfolder.folders:
+            recursive_increment_folder_start_idx(sfolder, if_bigger_than)
+
+    recursive_increment_folder_start_idx(rom.filenames, folder_first_file_id)
+    rom.files.insert(folder_first_file_id + index_of_new_file, data)
 
 
 class AutoString:

@@ -65,6 +65,10 @@ class Pmd2BinaryBlock(AutoString):
     def begin_absolute(self):
         return self.parent.loadaddress + self.begin
 
+    @property
+    def end_absolute(self):
+        return self.parent.loadaddress + self.end
+
 
 class Pmd2BinaryFunction(AutoString):
     def __init__(self, name: str, begin: int):

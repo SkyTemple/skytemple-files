@@ -128,6 +128,8 @@
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <Fn name="DebugPrint"            beg="0xC2C8"/>
         <Fn name="DebugPrint2"           beg="0xC284"/>
+        <Fn name="SaveScriptVariableValue"  beg="0x4BB58"/>
+        <Fn name="SaveScriptVariableValueWithOffset" beg="0x4BCC0"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">

@@ -271,14 +271,18 @@ class Ssb:
                                 new_params.append(param)
                                 warnings.warn(f"Unknown direction id: {param}", SsbWarning)
                         elif argument_spec.type == 'String':
-                            new_params.append(SsbOpParamLanguageString(self.get_single_string(param - self._header.number_of_constants)))
+                            new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
                         elif argument_spec.type == 'ConstString':
                             new_params.append(SsbOpParamConstString(self.constants[param]))
                         elif argument_spec.type == 'PositionMark':
-                            x_offset = param
-                            y_offset = op.params[i + 1]
-                            x_relative = op.params[i + 2]
-                            y_relative = op.params[i + 3]
+                            x_offset = y_offset = x_relative = y_relative = 0
+                            try:
+                                x_offset = param
+                                y_offset = op.params[i + 1]
+                                x_relative = op.params[i + 2]
+                                y_relative = op.params[i + 3]
+                            except IndexError:
+                                warnings.warn("SSB had wrong number of arguments for building a position marker.")
                             new_params.append(SsbOpParamPositionMarker(
                                 f'm{pos_marker_increment}', x_offset, y_offset, x_relative, y_relative
                             ))

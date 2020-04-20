@@ -134,8 +134,11 @@ class ScriptCompiler:
                             normal_op_code = next(o for o in op_codes if o.params != -1)
                             if self._correct_param_list_len(in_op.params) == normal_op_code.params:
                                 op_code = normal_op_code
-                            else:
+                            elif self._correct_param_list_len(in_op.params) > normal_op_code.params:
                                 op_code = var_len_op_code
+                            else:
+                                raise SsbCompilerError(f"The number of parameters for {normal_op_code.name} "
+                                                       f"must be at least {normal_op_code.params}, is {self._correct_param_list_len(in_op.params)}.")
                         else:
                             op_code = op_codes[0]
                         new_params: List[int] = []

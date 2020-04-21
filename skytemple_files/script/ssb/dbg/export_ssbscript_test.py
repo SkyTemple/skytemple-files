@@ -53,10 +53,10 @@ def main():
         bin_before = rom.getFileByName(file_name)
         time_opening = time.time()
         ssb_before = SsbHandler.deserialize(bin_before)
-        ssb_script, source_map = ssb_before.to_ssb_script()
+        ssb_script, source_map_before = ssb_before.to_ssb_script()
         time_decompiling = time.time()
 
-        for pos_mark in source_map.position_marks:
+        for pos_mark in source_map_before.position_marks:
             print(pos_mark)
 
         with open(out_file_name, 'w') as f:
@@ -69,7 +69,7 @@ def main():
         def callback_after_parsing():
             nonlocal time_parsing
             time_parsing = time.time()
-        ssb_after = compiler.compile_ssbscript(ssb_script, callback_after_parsing)
+        ssb_after, source_map_after = compiler.compile_ssbscript(ssb_script, callback_after_parsing)
         time_compiling = time.time()
 
         bin_after = SsbHandler.serialize(ssb_after)
@@ -84,6 +84,7 @@ def main():
             f.write(ssb_script_after)
 
         assert(ssb_script == ssb_script_after)
+        assert(source_map_before == source_map_after)
 
         times.append((
             time_serializing - time_before,  # total

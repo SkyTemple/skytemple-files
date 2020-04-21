@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Tuple, Iterator, Dict, Callable
 
+from explorerscript.source_map import SourceMap, SourceMapBuilder
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbCoroutine, SsbRoutineType, \
     SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
@@ -33,12 +34,13 @@ class ScriptCompiler:
     def __init__(self, rom_data: Pmd2Data):
         self.rom_data = rom_data
 
-    def compile_ssbscript(self, ssb_script_src: str, callback_after_parsing: Callable = None) -> Ssb:
+    def compile_ssbscript(self, ssb_script_src: str, callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
         """
         Compile SSBScript into a SSB model
 
         :raises: ParseError: On parsing errors
-        :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes / constants)
+        :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes)
+        :raises: ValueError: On misc. logical compiling errors (eg. unknown constants)
         """
         base_compiler = SsbScriptSsbCompiler()
         base_compiler.compile(ssb_script_src)
@@ -48,19 +50,26 @@ class ScriptCompiler:
             callback_after_parsing()
 
         return self.compile_structured(
-            base_compiler.routine_infos, base_compiler.routine_ops, base_compiler.named_coroutines
+            base_compiler.routine_infos, base_compiler.routine_ops, base_compiler.named_coroutines,
+            base_compiler.source_map
         )
 
     def compile_structured(
             self,
             routine_infos: List[SsbRoutineInfo],
             routine_ops: List[List[SsbOperation]],
-            named_coroutines: List[str]
-    ) -> Ssb:
+            named_coroutines: List[str],
+            original_source_map: SourceMap
+    ) -> Tuple[Ssb, SourceMap]:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
         model = Ssb.create_empty(self.rom_data.script_data)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
             raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")
+
+        # We need to rewrite the passed source map to use the actual binary opcode offsets.
+        new_source_map_builder = SourceMapBuilder()
+        for pm in original_source_map.position_marks:
+            new_source_map_builder.add_position_mark(pm)
 
         # Build routines and opcodes.
         if len(routine_ops) > 0:
@@ -166,7 +175,12 @@ class ScriptCompiler:
                                 new_params.append(self._parse_param(param, built_strings, built_constants))
                                 op_len += 2
                         built_ops.append(SkyTempleSsbOperation(opcode_cursor, op_code, new_params))
+
+                        # Create actual offset mapping for this opcode and update source map
                         opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
+                        line, col = original_source_map.get_position(in_op.offset)
+                        new_source_map_builder.add_opcode(int(opcode_cursor / 2), line, col)
+
                         bytes_written_last_rtn += op_len
                         opcode_cursor += op_len
 
@@ -196,7 +210,7 @@ class ScriptCompiler:
             model.constants = built_constants
             model.strings = built_strings
 
-        return model
+        return model, new_source_map_builder.build()
 
     def _parse_param(self, param: SsbOpParam, built_strings: Dict[str, List[str]], built_constants: List[str]) -> int:
         if isinstance(param, int):

@@ -188,7 +188,9 @@ class Ssb:
         return ExplorerScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
-            self._scriptdata.common_routine_info__by_id
+            self._scriptdata.common_routine_info__by_id,
+            SsbConstant.create_for(self._scriptdata.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
+            SsbConstant.get_dungeon_mode_constants()
         ).convert()
 
     def to_ssb_script(self) -> Tuple[str, SourceMap]:

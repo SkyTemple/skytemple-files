@@ -21,7 +21,7 @@ import warnings
 
 from ndspy.rom import NintendoDSRom
 
-from explorerscript.ssb_converting.decompiler.graph_minimizer import SsbGraphMinimizer
+from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import SsbGraphMinimizer
 from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import OpsLabelJumpToResolver
 from skytemple_files.common.util import get_files_from_rom_with_extension
 from skytemple_files.script.ssb.handler import SsbHandler
@@ -40,12 +40,8 @@ def main():
     total_count_labels_after = 0
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        if file_name.split('/')[1] not in ['COMMON', 'D01P11A']:
+        if file_name != 'SCRIPT/T00P01/enter03.ssb':
             continue
-        #if file_name != 'SCRIPT/P01P04A/s30a0601.ssb':
-        #    continue
-        #if file_name != 'SCRIPT/S01P02A/dead.ssb':
-        #    continue
 
         print(file_name)
 
@@ -59,36 +55,29 @@ def main():
 
         grapher = SsbGraphMinimizer(routine_ops)
         total_count_labels_before += grapher.count_labels()
-        old_control_flow = grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'before_optimize')
 
         grapher.optimize_paths()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'after_optimize')
 
         #grapher._graphs = [ grapher._graphs[86] ]
         grapher.build_branches()
         grapher.group_branches()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'after_branch')
 
         grapher.invert_branches()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'after_invert_branch')
 
         grapher.build_and_group_switch_cases()
         grapher.group_switches()
         grapher.group_switch_cases()
         grapher.build_switch_fallthroughs()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'after_switch')
 
         grapher.build_loops()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'after_loops')
 
         grapher.remove_label_markers()
-        assert old_control_flow == grapher.get_control_flow()
         draw_graphs(grapher, file_name, output_dir, 'done')
 
         total_count_labels_after += grapher.count_labels()

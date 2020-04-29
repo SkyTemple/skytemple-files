@@ -1169,8 +1169,9 @@
           <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2d"  name="BranchPerformance"                      params="3"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <!-- Same as BranchBit for variable PERFORMANCE_PROGRESS_LIST -->
+          <Argument id="0" type="uint" name="index"/>
+          <Argument id="1" type="uint" name="value"/>
           <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2e"  name="BranchScenarioNow"                      params="4"  stringidx="-1" unk2="1"  unk3="0"   >
@@ -1222,7 +1223,7 @@
           <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x36"  name="BranchVariation"                        params="2"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="GameVar" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x37"  name="Call"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
@@ -1386,8 +1387,8 @@
           <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x65"  name="CaseMenu2"                              params="2"  stringidx="-1" unk2="1"  unk3="0"  >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="choice?"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x66"  name="CaseScenario"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -1437,18 +1438,18 @@
         </OpCode>
         <OpCode id="0x74"  name="flag_CalcBit"                           params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="unk2"/>
+          <Argument id="1" type="uint" name="index"/>
+          <Argument id="2" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x75"  name="flag_CalcValue"                         params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="int"/>
+          <Argument id="1" type="uint" name="calc_operator"/>
+          <Argument id="2" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x76"  name="flag_CalcVariable"                      params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="unk2"/>
+          <Argument id="0" type="GameVar" name="var"/>
+          <Argument id="1" type="uint" name="calc_operator"/>
+          <Argument id="2" type="GameVar" name="var_to_set_from"/>
         </OpCode>
         <OpCode id="0x77"  name="flag_Clear"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
@@ -1458,7 +1459,7 @@
         </OpCode>
         <OpCode id="0x79"  name="flag_Set"                               params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="uint" name="int"/>
+          <Argument id="1" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x7a"  name="flag_ResetDungeonResult"                params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x7b"  name="flag_ResetScenario"                     params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1468,21 +1469,22 @@
           <Argument id="0" type="uint" name="unk0"/>
         </OpCode>
         <OpCode id="0x7d"  name="flag_SetDungeonMode"                    params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="dungeon"/>
+          <Argument id="1" type="uint" name="dungen_mode_id"/>
         </OpCode>
         <OpCode id="0x7e"  name="flag_SetDungeonResult"                  params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x7f"  name="flag_SetPerformance"                    params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <!-- Sets the game variable PERFORMANCE_PROGRESS_LIST -->
+          <Argument id="0" type="uint" name="index"/>
+          <Argument id="1" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x80"  name="flag_SetScenario"                       params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="unk2"/>
+          <Argument id="1" type="uint" name="scenario_value"/>
+          <Argument id="2" type="uint" name="level_value"/>
         </OpCode>
         <OpCode id="0x81"  name="Flash"                                  params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x82"  name="Hold"                                   params="0"  stringidx="-1" unk2="0"  unk3="0"  />

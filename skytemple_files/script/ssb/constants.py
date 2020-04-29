@@ -18,7 +18,7 @@ import re
 from typing import Union, TypeVar, Iterable
 
 from skytemple_files.common.ppmdu_config.script_data import *
-from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant
+from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant, DungeonModeConstants
 
 NULL = 'NULL'
 PREFIX_DIRECTION = 'DIRECTION_'
@@ -32,12 +32,21 @@ PREFIX_ACTOR = 'ACTOR_'
 PREFIX_CORO = 'CORO_'
 PREFIX_VAR = 'VAR_'
 PREFIX_OBJECT_NULL = PREFIX_OBJECT + NULL + '_'
+PREFIX_DMODE = 'DMODE_'
 CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
+
+
+class DungeonMode(Enum):
+    CLOSED = 0
+    OPEN = 1
+    REQUEST = 2
+
 
 SsbConstantPmdScriptMappable = Union[
     Pmd2ScriptEntity, Pmd2ScriptObject, Pmd2ScriptRoutine,
     Pmd2ScriptFaceName, Pmd2ScriptFacePositionMode, Pmd2ScriptGameVar,
-    Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection
+    Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection,
+    DungeonMode
 ]
 T = TypeVar('T')
 
@@ -95,6 +104,8 @@ class SsbConstant(SsbOpParamConstant):
             return cls(PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptDirection):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=value)
+        elif isinstance(value, DungeonMode):
+            return cls(PREFIX_DMODE + value.name, value=value)
         raise TypeError(f"value must be of type SsbConstantPmdScriptMappable.")
 
     @classmethod
@@ -181,3 +192,14 @@ class SsbConstant(SsbOpParamConstant):
             yield cls.create_for(x)
         for x in rom_data.directions.values():
             yield cls.create_for(x)
+        for x in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST]:
+            yield cls.create_for(x)
+
+    @classmethod
+    def get_dungeon_mode_constants(cls):
+        return DungeonModeConstants(
+            PREFIX_DMODE + DungeonMode.OPEN.name,
+            PREFIX_DMODE + DungeonMode.REQUEST.name,
+            PREFIX_DMODE + DungeonMode.CLOSED.name
+        )
+

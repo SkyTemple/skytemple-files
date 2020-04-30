@@ -30,7 +30,7 @@ PREFIX_FACE = 'FACE_'
 PREFIX_OBJECT = 'OBJECT_'
 PREFIX_ACTOR = 'ACTOR_'
 PREFIX_CORO = 'CORO_'
-PREFIX_VAR = 'VAR_'
+PREFIX_VAR = '$'
 PREFIX_OBJECT_NULL = PREFIX_OBJECT + NULL + '_'
 PREFIX_DMODE = 'DMODE_'
 CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
@@ -40,6 +40,7 @@ class DungeonMode(Enum):
     CLOSED = 0
     OPEN = 1
     REQUEST = 2
+    OPEN_AND_REQUEST = 3
 
 
 SsbConstantPmdScriptMappable = Union[
@@ -192,14 +193,14 @@ class SsbConstant(SsbOpParamConstant):
             yield cls.create_for(x)
         for x in rom_data.directions.values():
             yield cls.create_for(x)
-        for x in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST]:
+        for x in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST, DungeonMode.OPEN_AND_REQUEST]:
             yield cls.create_for(x)
 
     @classmethod
     def get_dungeon_mode_constants(cls):
         return DungeonModeConstants(
+            PREFIX_DMODE + DungeonMode.CLOSED.name,
             PREFIX_DMODE + DungeonMode.OPEN.name,
             PREFIX_DMODE + DungeonMode.REQUEST.name,
-            PREFIX_DMODE + DungeonMode.CLOSED.name
+            PREFIX_DMODE + DungeonMode.OPEN_AND_REQUEST.name
         )
-

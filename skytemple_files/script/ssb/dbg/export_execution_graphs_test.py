@@ -40,9 +40,6 @@ def main():
     total_count_labels_after = 0
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        if file_name != 'SCRIPT/T00P01/enter03.ssb':
-            continue
-
         print(file_name)
 
         bin_before = rom.getFileByName(file_name)
@@ -62,14 +59,11 @@ def main():
 
         #grapher._graphs = [ grapher._graphs[86] ]
         grapher.build_branches()
+        grapher.invert_branches()
         grapher.group_branches()
         draw_graphs(grapher, file_name, output_dir, 'after_branch')
 
-        grapher.invert_branches()
-        draw_graphs(grapher, file_name, output_dir, 'after_invert_branch')
-
         grapher.build_and_group_switch_cases()
-        grapher.group_switches()
         grapher.group_switch_cases()
         grapher.build_switch_fallthroughs()
         draw_graphs(grapher, file_name, output_dir, 'after_switch')

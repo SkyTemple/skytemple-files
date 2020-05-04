@@ -14,14 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, Iterator, Dict, Callable
+from typing import Tuple, Dict, Callable
 
+from explorerscript.error import SsbCompilerError
 from explorerscript.source_map import SourceMap, SourceMapBuilder
-from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbCoroutine, SsbRoutineType, \
+from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
     SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
-from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbCompiler as SsbScriptSsbCompiler
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU, GAME_REGION_US
+from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbScriptSsbCompiler
+from explorerscript.ssb_converting.ssb_compiler import ExplorerScriptSsbCompiler
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
@@ -44,6 +46,28 @@ class ScriptCompiler:
         """
         base_compiler = SsbScriptSsbCompiler()
         base_compiler.compile(ssb_script_src)
+
+        # Profiling callback
+        if callback_after_parsing:
+            callback_after_parsing()
+
+        return self.compile_structured(
+            base_compiler.routine_infos, base_compiler.routine_ops, base_compiler.named_coroutines,
+            base_compiler.source_map
+        )
+
+    def compile_explorerscript(self, es_src: str, callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
+        """
+        Compile ExplorerScript into a SSB model
+
+        :raises: ParseError: On parsing errors
+        :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes)
+        :raises: ValueError: On misc. logical compiling errors (eg. unknown constants)
+        """
+        base_compiler = ExplorerScriptSsbCompiler(
+            SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name
+        )
+        base_compiler.compile(es_src)
 
         # Profiling callback
         if callback_after_parsing:
@@ -254,10 +278,6 @@ class ScriptCompiler:
             else:
                 len += 1
         return len
-
-
-class SsbCompilerError(Exception):
-    pass
 
 
 class StringIndexPlaceholder(int):

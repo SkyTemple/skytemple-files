@@ -54,6 +54,7 @@ def main():
         time_opening = time.time()
         ssb_before = SsbHandler.deserialize(bin_before)
         explorer_script, source_map_before = ssb_before.to_explorerscript()
+        ssb_script, _ = ssb_before.to_ssb_script()
         time_decompiling = time.time()
 
         for pos_mark in source_map_before.position_marks:
@@ -61,8 +62,6 @@ def main():
 
         with open(out_file_name, 'w') as f:
             f.write(explorer_script)
-
-        continue  # TODO
 
         # Test the compiling and writing, by compiling the model, writing it to binary, and then loading it again,
         # and checking the generated ssb script.
@@ -76,17 +75,27 @@ def main():
 
         bin_after = SsbHandler.serialize(ssb_after)
         time_serializing = time.time()
-        ssb_after_after = SsbHandler.deserialize(bin_after)
-        explorer_script_after = ssb_after_after.to_explorerscript()[0]
 
-        with open('/tmp/diff1.ssb', 'w') as f:
+        ssb_after = SsbHandler.deserialize(bin_after)
+        ssb_script_after_compiling_and_decompiling, _ = ssb_after.to_ssb_script()
+
+        dir_for_scripts_before = os.path.join(output_dir, 'exps_export_test', 'before')
+        dir_for_scripts_after = os.path.join(output_dir, 'exps_export_test', 'after')
+        os.makedirs(dir_for_scripts_before, exist_ok=True)
+        os.makedirs(dir_for_scripts_after, exist_ok=True)
+        with open(os.path.join(dir_for_scripts_before, file_name.replace('/', '_') + '.ssbs'), 'w') as f:
+            f.write(ssb_script)
+        with open(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.ssbs'), 'w') as f:
+            f.write(ssb_script_after_compiling_and_decompiling)
+
+        explorer_script_after_compiling_and_decompiling, source_map_after_cd = ssb_after.to_explorerscript()
+
+        with open(os.path.join(dir_for_scripts_before, file_name.replace('/', '_') + '.exps'), 'w') as f:
             f.write(explorer_script)
+        with open(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.exps'), 'w') as f:
+            f.write(explorer_script_after_compiling_and_decompiling)
 
-        with open('/tmp/diff2.ssb', 'w') as f:
-            f.write(explorer_script_after)
-
-        assert(explorer_script == explorer_script_after)
-        assert(source_map_before == source_map_after)
+        # todo: assert(len(list(source_map_before)) == len(list(source_map_after)) == len(list(source_map_after_cd)))
         # todo: assert(SsbFlow(ssb_before) == SsbFlow(ssb_after))
 
         times.append((

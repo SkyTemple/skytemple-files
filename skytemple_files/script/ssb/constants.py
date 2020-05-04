@@ -42,6 +42,23 @@ class DungeonMode(Enum):
     REQUEST = 2
     OPEN_AND_REQUEST = 3
 
+    @property
+    def id(self):
+        # Compatibility with SsbNamedId
+        return self.value
+
+    @classmethod
+    def create_for(cls, string):
+        if string == 'CLOSED':
+            return cls.CLOSED
+        if string == 'OPEN':
+            return cls.OPEN
+        if string == 'REQUEST':
+            return cls.REQUEST
+        if string == 'OPEN_AND_REQUEST':
+            return cls.OPEN_AND_REQUEST
+        raise ValueError(f"Invalid DungeonMode: {string}")
+
 
 SsbConstantPmdScriptMappable = Union[
     Pmd2ScriptEntity, Pmd2ScriptObject, Pmd2ScriptRoutine,
@@ -144,6 +161,8 @@ class SsbConstant(SsbOpParamConstant):
                 )
             elif constant_as_string.startswith(PREFIX_DIRECTION):
                 return cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
+            elif constant_as_string.startswith(PREFIX_DMODE):
+                return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE):])
         except KeyError:
             raise ValueError(f"Unknown constant {constant_as_string}.")
         raise ValueError(f"Unknown constant {constant_as_string}.")

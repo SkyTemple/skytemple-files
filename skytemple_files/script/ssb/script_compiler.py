@@ -202,8 +202,9 @@ class ScriptCompiler:
 
                         # Create actual offset mapping for this opcode and update source map
                         opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
-                        line, col = original_source_map.get_position(in_op.offset)
-                        new_source_map_builder.add_opcode(int(opcode_cursor / 2), line, col)
+                        orig = original_source_map.get_position(in_op.offset)
+                        if orig is not None:
+                            new_source_map_builder.add_opcode(int(opcode_cursor / 2), *orig)
 
                         bytes_written_last_rtn += op_len
                         opcode_cursor += op_len

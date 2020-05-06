@@ -59,8 +59,9 @@ def main():
 
         #grapher._graphs = [ grapher._graphs[86] ]
         grapher.build_branches()
-        grapher.invert_branches()
+        draw_graphs(grapher, file_name, output_dir, 'after_branch_before_group')
         grapher.group_branches()
+        grapher.invert_branches()
         draw_graphs(grapher, file_name, output_dir, 'after_branch')
 
         grapher.build_and_group_switch_cases()

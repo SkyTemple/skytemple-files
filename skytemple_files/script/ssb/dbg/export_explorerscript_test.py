@@ -24,6 +24,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
+from skytemple_files.script.ssb.flow import SsbFlow
 from skytemple_files.script.ssb.handler import SsbHandler
 from skytemple_files.script.ssb.script_compiler import ScriptCompiler
 
@@ -44,6 +45,7 @@ def main():
     # total, opening. decompiling, parsing, compiling, serializing
     times: List[Tuple[float, float, float, float, float, float]] = []
 
+    static_data = Pmd2XmlReader.load_default()
     for i, file_name in enumerate(get_files_from_rom_with_extension(rom, 'ssb')):
         print(file_name)
 
@@ -54,8 +56,9 @@ def main():
         time_opening = time.time()
         ssb_before = SsbHandler.deserialize(bin_before)
         explorer_script, source_map_before = ssb_before.to_explorerscript()
-        ssb_script, _ = ssb_before.to_ssb_script()
         time_decompiling = time.time()
+        ssb_script, _ = ssb_before.to_ssb_script()
+        time_decompiling_ssb_script = time.time()
 
         for pos_mark in source_map_before.position_marks:
             print(pos_mark)
@@ -65,7 +68,7 @@ def main():
 
         # Test the compiling and writing, by compiling the model, writing it to binary, and then loading it again,
         # and checking the generated ssb script.
-        compiler = ScriptCompiler(Pmd2XmlReader.load_default())
+        compiler = ScriptCompiler(static_data)
         time_parsing = 0
         def callback_after_parsing():
             nonlocal time_parsing
@@ -79,6 +82,7 @@ def main():
         ssb_after = SsbHandler.deserialize(bin_after)
         ssb_script_after_compiling_and_decompiling, _ = ssb_after.to_ssb_script()
 
+        dir_for_scripts_sm = os.path.join(output_dir, 'exps_export_test', 'source_maps')
         dir_for_scripts_before = os.path.join(output_dir, 'exps_export_test', 'before')
         dir_for_scripts_after = os.path.join(output_dir, 'exps_export_test', 'after')
         os.makedirs(dir_for_scripts_before, exist_ok=True)
@@ -95,14 +99,27 @@ def main():
         with open(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.exps'), 'w') as f:
             f.write(explorer_script_after_compiling_and_decompiling)
 
-        # todo: assert(len(list(source_map_before)) == len(list(source_map_after)) == len(list(source_map_after_cd)))
-        # todo: assert(SsbFlow(ssb_before) == SsbFlow(ssb_after))
+        # Run flow check TODO
+        ssb_flow_before = SsbFlow(ssb_before, static_data)
+        ssb_flow_after = SsbFlow(ssb_after, static_data)
+
+        ssb_flow_before.to_dot(os.path.join(dir_for_scripts_before, file_name.replace('/', '_') + '.flow'))
+        ssb_flow_after.to_dot(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.flow'))
+
+        ssb_flow_before.assert_equal(ssb_flow_after)
+        # Output source maps TODO
+        #with open(os.path.join(dir_for_scripts_sm, file_name.replace('/', '_') + '_after_decompile.sm.exps'), 'w') as f:
+        #    f.write(SourceMapVisualizer(explorer_script, source_map_before).write())
+        #with open(os.path.join(dir_for_scripts_sm, file_name.replace('/', '_') + '_after_compile.sm.exps'), 'w') as f:
+        #    f.write(SourceMapVisualizer(explorer_script, source_map_after).write())
+
+        rom.setFileByName(file_name, bin_after)
 
         times.append((
             time_serializing - time_before,  # total
             time_opening - time_before,  # opening.
             time_decompiling - time_opening,  # decompiling,
-            time_parsing - time_decompiling,  # parsing,
+            time_parsing - time_decompiling_ssb_script,  # parsing,
             time_compiling - time_parsing,  # compiling,
             time_serializing - time_compiling,  # serializing
         ))
@@ -115,6 +132,8 @@ def main():
     print_table_row("AVG:", *[round(sum(t) / len(t), 2) for t in times_structured])
     print_table_row("MAX:", *[round(max(t), 2) for t in times_structured])
     print_table_row("MIN:", *[round(min(t), 2) for t in times_structured])
+
+    rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_all_scripts_replaced.nds'))
 
 
 if __name__ == '__main__':

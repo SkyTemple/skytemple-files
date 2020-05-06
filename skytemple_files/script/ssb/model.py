@@ -227,10 +227,12 @@ class Ssb:
                     argument_spec = self._get_argument_spec(op.op_code, i)
                     if argument_spec is not None:
                         if argument_spec.type == 'uint':
+                            # TODO: Do unsigned parameters actually exist? If so are they also 14bit?
                             new_params.append(param)
                         elif argument_spec.type == 'sint':
-                            if param & 0x8000:
-                                param = -0x10000 + param
+                            # 14 bit signed int.
+                            if param & 0x4000:
+                                param = -0x8000 + param
                             new_params.append(param)
                         elif argument_spec.type == 'Entity':
                             new_params.append(SsbConstant.create_for(self._scriptdata.level_entities__by_id[param]))

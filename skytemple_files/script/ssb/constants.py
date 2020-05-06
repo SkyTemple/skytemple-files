@@ -20,7 +20,6 @@ from typing import Union, TypeVar, Iterable
 from skytemple_files.common.ppmdu_config.script_data import *
 from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant, DungeonModeConstants
 
-NULL = 'NULL'
 PREFIX_DIRECTION = 'DIRECTION_'
 PREFIX_PROCESS_SPECIAL = 'PROCESS_SPECIAL_'
 PREFIX_MENU = 'MENU_'
@@ -31,7 +30,6 @@ PREFIX_OBJECT = 'OBJECT_'
 PREFIX_ACTOR = 'ACTOR_'
 PREFIX_CORO = 'CORO_'
 PREFIX_VAR = '$'
-PREFIX_OBJECT_NULL = PREFIX_OBJECT + NULL + '_'
 PREFIX_DMODE = 'DMODE_'
 CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
 
@@ -103,9 +101,7 @@ class SsbConstant(SsbOpParamConstant):
         if isinstance(value, Pmd2ScriptEntity):
             return cls(PREFIX_ACTOR + value.name, value=value)
         elif isinstance(value, Pmd2ScriptObject):
-            if value.name == NULL:
-                return cls(PREFIX_OBJECT_NULL + str(value.id), value=value)
-            return cls(PREFIX_OBJECT + value.name.upper(), value=value)
+            return cls(PREFIX_OBJECT + value.unique_name.upper(), value=value)
         elif isinstance(value, Pmd2ScriptRoutine):
             return cls(PREFIX_CORO + value.name, value=value)
         elif isinstance(value, Pmd2ScriptFaceName):
@@ -132,13 +128,8 @@ class SsbConstant(SsbOpParamConstant):
         try:
             if constant_as_string.startswith(PREFIX_ACTOR):
                 return script_data.level_entities__by_name[constant_as_string[len(PREFIX_ACTOR):]]
-            elif constant_as_string.startswith(PREFIX_OBJECT_NULL):
-                obj = script_data.objects__by_id[constant_as_string[len(PREFIX_OBJECT_NULL):]]
-                if obj.name != NULL:
-                    raise KeyError(obj.id)
-                return obj
             elif constant_as_string.startswith(PREFIX_OBJECT):
-                return cls._in_dict_insensitive(script_data.objects__by_name, constant_as_string[len(PREFIX_OBJECT):])
+                return cls._in_dict_insensitive(script_data.objects__by_unique_name, constant_as_string[len(PREFIX_OBJECT):])
             elif constant_as_string.startswith(PREFIX_CORO):
                 return script_data.common_routine_info__by_name[constant_as_string[len(PREFIX_CORO):]]
             elif constant_as_string.startswith(PREFIX_FACE_POS):

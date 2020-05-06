@@ -41,19 +41,23 @@ def main():
         ssb = SsbHandler.deserialize(bin_before)
 
         with open(out_file_name, 'w') as f:
-            lines = []
-            lines.append(str(ssb._header))
-            lines.append(f"number_of_routines: {len(ssb.routine_info)}")
-            lines.append(f"constants: {ssb.constants}")
-            lines.append(f"strings: {ssb.strings}")
-            lines.append(str(ssb.routine_info))
-            for i, ops in enumerate(ssb.routine_ops):
-                lines.append(f">>> Routine {i}:")
-                op_cursor = 0
-                for op in ops:
-                    lines.append(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
-                    op_cursor += 2 + len(op.params) * 2
-            f.writelines([l + '\n' for l in lines])
+            f.write(export_ssb_as_txt(ssb))
+
+
+def export_ssb_as_txt(ssb) -> str:
+    lines = []
+    lines.append(str(ssb._header))
+    lines.append(f"number_of_routines: {len(ssb.routine_info)}")
+    lines.append(f"constants: {ssb.constants}")
+    lines.append(f"strings: {ssb.strings}")
+    lines.append(str(ssb.routine_info))
+    for i, ops in enumerate(ssb.routine_ops):
+        lines.append(f">>> Routine {i}:")
+        op_cursor = 0
+        for op in ops:
+            lines.append(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
+            op_cursor += 2 + len(op.params) * 2
+    return '\n'.join(lines)
 
 
 if __name__ == '__main__':

@@ -1243,13 +1243,13 @@
         </OpCode>
         <OpCode id="0x3c"  name="camera_Move2PositionMark"               params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x3d"  name="camera_Move2PositionMark"               params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x3e"  name="camera_Move3Default"                    params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1263,13 +1263,13 @@
         </OpCode>
         <OpCode id="0x41"  name="camera_Move3PositionMark"               params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x42"  name="camera_Move3PositionMark"               params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x43"  name="camera_MoveDefault"                     params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1283,13 +1283,13 @@
         </OpCode>
         <OpCode id="0x46"  name="camera_MovePositionMark"                params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x47"  name="camera_MovePositionMark"                params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x48"  name="camera_SetDefault"                      params="0"  stringidx="-1" unk2="0"  unk3="0"  />
@@ -1314,13 +1314,13 @@
         </OpCode>
         <OpCode id="0x50"  name="camera2_Move2PositionMark"              params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x51"  name="camera2_Move2PositionMark"              params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x52"  name="camera2_Move3Default"                   params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1334,13 +1334,13 @@
         </OpCode>
         <OpCode id="0x55"  name="camera2_Move3PositionMark"              params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x56"  name="camera2_Move3PositionMark"              params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x57"  name="camera2_MoveDefault"                    params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1354,13 +1354,13 @@
         </OpCode>
         <OpCode id="0x5a"  name="camera2_MovePositionMark"               params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x5b"  name="camera2_MovePositionMark"               params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x5c"  name="camera2_SetDefault"                     params="0"  stringidx="-1" unk2="0"  unk3="0"  />
@@ -1525,7 +1525,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x8d"  name="main_EnterDungeon"                      params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="0" type="sint" name="dungeon_id"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x8e"  name="main_EnterGround"                       params="2"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1561,8 +1561,8 @@
           <Argument id="0" type="String" name="txt"/>
         </OpCode>
         <OpCode id="0x99"  name="message_FacePositionOffset"             params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="x"/>
-          <Argument id="1" type="uint" name="y"/>
+          <Argument id="0" type="sint" name="x"/>
+          <Argument id="1" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x9a"  name="message_ImitationSound"                 params="1"  stringidx="0"  unk2="0"  unk3="0"   >
           <Argument id="0" type="String" name="txt"/>
@@ -1633,7 +1633,7 @@
           <Argument id="0" type="String" name="txt"/>
         </OpCode>
         <OpCode id="0xaf"  name="Move2Position"                          params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -1643,7 +1643,7 @@
         </OpCode>
         <OpCode id="0xb1"  name="Move2PositionMark"                      params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
@@ -1654,24 +1654,24 @@
         </OpCode>
         <OpCode id="0xb3"  name="Move2PositionOffset"                    params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="x"/>
-            <Argument type="uint" name="y"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0xb4"  name="Move2PositionOffset"                    params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0xb5"  name="Move2PositionOffsetRandom"              params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0xb6"  name="Move3Position"                          params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -1681,7 +1681,7 @@
         </OpCode>
         <OpCode id="0xb8"  name="Move3PositionMark"                      params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
@@ -1692,21 +1692,21 @@
         </OpCode>
         <OpCode id="0xba"  name="Move3PositionOffset"                    params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="x"/>
-            <Argument type="uint" name="y"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0xbb"  name="Move3PositionOffset"                    params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0xbc"  name="Move3PositionOffsetRandom"              params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0xbd"  name="MoveDirection"                          params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -1718,7 +1718,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0xbf"  name="MovePosition"                           params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -1733,13 +1733,13 @@
         </OpCode>
         <OpCode id="0xc2"  name="MovePositionMark"                       params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0xc3"  name="MovePositionMark"                       params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0xc4"  name="MovePositionMarkTime"                   params="6"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1750,16 +1750,16 @@
         </OpCode>
         <OpCode id="0xc5"  name="MovePositionOffset"                     params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="x"/>
-            <Argument type="uint" name="y"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0xc6"  name="MovePositionOffset"                     params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0xc7"  name="MoveSpecial"                            params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -2066,12 +2066,12 @@
           <Argument id="0" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x10c" name="SetPositionOffset"                      params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="x"/>
-          <Argument id="1" type="uint" name="y"/>
+          <Argument id="0" type="sint" name="x"/>
+          <Argument id="1" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x10d" name="SetPositionOffsetRandom"                params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="x"/>
-          <Argument id="1" type="uint" name="y"/>
+          <Argument id="0" type="sint" name="x"/>
+          <Argument id="1" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x10e" name="SetReplyAttribute"                      params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -2082,7 +2082,7 @@
           <Argument id="2" type="uint" name="unk2"/>
         </OpCode>
         <OpCode id="0x110" name="Slide2Position"                         params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -2092,35 +2092,35 @@
         </OpCode>
         <OpCode id="0x112" name="Slide2PositionMark"                     params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x113" name="Slide2PositionMark"                     params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_mark"/>
         </OpCode>
         <OpCode id="0x114" name="Slide2PositionOffset"                   params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="x"/>
-            <Argument type="uint" name="y"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x115" name="Slide2PositionOffset"                   params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x116" name="Slide2PositionOffsetRandom"             params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x117" name="Slide3Position"                         params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -2130,30 +2130,30 @@
         </OpCode>
         <OpCode id="0x119" name="Slide3PositionMark"                     params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x11a" name="Slide3PositionMark"                     params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x11b" name="Slide3PositionOffset"                   params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="uint" name="x"/>
             <Argument type="uint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x11c" name="Slide3PositionOffset"                   params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
         <OpCode id="0x11d" name="Slide3PositionOffsetRandom"             params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -2162,7 +2162,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x11f" name="SlidePosition"                          params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -2177,13 +2177,13 @@
         </OpCode>
         <OpCode id="0x122" name="SlidePositionMark"                      params="-1" stringidx="-1" unk2="0"  unk3="0"   >
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="PositionMark" name="pos_marker"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x123" name="SlidePositionMark"                      params="5"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="PositionMark" name="pos_marker"/>
         </OpCode>
         <OpCode id="0x124" name="SlidePositionMarkTime"                  params="6"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -2194,14 +2194,14 @@
         </OpCode>
         <OpCode id="0x125" name="SlidePositionOffset"                    params="-1" stringidx="-1" unk2="0"  unk3="0"   >
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
             <Argument type="uint" name="unk1"/>
             <Argument type="uint" name="unk2"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x126" name="SlidePositionOffset"                    params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="x"/>
           <Argument id="2" type="uint" name="y"/>
         </OpCode>
@@ -2281,7 +2281,7 @@
           <Argument id="0" type="uint" name="station_id"/>
         </OpCode>
         <OpCode id="0x13d" name="supervision_Suspend"                    params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="0" type="sint" name="unk0"/>
         </OpCode>
         <OpCode id="0x13e" name="supervision2_SpecialActing"             params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>

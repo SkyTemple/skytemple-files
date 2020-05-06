@@ -82,6 +82,7 @@ class Pmd2ScriptObject(AutoString):
         self.unk2 = unk2
         self.unk3 = unk3
         self.name = name
+        self.unique_name = f'{name}_{id}'
 
 
 class Pmd2ScriptRoutine(SsbCoroutine):
@@ -245,8 +246,8 @@ class Pmd2ScriptData(AutoString):
         return {o.id: o for o in self.objects}
 
     @property
-    def objects__by_name(self):
-        return {o.name: o for o in self.objects if o.name != 'NULL'}
+    def objects__by_unique_name(self):
+        return {o.unique_name: o for o in self.objects}
 
     @property
     def face_names(self):

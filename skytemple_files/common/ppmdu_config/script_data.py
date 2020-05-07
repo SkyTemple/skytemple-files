@@ -64,7 +64,8 @@ def game_variable_type_by_value(i: int) -> GameVariableType:
 
 
 class Pmd2ScriptGameVar(AutoString):
-    def __init__(self, id: int, type: int, unk1: int, memoffset: int, bitshift: int, nbvalues: int, unk4: int, name: str):
+    def __init__(self, id: int, type: int, unk1: int, memoffset: int, bitshift: int,
+                 nbvalues: int, unk4: int, name: str, is_local: bool):
         self.id: int = id
         self.type: GameVariableType = game_variable_type_by_value(type)
         self.unk1 = unk1
@@ -73,6 +74,7 @@ class Pmd2ScriptGameVar(AutoString):
         self.nbvalues = nbvalues
         self.unk4 = unk4
         self.name = name
+        self.is_local = is_local
 
 
 class Pmd2ScriptObject(AutoString):

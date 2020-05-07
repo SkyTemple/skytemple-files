@@ -202,7 +202,8 @@ class Pmd2XmlReader:
                                 self._xml_int(e_var.attrib['bitshift']),
                                 self._xml_int(e_var.attrib['nbvalues']),
                                 self._xml_int(e_var.attrib['unk4']),
-                                e_var.attrib['name']
+                                e_var.attrib['name'],
+                                e.tag == 'GameVariablesTableExtended'
                             ))
                     ###########################
                     elif e.tag == 'ObjectsList':

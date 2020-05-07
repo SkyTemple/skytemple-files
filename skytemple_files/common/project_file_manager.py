@@ -35,7 +35,9 @@ class ProjectFileManager:
 
     def dir(self, subdir=None):
         if subdir:
-            return os.path.join(self.directory_name, subdir)
+            subdir_path = os.path.join(self.directory_name, subdir)
+            os.makedirs(subdir_path, exist_ok=True)
+            return subdir_path
         return self.directory_name
 
     # ExplorerScript source code file managing:

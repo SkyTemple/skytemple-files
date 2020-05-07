@@ -128,9 +128,9 @@
       <!--For the special variables in the id >= 0x400 range!-->
       <GameVariablesTableExtended>
         <GameVar name="LOCAL0" type="6" unk1="0x7" memoffset="0x0" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
-        <GameVar name="LOCAL1" type="6" unk1="0x7" memoffset="0x2" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
+        <GameVar name="LOCAL1" type="6" unk1="0x7" memoffset="0x1" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
         <GameVar name="LOCAL2" type="6" unk1="0x7" memoffset="0x2" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
-        <GameVar name="LOCAL3" type="6" unk1="0x7" memoffset="0x2" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
+        <GameVar name="LOCAL3" type="6" unk1="0x7" memoffset="0x3" bitshift="0x0" nbvalues="0x1" unk4="0x0" />
       </GameVariablesTableExtended>
 
       <!--**********************************************-->

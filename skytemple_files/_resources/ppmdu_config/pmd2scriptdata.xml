@@ -1211,15 +1211,15 @@
           <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x34"  name="BranchValue"                            params="4"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="unk2"/>
+          <Argument id="0" type="GameVar" name="var"/>
+          <Argument id="1" type="uint" name="operator"/>
+          <Argument id="2" type="uint" name="value"/>
           <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x35"  name="BranchVariable"                         params="4"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
-          <Argument id="2" type="uint" name="unk2"/>
+          <Argument id="0" type="GameVar" name="var"/>
+          <Argument id="1" type="uint" name="operator"/>
+          <Argument id="2" type="GameVar" name="cmp_var"/>
           <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x36"  name="BranchVariation"                        params="2"  stringidx="-1" unk2="1"  unk3="0"   >

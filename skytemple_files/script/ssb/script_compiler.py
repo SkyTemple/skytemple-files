@@ -17,6 +17,7 @@
 from typing import Tuple, Dict, Callable
 
 from explorerscript.error import SsbCompilerError
+from explorerscript.macro import ExplorerScriptMacro
 from explorerscript.source_map import SourceMap, SourceMapBuilder
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
     SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
@@ -56,11 +57,12 @@ class ScriptCompiler:
             base_compiler.source_map
         )
 
-    def compile_explorerscript(self, es_src: str, file_name: str,
+    def compile_explorerscript(self, es_src: str, exps_absolue_path: str,
                                callback_after_parsing: Callable = None,
                                lookup_paths: List[str] = None) -> Tuple[Ssb, SourceMap]:
         """
-        Compile ExplorerScript into a SSB model
+        Compile ExplorerScript into a SSB model. Returns the Ssb model, the source map, and a list of macros
+        that were used in the ExplorerScript file.
 
         lookup_paths is the list of include lookup paths.
 
@@ -69,9 +71,10 @@ class ScriptCompiler:
         :raises: ValueError: On misc. logical compiling errors (eg. unknown constants)
         """
         base_compiler = ExplorerScriptSsbCompiler(
-            SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name
+            SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
+            lookup_paths
         )
-        base_compiler.compile(es_src, file_name)
+        base_compiler.compile(es_src, exps_absolue_path)
 
         # Profiling callback
         if callback_after_parsing:

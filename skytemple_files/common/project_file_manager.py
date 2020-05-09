@@ -15,8 +15,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import json
 import os
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from explorerscript import EXPLORERSCRIPT_EXT
 from explorerscript.source_map import SourceMap
@@ -25,6 +26,7 @@ from skytemple_files.common.script_util import SSB_EXT
 DIRECTORY_NAME_SUFFIX = '.skytemple'
 SCRIPT_DIR = 'SCRIPT'
 EXPLORERSCRIPT_SOURCE_MAP_SUFFIX = '.sm'
+EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX = '.im'
 
 
 class ProjectFileManager:
@@ -43,7 +45,7 @@ class ProjectFileManager:
     # ExplorerScript source code file managing:
     # The filename for all of the methods can either be the direct file name
     # (relative to project dir, must start with SCRIPT)
-    # or the name of the ssb file in ROM, see _explorerscript_resolve_filename
+    # or the name of the ssb file in ROM, see _explorerscript_resolve_filename/explorerscript_get_path_for_ssb.
 
     def explorerscript_exists(self, filename):
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
@@ -84,19 +86,58 @@ class ProjectFileManager:
         with open(filename, 'w') as f:
             f.write(new_hash)
 
-    def _explorerscript_resolve_filename(self, filename: str, desired_extension: str) -> str:
+    def explorerscript_include_usage_remove(self, filename, ssb_filename_that_is_included):
+        """Removes an entry from the inclusion map for filename (can be SSB filename or inclusion map filename)."""
+        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
+        entries: List[str] = self._explorerscript_get_inclusion_map(filename)
+        if ssb_filename_that_is_included in entries:
+            entries.remove(ssb_filename_that_is_included)
+        self._explorerscript_save_inclusion_map(filename, entries)
+
+    def explorerscript_include_usage_add(self, filename, ssb_filename_that_is_included):
+        """Adds an entry to the inclusion map for filename (can be SSB filename or inclusion map filename)."""
+        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
+        entries: List[str] = self._explorerscript_get_inclusion_map(filename)
+        if ssb_filename_that_is_included not in entries:
+            entries.append(ssb_filename_that_is_included)
+        self._explorerscript_save_inclusion_map(filename, entries)
+
+    def explorerscript_get_path_for_ssb(self, ssb_filename):
+        """
+        Returns a relative path (relative to project dir) to an exps file for a given ssb file.
+        """
+        return self._explorerscript_resolve_filename__relative(ssb_filename, EXPLORERSCRIPT_EXT)
+
+    def _explorerscript_resolve_filename__relative(self, filename: str, desired_extension: str) -> str:
         """
         First makes sure, that the filename starts with SCRIPT.
         Then checks, if the file extension is ssb. If so, removes the ssb suffix and attaches
         the desired extension.
-        Also makes sure, that the directories on the way exist.
-        Returns the resulting full path, including the project dir.
+        Returns the path relative to the project dir.
         """
         if not filename.startswith(SCRIPT_DIR):
             raise ValueError(f"The filename for the ExplorerScript related file must be "
                              f"stored relative to the {SCRIPT_DIR} directory.")
         if filename[-4:] == SSB_EXT:
             filename = filename[:-4] + desired_extension
-        filename = os.path.join(self.directory_name, filename)
+        return filename
+
+    def _explorerscript_resolve_filename(self, filename: str, desired_extension: str) -> str:
+        """
+        Like the __relative version, but returns the full path and makes sure, that the directory exists.
+        """
+        filename = os.path.join(self.directory_name, self._explorerscript_resolve_filename__relative(
+            filename, desired_extension
+        ))
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         return filename
+
+    def _explorerscript_get_inclusion_map(self, filename):
+        if not os.path.exists(filename):
+            return []
+        with open(filename, 'r'):
+            return json.load(filename)
+
+    def _explorerscript_save_inclusion_map(self, filename, entries):
+        with open(filename, 'w') as f:
+            json.dump(filename, entries, indent=0)

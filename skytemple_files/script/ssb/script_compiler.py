@@ -57,9 +57,12 @@ class ScriptCompiler:
         )
 
     def compile_explorerscript(self, es_src: str, file_name: str,
-                               callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
+                               callback_after_parsing: Callable = None,
+                               lookup_paths: List[str] = None) -> Tuple[Ssb, SourceMap]:
         """
         Compile ExplorerScript into a SSB model
+
+        lookup_paths is the list of include lookup paths.
 
         :raises: ParseError: On parsing errors
         :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes)

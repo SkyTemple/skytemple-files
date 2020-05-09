@@ -21,6 +21,7 @@ import signal
 import sys
 import time
 import traceback
+from concurrent.futures.thread import ThreadPoolExecutor
 from threading import Lock
 from typing import List, Tuple
 
@@ -47,7 +48,7 @@ poison_container = [False]
 loop = asyncio.get_event_loop()
 
 
-async def main():
+async def main(executor):
     output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
@@ -64,7 +65,7 @@ async def main():
     for i, file_name in enumerate(get_files_from_rom_with_extension(rom, 'ssb')):
         # Run multiple in parallel with asyncio executors.
         awaitables.append(loop.run_in_executor(
-            None,
+            executor,
             process_single,
 
             file_name, times, static_data, output_dir, rom
@@ -112,7 +113,7 @@ def process_single(file_name, times, static_data, output_dir, rom):
     ssb_script, _ = ssb_before.to_ssb_script()
     time_decompiling_ssb_script = time.time()
 
-    for pos_mark in source_map_before.position_marks:
+    for pos_mark in source_map_before.get_position_marks__direct():
         print(pos_mark)
 
     with open(out_file_name, 'w') as f:
@@ -127,7 +128,7 @@ def process_single(file_name, times, static_data, output_dir, rom):
         nonlocal time_parsing
         time_parsing = time.time()
 
-    ssb_after, source_map_after = compiler.compile_explorerscript(explorer_script, callback_after_parsing)
+    ssb_after, source_map_after = compiler.compile_explorerscript(explorer_script, file_name, callback_after_parsing)
     time_compiling = time.time()
 
     bin_after = SsbHandler.serialize(ssb_after)
@@ -199,5 +200,10 @@ def handle_exception(loop, context):
 
 
 if __name__ == '__main__':
+    executor = ThreadPoolExecutor(max_workers=max(2, os.cpu_count() - 2))
     loop.set_exception_handler(handle_exception)
-    loop.run_until_complete(main())
+    try:
+        loop.run_until_complete(main(executor))
+    finally:
+        loop.close()
+        executor.shutdown()

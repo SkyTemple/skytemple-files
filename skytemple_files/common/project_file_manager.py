@@ -67,7 +67,7 @@ class ProjectFileManager:
                 source_map_code = f.read()
             source_map = SourceMap.deserialize(source_map_code)
         else:
-            source_map = SourceMap({}, [])
+            source_map = SourceMap.create_empty()
         return source_code, source_map
 
     def explorerscript_save(self, filename, code, source_map: Optional[SourceMap] = None):

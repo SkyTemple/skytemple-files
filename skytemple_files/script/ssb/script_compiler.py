@@ -56,7 +56,8 @@ class ScriptCompiler:
             base_compiler.source_map
         )
 
-    def compile_explorerscript(self, es_src: str, callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
+    def compile_explorerscript(self, es_src: str, file_name: str,
+                               callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
         """
         Compile ExplorerScript into a SSB model
 
@@ -67,7 +68,7 @@ class ScriptCompiler:
         base_compiler = ExplorerScriptSsbCompiler(
             SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name
         )
-        base_compiler.compile(es_src)
+        base_compiler.compile(es_src, file_name)
 
         # Profiling callback
         if callback_after_parsing:
@@ -92,7 +93,7 @@ class ScriptCompiler:
 
         # We need to rewrite the passed source map to use the actual binary opcode offsets.
         new_source_map_builder = SourceMapBuilder()
-        for pm in original_source_map.position_marks:
+        for pm in original_source_map.get_position_marks__direct():
             new_source_map_builder.add_position_mark(pm)
 
         # Build routines and opcodes.
@@ -202,7 +203,7 @@ class ScriptCompiler:
 
                         # Create actual offset mapping for this opcode and update source map
                         opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
-                        orig = original_source_map.get_position(in_op.offset)
+                        orig = original_source_map.get_op_line_and_col__direct(in_op.offset)
                         if orig is not None:
                             new_source_map_builder.add_opcode(int(opcode_cursor / 2), *orig)
 

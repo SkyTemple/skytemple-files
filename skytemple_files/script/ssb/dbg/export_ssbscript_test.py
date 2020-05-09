@@ -56,7 +56,7 @@ def main():
         ssb_script, source_map_before = ssb_before.to_ssb_script()
         time_decompiling = time.time()
 
-        for pos_mark in source_map_before.position_marks:
+        for pos_mark in source_map_before.get_position_marks__direct():
             print(pos_mark)
 
         with open(out_file_name, 'w') as f:

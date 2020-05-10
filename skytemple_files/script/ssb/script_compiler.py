@@ -97,11 +97,6 @@ class ScriptCompiler:
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
             raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")
 
-        # We need to rewrite the passed source map to use the actual binary opcode offsets.
-        new_source_map_builder = SourceMapBuilder()
-        for pm in original_source_map.get_position_marks__direct():
-            new_source_map_builder.add_position_mark(pm)
-
         # Build routines and opcodes.
         if len(routine_ops) > 0:
             header_class = SsbHeaderUs
@@ -209,9 +204,6 @@ class ScriptCompiler:
 
                         # Create actual offset mapping for this opcode and update source map
                         opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
-                        orig = original_source_map.get_op_line_and_col__direct(in_op.offset)
-                        if orig is not None:
-                            new_source_map_builder.add_opcode(int(opcode_cursor / 2), *orig)
 
                         bytes_written_last_rtn += op_len
                         opcode_cursor += op_len
@@ -242,7 +234,10 @@ class ScriptCompiler:
             model.constants = built_constants
             model.strings = built_strings
 
-        return model, new_source_map_builder.build()
+            # Update the source map
+            original_source_map.rewrite_offsets(opcode_index_mem_offset_mapping)
+
+        return model, original_source_map
 
     def _parse_param(self, param: SsbOpParam, built_strings: Dict[str, List[str]], built_constants: List[str]) -> int:
         if isinstance(param, int):

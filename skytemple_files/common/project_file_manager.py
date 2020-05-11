@@ -59,18 +59,23 @@ class ProjectFileManager:
             hash_file = f.read()
         return hash_file == hash_compare
 
-    def explorerscript_load(self, filename) -> Tuple[str, SourceMap]:
+    def explorerscript_load(self, filename, sourcemap=True) -> Tuple[str, SourceMap]:
         """Load the ExplorerScript file and it's source map if it exists, otherwise an empty map"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
         with open(filename, 'r') as f:
             source_code = f.read()
-        if os.path.exists(filename + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX):
-            with open(filename + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX, 'r') as f:
+        sourcemap = self.explorerscript_load_sourcemap(filename) if sourcemap else SourceMap.create_empty()
+        return source_code, sourcemap
+
+    def explorerscript_load_sourcemap(self, filename) -> SourceMap:
+        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX)
+        if os.path.exists(filename):
+            with open(filename, 'r') as f:
                 source_map_code = f.read()
             source_map = SourceMap.deserialize(source_map_code)
         else:
             source_map = SourceMap.create_empty()
-        return source_code, source_map
+        return source_map
 
     def explorerscript_save(self, filename, code, source_map: Optional[SourceMap] = None):
         """Save the ExplorerScript file and it's source map if given"""
@@ -88,7 +93,7 @@ class ProjectFileManager:
 
     def explorerscript_include_usage_remove(self, filename, ssb_filename_that_is_included):
         """Removes an entry from the inclusion map for filename (can be SSB filename or inclusion map filename)."""
-        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
+        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
         entries: List[str] = self._explorerscript_get_inclusion_map(filename)
         if ssb_filename_that_is_included in entries:
             entries.remove(ssb_filename_that_is_included)
@@ -96,7 +101,7 @@ class ProjectFileManager:
 
     def explorerscript_include_usage_add(self, filename, ssb_filename_that_is_included):
         """Adds an entry to the inclusion map for filename (can be SSB filename or inclusion map filename)."""
-        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
+        filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX)
         entries: List[str] = self._explorerscript_get_inclusion_map(filename)
         if ssb_filename_that_is_included not in entries:
             entries.append(ssb_filename_that_is_included)
@@ -110,17 +115,10 @@ class ProjectFileManager:
 
     def _explorerscript_resolve_filename__relative(self, filename: str, desired_extension: str) -> str:
         """
-        First makes sure, that the filename starts with SCRIPT.
-        Then checks, if the file extension is ssb. If so, removes the ssb suffix and attaches
-        the desired extension.
+        Removes the file extension and adds the desired extension.
         Returns the path relative to the project dir.
         """
-        if not filename.startswith(SCRIPT_DIR):
-            raise ValueError(f"The filename for the ExplorerScript related file must be "
-                             f"stored relative to the {SCRIPT_DIR} directory.")
-        if filename[-4:] == SSB_EXT:
-            filename = filename[:-4] + desired_extension
-        return filename
+        return '.'.join(filename.split('.')[:-1]) + desired_extension
 
     def _explorerscript_resolve_filename(self, filename: str, desired_extension: str) -> str:
         """
@@ -135,9 +133,9 @@ class ProjectFileManager:
     def _explorerscript_get_inclusion_map(self, filename):
         if not os.path.exists(filename):
             return []
-        with open(filename, 'r'):
-            return json.load(filename)
+        with open(filename, 'r') as f:
+            return json.load(f)
 
     def _explorerscript_save_inclusion_map(self, filename, entries):
         with open(filename, 'w') as f:
-            json.dump(filename, entries, indent=0)
+            json.dump(entries, f, indent=0)

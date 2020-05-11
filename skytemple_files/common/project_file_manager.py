@@ -118,7 +118,7 @@ class ProjectFileManager:
         Removes the file extension and adds the desired extension.
         Returns the path relative to the project dir.
         """
-        return '.'.join(filename.split('.')[:-1]) + desired_extension
+        return '.'.join(filename.split('.')[:-1]).replace('/', os.path.sep) + desired_extension
 
     def _explorerscript_resolve_filename(self, filename: str, desired_extension: str) -> str:
         """

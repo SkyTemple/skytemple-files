@@ -56,14 +56,14 @@ async def main(executor):
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
 
     script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
     # total, opening. decompiling, parsing, compiling, serializing
     times: List[Tuple[float, float, float, float, float, float]] = []
 
-    static_data = Pmd2XmlReader.load_default()
+    static_data = Pmd2XmlReader.load_default(for_version='EoS_NA')
     awaitables = []
     for i, file_name in enumerate(get_files_from_rom_with_extension(rom, 'ssb')):
         # Run multiple in parallel with asyncio executors.
@@ -96,7 +96,7 @@ async def main(executor):
     print_table_row("MAX:", *[round(max(t), 2) for t in times_structured])
     print_table_row("MIN:", *[round(min(t), 2) for t in times_structured])
 
-    rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_all_scripts_replaced.nds'))
+    #rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_all_scripts_replaced.nds'))
 
 
 def process_single(file_name, times, static_data, output_dir, rom):
@@ -110,7 +110,7 @@ def process_single(file_name, times, static_data, output_dir, rom):
         time_before = time.time()
         bin_before = rom.getFileByName(file_name)
         time_opening = time.time()
-    ssb_before = SsbHandler.deserialize(bin_before)
+    ssb_before = SsbHandler.deserialize(bin_before, static_data)
     explorer_script, source_map_before = ssb_before.to_explorerscript()
     time_decompiling = time.time()
     ssb_script, _ = ssb_before.to_ssb_script()
@@ -134,10 +134,10 @@ def process_single(file_name, times, static_data, output_dir, rom):
     ssb_after, source_map_after = compiler.compile_explorerscript(explorer_script, file_name, callback_after_parsing)
     time_compiling = time.time()
 
-    bin_after = SsbHandler.serialize(ssb_after)
+    bin_after = SsbHandler.serialize(ssb_after, static_data)
     time_serializing = time.time()
 
-    ssb_after = SsbHandler.deserialize(bin_after)
+    ssb_after = SsbHandler.deserialize(bin_after, static_data)
     ssb_script_after_compiling_and_decompiling, _ = ssb_after.to_ssb_script()
 
     dir_for_scripts_sm = os.path.join(output_dir, 'exps_export_test', 'source_maps')

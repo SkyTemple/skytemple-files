@@ -85,9 +85,16 @@
         <Block name="ItemTablesPtrs1"   beg="0xB0948"   end="0xB09B0"/>
         <Block name="SMDEventsFunTable" beg="0xB0B90"   end="0xB0D8C"/>
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
+        <Pointer name="GameStateValues"  beg="0xAF6B8"/>
+        <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
+        <Pointer name="GameMode"         beg="0xAFF70"/>
+        <Pointer name="NotifyNote"       beg="0xAFEF8"/>
+        <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <Block name="GameVarsValues"    beg="0x2AB0AC" end="0x2AB360"/>
         <Fn name="DebugPrint"           beg="0xC240"/>
         <Fn name="DebugPrint2"          beg="0xC30C"/>
+        <Fn name="SaveScriptVariableValue"  beg="0x4B820"/>
+        <Fn name="SaveScriptVariableValueWithOffset" beg="0x4B988"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
@@ -96,8 +103,14 @@
         <Block name="CRoutines"                 beg="0x405E8" end="0x41BD0"/>
         <Block name="GroundStatePntrs"          beg="0x48AB4" end="0x48AC8"/>
         <Pointer name="GroundStateMap"          beg="0x48A80"/>
-        <Fn name="FuncThatCallsCommandParsing"  beg="0x77C"/>
-        <Fn name="ScriptCommandParsing"         beg="0x484"/>
+        <Pointer name="UnionallRAMAddress"      beg="0x48A64"/>
+        <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>
+        <Fn name="ScriptCommandParsing"         beg="0x1B24"/>
+        <Fn name="GroundMainLoop"               beg="0xC534"/>
+        <Fn name="ScriptStationLoadTalk"        beg="0x91A4"/>
+        <Fn name="StationLoadHanger"            beg="0x8994"/>
+        <Fn name="SsbLoad1"                     beg="0x9B10"/>
+        <Fn name="SsbLoad2"                     beg="0x84BC"/>
       </Bin>
       <!-- overlay_0013 -->
       <Bin filepath="overlay/overlay_0013.bin" loadaddress="0x238A140">
@@ -120,7 +133,6 @@
         <Block name="Events"             beg="0xA5BE0" end="0xA715C"/>
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
         <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
-        <!--#TODO: US!!! -->
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>

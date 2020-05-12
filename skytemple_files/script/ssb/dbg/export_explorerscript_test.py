@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
+import logging
 import os
 import signal
 import sys
@@ -46,6 +47,8 @@ times_lock = Lock()
 poison_lock = Lock()
 poison_container = [False]
 loop = asyncio.get_event_loop()
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
 
 
 async def main(executor):

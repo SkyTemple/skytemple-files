@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 from typing import Tuple, Dict, Callable
 
 from explorerscript.error import SsbCompilerError
@@ -30,6 +31,7 @@ from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
 from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
     SSB_PADDING_BEFORE_ROUTINE_INFO
+logger = logging.getLogger(__name__)
 
 
 class ScriptCompiler:
@@ -45,6 +47,8 @@ class ScriptCompiler:
         :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes)
         :raises: ValueError: On misc. logical compiling errors (eg. unknown constants)
         """
+        logger.debug("Compiling SSBScript (size: %d)...", len(ssb_script_src))
+
         base_compiler = SsbScriptSsbCompiler()
         base_compiler.compile(ssb_script_src)
 
@@ -70,6 +74,8 @@ class ScriptCompiler:
         :raises: SsbCompilerError: On logical compiling errors (eg. unknown opcodes)
         :raises: ValueError: On misc. logical compiling errors (eg. unknown constants)
         """
+        logger.debug("Compiling ExplorerScript (size: %d, path: %s)...", len(es_src), exps_absolue_path)
+
         base_compiler = ExplorerScriptSsbCompiler(
             SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
             lookup_paths
@@ -93,6 +99,8 @@ class ScriptCompiler:
             original_source_map: SourceMap
     ) -> Tuple[Ssb, SourceMap]:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
+        logger.debug("Assembling SSB model...")
+
         model = Ssb.create_empty(self.rom_data.script_data)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
             raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")

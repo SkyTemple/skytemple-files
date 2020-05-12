@@ -20,8 +20,10 @@ Manages asyncio event loop in a separate loop handler thread.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
+import logging
 import traceback
 from threading import Thread
+logger = logging.getLogger(__name__)
 
 
 class AsyncTaskRunner(Thread):
@@ -66,6 +68,4 @@ class AsyncTaskRunner(Thread):
         try:
             return await asyncio.ensure_future(coro)
         except BaseException as ex:
-            # TODO Proper logging
-            print(f"Uncaught AsyncTaskRunner task exception:")
-            print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
+            logger.error(f"Uncaught AsyncTaskRunner task exception.", exc_info=ex)

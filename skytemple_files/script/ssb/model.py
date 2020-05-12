@@ -14,18 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 from typing import Dict, Optional
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
-from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, SsbOpParamConstant, \
+from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, \
     SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam, SsbOpParamPositionMarker
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
-from skytemple_files.script.ssa_sse_sss.position_marker import SsaPositionMarker
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
+logger = logging.getLogger(__name__)
 
 
 SSB_LEN_ROUTINE_INFO_ENTRY = 6
@@ -57,6 +58,8 @@ class Ssb:
             self.constants = []
             self.strings = []
             return
+
+        logger.debug("Deserializing SSB model (size: %d)...", len(data))
 
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -213,6 +216,7 @@ class Ssb:
 
     def get_filled_routine_ops(self):
         """Returns self.routine_ops, but with constant strings, strings and constants from scriptdata filled out"""
+        logger.debug("Disassembling SSB model data...")
         rtns: List[List[SkyTempleSsbOperation]] = []
         pos_marker_increment = 0
         for rtn in self.routine_ops:
@@ -244,7 +248,7 @@ class Ssb:
                             if param in self._scriptdata.face_names__by_id:
                                 new_params.append(SsbConstant.create_for(self._scriptdata.face_names__by_id[param]))
                             else:
-                                warnings.warn(f"Unknown face id: {param}", SsbWarning)
+                                logger.warning(f"Unknown face id: {param}")
                                 new_params.append(param)
                         elif argument_spec.type == 'FaceMode':
                             new_params.append(SsbConstant.create_for(self._scriptdata.face_position_modes__by_id[param]))
@@ -254,26 +258,26 @@ class Ssb:
                             if param in self._scriptdata.level_list__by_id:
                                 new_params.append(SsbConstant.create_for(self._scriptdata.level_list__by_id[param]))
                             else:
-                                warnings.warn(f"Unknown level id: {param}", SsbWarning)
+                                logger.warning(f"Unknown level id: {param}")
                                 new_params.append(param)
                         elif argument_spec.type == 'Menu':
                             if param in self._scriptdata.menus__by_id:
                                 new_params.append(SsbConstant.create_for(self._scriptdata.menus__by_id[param]))
                             else:
-                                warnings.warn(f"Unknown menu id: {param}", SsbWarning)
+                                logger.warning(f"Unknown menu id: {param}")
                                 new_params.append(param)
                         elif argument_spec.type == 'ProcessSpecial':
                             if param in self._scriptdata.process_specials__by_id:
                                 new_params.append(SsbConstant.create_for(self._scriptdata.process_specials__by_id[param]))
                             else:
                                 new_params.append(param)
-                                warnings.warn(f"Unknown special process id: {param}", SsbWarning)
+                                logger.warning(f"Unknown special process id: {param}")
                         elif argument_spec.type == 'Direction':
                             if param in self._scriptdata.directions__by_id:
                                 new_params.append(SsbConstant.create_for(self._scriptdata.directions__by_id[param]))
                             else:
                                 new_params.append(param)
-                                warnings.warn(f"Unknown direction id: {param}", SsbWarning)
+                                logger.warning(f"Unknown direction id: {param}")
                         elif argument_spec.type == 'String':
                             new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
                         elif argument_spec.type == 'ConstString':
@@ -286,7 +290,7 @@ class Ssb:
                                 x_relative = op.params[i + 2]
                                 y_relative = op.params[i + 3]
                             except IndexError:
-                                warnings.warn("SSB had wrong number of arguments for building a position marker.")
+                                logger.warning("SSB had wrong number of arguments for building a position marker.")
                             new_params.append(SsbOpParamPositionMarker(
                                 f'm{pos_marker_increment}', x_offset, y_offset, x_relative, y_relative
                             ))

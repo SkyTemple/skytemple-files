@@ -15,7 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import logging
 import math
 import warnings
 from itertools import chain
@@ -24,6 +24,7 @@ from typing import List, Tuple, Union
 from PIL import Image
 
 from skytemple_files.common.util import iter_bytes_4bit_le
+logger = logging.getLogger(__name__)
 
 
 class TilemapEntry:
@@ -101,8 +102,8 @@ def to_pil(
         except IndexError:
             # This happens when exporting a BPCs chunk without "loading" the BPAs, because the BPA tiles
             # take up slots after the BPC slots.
-            warnings.warn(f'TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. '
-                          f'Replaced with 0.')
+            logger.warning(f'TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. '
+                           f'Replaced with 0.')
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
         pal_start_offset = number_of_cols_per_pal * tile_mapping.pal_idx
@@ -262,12 +263,12 @@ def from_pil(
                                  f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")
             # Just set the color to 0 instead if invalid...
             else:
-                warnings.warn(f"Can not reliably convert PIL image to PMD tiled image: "
-                              f"The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
-                              f"pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
-                              f"Expected are colors from palette {tile_palette_indices[tile_id]} ("
-                              f"{tile_palette_indices[tile_id] * single_palette_size} - "
-                              f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")
+                logger.warning(f"Can not reliably convert PIL image to PMD tiled image: "
+                               f"The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
+                               f"pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
+                               f"Expected are colors from palette {tile_palette_indices[tile_id]} ("
+                               f"{tile_palette_indices[tile_id] * single_palette_size} - "
+                               f"{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")
             real_pix = 0
 
         # We store 2 bytes as one... in LE

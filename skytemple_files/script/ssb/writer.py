@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 import math
 from typing import Dict
 
@@ -23,6 +24,7 @@ from skytemple_files.common.string_codec import PMD2_STR_ENCODER
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu
 from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
+logger = logging.getLogger(__name__)
 
 
 class SsbWriter:
@@ -42,6 +44,9 @@ class SsbWriter:
         model.constants = built_constants
         model.strings = built_strings
         """
+
+        logger.debug("Serializing SSB model...")
+
         if self.static_data.game_region == GAME_REGION_US:
             header_cls = SsbHeaderUs
             header_len = SSB_HEADER_US_LENGTH

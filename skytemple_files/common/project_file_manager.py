@@ -19,6 +19,8 @@ import json
 import os
 from typing import Optional, Tuple, List
 
+from appdirs import user_config_dir
+
 from explorerscript import EXPLORERSCRIPT_EXT
 from explorerscript.source_map import SourceMap
 from skytemple_files.common.script_util import SSB_EXT
@@ -34,6 +36,11 @@ class ProjectFileManager:
     def __init__(self, rom_file_name: str):
         self.directory_name = rom_file_name + DIRECTORY_NAME_SUFFIX
         os.makedirs(self.directory_name, exist_ok=True)
+
+    @classmethod
+    def shared_config_dir(cls):
+        """Returns the shared configuration directory for all SkyTemple projects."""
+        return user_config_dir('skytemple', False)
 
     def dir(self, subdir=None):
         if subdir:

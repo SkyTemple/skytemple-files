@@ -14,11 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 import warnings
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptObject
 from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
+logger = logging.getLogger(__name__)
 
 
 class SsaObject(AutoString):
@@ -26,7 +28,7 @@ class SsaObject(AutoString):
         try:
             self.object = scriptdata.objects__by_id[object_id]
         except KeyError:
-            warnings.warn(f"[{self.__class__.__name__}]: Unknown object id: {object_id}")
+            logger.warning(f"Unknown object id: {object_id}")
             self.object = Pmd2ScriptObject(object_id, 0, 0, 0, 'UNKNOWN')
         self.unk4 = unk4
         self.unk6 = unk6

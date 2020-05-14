@@ -9,7 +9,7 @@ with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='skytemple-files',
-    version='0.0.2a2',
+    version='0.0.2a3',
     packages=find_packages(),
     package_data={'skytemple_files': ['_resources/**/*']},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',

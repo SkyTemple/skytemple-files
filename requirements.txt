@@ -1,5 +1,5 @@
 ndspy==3.0.0
-Pillow-SIMD==6.0.0.post0
+Pillow==7.1.2
 appdirs==1.4.3
-explorerscript==0.0.1
+explorerscript==0.0.2a1
 

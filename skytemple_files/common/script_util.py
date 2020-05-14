@@ -17,8 +17,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import re
 from collections import OrderedDict
-from typing import TypedDict, List, Union, Tuple
-from typing import OrderedDict as OrderedDictType
+from typing import List, Union, Tuple, Dict
+
+try:
+    from typing import TypedDict
+except ImportError:
+    from typing_extensions import TypedDict
 
 from ndspy.fnt import Folder
 
@@ -41,7 +45,7 @@ class MapEntry(TypedDict):
     enter_sse: Union[str, None]
     enter_ssbs: List[str]
     # Dict of sss files and their ssb files:
-    subscripts: OrderedDictType[str, List[str]]
+    subscripts: Dict[str, List[str]]
     # LSD file name
     lsd: Union[str, None]
     # SSA and SSB file tuples (not loaded from LSD but read from dir directly!)
@@ -50,7 +54,7 @@ class MapEntry(TypedDict):
 
 class ScriptFiles(TypedDict):
     common: List[str]
-    maps: OrderedDictType[str, MapEntry]
+    maps: Dict[str, MapEntry]
 
 
 def load_script_files(script_folder: Folder) -> ScriptFiles:

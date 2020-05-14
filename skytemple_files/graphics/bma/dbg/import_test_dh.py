@@ -17,7 +17,10 @@
 
 import os
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType

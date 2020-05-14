@@ -18,7 +18,10 @@
 import math
 from typing import Tuple
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *

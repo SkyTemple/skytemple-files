@@ -18,7 +18,10 @@
 import math
 from typing import Tuple, List
 
-from PIL import Image, ImageDraw, ImageFont
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    from pil import Image, ImageDraw, ImageFont
 
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *

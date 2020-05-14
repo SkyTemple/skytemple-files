@@ -17,14 +17,17 @@
 
 import os
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.kao.handler import KaoHandler
 
 dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 
-rom = NintendoDSRom.fromFile(os.path.join(dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(dir, 'skyworkcopy_edit.nds'))
 
 kao_data = rom.getFileByName('FONT/kaomado.kao')
 kao = KaoHandler.deserialize(kao_data)
@@ -42,25 +45,29 @@ with open(os.path.join(dir, 'dh', 'new051.png'), 'rb') as f:
     kao.get(51, 0).set(i)
     kao.get(51, 2).set(i)
 
-with open(os.path.join(dir, 'dh', 'new000.png'), 'rb') as f:
+with open(os.path.join(dir, 'dh', 'new468.png'), 'rb') as f:
     i = Image.open(f)
-    kao.get(0, 0).set(i)
-    kao.get(0, 2).set(i)
+    kao.get(468, 0).set(i)
 
-with open(os.path.join(dir, 'dh', 'new003.png'), 'rb') as f:
+with open(os.path.join(dir, 'dh', 'new265.png'), 'rb') as f:
     i = Image.open(f)
-    kao.get(3, 0).set(i)
-    kao.get(3, 2).set(i)
+    kao.get(265, 0).set(i)
 
-with open(os.path.join(dir, 'dh', 'new151.png'), 'rb') as f:
+with open(os.path.join(dir, 'dh', 'new040.png'), 'rb') as f:
     i = Image.open(f)
-    kao.get(151, 0).set(i)
-    kao.get(151, 2).set(i)
+    kao.get(40, 0).set(i)
 
-with open(os.path.join(dir, 'dh', 'new024.png'), 'rb') as f:
+with open(os.path.join(dir, 'dh', 'new049.png'), 'rb') as f:
     i = Image.open(f)
-    kao.get(24, 0).set(i)
-    kao.get(24, 2).set(i)
+    kao.get(49, 0).set(i)
+
+with open(os.path.join(dir, 'dh', 'new533.png'), 'rb') as f:
+    i = Image.open(f)
+    kao.get(533, 0).set(i)
+
+with open(os.path.join(dir, 'dh', 'new039.png'), 'rb') as f:
+    i = Image.open(f)
+    kao.get(39, 0).set(i)
 
 kao_data_new = KaoHandler.serialize(kao)
 #kao.get(427, 0).get().show()
@@ -78,7 +85,9 @@ kao_data = rom.getFileByName('FONT/kaomado.kao')
 kao = KaoHandler.deserialize(kao_data)
 kao.get(427, 0).get().show()
 kao.get(51, 0).get().show()
-kao.get(0, 0).get().show()
-kao.get(3, 0).get().show()
-kao.get(151, 0).get().show()
-kao.get(24, 0).get().show()
+kao.get(468, 0).get().show()
+kao.get(265, 0).get().show()
+kao.get(40, 0).get().show()
+kao.get(49, 0).get().show()
+kao.get(533, 0).get().show()
+kao.get(39, 0).get().show()

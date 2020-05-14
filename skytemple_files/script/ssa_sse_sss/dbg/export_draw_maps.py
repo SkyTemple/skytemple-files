@@ -18,7 +18,10 @@
 import os
 import sys
 
-from PIL import Image, ImageDraw, ImageFont
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    from pil import Image, ImageDraw, ImageFont
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader

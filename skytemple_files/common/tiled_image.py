@@ -21,7 +21,10 @@ import warnings
 from itertools import chain
 from typing import List, Tuple, Union
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.util import iter_bytes_4bit_le
 logger = logging.getLogger(__name__)

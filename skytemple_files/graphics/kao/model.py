@@ -18,7 +18,10 @@
 import math
 
 import warnings
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 from typing import Union, Tuple
 
 from skytemple_files.common.util import *

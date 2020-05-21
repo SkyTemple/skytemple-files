@@ -322,8 +322,9 @@ class Bpc:
                 ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
 
                 previous_end_of_tiles = new_end_of_tiles
-                bpa_animation_indices[bpaidx] += 1
-                bpa_animation_indices[bpaidx] %= bpa.number_of_frames
+                if bpa.number_of_frames > 0:
+                    bpa_animation_indices[bpaidx] += 1
+                    bpa_animation_indices[bpaidx] %= bpa.number_of_frames
 
             frames.append(self.single_chunk_to_pil(layer, chunk_idx, palettes))
             # All animations have been played, we are done!
@@ -465,6 +466,36 @@ class Bpc:
             tiles=[bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))],
             tilemap=tilemap
         )
+
+    def process_bpa_change(self, bpa_index, tiles_bpa_new):
+        """
+        Update the layer entries for BPA tile number change and also re-map all tilemappings,
+        so that they still match their original tile, even though some tiles in-between may now
+        be new or removed.
+        """
+        layer_idx = int(bpa_index / 4)
+        bpa_layer_idx = bpa_index % 4
+        # Re-map all affected tile mappings.
+        tile_idx_start = len(self.layers[layer_idx].tiles)
+        for bpaidx, n_bpas in enumerate(self.layers[layer_idx].bpas):
+            if bpaidx >= bpa_layer_idx:
+                break
+            tile_idx_start = tile_idx_start + n_bpas
+
+        old_tile_idx_end = tile_idx_start + self.layers[layer_idx].bpas[bpa_layer_idx]
+        number_tiles_added = tiles_bpa_new - self.layers[layer_idx].bpas[bpa_layer_idx] # may be negative, of course.
+        for mapping in self.layers[layer_idx].tilemap:
+            if mapping.idx > old_tile_idx_end:
+                # We need to move this back by the full amount
+                mapping.idx += number_tiles_added
+            elif mapping.idx >= tile_idx_start:
+                # We may need to set to 0, if we removed
+                relative_old_mapping = mapping.idx - tile_idx_start
+                if relative_old_mapping >= tiles_bpa_new:
+                    mapping.idx = 0
+
+        # Finally: Update layer entry.
+        self.layers[layer_idx].bpas[bpa_layer_idx] = tiles_bpa_new
 
     def _get_palette_for_tile(self, layer, i):
         """Returns the first found palette of the tile with idx i. Or 0"""

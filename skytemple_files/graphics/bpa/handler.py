@@ -28,3 +28,8 @@ class BpaHandler(DataHandler[Bpa]):
     @classmethod
     def serialize(cls, data: Bpa, **kwargs) -> bytes:
         return BpaWriter(data).write()
+
+    @classmethod
+    def new(cls):
+        """Creates a new and empty BPA model"""
+        return Bpa(None)

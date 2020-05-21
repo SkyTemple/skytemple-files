@@ -274,10 +274,10 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     file_name = path_list[-1]
     folder: Folder = rom.filenames.subfolder(dir_name)
     if folder is None:
-        raise ValueError(f"Folder {dir_name} does not exist.")
+        raise FileNotFoundError(f"Folder {dir_name} does not exist.")
     folder_first_file_id = folder.firstID
     if file_name in folder.files:
-        raise ValueError(f"File {file_name} already exists in this folder.")
+        raise FileExistsError(f"File {file_name} already exists in this folder.")
     index_of_new_file = bisect.bisect(folder.files, file_name)
     folder.files.insert(index_of_new_file, file_name)
 

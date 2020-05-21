@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
+from typing import Optional
 
 try:
     from PIL import Image
@@ -38,16 +39,25 @@ class BpaFrameInfo:
         self.unk2 = unk2
         assert self.unk2 == 0
 
+    def __str__(self):
+        return f"BpaFrameInfo({self.duration_per_frame}, {self.unk2})"
+
 
 class Bpa:
-    def __init__(self, data: bytes):
+    def __init__(self, data: Optional[bytes]):
+        self.number_of_tiles = 0
+        self.number_of_frames = 0
+        self.tiles = []
+        self.frame_info = []
+        if data is None:
+            return
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.number_of_tiles = read_uintle(data, 0, 2)
         self.number_of_frames = read_uintle(data, 2, 2)
 
         # Read image header
-        self.frame_info = []
         for i in range(0, self.number_of_frames):
             self.frame_info.append(BpaFrameInfo(
                 read_uintle(data, 4 + i*4, 2),
@@ -141,6 +151,30 @@ class Bpa:
             for tile_idx in range(0, self.number_of_tiles):
                 self.tiles.append(tiles[tile_idx * self.number_of_frames + frame_idx])
 
+        self._correct_frame_info()
+
+    def pil_to_tiles_separate(self, images: List[Image.Image]):
+        frames = []
+        first_image_dims = None
+        for image in images:
+            frames.append(from_pil(
+                image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPA_TILE_DIM,
+                image.width, image.height, optimize=False
+            )[0])
+            if first_image_dims is None:
+                first_image_dims = (image.width, image.height)
+            if (image.width, image.height) != first_image_dims:
+                raise ValueError("The dimensions of all images must be the same.")
+        self.tiles = []
+        self.number_of_frames = len(frames)
+        self.number_of_tiles = int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM))
+
+        for tile in frames:
+            self.tiles += tile
+
+        self._correct_frame_info()
+
+    def _correct_frame_info(self):
         # Correct frame info size
         len_finfo = len(self.frame_info)
         if len_finfo > self.number_of_frames:
@@ -148,11 +182,11 @@ class Bpa:
         elif len_finfo < self.number_of_frames:
             for i in range(len_finfo, self.number_of_frames):
                 # If the length is shorter, we just copy the last entry
-                self.frame_info.append(self.frame_info[len_finfo-1])
-
-    def pil_to_tiles_separate(self, images: List[Image.Image]):
-        """TODO"""
-        raise NotImplementedError("This is not implemented yet! Sorry!")
+                if len(self.frame_info) > 0:
+                    self.frame_info.append(self.frame_info[len_finfo-1])
+                else:
+                    # ... or we default to 10.
+                    self.frame_info.append(BpaFrameInfo(10, 0))
 
     def tiles_for_frame(self, frame):
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""

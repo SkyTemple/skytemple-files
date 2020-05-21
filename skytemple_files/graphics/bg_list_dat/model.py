@@ -129,3 +129,36 @@ class BgList:
                 read_bytes(bytes(entry), 16, 8).rstrip(b'\0').decode('ascii'),
                 bpas
             ))
+
+    def find_bma(self, name) -> int:
+        """Count all occurrences of this BMA in the list."""
+        count = 0
+        for l in self.level:
+            if l.bma_name == name:
+                count += 1
+        return count
+
+    def find_bpl(self, name) -> int:
+        """Count all occurrences of this BPL in the list."""
+        count = 0
+        for l in self.level:
+            if l.bpl_name == name:
+                count += 1
+        return count
+
+    def find_bpc(self, name) -> int:
+        """Count all occurrences of this BPL in the list."""
+        count = 0
+        for l in self.level:
+            if l.bpc_name == name:
+                count += 1
+        return count
+
+    def find_bpa(self, name) -> int:
+        """Count all occurrences of this BPA in the list."""
+        count = 0
+        for l in self.level:
+            for bpa in l.bpa_names:
+                if bpa == name:
+                    count += 1
+        return count

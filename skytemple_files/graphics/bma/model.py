@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import itertools
 import math
 from typing import Tuple, List
 
@@ -503,3 +503,75 @@ class Bma:
             return
         self.number_of_layers = 2
         self.layer1 = [0 for _ in range(0, self.map_width_chunks * self.map_height_chunks)]
+
+    def resize(self, new_width_chunks, new_height_chunks, new_width_camera, new_height_camera):
+        """
+        Change the dimensions of the map. Existing tiles and chunks will keep their position in the grid.
+        If the size is reduced, all tiles and chunks that are moved out of the new dimension box are removed.
+        """
+        # Layer 0
+        self.layer0 = self._if_not_none_resize(
+            self.layer0,
+            self.map_width_chunks, 0,
+            new_width_chunks, new_height_chunks
+        )
+        # Layer 1
+        self.layer1 = self._if_not_none_resize(
+            self.layer1,
+            self.map_width_chunks, 0,
+            new_width_chunks, new_height_chunks
+        )
+        # Collision
+        self.collision = self._if_not_none_resize(
+            self.collision,
+            self.map_width_camera, 0,
+            new_width_camera, new_height_camera
+        )
+        # Collision 2
+        self.collision2 = self._if_not_none_resize(
+            self.collision2,
+            self.map_width_camera, 0,
+            new_width_camera, new_height_camera
+        )
+        # Data Layer
+        self.unknown_data_block = self._if_not_none_resize(
+            self.unknown_data_block,
+            self.map_width_camera, 0,
+            new_width_camera, new_height_camera
+        )
+
+        self.map_width_chunks = new_width_chunks
+        self.map_height_chunks = new_height_chunks
+        self.map_width_camera = new_width_camera
+        self.map_height_camera = new_height_camera
+
+    @staticmethod
+    def _if_not_none_resize(target, old_w, empty_elem, new_w, new_h):
+        if target is None:
+            return target
+
+        # Convert existing data into a grid
+        rows = []
+        current_row = None
+        for i, el in enumerate(target):
+            if i % old_w == 0:
+                if current_row is not None:
+                    rows.append(current_row)
+                current_row = []
+            current_row.append(el)
+        rows.append(current_row)
+
+        # Shrink / enlarge the grid
+        # Y: Enlarge
+        for _ in range(0, new_h - len(rows)):
+            rows.append([])
+        # Y: Shrink
+        rows = rows[:new_h]
+        for row_i, row in enumerate(rows):
+            # X: Enlarge
+            for _ in range(0, new_w - len(row)):
+                row.append(empty_elem)
+            # X: Shrink
+            rows[row_i] = row[:new_w]
+
+        return list(itertools.chain.from_iterable(rows))

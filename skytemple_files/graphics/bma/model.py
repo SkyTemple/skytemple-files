@@ -441,7 +441,6 @@ class Bma:
             # We need to offset the colors in the upper image now, when we read it.
             upper_palette_palette_color_offset = how_many_palettes_lower_layer
 
-
         # Adjust layer numbers
         number_of_layers = 2 if upper_img is not None else 1
         low_map_idx = 0 if lower_img is not None else 1

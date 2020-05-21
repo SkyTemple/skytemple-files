@@ -179,6 +179,26 @@ class Bpc:
             width, height, self.tiling_width, self.tiling_height
         )
 
+    def single_chunk_to_pil(self, layer: int, chunk_idx: int, palettes: List[List[int]]) -> Image.Image:
+        """
+        Convert a single chunk of the BPC to one big PIL image. For general notes, see chunks_to_pil.
+
+        Does NOT export BPA tiles. Chunks that reference BPA tiles are replaced with empty tiles.
+
+        The palette rendering restrictions are honored (palettes 15/16 unusable).
+        """
+        # Limit to 14 palettes
+        palettes = palettes.copy()
+        for p in range(14, 16):
+            if len(palettes) > p:
+                palettes[p] = [0] * 3 * 16
+        mtidx = chunk_idx * self.tiling_width * self.tiling_height
+        return to_pil(
+            self.layers[layer].tilemap[mtidx:mtidx + 9], self.layers[layer].tiles, palettes, BPC_TILE_DIM,
+            BPC_TILE_DIM * self.tiling_width, BPC_TILE_DIM * self.tiling_height,
+            self.tiling_width, self.tiling_height
+        )
+
     def tiles_to_pil(self, layer: int, palettes: List[List[int]], width_in_tiles=20, single_palette=None) -> Image.Image:
         """
         Convert all individual tiles of the BPC into one PIL image.
@@ -257,6 +277,55 @@ class Bpc:
                 bpa_animation_indices[bpaidx] %= bpa.number_of_frames
 
             frames.append(self.chunks_to_pil(layer, palettes, width_in_mtiles))
+            # All animations have been played, we are done!
+            if bpa_animation_indices == [0, 0, 0, 0]:
+                break
+
+        # RESET the layer's tiles to NOT include the BPA tiles!
+        ldata.tiles = ldata.tiles[:orig_len]
+        return frames
+
+    def single_chunk_animated_to_pil(
+            self, layer: int, chunk_idx: int, palettes: List[List[int]], bpas: List[Bpa]
+    ) -> List[Image.Image]:
+        """
+        Exports a single chunk. For general notes see chunks_to_pil. For notes regarding the animation see
+        chunks_animated_to_pil.
+
+        TODO: Code duplication with chunks_animated_to_pil. Could probably be refactored.
+        """
+        ldata = self.layers[layer]
+        # First check if we even have BPAs to use
+        is_using_bpa = len(bpas) > 0 and any(x > 0 for x in ldata.bpas)
+        if is_using_bpa:
+            # Also check if any of the tiles in the chunk even uses BPA tiles
+            is_using_bpa = False
+            for tilem in self.get_chunk(layer, chunk_idx):
+                if tilem.idx > ldata.number_tiles:
+                    is_using_bpa = True
+                    break
+        if not is_using_bpa:
+            # Simply build the single chunks frame
+            return [self.single_chunk_to_pil(layer, chunk_idx, palettes)]
+
+        bpa_animation_indices = [0, 0, 0, 0]
+        frames = []
+
+        orig_len = len(ldata.tiles)
+        while True:  # Ended by check at end (do while)
+            previous_end_of_tiles = orig_len
+            # For each frame: Insert all BPA current frame tiles into their slots
+            for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
+
+                # Add the BPA tiles for this frame to the set of BPC tiles:
+                new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+
+                previous_end_of_tiles = new_end_of_tiles
+                bpa_animation_indices[bpaidx] += 1
+                bpa_animation_indices[bpaidx] %= bpa.number_of_frames
+
+            frames.append(self.single_chunk_to_pil(layer, chunk_idx, palettes))
             # All animations have been played, we are done!
             if bpa_animation_indices == [0, 0, 0, 0]:
                 break
@@ -367,7 +436,7 @@ class Bpc:
         self.layers[layer].tilemap[mtidx:mtidx+9] = new_tilemappings
 
     def remove_upper_layer(self):
-        """Remove the upper layer. Silently does nothing when it doesn't."""
+        """Remove the upper layer. Silently does nothing when it doesn't exist."""
         if self.number_of_layers == 1:
             return
         self.number_of_layers = 1
@@ -379,11 +448,22 @@ class Bpc:
         if self.number_of_layers == 2:
             return
         self.number_of_layers = 2
-        self.layers[1] = self.layers[0]
+        if len(self.layers) < 2:
+            self.layers.append(self.layers[0])
+        else:
+            self.layers[1] = self.layers[0]
+
+        tilemap = []
+        # The first chunk is not stored, but is always empty
+        for i in range(0, self.tiling_width * self.tiling_height):
+            tilemap.append(TilemapEntry.from_int(0))
         self.layers[0] = BpcLayer(
-            number_tiles=0,
-            tilemap_len=0,
-            bpas=[0, 0, 0, 0]
+            number_tiles=1,
+            tilemap_len=1,
+            bpas=[0, 0, 0, 0],
+            # The first tile is not stored, but is always empty
+            tiles=[bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))],
+            tilemap=tilemap
         )
 
     def _get_palette_for_tile(self, layer, i):

@@ -146,3 +146,10 @@ class Bpl:
             else:
                 f_palettes.append(self.palettes[i])
         return f_palettes
+
+    def is_palette_affected_by_animation(self, pal_idx):
+        """Returns whether or not the palette with that index is affected by animation"""
+        if not self.has_palette_animation:
+            return False
+        spec = self.animation_specs[pal_idx]
+        return spec.number_of_frames > 0

@@ -545,6 +545,14 @@ class Bma:
         self.map_width_camera = new_width_camera
         self.map_height_camera = new_height_camera
 
+    def place_chunk(self, layer_id: int, x: int, y: int, chunk_index: int):
+        """Place the chunk with the given ID at the X and Y position. No error checking is done."""
+        bma_index = y * self.map_width_chunks + x
+        if layer_id == 0:
+            self.layer0[bma_index] = chunk_index
+        else:
+            self.layer1[bma_index] = chunk_index
+
     @staticmethod
     def _if_not_none_resize(target, old_w, empty_elem, new_w, new_h):
         if target is None:

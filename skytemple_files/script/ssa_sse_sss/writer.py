@@ -80,8 +80,8 @@ class SsaWriter:
             for obj in layer.objects:
                 object_bytes += self.uint16(obj.object.id)
                 object_bytes += self.uint16(obj.pos.direction.id)
-                object_bytes += self.sint16(obj.unk4)
-                object_bytes += self.sint16(obj.unk6)
+                object_bytes += self.sint16(obj.hitbox_w)
+                object_bytes += self.sint16(obj.hitbox_h)
                 object_bytes += self.uint16(obj.pos.x_relative)
                 object_bytes += self.uint16(obj.pos.y_relative)
                 object_bytes += self.uint16(obj.pos.x_offset)
@@ -93,8 +93,8 @@ class SsaWriter:
             for prf in layer.performers:
                 performer_bytes += self.uint16(prf.type)
                 performer_bytes += self.uint16(prf.pos.direction.id)
-                performer_bytes += self.sint16(prf.unk4)
-                performer_bytes += self.sint16(prf.unk6)
+                performer_bytes += self.sint16(prf.hitbox_w)
+                performer_bytes += self.sint16(prf.hitbox_h)
                 performer_bytes += self.uint16(prf.pos.x_relative)
                 performer_bytes += self.uint16(prf.pos.y_relative)
                 performer_bytes += self.uint16(prf.pos.x_offset)

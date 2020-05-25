@@ -244,7 +244,7 @@ class Pmd2ScriptData(AutoString):
         self._objects = value
 
     @property
-    def objects__by_id(self):
+    def objects__by_id(self) -> Dict[int, Pmd2ScriptObject]:
         return {o.id: o for o in self.objects}
 
     @property
@@ -388,7 +388,7 @@ class Pmd2ScriptData(AutoString):
         self._level_entities = value
 
     @property
-    def level_entities__by_id(self):
+    def level_entities__by_id(self) -> Dict[int, Pmd2ScriptEntity]:
         return {o.id: o for o in self.level_entities}
 
     @property

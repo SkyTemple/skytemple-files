@@ -20,10 +20,14 @@ from typing import Union, Tuple
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptDirection
 from skytemple_files.common.util import AutoString
+from skytemple_files.graphics.bpc.model import BPC_TILE_DIM
+
 logger = logging.getLogger(__name__)
 
 
 TILE_SIZE = 8
+ACTOR_DEFAULT_HITBOX_W = 2 * BPC_TILE_DIM
+ACTOR_DEFAULT_HITBOX_H = 1 * BPC_TILE_DIM
 
 
 class SsaPosition(AutoString):
@@ -48,17 +52,13 @@ class SsaPosition(AutoString):
     @property
     def x_absolute(self):
         offset = 0
-        if self.x_offset == 2 or self.x_offset == 3:
+        if self.x_offset >= 2:
             offset = 4
-        elif self.x_offset >= 4:
-            offset = 16
         return self.x_relative * TILE_SIZE + offset
 
     @property
     def y_absolute(self):
         offset = 0
-        if self.y_offset == 2 or self.y_offset == 3:
+        if self.y_offset >= 2:
             offset = 4
-        elif self.y_offset >= 4:
-            offset = 16
         return self.y_relative * TILE_SIZE + offset

@@ -19,11 +19,11 @@ from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
 class SsaPerformer(AutoString):
-    def __init__(self, type, unk4, unk6, pos: SsaPosition, unk10, unk12):
+    def __init__(self, type, hitbox_w, hitbox_h, pos: SsaPosition, unk10, unk12):
         # TODO: This is an enum: An enum value from 0 to 5 that dictates what entity will be picked to be this performer.
         self.type: int = type
-        self.unk4 = unk4
-        self.unk6 = unk6
+        self.hitbox_w = hitbox_w
+        self.hitbox_h = hitbox_h
         self.pos = pos
         self.unk10 = unk10
         self.unk12 = unk12

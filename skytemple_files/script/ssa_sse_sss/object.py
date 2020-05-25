@@ -24,14 +24,14 @@ logger = logging.getLogger(__name__)
 
 
 class SsaObject(AutoString):
-    def __init__(self, scriptdata: Pmd2ScriptData, object_id, unk4, unk6, pos: SsaPosition, script_id, unk12):
+    def __init__(self, scriptdata: Pmd2ScriptData, object_id, htibox_w, hitbox_h, pos: SsaPosition, script_id, unk12):
         try:
             self.object = scriptdata.objects__by_id[object_id]
         except KeyError:
             logger.warning(f"Unknown object id: {object_id}")
             self.object = Pmd2ScriptObject(object_id, 0, 0, 0, 'UNKNOWN')
-        self.unk4 = unk4
-        self.unk6 = unk6
+        self.hitbox_w = htibox_w
+        self.hitbox_h = hitbox_h
         self.pos = pos
         self.script_id = script_id
         self.unk12 = unk12

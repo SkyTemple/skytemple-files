@@ -124,7 +124,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         for i, object in enumerate(layer.objects):
             triangle(draw, object.pos.x_absolute, object.pos.y_absolute, COLOR_OBJECTS, object.pos.direction.id)
             draw.text((object.pos.x_absolute, object.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
-            object_text = f"{i}: {object.object.name} - S:{object.script_id} - Unks: ({object.unk4},{object.unk12})"
+            object_text = f"{i}: {object.object.name} - S:{object.script_id} - Unks: ({object.hitbox_w},{object.unk12})"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))
 
         # Performers
@@ -133,7 +133,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         for i, performer in enumerate(layer.performers):
             triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction.id)
             draw.text((performer.pos.x_absolute, performer.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
-            object_text = f"{i}: T:{performer.type} - Unks: ({performer.unk4},{performer.unk6},{performer.unk10},{performer.unk12})"
+            object_text = f"{i}: T:{performer.type} - Unks: ({performer.hitbox_w},{performer.hitbox_h},{performer.unk10},{performer.unk12})"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))
 
         # Events

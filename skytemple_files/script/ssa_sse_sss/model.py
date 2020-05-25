@@ -126,8 +126,8 @@ class Ssa:
                 lst.append(SsaObject(
                     scriptdata=self._scriptdata,
                     object_id=read_uintle(entry, 0x0, 2),
-                    unk4=read_sintle(entry, 0x4, 2),
-                    unk6=read_sintle(entry, 0x6, 2),
+                    htibox_w=read_sintle(entry, 0x4, 2),
+                    hitbox_h=read_sintle(entry, 0x6, 2),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),
@@ -147,8 +147,8 @@ class Ssa:
             for entry in iter_bytes(data, PERFORMERS_ENTRY_LEN, self.header.performer_pointer, self.header.performer_end_pointer):
                 lst.append(SsaPerformer(
                     type=read_uintle(entry, 0x0, 2),
-                    unk4=read_sintle(entry, 0x4, 2),
-                    unk6=read_sintle(entry, 0x6, 2),
+                    hitbox_w=read_sintle(entry, 0x4, 2),
+                    hitbox_h=read_sintle(entry, 0x6, 2),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
                         direction=read_uintle(entry, 0x2, 2),

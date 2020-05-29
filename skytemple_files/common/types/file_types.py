@@ -20,6 +20,8 @@ from skytemple_files.compression.bma_layer_nrl.handler import BmaLayerNrlHandler
 from skytemple_files.compression.bpc_image.handler import BpcImageHandler
 from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
 from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
+from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
+from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
 from skytemple_files.graphics.bma.handler import BmaHandler
@@ -40,6 +42,7 @@ class FileType:
     UNKNOWN = None
     KAO = KaoHandler
     AT4PX = At4pxHandler
+    PKDPX = PkdpxHandler
     PX = PxHandler
     BGP = BgpHandler
     BG_LIST_DAT = BgListDatHandler
@@ -58,3 +61,4 @@ class FileType:
     SSE = SsaHandler
     SSS = SsaHandler
     SSB = SsbHandler
+    BIN_PACK = BinPackHandler

@@ -21,6 +21,7 @@ setup(
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
         'explorerscript >= 0.0.2a1',
+        'skytemple-rust >= 0.0.1',
         'typing-extensions == 3.7.4.2; python_version<"3.7"'
     ],
     classifiers=[

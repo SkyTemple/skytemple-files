@@ -17,6 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
+import warnings
 from typing import Optional
 
 from skytemple_files.container.bin_pack.model import BinPack
@@ -84,7 +85,7 @@ def load_map_bg(rom, map_bg_entry, map_name):
     global loaded_map_bg_images
     if map_name not in loaded_map_bg_images:
         loaded_map_bg_images[map_name] = map_bg_entry.get_bma(rom).to_pil(
-            map_bg_entry.get_bpc(rom), map_bg_entry.get_bpl(rom).palettes, map_bg_entry.get_bpas(rom), False, False
+            map_bg_entry.get_bpc(rom), map_bg_entry.get_bpl(rom), map_bg_entry.get_bpas(rom), False, False
         )[0]
 
     return loaded_map_bg_images[map_name]
@@ -126,9 +127,14 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
     if obj.object.name == 'NULL':
         return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_ACTOR, obj.pos.direction.id)
 
-    sprite = FileType.WAN.deserialize(
-        rom.getFileByName(f'GROUND/{obj.object.name}.wan')
-    )
+    try:
+        sprite = FileType.WAN.deserialize(
+            rom.getFileByName(f'GROUND/{obj.object.name}.wan')
+        )
+    except ValueError as e:
+        warnings.warn(f"Failed to render a sprite, replaced with placeholder ({obj}): {e}")
+        return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_ACTOR, obj.pos.direction.id)
+
     ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
     frame_id = obj.pos.direction.id - 1 if obj.pos.direction.id > 0 else 0
     if frame_id > len(ani_group) - 1:

@@ -30,9 +30,6 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
 bin = rom.getFileByName('MAP_BG/bg_list.dat')
 bg_list = BgListDatHandler.deserialize(bin)
 
-possible_values_for_unk6 = {}
-possible_values_for_unk7 = {}
-
 for i, l in enumerate(bg_list.level):
     maps = [
         #'P01P01A',  # OK: Map with collision
@@ -66,12 +63,6 @@ for i, l in enumerate(bg_list.level):
             assert bma.map_height_camera == bma.map_height_chunks * bma.tiling_height
         except AssertionError:
             print("DIMENSION ASSERTION FAILED")
-        if bma.unk6 not in possible_values_for_unk6:
-            possible_values_for_unk6[bma.unk6] = []
-        possible_values_for_unk6[bma.unk6].append(bma)
-        if bma.number_of_collision_layers not in possible_values_for_unk7:
-            possible_values_for_unk7[bma.number_of_collision_layers] = []
-        possible_values_for_unk7[bma.number_of_collision_layers].append(bma)
         setattr(bma, 'dbg_name', l.bma_name)
 
         bpas = l.get_bpas(rom)
@@ -85,14 +76,20 @@ for i, l in enumerate(bg_list.level):
             bma.to_pil_single_layer(bpc, bpl.palettes, bpas, 1).save(filename_h + '_HIGHER.png')
 
         # Saving animated map!
-        # Default for only one frame, doesn't really matter
-        duration = 1000
+        bpa_duration = -1
+        pal_ani_duration = -1
         if len(non_none_bpas) > 0:
             # Assuming the game runs 60 FPS.
-            duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].duration_per_frame)
-        frames = bma.to_pil(bpc, bpl.palettes, bpas)
+            bpa_duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].duration_per_frame)
+        if bpl.has_palette_animation:
+            pal_ani_duration = round(1000 / 60 * max(spec.duration_per_frame for spec in bpl.animation_specs))
+        duration = max(bpa_duration, pal_ani_duration)
+        if duration == -1:
+            # Default for only one frame, doesn't really matter
+            duration = 1000
+        frames = bma.to_pil(bpc, bpl, bpas, include_collision=False, include_unknown_data_block=False)
         frames[0].save(
-            filename_h + '.webp',
+            filename_h + '.gif',
             save_all=True,
             append_images=frames[1:],
             duration=duration,
@@ -104,22 +101,3 @@ for i, l in enumerate(bg_list.level):
     except (NotImplementedError, SystemError) as ex:
         print(f"error for {l.bma_name}: {repr(ex)}")
         print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))
-
-print("=====")
-print(f"Possible values for unk6: {possible_values_for_unk6.keys()}")
-print(f"Possible values for unk7: {possible_values_for_unk7.keys()}")
-
-print("-----")
-print("Levels with unk7=0")
-for l in possible_values_for_unk7[0]:
-    print(l.dbg_name)
-
-print("-----")
-print("Levels with unk7=1")
-for l in possible_values_for_unk7[1]:
-    print(l.dbg_name)
-
-print("-----")
-print("Levels with unk7=2")
-for l in possible_values_for_unk7[2]:
-    print(l.dbg_name)

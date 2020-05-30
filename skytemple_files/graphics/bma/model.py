@@ -272,8 +272,8 @@ class Bma:
         return fimg
 
     def to_pil(
-            self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa],
-            include_collision=True, include_unknown_data_block=True
+            self, bpc: Bpc, bpl: Bpl, bpas: List[Bpa],
+            include_collision=True, include_unknown_data_block=True, pal_ani=True, single_frame=False
     ) -> List[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
@@ -284,8 +284,7 @@ class Bma:
         If BPAs are using a different amount of frames per tile, the length of returned list of images will be the lowest
         common multiple of the different frame lengths.
 
-        Does not include palette animations. You can apply them by switching out the palettes of the PIL
-        using the information provided by the BPL.
+        If pal_ani=True, then also includes palette animations.
 
         The list of bpas must be the one contained in the bg_list. It needs to contain 8 slots, with empty
         slots being None.
@@ -301,7 +300,7 @@ class Bma:
 
         final_images = []
         lower_layer_bpc = 0 if bpc.number_of_layers == 1 else 1
-        chunks_lower = bpc.chunks_animated_to_pil(lower_layer_bpc, palettes, bpas, 1)
+        chunks_lower = bpc.chunks_animated_to_pil(lower_layer_bpc, bpl.palettes, bpas, 1)
         for img in chunks_lower:
             fimg = Image.new('P', (width_map, height_map))
             fimg.putpalette(img.getpalette())
@@ -316,13 +315,15 @@ class Bma:
                 )
 
             final_images.append(fimg)
+            if single_frame:
+                break
 
         if bpc.number_of_layers > 1:
             # Overlay higher layer tiles
-            chunks_higher = bpc.chunks_animated_to_pil(0, palettes, bpas, 1)
+            chunks_higher = bpc.chunks_animated_to_pil(0, bpl.palettes, bpas, 1)
             len_lower = len(chunks_lower)
             len_higher = len(chunks_higher)
-            if len_higher != len_lower:
+            if len_higher != len_lower and not single_frame:
                 # oh fun! We are missing animations for one of the layers, let's stretch to the lowest common multiple
                 lm = lcm(len_higher, len_lower)
                 for i in range(len_lower, lm):
@@ -344,6 +345,8 @@ class Bma:
                         (x * chunk_width, y * chunk_height),
                         mask=cropped_img_mask.convert('1')
                     )
+                if single_frame:
+                    break
 
         final_images_were_rgb_converted = False
         if include_collision and self.number_of_collision_layers > 0:
@@ -389,6 +392,22 @@ class Bma:
                             font=fnt,
                             fill=(0x00, 0xff, 0x00)
                         )
+
+        # Apply palette animations
+        if pal_ani and bpl.has_palette_animation and len(bpl.animation_palette) > 0 and not single_frame:
+            old_images = final_images
+            old_images_i = 0
+            final_images = []
+
+            for pal_ani in range(0, len(bpl.animation_palette)):
+                current_img = old_images[old_images_i].copy()
+                # Switch out the palette with that from the palette animation
+                pal_for_frame = itertools.chain.from_iterable(bpl.apply_palette_animations(pal_ani))
+                current_img.putpalette(pal_for_frame)
+                final_images.append(current_img)
+                old_images_i += 1
+                if old_images_i >= len(old_images):
+                    old_images_i = 0
 
         return final_images
 

@@ -22,6 +22,7 @@ from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
 from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
+from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
 from skytemple_files.graphics.bma.handler import BmaHandler
@@ -65,3 +66,4 @@ class FileType:
     SSS = SsaHandler
     SSB = SsbHandler
     BIN_PACK = BinPackHandler
+    MD = MdHandler

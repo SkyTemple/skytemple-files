@@ -32,12 +32,22 @@ class SsaLayer(AutoString):
     A single layer of an SSA file.
     """
     def __init__(self,
-                 header: SsaHeader,
-                 actors_count, actors_pointer,
-                 objects_count, objects_pointer,
-                 performers_count, performers_pointer,
-                 events_count, events_pointer,
-                 unk10_block_count, unk10_block_pointer):
+                 header: SsaHeader = None,
+                 actors_count=None, actors_pointer=None,
+                 objects_count=None, objects_pointer=None,
+                 performers_count=None, performers_pointer=None,
+                 events_count=None, events_pointer=None,
+                 unk10_block_count=None, unk10_block_pointer=None):
+
+        self.actors: List[SsaActor] = []
+        self.objects: List[SsaObject] = []
+        self.performers: List[SsaPerformer] = []
+        self.events: List[SsaEvent] = []
+        self.unk10s: List[SsaUnk10] = []
+
+        if header is None:
+            # Empty layer
+            return
 
         # These fields are only used to build the layer data in self.fill_data.
         # If a value is (start offset of data block - 2), then it's count is 0.
@@ -51,12 +61,6 @@ class SsaLayer(AutoString):
         self._performers_first_offset = None
         self._events_first_offset = None
         self._unk10_block_first_offset = None
-
-        self.actors: List[SsaActor] = []
-        self.objects: List[SsaObject] = []
-        self.performers: List[SsaPerformer] = []
-        self.events: List[SsaEvent] = []
-        self.unk10s: List[SsaUnk10] = []
 
         # It's also possible everything is just 0.
         if actors_pointer == 0 and objects_pointer == 0 and performers_pointer == 0 and events_pointer == 0 and unk10_block_pointer == 0:

@@ -17,7 +17,7 @@
 from typing import List, Tuple
 
 from PIL import Image
-from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame
+from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation
 
 
 class MetaFramePositioningSpecs:
@@ -67,6 +67,17 @@ class Wan:
     def frame_groups(self):
         return self.model.meta_frame_store.meta_frame_groups
 
+    @property
+    def anim_groups(self):
+        return self.model.anim_store.anim_groups
+
+    @property
+    def animations(self):
+        return self.model.anim_store.animations
+
+    def get_animations_for_group(self, anim_group: Tuple[int, int]) -> List[Animation]:
+        return self.model.anim_store.animations[anim_group[0]:anim_group[0]+anim_group[1]]
+
     def render_frame_group(self, frame_group: MetaFrameGroup) -> Tuple[Image.Image, Tuple[int, int]]:
         """Returns the frame group as an image and it's center position as a tuple."""
         specs: List[MetaFramePositioningSpecs] = []
@@ -74,16 +85,13 @@ class Wan:
         for mf_i, meta_frame_id in enumerate(frame_group.meta_frames_id):
             meta_frame: MetaFrame = self.model.meta_frame_store.meta_frames[meta_frame_id]
             meta_frame_img = self.model.image_store.images[meta_frame.image_index]
-            resolution = meta_frame.resolution
 
             im = Image.frombuffer('RGBA',
-                                  (resolution.x, resolution.y),
+                                  (meta_frame_img.width, meta_frame_img.height),
                                   bytearray(meta_frame_img.img),
                                   'raw', 'RGBA', 0, 1)
-            if resolution is None:
-                raise NotImplementedError("Images without resolutions are not supported at the moment.")
 
-            specs.append(MetaFramePositioningSpecs(im, resolution.x, resolution.y,
+            specs.append(MetaFramePositioningSpecs(im, meta_frame_img.width, meta_frame_img.height,
                                                    meta_frame.offset_x, meta_frame.offset_y))
 
         w, h, cx, cy = MetaFramePositioningSpecs.process(specs)
@@ -93,7 +101,8 @@ class Wan:
             final_img.paste(
                 frame.img,
                 (frame.final_relative_x, frame.final_relative_y,
-                 frame.final_relative_x + frame.width, frame.final_relative_y + frame.height)
+                 frame.final_relative_x + frame.width, frame.final_relative_y + frame.height),
+                frame.img
             )
 
         return final_img, (cx, cy)

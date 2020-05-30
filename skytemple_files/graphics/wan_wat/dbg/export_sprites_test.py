@@ -18,6 +18,7 @@ import os
 import sys
 
 from ndspy.rom import NintendoDSRom
+from skytemple_rust.pmd_wan import AnimationFrame
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_files_from_rom_with_extension
@@ -42,12 +43,16 @@ for path in get_files_from_rom_with_extension(rom, 'wan'):
         continue
 
     os.makedirs(os.path.join(output_dir, basename), exist_ok=True)
-    for i, group in enumerate(wan_model.frame_groups):
-        try:
-            img, (cx, cy) = wan_model.render_frame_group(group)
-            img.save(os.path.join(output_dir, basename, f'{i}.png'))
-        except ValueError as e:
-            print(f"Error for {basename}/{i}: {e}", file=sys.stderr)
+    for ag_i, group in enumerate(wan_model.anim_groups):
+        if group is None:
+            continue
+        for ani_i, ani in enumerate(wan_model.get_animations_for_group(group)):
+            mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
+            try:
+                img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+                img.save(os.path.join(output_dir, basename, f'{ag_i}_{ani_i}.png'))
+            except ValueError as e:
+                print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)
 
 # Actor Sprites
 pack_file = rom.getFileByName('MONSTER/monster.bin')
@@ -59,9 +64,13 @@ for s_i, sprite in enumerate(bin_pack):
     basename = f'actor_{s_i}'
 
     os.makedirs(os.path.join(output_dir, basename), exist_ok=True)
-    for i, group in enumerate(wan_model.frame_groups):
-        try:
-            img, (cx, cy) = wan_model.render_frame_group(group)
-            img.save(os.path.join(output_dir, basename, f'{i}.png'))
-        except ValueError as e:
-            print(f"Error for {basename}/{i}: {e}", file=sys.stderr)
+    for ag_i, group in enumerate(wan_model.anim_groups):
+        if group is None:
+            continue
+        for ani_i, ani in enumerate(wan_model.get_animations_for_group(group)):
+            mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
+            try:
+                img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+                img.save(os.path.join(output_dir, basename, f'{ag_i}_{ani_i}.png'))
+            except ValueError as e:
+                print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)

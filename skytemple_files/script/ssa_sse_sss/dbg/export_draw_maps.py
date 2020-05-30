@@ -17,6 +17,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
+from typing import Optional
+
+from skytemple_files.container.bin_pack.model import BinPack
+from skytemple_files.data.md.model import Md
+from skytemple_files.script.ssa_sse_sss.actor import SsaActor
+from skytemple_files.script.ssa_sse_sss.object import SsaObject
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -47,18 +53,22 @@ TXT_AREA_SIZE = 200
 MAP_WIDTH = 900
 
 loaded_map_bg_images = {}
+monster_bin_pack_file: Optional[BinPack] = None
+monster_md: Optional[Md] = None
+
 def draw_maps_main():
+    global monster_bin_pack_file, monster_md
     os.makedirs(output_dir, exist_ok=True)
 
     rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+    monster_bin_pack_file = FileType.BIN_PACK.deserialize(rom.getFileByName('MONSTER/monster.bin'))
+    monster_md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
 
     script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
     map_bg_entry_level_list = FileType.BG_LIST_DAT.deserialize(rom.getFileByName('MAP_BG/bg_list.dat')).level
 
     for script_map in script_info['maps'].values():
-        if script_map['name'] != 'G01P01A':
-            continue
         # Map BGs are NOT *actually* mapped 1:1 to scripts. They are loaded via Opcode. However it turns out, using the BPL name
         # is an easy way to map them.
         map_bg_entry = next(x for x in map_bg_entry_level_list if x.bpl_name == script_map['name'])
@@ -90,6 +100,47 @@ def draw_grid(draw, image):
         draw.line(line, fill=(0, 0, 0, 40))
 
 
+def draw_actor(img: Image.Image, draw, actor: SsaActor):
+    """Draws the sprite for an actor"""
+
+    if actor.actor.entid == 0:
+        return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTOR, actor.pos.direction.id)
+
+    actor_sprite_id = monster_md[actor.actor.entid].sprite_index
+
+    sprite = FileType.WAN.deserialize(
+        FileType.PKDPX.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
+    )
+    ani_group = sprite.get_animations_for_group(sprite.anim_groups[11])
+    frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0
+    mfg_id = ani_group[frame_id].frames[0].frame_id
+
+    sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
+    render_x = actor.pos.x_absolute - cx
+    render_y = actor.pos.y_absolute - cy
+    img.paste(sprite_img, (render_x, render_y), sprite_img)
+
+def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
+    """Draws the sprite for an object"""
+
+    if obj.object.name == 'NULL':
+        return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_ACTOR, obj.pos.direction.id)
+
+    sprite = FileType.WAN.deserialize(
+        rom.getFileByName(f'GROUND/{obj.object.name}.wan')
+    )
+    ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
+    frame_id = obj.pos.direction.id - 1 if obj.pos.direction.id > 0 else 0
+    if frame_id > len(ani_group) - 1:
+        frame_id = 0
+    mfg_id = ani_group[frame_id].frames[0].frame_id
+
+    sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
+    render_x = obj.pos.x_absolute - cx
+    render_y = obj.pos.y_absolute - cy
+    img.paste(sprite_img, (render_x, render_y), sprite_img)
+
+
 def process(rom, map_bg_entry, map_name, file_name):
     print(f"Processing {file_name}...")
 
@@ -113,7 +164,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         text_x = 20
         draw.text((text_x, text_y), "Actors:", COLOR_ACTOR)
         for i, actor in enumerate(layer.actors):
-            triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTOR, actor.pos.direction.id)
+            draw_actor(img, draw, actor)
             draw.text((actor.pos.x_absolute, actor.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
             actor_text = f"{i}: {actor.actor.name} - S:{actor.script_id}"
             draw.text((text_x, text_y + 10 + (i * 10)), actor_text, (0, 0, 0))
@@ -122,7 +173,7 @@ def process(rom, map_bg_entry, map_name, file_name):
         text_x = 200
         draw.text((text_x, text_y), "Objects:", COLOR_OBJECTS)
         for i, object in enumerate(layer.objects):
-            triangle(draw, object.pos.x_absolute, object.pos.y_absolute, COLOR_OBJECTS, object.pos.direction.id)
+            draw_object(img, draw, object, rom)
             draw.text((object.pos.x_absolute, object.pos.y_absolute + TILE_SIZE), str(i), (0, 0, 0))
             object_text = f"{i}: {object.object.name} - S:{object.script_id} - Unks: ({object.hitbox_w},{object.unk12})"
             draw.text((text_x, text_y + 10 + (i * 10)), object_text, (0, 0, 0))

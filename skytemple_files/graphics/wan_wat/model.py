@@ -16,7 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Tuple
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation
 
 

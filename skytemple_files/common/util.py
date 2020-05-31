@@ -26,6 +26,9 @@ from skytemple_files.common import string_codec
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
+# Useful files:
+MONSTER_MD = 'BALANCE/monster.md'
+MONSTER_BIN = 'MONSTER/monster.bin'
 
 DEBUG = False
 

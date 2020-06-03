@@ -17,7 +17,7 @@
 from typing import List, Tuple
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageOps
 except ImportError:
     from pil import Image
 from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation
@@ -93,6 +93,10 @@ class Wan:
                                   (meta_frame_img.width, meta_frame_img.height),
                                   bytearray(meta_frame_img.img),
                                   'raw', 'RGBA', 0, 1)
+            if meta_frame.h_flip:
+                im = ImageOps.mirror(im)
+            if meta_frame.v_flip:
+                im = ImageOps.flip(im)
 
             specs.append(MetaFramePositioningSpecs(im, meta_frame_img.width, meta_frame_img.height,
                                                    meta_frame.offset_x, meta_frame.offset_y))

@@ -75,6 +75,9 @@ class SsbWriter:
         # 4 bytes of padding, written at the end
         self.bytes_written += SSB_PADDING_BEFORE_ROUTINE_INFO
 
+        if len(self.model.strings) == 0:
+            # Init empty string list
+            self.model.strings = {lang_name: [] for lang_name in header_cls.supported_langs()}
         number_of_strings = len(self.model.strings[next(iter(self.model.strings.keys()))])
 
         # Routine Info - The offsets used for the routine starts MUST already be correctly calculated!

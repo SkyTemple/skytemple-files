@@ -42,3 +42,18 @@ class SsbHandler(DataHandler[Ssb]):
             static_data = Pmd2XmlReader.load_default()
 
         return SsbWriter(data, static_data).write()
+
+    @classmethod
+    def create(cls, static_data: Pmd2Data = None) -> Ssb:
+        """Create a new empty script"""
+        if static_data is None:
+            static_data = Pmd2XmlReader.load_default()
+
+        if static_data.game_region == GAME_REGION_US:
+            header_cls = SsbHeaderUs
+        elif static_data.game_region == GAME_REGION_EU:
+            header_cls = SsbHeaderEu
+        else:
+            raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
+
+        return Ssb.create_empty(static_data.script_data, header_cls.supported_langs())

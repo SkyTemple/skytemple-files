@@ -23,7 +23,6 @@ from appdirs import user_config_dir
 
 from explorerscript import EXPLORERSCRIPT_EXT
 from explorerscript.source_map import SourceMap
-from skytemple_files.common.script_util import SSB_EXT
 
 DIRECTORY_NAME_SUFFIX = '.skytemple'
 SCRIPT_DIR = 'SCRIPT'

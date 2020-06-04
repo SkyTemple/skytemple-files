@@ -19,13 +19,14 @@ from typing import Dict, Optional
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
-from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbWarning, SsbRoutineInfo, \
+from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbRoutineInfo, \
     SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam, SsbOpParamPositionMarker
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
+
 logger = logging.getLogger(__name__)
 
 
@@ -40,23 +41,25 @@ class SkyTempleSsbOperation(SsbOperation):
 
 class Ssb:
     @classmethod
-    def create_empty(cls, scriptdata: Pmd2ScriptData):
-        return cls(None, None, None, scriptdata)
+    def create_empty(cls, scriptdata: Pmd2ScriptData, supported_langs=None):
+        return cls(None, None, None, scriptdata, if_empty_supported_langs=supported_langs)
 
     def __init__(
             self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
-            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData
+            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData, if_empty_supported_langs=None
     ):
 
         self._scriptdata = scriptdata
 
         if data is None:
             # Empty model mode, for the ScriptCompiler.
+            if if_empty_supported_langs is None:
+                if_empty_supported_langs = []
             self.original_binary_data = bytes()
             self.routine_info = []
             self.routine_ops = []
             self.constants = []
-            self.strings = []
+            self.strings = {lang_name: [] for lang_name in if_empty_supported_langs}
             return
 
         logger.debug("Deserializing SSB model (size: %d)...", len(data))
@@ -279,9 +282,17 @@ class Ssb:
                                 new_params.append(param)
                                 logger.warning(f"Unknown direction id: {param}")
                         elif argument_spec.type == 'String':
-                            new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
+                            try:
+                                new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
+                            except IndexError:
+                                # Fall back to const table
+                                new_params.append(SsbOpParamConstString(self.constants[param]))
                         elif argument_spec.type == 'ConstString':
-                            new_params.append(SsbOpParamConstString(self.constants[param]))
+                            try:
+                                new_params.append(SsbOpParamConstString(self.constants[param]))
+                            except IndexError:
+                                # Fall back to lang string
+                                new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
                         elif argument_spec.type == 'PositionMark':
                             x_offset = y_offset = x_relative = y_relative = 0
                             try:

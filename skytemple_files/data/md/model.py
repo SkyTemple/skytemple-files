@@ -21,6 +21,7 @@ from skytemple_files.common.util import *
 
 
 NUM_ENTITIES = 600
+MD_ENTRY_LEN = 68
 
 
 class Gender(Enum):
@@ -302,8 +303,8 @@ class Md:
         self.entries: List[MdEntry] = []
         self._entries_by_entid: Dict[int, List[Tuple[int, MdEntry]]] = {}
         for i in range(0, number_entries):
-            rs = lambda offset, length=2: read_sintle(data, 8 + (i * 68) + offset, length)
-            ru = lambda offset, length=2: read_uintle(data, 8 + (i * 68) + offset, length)
+            rs = lambda offset, length=2: read_sintle(data, 8 + (i * MD_ENTRY_LEN) + offset, length)
+            ru = lambda offset, length=2: read_uintle(data, 8 + (i * MD_ENTRY_LEN) + offset, length)
 
             entry: MdEntry = MdEntry(**{
                 'md_index': i,

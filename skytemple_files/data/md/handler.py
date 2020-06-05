@@ -18,6 +18,7 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
 from skytemple_files.data.md.model import Md
+from skytemple_files.data.md.writer import MdWriter
 
 
 class MdHandler(DataHandler[Md]):
@@ -34,5 +35,4 @@ class MdHandler(DataHandler[Md]):
 
     @classmethod
     def serialize(cls, data: Md, **kwargs) -> bytes:
-        # Sorry!
-        raise NotImplementedError()
+        return MdWriter(data).write()

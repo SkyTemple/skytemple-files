@@ -20,6 +20,9 @@ from typing import Dict
 from skytemple_files.common.util import *
 
 
+NUM_ENTITIES = 600
+
+
 class Gender(Enum):
     INVALID = 0
     MALE = 1
@@ -27,7 +30,7 @@ class Gender(Enum):
     GENDERLESS = 3
 
 
-class Type(Enum):
+class PokeType(Enum):
     NONE = 0x00
     NORMAL = 0x01
     FIRE = 0x02
@@ -247,8 +250,8 @@ class MdEntry(AutoString):
         self.sprite_index: int = -1
         self.gender: Gender = Gender.INVALID
         self.body_size: int = -1
-        self.type_primary: Type = Type.NONE
-        self.type_secondary: Type = Type.NONE
+        self.type_primary: PokeType = PokeType.NONE
+        self.type_secondary: PokeType = PokeType.NONE
         self.movement_type: MovementType = MovementType.STANDARD
         self.iq_group: IQGroup = IQGroup.INVALID
         self.ability_primary: Ability = Ability.NONE
@@ -284,6 +287,10 @@ class MdEntry(AutoString):
                 raise KeyError(f"Unknown attribute key {key}.")
             setattr(self, key, data[key])
 
+    @property
+    def md_index_base(self):
+        return self.md_index % NUM_ENTITIES
+
 
 class Md:
     def __init__(self, data: bytes):
@@ -311,8 +318,8 @@ class Md:
                 'sprite_index': ru(0x10),
                 'gender': Gender(ru(0x12, 1)),
                 'body_size': ru(0x13, 1),
-                'type_primary': Type(ru(0x14, 1)),
-                'type_secondary': Type(ru(0x15, 1)),
+                'type_primary': PokeType(ru(0x14, 1)),
+                'type_secondary': PokeType(ru(0x15, 1)),
                 'movement_type': MovementType(ru(0x16, 1)),
                 'iq_group': IQGroup(ru(0x17, 1)),
                 'ability_primary': Ability(ru(0x18, 1)),

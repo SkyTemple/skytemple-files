@@ -62,7 +62,7 @@ class KaoImage:
 
     def get_internal(self) -> bytes:
         """Returns the portrait as 16 color palette followed by AT4PX compressed image data"""
-        return self.pal_data + self.compressed_img_data
+        return bytes(self.pal_data) + bytes(self.compressed_img_data)
 
     def set(self, pil: Image) -> 'KaoImage':
         """Sets the portrait using a PIL image with 16-bit color palette as input"""

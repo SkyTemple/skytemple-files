@@ -46,16 +46,21 @@ class ArmPatcher:
     def __init__(self, rom: NintendoDSRom):
         self.rom = rom
 
-    def apply(self, patch: Pmd2Patch, binaries: Dict[str, Pmd2Binary], patch_file_dir: str):
+    def apply(self, patch: Pmd2Patch, binaries: Dict[str, Pmd2Binary], patch_file_dir: str, stub_path: str):
         try:
             with tempfile.TemporaryDirectory() as tmp:
                 shutil.copytree(patch_file_dir, tmp, dirs_exist_ok=True)
 
                 # Build ASM file to run
                 asm_entrypoint = ''
+
+                # First read in  stub
+                with open(os.path.join(tmp, stub_path)) as f:
+                    asm_entrypoint += f.read() + '\n'
+
+                # Then include other includes
                 for include in patch.includes:
-                    with open(os.path.join(tmp, include.filename)) as f:
-                        asm_entrypoint += f.read() + '\n'
+                    asm_entrypoint += f'.include "{os.path.join(tmp, include.filename)}"\n'
 
                 # Build binary blocks
                 for open_bin in patch.open_bins:
@@ -65,10 +70,9 @@ class ArmPatcher:
                     # Write binary to tmp dir
                     with open(binary_path, 'wb') as f:
                         f.write(get_binary_from_rom_ppmdu(self.rom, binary))
-                    asm_entrypoint += f'.open "{binary_path}", {binary.loadaddress}\n'
+                    asm_entrypoint += f'.open "{binary_path}", "{binary_path}_out.bin", 0x{binary.loadaddress:0x}\n'
                     for include in open_bin.includes:
-                        with open(os.path.join(tmp, include.filename)) as f:
-                            asm_entrypoint += f.read() + '\n'
+                        asm_entrypoint += f'.include "{os.path.join(tmp, include.filename)}"\n'
                     asm_entrypoint += '.close\n'
 
                 # Write final asm file
@@ -97,7 +101,7 @@ class ArmPatcher:
                 for open_bin in patch.open_bins:
                     binary = binaries[open_bin.filepath]
                     binary_path = os.path.join(tmp, open_bin.filepath)
-                    with open(binary_path, 'rb') as f:
+                    with open(binary_path + '_out.bin', 'rb') as f:
                         set_binary_in_rom_ppmdu(self.rom, binary, f.read())
 
         except (PatchError, ArmipsNotInstalledError):

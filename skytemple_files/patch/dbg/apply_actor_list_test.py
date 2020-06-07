@@ -18,7 +18,7 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import get_ppmdu_config_for_rom
+from skytemple_files.common.util import get_ppmdu_config_for_rom, create_file_in_rom, set_binary_in_rom_ppmdu
 from skytemple_files.patch.patches import Patcher
 
 if __name__ == '__main__':
@@ -33,6 +33,17 @@ if __name__ == '__main__':
     patcher.apply('ActorLoader')
     with open(os.path.join(out_dir, 'actor_list.bin'), 'wb') as f:
         f.write(in_rom.getFileByName('BALANCE/actor_list.bin'))
+    #with open(os.path.join(out_dir, 'actor_list.bin'), 'rb') as f:
+    #    in_rom.setFileByName('BALANCE/actor_list.bin', f.read())
+
+    #with open(os.path.join(out_dir, 'level_list.bin'), 'rb') as f:
+    #    create_file_in_rom(in_rom, 'BALANCE/level_list.bin', f.read())
+
+    config = get_ppmdu_config_for_rom(in_rom)
+    #with open(os.path.join(out_dir, 'bin_out_psy/arm9.bin'), 'rb') as f:
+    #    set_binary_in_rom_ppmdu(in_rom, config.binaries['arm9.bin'], f.read())
+    #with open(os.path.join(out_dir, 'bin_out_psy/overlay/overlay_0011.bin'), 'rb') as f:
+    #    set_binary_in_rom_ppmdu(in_rom, config.binaries['overlay/overlay_0011.bin'], f.read())
 
     assert patcher.is_applied('ActorLoader')
     in_rom.saveToFile(os.path.join(out_dir, 'patched.nds'))
@@ -40,3 +51,9 @@ if __name__ == '__main__':
     # Check if really patched
     out_rom = NintendoDSRom.fromFile(os.path.join(out_dir, 'patched.nds'))
     assert Patcher(out_rom, get_ppmdu_config_for_rom(out_rom)).is_applied('ActorLoader')
+
+    with open(os.path.join(out_dir, 'arm9.bin'), 'wb') as f:
+        f.write(in_rom.arm9)
+
+    with open(os.path.join(out_dir, 'overlay_0011.bin'), 'wb') as f:
+        f.write(in_rom.loadArm9Overlays([11])[11].data)

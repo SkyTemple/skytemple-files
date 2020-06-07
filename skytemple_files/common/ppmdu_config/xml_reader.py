@@ -384,7 +384,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
                     if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
                             ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
                             ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
-                        patch_dir = Pmd2PatchDir(e_game.attrib['filepath'])
+                        patch_dir = Pmd2PatchDir(e_game.attrib['filepath'], e_game.attrib['stubpath'])
             elif sub_e.tag == 'Patches':
                 for e_game in sub_e:
                     if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \

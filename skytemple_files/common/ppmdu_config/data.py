@@ -134,8 +134,9 @@ class Pmd2LooseBinFile(AutoString):
 
 
 class Pmd2PatchDir(AutoString):
-    def __init__(self, filepath: str):
+    def __init__(self, filepath: str, stubpath: str):
         self.filepath = filepath
+        self.stubpath = stubpath
 
 
 class Pmd2PatchInclude(AutoString):

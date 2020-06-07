@@ -379,9 +379,9 @@
     <!--*******************-->
     <PatchesDir>
       <!--Explorers of Sky-->
-      <Game id="EoS_JP" filepath="asm_patches/eos/jp" />
-      <Game id="EoS_NA" filepath="asm_patches/eos/na" />
-      <Game id="EoS_EU" filepath="asm_patches/eos/eu" />
+      <Game id="EoS_JP" filepath="asm_patches" stubpath="header_stub_jp.asm" />
+      <Game id="EoS_NA" filepath="asm_patches" stubpath="header_stub_na.asm" />
+      <Game id="EoS_EU" filepath="asm_patches" stubpath="header_stub_eu.asm" />
       <!--Explorers of Time-->
       <!--Explorers of Darkness-->
     </PatchesDir>
@@ -391,48 +391,36 @@
     <!--*******************-->
     <!--Patching steps for applying various asm patches on the game-->
     <Patches>
-      
       <!--###############################-->
-      <!--North American Explorers of Sky-->
+      <!--Explorers of Sky-->
       <!--###############################-->
-      <Game id="EoS_NA">
+      <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP"> <!-- for JP the cmn_eos_jp.asm needs to be implemented to actually work! -->
         
         <!--Patching sequence for the level list loader-->
         <Patch id="LvlLstLdr" >
-          <!--Include stub-->
-          <Include filename ="header_stub.asm"/>
           <!--Open each binaries for processing and include the appropriate files-->
           <!--The openfile statements will be appropriately generated based on the data in this file, and on the rom path!-->
           <OpenBin filepath="arm9.bin">
-            <Include filename ="levellistloader_arm9.asm"/>
+            <Include filename ="pmd2_asm_mods/levellistloader_arm9.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-            <Include filename ="levellistloader_overlay11.asm"/>
+            <Include filename ="pmd2_asm_mods/levellistloader_overlay11.asm"/>
           </OpenBin>
         </Patch>
         
         <!--Patching sequence for the actor list loader-->
         <Patch id="ActorLoader" >
-          <!--Include stub-->
-          <Include filename ="header_stub.asm"/>
           <!--Open each binaries for processing and include the appropriate files-->
           <!--The openfile statements will be appropriately generated based on the data in this file, and on the rom path!-->
           <OpenBin filepath="arm9.bin">
-            <Include filename ="actorlistloader_arm9.asm"/>
+            <Include filename ="pmd2_asm_mods/actorlistloader_arm9.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-            <Include filename ="actorlistloader_overlay11.asm"/>
+            <Include filename ="pmd2_asm_mods/actorlistloader_overlay11.asm"/>
           </OpenBin>
         </Patch>
         
       </Game>
-      <!--###############################-->
-      <!--European Explorers of Sky-->
-      <!--###############################-->
-    
-      <!--###############################-->
-      <!--Japanese Explorers of Sky-->
-      <!--###############################-->
     </Patches>
 
   </ASMPatchesConstants>

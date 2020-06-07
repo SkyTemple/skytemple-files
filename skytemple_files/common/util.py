@@ -294,7 +294,7 @@ def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):
     """Returns the correct binary from the rom, using the binary block specifications."""
     parts = binary.filepath.split('/')
     if parts[0] == 'arm9.bin':
-        return rom.arm9
+        return rom.arm9 + rom.arm9PostData
     if parts[0] == 'arm7.bin':
         return rom.arm7
     if parts[0] == 'overlay':
@@ -326,7 +326,7 @@ def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: byte
                 ov_id = int(match.group(1))
                 overlays = rom.loadArm9Overlays([ov_id])
                 if len(overlays) > 0:
-                    overlays[ov_id].data = bytes(data)
+                    rom.files[overlays[ov_id].fileID] = data
                     return
     raise ValueError(f"Binary {binary.filepath} not found.")
 

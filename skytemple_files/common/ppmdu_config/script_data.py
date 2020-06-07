@@ -130,6 +130,13 @@ class Pmd2ScriptEntity(AutoString):
         self.unk3 = unk3
         self.unk4 = unk4
 
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2ScriptEntity):
+            return False
+        return self.id == other.id and self.entid == other.entid and \
+               self.name == other.name and self.type == other.type and \
+               self.unk3 == other.unk3 and self.unk4 == other.unk4
+
 
 class Pmd2ScriptOpCodeArgument(AutoString):
     def __init__(self, id: int, type: str, name: str):

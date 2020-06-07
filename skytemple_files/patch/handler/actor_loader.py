@@ -19,6 +19,7 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US
+from skytemple_files.list.actor.model import LEN_ACTOR_ENTRY
 from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
@@ -48,7 +49,9 @@ class ActorLoaderPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] == PATCH_STRING
+                # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
+                #return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] == PATCH_STRING
+                return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] != b'PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY'
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
@@ -60,7 +63,7 @@ class ActorLoaderPatchHandler(AbstractPatchHandler):
         if EXTRACT_LOOSE_BIN_SRCDATA not in config.asm_patches_constants.loose_bin_files:
             raise ValueError("The source data specification was not found in the configuration.")
         loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA]
-        ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(12, [4])
+        ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(LEN_ACTOR_ENTRY, [4])
 
         # Apply the patch
         apply()

@@ -34,7 +34,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.handler.actor_loader import ActorLoaderPatchHandler
 
 
-CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'ppmdu_patches')
+CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
 
 class PatchType(Enum):
@@ -81,7 +81,10 @@ class Patcher:
     def _apply_armips(self, name: str):
         patch = self._config.asm_patches_constants.patches[name]
         patch_dir_for_version = self._config.asm_patches_constants.patch_dir.filepath
-        self._arm_patcher.apply(patch, self._config.binaries, os.path.join(self._patch_dirs[name], patch_dir_for_version))
+        stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
+        self._arm_patcher.apply(patch, self._config.binaries,
+                                os.path.join(self._patch_dirs[name], patch_dir_for_version),
+                                stub_path_for_version)
 
     def add_pkg(self, zip_path: str):
         """Loads a skypatch file. Raises PatchPackageError on error."""

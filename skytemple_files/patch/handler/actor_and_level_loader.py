@@ -23,24 +23,26 @@ from skytemple_files.list.actor.model import LEN_ACTOR_ENTRY
 from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-EXTRACT_LOOSE_BIN_SRCDATA = 'Entities'
+EXTRACT_LOOSE_BIN_SRCDATA__ACTORS = 'Entities'
+EXTRACT_LOOSE_BIN_SRCDATA__LEVELS = 'Events'
 PATCH_STRING = b'PATCH PPMD ActorLoader 0.1'
 PATCH_STRING_ADDR_ARM9_US = 0xA6910
 
 
-class ActorLoaderPatchHandler(AbstractPatchHandler):
+class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'ActorLoader'
+        return 'ActorAndLevelLoader'
 
     @property
     def description(self) -> str:
-        return 'Tells the game, to load the actor list from a separate file. Extracts that file on applying the patch.'
+        return 'Tells the game, to load the actor and level lists from a separate file. ' \
+               'Extracts both files on applying the patch.'
 
     @property
     def author(self) -> str:
-        return 'psy_commando / Parakoopa'
+        return 'psy_commando'
 
     @property
     def version(self) -> str:
@@ -60,10 +62,16 @@ class ActorLoaderPatchHandler(AbstractPatchHandler):
             raise RuntimeError("This patch can not be re-applied.")
 
         # Extract the actor list
-        if EXTRACT_LOOSE_BIN_SRCDATA not in config.asm_patches_constants.loose_bin_files:
+        if EXTRACT_LOOSE_BIN_SRCDATA__ACTORS not in config.asm_patches_constants.loose_bin_files:
             raise ValueError("The source data specification was not found in the configuration.")
-        loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA]
+        loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__ACTORS]
         ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(LEN_ACTOR_ENTRY, [4])
+
+        # Extract the level list
+        if EXTRACT_LOOSE_BIN_SRCDATA__LEVELS not in config.asm_patches_constants.loose_bin_files:
+            raise ValueError("The source data specification was not found in the configuration.")
+        loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__LEVELS]
+        ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(12, [8], write_subheader=False)
 
         # Apply the patch
         apply()

@@ -31,14 +31,13 @@ from skytemple_files.common.ppmdu_config.xml_reader import Pmd2AsmPatchesConstan
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.patch.handler.actor_loader import ActorLoaderPatchHandler
-
+from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
 
 class PatchType(Enum):
-    ACTOR_LOADER = ActorLoaderPatchHandler
+    ACTOR_AND_LEVEL_LIST_LOADER = ActorAndLevelListLoaderPatchHandler
 
 
 class PatchPackageError(RuntimeError):

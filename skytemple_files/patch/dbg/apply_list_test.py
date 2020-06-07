@@ -28,29 +28,20 @@ if __name__ == '__main__':
 
     in_rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
     patcher = Patcher(in_rom, get_ppmdu_config_for_rom(in_rom))
-    assert not patcher.is_applied('ActorLoader')
+    assert not patcher.is_applied('ActorAndLevelLoader')
 
-    patcher.apply('ActorLoader')
+    patcher.apply('ActorAndLevelLoader')
     with open(os.path.join(out_dir, 'actor_list.bin'), 'wb') as f:
         f.write(in_rom.getFileByName('BALANCE/actor_list.bin'))
-    #with open(os.path.join(out_dir, 'actor_list.bin'), 'rb') as f:
-    #    in_rom.setFileByName('BALANCE/actor_list.bin', f.read())
+    with open(os.path.join(out_dir, 'level_list.bin'), 'wb') as f:
+        f.write(in_rom.getFileByName('BALANCE/level_list.bin'))
 
-    #with open(os.path.join(out_dir, 'level_list.bin'), 'rb') as f:
-    #    create_file_in_rom(in_rom, 'BALANCE/level_list.bin', f.read())
-
-    config = get_ppmdu_config_for_rom(in_rom)
-    #with open(os.path.join(out_dir, 'bin_out_psy/arm9.bin'), 'rb') as f:
-    #    set_binary_in_rom_ppmdu(in_rom, config.binaries['arm9.bin'], f.read())
-    #with open(os.path.join(out_dir, 'bin_out_psy/overlay/overlay_0011.bin'), 'rb') as f:
-    #    set_binary_in_rom_ppmdu(in_rom, config.binaries['overlay/overlay_0011.bin'], f.read())
-
-    assert patcher.is_applied('ActorLoader')
+    assert patcher.is_applied('ActorAndLevelLoader')
     in_rom.saveToFile(os.path.join(out_dir, 'patched.nds'))
 
     # Check if really patched
     out_rom = NintendoDSRom.fromFile(os.path.join(out_dir, 'patched.nds'))
-    assert Patcher(out_rom, get_ppmdu_config_for_rom(out_rom)).is_applied('ActorLoader')
+    assert Patcher(out_rom, get_ppmdu_config_for_rom(out_rom)).is_applied('ActorAndLevelLoader')
 
     with open(os.path.join(out_dir, 'arm9.bin'), 'wb') as f:
         f.write(in_rom.arm9)

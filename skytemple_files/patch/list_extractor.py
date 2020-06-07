@@ -36,11 +36,12 @@ class ListExtractor:
             raise ValueError("The source data block for the patch was not found in the configuration.")
         self._block = binary.blocks[self._key]
 
-    def extract(self, entry_len: int, string_offs_per_entry: List[int]):
+    def extract(self, entry_len: int, string_offs_per_entry: List[int], write_subheader=True):
         """Performs the extraction. Raises a RuntimeError on error."""
         try:
             binary = get_binary_from_rom_ppmdu(self._rom, self._binary)
-            data = self._wrap_sir0(binary, binary[self._block.begin:self._block.end], entry_len, string_offs_per_entry)
+            data = self._wrap_sir0(binary, binary[self._block.begin:self._block.end],
+                                   entry_len, string_offs_per_entry, write_subheader)
             if self._out_path not in self._rom.filenames:
                 create_file_in_rom(self._rom, self._out_path, data)
             else:
@@ -48,7 +49,8 @@ class ListExtractor:
         except BaseException as ex:
             raise RuntimeError("Error during extraction for patch.") from ex
 
-    def _wrap_sir0(self, full_binary: bytes, table_data: bytes, entry_len: int, string_offs_per_entry: List[int]) -> bytes:
+    def _wrap_sir0(self, full_binary: bytes, table_data: bytes,
+                   entry_len: int, string_offs_per_entry: List[int], write_subheader) -> bytes:
         table_data = bytearray(table_data)
         out_data = bytearray()
         pointer_offsets = []
@@ -78,10 +80,13 @@ class ListExtractor:
         self._pad(out_data)
 
         # 4. Write sub-header
-        data_pointer = len(out_data)
-        pointer_offsets.append(len(out_data))
-        out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
-        out_data += number_entries.to_bytes(4, byteorder='little', signed=False)
+        if write_subheader:
+            data_pointer = len(out_data)
+            pointer_offsets.append(len(out_data))
+            out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
+            out_data += number_entries.to_bytes(4, byteorder='little', signed=False)
+        else:
+            data_pointer = pointer_data_block
 
         # 5. Convert into SIR0
         return FileType.SIR0.serialize(FileType.SIR0.wrap(out_data, pointer_offsets, data_pointer))

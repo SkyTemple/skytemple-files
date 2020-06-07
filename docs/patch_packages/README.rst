@@ -12,7 +12,22 @@ in the ``actor_loader.skypatch`` archive.
 
 Applying Patch Packages
 -----------------------
-WIP.
+To apply a patch file, load it via the ``Patcher``:
+
+.. code:: python
+
+    from ndspy.rom import NintendoDSRom
+    from skytemple_files.common.util import get_ppmdu_config_for_rom
+    from skytemple_files.patch.patches import Patcher
+
+    in_rom = NintendoDSRom.fromFile('my_rom.nds'))
+
+    # Load PPMDU config
+    config = get_ppmdu_config_for_rom(in_rom)
+
+    patcher = Patcher(in_rom, config)
+    patcher.add_pkg('my_patch.skypatch')
+    patcher.apply('MyPatchName')
 
 Creating Patch Packages
 -----------------------
@@ -21,12 +36,15 @@ should have the file extension ``.skypatch``.
 
 config.xml
 ~~~~~~~~~~
-WIP
+TODO: Documentation for this. For now see the skypatch file in this dir as an
+example. If you would like to write this documentation, please open a Pull Request!
 
 patch.py
 ~~~~~~~~
-WIP
+TODO: Documentation for this. For now see the skypatch file in this dir as an
+example. If you would like to write this documentation, please open a Pull Request!
 
 asm_patches/eos/{na,eu,jp}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-WIP
+TODO: Documentation for this. For now see the skypatch file in this dir as an
+example. If you would like to write this documentation, please open a Pull Request!

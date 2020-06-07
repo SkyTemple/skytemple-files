@@ -136,38 +136,7 @@ class Pmd2XmlReader:
                                 x.add_parent(bin)
             ###########################
             elif e.tag == 'ASMPatchesConstants':
-                loose_bin_files = []
-                patch_dir = None
-                patches = []
-                for sub_e in e:
-                    if sub_e.tag == 'LooseBinFiles':
-                        for e_game in sub_e:
-                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
-                                for e_node in e_game:
-                                    loose_bin_files.append(Pmd2LooseBinFile(
-                                        e_node.attrib['srcdata'],
-                                        e_node.attrib['filepath'],
-                                    ))
-                    elif sub_e.tag == 'PatchesDir':
-                        for e_game in sub_e:
-                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
-                                patch_dir = Pmd2PatchDir(e_game.attrib['filepath'])
-                    elif sub_e.tag == 'Patches':
-                        for e_game in sub_e:
-                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
-                                for e_node in e_game:
-                                    patches.append(self._parse_patch(e_node))
-                asm_patches_constants = Pmd2AsmPatchesConstants(
-                    loose_bin_files,
-                    patch_dir,
-                    patches,
-                )
+                asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
             ###########################
             elif e.tag == 'StringIndexData':
                 for e_game in e:
@@ -206,23 +175,6 @@ class Pmd2XmlReader:
             string_index_data,
             asm_patches_constants,
             script_data
-        )
-
-    def _parse_patch(self, e_patch) -> Pmd2Patch:
-        includes = []
-        open_bins = []
-        for e_sub in e_patch:
-            if e_sub.tag == 'Include':
-                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
-            if e_sub.tag == 'OpenBin':
-                open_bin_includes = []
-                for e_include in e_sub:
-                    open_bin_includes.append(Pmd2PatchInclude(e_include.attrib['filename']))
-                open_bins.append(Pmd2PatchOpenBin(e_sub.attrib['filepath'], open_bin_includes))
-        return Pmd2Patch(
-            e_patch.attrib['id'],
-            includes,
-            open_bins
         )
 
     def _parse_script_data(self, script_root) -> Pmd2ScriptData:
@@ -406,6 +358,62 @@ class Pmd2XmlReader:
         if s == "true":
             return True
         raise ParseError(f"Invalid boolean '{s}'")
+
+
+class Pmd2AsmPatchesConstantsXmlReader:
+    def __init__(self, game_edition):
+        self._game_edition = game_edition
+
+    def read(self, e) -> Pmd2AsmPatchesConstants:
+        loose_bin_files = []
+        patch_dir = None
+        patches = []
+        for sub_e in e:
+            if sub_e.tag == 'LooseBinFiles':
+                for e_game in sub_e:
+                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                        for e_node in e_game:
+                            loose_bin_files.append(Pmd2LooseBinFile(
+                                e_node.attrib['srcdata'],
+                                e_node.attrib['filepath'],
+                            ))
+            elif sub_e.tag == 'PatchesDir':
+                for e_game in sub_e:
+                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                        patch_dir = Pmd2PatchDir(e_game.attrib['filepath'])
+            elif sub_e.tag == 'Patches':
+                for e_game in sub_e:
+                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                        for e_node in e_game:
+                            patches.append(self._parse_patch(e_node))
+        return Pmd2AsmPatchesConstants(
+            loose_bin_files,
+            patch_dir,
+            patches,
+        )
+
+    def _parse_patch(self, e_patch) -> Pmd2Patch:
+        includes = []
+        open_bins = []
+        for e_sub in e_patch:
+            if e_sub.tag == 'Include':
+                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
+            if e_sub.tag == 'OpenBin':
+                open_bin_includes = []
+                for e_include in e_sub:
+                    open_bin_includes.append(Pmd2PatchInclude(e_include.attrib['filename']))
+                open_bins.append(Pmd2PatchOpenBin(e_sub.attrib['filepath'], open_bin_includes))
+        return Pmd2Patch(
+            e_patch.attrib['id'],
+            includes,
+            open_bins
+        )
 
 
 class XmlCombinerMergeConfig:

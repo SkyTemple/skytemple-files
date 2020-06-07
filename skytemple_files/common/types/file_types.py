@@ -22,6 +22,7 @@ from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
 from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
+from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
@@ -34,6 +35,7 @@ from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression.px.handler import PxHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
+from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
 from skytemple_files.script.ssb.handler import SsbHandler
@@ -65,5 +67,10 @@ class FileType:
     SSE = SsaHandler
     SSS = SsaHandler
     SSB = SsbHandler
+    SIR0 = Sir0Handler
     BIN_PACK = BinPackHandler
     MD = MdHandler
+
+    # Please don't use these directly, use them via the ppmdu_config instead!
+    # (skytemple_files.common.util.get_ppmdu_config_for_rom).
+    ACTOR_LIST_BIN = ActorListBinHandler

@@ -24,6 +24,7 @@ import pkg_resources
 
 from skytemple_files.common.ppmdu_config.data import *
 from skytemple_files.common.ppmdu_config.script_data import *
+from skytemple_files.common.util import get_resources_dir
 
 
 class Pmd2XmlReader:
@@ -56,7 +57,7 @@ class Pmd2XmlReader:
         Load the default pmd2data.xml, patched with the skytemple.xml and create a Pmd2Data object for the version
         passed.
         """
-        res_dir = os.path.join(pkg_resources.resource_filename('skytemple_files', '_resources'), 'ppmdu_config')
+        res_dir = os.path.join(get_resources_dir(), 'ppmdu_config')
         return Pmd2XmlReader([
             os.path.join(res_dir, 'pmd2data.xml'),
             os.path.join(res_dir, 'skytemple.xml')
@@ -70,6 +71,7 @@ class Pmd2XmlReader:
         game_constants = {}
         binaries = []
         string_index_data = None
+        asm_patches_constants = None
         script_data = None
         for e in self._root:
             ###########################
@@ -132,7 +134,40 @@ class Pmd2XmlReader:
                                 x.add_parent(bin)
                             for x in pointers:
                                 x.add_parent(bin)
-
+            ###########################
+            elif e.tag == 'ASMPatchesConstants':
+                loose_bin_files = []
+                patch_dir = None
+                patches = []
+                for sub_e in e:
+                    if sub_e.tag == 'LooseBinFiles':
+                        for e_game in sub_e:
+                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                                for e_node in e_game:
+                                    loose_bin_files.append(Pmd2LooseBinFile(
+                                        e_node.attrib['srcdata'],
+                                        e_node.attrib['filepath'],
+                                    ))
+                    elif sub_e.tag == 'PatchesDir':
+                        for e_game in sub_e:
+                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                                patch_dir = Pmd2PatchDir(e_game.attrib['filepath'])
+                    elif sub_e.tag == 'Patches':
+                        for e_game in sub_e:
+                            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                                for e_node in e_game:
+                                    patches.append(self._parse_patch(e_node))
+                asm_patches_constants = Pmd2AsmPatchesConstants(
+                    loose_bin_files,
+                    patch_dir,
+                    patches,
+                )
             ###########################
             elif e.tag == 'StringIndexData':
                 for e_game in e:
@@ -169,7 +204,25 @@ class Pmd2XmlReader:
             game_constants,
             binaries,
             string_index_data,
+            asm_patches_constants,
             script_data
+        )
+
+    def _parse_patch(self, e_patch) -> Pmd2Patch:
+        includes = []
+        open_bins = []
+        for e_sub in e_patch:
+            if e_sub.tag == 'Include':
+                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
+            if e_sub.tag == 'OpenBin':
+                open_bin_includes = []
+                for e_include in e_sub:
+                    open_bin_includes.append(Pmd2PatchInclude(e_include.attrib['filename']))
+                open_bins.append(Pmd2PatchOpenBin(e_sub.attrib['filepath'], open_bin_includes))
+        return Pmd2Patch(
+            e_patch.attrib['id'],
+            includes,
+            open_bins
         )
 
     def _parse_script_data(self, script_root) -> Pmd2ScriptData:

@@ -37,3 +37,6 @@ README's containing the documentation for file types
 in the directories for the file handlers.
 
 The ``export_maps.py`` script contains a sample script on how to use this library.
+
+In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
+be installed and in the system's ``PATH`` to be able to apply ROM patches.

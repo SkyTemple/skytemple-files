@@ -15,16 +15,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
+import re
 import warnings
 from typing import List, Tuple, TYPE_CHECKING
 
+import pkg_resources
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common import string_codec
 
 if TYPE_CHECKING:
-    from skytemple_files.common.ppmdu_config.data import Pmd2Data
+    from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
 
 # Useful files:
 MONSTER_MD = 'BALANCE/monster.md'
@@ -248,10 +250,20 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)
 
 
+def get_resources_dir():
+    return pkg_resources.resource_filename('skytemple_files', '_resources')
+
+
 def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
     """
     Returns the Pmd2Data for the given ROM.
     If the ROM is not a valid and supported PMD EoS ROM, raises ValueError.
+
+    The configuration is loaded from the pmd2data.xml using the XML logic described in the README.rst
+    of the ``skytemple_files.common.ppmdu_config`` package.
+
+    Additionally supported data from the ROM is loaded and replaces the data loaded from the XML, if possible.
+    See the README.rst for the package ``skytemple_files.common.ppmdu_config.rom_data`` for more information.
     """
     from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
     data_general = Pmd2XmlReader.load_default()
@@ -268,6 +280,55 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
 
     # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
     return Pmd2XmlReader.load_default(matched_edition)
+
+
+def save_ppmdu_config_changes(rom: NintendoDSRom, data: 'Pmd2Data'):
+    """
+    Saves changes to supported ppmdu config entities back to ROM. What is saved and under
+    what conditions, is documented in the README.rst the package ``skytemple_files.common.ppmdu_config.rom_data``.
+    """
+    pass  # TODO
+
+
+def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):
+    """Returns the correct binary from the rom, using the binary block specifications."""
+    parts = binary.filepath.split('/')
+    if parts[0] == 'arm9.bin':
+        return rom.arm9
+    if parts[0] == 'arm7.bin':
+        return rom.arm7
+    if parts[0] == 'overlay':
+        if len(parts) > 1:
+            r = re.compile(r'overlay_(\d+).bin', re.IGNORECASE)
+            match = r.match(parts[1])
+            if match is not None:
+                ov_id = int(match.group(1))
+                overlays = rom.loadArm9Overlays([ov_id])
+                if len(overlays) > 0:
+                    return overlays[ov_id].data
+    raise ValueError(f"Binary {binary.filepath} not found.")
+
+
+def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: bytes):
+    """Sets the correct binary in the rom, using the binary block specifications."""
+    parts = binary.filepath.split('/')
+    if parts[0] == 'arm9.bin':
+        rom.arm9 = bytes(data)
+        return
+    if parts[0] == 'arm7.bin':
+        rom.arm7 = bytes(data)
+        return
+    if parts[0] == 'overlay':
+        if len(parts) > 1:
+            r = re.compile(r'overlay_(\d+).bin', re.IGNORECASE)
+            match = r.match(parts[1])
+            if match is not None:
+                ov_id = int(match.group(1))
+                overlays = rom.loadArm9Overlays([ov_id])
+                if len(overlays) > 0:
+                    overlays[ov_id].data = bytes(data)
+                    return
+    raise ValueError(f"Binary {binary.filepath} not found.")
 
 
 def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):

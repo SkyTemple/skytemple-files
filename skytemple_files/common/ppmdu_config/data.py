@@ -102,9 +102,9 @@ class Pmd2Binary(AutoString):
     def __init__(self, filepath: str, loadaddress: int, blocks: List[Pmd2BinaryBlock], functions: List[Pmd2BinaryFunction], pointers: List[Pmd2BinaryPointer]):
         self.filepath = filepath
         self.loadaddress = loadaddress
-        self.blocks = {x.name: x for x in blocks}
-        self.functions = {x.name: x for x in functions}
-        self.pointers = {x.name: x for x in pointers}
+        self.blocks: Dict[str, Pmd2BinaryBlock] = {x.name: x for x in blocks}
+        self.functions: Dict[str, Pmd2BinaryFunction] = {x.name: x for x in functions}
+        self.pointers: Dict[str, Pmd2BinaryPointer] = {x.name: x for x in pointers}
 
 
 class Pmd2Language(AutoString):
@@ -127,6 +127,42 @@ class Pmd2StringIndexData(AutoString):
         self.string_blocks: Dict[str, Pmd2StringBlock] = {blk.name: blk for blk in string_blocks}
 
 
+class Pmd2LooseBinFile(AutoString):
+    def __init__(self, srcdata: str, filepath: str):
+        self.srcdata = srcdata
+        self.filepath = filepath
+
+
+class Pmd2PatchDir(AutoString):
+    def __init__(self, filepath: str):
+        self.filepath = filepath
+
+
+class Pmd2PatchInclude(AutoString):
+    def __init__(self, filename: str):
+        self.filename = filename
+
+
+class Pmd2PatchOpenBin(AutoString):
+    def __init__(self, filepath: str, includes: List[Pmd2PatchInclude]):
+        self.filepath = filepath
+        self.includes = includes
+
+
+class Pmd2Patch(AutoString):
+    def __init__(self, id: str, includes: List[Pmd2PatchInclude], open_bins: List[Pmd2PatchOpenBin]):
+        self.id = id
+        self.includes = includes
+        self.open_bins = open_bins
+
+
+class Pmd2AsmPatchesConstants(AutoString):
+    def __init__(self, loose_bin_files: List[Pmd2LooseBinFile], patch_dir: Pmd2PatchDir, patches: List[Pmd2Patch]):
+        self.loose_bin_files: Dict[str, Pmd2LooseBinFile] = {var.srcdata: var for var in loose_bin_files}
+        self.patch_dir = patch_dir
+        self.patches: Dict[str, Pmd2Patch] = {var.id: var for var in patches}
+
+
 class Pmd2Data(AutoString):
     def __init__(self,
                  game_edition: str,
@@ -134,6 +170,7 @@ class Pmd2Data(AutoString):
                  game_constants: Dict[str, int],
                  binaries: List[Pmd2Binary],
                  string_index_data: Pmd2StringIndexData,
+                 asm_patches_constants: Pmd2AsmPatchesConstants,
                  script_data: Pmd2ScriptData):
         self.game_edition = game_edition
         self.game_version = game_edition.split('_')[0]
@@ -142,5 +179,5 @@ class Pmd2Data(AutoString):
         self.game_constants = game_constants
         self.binaries: Dict[str, Pmd2Binary] = {x.filepath: x for x in binaries}
         self.string_index_data = string_index_data
-        # asm patches constants currently not used
+        self.asm_patches_constants = asm_patches_constants
         self.script_data = script_data

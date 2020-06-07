@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Union, List, Type
+from typing import Union, List, Type, TypeVar
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
 from skytemple_files.container.sir0.model import Sir0
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.writer import Sir0Writer
+
+
+T = TypeVar('T', bound=Sir0Serializable)
 
 
 class Sir0Handler(DataHandler[Sir0]):
@@ -45,11 +48,9 @@ class Sir0Handler(DataHandler[Sir0]):
         return Sir0(content, pointer_offsets, data_pointer)
 
     @classmethod
-    def wrap_obj(cls, obj: Sir0Serializable):
-        # TODO: Deal with Sir0Serializable.
-        raise NotImplementedError()
+    def wrap_obj(cls, obj: Sir0Serializable) -> Sir0:
+        return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
-    def unwrap_obj(cls, data: bytes, spec: Type[Sir0Serializable]):
-        # TODO: Deal with Sir0Serializable.
-        raise NotImplementedError()
+    def unwrap_obj(cls, data: Sir0, spec: Type[T]) -> T:
+        return spec.sir0_unwrap(data.content, data.data_pointer)

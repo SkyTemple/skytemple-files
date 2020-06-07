@@ -14,8 +14,26 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from abc import ABC
+from abc import ABC, abstractmethod
+from typing import List, Tuple, Optional
 
 
 class Sir0Serializable(ABC):
-    pass  # TODO
+    @abstractmethod
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+        """
+        Prepares this object to be wrapped in Sir0.
+        Returns:
+        - The binary content data for this type
+        - A list of pointers in the binary content (offsets)
+        - Optionally a pointer to the start of the data, if None, the beginning of the data is used.
+        """
+        pass
+
+    @classmethod
+    @abstractmethod
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'Sir0Serializable':
+        """
+        Builds the model from the unwrapped Sir0.
+        """
+        pass

@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.util import *
+from skytemple_files.container.sir0 import HEADER_LEN
 
 
 class Sir0:
@@ -27,7 +28,55 @@ class Sir0:
 
     @classmethod
     def from_bin(cls, data: bytes):
-        if not isinstance(data, memoryview):
-            data = memoryview(data)
-        # TODO
-        raise NotImplementedError()
+        data = memoryview(bytearray(data))
+        data_pointer = read_uintle(data, 0x04, 4)
+        pointer_offset_list_pointer = read_uintle(data, 0x08, 4)
+
+        pointer_offsets = cls._decode_pointer_offsets(data, pointer_offset_list_pointer)
+
+        # Correct pointers by subtracting the header
+        for pnt_off in pointer_offsets:
+            write_uintle(data, read_uintle(data, pnt_off, 4) - HEADER_LEN, pnt_off, 4)
+
+        # The first two are for the pointers in the header, we remove them now, they are not
+        # part of the content pointers
+        content_pointer_offsets = [pnt - HEADER_LEN for pnt in pointer_offsets][2:]
+
+        return cls(
+            bytes(data[HEADER_LEN:pointer_offset_list_pointer]),
+            content_pointer_offsets,
+            data_pointer - HEADER_LEN
+        )
+
+    # Based on C++ algorithm by psy_commando from
+    # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
+    @classmethod
+    def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: int) -> List[int]:
+        decoded = []
+        # This is used to sum up all offsets and obtain the offset relative to the file, and not the last offset
+        offsetsum = 0
+        # temp buffer to assemble longer offsets
+        buffer = 0
+        # This contains whether the byte read on the previous turn of the loop had the bit flag
+        # indicating to append the next byte!
+        last_had_bit_flag = False
+        for curbyte in data[pointer_offset_list_pointer:len(data)]:
+            if not last_had_bit_flag and curbyte == 0:
+                break
+            # Ignore the first bit, using the 0x7F bitmask, as its reserved.
+            # And append or assign the next byte's value to the buffer.
+            buffer |= curbyte & 0x7F
+
+            if (0x80 & curbyte) != 0:
+                last_had_bit_flag = True
+                # If first bit is 1, bitshift left the current buffer, to append the next byte.
+                buffer <<= 7
+            else:
+                last_had_bit_flag = False
+                # If we don't need to append, add the value of the current buffer to the offset sum this far,
+                # and add that value to the output vector. Then clear the buffer.
+                offsetsum += buffer
+                decoded.append(offsetsum)
+                buffer = 0
+
+        return decoded

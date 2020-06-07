@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Union, List
+from typing import Union, List, Type
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
@@ -46,5 +46,10 @@ class Sir0Handler(DataHandler[Sir0]):
 
     @classmethod
     def wrap_obj(cls, obj: Sir0Serializable):
+        # TODO: Deal with Sir0Serializable.
+        raise NotImplementedError()
+
+    @classmethod
+    def unwrap_obj(cls, data: bytes, spec: Type[Sir0Serializable]):
         # TODO: Deal with Sir0Serializable.
         raise NotImplementedError()

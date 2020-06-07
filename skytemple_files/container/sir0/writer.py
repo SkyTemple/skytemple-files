@@ -17,8 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
+from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.model import Sir0
-HEADER_LEN = 16
 
 
 class Sir0Writer:
@@ -29,6 +29,8 @@ class Sir0Writer:
 
     def write(self) -> bytes:
         # Correct all pointers in content by HEADER_LEN
+        if not isinstance(self.model.content, bytearray):
+            self.model.content = bytearray(self.model.content)
         for i, pnt_off in enumerate(self.model.content_pointer_offsets):
             self.model.content_pointer_offsets[i] = pnt_off + HEADER_LEN
             write_uintle(self.model.content, read_uintle(self.model.content, pnt_off, 4) + HEADER_LEN, pnt_off, 4)

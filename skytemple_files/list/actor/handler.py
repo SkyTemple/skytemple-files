@@ -20,8 +20,8 @@ from skytemple_files.list.actor.model import ActorListBin
 
 class ActorListBinHandler(DataHandler[ActorListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> ActorListBin:
-        return ActorListBin(data)
+    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> ActorListBin:
+        return ActorListBin(data, header_start)
 
     @classmethod
     def serialize(cls, data: ActorListBin, **kwargs) -> bytes:

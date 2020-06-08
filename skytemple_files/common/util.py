@@ -24,6 +24,7 @@ from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common import string_codec
+from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
@@ -279,15 +280,11 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
         raise ValueError("This ROM is not supported by SkyTemple.")
 
     # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
-    return Pmd2XmlReader.load_default(matched_edition)
+    config = Pmd2XmlReader.load_default(matched_edition)
 
-
-def save_ppmdu_config_changes(rom: NintendoDSRom, data: 'Pmd2Data'):
-    """
-    Saves changes to supported ppmdu config entities back to ROM. What is saved and under
-    what conditions, is documented in the README.rst the package ``skytemple_files.common.ppmdu_config.rom_data``.
-    """
-    pass  # TODO
+    # Patch the config with real data from the ROM
+    RomDataLoader(rom).load_into(config)
+    return config
 
 
 def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):

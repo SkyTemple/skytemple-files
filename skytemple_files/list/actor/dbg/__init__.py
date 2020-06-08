@@ -14,21 +14,4 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type
 
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.list.actor.model import ActorListBin
-
-
-class ActorListBinHandler(DataHandler[ActorListBin]):
-    @classmethod
-    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> ActorListBin:
-        return ActorListBin(data, header_start)
-
-    @classmethod
-    def serialize(cls, data: ActorListBin, **kwargs) -> bytes:
-        return data.serialize()
-
-    @classmethod
-    def type(cls) -> Type[ActorListBin]:
-        return ActorListBin

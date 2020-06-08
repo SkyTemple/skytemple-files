@@ -47,5 +47,5 @@ class RomDataLoader:
                 FileType.SIR0.deserialize(list_bin), FileType.ACTOR_LIST_BIN.type()
             )
             config_load_into.script_data.level_entities = actor_list.list
-        else:
+        elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")

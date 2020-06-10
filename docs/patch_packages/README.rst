@@ -7,8 +7,8 @@ and the Python logic for applying them.
 The SkyTemple core patches are instead directly contained in the core ppmdu XML
 configuration and the ``skytemple_files.patch`` package.
 
-However as an example for this mechanism, the ``ActorLoader`` patch is also contained
-in the ``actor_loader.skypatch`` archive.
+However as an example for this mechanism is also contained
+in the ``example_patch.skypatch`` archive.
 
 Applying Patch Packages
 -----------------------
@@ -44,7 +44,7 @@ patch.py
 TODO: Documentation for this. For now see the skypatch file in this dir as an
 example. If you would like to write this documentation, please open a Pull Request!
 
-asm_patches/eos/{na,eu,jp}
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+asm_patches/header_stub_{eu,na,jp}.asm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 TODO: Documentation for this. For now see the skypatch file in this dir as an
 example. If you would like to write this documentation, please open a Pull Request!

@@ -130,7 +130,7 @@
         <!--<Block name="ScriptVars"        beg="0x9D870"   end="0x9DFA0"/>-->
         <!--<Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>-->
         <Block name="Entities"           beg="0xA8890" end="0xA9AA8"/>
-        <Block name="Events"             beg="0xA5BE0" end="0xA715C"/>
+        <Block name="Events"             beg="0xA5BD8" end="0xA715C"/>
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
         <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>

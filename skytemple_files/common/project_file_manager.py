@@ -23,6 +23,7 @@ from appdirs import user_config_dir
 
 from explorerscript import EXPLORERSCRIPT_EXT
 from explorerscript.source_map import SourceMap
+from skytemple_files.common.util import open_utf8
 
 DIRECTORY_NAME_SUFFIX = '.skytemple'
 SCRIPT_DIR = 'SCRIPT'
@@ -61,14 +62,14 @@ class ProjectFileManager:
         filename = self._explorerscript_resolve_filename(filename, '.ssb.sha256')
         if not os.path.exists(filename):
             return False
-        with open(filename, 'r') as f:
+        with open_utf8(filename, 'r') as f:
             hash_file = f.read()
         return hash_file == hash_compare
 
     def explorerscript_load(self, filename, sourcemap=True) -> Tuple[str, SourceMap]:
         """Load the ExplorerScript file and it's source map if it exists, otherwise an empty map"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
-        with open(filename, 'r') as f:
+        with open_utf8(filename, 'r') as f:
             source_code = f.read()
         sourcemap = self.explorerscript_load_sourcemap(filename) if sourcemap else SourceMap.create_empty()
         return source_code, sourcemap
@@ -76,7 +77,7 @@ class ProjectFileManager:
     def explorerscript_load_sourcemap(self, filename) -> SourceMap:
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX)
         if os.path.exists(filename):
-            with open(filename, 'r') as f:
+            with open_utf8(filename, 'r') as f:
                 source_map_code = f.read()
             source_map = SourceMap.deserialize(source_map_code)
         else:
@@ -86,15 +87,15 @@ class ProjectFileManager:
     def explorerscript_save(self, filename, code, source_map: Optional[SourceMap] = None):
         """Save the ExplorerScript file and it's source map if given"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
-        with open(filename, 'w') as f:
+        with open_utf8(filename, 'w') as f:
             f.write(code)
         if source_map:
-            with open(filename + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX, 'w') as f:
+            with open_utf8(filename + EXPLORERSCRIPT_SOURCE_MAP_SUFFIX, 'w') as f:
                 f.write(source_map.serialize())
 
     def explorerscript_save_hash(self, filename, new_hash):
         filename = self._explorerscript_resolve_filename(filename, '.ssb.sha256')
-        with open(filename, 'w') as f:
+        with open_utf8(filename, 'w') as f:
             f.write(new_hash)
 
     def explorerscript_include_usage_remove(self, filename, ssb_filename_that_is_included):
@@ -139,9 +140,9 @@ class ProjectFileManager:
     def _explorerscript_get_inclusion_map(self, filename):
         if not os.path.exists(filename):
             return []
-        with open(filename, 'r') as f:
+        with open_utf8(filename, 'r') as f:
             return json.load(f)
 
     def _explorerscript_save_inclusion_map(self, filename, entries):
-        with open(filename, 'w') as f:
+        with open_utf8(filename, 'w') as f:
             json.dump(entries, f, indent=0)

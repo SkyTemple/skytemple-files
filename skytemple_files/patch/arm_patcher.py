@@ -23,7 +23,7 @@ from typing import Dict
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary
-from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu
+from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 
@@ -76,7 +76,7 @@ class ArmPatcher:
                     asm_entrypoint += '.close\n'
 
                 # Write final asm file
-                with open(os.path.join(tmp, ASM_ENTRYPOINT_FN), 'w') as f:
+                with open_utf8(os.path.join(tmp, ASM_ENTRYPOINT_FN), 'w') as f:
                     f.write(asm_entrypoint)
 
                 # Run armips

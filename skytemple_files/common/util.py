@@ -36,6 +36,11 @@ MONSTER_BIN = 'MONSTER/monster.bin'
 DEBUG = False
 
 
+def open_utf8(file, mode='r', *args, **kwargs):
+    """Like open, but always uses the utf-8 encoding, on all platforms."""
+    return open(file, mode, *args, encoding='utf-8', **kwargs)
+
+
 def read_bytes(data: bytes, start=0, length=1) -> bytes:
     """
     Read a number of bytes (default 1) from a bytes-like object

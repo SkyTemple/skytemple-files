@@ -26,7 +26,7 @@ from skytemple_files.list.actor.model import ActorListBin
 if __name__ == '__main__':
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_patched.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_eu_patched.nds'))
 
     bin_before = rom.getFileByName('BALANCE/actor_list.bin')
     # noinspection PyTypeChecker
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         Sir0Handler.deserialize(bin_before), ActorListBin
     )
     # This only works with unmodified ROMs!
-    assert actor_list_before.list == Pmd2XmlReader.load_default('EoS_NA').script_data.level_entities
+    assert actor_list_before.list == Pmd2XmlReader.load_default('EoS_EU').script_data.level_entities
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_before))
     # noinspection PyTypeChecker
@@ -52,12 +52,13 @@ if __name__ == '__main__':
     assert actor_list_before.list == actor_list_after.list
 
     for entry in actor_list_after.list:
+        print(entry)
         entry.entid = 328
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_after))
     rom.setFileByName('BALANCE/actor_list.bin', bin_after)
 
-    rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_us_patched_edit.nds'))
+    rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_eu_patched_edit.nds'))
 
     # Test config patching
     config = get_ppmdu_config_for_rom(rom)

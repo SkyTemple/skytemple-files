@@ -18,7 +18,7 @@ import os
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Type, Dict, List
+from typing import Type, Dict, List, Generator
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
@@ -131,6 +131,10 @@ class Patcher:
             raise ValueError(f"No patch for handler '{handler.name}' found in the configuration.")
         self._loaded_patches[handler.name] = handler
         self._patch_dirs[handler.name] = os.path.realpath(patch_base_dir)
+
+    def list(self) -> Generator[AbstractPatchHandler, None, None]:
+        for handler in self._loaded_patches.values():
+            yield handler
 
 
 class PatchPackageConfigMerger:

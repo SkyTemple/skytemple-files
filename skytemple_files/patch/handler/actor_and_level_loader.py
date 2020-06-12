@@ -18,7 +18,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.list.actor.model import LEN_ACTOR_ENTRY
 from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
@@ -27,6 +27,7 @@ EXTRACT_LOOSE_BIN_SRCDATA__ACTORS = 'Entities'
 EXTRACT_LOOSE_BIN_SRCDATA__LEVELS = 'Events'
 PATCH_STRING = b'PATCH PPMD ActorLoader 0.1'
 PATCH_STRING_ADDR_ARM9_US = 0xA6910
+PATCH_STRING_ADDR_ARM9_EU = 0xA71B0
 
 
 class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
@@ -49,11 +50,15 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
         return '0.1.0'
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
+        pattern = b'PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY'
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
                 #return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] == PATCH_STRING
-                return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] != b'PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY'
+                return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] != pattern
+            # TODO: The EU version patch doesn't work at the moment.
+            #if config.game_region == GAME_REGION_EU:
+            #    return rom.arm9[PATCH_STRING_ADDR_ARM9_EU:PATCH_STRING_ADDR_ARM9_EU + len(PATCH_STRING)] != pattern
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):

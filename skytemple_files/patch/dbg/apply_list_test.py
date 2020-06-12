@@ -43,8 +43,7 @@ if __name__ == '__main__':
     out_rom = NintendoDSRom.fromFile(os.path.join(out_dir, 'patched.nds'))
     assert Patcher(out_rom, get_ppmdu_config_for_rom(out_rom)).is_applied('ActorAndLevelLoader')
 
-    with open(os.path.join(out_dir, 'arm9.bin'), 'wb') as f:
-        f.write(in_rom.arm9)
-
-    with open(os.path.join(out_dir, 'overlay_0011.bin'), 'wb') as f:
-        f.write(in_rom.loadArm9Overlays([11])[11].data)
+    with open(os.path.join(out_dir, 'bin_out_psy', 'arm9.bin'), 'rb') as arm9f:
+        with open(os.path.join(out_dir, 'bin_out_psy', 'overlay', 'overlay_0011.bin'), 'rb') as ov11f:
+            assert out_rom.arm9 == arm9f.read()
+            assert out_rom.loadArm9Overlays([11])[11].data == ov11f.read()

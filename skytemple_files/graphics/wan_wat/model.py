@@ -19,7 +19,7 @@ from typing import List, Tuple
 try:
     from PIL import Image, ImageOps
 except ImportError:
-    from pil import Image
+    from pil import Image, ImageOps
 from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation
 
 

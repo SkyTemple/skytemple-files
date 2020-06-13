@@ -1,3 +1,5 @@
+import os
+
 from setuptools import setup, find_packages
 
 # README read-in
@@ -7,11 +9,22 @@ with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 # END README read-in
 
+
+def get_resources(file_exts):
+    directory = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'skytemple_files', '_resources')
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            if any(filename.endswith(file_ext) for file_ext in file_exts):
+                paths.append(os.path.join('_resources', os.path.relpath(os.path.join('..', path, filename), directory)))
+    return paths
+
+
 setup(
     name='skytemple-files',
     version='0.0.3',
     packages=find_packages(),
-    package_data={'skytemple_files': ['_resources/**/*']},
+    package_data={'skytemple_files': get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md'])},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',
     long_description=long_description,
     long_description_content_type='text/x-rst',

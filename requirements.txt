@@ -1,5 +1,5 @@
 ndspy==3.0.0
 Pillow==7.1.2
 appdirs==1.4.3
-explorerscript==0.0.2a1
+explorerscript==0.0.3
 skytemple-rust==0.0.1

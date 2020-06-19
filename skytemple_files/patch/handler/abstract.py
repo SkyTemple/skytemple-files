@@ -62,6 +62,7 @@ class AbstractPatchHandler(ABC):
         Apply the patch. The apply parameter is a callable which applies the actual patch files using ARMIPS,
         as specified in the configuration file.
         The ``apply`` callable might raise a RuntimeError, if the patch was not applied successfully.
+        It raises a ArmipsNotInstalledError when armips is not installed.
         The configuration (``config``) may be invalid (no longer up to date) after calling ``apply``.
 
         :param apply: Applies the ROM patch

@@ -29,12 +29,13 @@ ASM_ENTRYPOINT_FN = '__main.asm'
 
 
 class PatchError(RuntimeError):
-    def __init__(self, message: str, error_out: str):
+    def __init__(self, message: str, error_out: str, error_err: str):
         self.message = message
         self.error_out = error_out
+        self.error_err = error_err
 
     def __str__(self):
-        return self.message + '\n' + self.error_out
+        return self.message + '\n' + self.error_out + '\n' + self.error_err
 
 
 class ArmipsNotInstalledError(RuntimeError):
@@ -95,7 +96,7 @@ class ArmPatcher:
 
                 if retcode != 0:
                     raise PatchError("ARMIPS reported an error while applying the patch.",
-                                     str(result.stdout.read(), 'utf-8'))
+                                     str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8'))
 
                 # Load the binaries back into the ROM
                 for open_bin in patch.open_bins:
@@ -107,4 +108,4 @@ class ArmPatcher:
         except (PatchError, ArmipsNotInstalledError):
             raise
         except BaseException as ex:
-            raise RuntimeError("Error while applying the patch") from ex
+            raise RuntimeError(f"Error while applying the patch: {ex}") from ex

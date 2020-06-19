@@ -61,20 +61,33 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
         if self.is_applied(rom, config):
             raise RuntimeError("This patch can not be re-applied.")
 
+        extracted_a_list = False
+
         # Extract the actor list
         if EXTRACT_LOOSE_BIN_SRCDATA__ACTORS not in config.asm_patches_constants.loose_bin_files:
             raise ValueError("The source data specification was not found in the configuration.")
         loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__ACTORS]
-        ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(LEN_ACTOR_ENTRY, [4])
+        if loose_bin_spec.filepath not in rom.filenames:
+            ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(LEN_ACTOR_ENTRY, [4])
+            extracted_a_list = True
 
         # Extract the level list
         if EXTRACT_LOOSE_BIN_SRCDATA__LEVELS not in config.asm_patches_constants.loose_bin_files:
             raise ValueError("The source data specification was not found in the configuration.")
         loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__LEVELS]
-        ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(12, [8], write_subheader=False)
+        if loose_bin_spec.filepath not in rom.filenames:
+            ListExtractor(rom, config.binaries['arm9.bin'], loose_bin_spec).extract(12, [8], write_subheader=False)
+            extracted_a_list = True
 
         # Apply the patch
-        apply()
+        try:
+            apply()
+        except RuntimeError as ex:
+            if extracted_a_list:
+                raise RuntimeError(str(ex) + "\n\nThe list was extracted anyway.\n"
+                                             "You can already edit it through SkyTemple, but it won't be "
+                                             "used in game, until you successfully apply the patch.") from ex
+            raise ex
 
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

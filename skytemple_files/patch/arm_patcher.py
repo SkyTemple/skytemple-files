@@ -42,7 +42,6 @@ class ArmipsNotInstalledError(RuntimeError):
     pass
 
 
-
 class ArmPatcher:
     def __init__(self, rom: NintendoDSRom):
         self.rom = rom
@@ -91,8 +90,9 @@ class ArmPatcher:
                 except FileNotFoundError as ex:
                     raise ArmipsNotInstalledError("ARMIPS could not be found. Make sure, that "
                                                   "'armips' is inside your system's PATH.") from ex
-                # Restore cwd
-                os.chdir(original_cwd)
+                finally:
+                    # Restore cwd
+                    os.chdir(original_cwd)
 
                 if retcode != 0:
                     raise PatchError("ARMIPS reported an error while applying the patch.",

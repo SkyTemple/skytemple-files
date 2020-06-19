@@ -17,11 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import Optional
-try:
-    from typing import OrderedDict as OrderedDictType
-except ImportError:
-    from typing_extensions import OrderedDict as OrderedDictType
+from typing import Optional, Dict
 
 from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE, LANG_JP
 from skytemple_files.common.util import *
@@ -66,7 +62,7 @@ class AbstractSsbHeader(ABC):
 
     @property
     @abstractmethod
-    def string_table_lengths(self) -> OrderedDictType[str, int]:
+    def string_table_lengths(self) -> Dict[str, int]:
         """Returns an OrderedDict where keys are languages and values are the number of bytes in that table"""
         pass
 
@@ -118,7 +114,7 @@ class SsbHeaderUs(AbstractSsbHeader):
         return self._const_table_length
 
     @property
-    def string_table_lengths(self) -> OrderedDictType[str, int]:
+    def string_table_lengths(self) -> Dict[str, int]:
         return self._string_table_lengths
 
     @property
@@ -170,5 +166,5 @@ class SsbHeaderEu(AbstractSsbHeader):
         return self._const_table_length
 
     @property
-    def string_table_lengths(self) -> OrderedDictType[str, int]:
+    def string_table_lengths(self) -> Dict[str, int]:
         return self._string_table_lengths

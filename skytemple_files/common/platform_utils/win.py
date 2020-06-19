@@ -35,3 +35,13 @@ def win_use_light_theme():
         return value != 0
     except WindowsError:
         return None
+
+
+def win_set_error_mode():
+    """
+    This tells Windows not to show error dialogs for 'No Disk'.
+    See: https://github.com/SkyTemple/skytemple/issues/12
+    """
+    import msvcrt
+    old_mode = msvcrt.SetErrorMode(0)
+    msvcrt.SetErrorMode(old_mode & msvcrt.SEM_FAILCRITICALERRORS)

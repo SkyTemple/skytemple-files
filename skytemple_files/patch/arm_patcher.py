@@ -17,13 +17,14 @@
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from typing import Dict
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary
-from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8
+from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 
@@ -83,7 +84,11 @@ class ArmPatcher:
                 original_cwd = os.getcwd()
                 os.chdir(tmp)
                 try:
-                    result = subprocess.Popen(["armips", ASM_ENTRYPOINT_FN],
+                    prefix = ""
+                    # Under Windows, try to load from SkyTemple _resources dir first.
+                    if sys.platform.startswith('win') and os.path.exists(os.path.join(get_resources_dir(), 'armips.exe')):
+                        prefix = os.path.join(get_resources_dir(), '')
+                    result = subprocess.Popen([f'{prefix}armips', ASM_ENTRYPOINT_FN],
                                               stdout=subprocess.PIPE,
                                               stderr=subprocess.STDOUT)
                     retcode = result.wait()

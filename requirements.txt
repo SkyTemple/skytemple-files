@@ -3,3 +3,4 @@ Pillow==7.1.2
 appdirs==1.4.3
 explorerscript==0.0.3
 skytemple-rust==0.0.1
+tilequant==0.0.1

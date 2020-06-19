@@ -35,6 +35,7 @@ setup(
         'appdirs >= 1.4.0',
         'explorerscript >= 0.0.3',
         'skytemple-rust >= 0.0.1',
+        'tilequant >= 0.0.1',
         'typing-extensions == 3.7.4.2; python_version<"3.7"'
     ],
     classifiers=[

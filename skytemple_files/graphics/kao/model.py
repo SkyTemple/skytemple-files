@@ -18,6 +18,9 @@
 import math
 
 import warnings
+
+from skytemple_tilequant.image_converter import ImageConverter
+
 try:
     from PIL import Image
 except ImportError:
@@ -209,7 +212,9 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.mode != 'P':
-        raise ValueError('Can not convert PIL image to Kao: Must be indexed image (=using a palette)')
+        # todo: the transparent color is just some random color, we don't actually want transparency...
+        converter = ImageConverter(pil, img_dim, img_dim, (123, 156, 145))
+        pil = converter.convert(num_palettes=1, colors_per_palette=16)
     if pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
         raise ValueError('Can not convert PIL image to Kao: Palette must contain 16 RGB colors.')
     if pil.width != img_dim or pil.height != img_dim:

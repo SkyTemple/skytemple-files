@@ -17,7 +17,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import OrderedDict as OrderedDictType, Optional
+from typing import Optional
+try:
+    from typing import OrderedDict as OrderedDictType
+except ImportError:
+    from typing_extensions import OrderedDict as OrderedDictType
 
 from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE, LANG_JP
 from skytemple_files.common.util import *

@@ -14,10 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data
+from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data, GAME_REGION_JP
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
+from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp
 from skytemple_files.script.ssb.model import Ssb
 from skytemple_files.script.ssb.writer import SsbWriter
 
@@ -31,10 +31,12 @@ class SsbHandler(DataHandler[Ssb]):
             ssb_header = SsbHeaderEu(data)
         elif static_data.game_region == GAME_REGION_US:
             ssb_header = SsbHeaderUs(data)
+        elif static_data.game_region == GAME_REGION_JP:
+            ssb_header = SsbHeaderJp(data)
         else:
             raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
 
-        return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data)
+        return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data, string_codec=static_data.string_encoding)
 
     @classmethod
     def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs) -> bytes:

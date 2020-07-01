@@ -86,9 +86,10 @@ def read_sintbe(data: bytes, start=0, length=1) -> int:
     return int.from_bytes(data[start:(start+length)], byteorder='big', signed=True)
 
 
-def read_var_length_string(data: bytes, start=0) -> Tuple[int, str]:
+def read_var_length_string(data: bytes, start=0, codec=string_codec.PMD2_STR_ENCODER) -> Tuple[int, str]:
     """Reads a zero terminated string of characters. """
-    string_codec.init()
+    if codec == string_codec.PMD2_STR_ENCODER:
+        string_codec.init()
     bytes_of_string = bytearray()
     current_byte = -1
     cursor = start
@@ -98,7 +99,7 @@ def read_var_length_string(data: bytes, start=0) -> Tuple[int, str]:
         if current_byte != 0:
             bytes_of_string.append(current_byte)
 
-    return cursor - start, str(bytes_of_string, string_codec.PMD2_STR_ENCODER)
+    return cursor - start, str(bytes_of_string, codec)
 
 
 def write_uintle(data: bytes, to_write: int, start=0, length=1):

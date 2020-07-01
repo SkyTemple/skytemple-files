@@ -46,10 +46,12 @@ class Ssb:
 
     def __init__(
             self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
-            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData, if_empty_supported_langs=None
+            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData, if_empty_supported_langs=None,
+            string_codec=string_codec.PMD2_STR_ENCODER
     ):
 
         self._scriptdata = scriptdata
+        self._string_codec = string_codec
 
         if data is None:
             # Empty model mode, for the ScriptCompiler.
@@ -117,7 +119,7 @@ class Ssb:
         # Read constants
         for const_string_offset in const_offset_table:
             assert cursor == const_string_offset
-            bytes_read, string = read_var_length_string(data, const_string_offset)
+            bytes_read, string = read_var_length_string(data, const_string_offset, self._string_codec)
             self.constants.append(string)
             cursor += bytes_read
         # Padding if not even
@@ -145,7 +147,7 @@ class Ssb:
             # Read strings
             for string_offset in string_offset_table_lang:
                 assert cursor == string_offset
-                bytes_read, string = read_var_length_string(data, string_offset)
+                bytes_read, string = read_var_length_string(data, string_offset, self._string_codec)
                 strings_lang.append(string)
                 cursor += bytes_read
             string_offset_table[language] = string_offset_table_lang
@@ -319,6 +321,8 @@ class Ssb:
     def get_single_string(self, id: int) -> Dict[str, str]:
         """Return a single string in all languages"""
         res = {}
+        if len(self.strings) < 1:
+            raise IndexError(f"No strings exist.")
         for key, strs in self.strings.items():
             res[key] = strs[id]
         return res

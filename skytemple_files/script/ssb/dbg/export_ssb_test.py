@@ -20,6 +20,7 @@ import os
 from ndspy.rom import NintendoDSRom
 from ndspy.code import loadOverlayTable
 
+from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
 from skytemple_files.script.ssb.handler import SsbHandler
@@ -30,7 +31,10 @@ def main():
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'sky_jp.nds'))
+
+    with open(os.path.join(output_dir, "enter23.ssb"), 'wb') as f:
+        f.write(rom.getFileByName('SCRIPT/D42P21A/enter23.ssb'))
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
         print(file_name)
@@ -38,7 +42,7 @@ def main():
         out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
 
         bin_before = rom.getFileByName(file_name)
-        ssb = SsbHandler.deserialize(bin_before)
+        ssb = SsbHandler.deserialize(bin_before, Pmd2XmlReader.load_default('EoS_JP'))
 
         with open(out_file_name, 'w') as f:
             f.write(export_ssb_as_txt(ssb))

@@ -18,6 +18,7 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.data.md.handler import MdHandler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
@@ -26,5 +27,18 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 md_bin = rom.getFileByName('BALANCE/monster.md')
 md_model = MdHandler.deserialize(md_bin)
 
-for entry in md_model:
-    print(entry)
+unknames = ["unk31", "unk1", "unk17", "unk18", "unk19", "unk20", "unk21", "unk27", "unk28", "unk29", "unk30"]
+for unkname in unknames:
+    unks = {}
+    strings = FileType.STR.deserialize(rom.getFileByName('MESSAGE/text_e.str'))
+
+    for entry in md_model:
+        v = getattr(entry, unkname)
+        if v not in unks:
+            unks[v] = []
+        unks[v].append(strings.strings[8736 + entry.md_index_base])
+
+    print("=========================")
+    print(unkname)
+    for k, v in unks.items():
+        print(k, f" (count {len(v)}:", v)

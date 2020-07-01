@@ -73,6 +73,7 @@ class Pmd2XmlReader:
         string_index_data = None
         asm_patches_constants = None
         script_data = None
+        string_encoding = None
         for e in self._root:
             ###########################
             if e.tag == 'GameEditions':
@@ -166,6 +167,13 @@ class Pmd2XmlReader:
             ###########################
             elif e.tag == 'ScriptData':
                 script_data = self._parse_script_data(e)
+            ###########################
+            elif e.tag == 'StringEncoding':
+                for e_game in e:
+                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+                       ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+                       ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                        string_encoding = e_game.attrib['codec']
 
         return Pmd2Data(
             self._game_edition,
@@ -174,7 +182,8 @@ class Pmd2XmlReader:
             binaries,
             string_index_data,
             asm_patches_constants,
-            script_data
+            script_data,
+            string_encoding
         )
 
     def _parse_script_data(self, script_root) -> Pmd2ScriptData:

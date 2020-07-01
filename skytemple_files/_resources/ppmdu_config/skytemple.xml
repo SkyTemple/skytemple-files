@@ -18,4 +18,9 @@
     <Game id="EoD_JP" issupported="false"/>
     <Game id="EoT_JP" issupported="false"/>
   </GameEditions>
+
+  <StringEncoding>
+    <Game id="EoS_NA" id2="EoS_EU" codec="pmd2str"/>
+    <Game id="EoS_JP" codec="shift_jis"/>
+  </StringEncoding>
 </PMD2>

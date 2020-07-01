@@ -17,7 +17,7 @@
 
 import os
 from pathlib import PurePosixPath
-from typing import List, Union
+from typing import List, Union, Optional
 
 from ndspy.rom import NintendoDSRom
 
@@ -34,7 +34,7 @@ BPA_EXT = '.bpa'
 
 
 class BgListEntry:
-    def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[str]):
+    def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[Optional[str]]):
         # ALL names can only be 1-8 character ASCII strings with only uppercase
         # letters. This is checked during serialization in the writer.
         self.bpl_name = bpl_name

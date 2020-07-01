@@ -25,6 +25,7 @@ from skytemple_files.common.util import *
 
 SSB_HEADER_US_LENGTH = 0x0C
 SSB_HEADER_EU_LENGTH = 0x12
+SSB_HEADER_JP_LENGTH = 0x0C
 
 
 class AbstractSsbHeader(ABC):
@@ -168,3 +169,46 @@ class SsbHeaderEu(AbstractSsbHeader):
     @property
     def string_table_lengths(self) -> Dict[str, int]:
         return self._string_table_lengths
+
+
+class SsbHeaderJp(AbstractSsbHeader):
+    def __init__(self, data: Optional[bytes]):
+        if data is None:
+            # Build mode.
+            return
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+        self._number_of_constants = read_uintle(data, 0x0, 2)
+        self._dummy = read_uintle(data, 0x2, 2)
+        self._constant_strings_start = read_uintle(data, 0x4, 2) * 2
+        self._const_table_length = read_uintle(data, 0x6, 2) * 2
+        self._dummy2 = read_uintle(data, 0x8, 2)
+        self._dummy3 = read_uintle(data, 0xA, 2)
+
+    @classmethod
+    def supported_langs(cls):
+        return []  # The JP ROM does not use language strings.
+
+    @property
+    def data_offset(self) -> int:
+        return SSB_HEADER_JP_LENGTH
+
+    @property
+    def number_of_constants(self) -> int:
+        return self._number_of_constants
+
+    @property
+    def number_of_strings(self) -> int:
+        return 0
+
+    @property
+    def constant_strings_start(self) -> int:
+        return self._constant_strings_start
+
+    @property
+    def const_table_length(self) -> int:
+        return self._const_table_length
+
+    @property
+    def string_table_lengths(self) -> Dict[str, int]:
+        return {}

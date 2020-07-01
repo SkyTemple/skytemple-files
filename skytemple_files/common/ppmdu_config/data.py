@@ -172,7 +172,8 @@ class Pmd2Data(AutoString):
                  binaries: List[Pmd2Binary],
                  string_index_data: Pmd2StringIndexData,
                  asm_patches_constants: Pmd2AsmPatchesConstants,
-                 script_data: Pmd2ScriptData):
+                 script_data: Pmd2ScriptData,
+                 string_encoding: str):
         self.game_edition = game_edition
         self.game_version = game_edition.split('_')[0]
         self.game_region = game_edition.split('_')[1]
@@ -182,3 +183,4 @@ class Pmd2Data(AutoString):
         self.string_index_data = string_index_data
         self.asm_patches_constants = asm_patches_constants
         self.script_data = script_data
+        self.string_encoding = string_encoding

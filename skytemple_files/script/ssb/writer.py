@@ -19,10 +19,10 @@ import logging
 import math
 from typing import Dict
 
-from skytemple_files.common.ppmdu_config.data import GAME_REGION_US, GAME_REGION_EU, Pmd2Data
-from skytemple_files.common.string_codec import PMD2_STR_ENCODER
+from skytemple_files.common.ppmdu_config.data import GAME_REGION_US, GAME_REGION_EU, Pmd2Data, GAME_REGION_JP
 from skytemple_files.common.util import *
-from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu
+from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu, \
+    SSB_HEADER_JP_LENGTH, SsbHeaderJp
 from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
 logger = logging.getLogger(__name__)
 
@@ -36,6 +36,7 @@ class SsbWriter:
         self.model = model
         self.bytes_written = 0
         self.static_data = static_data
+        self._string_codec = static_data.string_encoding
 
     def write(self) -> bytes:
         """
@@ -53,6 +54,9 @@ class SsbWriter:
         elif self.static_data.game_region == GAME_REGION_EU:
             header_cls = SsbHeaderEu
             header_len = SSB_HEADER_EU_LENGTH
+        elif self.static_data.game_region == GAME_REGION_JP:
+            header_cls = SsbHeaderJp
+            header_len = SSB_HEADER_JP_LENGTH
         else:
             raise ValueError(f"Unsupported game region {self.static_data.game_region}")
 
@@ -177,6 +181,19 @@ class SsbWriter:
             assert len(string_lengths) == 5
             for i, length in enumerate(string_lengths.values()):
                 write_uintle(data, int(length / 2), 0x08 + (2 * i), 2)
+        elif header_cls == SsbHeaderJp:
+            # Number of constants
+            write_uintle(data, len(self.model.constants), 0x00, 2)
+            # Unknown. TODO: Might want to check this.
+            write_uintle(data, 0, 0x02, 2)
+            # Constant Strings Start
+            write_uintle(data, int((start_of_const_table - header_len + len_of_const_table) / 2), 0x04, 2)
+            # Const length
+            write_uintle(data, math.ceil(const_string_bytes_written / 2), 0x06, 2)
+            # Unknown. TODO: Might want to check this.
+            write_uintle(data, 0, 0x08, 2)
+            # Unknown. TODO: Might want to check this.
+            write_uintle(data, 0, 0x0A, 2)
 
         # Important metadata
         write_uintle(data, int((start_of_const_table - header_len) / 2), header_len, 2)
@@ -199,7 +216,7 @@ class SsbWriter:
         write_uintle(data, to_write, start, length)
 
     def _write_string(self, data: bytearray, to_write: str, start=0):
-        b = bytes(to_write, PMD2_STR_ENCODER) + bytes([0])
+        b = bytes(to_write, self._string_codec) + bytes([0])
         length = len(b)
         if len(data) < start + length:
             bytes_needed = start + length - len(data)

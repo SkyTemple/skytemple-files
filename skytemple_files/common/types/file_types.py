@@ -32,8 +32,10 @@ from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpl.handler import BplHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
+from skytemple_files.compression_container.at4pn.handler import At4pnHandler
 from skytemple_files.compression.px.handler import PxHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
@@ -47,6 +49,7 @@ class FileType:
     KAO = KaoHandler
     AT4PX = At4pxHandler
     PKDPX = PkdpxHandler
+    AT4PN = At4pnHandler
     PX = PxHandler
     BGP = BgpHandler
     BG_LIST_DAT = BgListDatHandler
@@ -60,6 +63,7 @@ class FileType:
     BPA = BpaHandler
     WAN = WanHandler
     WAT = WanHandler
+    W16 = W16Handler
     GENERIC_NRL = GenericNrlHandler
     STR = StrHandler
     LSD = LsdHandler

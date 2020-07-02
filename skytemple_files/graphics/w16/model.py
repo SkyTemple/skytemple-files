@@ -64,8 +64,10 @@ class W16Image(ABC):
             [self.pal], TILE_DIM, w, h
         )
 
-    def set(self, pil: Image) -> 'W16Image':
+    def set(self, pil: Image.Image) -> 'W16Image':
         """Sets the w16 image using a PIL image with 16-bit color palette as input"""
+        self.entry_data.width = int(pil.width / TILE_DIM)
+        self.entry_data.height = int(pil.height / TILE_DIM)
         new_pal, new_img = self._read_in(pil, self.entry_data.width, self.entry_data.height)
         self.pal = new_pal
         self.compressed_img_data = self.compress(new_img)
@@ -74,6 +76,8 @@ class W16Image(ABC):
     @classmethod
     def new(cls, entry_data: 'W16TocEntry', pil: Image) -> 'W16Image':
         """Creates a new W16Image from a PIL image with 16-bit color palette as input"""
+        entry_data.width = int(pil.width / TILE_DIM)
+        entry_data.height = int(pil.height / TILE_DIM)
         new_pal, new_img = cls._read_in(pil, entry_data.width, entry_data.height)
         return cls(entry_data, cls.compress(new_img), new_pal)
 
@@ -179,6 +183,9 @@ class W16:
 
     def __iter__(self):
         return iter(self._files)
+
+    def append(self, img: W16Image):
+        self._files.append(img)
 
     def _read_pal(self, pal_bytes: bytes) -> List[int]:
         palette = []

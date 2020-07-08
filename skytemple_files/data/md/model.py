@@ -237,13 +237,19 @@ class MovementType(Enum):
     WATER = 5
 
 
+class ShadowSize(Enum):
+    SMALL = 0
+    MEDIUM = 1
+    LARGE = 2
+
+
 class MdEntry(AutoString):
     def __init__(self, **data):
         self.md_index: int = -1
         self.entid: int = -1
         self.unk31: int = -1
         self.national_pokedex_number: int = -1
-        self.unk1: int = -1
+        self.base_movement_speed: int = -1
         self.pre_evo_index: int = -1
         self.evo_method: EvolutionMethod = EvolutionMethod.NONE
         self.evo_param1: int = -1
@@ -270,9 +276,14 @@ class MdEntry(AutoString):
         self.size: int = -1
         self.unk17: int = -1
         self.unk18: int = -1
-        self.unk19: int = -1
-        self.unk20: int = -1
-        self.unk21: int = -1
+        self.shadow_size: ShadowSize = ShadowSize.SMALL
+        self.chance_spawn_asleep: int = -1
+        # @End:
+        # The % of HP that this pokémon species regenerates at the end of each turn is equal to 1/(value * 2)
+        # (Before applying any modifiers)
+        # The final value is capped between 1/30 and 1/500
+        self.hp_regeneration: int = -1
+        self.unk21_h: int = -1
         self.base_form_index: int = -1
         self.exclusive_item1: int = -1
         self.exclusive_item2: int = -1
@@ -311,7 +322,7 @@ class Md:
                 'entid': ru(0x00),
                 'unk31': ru(0x02),
                 'national_pokedex_number': ru(0x04),
-                'unk1': ru(0x06),
+                'base_movement_speed': ru(0x06),
                 'pre_evo_index': ru(0x08),
                 'evo_method': EvolutionMethod(ru(0x0A)),
                 'evo_param1': ru(0x0C),
@@ -338,9 +349,10 @@ class Md:
                 'size': rs(0x2A),
                 'unk17': rs(0x2C, 1),
                 'unk18': rs(0x2D, 1),
-                'unk19': rs(0x2E, 1),
-                'unk20': rs(0x2F, 1),
-                'unk21': rs(0x30),
+                'shadow_size': ShadowSize(rs(0x2E, 1)),
+                'chance_spawn_asleep': rs(0x2F, 1),
+                'hp_regeneration': rs(0x30, 1),
+                'unk21_h': rs(0x31, 1),
                 'base_form_index': rs(0x32),
                 'exclusive_item1': rs(0x34),
                 'exclusive_item2': rs(0x36),

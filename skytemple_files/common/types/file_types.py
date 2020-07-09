@@ -22,6 +22,15 @@ from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
 from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
+from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
+from skytemple_files.container.dungeon_bin.sub.at4px_sir0 import DbinAt4pxSir0Handler
+from skytemple_files.container.dungeon_bin.sub.pkdpx_sir0 import DbinPkdpxSir0Handler
+from skytemple_files.container.dungeon_bin.sub.raw_rgbx32_palette import DbinRawRgbx32PaletteHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_1035 import DbinSir01035Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_image_1034 import DbinSir0Image1034Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_weird_palette import DbinSir0WeirdPaletteHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
@@ -73,7 +82,18 @@ class FileType:
     SSB = SsbHandler
     SIR0 = Sir0Handler
     BIN_PACK = BinPackHandler
+    DUNGEON_BIN = DungeonBinHandler
     MD = MdHandler
+    
+    # dungeon.bin sub file handlers
+    DBIN_SIR0_WEIRD_PALETTE = DbinSir0WeirdPaletteHandler
+    DBIN_AT4PX_SIR0 = DbinAt4pxSir0Handler
+    DBIN_RAW_RGBX32_PALETTE = DbinRawRgbx32PaletteHandler
+    DBIN_PKDPX_SIR0 = DbinPkdpxSir0Handler
+    DBIN_SIR0_WEIRD_DATA_FILE = DbinSir0WeirdDataFileHandler
+    DBIN_SIR0_IMAGE_1033 = DbinSir0Image1033Handler
+    DBIN_SIR0_IMAGE_1034 = DbinSir0Image1034Handler
+    DBIN_SIR0_1035 = DbinSir01035Handler
 
     # Please don't use these directly, use them via the ppmdu_config instead!
     # (skytemple_files.common.util.get_ppmdu_config_for_rom).

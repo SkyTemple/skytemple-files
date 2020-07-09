@@ -20,6 +20,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Dict
 
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString
 
@@ -173,6 +174,7 @@ class Pmd2Data(AutoString):
                  string_index_data: Pmd2StringIndexData,
                  asm_patches_constants: Pmd2AsmPatchesConstants,
                  script_data: Pmd2ScriptData,
+                 dungeon_data: Pmd2DungeonData,
                  string_encoding: str):
         self.game_edition = game_edition
         self.game_version = game_edition.split('_')[0]
@@ -183,4 +185,5 @@ class Pmd2Data(AutoString):
         self.string_index_data = string_index_data
         self.asm_patches_constants = asm_patches_constants
         self.script_data = script_data
+        self.dungeon_data = dungeon_data
         self.string_encoding = string_encoding

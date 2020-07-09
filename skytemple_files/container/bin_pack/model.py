@@ -51,6 +51,10 @@ class BinPack:
         s = toc_entry.pointer
         return data[s:s + toc_entry.length].tobytes()
 
+    def get_files_bytes(self):
+        """Returns the binary representation of the files (or a copy), for writing."""
+        return self._files
+
     def __len__(self):
         return len(self._files)
 

@@ -422,5 +422,6 @@
   <!--Append any external config files to parse here!-->
   <!--=======================================================================-->
   <External filepath="pmd2scriptdata.xml" />
+  <External filepath="pmd2dungeondata.xml" />
 
 </PMD2>

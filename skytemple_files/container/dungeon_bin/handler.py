@@ -14,24 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.container.bin_pack.writer import BinPackWriter
+from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 
 
-class BinPackHandler(DataHandler[BinPack]):
+class DungeonBinHandler(DataHandler[DungeonBinPack]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> BinPack:
-        return BinPack(data)
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> DungeonBinPack:
+        return DungeonBinPack(data, static_data.dungeon_data.dungeon_bin_files)
 
     @classmethod
-    def serialize(cls, data: BinPack, fixed_header_len=0, **kwargs) -> bytes:
+    def serialize(cls, data: DungeonBinPack, **kwargs) -> bytes:
         """
         Serialize the bin pack.
-
-        If fixed_header_len is set, the first sub file is placed at exactly this position,
-        the header is padded until then. For the three files in the MONSTER/ directory,
-        this must be 0x1300.
         """
-        return BinPackWriter(data, fixed_header_len).write()
+        data.serialize_subfiles()
+        return BinPackWriter(data, 0).write()

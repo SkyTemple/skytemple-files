@@ -29,6 +29,10 @@ SkyTemple Files
     :target: https://discord.gg/4e3X36f
     :alt: Discord
 
+.. |kofi| image:: https://www.ko-fi.com/img/githubbutton_sm.svg
+    :target: https://ko-fi.com/I2I81E5KH
+    :alt: Ko-Fi
+
 Python library to work with the files inside the ROM of Pokémon Mystery Dungeon Explorers of Sky.
 
 This is still very WIP, so I didn't feel like
@@ -40,3 +44,5 @@ The ``export_maps.py`` script contains a sample script on how to use this librar
 
 In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
 be installed and in the system's ``PATH`` to be able to apply ROM patches.
+
+|kofi|

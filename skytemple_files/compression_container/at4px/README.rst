@@ -61,6 +61,6 @@ Based on following documentations:
 .. _psy_commando:                   https://github.com/PsyCommando/
 .. _Zhorken:                        https://github.com/Zhorken
 
-.. _PKDPX:                          https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression_container/pkdpx
-.. _SIR0:                           https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/container/sir0
-.. _PX:                             https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression/px
+.. _PKDPX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/pkdpx
+.. _SIR0:                           https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/container/sir0
+.. _PX:                             https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/px

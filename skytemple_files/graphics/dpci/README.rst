@@ -23,5 +23,5 @@ Contains a stream of 8x8px 4bpp indexed images (tiles). The tiles use only 16 co
 
 .. Links:
 
-.. _DPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpc
-.. _BPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpc
+.. _DPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpc
+.. _BPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpc

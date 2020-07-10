@@ -68,5 +68,5 @@ If I missed you, please open an Issue!)
 
 .. _psy_commando:                   https://github.com/PsyCommando/
 
-.. _DPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpl
-.. _BPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpl
+.. _DPL:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpl
+.. _BPL:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpl

@@ -22,5 +22,5 @@ Usually pairs of 16 colors build up one palette, the first palette will usually 
 
 .. Links:
 
-.. _DPLA:                           https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpla
-.. _BPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpl
+.. _DPLA:                           https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpla
+.. _BPL:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpl

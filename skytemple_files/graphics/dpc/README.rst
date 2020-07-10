@@ -78,8 +78,8 @@ If I missed you, please open an Issue!)
 
 .. _psy_commando:                   https://github.com/PsyCommando/
 
-.. _DPCI:                           https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpci
-.. _DPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpl
-.. _DPLA:                           https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/dpla
-.. _BPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpc
-.. _BGP:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bgp
+.. _DPCI:                           https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpci
+.. _DPL:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpl
+.. _DPLA:                           https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/dpla
+.. _BPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpc
+.. _BGP:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bgp

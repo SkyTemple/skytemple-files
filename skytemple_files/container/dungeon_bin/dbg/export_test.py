@@ -1,3 +1,4 @@
+"""NOTE: THIS IS CURRENTLY OUTDATAED FROM EARLY EXPERIMENTATION!"""
 #  Copyright 2020 Parakoopa
 #
 #  This file is part of SkyTemple.
@@ -20,13 +21,15 @@ from PIL import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry
-from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, iter_bytes_4bit_le
+from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.container.dungeon_bin.sub.raw_rgbx32_palette import DbinRawRgbx32Palette
-from skytemple_files.container.dungeon_bin.sub.sir0_weird_palette import DbinWeirdPalette
 from skytemple_files.compression_container.at4px.model import At4px
 
 from itertools import islice
+
+from skytemple_files.container.sir0.handler import Sir0Handler
+from skytemple_files.graphics.dpl.model import Dpl
+from skytemple_files.graphics.dpla.model import Dpla
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
@@ -44,7 +47,7 @@ def chunk(it, size):
     return iter(lambda: tuple(islice(it, size)), ())
 
 
-def output_weird_palette(fn: str, file: DbinWeirdPalette):
+def output_dpla(fn: str, file: Dpla):
     print("Outputting weird palette as image.")
     max_pal_len = max(max(len(p) for p in file.colors), 1)
     # each entry on the y access is a color, x axis shows animation
@@ -57,7 +60,7 @@ def output_weird_palette(fn: str, file: DbinWeirdPalette):
     out_img.save(os.path.join(output_dir, fn + '.png'))
 
 
-def output_raw_palette(fn: str, file: DbinRawRgbx32Palette):
+def output_raw_palette(fn: str, file: Dpl):
     print("Outputting raw palette as image.")
     max_pal_len = max(max(int(len(p) / 3) for p in file.palettes), 1)
     # each entry on the y access is a palette, x axis shows palette colors
@@ -70,7 +73,7 @@ def output_raw_palette(fn: str, file: DbinRawRgbx32Palette):
     out_img.save(os.path.join(output_dir, fn + '.png'))
 
 
-def output_at4px_water_tiles(fn: str, at4px: At4px, pal: DbinWeirdPalette):
+def output_at4px_water_tiles(fn: str, at4px: At4px, pal: Dpla):
     print("Outputting water AT4PX as image.")
     img_bin = at4px.decompress()
     tiles = list(iter_bytes(img_bin, int(8 * 8 / 2)))
@@ -92,7 +95,7 @@ def output_at4px_water_tiles(fn: str, at4px: At4px, pal: DbinWeirdPalette):
     out_img.save(os.path.join(output_dir, fn + '.png'))
 
 
-def output_at4px_dungeon_tiles(fn: str, at4px: At4px, pal: DbinWeirdPalette):
+def output_at4px_dungeon_tiles(fn: str, at4px: At4px, pal: Dpla):
     print("Outputting dungeon AT4PX as image.")
     img_bin = at4px.decompress()
     tiles = list(iter_bytes(img_bin, int(8 * 8)))
@@ -127,17 +130,18 @@ for i, file in enumerate(dungeon_bin):
     fn = dungeon_bin.get_filename(i)
     fdef = static_data.dungeon_data.dungeon_bin_files.get(i)
     print(i, type(file), fn)
-    if isinstance(file, DbinWeirdPalette):
-        output_weird_palette(fn, file)
+    if isinstance(file, Dpla):
+        output_dpla(fn, file)
     elif isinstance(file, At4px):
         # As the palette, we use one of the first 170 files, matching the modulo index.
+        # TODO: This is currently using the animated palette actually...
         pal = dungeon_bin[i % 170]
-        assert isinstance(pal, DbinWeirdPalette)
-        if fdef.name == "water_%i.at4px":
+        assert isinstance(pal, Dpla)
+        if fdef.name == "dungeon%i.bpci":
             output_at4px_water_tiles(fn, file, pal)
         else:
             output_at4px_dungeon_tiles(fn, file, pal)
-    elif isinstance(file, DbinRawRgbx32Palette):
+    elif isinstance(file, Dpl):
         output_raw_palette(fn, file)
     elif isinstance(file, bytes):
         print("No model, skipped.")
@@ -147,5 +151,8 @@ for i, file in enumerate(dungeon_bin):
 # Also output the raw files
 for i, file in enumerate(dungeon_bin.get_files_bytes()):
     fn = dungeon_bin.get_filename(i)
+    if i == 1028:
+        sir0 = Sir0Handler.deserialize(file)
+        file = sir0.content
     with open(os.path.join(output_dir, 'raw', fn), 'wb') as f:
         f.write(file)

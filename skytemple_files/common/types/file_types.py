@@ -23,14 +23,16 @@ from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.container.dungeon_bin.sub.at4px_sir0 import DbinAt4pxSir0Handler
-from skytemple_files.container.dungeon_bin.sub.pkdpx_sir0 import DbinPkdpxSir0Handler
-from skytemple_files.container.dungeon_bin.sub.raw_rgbx32_palette import DbinRawRgbx32PaletteHandler
+from skytemple_files.container.dungeon_bin.sub.at4px_dpc import DbinAt4pxDpcHandler
+from skytemple_files.container.dungeon_bin.sub.at4px_dpci import DbinAt4pxDpciHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import DbinSir0At4pxDmaHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx import DbinSir0PkdpxHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_1035 import DbinSir01035Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1034 import DbinSir0Image1034Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_weird_palette import DbinSir0WeirdPaletteHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DbplaHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
@@ -39,6 +41,11 @@ from skytemple_files.graphics.bma.handler import BmaHandler
 from skytemple_files.graphics.bpa.handler import BpaHandler
 from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpl.handler import BplHandler
+from skytemple_files.graphics.dma.handler import DmaHandler
+from skytemple_files.graphics.dpc.handler import DpcHandler
+from skytemple_files.graphics.dpci.handler import DpciHandler
+from skytemple_files.graphics.dpl.handler import DplHandler
+from skytemple_files.graphics.dpla.handler import DplaHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
@@ -55,12 +62,18 @@ from skytemple_files.script.ssb.handler import SsbHandler
 class FileType:
     """A list of supported file types. Values are their data handlers."""
     UNKNOWN = None
+
     KAO = KaoHandler
+
     AT4PX = At4pxHandler
     PKDPX = PkdpxHandler
     AT4PN = At4pnHandler
+
     PX = PxHandler
+    GENERIC_NRL = GenericNrlHandler
+
     BGP = BgpHandler
+
     BG_LIST_DAT = BgListDatHandler
     BPL = BplHandler
     BPC = BpcHandler
@@ -70,26 +83,38 @@ class FileType:
     BMA_LAYER_NRL = BmaLayerNrlHandler
     BMA_COLLISION_RLE = BmaCollisionRleHandler
     BPA = BpaHandler
+
+    DUNGEON_BIN = DungeonBinHandler
+    DPL = DplHandler
+    DPLA = DplaHandler
+    DPC = DpcHandler
+    DPCI = DpciHandler
+    DMA = DmaHandler
+
     WAN = WanHandler
     WAT = WanHandler
+
     W16 = W16Handler
-    GENERIC_NRL = GenericNrlHandler
     STR = StrHandler
     LSD = LsdHandler
+
     SSA = SsaHandler
     SSE = SsaHandler
     SSS = SsaHandler
     SSB = SsbHandler
+
     SIR0 = Sir0Handler
     BIN_PACK = BinPackHandler
-    DUNGEON_BIN = DungeonBinHandler
+
     MD = MdHandler
     
     # dungeon.bin sub file handlers
-    DBIN_SIR0_WEIRD_PALETTE = DbinSir0WeirdPaletteHandler
-    DBIN_AT4PX_SIR0 = DbinAt4pxSir0Handler
-    DBIN_RAW_RGBX32_PALETTE = DbinRawRgbx32PaletteHandler
-    DBIN_PKDPX_SIR0 = DbinPkdpxSir0Handler
+    DBIN_SIR0_DPLA = DbinSir0DbplaHandler
+    DBIN_SIR0_AT4PX_DMA = DbinSir0At4pxDmaHandler
+    DBIN_AT4PX_DPC = DbinAt4pxDpcHandler
+    DBIN_AT4PX_DPCI = DbinAt4pxDpciHandler
+    DBIN_SIR0_AT4PX = DbinSir0At4pxHandler
+    DBIN_SIR0_PKDPX = DbinSir0PkdpxHandler
     DBIN_SIR0_WEIRD_DATA_FILE = DbinSir0WeirdDataFileHandler
     DBIN_SIR0_IMAGE_1033 = DbinSir0Image1033Handler
     DBIN_SIR0_IMAGE_1034 = DbinSir0Image1034Handler

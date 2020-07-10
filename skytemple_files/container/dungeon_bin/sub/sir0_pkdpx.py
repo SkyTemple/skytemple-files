@@ -20,7 +20,7 @@ from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.compression_container.pkdpx.model import Pkdpx
 
 
-class DbinPkdpxSir0Handler(DataHandler[Pkdpx]):
+class DbinSir0PkdpxHandler(DataHandler[Pkdpx]):
     """A proxy data handler for Pkdpx wrapped in Sir0."""
 
     @classmethod

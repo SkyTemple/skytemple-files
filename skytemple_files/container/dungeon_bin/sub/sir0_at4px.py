@@ -20,7 +20,7 @@ from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.compression_container.at4px.model import At4px
 
 
-class DbinAt4pxSir0Handler(DataHandler[At4px]):
+class DbinSir0At4pxHandler(DataHandler[At4px]):
     """A proxy data handler for At4px wrapped in Sir0."""
 
     @classmethod

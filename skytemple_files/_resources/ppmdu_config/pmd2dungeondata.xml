@@ -52,21 +52,21 @@
             * File 1035 SIR0 wrapped file.. Has a short header, made of 2 pointers. Has a pointer table at the end, and 
               what seems to be a color palette ?
         -->
-        <BinPackFile idxfirst="0"    idxlast="169"  type="DBIN_SIR0_WEIRD_PALETTE"   name="%d.wpal.sir0"/>
-        <BinPackFile idxfirst="170"  idxlast="339"  type="DBIN_AT4PX_SIR0"           name="%d.at4px.sir0"/>
-        <BinPackFile idxfirst="340"  idxlast="509"  type="AT4PX"                     name="%d.at4px"/>
-        <BinPackFile idxfirst="510"  idxlast="679"  type="AT4PX"                     name="water_%i.at4px"/>
-        <BinPackFile idxfirst="680"  idxlast="849"  type="DBIN_RAW_RGBX32_PALETTE"   name="%d.rgb32xpal"/>
-        <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_WEIRD_PALETTE"   name="%d.wpal.sir0"/>
+        <BinPackFile idxfirst="0"    idxlast="169"  type="DBIN_SIR0_DPLA"            name="dungeon%i.dpla"/>
+        <BinPackFile idxfirst="170"  idxlast="339"  type="DBIN_SIR0_AT4PX_DMA"       name="dungeon%i.dma"/>
+        <BinPackFile idxfirst="340"  idxlast="509"  type="DBIN_AT4PX_DPC"            name="dungeon%i.dpc"/>
+        <BinPackFile idxfirst="510"  idxlast="679"  type="DBIN_AT4PX_DPCI"           name="dungeon%i.dpci"/>
+        <BinPackFile idxfirst="680"  idxlast="849"  type="DPL"                       name="dungeon%i.dpl"/>
+        <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_DPLA"            name="%d.dpla"/>
         <BinPackFile idxfirst="879"  idxlast="936"  type="AT4PX"                     name="%d.at4px"/>
         <BinPackFile idxfirst="937"  idxlast="965"  type="DBIN_PKDPX_SIR0"           name="%d.pkdpx.sir0"/>
-        <BinPackFile idxfirst="966"  idxlast="994"  type="DBIN_RAW_RGBX32_PALETTE"   name="%d.rgb32xpal"/>
+        <BinPackFile idxfirst="966"  idxlast="994"  type="DPL"                       name="%d.dpl"/>
         <BinPackFile idxfirst="995"                 type="DBIN_RAW_IMAGE_4BPP"       name="%d.img"/>
         <BinPackFile idxfirst="996"                 type="SIR0"                      name="%d.sir0"/>
-        <BinPackFile idxfirst="997"                 type="DBIN_RAW_RGBX32_PALETTE"   name="%d.rgb32xpal"/>
+        <BinPackFile idxfirst="997"                 type="DPL"                       name="%d.dpl"/>
         <BinPackFile idxfirst="998"                 type="UNKNOWN"                   name="%d.bin"/>
-        <BinPackFile idxfirst="999"                 type="DBIN_RAW_RGBX32_PALETTE"   name="%d.rgb32xpal"/>
-        <BinPackFile idxfirst="1000"                type="DBIN_SIR0_WEIRD_DATA_FILE" name="%d.bin.sir0"/>
+        <BinPackFile idxfirst="999"                 type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="1000"                type="DBIN_SIR0_WEIRD_DATA_FILE" name="%d.sir0"/>
         <BinPackFile idxfirst="1001"                type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1002"                type="WTU"                       name="%d.wtu"/>
         <BinPackFile idxfirst="1003"                type="WTE"                       name="%d.wte"/>
@@ -84,7 +84,7 @@
         <!--<BinPackFile idxfirst="1028"                type="WAN"                       name="%d.wan"/>-->
         <BinPackFile idxfirst="1028"                type="UNKNOWN"                   name="%d.wan.bin"/>
         <BinPackFile idxfirst="1029"                type="UNKNOWN"                   name="%d.bin"/>
-        <BinPackFile idxfirst="1030"                type="DBIN_RAW_RGBX32_PALETTE"   name="%d.rgb32xpal"/>
+        <BinPackFile idxfirst="1030"                type="DPL"                       name="%d.dpl"/>
         <BinPackFile idxfirst="1031"                type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1032"                type="WTU"                       name="%d.wtu"/>
         <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMAGE_1033"      name="%d.img1033.sir0"/>

@@ -26,9 +26,9 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, iter_bytes_4bit_le, write_uintle, \
     read_uintle
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.container.dungeon_bin.sub.at4px_sir0 import DbinAt4pxSir0Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
 from skytemple_files.container.dungeon_bin.sub.raw_rgbx32_palette import DbinRawRgbx32Palette
-from skytemple_files.container.dungeon_bin.sub.sir0_weird_palette import DbinWeirdPalette
+from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinWeirdPalette
 from skytemple_files.compression_container.at4px.model import At4px
 
 from itertools import islice
@@ -49,7 +49,7 @@ assert dungeon_bin_bin == dungeon_bin_bin_after
 
 # CHECK 2: We can open and save the Sir0 wrapped At4px images correctly
 at4px = dungeon_bin[170]
-assert at4px.decompress() == DbinAt4pxSir0Handler.deserialize(DbinAt4pxSir0Handler.serialize(at4px)).decompress()
+assert at4px.decompress() == DbinSir0At4pxHandler.deserialize(DbinSir0At4pxHandler.serialize(at4px)).decompress()
 
 
 # -- CORUPTION TASKS

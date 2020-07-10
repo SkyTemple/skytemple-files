@@ -14,22 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import *
 
+# Length of a palette in colors.
+DPL_PAL_LEN = 16
+# Maximum number of palettes
+DPL_MAX_PAL = 16
+# Number of color bytes per palette entry. Fourth is always 0x00.
+DPL_PAL_ENTRY_LEN = 4
+# Size of a single palette in bytes
+DPL_PAL_SIZE = DPL_PAL_LEN * DPL_PAL_ENTRY_LEN
+# The value of the fourth color
+DPL_FOURTH_COLOR = 128
 
-class DbinRawRgbx32PaletteHandler(DataHandler['DbinRawRgbx32Palette']):
 
-    @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'DbinRawRgbx32Palette':
-        return DbinRawRgbx32Palette(data)
-
-    @classmethod
-    def serialize(cls, data: 'DbinRawRgbx32Palette', **kwargs) -> bytes:
-        return data.to_bytes()
-
-
-class DbinRawRgbx32Palette:
+class Dpl:
     """
     This palette file contains a single raw RGBx palette.
     The model chunks the colors in 16-color palettes.
@@ -40,12 +39,12 @@ class DbinRawRgbx32Palette:
         self.palettes = []
         assert len(data) / 4 % 1 == 0
         pal = []
-        for i, (r, g, b, x) in enumerate(iter_bytes(data, 4)):
+        for i, (r, g, b, x) in enumerate(iter_bytes(data, DPL_PAL_ENTRY_LEN)):
             pal.append(r)
             pal.append(g)
             pal.append(b)
-            assert x == 128  # just in case it isn't... then we'd have a real alpha channel
-            if i % 16 == 15:
+            assert x == DPL_FOURTH_COLOR  # just in case it isn't... then we'd have a real alpha channel
+            if i % DPL_PAL_LEN == DPL_PAL_LEN - 1:
                 self.palettes.append(pal)
                 pal = []
         if len(pal) > 0:

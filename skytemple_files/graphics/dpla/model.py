@@ -14,30 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, List, Optional
+from typing import Optional
 
-from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import *
 
-from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
-
-class DbinSir0WeirdPaletteHandler(DataHandler['DbinWeirdPalette']):
-
-    @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'DbinWeirdPalette':
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.deserialize(data)
-        return FileType.SIR0.unwrap_obj(sir0, DbinWeirdPalette)
-
-    @classmethod
-    def serialize(cls, data: 'DbinWeirdPalette', **kwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.wrap_obj(data)
-        return FileType.SIR0.serialize(sir0)
-
-
-class DbinWeirdPalette(Sir0Serializable):
+class Dpla:
     """
     This palette file contains sets of 16 colors and "frames" of animations for them. Each Sir0 poiinter
     points to one color entry and each of these color entries has 0-X frames of animation.
@@ -56,7 +38,7 @@ class DbinWeirdPalette(Sir0Serializable):
             unk = read_uintle(data, pnt + 2, 2)
             # 0x4         (NbColors * 4)          A list of colors. Always at least 4 bytes even when empty! Is completely 0 if nb of color == 0 !
             # [
-            #     0x0     4           RGBX32      A color. 
+            #     0x0     4           RGBX32      A color.
             #     ...
             # ]
             frames = []
@@ -88,5 +70,5 @@ class DbinWeirdPalette(Sir0Serializable):
         raise NotImplementedError()
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'DbinWeirdPalette':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'Dpla':
         return cls(content_data, data_pointer)

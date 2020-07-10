@@ -77,7 +77,11 @@ class DungeonBinPack(BinPack):
             # We don't have a handler... just return the bytes instead.
             logger.warning(f"No file handler for {file_def.type} found, falling back to bytes.")
             return file_bytes
-        return handler.deserialize(file_bytes)
+        try:
+            return handler.deserialize(file_bytes)
+        except NotImplementedError:
+            logger.warning(f"File handler for {file_def.type} not implemented, falling back to bytes.")
+            return file_bytes
 
     def _get_handler(self, type_name: str) -> Optional[DataHandler]:
         from skytemple_files.common.types.file_types import FileType

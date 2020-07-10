@@ -1,4 +1,4 @@
-"""Exports all PMAs from the dungeon.bin"""
+"""Replaces the P** of dungeon tileset 1 with dungeon tileset 2."""
 #  Copyright 2020 Parakoopa
 #
 #  This file is part of SkyTemple.
@@ -38,39 +38,22 @@ dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
-for i, file in enumerate(dungeon_bin):
-    fn = dungeon_bin.get_filename(i)
-    if fn.endswith('.dma'):
-        file: Dma
-        pal_file: Dpl = dungeon_bin.get(fn.replace('.dma', '.dpl'))
-        ani_pal_file: Dpla = dungeon_bin.get(fn.replace('.dma', '.dpla'))
-        dpci: Dpci = dungeon_bin.get(fn.replace('.dma', '.dpci'))
-        dpc: Dpc = dungeon_bin.get(fn.replace('.dma', '.dpc'))
-        print(fn)
-        images = []
-        base_img = file.to_pil(dpc, dpci, pal_file.palettes)
-        images.append(base_img)
+dungeon_bin.set('dungeon1.dpl', dungeon_bin.get('dungeon2.dpl'))
+dungeon_bin.set('dungeon1.dpla', dungeon_bin.get('dungeon2.dpla'))
+dungeon_bin.set('dungeon1.dpci', dungeon_bin.get('dungeon2.dpci'))
+dungeon_bin.set('dungeon1.dpc', dungeon_bin.get('dungeon2.dpc'))
+dungeon_bin.set('dungeon1.dma', dungeon_bin.get('dungeon2.dma'))
 
-        # Pal ani
-        number_frames = len(ani_pal_file.colors[0])
-        has_a_second_palette = len(ani_pal_file.colors) > 16 and len(ani_pal_file.colors[16]) > 0
+dungeon_bin_bin_after = DungeonBinHandler.serialize(dungeon_bin)
+rom.setFileByName('DUNGEON/dungeon.bin', dungeon_bin_bin_after)
 
-        for fidx in range(0, number_frames):
-            pal_copy = pal_file.palettes.copy()
-            img_copy = base_img.copy()
-            # Put palette 11
-            pal_copy[10] = ani_pal_file.get_palette_for_frame(0, fidx)
-            if has_a_second_palette:
-                # Put palette 12
-                pal_copy[11] = ani_pal_file.get_palette_for_frame(1, fidx)
-            img_copy.putpalette(itertools.chain.from_iterable(pal_copy))
-            images.append(img_copy)
+# Check if we can open them again
+dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin.get('dungeon1.dpl')
+dungeon_bin.get('dungeon1.dpla')
+dungeon_bin.get('dungeon1.dpci')
+dungeon_bin.get('dungeon1.dpc')
+dungeon_bin.get('dungeon1.dma')
 
-        images[0].save(
-            os.path.join(output_dir, fn + '.gif'),
-            save_all=True,
-            append_images=images[1:],
-            duration=40,
-            loop=0,
-            optimize=False
-        )
+rom.saveToFile(os.path.join(output_dir, 'changed.nds'))
+

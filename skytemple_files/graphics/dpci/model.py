@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import itertools
 import math
 
 from PIL import Image
@@ -64,3 +65,6 @@ class Dpci:
             image, DPL_PAL_LEN, DPL_MAX_PAL, DPCI_TILE_DIM,
             image.width, image.height, optimize=False
         )
+
+    def to_bytes(self):
+        return bytes(itertools.chain.from_iterable(self.tiles))

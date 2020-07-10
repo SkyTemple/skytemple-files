@@ -80,3 +80,10 @@ class Dpc:
         )
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
         return tiles, palettes
+
+    def to_bytes(self):
+        all_tilemaps = list(itertools.chain.from_iterable(self.chunks))
+        data = bytearray(len(all_tilemaps) * 2)
+        for i, tm in enumerate(all_tilemaps):
+            write_uintle(data, tm.to_int(), i * 2, 2)
+        return data

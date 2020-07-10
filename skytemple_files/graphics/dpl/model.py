@@ -51,4 +51,13 @@ class Dpl:
             self.palettes.append(pal)
 
     def to_bytes(self):
-        raise NotImplementedError()
+        data = bytearray(len(self.palettes) * DPL_PAL_LEN * DPL_PAL_ENTRY_LEN)
+        cursor = 0
+        for pal in self.palettes:
+            for i, col in enumerate(pal):
+                write_uintle(data, col, cursor)
+                cursor += 1
+                if i % 3 == 2:
+                    write_uintle(data, DPL_FOURTH_COLOR, cursor)
+                    cursor += 1
+        return data

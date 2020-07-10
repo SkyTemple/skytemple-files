@@ -36,6 +36,14 @@ class DungeonBinPack(BinPack):
                 return self[i]
         raise KeyError(f"File {filename} not found.")
 
+    def set(self, filename, data):
+        """Sets a file by name."""
+        for i in range(0, len(self)):
+            if filename == self.get_filename(i):
+                self[i] = data
+                return
+        raise KeyError(f"File {filename} not found.")
+
     def get_filename(self, index):
         """Returns the filename for a file at a given index."""
         fdef = self.files_def.get(index)

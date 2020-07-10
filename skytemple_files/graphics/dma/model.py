@@ -190,3 +190,6 @@ class Dma:
             y_cursor += 2
 
         return fimg
+
+    def to_bytes(self):
+        return bytes(self.chunk_mappings)

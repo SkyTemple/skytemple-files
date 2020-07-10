@@ -17,7 +17,6 @@
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpc.writer import DpcWriter
 
 
 class DpcHandler(DataHandler[Dpc]):
@@ -27,4 +26,4 @@ class DpcHandler(DataHandler[Dpc]):
 
     @classmethod
     def serialize(cls, data: Dpc, **kwargs) -> bytes:
-        return DpcWriter(data).write()
+        return data.to_bytes()

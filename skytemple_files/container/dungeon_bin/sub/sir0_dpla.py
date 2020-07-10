@@ -19,7 +19,7 @@ from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dpla.model import Dpla
 
 
-class DbinSir0DbplaHandler(DataHandler[Dpla]):
+class DbinSir0DplaHandler(DataHandler[Dpla]):
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Dpla:

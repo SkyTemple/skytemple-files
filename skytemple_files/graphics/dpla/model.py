@@ -31,11 +31,12 @@ class Dpla:
 
         # A list of colors stored in this file. The colors are lists of RGB value tuples: [(R, G, B), (R, G, B)...]
         self.colors = []
+        self.unks_for_colors = []
         for pnt in toc_pointers:
             # 0x0         2           uint16      (NbColors) The amount of colors in this entry.
             number_colors = read_uintle(data, pnt, 2)
             # 0x2         2           uint16      unknown
-            unk = read_uintle(data, pnt + 2, 2)
+            self.unks_for_colors.append(read_uintle(data, pnt + 2, 2))
             # 0x4         (NbColors * 4)          A list of colors. Always at least 4 bytes even when empty! Is completely 0 if nb of color == 0 !
             # [
             #     0x0     4           RGBX32      A color.
@@ -66,8 +67,38 @@ class Dpla:
         return frame_pal
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        # TODO - A pointer for each palette must be created. Data Pointer must point to list of pointers at end.
-        raise NotImplementedError()
+        data = bytearray()
+        pointers = []
+        pointer_offsets = []
+        for i, color_frames in enumerate(self.colors):
+            pointers.append(len(data))
+            buffer_entry = bytearray(((int(len(color_frames) / 3) + 1) * 4))
+            # Number colors
+            write_uintle(buffer_entry, len(color_frames), 0)
+            # Unk
+            write_uintle(buffer_entry, self.unks_for_colors[i], 2)
+            # Always one null color
+            null_color = False
+            if len(color_frames) == 0:
+                null_color = True
+                color_frames = [[0, 0, 0]]
+            cursor = 4
+            for j, (r, g, b) in enumerate(color_frames):
+                write_uintle(buffer_entry, r, cursor)
+                write_uintle(buffer_entry, g, cursor + 1)
+                write_uintle(buffer_entry, b, cursor + 2)
+                write_uintle(buffer_entry, 128 if not null_color else 0, cursor + 3)
+                cursor += 4
+
+            data += buffer_entry
+        data_offset = cursor = len(data)
+        data += bytes(4 * len(pointers))
+        for pnt in pointers:
+            write_uintle(data, pnt, cursor, 4)
+            pointer_offsets.append(cursor)
+            cursor += 4
+
+        return data, pointer_offsets, data_offset
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'Dpla':

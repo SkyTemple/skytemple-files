@@ -17,7 +17,6 @@
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dma.writer import DmaWriter
 
 
 class DmaHandler(DataHandler[Dma]):
@@ -27,4 +26,4 @@ class DmaHandler(DataHandler[Dma]):
 
     @classmethod
     def serialize(cls, data: Dma, **kwargs) -> bytes:
-        return DmaWriter(data).write()
+        return data.to_bytes()

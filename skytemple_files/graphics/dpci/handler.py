@@ -17,7 +17,6 @@
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpci.writer import DpciWriter
 
 
 class DpciHandler(DataHandler[Dpci]):
@@ -27,4 +26,4 @@ class DpciHandler(DataHandler[Dpci]):
 
     @classmethod
     def serialize(cls, data: Dpci, **kwargs) -> bytes:
-        return DpciWriter(data).write()
+        return data.to_bytes()

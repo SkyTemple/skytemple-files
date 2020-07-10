@@ -65,7 +65,7 @@ class Dma:
         """
         Returns all three variations (chunk ids) set for this dungeon tile configuration.
         neighbors_same is a bitfield with the bits for the directions set to 1 if the neighbor at this
-        position has the same (floor/not floor) property as the tile at this position.
+        position has the same type as the tile at this position.
         TIP: For neighbors_same, use the bit flags in DmaNeighbor.
         """
         # Wall

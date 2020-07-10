@@ -50,7 +50,7 @@ The highest two bits define the type of the tile:
 
 The lowest eight bits (if not "extra")
 ######################################
-If a bit is set, it means the neighbor tile has the same property (floor/not floor) as the current tile.
+If a bit is set, it means the neighbor tile has the same type as the current tile.
 
 +---------+---------------------------------------+
 | Bit     | Direction                             |

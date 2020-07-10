@@ -27,8 +27,6 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, it
     read_uintle
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
-from skytemple_files.container.dungeon_bin.sub.raw_rgbx32_palette import DbinRawRgbx32Palette
-from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinWeirdPalette
 from skytemple_files.compression_container.at4px.model import At4px
 
 from itertools import islice
@@ -47,24 +45,15 @@ dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 dungeon_bin_bin_after = DungeonBinHandler.serialize(dungeon_bin)
 assert dungeon_bin_bin == dungeon_bin_bin_after
 
-# CHECK 2: We can open and save the Sir0 wrapped At4px images correctly
-at4px = dungeon_bin[170]
-assert at4px.decompress() == DbinSir0At4pxHandler.deserialize(DbinSir0At4pxHandler.serialize(at4px)).decompress()
-
 
 # -- CORUPTION TASKS
 def corrupt171():
     """Corrupt 171: Dungeon tiles Beach cave 1? -- No actually not.
     Seems to be some kind of map assembling information."""
     img171 = dungeon_bin[171].decompress()
-    # Make every second byte 2
-    img171new = bytearray(len(img171))
-    for i, b in enumerate(img171):
-        if i % 2 == 0:
-            img171new[i] = img171[i]
-        else:
-            img171new[i] = 2
-    dungeon_bin[171] = FileType.AT4PX.compress(img171new)
+    # Make the first entry tile 2
+    img171 = b'\x02' * len(img171)
+    dungeon_bin[171] = FileType.AT4PX.compress(img171)
 
 
 def corrupt341():
@@ -131,8 +120,8 @@ def corrupt511():
 # -- /
 
 # Run corruption tasks
-#corrupt171()
-corrupt341()
+corrupt171()
+#corrupt341()
 #corrupt511()
 
 dungeon_bin_bin_after_changes = DungeonBinHandler.serialize(dungeon_bin)

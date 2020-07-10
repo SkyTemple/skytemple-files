@@ -14,13 +14,179 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import math
+from enum import Enum
+
+from PIL import Image
+
 from skytemple_files.common.util import *
+from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
+from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
+
+
+class DmaType(Enum):
+    WALL = 0
+    WATER = 1
+    FLOOR = 2
+
+
+class DmaExtraType(Enum):
+    FLOOR1 = 0
+    WALL_OR_VOID = 1
+    FLOOR2 = 2
+
+
+class DmaNeighbor:
+    SOUTH = 0x01
+    SOUTH_EAST = 0x02
+    EAST = 0x04
+    NORTH_EAST = 0x08
+    NORTH = 0x10
+    NORTH_WEST = 0x20
+    WEST = 0x40
+    SOUTH_WEST = 0x80
 
 
 class Dma:
     def __init__(self, data: bytes):
-        from skytemple_files.common.types.file_types import FileType
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        raise NotImplementedError()  # TODO
+        # Come in pair of three. So: i = floor(i/3)
+        # First two:
+        # 00 -> Wall
+        # 01 -> Water
+        # 10 -> Floor
+        # 11 -> Extra
+        # Rest: SouthWest West NorthWest North NorthEast East SouthEast South
+        self.chunk_mappings = list(data)  # d for i, d in enumerate(data) if (math.floor(i / 3) >= 0b1100000000)
+
+    def get(self, get_type: DmaType, solid_neighbors: int) -> List[int]:
+        """
+        Returns all three variations (chunk ids) set for this dungeon tile configuration.
+        TIP: For solid_neighbors, use the bit flags in DmaNeighbor.
+        """
+        # Wall
+        high_two = 0
+        if get_type == DmaType.WATER:
+            high_two = 0x100
+        elif get_type == DmaType.FLOOR:
+            high_two = 0x200
+        idx = high_two + solid_neighbors
+        return self.chunk_mappings[(idx * 3):(idx * 3) + 3]
+
+    def get_extra(self, extra_type: DmaExtraType) -> List[int]:
+        """
+        Returns a few extra chunk variations for the given type.
+        How they are used exactly by the game is currently not know,
+        this interface could change if we find out.
+        """
+        cms = []
+        for i in range(0x300 * 3, len(self.chunk_mappings)):
+            if i % 3 == extra_type.value:
+                cms.append(self.chunk_mappings[i])
+        return cms
+
+    def to_pil(
+            self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]
+    ) -> Image.Image:
+        """
+        For debugging only, the output image contains some labels, etc. Use get(...) instead to
+        get a chunk mapping and then render that chunk by extracting it from the image returned by
+        bpc.chunks_to_pil(...)
+
+        Converts the chunks of the DMA into an image. Works like bpc.chunks_to_pil,
+        but uses the chunk mappings stored in this file to place them instead.
+        """
+
+        # We don't render all possibilities of course...
+        possibilities_to_render = [[
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1]
+        ], [
+            [1, 1, 1],
+            [1, 0, 1],
+            [1, 1, 1]
+        ], [
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ], [
+            [0, 1, 0],
+            [1, 1, 1],
+            [0, 1, 0]
+        ], [
+            [1, 0, 1],
+            [0, 1, 0],
+            [1, 0, 1]
+        ]]
+        # For each possibility we need 11x4 chunks (incl. 1 space line and three variations, with spacing)
+        # This means for all two types we need 24x4 (incl. 2 spacing) per possibility
+        # Possibilities are rendered down
+        # For the extra tiles we need 16x1, in total 16x6 (incl. spacing and one spacing before)
+        chunk_dim = DPC_TILING_DIM * DPCI_TILE_DIM
+
+        width = 24 * chunk_dim
+        height = (4 * len(possibilities_to_render) + 6) * chunk_dim
+
+        chunks = dpc.chunks_to_pil(dpci, palettes, 1)
+
+        fimg = Image.new('P', (width, height))
+        fimg.putpalette(chunks.getpalette())
+
+        def paste(chunk_index, x, y):
+            fimg.paste(
+                chunks.crop((0, chunk_index * chunk_dim, chunk_dim, chunk_index * chunk_dim + chunk_dim)),
+                (x * chunk_dim, y * chunk_dim)
+            )
+
+        def get_tile_neighbors(possibility, x, y):
+            ns = 0
+            # SOUTH
+            if y + 1 < len(possibility) and possibility[y + 1][x]:
+                ns += DmaNeighbor.SOUTH
+            # SOUTH_EAST
+            if y + 1 < len(possibility) and x + 1 < len(possibility[y + 1]) and possibility[y + 1][x + 1]:
+                ns += DmaNeighbor.SOUTH_EAST
+            # EAST
+            if x + 1 < len(possibility[y]) and possibility[y][x + 1]:
+                ns += DmaNeighbor.EAST
+            # NORTH_EAST
+            if y - 1 >= 0 and x + 1 < len(possibility[y - 1]) and possibility[y - 1][x + 1]:
+                ns += DmaNeighbor.NORTH_EAST
+            # NORTH
+            if y - 1 >= 0 and possibility[y - 1][x]:
+                ns += DmaNeighbor.NORTH
+            # NORTH_WEST
+            if y - 1 >= 0 and x - 1 >= 0 and possibility[y - 1][x - 1]:
+                ns += DmaNeighbor.NORTH_WEST
+            # WEST
+            if x - 1 >= 0 and possibility[y][x - 1]:
+                ns += DmaNeighbor.WEST
+            # SOUTH_WEST
+            if y + 1 < len(possibility) and x - 1 >= 0 and possibility[y + 1][x - 1]:
+                ns += DmaNeighbor.SOUTH_WEST
+            return ns
+
+        y_cursor = 0
+        x_cursor = 0
+
+        for solid_type in (DmaType.WALL, DmaType.WATER):
+            y_cursor = 0
+            for possibility in possibilities_to_render:
+                for y, row in enumerate(possibility):
+                    for x, solid in enumerate(row):
+                        ctype = solid_type if solid else DmaType.FLOOR
+                        solid_neighbors = get_tile_neighbors(possibility, x, y)
+                        for iv, variation in enumerate(self.get(ctype, solid_neighbors)):
+                            paste(variation, x_cursor + (4 * iv) + x, y_cursor + y)
+                y_cursor += 4
+            x_cursor += 13
+
+        for extra_type in (DmaExtraType.FLOOR1, DmaExtraType.WALL_OR_VOID, DmaExtraType.FLOOR2):
+            for x, variation in enumerate(self.get_extra(extra_type)):
+                paste(variation, x, y_cursor)
+            y_cursor += 2
+
+        return fimg

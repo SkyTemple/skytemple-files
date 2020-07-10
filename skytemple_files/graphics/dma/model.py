@@ -59,12 +59,14 @@ class Dma:
         # 10 -> Floor
         # 11 -> Extra
         # Rest: SouthWest West NorthWest North NorthEast East SouthEast South
-        self.chunk_mappings = list(data)  # d for i, d in enumerate(data) if (math.floor(i / 3) >= 0b1100000000)
+        self.chunk_mappings = list(data)
 
-    def get(self, get_type: DmaType, solid_neighbors: int) -> List[int]:
+    def get(self, get_type: DmaType, neighbors_same: int) -> List[int]:
         """
         Returns all three variations (chunk ids) set for this dungeon tile configuration.
-        TIP: For solid_neighbors, use the bit flags in DmaNeighbor.
+        neighbors_same is a bitfield with the bits for the directions set to 1 if the neighbor at this
+        position has the same (floor/not floor) property as the tile at this position.
+        TIP: For neighbors_same, use the bit flags in DmaNeighbor.
         """
         # Wall
         high_two = 0
@@ -72,7 +74,7 @@ class Dma:
             high_two = 0x100
         elif get_type == DmaType.FLOOR:
             high_two = 0x200
-        idx = high_two + solid_neighbors
+        idx = high_two + neighbors_same
         return self.chunk_mappings[(idx * 3):(idx * 3) + 3]
 
     def get_extra(self, extra_type: DmaExtraType) -> List[int]:
@@ -179,6 +181,9 @@ class Dma:
                     for x, solid in enumerate(row):
                         ctype = solid_type if solid else DmaType.FLOOR
                         solid_neighbors = get_tile_neighbors(possibility, x, y)
+                        if not solid:
+                            # If we are not solid, we need to invert, since we just checked for us being solid.
+                            solid_neighbors ^= 0xFF
                         for iv, variation in enumerate(self.get(ctype, solid_neighbors)):
                             paste(variation, x_cursor + (4 * iv) + x, y_cursor + y)
                 y_cursor += 4

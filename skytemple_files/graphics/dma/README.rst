@@ -50,8 +50,7 @@ The highest two bits define the type of the tile:
 
 The lowest eight bits (if not "extra")
 ######################################
-If a bit is set, it means there is a wall on that neighboring tile,
-otherwise it means there is none there.
+If a bit is set, it means the neighbor tile has the same property (floor/not floor) as the current tile.
 
 +---------+---------------------------------------+
 | Bit     | Direction                             |

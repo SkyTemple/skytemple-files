@@ -42,11 +42,14 @@ Color entry
 | 0x00    | 2      | uint16                | NumberColors          | The amount of frames/colors that this color                 |
 |         |        |                       |                       | entry cycles through.                                       |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
-| 0x02    | 2      | uin16                 | Unk2                  | Probably the speed / duration to hold a frame!              |
+| 0x02    | 2      | uint16                | DurationPerFrame      | Time in game frames to hold a single palette frame for      |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
 |         | Varies | List of `Color`_      | ColorFrames           | One color per NumberColors.                                 |
 |         |        |                       |                       | If NumberColors == 0, this contains one NULL color          |
 +---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
+
+It should be noted that even though the colors COULD have different values for DurationPerFrame and NumberColors,
+in practice 16 color-pairs build a palette and color of one palette ALWAYS have the same values.
 
 Color
 ~~~~~

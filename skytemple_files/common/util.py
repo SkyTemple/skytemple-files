@@ -362,6 +362,12 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     rom.files.insert(folder_first_file_id + index_of_new_file, data)
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 class AutoString:
     """Utility base class, that implements convenient __str__ and __repr__ based on object attributes."""
 

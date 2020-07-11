@@ -146,11 +146,11 @@ Based on following documentations:
 .. _psy_commando:                   https://github.com/PsyCommando/
 .. _MegaMinerd:                     https://projectpokemon.org/home/profile/73557-megaminerd/
 
-.. _BPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpc
-.. _BMA:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bma
-.. _BPA:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpa
-.. _BPL:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpl
-.. _bg_list.dat:                    https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bg_list_dat
-.. _BMA Layer NRL:                  https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression/bma_layer_nrl
-.. _Generic NRL:                    https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression/generic_nrl
-.. _BMA Collision RLE:              https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression/bma_collision_rle
+.. _BPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpc
+.. _BMA:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bma
+.. _BPA:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpa
+.. _BPL:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpl
+.. _bg_list.dat:                    https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bg_list_dat
+.. _BMA Layer NRL:                  https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/bma_layer_nrl
+.. _Generic NRL:                    https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/generic_nrl
+.. _BMA Collision RLE:              https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/bma_collision_rle

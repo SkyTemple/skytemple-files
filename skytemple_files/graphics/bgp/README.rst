@@ -127,6 +127,6 @@ Based on following documentations:
 .. _psy_commando:                   https://github.com/PsyCommando/
 .. _evandixon:                      https://projectpokemon.org/home/profile/183-evandixon/
 
-.. _BPC:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bpc
-.. _BMA:                            https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/graphics/bma
-.. _AT4PX:                          https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression_container/at4px
+.. _BPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpc
+.. _BMA:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bma
+.. _AT4PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at4px

@@ -26,7 +26,8 @@ try:
 except ImportError:
     from pil import Image
 
-from skytemple_files.common.util import iter_bytes_4bit_le
+from skytemple_files.common.util import iter_bytes_4bit_le, iter_bytes
+
 logger = logging.getLogger(__name__)
 
 
@@ -77,7 +78,7 @@ def to_pil(
         tile_dim: int,
         img_width: int, img_height: int,
         tiling_width=1, tiling_height=1,
-        ignore_flip_bits=False
+        ignore_flip_bits=False, bpp=4
 ) -> Image.Image:
     """
     Convert all tiles referenced in tile_mapping to one big PIL image.
@@ -87,6 +88,12 @@ def to_pil(
 
     tiling_width/height control how many tiles form a chunk.
     """
+    if bpp == 8:
+        iter_fn = iter
+    elif bpp == 4:
+        iter_fn = iter_bytes_4bit_le
+    else:
+        raise ValueError("Only 4bpp and 8bpp images are supported.")
     pil_img_data = bytearray(img_width * img_height)
     img_width_in_tiles = int(img_width / tile_dim)
     number_tiles = len(tilemap)
@@ -110,7 +117,7 @@ def to_pil(
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
         pal_start_offset = number_of_cols_per_pal * tile_mapping.pal_idx
-        for idx, pal in enumerate(iter_bytes_4bit_le(tile_data)):
+        for idx, pal in enumerate(iter_fn(tile_data)):
             real_pal = pal_start_offset + pal
             x_in_tile, y_in_tile = _px_pos_flipped(
                 idx % tile_dim, math.floor(idx / tile_dim), tile_dim, tile_dim,

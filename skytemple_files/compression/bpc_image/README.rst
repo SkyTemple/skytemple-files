@@ -99,4 +99,4 @@ Based on following documentations:
 
 .. _psy_commando:                   https://github.com/PsyCommando/
 
-.. _Generic NRL:                    https://github.com/SkyTemple/skytemple_files/blob/master/skytemple_files/compression/generic_nrl
+.. _Generic NRL:                    https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/generic_nrl

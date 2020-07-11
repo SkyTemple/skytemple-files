@@ -26,7 +26,7 @@ class BinPackHandler(DataHandler[BinPack]):
         return BinPack(data)
 
     @classmethod
-    def serialize(cls, data: BinPack, fixed_header_len=None, **kwargs) -> bytes:
+    def serialize(cls, data: BinPack, fixed_header_len=0, **kwargs) -> bytes:
         """
         Serialize the bin pack.
 

@@ -23,6 +23,7 @@ from xml.etree.ElementTree import ParseError
 import pkg_resources
 
 from skytemple_files.common.ppmdu_config.data import *
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
@@ -73,6 +74,7 @@ class Pmd2XmlReader:
         string_index_data = None
         asm_patches_constants = None
         script_data = None
+        dungeon_data = None
         string_encoding = None
         for e in self._root:
             ###########################
@@ -168,6 +170,9 @@ class Pmd2XmlReader:
             elif e.tag == 'ScriptData':
                 script_data = self._parse_script_data(e)
             ###########################
+            elif e.tag == 'DungeonData':
+                dungeon_data = self._parse_dungeon_data(e)
+            ###########################
             elif e.tag == 'StringEncoding':
                 for e_game in e:
                     if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
@@ -183,6 +188,7 @@ class Pmd2XmlReader:
             string_index_data,
             asm_patches_constants,
             script_data,
+            dungeon_data,
             string_encoding
         )
 
@@ -351,6 +357,28 @@ class Pmd2XmlReader:
             lives_entities,
             op_codes,
             ground_state_structs
+        )
+
+    def _parse_dungeon_data(self, dungeon_root) -> Pmd2DungeonData:
+        dungeon_bin_files = None
+        for e_game in dungeon_root:
+            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
+               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
+               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                for e in e_game:
+                    ###########################
+                    if e.tag == 'DungeonBinFiles':
+                        files = []
+                        for i, e_var in enumerate(e):
+                            files.append(Pmd2BinPackFile(
+                                self._xml_int(e_var.attrib['idxfirst']),
+                                self._xml_int(e_var.attrib['idxlast']) if 'idxlast' in e_var.attrib else None,
+                                e_var.attrib['type'],
+                                e_var.attrib['name']
+                            ))
+                        dungeon_bin_files = Pmd2DungeonBinFiles(files)
+        return Pmd2DungeonData(
+            dungeon_bin_files
         )
 
     @staticmethod

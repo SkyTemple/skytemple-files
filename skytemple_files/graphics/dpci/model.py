@@ -36,7 +36,7 @@ class Dpci:
 
         self.tiles = list(iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2)))  # / 2 because 4bpp
 
-    def tiles_to_pil(self, palettes: List[List[int]], width_in_tiles=20) -> Image.Image:
+    def tiles_to_pil(self, palettes: List[List[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
         """
         Convert all individual tiles of the DPCI into one PIL image.
         The image contains all tiles next to each other, the image width is tile_width tiles.
@@ -50,7 +50,7 @@ class Dpci:
         tilemap = []
         for i in range(0, len(self.tiles)):
             tilemap.append(TilemapEntry(
-                i, False, False, 0, True
+                i, False, False, palette_index, True
             ))
 
         width = width_in_tiles * DPCI_TILE_DIM

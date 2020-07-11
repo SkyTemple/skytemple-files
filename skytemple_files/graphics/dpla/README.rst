@@ -6,8 +6,8 @@ each of these 16-color pairs is considered a palette.
 For each of the color entries an arbitrary amount of colors can be found. The color will cycle
 through all of the colors in this list as part of a palette animation.
 
-This is meant to replace the palettes 15 and 16 in `DPL`_ palettes. The first 16 colors replace
-and animate palette 15 and the last 16 colors replace and animate palette 16 [this is yet to be
+This is meant to replace the palettes 11 and 12 in `DPL`_ palettes. The first 16 colors replace
+and animate palette 11 and the last 16 colors replace and animate palette 12 [this is yet to be
 tested, as of writing!].
 
 This file format, used togehter with `DPL`_ is the equivalent of `BPL`_ files but for dungeons.

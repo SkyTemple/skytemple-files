@@ -3,7 +3,7 @@ DPC File Format
 Contains a tileset for dungeon tiles.
 
 The tiles are built and assigned palettes using tile mappings, and each 3x3 block of this tile mapping builds a
-chunk. Those chunks are the actual 32x32 chunks that make up each field in a dungeon.
+chunk. Those chunks are the actual 24x24 chunks that make up each field in a dungeon.
 
 The tile mappings contain palette indices that are references to the same dungeon's `DPL`_ + `DPLA`_ palette files.
 The image data for the tiles must be read from the dungeon's `DPCI`_ file.

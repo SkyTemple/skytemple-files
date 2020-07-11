@@ -43,7 +43,7 @@ class Dpc:
             all_tilemaps.append(TilemapEntry.from_int(read_uintle(bytes2, 0, 2)))
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
 
-    def chunks_to_pil(self, dpci: Dpci, palettes: List[List[int]], width_in_mtiles=20) -> Image.Image:
+    def chunks_to_pil(self, dpci: Dpci, palettes: List[List[int]], width_in_mtiles=16) -> Image.Image:
         """
         Convert all chunks of the DPC to one big PIL image.
         The chunks are all placed next to each other.

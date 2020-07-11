@@ -42,4 +42,5 @@ for i, file in enumerate(dungeon_bin):
         pal_file: Dpl = dungeon_bin.get(fn.replace('.dpc', '.dpl'))
         dpci: Dpci = dungeon_bin.get(fn.replace('.dpc', '.dpci'))
         print(fn)
+        file.chunks = file.chunks[0:16*16]
         file.chunks_to_pil(dpci, pal_file.palettes).save(os.path.join(output_dir, fn + '.png'))

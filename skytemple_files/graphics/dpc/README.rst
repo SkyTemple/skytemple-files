@@ -8,7 +8,7 @@ chunk. Those chunks are the actual 24x24 chunks that make up each field in a dun
 The tile mappings contain palette indices that are references to the same dungeon's `DPL`_ + `DPLA`_ palette files.
 The image data for the tiles must be read from the dungeon's `DPCI`_ file.
 
-This file format, used togehter with `DPCI`_ is the equivalent of `BPC`_ files but for dungeons.
+This file format, used together with `DPCI`_ is the equivalent of `BPC`_ files but for dungeons.
 
 The name is not official.
 

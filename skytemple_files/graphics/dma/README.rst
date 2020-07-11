@@ -74,7 +74,7 @@ If a bit is set, it means the neighbor tile has the same type as the current til
 
 Extra tiles
 ###########
-In the set of extra tiles, every third tile build a group. There are three groups. We don't know much about these
+In the set of extra tiles, every third tile builds a group. There are three groups. We don't know much about how these
 work yet.
 
 +---------+---------------------------------------+

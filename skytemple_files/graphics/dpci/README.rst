@@ -2,7 +2,7 @@ DPCI File Format
 ================
 Contains 8x8px 4bpp indexed images. Those images are the dungeon tiles used by the game.
 
-This file format, used togehter with `DPC`_ is the equivalent of `BPC`_ files but for dungeons.
+This file format, used together with `DPC`_ is the equivalent of `BPC`_ files but for dungeons.
 
 The name is not official.
 

@@ -2,7 +2,7 @@ DPL File Format
 ===============
 A raw list of RGBx colors, usually to be read into 16x16 color palettes.
 
-This file format, used togehter with `DPLA`_ is the equivalent of `BPL`_ files but for dungeons.
+This file format, used together with `DPLA`_ is the equivalent of `BPL`_ files but for dungeons.
 
 The name is not official.
 

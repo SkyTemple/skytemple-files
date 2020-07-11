@@ -17,7 +17,10 @@
 import itertools
 import math
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
@@ -62,7 +65,7 @@ class Dpci:
         Imports tiles that are in a format as described in the documentation for tiles_to_pil.
         """
         self.tiles, _, __ = from_pil(
-            image, DPL_PAL_LEN, DPL_MAX_PAL, DPCI_TILE_DIM,
+            image, DPL_PAL_LEN, 16, DPCI_TILE_DIM,
             image.width, image.height, optimize=False
         )
 

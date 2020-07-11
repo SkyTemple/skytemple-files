@@ -52,7 +52,7 @@ for i, file in enumerate(dungeon_bin):
         images.append(base_img)
 
         # Pal ani
-        number_frames = len(ani_pal_file.colors[0])
+        number_frames = int(len(ani_pal_file.colors[0]) / 3)
         has_a_second_palette = len(ani_pal_file.colors) > 16 and len(ani_pal_file.colors[16]) > 0
 
         for fidx in range(0, number_frames):

@@ -49,12 +49,12 @@ def chunk(it, size):
 
 def output_dpla(fn: str, file: Dpla):
     print("Outputting weird palette as image.")
-    max_pal_len = max(max(len(p) for p in file.colors), 1)
+    max_pal_len = max(max(int(len(p) / 3) for p in file.colors), 1)
     # each entry on the y access is a color, x axis shows animation
     out_img = Image.new('RGBA', (max_pal_len, max(len(file.colors), 1)), (0, 0, 0, 0))
     pix = out_img.load()
     for palidx, pal in enumerate(file.colors):
-        for i, (r, g, b) in enumerate(pal):
+        for i, (r, g, b) in enumerate(chunk(pal, 3)):
             pix[(i, palidx)] = (r, g, b, 255)
 
     out_img.save(os.path.join(output_dir, fn + '.png'))

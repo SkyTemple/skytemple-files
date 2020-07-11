@@ -17,7 +17,10 @@
 import itertools
 import math
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
@@ -25,12 +28,6 @@ from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
 from skytemple_files.graphics.dpl.model import DPL_PAL_LEN, DPL_MAX_PAL
 
 DPC_TILING_DIM = 3
-
-
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
 
 
 class Dpc:
@@ -62,6 +59,16 @@ class Dpc:
             width, height, DPC_TILING_DIM, DPC_TILING_DIM
         )
 
+    def single_chunk_to_pil(self, chunk_idx, dpci: Dpci, palettes: List[List[int]]):
+        """
+        Convert a single chunk of the DPC into a PIL image. For general notes, see chunks_to_pil.
+        """
+        return to_pil(
+            self.chunks[chunk_idx], dpci.tiles, palettes, DPCI_TILE_DIM,
+            DPCI_TILE_DIM * DPC_TILING_DIM, DPCI_TILE_DIM * DPC_TILING_DIM,
+            DPC_TILING_DIM, DPC_TILING_DIM
+        )
+
     def pil_to_chunks(self, image: Image.Image, force_import=True) -> Tuple[List[bytes], List[List[int]]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
@@ -75,9 +82,15 @@ class Dpc:
         the force_import flag.
         """
         tiles, all_tilemaps, palettes = from_pil(
-            image, DPL_PAL_LEN, DPL_MAX_PAL, DPCI_TILE_DIM,
+            image, DPL_PAL_LEN, 16, DPCI_TILE_DIM,
             image.width, image.height, DPC_TILING_DIM, DPC_TILING_DIM, force_import
         )
+        # Validate number of palettes
+        palettes = palettes[:DPL_MAX_PAL]
+        for tm in all_tilemaps:
+            if tm.pal_idx > DPL_MAX_PAL - 1:
+                raise ValueError(f"The image to import can only use the first 12 palettes. "
+                                 f"Tried to use palette {tm.pal_idx}")
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
         return tiles, palettes
 

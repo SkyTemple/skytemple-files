@@ -92,6 +92,25 @@ class Dma:
                 cms.append(self.chunk_mappings[i])
         return cms
 
+    def set(self, get_type: DmaType, neighbors_same: int, variation_index: int, value: int):
+        """
+        Sets the mapping for the given configuration and the given variation of it.
+        """
+        # Wall
+        high_two = 0
+        if get_type == DmaType.WATER:
+            high_two = 0x100
+        elif get_type == DmaType.FLOOR:
+            high_two = 0x200
+        idx = high_two + neighbors_same
+        self.chunk_mappings[(idx * 3) + variation_index] = value
+
+    def set_extra(self, extra_type: DmaExtraType, index: int, value: int):
+        """
+        Sets and extra tile entry.
+        """
+        self.chunk_mappings[(0x300 * 3) + extra_type.value + (3 * index)] = value
+
     def to_pil(
             self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]
     ) -> Image.Image:

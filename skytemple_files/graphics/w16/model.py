@@ -18,7 +18,10 @@ import itertools
 from abc import ABC, abstractmethod
 from itertools import zip_longest
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *

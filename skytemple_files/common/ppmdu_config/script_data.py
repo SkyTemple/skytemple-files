@@ -111,6 +111,12 @@ class Pmd2ScriptSpriteEffect(AutoString):
         self.name = name
 
 
+class Pmd2ScriptBgm(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
 class Pmd2ScriptLevel(AutoString):
     def __init__(self, id: int, mapid: int, name: str, mapty: int, unk2: int, unk4: int):
         self.id = id
@@ -208,6 +214,7 @@ class Pmd2ScriptData(AutoString):
                  menu_ids: List[Pmd2ScriptMenu],
                  process_special_ids: List[Pmd2ScriptSpecial],
                  sprite_effect_ids: List[Pmd2ScriptSpriteEffect],
+                 bgms: List[Pmd2ScriptBgm],
                  level_list: List[Pmd2ScriptLevel],
                  level_entity_table: List[Pmd2ScriptEntity],
                  op_codes: List[Pmd2ScriptOpCode],
@@ -221,6 +228,7 @@ class Pmd2ScriptData(AutoString):
         self._menus = menu_ids
         self._process_specials = process_special_ids
         self._sprite_effects = sprite_effect_ids
+        self._bgms = bgms
         self._level_list = level_list
         self._level_entities = level_entity_table
         self._op_codes = op_codes
@@ -369,6 +377,22 @@ class Pmd2ScriptData(AutoString):
     @property
     def sprite_effects__by_name(self):
         return {o.name: o for o in self.sprite_effects}
+
+    @property
+    def bgms(self):
+        return self._bgms
+
+    @bgms.setter
+    def bgms(self, value):
+        self._bgms = value
+
+    @property
+    def bgms__by_id(self):
+        return {o.id: o for o in self.bgms}
+
+    @property
+    def bgms__by_name(self):
+        return {o.name: o for o in self.bgms}
 
     @property
     def level_list(self):

@@ -211,6 +211,7 @@ class Pmd2XmlReader:
         menu_ids = []
         process_specials = []
         sprite_effects = []
+        bgms = []
         level_list = []
         lives_entities = []
         op_codes = []
@@ -283,6 +284,12 @@ class Pmd2XmlReader:
                             sprite_effects.append(Pmd2ScriptSpriteEffect(
                                 self._xml_int(e_sei.attrib['id']),
                                 e_sei.attrib['name']
+                            ))
+                    ###########################
+                    elif e.tag == 'BackgroundMusicIDs':
+                        for i, e_bgm in enumerate(e):
+                            bgms.append(Pmd2ScriptBgm(
+                                i, e_bgm.text
                             ))
                     ###########################
                     elif e.tag == 'LevelList':
@@ -360,6 +367,7 @@ class Pmd2XmlReader:
             menu_ids,
             process_specials,
             sprite_effects,
+            bgms,
             level_list,
             lives_entities,
             op_codes,

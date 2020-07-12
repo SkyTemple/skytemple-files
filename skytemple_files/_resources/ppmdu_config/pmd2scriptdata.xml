@@ -1016,6 +1016,206 @@
       </SpriteEffectIDs>
 
       <!--**********************************************-->
+      <!--Background Music IDs-->
+      <!--**********************************************-->
+      <BackgroundMusicIDs>
+        <Bgm>Nothing0</Bgm>
+        <Bgm>PokemonExplorationTeamTheme</Bgm>
+        <Bgm>TopMenuTheme</Bgm>
+        <Bgm>MarowakDojo</Bgm>
+        <Bgm>TheGatekeepers</Bgm>
+        <Bgm>JobClear</Bgm>
+        <Bgm>WelcomeToTheWorldOfPokémon</Bgm>
+        <Bgm>WigglytuffsGuild</Bgm>
+        <Bgm>WigglytuffsGuildRemix</Bgm>
+        <Bgm>TreasureTown</Bgm>
+        <Bgm>DoYourBestAsAlways</Bgm>
+        <Bgm>MonsterHouse</Bgm>
+        <Bgm>KecleonsShop</Bgm>
+        <Bgm>Outlaw</Bgm>
+        <Bgm>InTheDepthsOfThePit</Bgm>
+        <Bgm>BossBattle</Bgm>
+        <Bgm>DialgasFightToTheFinish</Bgm>
+        <Bgm>BattleAgainstDusknoir</Bgm>
+        <Bgm>DefyTheLegends</Bgm>
+        <Bgm>MissionFailure</Bgm>
+        <Bgm>MissionSuccess</Bgm>
+        <Bgm>BeachCave</Bgm>
+        <Bgm>DrenchedBluff</Bgm>
+        <Bgm>MtBristle</Bgm>
+        <Bgm>WaterfallCave</Bgm>
+        <Bgm>AppleWoods</Bgm>
+        <Bgm>CraggyCoast</Bgm>
+        <Bgm>CaveAndSidePath</Bgm>
+        <Bgm>MtHorn</Bgm>
+        <Bgm>FoggyForest</Bgm>
+        <Bgm>SteamCave</Bgm>
+        <Bgm>UpperSteamCave</Bgm>
+        <Bgm>AmpPlains</Bgm>
+        <Bgm>FarAmpPlains</Bgm>
+        <Bgm>NorthernDesert</Bgm>
+        <Bgm>QuicksandCave</Bgm>
+        <Bgm>QuicksandPit</Bgm>
+        <Bgm>CrystalCave</Bgm>
+        <Bgm>CrystalCrossing</Bgm>
+        <Bgm>ChasmCave</Bgm>
+        <Bgm>DarkHill</Bgm>
+        <Bgm>SealedRuin</Bgm>
+        <Bgm>SealedRuinPit</Bgm>
+        <Bgm>DuskForest</Bgm>
+        <Bgm>DeepDuskForest</Bgm>
+        <Bgm>RandomDungeonTheme2</Bgm>
+        <Bgm>BrineCave</Bgm>
+        <Bgm>LowerBrineCave</Bgm>
+        <Bgm>HiddenLand</Bgm>
+        <Bgm>HiddenHighland</Bgm>
+        <Bgm>TemporalTower</Bgm>
+        <Bgm>TemporalSpire</Bgm>
+        <Bgm>MystifyingForest</Bgm>
+        <Bgm>BlizzardIslandRescueTeamMedley</Bgm>
+        <Bgm>SurroundedSea</Bgm>
+        <Bgm>RandomDungeonTheme1</Bgm>
+        <Bgm>AegisCave</Bgm>
+        <Bgm>ConcealedRuins</Bgm>
+        <Bgm>MtTravail</Bgm>
+        <Bgm>InTheNightmare</Bgm>
+        <Bgm>MiracleSea</Bgm>
+        <Bgm>TreeshroudForest</Bgm>
+        <Bgm>DarkCrater</Bgm>
+        <Bgm>DeepDarkCrater</Bgm>
+        <Bgm>IntroUnused</Bgm>
+        <Bgm>PerfectSentryDuty</Bgm>
+        <Bgm>GoodSentryDuty</Bgm>
+        <Bgm>DecentSentryDuty</Bgm>
+        <Bgm>FailedSentryDuty</Bgm>
+        <Bgm>OnTheBeachAtDusk</Bgm>
+        <Bgm>Goodnight</Bgm>
+        <Bgm>GoodnightAlternateUnused</Bgm>
+        <Bgm>AtTheEndOfTheDay</Bgm>
+        <Bgm>GuildmasterWigglytuff</Bgm>
+        <Bgm>GrowingAnxiety</Bgm>
+        <Bgm>ThePowerOfDarkness</Bgm>
+        <Bgm>OhNo</Bgm>
+        <Bgm>TimeGear</Bgm>
+        <Bgm>TimeGearRemix</Bgm>
+        <Bgm>ISawSomethingAgain</Bgm>
+        <Bgm>InTheFuture</Bgm>
+        <Bgm>PlanetsParalysis</Bgm>
+        <Bgm>ThroughTheSeaOfTime</Bgm>
+        <Bgm>InTheHandsOfFate</Bgm>
+        <Bgm>TimeRestored</Bgm>
+        <Bgm>DontEverForget</Bgm>
+        <Bgm>AWishForPeace</Bgm>
+        <Bgm>OnTheBeachAtDuskShortened</Bgm>
+        <Bgm>MemoriesReturned</Bgm>
+        <Bgm>EndingThemeIntro</Bgm>
+        <Bgm>EndingTheme</Bgm>
+        <Bgm>EpilogueTheme</Bgm>
+        <Bgm>TitleThemeAlternate1Unused</Bgm>
+        <Bgm>TitleThemeAlternate2Unused</Bgm>
+        <Bgm>MurkyForest</Bgm>
+        <Bgm>SkyPeakCave</Bgm>
+        <Bgm>SouthernJungle</Bgm>
+        <Bgm>SkyPeakCoast</Bgm>
+        <Bgm>SpringCave</Bgm>
+        <Bgm>LowerSpringCave</Bgm>
+        <Bgm>Ocean1</Bgm>
+        <Bgm>Storm</Bgm>
+        <Bgm>StormInside</Bgm>
+        <Bgm>Earthquake1</Bgm>
+        <Bgm>Earthquake2</Bgm>
+        <Bgm>Earthquake3</Bgm>
+        <Bgm>Rain1</Bgm>
+        <Bgm>HeavyFeeling</Bgm>
+        <Bgm>TemporalPinnacle</Bgm>
+        <Bgm>Nothing109</Bgm>
+        <Bgm>BoulderCrushingNoise</Bgm>
+        <Bgm>HighPitchedWhistle</Bgm>
+        <Bgm>StaticNoise</Bgm>
+        <Bgm>StrongBlastNoise</Bgm>
+        <Bgm>AnotherStaticNoise</Bgm>
+        <Bgm>FireCrackling</Bgm>
+        <Bgm>FireCracklingLouder</Bgm>
+        <Bgm>GlowingNoise</Bgm>
+        <Bgm>AnotherGlowingNoise</Bgm>
+        <Bgm>RainbowStoneshipNoise</Bgm>
+        <Bgm>VibratingNoise</Bgm>
+        <Bgm>HaveToGetHome</Bgm>
+        <Bgm>FartherAway</Bgm>
+        <Bgm>PalkiasOnslaught</Bgm>
+        <Bgm>Nothing124</Bgm>
+        <Bgm>Rain2</Bgm>
+        <Bgm>Eating</Bgm>
+        <Bgm>OnTheCeiling</Bgm>
+        <Bgm>StormyOcean1</Bgm>
+        <Bgm>PelipperIsland</Bgm>
+        <Bgm>TitleTheme</Bgm>
+        <Bgm>Heartwarming</Bgm>
+        <Bgm>DownADarkPath</Bgm>
+        <Bgm>RisingFear</Bgm>
+        <Bgm>TeamSkull</Bgm>
+        <Bgm>Sympathy</Bgm>
+        <Bgm>BeyondTheDream</Bgm>
+        <Bgm>AirOfUnease</Bgm>
+        <Bgm>OneForAllAllForOne</Bgm>
+        <Bgm>BoulderQuarry</Bgm>
+        <Bgm>SpringCaveDepths</Bgm>
+        <Bgm>StarCave</Bgm>
+        <Bgm>DeepStarCave</Bgm>
+        <Bgm>LimestoneCavern</Bgm>
+        <Bgm>DeepLimestoneCavern</Bgm>
+        <Bgm>RandomDungeonTheme3</Bgm>
+        <Bgm>FortuneRavine</Bgm>
+        <Bgm>FortuneRavineDepths</Bgm>
+        <Bgm>BarrenValley</Bgm>
+        <Bgm>DarkWasteland</Bgm>
+        <Bgm>SpacialCliffs</Bgm>
+        <Bgm>DarkIceMountain</Bgm>
+        <Bgm>IcicleForest</Bgm>
+        <Bgm>VastIceMountain</Bgm>
+        <Bgm>VastIceMountainPeak</Bgm>
+        <Bgm>SkyPeakForest</Bgm>
+        <Bgm>SkyPeakPrairie</Bgm>
+        <Bgm>SkyPeakSnowfield</Bgm>
+        <Bgm>SkyPeakFinalPass</Bgm>
+        <Bgm>SpindasCafe</Bgm>
+        <Bgm>LudicoloDance</Bgm>
+        <Bgm>IllusionStoneChamber</Bgm>
+        <Bgm>ItCantBe</Bgm>
+        <Bgm>DefendGlobe</Bgm>
+        <Bgm>DefendGlobeEnding</Bgm>
+        <Bgm>TeamCharmsTheme</Bgm>
+        <Bgm>HereComesTeamCharm</Bgm>
+        <Bgm>ForANewLife</Bgm>
+        <Bgm>LivingSpirit</Bgm>
+        <Bgm>ProudAccomplishment</Bgm>
+        <Bgm>InTheMorningSun</Bgm>
+        <Bgm>ANewWorld</Bgm>
+        <Bgm>ThoughtsForFriends</Bgm>
+        <Bgm>LifeGoesOnEnding</Bgm>
+        <Bgm>ItsNotAMiracle</Bgm>
+        <Bgm>AMessageOnTheWind</Bgm>
+        <Bgm>AFunExploration</Bgm>
+        <Bgm>ShayminVillage</Bgm>
+        <Bgm>TeamCharmsThemeIntroOnly</Bgm>
+        <Bgm>Earthquake4</Bgm>
+        <Bgm>Earthquake5</Bgm>
+        <Bgm>Ocean2</Bgm>
+        <Bgm>Ocean3</Bgm>
+        <Bgm>CaveAmbiance</Bgm>
+        <Bgm>FireCrackling3</Bgm>
+        <Bgm>FireCrackling4</Bgm>
+        <Bgm>StormyOcean2</Bgm>
+        <Bgm>HeavyWind1</Bgm>
+        <Bgm>HeavyWind2</Bgm>
+        <Bgm>HeavyWind3</Bgm>
+        <Bgm>HeavyWind4</Bgm>
+        <Bgm>HeavyWind5</Bgm>
+        <Bgm>ThatShape</Bgm>
+        <Bgm>HeavyWind6</Bgm>
+      </BackgroundMusicIDs>
+
+      <!--**********************************************-->
       <!--OpCodes-->
       <!--**********************************************-->
       <OpCodes>
@@ -1139,10 +1339,10 @@
           <Argument id="0" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0x1f"  name="bgm_Play"                               params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm_id"/>
+          <Argument id="0" type="Bgm" name="bgm_id"/>
         </OpCode>
         <OpCode id="0x20"  name="bgm_PlayFadeIn"                         params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm_id"/>
+          <Argument id="0" type="Bgm" name="bgm_id"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="volume"/>
         </OpCode>
@@ -1155,10 +1355,10 @@
           <Argument id="0" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0x24"  name="bgm2_Play"                              params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm_id"/>
+          <Argument id="0" type="Bgm" name="bgm_id"/>
         </OpCode>
         <OpCode id="0x25"  name="bgm2_PlayFadeIn"                        params="3"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm_id"/>
+          <Argument id="0" type="Bgm" name="bgm_id"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="volume"/>
         </OpCode>
@@ -2408,10 +2608,10 @@
         <OpCode id="0x159" name="WaitBackEffect"                         params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x15a" name="WaitBack2Effec"                         params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x15b" name="WaitBgm"                                params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm"/>
+          <Argument id="0" type="Bgm" name="bgm"/>
         </OpCode>
         <OpCode id="0x15c" name="WaitBgm2"                               params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="bgm"/>
+          <Argument id="0" type="Bgm" name="bgm"/>
         </OpCode>
         <OpCode id="0x15d" name="WaitBgmSignal"                          params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x15e" name="WaitEffect"                             params="0"  stringidx="-1" unk2="0"  unk3="0"  />

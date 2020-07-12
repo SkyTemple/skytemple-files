@@ -34,6 +34,12 @@ PREFIX_DMODE = 'DMODE_'
 CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
 
 
+# Mappings for renamed constants, for backwards compatibility
+CONSTANT_ALIASES = {
+    'MENU_DUNGEON_RESULT': 'MENU_DUNGEON_INITIALIZE_TEAM'
+}
+
+
 class DungeonMode(Enum):
     CLOSED = 0
     OPEN = 1
@@ -125,6 +131,9 @@ class SsbConstant(SsbOpParamConstant):
     @classmethod
     def _map_back(cls, constant_as_string: str, script_data: Pmd2ScriptData) -> SsbConstantPmdScriptMappable:
         """Inverse of create_for."""
+        # Backwards compatibility
+        if constant_as_string in CONSTANT_ALIASES:
+            constant_as_string = CONSTANT_ALIASES[constant_as_string]
         try:
             if constant_as_string.startswith(PREFIX_ACTOR):
                 return script_data.level_entities__by_name[constant_as_string[len(PREFIX_ACTOR):]]

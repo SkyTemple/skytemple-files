@@ -922,52 +922,73 @@
       <!--Menu IDs-->
       <!--**********************************************-->
       <MenuIds>
-        <!--TODO-->
         <Menu id="1" name="PlayerName" />
-
+        <Menu id="2" name="PartnerName" />
+        <Menu id="3" name="GenericName" />
         <Menu id="4" name="TeamName" />
-
+        <!-- 5 to 10 seem unused and not working -->
         <Menu id="11" name="SaveMenu" />
         <Menu id="12" name="KangaskhanStorage" />
         <Menu id="13" name="Storage" />
-
+        <!-- 14 seems unused and not working -->
         <Menu id="15" name="DuskullBank" />
         <Menu id="16" name="TeamAssembly" />
-
+        <!-- 17 seems unused and not working -->
         <Menu id="18" name="KecleonShop" />
         <Menu id="19" name="KecleonWares" />
-
+        <Menu id="20" name="LinkShop" />
+        <Menu id="21" name="EvolutionSequence" />
+        <Menu id="22" name="EvolutionSequence2" /> <!-- Freezes the game if previous command was not menu EvolutionSequence -->
         <Menu id="23" name="SwapShop" />
-        <Menu id="24" name="SwapShop2" />
-
+        <Menu id="24" name="SwapShop2" />  <!-- Freezes the game if previous command was not menu SwapShop -->
+        <Menu id="25" name="Appraisal" />
+        <Menu id="26" name="Appraisa2" />  <!-- Freezes the game if previous command was not menu Appraisal -->
         <Menu id="27" name="DayCare" />
-
+        <!-- 28 seems unused and not working -->
         <Menu id="29" name="JuiceBar" />
-        <Menu id="30" name="JuiceBarPickItem" />
-
+        <Menu id="30" name="JuiceBarPickItem" /> <!-- Freezes the game if previous command was not menu JuiceBar -->
         <Menu id="31" name="RecycleShop" />
-
+        <Menu id="32" name="RecycleShop2" /> <!-- Freezes the game if previous command was not menu RecycleShop -->
         <Menu id="33" name="Lottery" />
-
+        <Menu id="34" name="Lottery2" /> <!-- Freezes the game if previous command was not menu Lottery -->
         <Menu id="35" name="SOSMailPicker" />
-
+        <!-- TODO 36 - 38 -->
         <Menu id="39" name="JobBoard" />
         <Menu id="40" name="OutlawBoard" />
-
+        <Menu id="41" name="JobRewardType" />
+        <Menu id="42" name="JobRewardNpcAmount" />
         <Menu id="43" name="JobRewardText" />
-
+        <!-- 44 to 47 seem unused and not working -->
         <Menu id="48" name="PersonalityTest" />
-
-        <Menu id="54" name="DungeonResult" /> <!-- ? -->
-
+        <Menu id="49" name="PersonalityTestEnd" />
+        <Menu id="50" name="PersonalityTestContinue" />
+        <!-- 51 seems unused and not working -->
+        <Menu id="52" name="ScriptDebug" />
+        <Menu id="53" name="SceneDebug" />
+        <!-- Names for the following are taken from T00P001 -->
+        <Menu id="54" name="DungeonInitializeTeam" /> <!-- Used to be called 'DungeonResult?' -->
+        <Menu id="55" name="DungeonTeamReturnsFromMap" />
+        <Menu id="56" name="DungeonTeamDefeatedFromMap" />
+        <Menu id="57" name="GuildMiniGameStart" />
+        <Menu id="58" name="GuildMiniGameEnd" />
+        <Menu id="59" name="GuildMiniGameFlagCheck" />
         <Menu id="60" name="GuildMiniGameScoreboard" />
-
+        <Menu id="61" name="DemoSequence1" /> <!-- TODO: What exactly does it do? -->
+        <Menu id="62" name="DemoSequence2" /> <!-- TODO: What exactly does it do? -->
+        <Menu id="63" name="GiveItem" />
+        <Menu id="64" name="GiveItem2" />
+        <Menu id="65" name="AcceptTeamMember" /> <!-- Which team member is set with ProcessSpecial 44 -->
+        <Menu id="66" name="DungeonExplorationResults" />
         <Menu id="67" name="DiaryBidoof" />
         <Menu id="68" name="DiarySunflora" />
         <Menu id="69" name="GuildFAQBoard" />
         <Menu id="70" name="DiaryBidoofSpEP" />
-
-        <!--<Menu id="" name="" />-->
+        <Menu id="71" name="StaffCredits1" />
+        <Menu id="72" name="StaffCredits2" />
+        <Menu id="73" name="StaffCredits3" />
+        <Menu id="74" name="StaffCredits4" />
+        <Menu id="75" name="SpecialEpisodeDiscardItems" /> <!-- This menu actually seems unused... but it works -->
+        <!-- TODO 76 -->
       </MenuIds>
 
       <!--**********************************************-->

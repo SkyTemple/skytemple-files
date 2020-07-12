@@ -3,7 +3,7 @@
   <DungeonData>
 
     <!--Common to all 3-->
-    <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP">
+    <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
 
       <!--**********************************************-->
       <!--File names and types of the files in DUNGEON/dungeon.bin-->

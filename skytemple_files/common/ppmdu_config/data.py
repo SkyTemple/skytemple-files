@@ -43,9 +43,10 @@ LANG_SP = 'spanish'
 
 
 class Pmd2GameEdition(AutoString):
-    def __init__(self, id: str, gamecode: str, region: str, arm9off14: int, defaultlang: str, issupported: bool):
+    def __init__(self, id: str, gamecode: str, version: str, region: str, arm9off14: int, defaultlang: str, issupported: bool):
         self.id = id
         self.gamecode = gamecode
+        self.version = version
         self.region = region
         self.arm9off14 = arm9off14
         self.defaultlang = defaultlang
@@ -167,7 +168,7 @@ class Pmd2AsmPatchesConstants(AutoString):
 
 class Pmd2Data(AutoString):
     def __init__(self,
-                 game_edition: str,
+                 game_edition: Pmd2GameEdition,
                  game_editions: List[Pmd2GameEdition],
                  game_constants: Dict[str, int],
                  binaries: List[Pmd2Binary],
@@ -176,9 +177,9 @@ class Pmd2Data(AutoString):
                  script_data: Pmd2ScriptData,
                  dungeon_data: Pmd2DungeonData,
                  string_encoding: str):
-        self.game_edition = game_edition
-        self.game_version = game_edition.split('_')[0]
-        self.game_region = game_edition.split('_')[1]
+        self.game_edition = game_edition.id
+        self.game_version = game_edition.version
+        self.game_region = self.get_region_constant_for_region_name(game_edition.region)
         self.game_editions: Dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
         self.binaries: Dict[str, Pmd2Binary] = {x.filepath: x for x in binaries}
@@ -187,3 +188,13 @@ class Pmd2Data(AutoString):
         self.script_data = script_data
         self.dungeon_data = dungeon_data
         self.string_encoding = string_encoding
+
+    @staticmethod
+    def get_region_constant_for_region_name(region):
+        if region == 'NorthAmerica':
+            return GAME_REGION_US
+        if region == 'Europe':
+            return GAME_REGION_EU
+        if region == 'Japan':
+            return GAME_REGION_JP
+        raise ValueError(f"Unknown region {region}.")

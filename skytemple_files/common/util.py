@@ -279,10 +279,11 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
     from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
     data_general = Pmd2XmlReader.load_default()
     game_code = rom.idCode.decode('ascii')
+    arm9off14 = read_uintle(rom.arm9[0xE:0x10], 0, 2)
 
     matched_edition = None
     for edition_name, edition in data_general.game_editions.items():
-        if edition.issupported and edition.gamecode == game_code:
+        if edition.issupported and edition.gamecode == game_code and edition.arm9off14 == arm9off14:
             matched_edition = edition_name
             break
 

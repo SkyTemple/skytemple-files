@@ -28,6 +28,13 @@ from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
 
+def id_matches_edition(e_game, edition):
+    for key, value in e_game.attrib.items():
+        if key.startswith('id') and value == edition:
+            return True
+    return False
+
+
 class Pmd2XmlReader:
     def __init__(self, file_names: List[str], game_edition: str):
         """
@@ -83,6 +90,7 @@ class Pmd2XmlReader:
                     game_editions.append(Pmd2GameEdition(
                         e_edition.attrib['id'],
                         e_edition.attrib['gamecode'],
+                        e_edition.attrib['version'],
                         e_edition.attrib['region'],
                         self._xml_int(e_edition.attrib['arm9off14']),
                         e_edition.attrib['defaultlang'],
@@ -99,9 +107,7 @@ class Pmd2XmlReader:
             ###########################
             elif e.tag == 'Binaries':
                 for e_game in e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                       ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                       ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         for e_binary in e_game:
                             blocks = []
                             fns = []
@@ -143,9 +149,7 @@ class Pmd2XmlReader:
             ###########################
             elif e.tag == 'StringIndexData':
                 for e_game in e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                       ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                       ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         languages = []
                         string_blocks = []
                         for e_sub in e_game:
@@ -175,13 +179,18 @@ class Pmd2XmlReader:
             ###########################
             elif e.tag == 'StringEncoding':
                 for e_game in e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                       ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                       ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         string_encoding = e_game.attrib['codec']
 
+        game_edition_for_this_rom = None
+        for game_edition in game_editions:
+            if game_edition.id == self._game_edition:
+                game_edition_for_this_rom = game_edition
+                break
+        if game_edition_for_this_rom is None:
+            raise ValueError(f"Game edition {self._game_edition} is not defined in the XML.")
         return Pmd2Data(
-            self._game_edition,
+            game_edition_for_this_rom,
             game_editions,
             game_constants,
             binaries,
@@ -207,9 +216,7 @@ class Pmd2XmlReader:
         op_codes = []
         ground_state_structs = {}
         for e_game in script_root:
-            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+            if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
                     ###########################
                     if e.tag == 'GameVariablesTable' or e.tag == 'GameVariablesTableExtended':
@@ -362,9 +369,7 @@ class Pmd2XmlReader:
     def _parse_dungeon_data(self, dungeon_root) -> Pmd2DungeonData:
         dungeon_bin_files = None
         for e_game in dungeon_root:
-            if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-               ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-               ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+            if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
                     ###########################
                     if e.tag == 'DungeonBinFiles':
@@ -408,9 +413,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
         for sub_e in e:
             if sub_e.tag == 'LooseBinFiles':
                 for e_game in sub_e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         for e_node in e_game:
                             loose_bin_files.append(Pmd2LooseBinFile(
                                 e_node.attrib['srcdata'],
@@ -418,15 +421,11 @@ class Pmd2AsmPatchesConstantsXmlReader:
                             ))
             elif sub_e.tag == 'PatchesDir':
                 for e_game in sub_e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         patch_dir = Pmd2PatchDir(e_game.attrib['filepath'], e_game.attrib['stubpath'])
             elif sub_e.tag == 'Patches':
                 for e_game in sub_e:
-                    if ('id' in e_game.attrib and e_game.attrib['id'] == self._game_edition) or \
-                            ('id2' in e_game.attrib and e_game.attrib['id2'] == self._game_edition) or \
-                            ('id3' in e_game.attrib and e_game.attrib['id3'] == self._game_edition):
+                    if id_matches_edition(e_game, self._game_edition):
                         for e_node in e_game:
                             patches.append(self._parse_patch(e_node))
         return Pmd2AsmPatchesConstants(

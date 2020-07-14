@@ -57,7 +57,7 @@ class MappaBin(Sir0Serializable):
         return dungeons
 
     def _read_floors(self, read: MappaBinReadContainer, pointer):
-        # The first floor is just nulls, we omit it.
+        # The zeroth floor is just nulls, we omit it.
         empty = bytes(FLOOR_IDX_ENTRY_LEN)
         assert read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN] == empty, \
             "The first floor of a dungeon must be a null floor."

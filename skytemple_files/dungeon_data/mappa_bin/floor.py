@@ -45,7 +45,7 @@ class MappaFloor:
     def from_mappa(cls, read: 'MappaBinReadContainer', floor_data: bytes) -> 'MappaFloor':
         return cls(
             MappaFloorLayout.from_mappa(
-                read, cls._read_pointer(read.data, read.floor_layout_data_start, read_uintle(floor_data, 0x00, 2))
+                read, read.floor_layout_data_start + 32 * read_uintle(floor_data, 0x00, 2)
             ),
             MappaMonsterList.from_mappa(
                 read, cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_uintle(floor_data, 0x02, 2))
@@ -75,5 +75,4 @@ class MappaFloor:
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
-        print(index)
-        return read_uintle(data, start + (4 * index))
+        return read_uintle(data, start + (4 * index), 4)

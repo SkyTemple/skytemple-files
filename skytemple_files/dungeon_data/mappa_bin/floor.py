@@ -17,22 +17,22 @@
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
-from skytemple_files.dungeon_data.mappa_bin.monster_list import MappaMonsterList
+from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
 
 
-class MappaFloor:
+class MappaFloor(AutoString):
     def __init__(
-        self, layout: MappaFloorLayout, monsters: MappaMonsterList, traps: MappaTrapList, floor_items: MappaItemList,
+        self, layout: MappaFloorLayout, monsters: List[MappaMonster], traps: MappaTrapList, floor_items: MappaItemList,
         shop_items: MappaItemList, monster_house_items: MappaItemList, buried_items: MappaItemList,
         unk_items1: MappaItemList, unk_items2: MappaItemList
     ):
         self.id: int  # ID in dungeon
         self.layout: MappaFloorLayout = layout
-        self.monsters: MappaMonsterList = monsters
+        self.monsters: List[MappaMonster] = monsters
         self.traps: MappaTrapList = traps
         self.floor_items: MappaItemList = floor_items
         self.shop_items: MappaItemList = shop_items
@@ -47,7 +47,7 @@ class MappaFloor:
             MappaFloorLayout.from_mappa(
                 read, read.floor_layout_data_start + 32 * read_uintle(floor_data, 0x00, 2)
             ),
-            MappaMonsterList.from_mappa(
+            MappaMonster.list_from_mappa(
                 read, cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_uintle(floor_data, 0x02, 2))
             ),
             MappaTrapList.from_mappa(

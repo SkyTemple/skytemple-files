@@ -55,9 +55,9 @@ class MappaFloorWeather(Enum):
 
 
 class MappaFloorSecondaryTerrainType(Enum):
-    NONE = 0
-    WATER = 1
-    LAVA = 10  # TODO: Check
+    WATER = 0
+    LAVA = 1
+    VOID = 10
 
 
 class MappaFloorTerrainSettings:

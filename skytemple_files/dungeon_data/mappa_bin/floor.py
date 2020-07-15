@@ -14,7 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from xml.etree.ElementTree import Element
+
 from skytemple_files.common.util import *
+from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError
+from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR_LAYOUT, XML_FLOOR, XML_TRAP_LIST, XML_MONSTER, \
+    XML_MONSTER_LIST, XML_ITEM_LIST, XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR, XML_ITEM_LIST__TYPE__SHOP, \
+    XML_ITEM_LIST__TYPE__MONSTER_HOUSE, XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__UNK1, \
+    XML_ITEM_LIST__TYPE__UNK2
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
@@ -24,13 +31,12 @@ if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
 
 
-class MappaFloor(AutoString):
+class MappaFloor(AutoString, XmlSerializable):
     def __init__(
         self, layout: MappaFloorLayout, monsters: List[MappaMonster], traps: MappaTrapList, floor_items: MappaItemList,
         shop_items: MappaItemList, monster_house_items: MappaItemList, buried_items: MappaItemList,
         unk_items1: MappaItemList, unk_items2: MappaItemList
     ):
-        self.id: int  # ID in dungeon
         self.layout: MappaFloorLayout = layout
         self.monsters: List[MappaMonster] = monsters
         self.traps: MappaTrapList = traps
@@ -100,3 +106,111 @@ class MappaFloor(AutoString):
         if pnt not in read.read_cache:
             read.read_cache[pnt] = load_callback(pnt)
         return read.read_cache[pnt]
+
+    def to_xml(self) -> Element:
+        floor_xml = Element(XML_FLOOR)
+
+        layout_xml = self.layout.to_xml()
+        validate_xml_tag(layout_xml, XML_FLOOR_LAYOUT)
+
+        monsters_xml = Element(XML_MONSTER_LIST)
+        for monster in self.monsters:
+            monster_xml = monster.to_xml()
+            validate_xml_tag(monster_xml, XML_MONSTER)
+            monsters_xml.append(monster_xml)
+
+        traps_xml = self.traps.to_xml()
+        validate_xml_tag(traps_xml, XML_TRAP_LIST)
+
+        floor_items_xml = self.floor_items.to_xml()
+        validate_xml_tag(floor_items_xml, XML_ITEM_LIST)
+        floor_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR)
+
+        shop_items_xml = self.shop_items.to_xml()
+        validate_xml_tag(shop_items_xml, XML_ITEM_LIST)
+        shop_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__SHOP)
+
+        monster_house_items_xml = self.monster_house_items.to_xml()
+        validate_xml_tag(monster_house_items_xml, XML_ITEM_LIST)
+        monster_house_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE)
+
+        buried_items_xml = self.buried_items.to_xml()
+        validate_xml_tag(buried_items_xml, XML_ITEM_LIST)
+        buried_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__BURIED)
+
+        unk_items1_xml = self.unk_items1.to_xml()
+        validate_xml_tag(unk_items1_xml, XML_ITEM_LIST)
+        unk_items1_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK1)
+
+        unk_items2_xml = self.unk_items2.to_xml()
+        validate_xml_tag(unk_items2_xml, XML_ITEM_LIST)
+        unk_items2_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK2)
+
+        floor_xml.append(layout_xml)
+        floor_xml.append(monsters_xml)
+        floor_xml.append(traps_xml)
+        floor_xml.append(floor_items_xml)
+        floor_xml.append(shop_items_xml)
+        floor_xml.append(monster_house_items_xml)
+        floor_xml.append(buried_items_xml)
+        floor_xml.append(unk_items1_xml)
+        floor_xml.append(unk_items2_xml)
+
+        return floor_xml
+
+    @classmethod
+    def from_xml(cls, ele: Element) -> 'MappaFloor':
+        data = {
+            'layout': None,
+            'monsters': None,
+            'traps': None,
+            'floor_items': None,
+            'shop_items': None,
+            'monster_house_items': None,
+            'buried_items': None,
+            'unk_items1': None,
+            'unk_items2': None
+        }
+        for child in ele:
+            if child.tag == XML_FLOOR_LAYOUT and data['layout'] is None:
+                data['layout'] = MappaFloorLayout.from_xml(child)
+            elif child.tag == XML_MONSTER_LIST and data['monsters'] is None:
+                monsters = []
+                for monster in child:
+                    monsters.append(MappaMonster.from_xml(monster))
+                data['monsters'] = monsters
+            elif child.tag == XML_TRAP_LIST and data['traps'] is None:
+                data['traps'] = MappaTrapList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__FLOOR and data['floor_items'] is None:
+                data['floor_items'] = MappaItemList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__SHOP and data['shop_items'] is None:
+                data['shop_items'] = MappaItemList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__MONSTER_HOUSE and data['monster_house_items'] is None:
+                data['monster_house_items'] = MappaItemList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__BURIED and data['buried_items'] is None:
+                data['buried_items'] = MappaItemList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK1 and data['unk_items1'] is None:
+                data['unk_items1'] = MappaItemList.from_xml(child)
+            elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2 and data['unk_items2'] is None:
+                data['unk_items2'] = MappaItemList.from_xml(child)
+            else:
+                raise XmlValidateError(f'Floor parsing: Unexpected {child.tag}')
+
+        for k, v in data.items():
+            if v is None:
+                raise XmlValidateError(f'Missing {k} for Floor data.')
+
+        return cls(**data)
+
+    def __eq__(self, other):
+        if not isinstance(other, MappaFloor):
+            return False
+        return self.floor_items == other.floor_items \
+            and self.layout == other.layout \
+            and self.traps == other.traps \
+            and self.monsters == other.monsters \
+            and self.buried_items == other.buried_items \
+            and self.monster_house_items == other.monster_house_items \
+            and self.shop_items == other.shop_items \
+            and self.unk_items1 == other.unk_items1 \
+            and self.unk_items2 == other.unk_items2

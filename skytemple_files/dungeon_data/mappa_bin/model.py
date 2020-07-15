@@ -15,17 +15,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
+from xml.etree.ElementTree import Element
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem, Pmd2DungeonData
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.dungeon_data.mappa_bin import XML_MAPPA, XML_FLOOR_LIST, XML_FLOOR
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
 FLOOR_IDX_ENTRY_LEN = 18
 
 
 class MappaBinReadContainer:
-    def __init__(self, data: memoryview, header_start: int, items: List[Pmd2DungeonItem]):
+    def __init__(self, data: bytes, header_start: int, items: List[Pmd2DungeonItem]):
         self.data = data
         self.dungeon_list_index_start = read_uintle(data, header_start + 0x00, 4)
         self.floor_layout_data_start = read_uintle(data, header_start + 0x04, 4)
@@ -36,13 +39,10 @@ class MappaBinReadContainer:
         self.read_cache = {}
 
 
-class MappaBin(Sir0Serializable):
-    def __init__(self, data: bytes, header_start: int, dungeon_data: Pmd2DungeonData):
-        if not isinstance(data, memoryview):
-            data = memoryview(data)
+class MappaBin(Sir0Serializable, XmlSerializable):
 
-        self.floor_lists = self._read_floor_list(MappaBinReadContainer(data, header_start, dungeon_data.items))
-        print("ok.")
+    def __init__(self, floor_lists: List[List[MappaFloor]]):
+        self.floor_lists = floor_lists
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
@@ -52,17 +52,21 @@ class MappaBin(Sir0Serializable):
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'MappaBin':
         if static_data is None:
             raise ValueError("MappaBin needs Pmd2Data to initialize.")
-        return cls(content_data, data_pointer, static_data.dungeon_data)
+        return cls(cls._read_floor_list(MappaBinReadContainer(
+            content_data, data_pointer, static_data.dungeon_data.items
+        )))
 
-    def _read_floor_list(self, read: MappaBinReadContainer):
+    @classmethod
+    def _read_floor_list(cls, read: MappaBinReadContainer):
         start = read.dungeon_list_index_start
         end = read.floor_layout_data_start
         dungeons = []
         for i in range(start, end, 4):
-            dungeons.append(self._read_floors(read, read_uintle(read.data, i, 4)))
+            dungeons.append(cls._read_floors(read, read_uintle(read.data, i, 4)))
         return dungeons
 
-    def _read_floors(self, read: MappaBinReadContainer, pointer):
+    @classmethod
+    def _read_floors(cls, read: MappaBinReadContainer, pointer):
         # The zeroth floor is just nulls, we omit it.
         empty = bytes(FLOOR_IDX_ENTRY_LEN)
         assert read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN] == empty, \
@@ -78,3 +82,30 @@ class MappaBin(Sir0Serializable):
                 break
         return floors
 
+    def to_xml(self) -> Element:
+        mappa_xml = Element(XML_MAPPA)
+        for i, floor_list in enumerate(self.floor_lists):
+            floor_list_xml = Element(XML_FLOOR_LIST)
+            for floor in floor_list:
+                floor_xml = floor.to_xml()
+                validate_xml_tag(floor_xml, XML_FLOOR)
+                floor_list_xml.append(floor_xml)
+            mappa_xml.append(floor_list_xml)
+        return mappa_xml
+
+    @classmethod
+    def from_xml(cls, ele: Element) -> 'MappaBin':
+        validate_xml_tag(ele, XML_MAPPA)
+        floor_lists = []
+        for x_floor_list in ele:
+            floor_list = []
+            validate_xml_tag(x_floor_list, XML_FLOOR_LIST)
+            for x_floor in x_floor_list:
+                floor_list.append(MappaFloor.from_xml(x_floor))
+            floor_lists.append(floor_list)
+        return cls(floor_lists)
+
+    def __eq__(self, other):
+        if not isinstance(other, MappaBin):
+            return False
+        return self.floor_lists == other.floor_lists

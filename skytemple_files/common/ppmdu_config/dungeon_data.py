@@ -32,6 +32,14 @@ class Pmd2DungeonItem(AutoString):
         self.id = id
         self.name = name
 
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2DungeonItem):
+            return False
+        return self.id == other.id  # name is not relevant here
+
+    def __hash__(self):
+        return hash(self.id)
+
 
 class Pmd2DungeonBinFiles(AutoString):
     def __init__(self, files: List[Pmd2BinPackFile]):

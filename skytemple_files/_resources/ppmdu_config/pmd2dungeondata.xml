@@ -92,6 +92,1364 @@
         <BinPackFile idxfirst="1035"                type="DBIN_SIR0_1035"            name="%d.unk.sir0"/>
       </DungeonBinFiles>
 
+      <!--**********************************************-->
+      <!--Item names, for convenience. The names are taken from the string files, position index is the ID-->
+      <!--**********************************************-->
+      <Items>
+        <Item>Nothing</Item>
+        <Item>Stick</Item>
+        <Item>Iron Thorn</Item>
+        <Item>Silver Spike</Item>
+        <Item>Gold Fang</Item>
+        <Item>Cacnea Spike</Item>
+        <Item>Corsola Twig</Item>
+        <Item>Gravelerock</Item>
+        <Item>Geo Pebble</Item>
+        <Item>Gold Thorn</Item>
+        <Item>Rare Fossil</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>No-Slip Cap</Item>
+        <Item>Y-Ray Specs</Item>
+        <Item>Gaggle Specs</Item>
+        <Item>Mobile Scarf</Item>
+        <Item>Heal Ribbon</Item>
+        <Item>Twist Band</Item>
+        <Item>Scope Lens</Item>
+        <Item>Patsy Band</Item>
+        <Item>No-Stick Cap</Item>
+        <Item>Pierce Band</Item>
+        <Item>Joy Ribbon</Item>
+        <Item>X-Ray Specs</Item>
+        <Item>Persim Band</Item>
+        <Item>Power Band</Item>
+        <Item>Pecha Scarf</Item>
+        <Item>Insomniscope</Item>
+        <Item>Warp Scarf</Item>
+        <Item>Tight Belt</Item>
+        <Item>Sneak Scarf</Item>
+        <Item>Gold Ribbon</Item>
+        <Item>Goggle Specs</Item>
+        <Item>Diet Ribbon</Item>
+        <Item>Trap Scarf</Item>
+        <Item>Racket Band</Item>
+        <Item>Def. Scarf</Item>
+        <Item>Stamina Band</Item>
+        <Item>Plain Ribbon</Item>
+        <Item>Special Band</Item>
+        <Item>Zinc Band</Item>
+        <Item>Detect Band</Item>
+        <Item>Space Globe</Item>
+        <Item>Dodge Scarf</Item>
+        <Item>Bounce Band</Item>
+        <Item>Curve Band</Item>
+        <Item>Whiff Specs</Item>
+        <Item>No-Aim Scope</Item>
+        <Item>Lockon Specs</Item>
+        <Item>Munch Belt</Item>
+        <Item>Pass Scarf</Item>
+        <Item>Weather Band</Item>
+        <Item>Friend Bow</Item>
+        <Item>Beauty Scarf</Item>
+        <Item>Sun Ribbon</Item>
+        <Item>Lunar Ribbon</Item>
+        <Item>Golden Mask</Item>
+        <Item>Amber Tear</Item>
+        <Item>Icy Flute</Item>
+        <Item>Fiery Drum</Item>
+        <Item>Terra Cymbal</Item>
+        <Item>Aqua-Monica</Item>
+        <Item>Rock Horn</Item>
+        <Item>Grass Cornet</Item>
+        <Item>Sky Melodica</Item>
+        <Item>Miracle Chest</Item>
+        <Item>Wonder Chest</Item>
+        <Item>IQ Booster</Item>
+        <Item>Heal Seed</Item>
+        <Item>Oran Berry</Item>
+        <Item>Sitrus Berry</Item>
+        <Item>Eyedrop Seed</Item>
+        <Item>Reviver Seed</Item>
+        <Item>Blinker Seed</Item>
+        <Item>Doom Seed</Item>
+        <Item>X-Eye Seed</Item>
+        <Item>Life Seed</Item>
+        <Item>Rawst Berry</Item>
+        <Item>Hunger Seed</Item>
+        <Item>Quick Seed</Item>
+        <Item>Pecha Berry</Item>
+        <Item>Cheri Berry</Item>
+        <Item>Totter Seed</Item>
+        <Item>Sleep Seed</Item>
+        <Item>Plain Seed</Item>
+        <Item>Warp Seed</Item>
+        <Item>Blast Seed</Item>
+        <Item>Ginseng</Item>
+        <Item>Joy Seed</Item>
+        <Item>Chesto Berry</Item>
+        <Item>Stun Seed</Item>
+        <Item>Gabite Scale</Item>
+        <Item>Golden Seed</Item>
+        <Item>Vile Seed</Item>
+        <Item>Pure Seed</Item>
+        <Item>Violent Seed</Item>
+        <Item>Vanish Seed</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Max Elixir</Item>
+        <Item>Protein</Item>
+        <Item>Calcium</Item>
+        <Item>Iron</Item>
+        <Item>Nectar</Item>
+        <Item>Dropeye Seed</Item>
+        <Item>Reviser Seed</Item>
+        <Item>Slip Seed</Item>
+        <Item>Via Seed</Item>
+        <Item>Zinc</Item>
+        <Item>Apple</Item>
+        <Item>Big Apple</Item>
+        <Item>Grimy Food</Item>
+        <Item>Huge Apple</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Golden Apple</Item>
+        <Item>Mix Elixir</Item>
+        <Item>Oren Berry</Item>
+        <Item>Dough Seed</Item>
+        <Item>White Gummi</Item>
+        <Item>Red Gummi</Item>
+        <Item>Blue Gummi</Item>
+        <Item>Grass Gummi</Item>
+        <Item>Yellow Gummi</Item>
+        <Item>Clear Gummi</Item>
+        <Item>Orange Gummi</Item>
+        <Item>Pink Gummi</Item>
+        <Item>Brown Gummi</Item>
+        <Item>Sky Gummi</Item>
+        <Item>Gold Gummi</Item>
+        <Item>Green Gummi</Item>
+        <Item>Gray Gummi</Item>
+        <Item>Purple Gummi</Item>
+        <Item>Royal Gummi</Item>
+        <Item>Black Gummi</Item>
+        <Item>Silver Gummi</Item>
+        <Item>Wonder Gummi</Item>
+        <Item>Gravelyrock</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Upgrade</Item>
+        <Item>King's Rock</Item>
+        <Item>Thunderstone</Item>
+        <Item>Deepseascale</Item>
+        <Item>Deepseatooth</Item>
+        <Item>Sun Stone</Item>
+        <Item>Moon Stone</Item>
+        <Item>Fire Stone</Item>
+        <Item>Water Stone</Item>
+        <Item>Metal Coat</Item>
+        <Item>Leaf Stone</Item>
+        <Item>Dragon Scale</Item>
+        <Item>Link Cable</Item>
+        <Item>Dubious Disc</Item>
+        <Item>Protector</Item>
+        <Item>Reaper Cloth</Item>
+        <Item>Razor Fang</Item>
+        <Item>Razor Claw</Item>
+        <Item>Electirizer</Item>
+        <Item>Magmarizer</Item>
+        <Item>Oval Stone</Item>
+        <Item>Dawn Stone</Item>
+        <Item>Shiny Stone</Item>
+        <Item>Dusk Stone</Item>
+        <Item>Coronet Rock</Item>
+        <Item>Mossy Rock</Item>
+        <Item>Frozen Rock</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Gone Pebble</Item>
+        <Item>Wander Gummi</Item>
+        <Item>Prize Ticket</Item>
+        <Item>Silver Ticket</Item>
+        <Item>Gold Ticket</Item>
+        <Item>Prism Ticket</Item>
+        <Item>Mystery Part</Item>
+        <Item>Secret Slab</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Wonder Egg</Item>
+        <Item>Gracidea</Item>
+        <Item>Sky Gift</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Key</Item>
+        <Item>Poké</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Lost Loot</Item>
+        <Item>[M:I0]Used TM</Item>
+        <Item>[M:I0]Focus Punch</Item>
+        <Item>[M:I0]Dragon Claw</Item>
+        <Item>[M:I0]Water Pulse</Item>
+        <Item>[M:I0]Calm Mind</Item>
+        <Item>[M:I0]Roar</Item>
+        <Item>[M:I0]Toxic</Item>
+        <Item>[M:I0]Hail</Item>
+        <Item>[M:I0]Bulk Up</Item>
+        <Item>[M:I0]Bullet Seed</Item>
+        <Item>[M:I0]Hidden Power</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Taunt</Item>
+        <Item>[M:I0]Ice Beam</Item>
+        <Item>[M:I0]Blizzard</Item>
+        <Item>[M:I0]Hyper Beam</Item>
+        <Item>[M:I0]Light Screen</Item>
+        <Item>[M:I0]Protect</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Giga Drain</Item>
+        <Item>[M:I0]Safeguard</Item>
+        <Item>[M:I0]Frustration</Item>
+        <Item>[M:I0]SolarBeam</Item>
+        <Item>[M:I0]Iron Tail</Item>
+        <Item>[M:I0]Thunderbolt</Item>
+        <Item>[M:I0]Thunder</Item>
+        <Item>[M:I0]Earthquake</Item>
+        <Item>[M:I0]Return</Item>
+        <Item>[M:I0]Dig</Item>
+        <Item>[M:I0]Psychic</Item>
+        <Item>[M:I0]Shadow Ball</Item>
+        <Item>[M:I0]Brick Break</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Reflect</Item>
+        <Item>[M:I0]Shock Wave</Item>
+        <Item>[M:I0]Flamethrower</Item>
+        <Item>[M:I0]Sludge Bomb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Fire Blast</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Aerial Ace</Item>
+        <Item>[M:I0]Torment</Item>
+        <Item>[M:I0]Facade</Item>
+        <Item>[M:I0]Secret Power</Item>
+        <Item>[M:I0]Rest</Item>
+        <Item>[M:I0]Attract</Item>
+        <Item>[M:I0]Thief</Item>
+        <Item>[M:I0]Steel Wing</Item>
+        <Item>[M:I0]Skill Swap</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Overheat</Item>
+        <Item>[M:I0]Roost</Item>
+        <Item>[M:I0]Focus Blast</Item>
+        <Item>[M:I0]Energy Ball</Item>
+        <Item>[M:I0]False Swipe</Item>
+        <Item>[M:I0]Brine</Item>
+        <Item>[M:I0]Fling</Item>
+        <Item>[M:I0]Charge Beam</Item>
+        <Item>[M:I0]Endure</Item>
+        <Item>[M:I0]Dragon Pulse</Item>
+        <Item>[M:I0]Drain Punch</Item>
+        <Item>[M:I0]Will-O-Wisp</Item>
+        <Item>[M:I0]Silver Wind</Item>
+        <Item>[M:I0]Embargo</Item>
+        <Item>[M:I0]Explosion</Item>
+        <Item>[M:I0]Shadow Claw</Item>
+        <Item>[M:I0]Payback</Item>
+        <Item>[M:I0]Recycle</Item>
+        <Item>[M:I0]Giga Impact</Item>
+        <Item>[M:I0]Rock Polish</Item>
+        <Item>[M:I0]Wide Slash</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I0]Vacuum-Cut</Item>
+        <Item>[M:I0]Dive</Item>
+        <Item>[M:I0]Flash</Item>
+        <Item>[M:I0]Stone Edge</Item>
+        <Item>[M:I0]Avalanche</Item>
+        <Item>[M:I0]Thunder Wave</Item>
+        <Item>[M:I0]Gyro Ball</Item>
+        <Item>[M:I0]Swords Dance</Item>
+        <Item>[M:I0]Stealth Rock</Item>
+        <Item>[M:I0]Psych Up</Item>
+        <Item>[M:I0]Captivate</Item>
+        <Item>[M:I0]Dark Pulse</Item>
+        <Item>[M:I0]Rock Slide</Item>
+        <Item>[M:I0]X-Scissor</Item>
+        <Item>[M:I0]Sleep Talk</Item>
+        <Item>[M:I0]Natural Gift</Item>
+        <Item>[M:I0]Poison Jab</Item>
+        <Item>[M:I0]Dream Eater</Item>
+        <Item>[M:I0]Grass Knot</Item>
+        <Item>[M:I0]Swagger</Item>
+        <Item>[M:I0]Pluck</Item>
+        <Item>[M:I0]U-turn</Item>
+        <Item>[M:I0]Substitute</Item>
+        <Item>[M:I0]Flash Cannon</Item>
+        <Item>[M:I0]Trick Room</Item>
+        <Item>[M:I0]Cut</Item>
+        <Item>[M:I0]Fly</Item>
+        <Item>[M:I0]Surf</Item>
+        <Item>[M:I0]Strength</Item>
+        <Item>[M:I0]Defog</Item>
+        <Item>[M:I0]Rock Smash</Item>
+        <Item>[M:I0]Waterfall</Item>
+        <Item>[M:I0]Rock Climb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Hail Orb</Item>
+        <Item>[M:I1]Sunny Orb</Item>
+        <Item>[M:I1]Rainy Orb</Item>
+        <Item>[M:I1]Evasion Orb</Item>
+        <Item>[M:I1]Sandy Orb</Item>
+        <Item>[M:I1]Rocky Orb</Item>
+        <Item>[M:I1]Snatch Orb</Item>
+        <Item>[M:I1]See-Trap Orb</Item>
+        <Item>[M:I1]Mug Orb</Item>
+        <Item>[M:I1]Rebound Orb</Item>
+        <Item>[M:I1]Lob Orb</Item>
+        <Item>[M:I1]Switcher Orb</Item>
+        <Item>[M:I1]Blowback Orb</Item>
+        <Item>[M:I1]Warp Orb</Item>
+        <Item>[M:I1]Transfer Orb</Item>
+        <Item>[M:I1]Slow Orb</Item>
+        <Item>[M:I1]Quick Orb</Item>
+        <Item>[M:I1]Luminous Orb</Item>
+        <Item>[M:I1]Petrify Orb</Item>
+        <Item>[M:I1]Stayaway Orb</Item>
+        <Item>[M:I1]Pounce Orb</Item>
+        <Item>[M:I1]Trawl Orb</Item>
+        <Item>[M:I1]Cleanse Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Decoy Orb</Item>
+        <Item>[M:I1]Slumber Orb</Item>
+        <Item>[M:I1]Totter Orb</Item>
+        <Item>[M:I1]Two-Edge Orb</Item>
+        <Item>[M:I1]Silence Orb</Item>
+        <Item>[M:I1]Escape Orb</Item>
+        <Item>[M:I1]Scanner Orb</Item>
+        <Item>[M:I1]Radar Orb</Item>
+        <Item>[M:I1]Drought Orb</Item>
+        <Item>[M:I1]Trapbust Orb</Item>
+        <Item>[M:I1]Rollcall Orb</Item>
+        <Item>[M:I1]Invisify Orb</Item>
+        <Item>[M:I1]One-Shot Orb</Item>
+        <Item>[M:I1]Identify Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Shocker Orb</Item>
+        <Item>[M:I1]Sizebust Orb</Item>
+        <Item>[M:I1]One-Room Orb</Item>
+        <Item>[M:I1]Fill-In Orb</Item>
+        <Item>[M:I1]Trapper Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Itemizer Orb</Item>
+        <Item>[M:I1]Hurl Orb</Item>
+        <Item>[M:I1]Mobile Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Stairs Orb</Item>
+        <Item>[M:I1]Longtoss Orb</Item>
+        <Item>[M:I1]Pierce Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:I1]Spurn Orb</Item>
+        <Item>[M:I1]Foe-Hold Orb</Item>
+        <Item>[M:I1]All-Mach Orb</Item>
+        <Item>[M:I1]Foe-Fear Orb</Item>
+        <Item>[M:I1]All-Hit Orb</Item>
+        <Item>[M:I1]Foe-Seal Orb</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Link Box</Item>
+        <Item>[M:D1]$$$</Item>
+        <Item>Gorgeous Box</Item>
+        <Item>Gorgeous Box</Item>
+        <Item>Gorgeous Box</Item>
+        <Item>Heavy Box</Item>
+        <Item>Heavy Box</Item>
+        <Item>Heavy Box</Item>
+        <Item>Shiny Box</Item>
+        <Item>Shiny Box</Item>
+        <Item>Shiny Box</Item>
+        <Item>Nifty Box</Item>
+        <Item>Nifty Box</Item>
+        <Item>Nifty Box</Item>
+        <Item>Dainty Box</Item>
+        <Item>Dainty Box</Item>
+        <Item>Dainty Box</Item>
+        <Item>Glittery Box</Item>
+        <Item>Glittery Box</Item>
+        <Item>Glittery Box</Item>
+        <Item>Pretty Box</Item>
+        <Item>Pretty Box</Item>
+        <Item>Pretty Box</Item>
+        <Item>Deluxe Box</Item>
+        <Item>Deluxe Box</Item>
+        <Item>Deluxe Box</Item>
+        <Item>Light Box</Item>
+        <Item>Light Box</Item>
+        <Item>Light Box</Item>
+        <Item>Cute Box</Item>
+        <Item>Cute Box</Item>
+        <Item>Cute Box</Item>
+        <Item>Hard Box</Item>
+        <Item>Hard Box</Item>
+        <Item>Hard Box</Item>
+        <Item>Sinister Box</Item>
+        <Item>Sinister Box</Item>
+        <Item>Sinister Box</Item>
+        <Item>[FT:1]A[FT:0]-Stone</Item>
+        <Item>[FT:1]B[FT:0]-Stone</Item>
+        <Item>[FT:1]C[FT:0]-Stone</Item>
+        <Item>[FT:1]D[FT:0]-Stone</Item>
+        <Item>[FT:1]E[FT:0]-Stone</Item>
+        <Item>[FT:1]F[FT:0]-Stone</Item>
+        <Item>[FT:1]G[FT:0]-Stone</Item>
+        <Item>[FT:1]H[FT:0]-Stone</Item>
+        <Item>[FT:1]I[FT:0]-Stone</Item>
+        <Item>[FT:1]J[FT:0]-Stone</Item>
+        <Item>[FT:1]K[FT:0]-Stone</Item>
+        <Item>[FT:1]L[FT:0]-Stone</Item>
+        <Item>[FT:1]M[FT:0]-Stone</Item>
+        <Item>[FT:1]N[FT:0]-Stone</Item>
+        <Item>[FT:1]O[FT:0]-Stone</Item>
+        <Item>[FT:1]P[FT:0]-Stone</Item>
+        <Item>[FT:1]Q[FT:0]-Stone</Item>
+        <Item>[FT:1]R[FT:0]-Stone</Item>
+        <Item>[FT:1]S[FT:0]-Stone</Item>
+        <Item>[FT:1]T[FT:0]-Stone</Item>
+        <Item>[FT:1]U[FT:0]-Stone</Item>
+        <Item>[FT:1]V[FT:0]-Stone</Item>
+        <Item>[FT:1]W[FT:0]-Stone</Item>
+        <Item>[FT:1]X[FT:0]-Stone</Item>
+        <Item>[FT:1]Y[FT:0]-Stone</Item>
+        <Item>[FT:1]Z[FT:0]-Stone</Item>
+        <Item>[FT:1]![FT:0]-Stone</Item>
+        <Item>[FT:1]?[FT:0]-Stone</Item>
+        <Item>Silver Bow</Item>
+        <Item>Brown Bow</Item>
+        <Item>Red Bow</Item>
+        <Item>Pink Bow</Item>
+        <Item>Orange Bow</Item>
+        <Item>Yellow Bow</Item>
+        <Item>Lime Bow</Item>
+        <Item>Green Bow</Item>
+        <Item>Viridian Bow</Item>
+        <Item>Minty Bow</Item>
+        <Item>Sky Blue Bow</Item>
+        <Item>Blue Bow</Item>
+        <Item>Cobalt Bow</Item>
+        <Item>Purple Bow</Item>
+        <Item>Violet Bow</Item>
+        <Item>Fuchsia Bow</Item>
+        <Item>Prism Ruff</Item>
+        <Item>Aqua Collar</Item>
+        <Item>Volt Collar</Item>
+        <Item>Fire Collar</Item>
+        <Item>Light Collar</Item>
+        <Item>Dusk Collar</Item>
+        <Item>Virid Collar</Item>
+        <Item>Icy Collar</Item>
+        <Item>Pep Sash</Item>
+        <Item>Counter Ruff</Item>
+        <Item>Victory Belt</Item>
+        <Item>Power Bangle</Item>
+        <Item>Thundershard</Item>
+        <Item>Fallen Star</Item>
+        <Item>Fluff Dust</Item>
+        <Item>Egg Shard</Item>
+        <Item>Heroic Medal</Item>
+        <Item>Chic Shard</Item>
+        <Item>Yellow Jewel</Item>
+        <Item>Red Jewel</Item>
+        <Item>Blue Jewel</Item>
+        <Item>Laugh Dust</Item>
+        <Item>Guard Sand</Item>
+        <Item>Purple Jewel</Item>
+        <Item>White Jewel</Item>
+        <Item>Brave Dust</Item>
+        <Item>Heal Dew</Item>
+        <Item>Marine Cache</Item>
+        <Item>Freeze Veil</Item>
+        <Item>Thunder Veil</Item>
+        <Item>Fire Veil</Item>
+        <Item>Havoc Robe</Item>
+        <Item>Life Ring</Item>
+        <Item>Bolt Fang</Item>
+        <Item>Flare Fang</Item>
+        <Item>Aqua Mantle</Item>
+        <Item>Silver Veil</Item>
+        <Item>Rainbow Veil</Item>
+        <Item>Chrono Veil</Item>
+        <Item>Rock Sash</Item>
+        <Item>Ice Sash</Item>
+        <Item>Steel Sash</Item>
+        <Item>Heart Brooch</Item>
+        <Item>Eon Veil</Item>
+        <Item>Seabed Veil</Item>
+        <Item>Terra Ring</Item>
+        <Item>SkyHigh Veil</Item>
+        <Item>Wish Mantle</Item>
+        <Item>Revive Robe</Item>
+        <Item>Shadow Veil</Item>
+        <Item>Plasma Veil</Item>
+        <Item>Edify Robe</Item>
+        <Item>Charity Robe</Item>
+        <Item>Hope Robe</Item>
+        <Item>Time Shield</Item>
+        <Item>Air Blade</Item>
+        <Item>Searing Ring</Item>
+        <Item>Ancient Ring</Item>
+        <Item>Nether Veil</Item>
+        <Item>Lunar Veil</Item>
+        <Item>Tidal Cape</Item>
+        <Item>Eclipse Robe</Item>
+        <Item>White Silk</Item>
+        <Item>Normal Dust</Item>
+        <Item>White Gem</Item>
+        <Item>Joy Globe</Item>
+        <Item>Red Silk</Item>
+        <Item>Fire Dust</Item>
+        <Item>Fiery Gem</Item>
+        <Item>Fiery Globe</Item>
+        <Item>Blue Silk</Item>
+        <Item>Water Dust</Item>
+        <Item>Aqua Gem</Item>
+        <Item>Aqua Globe</Item>
+        <Item>Grass Silk</Item>
+        <Item>Grass Dust</Item>
+        <Item>Grass Gem</Item>
+        <Item>Soothe Globe</Item>
+        <Item>Yellow Silk</Item>
+        <Item>Thunder Dust</Item>
+        <Item>Thunder Gem</Item>
+        <Item>Volt Globe</Item>
+        <Item>Clear Silk</Item>
+        <Item>Icy Dust</Item>
+        <Item>Icy Gem</Item>
+        <Item>Icy Globe</Item>
+        <Item>Orange Silk</Item>
+        <Item>Courage Dust</Item>
+        <Item>Fight Gem</Item>
+        <Item>Power Globe</Item>
+        <Item>Pink Silk</Item>
+        <Item>Poison Dust</Item>
+        <Item>Poison Gem</Item>
+        <Item>Poison Globe</Item>
+        <Item>Brown Silk</Item>
+        <Item>Ground Dust</Item>
+        <Item>Earth Gem</Item>
+        <Item>Terra Globe</Item>
+        <Item>Sky Silk</Item>
+        <Item>Sky Dust</Item>
+        <Item>Sky Gem</Item>
+        <Item>Sky Globe</Item>
+        <Item>Gold Silk</Item>
+        <Item>Psyche Dust</Item>
+        <Item>Psyche Gem</Item>
+        <Item>Psyche Globe</Item>
+        <Item>Green Silk</Item>
+        <Item>Wonder Dust</Item>
+        <Item>Guard Gem</Item>
+        <Item>Defend Globe</Item>
+        <Item>Gray Silk</Item>
+        <Item>Rock Dust</Item>
+        <Item>Stone Gem</Item>
+        <Item>Rock Globe</Item>
+        <Item>Purple Silk</Item>
+        <Item>Shady Dust</Item>
+        <Item>Shadow Gem</Item>
+        <Item>Nether Globe</Item>
+        <Item>Royal Silk</Item>
+        <Item>Dragon Dust</Item>
+        <Item>Dragon Gem</Item>
+        <Item>Dragon Globe</Item>
+        <Item>Black Silk</Item>
+        <Item>Dark Dust</Item>
+        <Item>Dark Gem</Item>
+        <Item>Dusk Globe</Item>
+        <Item>Iron Silk</Item>
+        <Item>Steel Dust</Item>
+        <Item>Metal Gem</Item>
+        <Item>Steel Globe</Item>
+        <Item>Bulba-Claw</Item>
+        <Item>Bulba-Fang</Item>
+        <Item>Grass-Guard</Item>
+        <Item>Leafy Tie</Item>
+        <Item>Ivy-Claw</Item>
+        <Item>Ivy-Fang</Item>
+        <Item>Ivy-Crest</Item>
+        <Item>Plant Torc</Item>
+        <Item>Venus-Claw</Item>
+        <Item>Venus-Fang</Item>
+        <Item>Venus-Seal</Item>
+        <Item>Solar Sash</Item>
+        <Item>Char-Claw</Item>
+        <Item>Char-Fang</Item>
+        <Item>Fiery Heart</Item>
+        <Item>Heat Armlet</Item>
+        <Item>Charme-Claw</Item>
+        <Item>Charme-Fang</Item>
+        <Item>Charme-Crest</Item>
+        <Item>Kindle Scarf</Item>
+        <Item>Chariz-Claw</Item>
+        <Item>Chariz-Fang</Item>
+        <Item>Chariz-Seal</Item>
+        <Item>Flame Bangle</Item>
+        <Item>Squirt-Foam</Item>
+        <Item>Squirt-Card</Item>
+        <Item>Water-Guard</Item>
+        <Item>Aqua Tie</Item>
+        <Item>Wartor-Claw</Item>
+        <Item>Wartor-Fang</Item>
+        <Item>Wartor-Crest</Item>
+        <Item>BubbleBangle</Item>
+        <Item>Blasto-Claw</Item>
+        <Item>Blasto-Card</Item>
+        <Item>Blasto-Seal</Item>
+        <Item>Hydro Band</Item>
+        <Item>Pichu Hair</Item>
+        <Item>Pichu Card</Item>
+        <Item>Express Tag</Item>
+        <Item>Shocker Cape</Item>
+        <Item>Pikachu Hair</Item>
+        <Item>Pikachu Card</Item>
+        <Item>Volt Charm</Item>
+        <Item>Volt Torc</Item>
+        <Item>Raichu Hair</Item>
+        <Item>Raichu Card</Item>
+        <Item>Raichu Crest</Item>
+        <Item>Zapper Scarf</Item>
+        <Item>Meowth Claw</Item>
+        <Item>Meowth Fang</Item>
+        <Item>Coin Charm</Item>
+        <Item>Bling Ruff</Item>
+        <Item>Persian Claw</Item>
+        <Item>Persian Fang</Item>
+        <Item>Insight Rock</Item>
+        <Item>Noble Scarf</Item>
+        <Item>Chiko-Claw</Item>
+        <Item>Chiko-Card</Item>
+        <Item>Dawn Jewel</Item>
+        <Item>Fresh Bow</Item>
+        <Item>Bayleef Claw</Item>
+        <Item>Bayleef Card</Item>
+        <Item>Bayleef Seal</Item>
+        <Item>Spice Bow</Item>
+        <Item>Megani-Claw</Item>
+        <Item>Megani-Card</Item>
+        <Item>Shiny Charm</Item>
+        <Item>Bright Veil</Item>
+        <Item>Cynda-Hair</Item>
+        <Item>Cynda-Claw</Item>
+        <Item>Blazing Rock</Item>
+        <Item>Storm Sash</Item>
+        <Item>Quila-Hair</Item>
+        <Item>Quila-Card</Item>
+        <Item>Quila-Crest</Item>
+        <Item>Volcano Torc</Item>
+        <Item>Typhlo-Gasp</Item>
+        <Item>Typhlo-Fang</Item>
+        <Item>Typhlo-Seal</Item>
+        <Item>Blast Bangle</Item>
+        <Item>Totodi-Dew</Item>
+        <Item>Totodi-Fang</Item>
+        <Item>Water Heart</Item>
+        <Item>Wash Bow</Item>
+        <Item>Croco-Fang</Item>
+        <Item>Croco-Card</Item>
+        <Item>Swirl Rock</Item>
+        <Item>Anger Scarf</Item>
+        <Item>Feral-Claw</Item>
+        <Item>Feral-Fang</Item>
+        <Item>Feral-Crest</Item>
+        <Item>Hydro Jaw</Item>
+        <Item>Treeck-Thorn</Item>
+        <Item>Treeck-Card</Item>
+        <Item>Forest Ore</Item>
+        <Item>Guard Ring</Item>
+        <Item>Grovy-Shoot</Item>
+        <Item>Grovy-Card</Item>
+        <Item>Jungle-Tag</Item>
+        <Item>Grass Blade</Item>
+        <Item>Scept-Claw</Item>
+        <Item>Scept-Card</Item>
+        <Item>Scept-Seal</Item>
+        <Item>Drain Bangle</Item>
+        <Item>Torchic Hair</Item>
+        <Item>Torchic Card</Item>
+        <Item>Hot Pebble</Item>
+        <Item>Fire Cape</Item>
+        <Item>Combus-Sweat</Item>
+        <Item>Combus-Claw</Item>
+        <Item>Charge Tag</Item>
+        <Item>Gutsy Band</Item>
+        <Item>Blazi-Claw</Item>
+        <Item>Blazi-Card</Item>
+        <Item>Blazi-Seal</Item>
+        <Item>Blaze Torc</Item>
+        <Item>Mudkip Mud</Item>
+        <Item>Mudkip Card</Item>
+        <Item>Mud Jewel</Item>
+        <Item>Speed Scarf</Item>
+        <Item>Marsh-Mud</Item>
+        <Item>Marsh-Card</Item>
+        <Item>Marsh-Crest</Item>
+        <Item>Marsh Torc</Item>
+        <Item>Swamp-Mud</Item>
+        <Item>Swamp-Card</Item>
+        <Item>Swamp-Seal</Item>
+        <Item>Swamp Bangle</Item>
+        <Item>Skitty Fang</Item>
+        <Item>Skitty Card</Item>
+        <Item>Smile Pebble</Item>
+        <Item>Heal Pendant</Item>
+        <Item>Delcat-Hair</Item>
+        <Item>Delcat-Fang</Item>
+        <Item>Prim Pebble</Item>
+        <Item>Guard Collar</Item>
+        <Item>Lucky Leaf</Item>
+        <Item>Turtwig Card</Item>
+        <Item>Sprout Rock</Item>
+        <Item>Leafy Hat</Item>
+        <Item>Grotle Twig</Item>
+        <Item>Grotle Claw</Item>
+        <Item>Grotle Crest</Item>
+        <Item>Woody Scarf</Item>
+        <Item>Tort-Claw</Item>
+        <Item>Tort-Horn</Item>
+        <Item>Tort-Seal</Item>
+        <Item>Forest Torc</Item>
+        <Item>Chim-Hair</Item>
+        <Item>Chim-Fang</Item>
+        <Item>Nimble Charm</Item>
+        <Item>Ember Cap</Item>
+        <Item>Monfer-Hair</Item>
+        <Item>Monfer-Fang</Item>
+        <Item>Monfer-Crest</Item>
+        <Item>Burst Sash</Item>
+        <Item>Infern-Hair</Item>
+        <Item>Infern-Fang</Item>
+        <Item>Infern-Seal</Item>
+        <Item>Blazing Ruff</Item>
+        <Item>Piplup Foam</Item>
+        <Item>Piplup Card</Item>
+        <Item>Sea Ore</Item>
+        <Item>Water Cape</Item>
+        <Item>Prin-Foam</Item>
+        <Item>Prin-Card</Item>
+        <Item>Prin-Crest</Item>
+        <Item>Aqua Blade</Item>
+        <Item>Empol-Claw</Item>
+        <Item>Empol-Horn</Item>
+        <Item>Empol-Seal</Item>
+        <Item>Marine Crown</Item>
+        <Item>Munch-Drool</Item>
+        <Item>Munch-Claw</Item>
+        <Item>Tummy Charm</Item>
+        <Item>Glutton Cape</Item>
+        <Item>Snorlax Gasp</Item>
+        <Item>Snorlax Fang</Item>
+        <Item>Valor Charm</Item>
+        <Item>Glee Scarf</Item>
+        <Item>Scyther Fang</Item>
+        <Item>Scyther Card</Item>
+        <Item>Ambush Rock</Item>
+        <Item>Strike Ruff</Item>
+        <Item>Scizor Wing</Item>
+        <Item>Scizor Card</Item>
+        <Item>Steel Charm</Item>
+        <Item>Red Armlet</Item>
+        <Item>Lapras Song</Item>
+        <Item>Lapras Card</Item>
+        <Item>Wavy Charm</Item>
+        <Item>Mystic Scarf</Item>
+        <Item>Eevee Tail</Item>
+        <Item>Eevee Card</Item>
+        <Item>Evolve Charm</Item>
+        <Item>[M:D1]Eevee</Item>
+        <Item>Cleffa Dew</Item>
+        <Item>Cleffa Card</Item>
+        <Item>Starry Ore</Item>
+        <Item>Comet Ring</Item>
+        <Item>Clef-Claw</Item>
+        <Item>Clef-Fang</Item>
+        <Item>Moon Jewel</Item>
+        <Item>Moon Scarf</Item>
+        <Item>Clefa-Claw</Item>
+        <Item>Clefa-Card</Item>
+        <Item>Moon Rock</Item>
+        <Item>Fairy Bow</Item>
+        <Item>Iggly-Dew</Item>
+        <Item>Iggly-Card</Item>
+        <Item>Bouncy Charm</Item>
+        <Item>Pretty Bow</Item>
+        <Item>Jiggly-Song</Item>
+        <Item>Jiggly-Card</Item>
+        <Item>Slumber Rock</Item>
+        <Item>Snooze Ring</Item>
+        <Item>Wiggly-Hair</Item>
+        <Item>Wiggly-Card</Item>
+        <Item>Buddy Rock</Item>
+        <Item>Friend Torc</Item>
+        <Item>Togepi Dew</Item>
+        <Item>Togepi Card</Item>
+        <Item>Pure Heart</Item>
+        <Item>Angel Scarf</Item>
+        <Item>Togetic Wing</Item>
+        <Item>Togetic Card</Item>
+        <Item>Happy Rock</Item>
+        <Item>Luck Brooch</Item>
+        <Item>Togek-Wing</Item>
+        <Item>Togek-Card</Item>
+        <Item>Ovation Rock</Item>
+        <Item>Glitter Robe</Item>
+        <Item>Sneasel Claw</Item>
+        <Item>Sneasel Card</Item>
+        <Item>Dusk Jewel</Item>
+        <Item>Cruel Ring</Item>
+        <Item>Weavile Claw</Item>
+        <Item>Weavile Fang</Item>
+        <Item>Vile Tag</Item>
+        <Item>Ruin Armlet</Item>
+        <Item>Teddi-Claw</Item>
+        <Item>Teddi-Card</Item>
+        <Item>Honey Rock</Item>
+        <Item>Heal Scarf</Item>
+        <Item>Ursa-Claw</Item>
+        <Item>Ursa-Fang</Item>
+        <Item>Calming Rock</Item>
+        <Item>Hiber Scarf</Item>
+        <Item>Tyro-Sweat</Item>
+        <Item>Tyro-Card</Item>
+        <Item>Muscle Charm</Item>
+        <Item>[M:D1]Tyrogue</Item>
+        <Item>Smooch-Song</Item>
+        <Item>Smooch-Card</Item>
+        <Item>Kiss Charm</Item>
+        <Item>Heart Tiara</Item>
+        <Item>Jynx Song</Item>
+        <Item>Jynx Card</Item>
+        <Item>Frozen Ore</Item>
+        <Item>Ruin Scarf</Item>
+        <Item>Elekid Claw</Item>
+        <Item>Elekid Card</Item>
+        <Item>Jolt Charm</Item>
+        <Item>Current Ring</Item>
+        <Item>Electa-Claw</Item>
+        <Item>Electa-Fang</Item>
+        <Item>Charge Seal</Item>
+        <Item>Volt Bangle</Item>
+        <Item>Electi-Claw</Item>
+        <Item>Electi-Card</Item>
+        <Item>Voltaic Rock</Item>
+        <Item>Voltaic Band</Item>
+        <Item>Magby Claw</Item>
+        <Item>Magby Card</Item>
+        <Item>Ember Jewel</Item>
+        <Item>Coal Ring</Item>
+        <Item>Magmar Claw</Item>
+        <Item>Magmar Card</Item>
+        <Item>Erupt Ore</Item>
+        <Item>Magma Scarf</Item>
+        <Item>Magmor-Claw</Item>
+        <Item>Magmor-Card</Item>
+        <Item>Vulcan Rock</Item>
+        <Item>Burning Torc</Item>
+        <Item>Azuri-Dew</Item>
+        <Item>Azuri-Card</Item>
+        <Item>Fount Charm</Item>
+        <Item>Water Float</Item>
+        <Item>Marill Dew</Item>
+        <Item>Marill Card</Item>
+        <Item>Surfer Rock</Item>
+        <Item>Brine Scarf</Item>
+        <Item>Azuma-Dew</Item>
+        <Item>Azuma-Card</Item>
+        <Item>Stream Charm</Item>
+        <Item>Dotted Scarf</Item>
+        <Item>Plusle Tail</Item>
+        <Item>Plusle Card</Item>
+        <Item>Cheer Rock</Item>
+        <Item>Pulse Bow</Item>
+        <Item>Minun Tail</Item>
+        <Item>Minun Card</Item>
+        <Item>Volt Heart</Item>
+        <Item>Spark Tie</Item>
+        <Item>Cast-Dew</Item>
+        <Item>Cast-Card</Item>
+        <Item>Cloud Rock</Item>
+        <Item>Weather Cape</Item>
+        <Item>Wynaut Tail</Item>
+        <Item>Wynaut Card</Item>
+        <Item>Grin Charm</Item>
+        <Item>Cheery Scarf</Item>
+        <Item>Wobbu-Sweat</Item>
+        <Item>Wobbu-Card</Item>
+        <Item>Endure Rock</Item>
+        <Item>Suffer Scarf</Item>
+        <Item>Bidoof Tooth</Item>
+        <Item>Bidoof Card</Item>
+        <Item>Fall Charm</Item>
+        <Item>Stolid Scarf</Item>
+        <Item>Biba-Tooth</Item>
+        <Item>Biba-Card</Item>
+        <Item>River Charm</Item>
+        <Item>Dam Scarf</Item>
+        <Item>Shinx Claw</Item>
+        <Item>Shinx Fang</Item>
+        <Item>Flash Tag</Item>
+        <Item>Energy Scarf</Item>
+        <Item>Luxio Claw</Item>
+        <Item>Luxio Fang</Item>
+        <Item>Spark Tag</Item>
+        <Item>Spark Scarf</Item>
+        <Item>Luxray Claw</Item>
+        <Item>Luxray Fang</Item>
+        <Item>Glare Tag</Item>
+        <Item>Glare Sash</Item>
+        <Item>Pachi-Tooth</Item>
+        <Item>Pachi-Card</Item>
+        <Item>Rouse Charm</Item>
+        <Item>Miracle Bow</Item>
+        <Item>Buizel Fang</Item>
+        <Item>Buizel Card</Item>
+        <Item>Swimmer Rock</Item>
+        <Item>Screw Torc</Item>
+        <Item>Float-Fang</Item>
+        <Item>Float-Card</Item>
+        <Item>Rescue Rock</Item>
+        <Item>Float Aid</Item>
+        <Item>Drifloo-Gasp</Item>
+        <Item>Drifloo-Card</Item>
+        <Item>Wind Heart</Item>
+        <Item>Draft Ring</Item>
+        <Item>Drifbli-Gasp</Item>
+        <Item>Drifbli-Card</Item>
+        <Item>Easy Charm</Item>
+        <Item>Breeze Scarf</Item>
+        <Item>Cherubi Seed</Item>
+        <Item>Cherubi Card</Item>
+        <Item>Cute Ore</Item>
+        <Item>Charm Bow</Item>
+        <Item>Cherrim Dew</Item>
+        <Item>Cherrim Card</Item>
+        <Item>Sweet Aroma</Item>
+        <Item>Petal Dress</Item>
+        <Item>Bonsly Dew</Item>
+        <Item>Bonsly Card</Item>
+        <Item>Arid Tag</Item>
+        <Item>Teary Cape</Item>
+        <Item>Sudo-Sweat</Item>
+        <Item>Sudo-Card</Item>
+        <Item>Drain Rock</Item>
+        <Item>Fake Torc</Item>
+        <Item>Junior Beam</Item>
+        <Item>Junior Card</Item>
+        <Item>Mimic Pebble</Item>
+        <Item>Copy Mask</Item>
+        <Item>Mime Key</Item>
+        <Item>Mime Card</Item>
+        <Item>Bulwark Rock</Item>
+        <Item>Barrier Bow</Item>
+        <Item>Happiny Dew</Item>
+        <Item>Happiny Card</Item>
+        <Item>Play Tag</Item>
+        <Item>Nurture Cape</Item>
+        <Item>Chansey Song</Item>
+        <Item>Chansey Card</Item>
+        <Item>Lucky Charm</Item>
+        <Item>Lucky Scarf</Item>
+        <Item>Blissey Song</Item>
+        <Item>Blissey Card</Item>
+        <Item>Amity Rock</Item>
+        <Item>Faith Ring</Item>
+        <Item>Gible Fang</Item>
+        <Item>Gible Card</Item>
+        <Item>Dragon Jewel</Item>
+        <Item>Dragon Tie</Item>
+        <Item>Gabite Claw</Item>
+        <Item>Gabite Fang</Item>
+        <Item>Star Rock</Item>
+        <Item>Meteor Torc</Item>
+        <Item>Gar-Claw</Item>
+        <Item>Gar-Fang</Item>
+        <Item>Speed Tag</Item>
+        <Item>Mach Scarf</Item>
+        <Item>Riolu Tail</Item>
+        <Item>Riolu Card</Item>
+        <Item>Valiant Rock</Item>
+        <Item>Emit Ring</Item>
+        <Item>Lucario Fang</Item>
+        <Item>Lucario Card</Item>
+        <Item>Pledge Rock</Item>
+        <Item>Ravage Ring</Item>
+        <Item>Mantyke Beam</Item>
+        <Item>Mantyke Card</Item>
+        <Item>Waft Rock</Item>
+        <Item>Ocean Bow</Item>
+        <Item>Mantine Foam</Item>
+        <Item>Mantine Card</Item>
+        <Item>Sunset Rock</Item>
+        <Item>Horizon Bow</Item>
+        <Item>Phione Song</Item>
+        <Item>Phione Card</Item>
+        <Item>Wave Jewel</Item>
+        <Item>Ripple Cape</Item>
+        <Item>Vulpix Tail</Item>
+        <Item>Vulpix Card</Item>
+        <Item>Vulpix Tag</Item>
+        <Item>Glowing Bow</Item>
+        <Item>Nine-Hair</Item>
+        <Item>Nine-Card</Item>
+        <Item>Nine-Seal</Item>
+        <Item>Afire Collar</Item>
+        <Item>Phanpy Claw</Item>
+        <Item>Phanpy Card</Item>
+        <Item>Phanpy Tag</Item>
+        <Item>Value Ruff</Item>
+        <Item>Donphan Fang</Item>
+        <Item>Donphan Card</Item>
+        <Item>Don-Crest</Item>
+        <Item>Armor Scarf</Item>
+        <Item>Cater-Belt</Item>
+        <Item>Defense Bow</Item>
+        <Item>Glittery Bow</Item>
+        <Item>Weedle Bow</Item>
+        <Item>Kakuna Scarf</Item>
+        <Item>Charge Scarf</Item>
+        <Item>Pidgey Bow</Item>
+        <Item>Pidgeo-Scarf</Item>
+        <Item>Pidgeot Torc</Item>
+        <Item>Ratta-Scarf</Item>
+        <Item>Overcome Bow</Item>
+        <Item>Quirky Bow</Item>
+        <Item>Wing Scarf</Item>
+        <Item>Leash Bow</Item>
+        <Item>Shock Ruff</Item>
+        <Item>Sand-Scarf</Item>
+        <Item>Sandy Torc</Item>
+        <Item>Pointy Scarf</Item>
+        <Item>Return Scarf</Item>
+        <Item>Impact Torc</Item>
+        <Item>Halve Scarf</Item>
+        <Item>Thorny Scarf</Item>
+        <Item>King Sash</Item>
+        <Item>Dodge Bow</Item>
+        <Item>Absorb Scarf</Item>
+        <Item>Odd Bow</Item>
+        <Item>Guard Hat</Item>
+        <Item>Aroma Scarf</Item>
+        <Item>Moving Scarf</Item>
+        <Item>Firm Hat</Item>
+        <Item>Gaze Goggles</Item>
+        <Item>Venomoth Bow</Item>
+        <Item>Diglett Hat</Item>
+        <Item>Dugtrio Bow</Item>
+        <Item>Psyduck Hat</Item>
+        <Item>Paddle Scarf</Item>
+        <Item>Mankey Torc</Item>
+        <Item>Nullify Belt</Item>
+        <Item>Growl-Scarf</Item>
+        <Item>Legend Bow</Item>
+        <Item>Damp Bow</Item>
+        <Item>Poli-Bow</Item>
+        <Item>Bold Belt</Item>
+        <Item>Predict Torc</Item>
+        <Item>Psychic Torc</Item>
+        <Item>Sparkle Ruff</Item>
+        <Item>Impish Band</Item>
+        <Item>Strong Belt</Item>
+        <Item>Machamp Belt</Item>
+        <Item>Bell-Bow</Item>
+        <Item>Digest Scarf</Item>
+        <Item>Victree-Torc</Item>
+        <Item>Tangle Bow</Item>
+        <Item>Tenta-Cape</Item>
+        <Item>Geodude Torc</Item>
+        <Item>Rocky Torc</Item>
+        <Item>Rugged Sash</Item>
+        <Item>Heated Bow</Item>
+        <Item>Sunlight Bow</Item>
+        <Item>Slowpoke Hat</Item>
+        <Item>Slow-Scarf</Item>
+        <Item>Magne-Torc</Item>
+        <Item>Magneton Bow</Item>
+        <Item>Bullseye Bow</Item>
+        <Item>Buddy Torc</Item>
+        <Item>Fight Torc</Item>
+        <Item>Gentle Bow</Item>
+        <Item>North Torc</Item>
+        <Item>Grimy Scarf</Item>
+        <Item>Slimy Bow</Item>
+        <Item>Shell-Torc</Item>
+        <Item>Cover Armor</Item>
+        <Item>Gastly Veil</Item>
+        <Item>Slip Scarf</Item>
+        <Item>Sunglasses</Item>
+        <Item>Trust Brooch</Item>
+        <Item>Drowzee Tie</Item>
+        <Item>Dream Coin</Item>
+        <Item>Krabby Bow</Item>
+        <Item>Super Sash</Item>
+        <Item>Ball Scarf</Item>
+        <Item>Electro-Bow</Item>
+        <Item>Repel Scarf</Item>
+        <Item>Exeggu-Sash</Item>
+        <Item>Cubone Scarf</Item>
+        <Item>Marowak Torc</Item>
+        <Item>Licky Scarf</Item>
+        <Item>Koffing Bow</Item>
+        <Item>Weez-Scarf</Item>
+        <Item>Solid Shield</Item>
+        <Item>Pierce Drill</Item>
+        <Item>Sticky Bow</Item>
+        <Item>Kang-Apron</Item>
+        <Item>Horsea Bow</Item>
+        <Item>Swirl Scarf</Item>
+        <Item>Goldeen Bow</Item>
+        <Item>Seaking Bow</Item>
+        <Item>Recover Torc</Item>
+        <Item>Starmie Belt</Item>
+        <Item>Pinsir Sash</Item>
+        <Item>Rushing Bow</Item>
+        <Item>Magikarp Bow</Item>
+        <Item>Tempest Sash</Item>
+        <Item>Ditto Torc</Item>
+        <Item>AI Brooch</Item>
+        <Item>Spike Brooch</Item>
+        <Item>Aged Scarf</Item>
+        <Item>Kabuto Hat</Item>
+        <Item>Kabu-Torc</Item>
+        <Item>Old Brooch</Item>
+        <Item>Dragon Sash</Item>
+        <Item>Aloft Mantle</Item>
+        <Item>Mirage Cape</Item>
+        <Item>Sentret Ruff</Item>
+        <Item>Body Collar</Item>
+        <Item>Expose Specs</Item>
+        <Item>Noctowl Torc</Item>
+        <Item>Morning Bow</Item>
+        <Item>Ledian Bow</Item>
+        <Item>Spina-Scarf</Item>
+        <Item>Ariados Bow</Item>
+        <Item>Slash Bow</Item>
+        <Item>Shine Torc</Item>
+        <Item>Lanturn Bow</Item>
+        <Item>Lively Scarf</Item>
+        <Item>Xatu Bow</Item>
+        <Item>Wool Bow</Item>
+        <Item>Fluffy Scarf</Item>
+        <Item>Sacred Scarf</Item>
+        <Item>Bright Tiara</Item>
+        <Item>Rain Crown</Item>
+        <Item>Zephyr Bow</Item>
+        <Item>Skip-Scarf</Item>
+        <Item>Cotton Torc</Item>
+        <Item>Revenge Ruff</Item>
+        <Item>Hasty Bow</Item>
+        <Item>Sun Scarf</Item>
+        <Item>Chitin Bow</Item>
+        <Item>Wooper Bow</Item>
+        <Item>Quag-Torc</Item>
+        <Item>Murkrow Hat</Item>
+        <Item>King Cap</Item>
+        <Item>Misdrea-Cape</Item>
+        <Item>Cryptic Sash</Item>
+        <Item>Reverse Bow</Item>
+        <Item>Robust Bow</Item>
+        <Item>Dense Poncho</Item>
+        <Item>Escape Scarf</Item>
+        <Item>Takeoff Ruff</Item>
+        <Item>Quartz Torc</Item>
+        <Item>Snub-Cape</Item>
+        <Item>Stern Sash</Item>
+        <Item>Qwilfish Bow</Item>
+        <Item>Shuckle Bow</Item>
+        <Item>Horn Torc</Item>
+        <Item>Lava Bow</Item>
+        <Item>Torrid Scarf</Item>
+        <Item>Frigid Bow</Item>
+        <Item>Frost Torc</Item>
+        <Item>Eager Brooch</Item>
+        <Item>Reach Bow</Item>
+        <Item>Psy Bow</Item>
+        <Item>Snow Brooch</Item>
+        <Item>Skar-Cape</Item>
+        <Item>Dark Choker</Item>
+        <Item>Pit Fang</Item>
+        <Item>Tornado Bow</Item>
+        <Item>Virtual Bow</Item>
+        <Item>Delusion Bow</Item>
+        <Item>Paint Scarf</Item>
+        <Item>Milky Scarf</Item>
+        <Item>Larvitar Bow</Item>
+        <Item>Pupita-Scarf</Item>
+        <Item>Crash Claw</Item>
+        <Item>Pooch-Collar</Item>
+        <Item>Dark Fang</Item>
+        <Item>Merry Scarf</Item>
+        <Item>Linoone Ruff</Item>
+        <Item>Wurmple Bow</Item>
+        <Item>Tough Scarf</Item>
+        <Item>Vivid Silk</Item>
+        <Item>Guard Bow</Item>
+        <Item>Dustox Bow</Item>
+        <Item>Kelp Hat</Item>
+        <Item>Jolly Scarf</Item>
+        <Item>Ludicolo Hat</Item>
+        <Item>Seedot Hat</Item>
+        <Item>Nuzleaf Bow</Item>
+        <Item>Shiftry Belt</Item>
+        <Item>Taillow Bow</Item>
+        <Item>Midair Scarf</Item>
+        <Item>Wingull Bow</Item>
+        <Item>Stock Scarf</Item>
+        <Item>Sensing Hat</Item>
+        <Item>Magical Bow</Item>
+        <Item>Caring Scarf</Item>
+        <Item>Bliss Scarf</Item>
+        <Item>Blocking Bow</Item>
+        <Item>Mobile Bow</Item>
+        <Item>Thwart Bow</Item>
+        <Item>Slak-Scarf</Item>
+        <Item>Vigor Sash</Item>
+        <Item>Lazy Ruff</Item>
+        <Item>Novice Scarf</Item>
+        <Item>Ninja Ruff</Item>
+        <Item>Awe Mantle</Item>
+        <Item>Good Earring</Item>
+        <Item>Nice Bangle</Item>
+        <Item>Great Torc</Item>
+        <Item>Makuhit-Belt</Item>
+        <Item>Thrust Belt</Item>
+        <Item>Nose-Torc</Item>
+        <Item>Sable-Scope</Item>
+        <Item>Deceit Mask</Item>
+        <Item>Iron Torc</Item>
+        <Item>Metal Bangle</Item>
+        <Item>Iron Helmet</Item>
+        <Item>Intuit Bow</Item>
+        <Item>Ponder Sash</Item>
+        <Item>Punish Torc</Item>
+        <Item>Protect Mask</Item>
+        <Item>Neon Scarf</Item>
+        <Item>Evening Bow</Item>
+        <Item>Thorned Torc</Item>
+        <Item>Gulpin Bow</Item>
+        <Item>Swalot Belt</Item>
+        <Item>Carva-Sash</Item>
+        <Item>Vicious Bow</Item>
+        <Item>Spout Scarf</Item>
+        <Item>Huge Bow</Item>
+        <Item>Numel Bow</Item>
+        <Item>Erupt Scarf</Item>
+        <Item>Sooty Sash</Item>
+        <Item>Spring Bow</Item>
+        <Item>Scheme Scarf</Item>
+        <Item>Hula Bow</Item>
+        <Item>Desert Bow</Item>
+        <Item>Vibra Scarf</Item>
+        <Item>Red Glasses</Item>
+        <Item>Desert Sash</Item>
+        <Item>Cacturne Hat</Item>
+        <Item>Tuft Bow</Item>
+        <Item>Cloud Ruff</Item>
+        <Item>Strong Sash</Item>
+        <Item>Seviper Bow</Item>
+        <Item>Lunaton-Torc</Item>
+        <Item>Solrock Bow</Item>
+        <Item>Soak Scarf</Item>
+        <Item>Whiscash Bow</Item>
+        <Item>Bossy Scarf</Item>
+        <Item>Cower Sash</Item>
+        <Item>Bal-Brooch</Item>
+        <Item>Claydol Torc</Item>
+        <Item>Bind Scarf</Item>
+        <Item>Cradily Bow</Item>
+        <Item>Guard Claw</Item>
+        <Item>Rigid Cape</Item>
+        <Item>Admire Scarf</Item>
+        <Item>Grace Scarf</Item>
+        <Item>Kecleon Torc</Item>
+        <Item>Shuppet Cape</Item>
+        <Item>Ominous Torc</Item>
+        <Item>Duskull Ruff</Item>
+        <Item>Illusion Bow</Item>
+        <Item>Tropius Bow</Item>
+        <Item>Chime-Scarf</Item>
+        <Item>Perish Torc</Item>
+        <Item>Chilly Hat</Item>
+        <Item>Hail Scarf</Item>
+        <Item>Sleet Bow</Item>
+        <Item>Safe Scarf</Item>
+        <Item>Walrein Torc</Item>
+        <Item>Clam-Brooch</Item>
+        <Item>Deep Torc</Item>
+        <Item>Gore-Scarf</Item>
+        <Item>Reli-Torc</Item>
+        <Item>Luvdisc Torc</Item>
+        <Item>Crag Helmet</Item>
+        <Item>Outlast Bow</Item>
+        <Item>Sala-Cape</Item>
+        <Item>Beldum Torc</Item>
+        <Item>Metang Scarf</Item>
+        <Item>Meta-Torc</Item>
+        <Item>Starly Bow</Item>
+        <Item>Regret Torc</Item>
+        <Item>Guts Sash</Item>
+        <Item>Still Bow</Item>
+        <Item>Kricke-Torc</Item>
+        <Item>Budew Scarf</Item>
+        <Item>Bouquet Cape</Item>
+        <Item>Hard Helmet</Item>
+        <Item>Skull Helmet</Item>
+        <Item>Rebound Bow</Item>
+        <Item>Block Brooch</Item>
+        <Item>Straw Cape</Item>
+        <Item>Worma-Bow</Item>
+        <Item>Mothim Bow</Item>
+        <Item>Nectar Bow</Item>
+        <Item>Vespi-Torc</Item>
+        <Item>Awake Bow</Item>
+        <Item>Gastro-Torc</Item>
+        <Item>Ambipom Bow</Item>
+        <Item>Defrost Ruff</Item>
+        <Item>Allure Coat</Item>
+        <Item>Magic Hat</Item>
+        <Item>Honch-Cape</Item>
+        <Item>Glameow Bow</Item>
+        <Item>Scary Belt</Item>
+        <Item>Ching-Torc</Item>
+        <Item>Stinky Scarf</Item>
+        <Item>Stench Sash</Item>
+        <Item>Image Brooch</Item>
+        <Item>Mirror Torc</Item>
+        <Item>Chatot Scarf</Item>
+        <Item>Thick Scarf</Item>
+        <Item>Grit Veil</Item>
+        <Item>Skorupi Bow</Item>
+        <Item>Dust Scarf</Item>
+        <Item>Croa-Torc</Item>
+        <Item>Toxi-Belt</Item>
+        <Item>Carni-Bow</Item>
+        <Item>Swim Bow</Item>
+        <Item>Lumi-Torc</Item>
+        <Item>Snowy Torc</Item>
+        <Item>Frozen Cape</Item>
+        <Item>Builder Sash</Item>
+        <Item>Flabby Belt</Item>
+        <Item>Rhyperi-Torc</Item>
+        <Item>Clinging Bow</Item>
+        <Item>Yanmega Bow</Item>
+        <Item>Gliscor Cape</Item>
+        <Item>Glacier Cape</Item>
+        <Item>Best Scarf</Item>
+        <Item>Gallant Torc</Item>
+        <Item>Probo-Hat</Item>
+        <Item>Unlucky Sash</Item>
+        <Item>Froslass Bow</Item>
+        <Item>Purify Veil</Item>
+      </Items>
+
     </Game>
 
   </DungeonData>

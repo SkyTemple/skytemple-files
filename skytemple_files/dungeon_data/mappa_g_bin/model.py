@@ -17,6 +17,7 @@
 from typing import Optional
 
 from skytemple_files.common.util import *
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 
@@ -31,5 +32,5 @@ class MappaGBin(Sir0Serializable):
         return MappaGBinWriter(self).write()
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'MappaGBin':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'MappaGBin':
         return cls(content_data, data_pointer)

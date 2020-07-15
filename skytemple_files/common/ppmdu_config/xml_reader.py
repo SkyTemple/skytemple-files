@@ -23,7 +23,7 @@ from xml.etree.ElementTree import ParseError
 import pkg_resources
 
 from skytemple_files.common.ppmdu_config.data import *
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonItem
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
@@ -376,6 +376,7 @@ class Pmd2XmlReader:
 
     def _parse_dungeon_data(self, dungeon_root) -> Pmd2DungeonData:
         dungeon_bin_files = None
+        items = []
         for e_game in dungeon_root:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
@@ -390,8 +391,13 @@ class Pmd2XmlReader:
                                 e_var.attrib['name']
                             ))
                         dungeon_bin_files = Pmd2DungeonBinFiles(files)
+                    ###########################
+                    if e.tag == 'Items':
+                        for i, e_item in enumerate(e):
+                            items.append(Pmd2DungeonItem(i, e_item.text))
         return Pmd2DungeonData(
-            dungeon_bin_files
+            dungeon_bin_files,
+            items
         )
 
     @staticmethod

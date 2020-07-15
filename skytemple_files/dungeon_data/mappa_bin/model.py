@@ -16,28 +16,32 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
 
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem, Pmd2DungeonData
 from skytemple_files.common.util import *
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
 FLOOR_IDX_ENTRY_LEN = 18
 
 
 class MappaBinReadContainer:
-    def __init__(self, data: memoryview, header_start: int):
+    def __init__(self, data: memoryview, header_start: int, items: List[Pmd2DungeonItem]):
         self.data = data
         self.dungeon_list_index_start = read_uintle(data, header_start + 0x00, 4)
         self.floor_layout_data_start = read_uintle(data, header_start + 0x04, 4)
         self.item_spawn_list_index_start = read_uintle(data, header_start + 0x08, 4)
         self.monster_spawn_list_index_start = read_uintle(data, header_start + 0x0C, 4)
         self.trap_spawn_list_index_start = read_uintle(data, header_start + 0x10, 4)
+        self.items = items
+        self.read_cache = {}
 
 
 class MappaBin(Sir0Serializable):
-    def __init__(self, data: bytes, header_start: int):
+    def __init__(self, data: bytes, header_start: int, dungeon_data: Pmd2DungeonData):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.dungeons = self._read_dungeon_list(MappaBinReadContainer(data, header_start))
+        self.floor_lists = self._read_floor_list(MappaBinReadContainer(data, header_start, dungeon_data.items))
         print("ok.")
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
@@ -45,10 +49,12 @@ class MappaBin(Sir0Serializable):
         return MappaBinWriter(self).write()
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'MappaBin':
-        return cls(content_data, data_pointer)
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'MappaBin':
+        if static_data is None:
+            raise ValueError("MappaBin needs Pmd2Data to initialize.")
+        return cls(content_data, data_pointer, static_data.dungeon_data)
 
-    def _read_dungeon_list(self, read: MappaBinReadContainer):
+    def _read_floor_list(self, read: MappaBinReadContainer):
         start = read.dungeon_list_index_start
         end = read.floor_layout_data_start
         dungeons = []

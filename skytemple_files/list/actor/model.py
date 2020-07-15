@@ -17,6 +17,7 @@
 from typing import Tuple, List, Optional
 
 from skytemple_files.common import string_codec
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptEntity
 from skytemple_files.common.util import read_uintle, read_var_length_string, write_uintle
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -85,7 +86,7 @@ class ActorListBin(Sir0Serializable):
         return out_data, pointer_offsets, data_pointer
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'ActorListBin':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'ActorListBin':
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

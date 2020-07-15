@@ -14,8 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Union, List, Type, TypeVar
+from typing import List, Type, TypeVar, Optional
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
 from skytemple_files.container.sir0.model import Sir0
@@ -52,5 +53,5 @@ class Sir0Handler(DataHandler[Sir0]):
         return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
-    def unwrap_obj(cls, data: Sir0, spec: Type[T]) -> T:
-        return spec.sir0_unwrap(data.content, data.data_pointer)
+    def unwrap_obj(cls, data: Sir0, spec: Type[T], static_data: Optional[Pmd2Data] = None) -> T:
+        return spec.sir0_unwrap(data.content, data.data_pointer, static_data)

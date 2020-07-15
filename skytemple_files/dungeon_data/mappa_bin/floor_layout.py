@@ -17,7 +17,7 @@
 from enum import Enum
 from typing import TYPE_CHECKING
 
-from skytemple_files.common.util import read_uintle
+from skytemple_files.common.util import read_uintle, AutoString
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -79,11 +79,11 @@ class MappaFloorTerrainSettings:
 
 class MappaFloorDarknessLevel(Enum):
     NO_DARKNESS = 0
-    LIGHT_DARKNESS = 1
-    HEAVY_DARKNESS = 2
+    HEAVY_DARKNESS = 1
+    LIGHT_DARKNESS = 2
 
 
-class MappaFloorLayout:
+class MappaFloorLayout(AutoString):
     def __init__(
             self, *, structure: MappaFloorStructureType, room_density: int, tileset_id: int, music_id: int,
             weather: MappaFloorWeather, floor_connectivity: int, initial_enemy_density: int, kecleon_shop_chance: int,
@@ -156,7 +156,7 @@ class MappaFloorLayout:
             buried_item_density=read_uintle(read.data, pointer + 0x14),
             water_density=read_uintle(read.data, pointer + 0x15),
             darkness_level=MappaFloorDarknessLevel(read_uintle(read.data, pointer + 0x16)),
-            max_coin_amount=read_uintle(read.data, pointer + 0x17),
+            max_coin_amount=read_uintle(read.data, pointer + 0x17) * 5,
             kecleon_shop_item_positions=read_uintle(read.data, pointer + 0x18),
             empty_monster_house_chance=read_uintle(read.data, pointer + 0x19),
             unk_hidden_stairs=read_uintle(read.data, pointer + 0x1A),

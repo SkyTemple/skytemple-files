@@ -27,6 +27,12 @@ class Pmd2BinPackFile(AutoString):
         self.name = name
 
 
+class Pmd2DungeonItem(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
 class Pmd2DungeonBinFiles(AutoString):
     def __init__(self, files: List[Pmd2BinPackFile]):
         self._files = files
@@ -42,5 +48,6 @@ class Pmd2DungeonBinFiles(AutoString):
 
 
 class Pmd2DungeonData(AutoString):
-    def __init__(self, dungeon_bin_files: Pmd2DungeonBinFiles):
+    def __init__(self, dungeon_bin_files: Pmd2DungeonBinFiles, items: List[Pmd2DungeonItem]):
         self.dungeon_bin_files = dungeon_bin_files
+        self.items = items

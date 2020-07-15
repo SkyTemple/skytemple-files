@@ -44,35 +44,59 @@ class MappaFloor(AutoString):
     @classmethod
     def from_mappa(cls, read: 'MappaBinReadContainer', floor_data: bytes) -> 'MappaFloor':
         return cls(
-            MappaFloorLayout.from_mappa(
-                read, read.floor_layout_data_start + 32 * read_uintle(floor_data, 0x00, 2)
+            cls._from_cache(
+                read,
+                read.floor_layout_data_start + 32 * read_uintle(floor_data, 0x00, 2),
+                lambda pnt: MappaFloorLayout.from_mappa(read, pnt)
             ),
-            MappaMonster.list_from_mappa(
-                read, cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_uintle(floor_data, 0x02, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_uintle(floor_data, 0x02, 2)),
+                lambda pnt: MappaMonster.list_from_mappa(read, pnt)
             ),
-            MappaTrapList.from_mappa(
-                read, cls._read_pointer(read.data, read.trap_spawn_list_index_start, read_uintle(floor_data, 0x04, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.trap_spawn_list_index_start, read_uintle(floor_data, 0x04, 2)),
+                lambda pnt: MappaTrapList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x06, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x06, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x08, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x08, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0A, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0A, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0C, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0C, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0E, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0E, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
-            MappaItemList.from_mappa(
-                read, cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x10, 2))
+            cls._from_cache(
+                read,
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x10, 2)),
+                lambda pnt: MappaItemList.from_mappa(read, pnt)
             )
         )
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
         return read_uintle(data, start + (4 * index), 4)
+
+    @staticmethod
+    def _from_cache(read, pnt, load_callback):
+        if pnt not in read.read_cache:
+            read.read_cache[pnt] = load_callback(pnt)
+        return read.read_cache[pnt]

@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from decimal import Decimal
 from enum import Enum
 from typing import Dict, Union
 from xml.etree.ElementTree import Element
@@ -31,8 +32,8 @@ if TYPE_CHECKING:
 CMD_SKIP = 0x7530
 GUARANTEED = 0xFFFF
 MAX_ITEM_ID = 362
-# Actually GUARANTEED or a float. Literals are only supported for Python 3.8+ so we do it like this.
-Probability = Union[int, float]
+# Actually GUARANTEED or a Decimal. Literals are only supported for Python 3.8+ so we do it like this.
+Probability = Union[int, Decimal]
 
 
 class MappaItemCategory(Enum):
@@ -77,7 +78,7 @@ class MappaItemList(AutoString, XmlSerializable):
                 if val == GUARANTEED:
                     chance = 100
                 else:
-                    chance = val / 100
+                    chance = Decimal(val) / Decimal(100)
                 if processing_categories:
                     categories[MappaItemCategory(item_or_cat_id)] = chance
                 else:
@@ -89,6 +90,28 @@ class MappaItemList(AutoString, XmlSerializable):
             pointer += 2
 
         return MappaItemList(categories, items)
+
+    def to_mappa(self):
+        data = bytearray()
+        current_id = 0
+        # Start with the categories
+        for cat, val in sorted(self.categories.items(), key=lambda it: it[0].value):
+            id_cat = cat.value
+            if current_id != id_cat:
+                current_id = self._write_skip(data, current_id, id_cat)
+            self._write_probability(data, val)
+            current_id += 1
+        # Continue with the items
+        self._write_skip(data, current_id, 0x10)
+        current_id = 0
+        for item, val in sorted(self.items.items(), key=lambda it: it[0].id):
+            if current_id != item.id:
+                current_id = self._write_skip(data, current_id, item.id)
+            self._write_probability(data, val)
+            current_id += 1
+        # Fill up to MAX_ITEM_ID + 1
+        self._write_skip(data, current_id, MAX_ITEM_ID + 1)
+        return data
 
     def to_xml(self) -> Element:
         xml_item_list = Element(XML_ITEM_LIST)
@@ -121,12 +144,12 @@ class MappaItemList(AutoString, XmlSerializable):
                 if not hasattr(MappaItemCategory, name):
                     raise XmlValidateError(f"Unknown item category {name}.")
                 chance_str = child.get(XML_CATEGORY__CHANCE)
-                chance = float(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
+                chance = Decimal(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
                 categories[getattr(MappaItemCategory, name)] = chance
             elif child.tag == XML_ITEM:
                 validate_xml_attribs(child, [XML_ITEM__ID, XML_ITEM__CHANCE])
                 chance_str = child.get(XML_ITEM__CHANCE)
-                chance = float(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
+                chance = Decimal(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
                 items[Pmd2DungeonItem(int(child.get(XML_ITEM__ID)), '???')] = chance
             else:
                 raise XmlValidateError(f"Unexpected sub-node for {XML_ITEM_LIST}: {child.tag}")
@@ -136,3 +159,13 @@ class MappaItemList(AutoString, XmlSerializable):
         if not isinstance(other, MappaItemList):
             return False
         return self.categories == other.categories and self.items == other.items
+
+    def _write_skip(self, data: bytearray, current_id: int, target_id: int):
+        data += (target_id - current_id + CMD_SKIP).to_bytes(2, 'little', signed=False)
+        return target_id
+
+    def _write_probability(self, data: bytearray, probability: Probability):
+        if probability == GUARANTEED:
+            data += probability.to_bytes(2, 'little', signed=False)
+        else:
+            data += int(probability * 100).to_bytes(2, 'little', signed=False)

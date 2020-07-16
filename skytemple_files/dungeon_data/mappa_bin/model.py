@@ -23,7 +23,12 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.dungeon_data.mappa_bin import XML_MAPPA, XML_FLOOR_LIST, XML_FLOOR
-from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
+from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor, StubMappaFloor
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
+from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
+from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
+
 FLOOR_IDX_ENTRY_LEN = 18
 
 
@@ -43,6 +48,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
 
     def __init__(self, floor_lists: List[List[MappaFloor]]):
         self.floor_lists = floor_lists
+        print("ok")
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
@@ -104,6 +110,62 @@ class MappaBin(Sir0Serializable, XmlSerializable):
                 floor_list.append(MappaFloor.from_xml(x_floor))
             floor_lists.append(floor_list)
         return cls(floor_lists)
+
+    def minimize(self) -> Tuple[
+        List[List[StubMappaFloor]], List[MappaFloorLayout], List[List[MappaMonster]],
+        List[MappaTrapList], List[MappaItemList]
+    ]:
+        """
+        Collects a list of floors, that references indices in other lists, like stored in the mappa files.
+        If two floors use the same exact data for something, they will be pointing to the same index in the lists,
+        there are no duplicates.
+        Returned are all lists.
+        TODO: Performance could be improved here, by using more efficient lookup mechanisms.
+        """
+        floor_lists = []
+        floor_layouts = []
+        monster_lists = []
+        trap_lists = []
+        item_lists = []
+        for floor_list in self.floor_lists:
+            stub_floor_list = []
+            for floor in floor_list:
+                # Layout
+                layout_idx = self._find_if_not_exists_insert(floor_layouts, floor.layout)
+                # Monsters
+                monsters_idx = self._find_if_not_exists_insert(monster_lists, floor.monsters)
+                # Traps
+                traps_idx = self._find_if_not_exists_insert(trap_lists, floor.traps)
+                # Floor items
+                floor_items_idx = self._find_if_not_exists_insert(item_lists, floor.floor_items)
+                # Shop items
+                shop_items_idx = self._find_if_not_exists_insert(item_lists, floor.shop_items)
+                # Monster house items
+                monster_house_items_idx = self._find_if_not_exists_insert(item_lists, floor.monster_house_items)
+                # Buried items
+                buried_items_idx = self._find_if_not_exists_insert(item_lists, floor.buried_items)
+                # Unk items 1
+                unk_items1_idx = self._find_if_not_exists_insert(item_lists, floor.unk_items1)
+                # Unk items 2
+                unk_items2_idx = self._find_if_not_exists_insert(item_lists, floor.unk_items2)
+
+                stub_floor_list.append(StubMappaFloor(
+                    layout_idx, monsters_idx, traps_idx, floor_items_idx, shop_items_idx,
+                    monster_house_items_idx, buried_items_idx, unk_items1_idx, unk_items2_idx
+                ))
+
+            floor_lists.append(stub_floor_list)
+
+        return floor_lists, floor_layouts, monster_lists, trap_lists, item_lists
+
+    @staticmethod
+    def _find_if_not_exists_insert(lst, elem):
+        try:
+            index = lst.index(elem)
+        except ValueError:
+            index = len(lst)
+            lst.append(elem)
+        return index
 
     def __eq__(self, other):
         if not isinstance(other, MappaBin):

@@ -37,5 +37,20 @@ with open('/tmp/before.bin', 'wb') as f:
 with open('/tmp/after.bin', 'wb') as f:
     f.write(mappa_after_bin)
 
-assert mappa_bin == mappa_after_bin
-assert mappa == MappaBinHandler.deserialize(mappa_after_bin)
+mappa_after = MappaBinHandler.deserialize(mappa_after_bin)
+for i_fl in range(0, len(mappa.floor_lists)):
+    for i in range(0, len(mappa.floor_lists[i_fl])):
+        assert mappa.floor_lists[i_fl][i].layout == mappa_after.floor_lists[i_fl][i].layout
+        assert mappa.floor_lists[i_fl][i].monsters == mappa_after.floor_lists[i_fl][i].monsters
+        assert mappa.floor_lists[i_fl][i].traps == mappa_after.floor_lists[i_fl][i].traps
+        assert mappa.floor_lists[i_fl][i].floor_items == mappa_after.floor_lists[i_fl][i].floor_items
+        assert mappa.floor_lists[i_fl][i].shop_items == mappa_after.floor_lists[i_fl][i].shop_items
+        assert mappa.floor_lists[i_fl][i].buried_items == mappa_after.floor_lists[i_fl][i].buried_items
+        assert mappa.floor_lists[i_fl][i].monster_house_items == mappa_after.floor_lists[i_fl][i].monster_house_items
+        assert mappa.floor_lists[i_fl][i].unk_items1 == mappa_after.floor_lists[i_fl][i].unk_items1
+        assert mappa.floor_lists[i_fl][i].unk_items2 == mappa_after.floor_lists[i_fl][i].unk_items2
+assert mappa == mappa_after
+
+rom.setFileByName('BALANCE/mappa_s.bin', mappa_after_bin)
+rom.saveToFile(os.path.join(output_dir, 'mappa_save_test.nds'))
+

@@ -14,11 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from decimal import Decimal
 from enum import Enum
 from typing import TYPE_CHECKING, List, Dict, Union
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.util import read_uintle, AutoString
+from skytemple_files.common.util import read_uintle, AutoString, write_uintle
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_TRAP_LIST, XML_TRAP, XML_TRAP__NAME, XML_TRAP__CHANCE
 
@@ -55,7 +56,7 @@ class MappaTrapType(Enum):
 
 
 class MappaTrapList(AutoString, XmlSerializable):
-    def __init__(self, chances: Union[List[int], Dict[MappaTrapType, int]]):
+    def __init__(self, chances: Union[List[Decimal], Dict[MappaTrapType, Decimal]]):
         if isinstance(chances, list):
             if len(chances) != 25:
                 raise ValueError("MappaTrapList constructor needs a chance value for all of the 25 traps.")
@@ -73,8 +74,14 @@ class MappaTrapList(AutoString, XmlSerializable):
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int) -> 'MappaTrapList':
         chances = []
         for i in range(pointer, pointer + 50, 2):
-            chances.append(read_uintle(read.data, i, 2))
+            chances.append(Decimal(read_uintle(read.data, i, 2)) / Decimal(100))
         return MappaTrapList(chances)
+
+    def to_mappa(self):
+        data = bytearray(50)
+        for i in range(0, 25):
+            write_uintle(data, int(self.chances[MappaTrapType(i)] * 100), i * 2, 2)
+        return data
 
     def to_xml(self) -> Element:
         xml_trap_list = Element(XML_TRAP_LIST)

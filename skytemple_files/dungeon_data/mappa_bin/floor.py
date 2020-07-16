@@ -31,6 +31,37 @@ if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
 
 
+class StubMappaFloor:
+    """A mappa floor that only refernces an index for all of it's data."""
+    def __init__(
+        self, layout_idx: int, monsters_idx: int, traps_idx: int, floor_items_idx: int,
+        shop_items_idx: int, monster_house_items_idx: int, buried_items_idx: int,
+        unk_items1_idx: int, unk_items2_idx: int
+    ):
+        self.layout_idx: int = layout_idx
+        self.monsters_idx: int = monsters_idx
+        self.traps_idx: int = traps_idx
+        self.floor_items_idx: int = floor_items_idx
+        self.shop_items_idx: int = shop_items_idx
+        self.monster_house_items_idx: int = monster_house_items_idx
+        self.buried_items_idx: int = buried_items_idx
+        self.unk_items1_idx: int = unk_items1_idx
+        self.unk_items2_idx: int = unk_items2_idx
+
+    def to_mappa(self) -> bytes:
+        data = bytearray(18)
+        write_uintle(data, self.layout_idx, 0x00, 2)
+        write_uintle(data, self.monsters_idx, 0x02, 2)
+        write_uintle(data, self.traps_idx, 0x04, 2)
+        write_uintle(data, self.floor_items_idx, 0x06, 2)
+        write_uintle(data, self.shop_items_idx, 0x08, 2)
+        write_uintle(data, self.monster_house_items_idx, 0x0A, 2)
+        write_uintle(data, self.buried_items_idx, 0x0C, 2)
+        write_uintle(data, self.unk_items1_idx, 0x0E, 2)
+        write_uintle(data, self.unk_items2_idx, 0x10, 2)
+        return data
+
+
 class MappaFloor(AutoString, XmlSerializable):
     def __init__(
         self, layout: MappaFloorLayout, monsters: List[MappaMonster], traps: MappaTrapList, floor_items: MappaItemList,

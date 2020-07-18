@@ -1,6 +1,8 @@
 ``mappa_g*.bin`` File Format
 ============================
-XYZ
+The ``mappa_gs.bin`` file in the  ``BALANCE`` directory contains a subset of data for dungeon floor generation.
+
+The data it contains should be identical to the content in the ``mappa_s.bin``.
 
 Usage
 -----
@@ -13,22 +15,7 @@ See the handler class for more details.
 
 File Format
 -----------
-XYZ
-
-Color entry
-~~~~~~~~~~~
-XYZ TBD - this table is only here for later.
-+---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
-| Offset  | Length | Type                  | Name                  | Description                                                 |
-+=========+========+=======================+=======================+=============================================================+
-| 0x00    | 2      | uint16                | NumberColors          | The amount of frames/colors that this color                 |
-|         |        |                       |                       | entry cycles through.                                       |
-+---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
-| 0x02    | 2      | uint16                | DurationPerFrame      | Time in game frames to hold a single palette frame for      |
-+---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
-|         | Varies | List of `Color`_      | ColorFrames           | One color per NumberColors.                                 |
-|         |        |                       |                       | If NumberColors == 0, this contains one NULL color          |
-+---------+--------+-----------------------+-----------------------+-------------------------------------------------------------+
+For documentation, please see the `Dropbox by psy_commando`_ and the `Google Doc by End`_.
 
 Credits
 -------

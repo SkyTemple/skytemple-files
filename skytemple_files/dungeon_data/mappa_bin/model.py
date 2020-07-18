@@ -48,7 +48,6 @@ class MappaBin(Sir0Serializable, XmlSerializable):
 
     def __init__(self, floor_lists: List[List[MappaFloor]]):
         self.floor_lists = floor_lists
-        print("ok")
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter

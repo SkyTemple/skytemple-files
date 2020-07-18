@@ -14,18 +14,4 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import os
 
-from ndspy.rom import NintendoDSRom
-
-from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
-
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-os.makedirs(output_dir, exist_ok=True)
-
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
-
-mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
-mappa = MappaBinHandler.deserialize(mappa_bin)
-print(mappa)

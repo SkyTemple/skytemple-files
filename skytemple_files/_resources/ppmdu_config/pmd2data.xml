@@ -86,13 +86,17 @@
         <Block name="Events"            beg="0xA5488"   end="0xA68BC"/>
         <Block name="ItemTablesPtrs1"   beg="0xB0948"   end="0xB09B0"/>
         <Block name="SMDEventsFunTable" beg="0xB0B90"   end="0xB0D8C"/>
-        <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
         <Pointer name="NotifyNote"       beg="0xAFEF8"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
-        <Block name="GameVarsValues"    beg="0x2AB0AC" end="0x2AB360"/>
+        <!-- RAM values -->
+        <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
+        <Block name="GameVarsValues"               beg="0x2AB0AC" end="0x2AB360"/>
+        <Pointer name="DungeonData"                beg="0x2482f8"/>
+        <Block name="DungeonCurrentId"             beg="0x2AB4FE" end="0x2AB4FF"/>
+        <!-- END RAM values -->
         <Fn name="DebugPrint"           beg="0xC240"/>
         <Fn name="DebugPrint2"          beg="0xC30C"/>
         <Fn name="SaveScriptVariableValue"  beg="0x4B820"/>
@@ -133,13 +137,15 @@
         <!--<Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>-->
         <Block name="Entities"           beg="0xA8890" end="0xA9AA8"/>
         <Block name="Events"             beg="0xA5BD8" end="0xA715C"/>
-        <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
-        <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>
         <Pointer name="NotifyNote"       beg="0xB0814"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
+        <!-- RAM values -->
+        <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
+        <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
+        <!-- END RAM values -->
         <Fn name="DebugPrint"            beg="0xC2C8"/>
         <Fn name="DebugPrint2"           beg="0xC284"/>
         <Fn name="SaveScriptVariableValue"  beg="0x4BB58"/>

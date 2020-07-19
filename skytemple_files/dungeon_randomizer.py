@@ -6,7 +6,7 @@ Currently there are no settings. To run:
 
 $ python3 dungeon_randomizer.py input_rom_name.nds output_rom_name.nds
 
-It randomizes almost everything. Pokémon levels are randomized in a range of +/-5 of the normal max level Pokémon
+It randomizes almost everything. Pokémon levels are randomized in a range of +/-3 of the normal min/max level Pokémon
 on that floor.
 
 This is also an example on how to use the following file handlers:
@@ -270,10 +270,10 @@ def randomize_layout(original_layout: MappaFloorLayout):
     )
 
 
-def randomize_monsters(min_level):
+def randomize_monsters(min_level, max_level):
     monsters = []
     for _ in range(0, randrange(0, 21)):
-        level = min(100, max(1, randrange(min_level - 3, min_level + 2)))
+        level = min(100, max(1, randrange(min_level - 3, max_level + 3)))
         weight = random_decimal(5, 101)
         monsters.append(MappaMonster(level, weight, weight, choice(ALLOWED_MD_IDS)))
 
@@ -311,7 +311,10 @@ def randomize(mappa: MappaBin, trap_lists: List[MappaTrapList], item_lists: List
         for floor in floor_list:
             if can_be_randomized(floor):
                 floor.layout = randomize_layout(floor.layout)
-                floor.monsters = randomize_monsters(min(m.level for m in floor.monsters if m.chance > 0))
+                floor.monsters = randomize_monsters(
+                    min(m.level for m in floor.monsters if m.chance > 0),
+                    max(m.level for m in floor.monsters if m.chance > 0)
+                )
                 floor.traps = choice(trap_lists)
                 floor.floor_items = choice(item_lists)
                 floor.buried_items = choice(item_lists)
@@ -321,7 +324,7 @@ def randomize(mappa: MappaBin, trap_lists: List[MappaTrapList], item_lists: List
                 floor.unk_items2 = choice(item_lists)
 
 
-def main(rom_path, output_rom_path):
+def run_main(rom_path, output_rom_path):
     print("Loading ROM...")
     rom = NintendoDSRom.fromFile(rom_path)
     mappa_before = rom.getFileByName('BALANCE/mappa_s.bin')
@@ -349,15 +352,15 @@ def main(rom_path, output_rom_path):
     print(f"Size BALANCE/mappa_s.bin after: {len(mappa_after)}")
 
 
-if __name__ == '__main__':
+def main():
     # noinspection PyTypeChecker
     parser = argparse.ArgumentParser(description="""Randomize the dungeon floors in PMD EoS.
 
-Currently there are no settings.
+    Currently there are no settings.
 
-It randomizes almost everything. Pokémon levels are randomized in a range of +/-5.
+    It randomizes almost everything. Pokémon levels are randomized in a range of +/-3.
 
-    """, formatter_class=argparse.RawTextHelpFormatter)
+        """, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('input_rom', metavar='INPUT_ROM',
                         help='Path to the input ROM file.')
     parser.add_argument('output_rom', metavar='OUTPUT_ROM',
@@ -365,4 +368,8 @@ It randomizes almost everything. Pokémon levels are randomized in a range of +/
 
     args = parser.parse_args()
 
-    main(args.input_rom, args.output_rom)
+    run_main(args.input_rom, args.output_rom)
+
+
+if __name__ == '__main__':
+    main()

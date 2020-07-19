@@ -316,7 +316,7 @@ def triangle(draw, x, y, fill, direction):
         draw.polygon([(x, y), (x, y + BPC_TILE_DIM), (x + BPC_TILE_DIM, y + BPC_TILE_DIM)], fill=fill, outline=(0, 0, 0))
 
 
-def main(rom_path, export_dir, actor_mapping_path=None, opt_draw_invisible_actors_objects=True):
+def run_main(rom_path, export_dir, actor_mapping_path=None, opt_draw_invisible_actors_objects=True):
     global monster_bin_pack_file, monster_md, draw_invisible_actors_objects
     draw_invisible_actors_objects = opt_draw_invisible_actors_objects
 
@@ -341,30 +341,30 @@ def main(rom_path, export_dir, actor_mapping_path=None, opt_draw_invisible_actor
     draw_maps(rom, os.path.join(export_dir, 'MAP'), scriptdata)
 
 
-if __name__ == '__main__':
+def main():
     # noinspection PyTypeChecker
     parser = argparse.ArgumentParser(description="""Export the maps from PMD EoS (EU/US).
 
-The maps are exported into the directory EXPORT_DIR. If the directory doesn't exist, it's created.
+    The maps are exported into the directory EXPORT_DIR. If the directory doesn't exist, it's created.
 
-Please note, that the script keeps the map bgs in memory to draw the merged maps, this requires up
-to 2GB of RAM.
+    Please note, that the script keeps the map bgs in memory to draw the merged maps, this requires up
+    to 2GB of RAM.
 
-The export directory will contain the following subdirs:
-- MAP_BG - Map backgrounds of all maps in the game, as static PNG files and animated GIF files.
-- MAP - All script maps in the game:
-   - {map_name} - A directory for a map. The dimensions of all images in this directory are taken 
-                  from the MapBG with the same name.
-      - {scene_name} - A directory for a scene (SSA/SSE/SSS)
-          - {map_name}_{scene_name}_all_merged.webp - All assets of the scene as one animated WebP
-                                                      image. The Map BG of the same name (BPL name)
-                                                      is used as a background.
-          - ACTORS_OBJECTS - A directory containing PNG files for each layer with all actors and
-                             objects on them.
-          - PERF_TRIGGER - A directory with PNG files for each layer, with markers for 
-                                     all performers, triggers and position marks.
-      
-    """, formatter_class=argparse.RawTextHelpFormatter)
+    The export directory will contain the following subdirs:
+    - MAP_BG - Map backgrounds of all maps in the game, as static PNG files and animated GIF files.
+    - MAP - All script maps in the game:
+       - {map_name} - A directory for a map. The dimensions of all images in this directory are taken 
+                      from the MapBG with the same name.
+          - {scene_name} - A directory for a scene (SSA/SSE/SSS)
+              - {map_name}_{scene_name}_all_merged.webp - All assets of the scene as one animated WebP
+                                                          image. The Map BG of the same name (BPL name)
+                                                          is used as a background.
+              - ACTORS_OBJECTS - A directory containing PNG files for each layer with all actors and
+                                 objects on them.
+              - PERF_TRIGGER - A directory with PNG files for each layer, with markers for 
+                                         all performers, triggers and position marks.
+
+        """, formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('rom_path', metavar='ROM_PATH',
                         help='Path to the ROM file.')
     parser.add_argument('export_dir', metavar='EXPORT_DIR',
@@ -380,4 +380,8 @@ The export directory will contain the following subdirs:
 
     args = parser.parse_args()
 
-    main(args.rom_path, args.export_dir, args.actor_maping, not args.hide_invisble)
+    run_main(args.rom_path, args.export_dir, args.actor_maping, not args.hide_invisble)
+
+
+if __name__ == '__main__':
+    main()

@@ -40,7 +40,11 @@ putting a proper README here! But you'll find
 README's containing the documentation for file types
 in the directories for the file handlers.
 
-The ``export_maps.py`` script contains a sample script on how to use this library.
+Directly in the package (``skytemple_files`` directory) you can find a new example scripts that help with how
+to use this library. After installing the package you will have them as cli commands ``skytemple_<name>``. So for
+``dungeon_randomizer.py`` it's ``skytemple_dungeon_randomizer``::
+
+  $ skytemple_dungeon_randomizer input.nds output.nds
 
 In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
 be installed and in the system's ``PATH`` to be able to apply ROM patches.

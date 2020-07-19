@@ -40,8 +40,8 @@ putting a proper README here! But you'll find
 README's containing the documentation for file types
 in the directories for the file handlers.
 
-Directly in the package (``skytemple_files`` directory) you can find a new example scripts that help with how
-to use this library. After installing the package you will have them as cli commands ``skytemple_<name>``. So for
+Directly in the package (``skytemple_files`` directory) you can find a few example scripts that help with understanding
+how to use this library. After installing the package you will have them as cli commands: ``skytemple_<name>``. So for
 ``dungeon_randomizer.py`` it's ``skytemple_dungeon_randomizer``::
 
   $ skytemple_dungeon_randomizer input.nds output.nds

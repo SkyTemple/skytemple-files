@@ -123,7 +123,13 @@ def run_main(rom_path, output_rom_path):
         old_name = get_name(string_file, old_base, pokemon_string_data)
         new_name = get_name(string_file, new_base, pokemon_string_data)
         names_mapped[old_name] = new_name
-    string_file.strings = [replace_strings(string, names_mapped) for string in string_file.strings]
+    new_strings = []
+    for idx, string in enumerate(string_file.strings):
+        if idx < pokemon_string_data.begin or idx > pokemon_string_data.end:
+            new_strings.append(replace_strings(string, names_mapped))
+        else:
+            new_strings.append(string)
+    string_file.strings = new_strings
     rom.setFileByName(f'MESSAGE/{lang.filename}', FileType.STR.serialize(string_file))
 
     print("Replacing all text in the script files...")
@@ -131,9 +137,7 @@ def run_main(rom_path, output_rom_path):
         script = FileType.SSB.deserialize(rom.getFileByName(file_path), config)
         script.constants = [replace_strings(string, names_mapped) for string in script.constants]
         for langname, strings in script.strings.items():
-            script.strings[langname] = [replace_strings(string, names_mapped) for idx, string in enumerate(strings)
-                                        # We don't want to randomize the Pokémon names...
-                                        if idx < pokemon_string_data.begin or idx > pokemon_string_data.end]
+            script.strings[langname] = [replace_strings(string, names_mapped) for string in strings]
         rom.setFileByName(file_path, FileType.SSB.serialize(script, config))
 
     print("Cloning missing portraits...")

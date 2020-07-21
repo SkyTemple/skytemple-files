@@ -22,11 +22,16 @@ from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.list.actor.model import ActorListBin
+from skytemple_files.patch.patches import Patcher
 
 if __name__ == '__main__':
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_patched.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_unpatched.nds'))
+    patcher = Patcher(rom, get_ppmdu_config_for_rom(rom))
+    assert not patcher.is_applied('ActorAndLevelLoader')
+
+    patcher.apply('ActorAndLevelLoader')
 
     bin_before = rom.getFileByName('BALANCE/actor_list.bin')
     # noinspection PyTypeChecker
@@ -36,6 +41,7 @@ if __name__ == '__main__':
     )
     # This only works with unmodified ROMs!
     assert actor_list_before.list == Pmd2XmlReader.load_default('EoS_NA').script_data.level_entities
+    assert len(Sir0Handler.deserialize(bin_before).content_pointer_offsets) == len(Sir0Handler.wrap_obj(actor_list_before).content_pointer_offsets)
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_before))
     # noinspection PyTypeChecker

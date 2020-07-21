@@ -64,11 +64,13 @@ class ActorListBin(Sir0Serializable):
         self._pad(out_data)
 
         # Write table
+        sir0_pointer_offsets = []
         pointer_data_block = len(out_data)
         for i, entry in enumerate(self.list):
             entry_buffer = bytearray(LEN_ACTOR_ENTRY)
             write_uintle(entry_buffer, entry.type, 0, 2)
             write_uintle(entry_buffer, entry.entid, 2, 2)
+            sir0_pointer_offsets.append(len(out_data) + 4)
             write_uintle(entry_buffer, pointer_offsets[i], 4, 4)
             write_uintle(entry_buffer, entry.unk3, 8, 2)
             write_uintle(entry_buffer, entry.unk4, 10, 2)
@@ -79,11 +81,11 @@ class ActorListBin(Sir0Serializable):
 
         # 4. Write sub-header
         data_pointer = len(out_data)
-        pointer_offsets.append(len(out_data))
+        sir0_pointer_offsets.append(len(out_data))
         out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
         out_data += len(self.list).to_bytes(4, byteorder='little', signed=False)
 
-        return out_data, pointer_offsets, data_pointer
+        return out_data, sir0_pointer_offsets, data_pointer
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'ActorListBin':

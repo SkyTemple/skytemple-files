@@ -24,7 +24,7 @@ output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_unpatched.nds'))
 
 mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
 mappa = MappaBinHandler.deserialize(mappa_bin)
@@ -50,6 +50,8 @@ for i_fl in range(0, len(mappa.floor_lists)):
         assert mappa.floor_lists[i_fl][i].unk_items1 == mappa_after.floor_lists[i_fl][i].unk_items1
         assert mappa.floor_lists[i_fl][i].unk_items2 == mappa_after.floor_lists[i_fl][i].unk_items2
 assert mappa == mappa_after
+assert len(mappa_bin) % 16 == 0
+assert len(mappa_after_bin) % 16 == 0
 
 rom.setFileByName('BALANCE/mappa_s.bin', mappa_after_bin)
 rom.saveToFile(os.path.join(output_dir, 'mappa_save_test.nds'))

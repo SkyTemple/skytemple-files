@@ -75,16 +75,21 @@ class MappaBinWriter:
         data += monster_lut
         # Trap lists data
         trap_data_start = len(data)
-        trap_data = bytearray((len(trap_lists) * 50))
+        trap_data = bytearray(len(trap_lists) * 50)
         trap_data_cursor = 0
         trap_data_pointer = []
         for trap_list in trap_lists:
             trap_data_pointer.append(trap_data_start + trap_data_cursor)
             single_trap_list_data = trap_list.to_mappa()
             len_single = len(single_trap_list_data)
+            assert len_single == 50
             trap_data[trap_data_cursor:trap_data_cursor+len_single] = single_trap_list_data
             trap_data_cursor += len_single
+        assert trap_data_cursor == len(trap_lists) * 50
         data += trap_data
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Trap lists LUT
         start_traps_lut = len(data)
         trap_lut = bytearray(4 * len(trap_data_pointer))
@@ -94,16 +99,21 @@ class MappaBinWriter:
         data += trap_lut
         # Item spawn lists data
         item_data_start = len(data)
-        item_data = bytearray((len(item_lists) * 50))
+        # TODO: I don't need to explain why a fixed size here per list is flawed.
+        item_data = bytearray((len(item_lists) * 500))
         item_data_cursor = 0
         item_data_pointer = []
         for item_list in item_lists:
             item_data_pointer.append(item_data_start + item_data_cursor)
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
+            assert item_data_cursor + len_single < len(item_data)
             item_data[item_data_cursor:item_data_cursor+len_single] = single_item_list_data
             item_data_cursor += len_single
-        data += item_data
+        data += item_data[:item_data_cursor]
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Item spawn lists LUT
         start_items_lut = len(data)
         item_list_lut = bytearray(4 * len(item_data_pointer))

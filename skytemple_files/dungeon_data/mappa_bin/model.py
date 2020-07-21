@@ -40,6 +40,13 @@ class MappaBinReadContainer:
         self.item_spawn_list_index_start = read_uintle(data, header_start + 0x08, 4)
         self.monster_spawn_list_index_start = read_uintle(data, header_start + 0x0C, 4)
         self.trap_spawn_list_index_start = read_uintle(data, header_start + 0x10, 4)
+
+        assert self.dungeon_list_index_start % 4 == 0
+        assert self.floor_layout_data_start % 4 == 0
+        assert self.item_spawn_list_index_start % 4 == 0
+        assert self.monster_spawn_list_index_start % 4 == 0
+        assert self.trap_spawn_list_index_start % 4 == 0
+
         self.items = items
         self.read_cache = {}
 

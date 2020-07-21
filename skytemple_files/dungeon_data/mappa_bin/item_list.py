@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 CMD_SKIP = 0x7530
 GUARANTEED = 0xFFFF
-MAX_ITEM_ID = 362
+MAX_ITEM_ID = 363
 # Actually GUARANTEED or a Decimal. Literals are only supported for Python 3.8+ so we do it like this.
 Probability = Union[int, Decimal]
 
@@ -64,19 +64,22 @@ class MappaItemList(AutoString, XmlSerializable):
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int):
         processing_categories = True
         item_or_cat_id = 0
+        orig_pointer = pointer
+        len_read = 0
 
         items = {}
         categories = {}
 
         while item_or_cat_id <= MAX_ITEM_ID:
             val = read_uintle(read.data, pointer, 2)
-            skip = val > CMD_SKIP
+            len_read += 2
+            skip = val > CMD_SKIP and val != GUARANTEED
 
             if skip:
                 item_or_cat_id += val - CMD_SKIP
             else:
                 if val == GUARANTEED:
-                    chance = 100
+                    chance = GUARANTEED
                 else:
                     chance = Decimal(val) / Decimal(100)
                 if processing_categories:
@@ -88,6 +91,8 @@ class MappaItemList(AutoString, XmlSerializable):
                 processing_categories = False
                 item_or_cat_id -= 0x10
             pointer += 2
+
+        assert read.data[orig_pointer:orig_pointer+len_read] == MappaItemList(categories, items).to_mappa()
 
         return MappaItemList(categories, items)
 
@@ -102,9 +107,11 @@ class MappaItemList(AutoString, XmlSerializable):
             self._write_probability(data, val)
             current_id += 1
         # Continue with the items
-        self._write_skip(data, current_id, 0x10)
-        current_id = 0
-        for item, val in sorted(self.items.items(), key=lambda it: it[0].id):
+        sorted_items = sorted(self.items.items(), key=lambda it: it[0].id)
+        first_item_id = sorted_items[0][0].id if len(sorted_items) > 0 else 0
+        self._write_skip(data, current_id, 0x10 + first_item_id)
+        current_id = first_item_id
+        for item, val in sorted_items:
             if current_id != item.id:
                 current_id = self._write_skip(data, current_id, item.id)
             self._write_probability(data, val)
@@ -161,7 +168,8 @@ class MappaItemList(AutoString, XmlSerializable):
         return self.categories == other.categories and self.items == other.items
 
     def _write_skip(self, data: bytearray, current_id: int, target_id: int):
-        data += (target_id - current_id + CMD_SKIP).to_bytes(2, 'little', signed=False)
+        if current_id != target_id:
+            data += (target_id - current_id + CMD_SKIP).to_bytes(2, 'little', signed=False)
         return target_id
 
     def _write_probability(self, data: bytearray, probability: Probability):

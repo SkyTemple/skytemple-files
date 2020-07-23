@@ -202,7 +202,8 @@ SECONDARY_TERRAIN_TILESET_MAP = {
 }
 # TODO: Tileset IDS > 169 seem to be using MapBGs to render?
 ALLOWED_TILESET_IDS = [k for k in SECONDARY_TERRAIN_TILESET_MAP.keys() if k < 170]
-ALLOWED_MD_IDS = range(1, 537)
+# 383, 384 -> Kecleons
+ALLOWED_MD_IDS = [x for x in range(1, 537) if x not in [383, 384]]
 ALLOWED_ITEM_IDS = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
     34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
@@ -278,15 +279,16 @@ def randomize_monsters(min_level, max_level):
         monsters.append(MappaMonster(level, weight, weight, choice(ALLOWED_MD_IDS)))
 
     # Add Kecleon and Dummy
-    monsters.append(MappaMonster(42, 0, 0, 383))
-    monsters.append(MappaMonster(1, 0, 0, DUMMY_MD_INDEX))
+    monsters.append(MappaMonster(42, Decimal(0), Decimal(0), 383))
+    monsters.append(MappaMonster(1, Decimal(0), Decimal(0), DUMMY_MD_INDEX))
 
     return monsters
 
 
 def randomize_traps():
-    chances = []
-    for _ in range(0, 25):
+    # Unusued trap
+    chances = [Decimal(0)]
+    for _ in range(0, 24):
         chances.append(random_decimal(0, 101))
     return MappaTrapList(chances)
 

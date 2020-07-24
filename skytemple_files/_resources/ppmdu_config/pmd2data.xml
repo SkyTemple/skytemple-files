@@ -165,6 +165,11 @@
         <Fn name="SsbLoad1"                     beg="0x9B10"/>
         <Fn name="SsbLoad2"                     beg="0x84BC"/>
       </Bin>
+      <!-- overlay_0013 -->
+      <Bin filepath="overlay/overlay_0013.bin" loadaddress="0x238AC80">
+        <Block name="StartersPartnerIds"  beg="0x1F4C" end="0x1F76"/>
+        <Block name="StartersHeroIds"     beg="0x1F78" end="0x1FB8"/>
+      </Bin>
     </Game>
 
     <!--Japan-->

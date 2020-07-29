@@ -14,16 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from decimal import Decimal
 from enum import Enum
-from typing import Dict, Union
+from typing import Dict, Union, Optional
 from xml.etree.ElementTree import Element
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
 from skytemple_files.common.util import *
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_ITEM_LIST, XML_CATEGORY, XML_CATEGORY__NAME, \
-    XML_CATEGORY__CHANCE, XML_ITEM__ID, XML_ITEM__CHANCE, XML_ITEM
+    XML_CATEGORY__WEIGHT, XML_ITEM__ID, XML_ITEM__WEIGHT, XML_ITEM
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -32,27 +31,38 @@ if TYPE_CHECKING:
 CMD_SKIP = 0x7530
 GUARANTEED = 0xFFFF
 MAX_ITEM_ID = 363
-# Actually GUARANTEED or a Decimal. Literals are only supported for Python 3.8+ so we do it like this.
-Probability = Union[int, Decimal]
+# Actually GUARANTEED or a weight between 0 and MAX_WEIGHT.
+Probability = int
 
 
+# TODO: Put this information into ppmdu config?
 class MappaItemCategory(Enum):
-    THROWN_PIERCE = 0
-    THROWN_ROCK = 1
-    BERRIES_SEEDS_VITAMINS = 2
-    FOODS_GUMMIES = 3
-    HOLD = 4
-    TMS = 5
-    ORBS = 6
-    UNK7 = 7
-    OTHER = 8
-    UNK9 = 9
-    LINK_BOX = 0xA
-    UNKB = 0xB
-    UNKC = 0xC
-    UNKD = 0xD
-    UNKE = 0xE
-    UNKF = 0xF
+    THROWN_PIERCE = 0, 1, 6
+    THROWN_ROCK = 1, 7, 4
+    BERRIES_SEEDS_VITAMINS = 2, 69, 39
+    FOODS_GUMMIES = 3, 109, 28
+    HOLD = 4, 13, 55
+    TMS = 5, 187, 105
+    ORBS = 6, 301, 58
+    UNK7 = 7, None, None
+    OTHER = 8, 139, 43
+    UNK9 = 9, None, None  # Might be boxes?
+    LINK_BOX = 0xA, 362, 1
+    UNKB = 0xB, None, None
+    UNKC = 0xC, None, None
+    UNKD = 0xD, None, None
+    UNKE = 0xE, None, None
+    UNKF = 0xF, None, None
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, first_item_id: Optional[int], number_of_items: Optional[int]):
+        self.first_item_id = first_item_id
+        self.number_of_items = number_of_items
 
 
 class MappaItemList(AutoString, XmlSerializable):
@@ -79,13 +89,13 @@ class MappaItemList(AutoString, XmlSerializable):
                 item_or_cat_id += val - CMD_SKIP
             else:
                 if val == GUARANTEED:
-                    chance = GUARANTEED
+                    weight = GUARANTEED
                 else:
-                    chance = Decimal(val) / Decimal(100)
+                    weight = val
                 if processing_categories:
-                    categories[MappaItemCategory(item_or_cat_id)] = chance
+                    categories[MappaItemCategory(item_or_cat_id)] = weight
                 else:
-                    items[read.items[item_or_cat_id]] = chance
+                    items[read.items[item_or_cat_id]] = weight
                 item_or_cat_id += 1
             if item_or_cat_id >= 0xF and processing_categories:
                 processing_categories = False
@@ -123,17 +133,17 @@ class MappaItemList(AutoString, XmlSerializable):
     def to_xml(self) -> Element:
         xml_item_list = Element(XML_ITEM_LIST)
         for category, probability in self.categories.items():
-            chance = 'GUARANTEED' if probability == GUARANTEED else str(probability)
+            weight = 'GUARANTEED' if probability == GUARANTEED else str(probability)
             xml_category = Element(XML_CATEGORY, {
                 XML_CATEGORY__NAME: category.name,
-                XML_CATEGORY__CHANCE: str(chance)
+                XML_CATEGORY__WEIGHT: str(weight)
             })
             xml_item_list.append(xml_category)
         for item, probability in self.items.items():
-            chance = 'GUARANTEED' if probability == GUARANTEED else str(probability)
+            weight = 'GUARANTEED' if probability == GUARANTEED else str(probability)
             xml_item = Element(XML_ITEM, {
                 XML_ITEM__ID: str(item.id),
-                XML_ITEM__CHANCE: str(chance)
+                XML_ITEM__WEIGHT: str(weight)
             })
             xml_item_list.append(xml_item)
 
@@ -146,18 +156,18 @@ class MappaItemList(AutoString, XmlSerializable):
         items = {}
         for child in ele:
             if child.tag == XML_CATEGORY:
-                validate_xml_attribs(child, [XML_CATEGORY__NAME, XML_CATEGORY__CHANCE])
+                validate_xml_attribs(child, [XML_CATEGORY__NAME, XML_CATEGORY__WEIGHT])
                 name = child.get(XML_CATEGORY__NAME)
                 if not hasattr(MappaItemCategory, name):
                     raise XmlValidateError(f"Unknown item category {name}.")
-                chance_str = child.get(XML_CATEGORY__CHANCE)
-                chance = Decimal(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
-                categories[getattr(MappaItemCategory, name)] = chance
+                weight_str = child.get(XML_CATEGORY__WEIGHT)
+                weight = int(weight_str) if weight_str != 'GUARANTEED' else GUARANTEED
+                categories[getattr(MappaItemCategory, name)] = weight
             elif child.tag == XML_ITEM:
-                validate_xml_attribs(child, [XML_ITEM__ID, XML_ITEM__CHANCE])
-                chance_str = child.get(XML_ITEM__CHANCE)
-                chance = Decimal(chance_str) if chance_str != 'GUARANTEED' else GUARANTEED
-                items[Pmd2DungeonItem(int(child.get(XML_ITEM__ID)), '???')] = chance
+                validate_xml_attribs(child, [XML_ITEM__ID, XML_ITEM__WEIGHT])
+                weight_str = child.get(XML_ITEM__WEIGHT)
+                weight = int(weight_str) if weight_str != 'GUARANTEED' else GUARANTEED
+                items[Pmd2DungeonItem(int(child.get(XML_ITEM__ID)), '???')] = weight
             else:
                 raise XmlValidateError(f"Unexpected sub-node for {XML_ITEM_LIST}: {child.tag}")
         return cls(categories, items)
@@ -173,7 +183,4 @@ class MappaItemList(AutoString, XmlSerializable):
         return target_id
 
     def _write_probability(self, data: bytearray, probability: Probability):
-        if probability == GUARANTEED:
-            data += probability.to_bytes(2, 'little', signed=False)
-        else:
-            data += int(probability * 100).to_bytes(2, 'little', signed=False)
+        data += probability.to_bytes(2, 'little', signed=False)

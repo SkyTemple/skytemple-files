@@ -14,7 +14,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from decimal import Decimal
 from typing import TYPE_CHECKING, List
 from xml.etree.ElementTree import Element
 
@@ -29,10 +28,10 @@ LEVEL_MULTIPLIER = 512
 
 
 class MappaMonster(AutoString, XmlSerializable):
-    def __init__(self, level: int, chance: Decimal, chance2: Decimal, md_index: id):
+    def __init__(self, level: int, weight: int, weight2: int, md_index: id):
         self.level = level
-        self.chance = chance
-        self.chance2 = chance2
+        self.weight = weight
+        self.weight2 = weight2
         self.md_index = md_index
 
     @classmethod
@@ -41,8 +40,8 @@ class MappaMonster(AutoString, XmlSerializable):
         while not cls._is_end_of_entries(read.data, pointer):
             monsters.append(MappaMonster(
                 int(read_uintle(read.data, pointer + 0, 2) / LEVEL_MULTIPLIER),
-                Decimal(read_uintle(read.data, pointer + 2, 2)) / 100,
-                Decimal(read_uintle(read.data, pointer + 4, 2)) / 100,
+                read_uintle(read.data, pointer + 2, 2),
+                read_uintle(read.data, pointer + 4, 2),
                 read_uintle(read.data, pointer + 6, 2),
             ))
             pointer += 8
@@ -51,8 +50,8 @@ class MappaMonster(AutoString, XmlSerializable):
     def to_mappa(self):
         data = bytearray(8)
         write_uintle(data, self.level * LEVEL_MULTIPLIER, 0x00, 2)
-        write_uintle(data, int(self.chance * 100), 0x02, 2)
-        write_uintle(data, int(self.chance2 * 100), 0x04, 2)
+        write_uintle(data, self.weight, 0x02, 2)
+        write_uintle(data, self.weight2, 0x04, 2)
         write_uintle(data, self.md_index, 0x06, 2)
         return data
 
@@ -63,8 +62,8 @@ class MappaMonster(AutoString, XmlSerializable):
     def to_xml(self) -> Element:
         return Element(XML_MONSTER, {
             XML_MONSTER__LEVEL: str(self.level),
-            XML_MONSTER__CHANCE: str(self.chance),
-            XML_MONSTER__CHANCE2: str(self.chance2),
+            XML_MONSTER__WEIGHT: str(self.weight),
+            XML_MONSTER__WEIGHT2: str(self.weight2),
             XML_MONSTER__MD_INDEX: str(self.md_index),
         })
 
@@ -72,12 +71,12 @@ class MappaMonster(AutoString, XmlSerializable):
     def from_xml(cls, ele: Element) -> 'MappaMonster':
         validate_xml_tag(ele, XML_MONSTER)
         validate_xml_attribs(ele, [
-            XML_MONSTER__LEVEL, XML_MONSTER__CHANCE, XML_MONSTER__CHANCE2, XML_MONSTER__MD_INDEX
+            XML_MONSTER__LEVEL, XML_MONSTER__WEIGHT, XML_MONSTER__WEIGHT2, XML_MONSTER__MD_INDEX
         ])
         return cls(
             int(ele.get(XML_MONSTER__LEVEL)),
-            int(ele.get(XML_MONSTER__CHANCE)),
-            int(ele.get(XML_MONSTER__CHANCE2)),
+            int(ele.get(XML_MONSTER__WEIGHT)),
+            int(ele.get(XML_MONSTER__WEIGHT2)),
             int(ele.get(XML_MONSTER__MD_INDEX)),
         )
 
@@ -85,5 +84,5 @@ class MappaMonster(AutoString, XmlSerializable):
         if not isinstance(other, MappaMonster):
             return False
         return self.level == other.level \
-               and self.chance == other.chance \
-               and self.chance2 == other.chance2
+               and self.weight == other.weight \
+               and self.weight2 == other.weight2

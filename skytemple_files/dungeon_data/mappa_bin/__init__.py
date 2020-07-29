@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+MAX_WEIGHT = 10000
+
 XML_MAPPA = 'Mappa'
 XML_FLOOR_LIST = 'FloorList'
 XML_FLOOR = 'Floor'
@@ -22,13 +24,13 @@ XML_FLOOR_LAYOUT = 'FloorLayout'
 XML_MONSTER_LIST = 'MonsterList'
 XML_MONSTER = 'Monster'
 XML_MONSTER__LEVEL = 'level'
-XML_MONSTER__CHANCE = 'chance'
-XML_MONSTER__CHANCE2 = 'chance2'
+XML_MONSTER__WEIGHT = 'weight'
+XML_MONSTER__WEIGHT2 = 'weight2'
 XML_MONSTER__MD_INDEX = 'id'
 XML_TRAP_LIST = 'TrapList'
 XML_TRAP = 'Trap'
 XML_TRAP__NAME = 'name'
-XML_TRAP__CHANCE = 'chance'
+XML_TRAP__WEIGHT = 'weight'
 XML_ITEM_LIST = 'ItemList'
 XML_ITEM_LIST__TYPE = 'type'
 XML_ITEM_LIST__TYPE__FLOOR = 'Floor'
@@ -39,10 +41,10 @@ XML_ITEM_LIST__TYPE__UNK1 = 'Unk1'
 XML_ITEM_LIST__TYPE__UNK2 = 'Unk2'
 XML_ITEM = 'Item'
 XML_ITEM__ID = 'id'
-XML_ITEM__CHANCE = 'chance'
+XML_ITEM__WEIGHT = 'weight'
 XML_CATEGORY = 'Category'
 XML_CATEGORY__NAME = 'name'
-XML_CATEGORY__CHANCE = 'chance'
+XML_CATEGORY__WEIGHT = 'weight'
 
 # oooh boy
 XML_FLOOR_LAYOUT__STRUCTURE = 'structure'

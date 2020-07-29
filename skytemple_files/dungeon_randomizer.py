@@ -29,20 +29,19 @@ This is also an example on how to use the following file handlers:
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import argparse
-import os
-import statistics
-from decimal import Decimal
-from random import randrange, choice
+from collections import OrderedDict
+from random import randrange, choice, sample, shuffle
 from typing import List
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
 from skytemple_files.common.types.file_types import FileType
+from skytemple_files.dungeon_data.mappa_bin import MAX_WEIGHT
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout, MappaFloorStructureType, \
     MappaFloorSecondaryTerrainType, MappaFloorWeather, MappaFloorTerrainSettings, MappaFloorDarknessLevel
-from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory, MappaItemList
+from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory, MappaItemList, MAX_ITEM_ID
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster, DUMMY_MD_INDEX
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
@@ -202,30 +201,67 @@ SECONDARY_TERRAIN_TILESET_MAP = {
 }
 # TODO: Tileset IDS > 169 seem to be using MapBGs to render?
 ALLOWED_TILESET_IDS = [k for k in SECONDARY_TERRAIN_TILESET_MAP.keys() if k < 170]
+
 # 383, 384 -> Kecleons
-ALLOWED_MD_IDS = [x for x in range(1, 537) if x not in [383, 384]]
-ALLOWED_ITEM_IDS = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-    34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62,
-    63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91,
-    92, 93, 94, 95, 96, 97, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 115, 116, 117, 118, 119,
-    120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 139, 140, 141, 142, 143,
-    144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 167,
-    168, 169, 170, 171, 172, 173, 174, 178, 179, 180, 182, 183, 186, 187, 188, 189, 190, 191, 192, 193, 195, 196, 197,
-    199, 200, 201, 202, 203, 204, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 220, 221, 222, 223,
-    225, 227, 228, 229, 230, 231, 232, 233, 234, 235, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249,
-    250, 251, 252, 253, 254, 255, 256, 257, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274,
-    275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 301, 302, 303, 304, 305,
-    306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 325, 326, 327, 328, 329,
-    330, 331, 332, 333, 334, 335, 336, 337, 338, 340, 341, 342, 343, 344, 346, 347, 348, 350, 351, 352, 354, 355, 356,
-    357, 358, 359, 362
+KECLEON_MD_INDEX = 383
+DISALLOWED_MD_IDS = [KECLEON_MD_INDEX, 384]
+ALLOWED_MD_IDS = [x for x in range(1, 537) if x not in DISALLOWED_MD_IDS]
+MONSTER_LEVEL_VARIANCE = 3
+
+# Invalid items:
+DISALLOWED_ITEM_IDS = [11, 12, 98, 113, 114, 138, 166, 175, 176, 177, 181, 184, 185, 198, 205, 219, 224, 226, 236, 258,
+                       259, 293, 294, 295, 296, 297, 298, 299, 300, 324, 339, 345, 349, 353, 360, 361]
+ALLOWED_ITEM_IDS = [x for x in range(1, MAX_ITEM_ID) if x not in DISALLOWED_ITEM_IDS]
+ALLOWED_ITEM_CATS = [
+    MappaItemCategory.THROWN_PIERCE,
+    MappaItemCategory.THROWN_ROCK,
+    MappaItemCategory.BERRIES_SEEDS_VITAMINS,
+    MappaItemCategory.FOODS_GUMMIES,
+    MappaItemCategory.HOLD,
+    MappaItemCategory.TMS,
+    MappaItemCategory.ORBS,
+    MappaItemCategory.OTHER,
+    MappaItemCategory.UNK9  # This is the only unknown category actually used.
 ]
+
 MAX_TRAP_LISTS = 100
 MAX_ITEM_LISTS = 150
+MIN_MONSTERS_PER_LIST = 5
+MAX_MONSTERS_PER_LIST = 30  # 48 is theoretical limit [=max used by vanilla game]
+#MIN_ITEMS_PER_LIST = 20
+#MAX_ITEMS_PER_LIST = 100  # 196 is theoretical limit [=max used by vanilla game]
+MIN_ITEMS_PER_CAT = 4
+MAX_ITEMS_PER_CAT = 18
 
 
-def random_decimal(start, stop):
-    return Decimal(randrange(start * 100, stop * 100)) / 100
+def ranks(sample):
+    """
+    Return the ranks of each element in an integer sample.
+    """
+    indices = sorted(range(len(sample)), key=lambda i: sample[i])
+    return sorted(indices, key=lambda i: indices[i])
+
+
+def sample_with_minimum_distance(n, k, d):
+    """
+    Sample of k elements from range(n), with a minimum distance d.
+    """
+    smpl = sample(range(n-(k-1)*(d-1)), k)
+    return [s + (d-1)*r for s, r in zip(smpl, ranks(smpl))]
+
+
+def random_weights(k):
+    """
+    Returns k random weights, with relative equal distance, in a range of *0.75-*1
+    """
+    smallest_possible_d = int(MAX_WEIGHT / k)
+    d = int(smallest_possible_d * (randrange(75, 100) / 100))
+    # We actually subtract the d and add it later to all of the items, to make the first entry also a bit more likely
+    weights = [w + d for w in sample_with_minimum_distance(MAX_WEIGHT - d, k, d)]
+    # The last weight needs to have 10000
+    highest_index = weights.index(max(weights))
+    weights[highest_index] = MAX_WEIGHT
+    return weights
 
 
 def can_be_randomized(floor: MappaFloor):
@@ -235,14 +271,19 @@ def can_be_randomized(floor: MappaFloor):
 
 def randomize_layout(original_layout: MappaFloorLayout):
     tileset = choice(ALLOWED_TILESET_IDS)
+    structure = choice(list(MappaFloorStructureType))
+    # Make Monster Houses less likely by re-rolling 50% of the time when it happens
+    if structure == MappaFloorStructureType.SINGLE_MONSTER_HOUSE or structure == MappaFloorStructureType.TWO_ROOMS_ONE_MH:
+        if choice((True, False)):
+            structure = choice(list(MappaFloorStructureType))
     return MappaFloorLayout(
-        structure=choice(list(MappaFloorStructureType)),
+        structure=structure,
         room_density=randrange(3, 21),
         tileset_id=tileset,
-        music_id=randrange(0, 118),
+        music_id=randrange(1, 118),
         weather=choice(list(MappaFloorWeather)),
         floor_connectivity=randrange(5, 51),
-        initial_enemy_density=randrange(0, 14),
+        initial_enemy_density=randrange(1, 14),
         kecleon_shop_chance=randrange(0, 101),
         monster_house_chance=randrange(0, 101),
         unusued_chance=randrange(0, 101),
@@ -273,39 +314,57 @@ def randomize_layout(original_layout: MappaFloorLayout):
 
 def randomize_monsters(min_level, max_level):
     monsters = []
-    for _ in range(0, randrange(0, 21)):
-        level = min(100, max(1, randrange(min_level - 3, max_level + 3)))
-        weight = random_decimal(5, 101)
-        monsters.append(MappaMonster(level, weight, weight, choice(ALLOWED_MD_IDS)))
+    md_ids = sorted(set(choice(ALLOWED_MD_IDS) for _ in range(0, randrange(MIN_MONSTERS_PER_LIST, MAX_MONSTERS_PER_LIST + 1))))
+    weights = sorted(random_weights(len(md_ids)))
+    for md_id, weight in zip(md_ids, weights):
+        level = min(100, max(1, randrange(min_level - MONSTER_LEVEL_VARIANCE, max_level + MONSTER_LEVEL_VARIANCE + 1)))
+        monsters.append(MappaMonster(level, weight, weight, md_id))
 
     # Add Kecleon and Dummy
-    monsters.append(MappaMonster(42, Decimal(0), Decimal(0), 383))
-    monsters.append(MappaMonster(1, Decimal(0), Decimal(0), DUMMY_MD_INDEX))
+    monsters.append(MappaMonster(42, 0, 0, KECLEON_MD_INDEX))
+    monsters.append(MappaMonster(1, 0, 0, DUMMY_MD_INDEX))
 
-    return monsters
+    return sorted(monsters, key=lambda m: m.md_index)
 
 
 def randomize_traps():
-    # Unusued trap
-    chances = [Decimal(0)]
-    for _ in range(0, 24):
-        chances.append(random_decimal(0, 101))
-    return MappaTrapList(chances)
+    # Unusued trap + 24 traps
+    ws = sorted(random_weights(24))
+    return MappaTrapList([0] + ws)
 
 
 def randomize_items():
     categories = {}
-    items = {}
-    for cat in MappaItemCategory:
-        categories[cat] = random_decimal(35, 101)
+    items = OrderedDict()
+    cats_as_list = ALLOWED_ITEM_CATS
+    # 1/20 chance for Link Box
+    if choice([True] + [False] * 19):
+        cats_as_list.append(MappaItemCategory.LINK_BOX)
+    weights = sorted(random_weights(len(cats_as_list)))
+    for i, cat in enumerate(cats_as_list):
+        categories[cat] = weights[i]
 
-    for _ in range(0, randrange(1, 150)):
-        # We could maybe override previous values here, but that's okay.
-        items[Pmd2DungeonItem(choice(ALLOWED_ITEM_IDS), '???')] = random_decimal(5, 101)
+        if cat.number_of_items is not None:
+            allowed_cat_item_ids = [x for x in ALLOWED_ITEM_IDS if x in
+                                    range(cat.first_item_id, cat.first_item_id + cat.number_of_items)]
+            upper_limit = min(MAX_ITEMS_PER_CAT, len(allowed_cat_item_ids))
+            if upper_limit <= MIN_ITEMS_PER_CAT:
+                n_items = MIN_ITEMS_PER_CAT
+            else:
+                n_items = randrange(MIN_ITEMS_PER_CAT, upper_limit)
+            cat_item_ids = sorted(set(
+                (choice(allowed_cat_item_ids) for _ in range(0, n_items))
+            ))
+            cat_weights = sorted(random_weights(len(cat_item_ids)))
 
-    # Add coins
-    items[Pmd2DungeonItem(183, '???')] = random_decimal(0, 101)
-    return MappaItemList(categories, items)
+            for item_id, weight in zip(cat_item_ids, cat_weights):
+                items[Pmd2DungeonItem(item_id, '???')] = weight
+
+    # 1/8 chance for money
+    if choice([True] + [False] * 7):
+        items[Pmd2DungeonItem(183, '???')] = 10000
+
+    return MappaItemList(categories, OrderedDict(sorted(items.items(), key=lambda i: i[0].id)))
 
 
 def randomize(mappa: MappaBin, trap_lists: List[MappaTrapList], item_lists: List[MappaItemList]):
@@ -314,8 +373,8 @@ def randomize(mappa: MappaBin, trap_lists: List[MappaTrapList], item_lists: List
             if can_be_randomized(floor):
                 floor.layout = randomize_layout(floor.layout)
                 floor.monsters = randomize_monsters(
-                    min(m.level for m in floor.monsters if m.chance > 0),
-                    max(m.level for m in floor.monsters if m.chance > 0)
+                    min(m.level for m in floor.monsters if m.weight > 0),
+                    max(m.level for m in floor.monsters if m.weight > 0)
                 )
                 floor.traps = choice(trap_lists)
                 floor.floor_items = choice(item_lists)

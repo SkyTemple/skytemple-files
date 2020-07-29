@@ -220,8 +220,7 @@ ALLOWED_ITEM_CATS = [
     MappaItemCategory.HOLD,
     MappaItemCategory.TMS,
     MappaItemCategory.ORBS,
-    MappaItemCategory.OTHER,
-    MappaItemCategory.UNK9  # This is the only unknown category actually used.
+    MappaItemCategory.OTHER
 ]
 
 MAX_TRAP_LISTS = 100
@@ -336,10 +335,16 @@ def randomize_traps():
 def randomize_items():
     categories = {}
     items = OrderedDict()
-    cats_as_list = ALLOWED_ITEM_CATS
-    # 1/20 chance for Link Box
-    if choice([True] + [False] * 19):
+    cats_as_list = list(ALLOWED_ITEM_CATS)
+
+    # 1/8 chance for money to get a chance
+    if choice([True] + [False] * 7):
+        cats_as_list.append(MappaItemCategory.POKE)
+
+    # 1/8 chance for Link Box to get a chance
+    if choice([True] + [False] * 7):
         cats_as_list.append(MappaItemCategory.LINK_BOX)
+
     weights = sorted(random_weights(len(cats_as_list)))
     for i, cat in enumerate(cats_as_list):
         categories[cat] = weights[i]
@@ -359,10 +364,6 @@ def randomize_items():
 
             for item_id, weight in zip(cat_item_ids, cat_weights):
                 items[Pmd2DungeonItem(item_id, '???')] = weight
-
-    # 1/8 chance for money
-    if choice([True] + [False] * 7):
-        items[Pmd2DungeonItem(183, '???')] = 10000
 
     return MappaItemList(categories, OrderedDict(sorted(items.items(), key=lambda i: i[0].id)))
 

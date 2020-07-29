@@ -31,6 +31,7 @@ if TYPE_CHECKING:
 CMD_SKIP = 0x7530
 GUARANTEED = 0xFFFF
 MAX_ITEM_ID = 363
+POKE_ID = 183
 # Actually GUARANTEED or a weight between 0 and MAX_WEIGHT.
 Probability = int
 
@@ -42,11 +43,11 @@ class MappaItemCategory(Enum):
     BERRIES_SEEDS_VITAMINS = 2, 69, 39
     FOODS_GUMMIES = 3, 109, 28
     HOLD = 4, 13, 55
-    TMS = 5, 187, 105
-    ORBS = 6, 301, 58
+    TMS = 5, 188, 105
+    POKE = 6, 183, 1
     UNK7 = 7, None, None
     OTHER = 8, 139, 43
-    UNK9 = 9, None, None  # Might be boxes?
+    ORBS = 9, 301, 58
     LINK_BOX = 0xA, 362, 1
     UNKB = 0xB, None, None
     UNKC = 0xC, None, None

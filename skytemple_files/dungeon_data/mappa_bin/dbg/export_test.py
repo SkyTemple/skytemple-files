@@ -25,8 +25,8 @@ output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, '/tmp/x.nds'))
-#rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+#rom = NintendoDSRom.fromFile(os.path.join(base_dir, '/tmp/x.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
 
 mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
 mappa = MappaBinHandler.deserialize(mappa_bin)
@@ -43,9 +43,9 @@ for fl in mappa.floor_lists:
         items.append(floor.unk_items1)
         items.append(floor.unk_items2)
 
-items_with_link_boxes = 0
+items_with_unk7 = []
 for item_list in items:
-    if MappaItemCategory.LINK_BOX in item_list.categories:
-        items_with_link_boxes += 1
+    if MappaItemCategory.UNK7 in item_list.categories:
+        items_with_unk7.append(item_list)
 
-print(len(items), items_with_link_boxes)
+print(len(items_with_unk7))

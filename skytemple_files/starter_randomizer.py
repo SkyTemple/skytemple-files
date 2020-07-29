@@ -56,7 +56,8 @@ def get_name(string_file: Str, index: int, pokemon_string_data):
 def clone_missing_portraits(kao: Kao, index: int):
     """Fills all missing kao subindex slots for index with the first portrait."""
     cloned = kao.get(index, 0)
-    for i in range(1, SUBENTRIES):
+    # Skip mirrored slots.
+    for i in range(2, SUBENTRIES, 2):
         if kao.get(index, i) is None:
             kao.set(index, i, cloned)
 

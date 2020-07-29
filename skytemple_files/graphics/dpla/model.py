@@ -152,5 +152,5 @@ class Dpla:
         return data, pointer_offsets, data_offset
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int) -> 'Dpla':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> 'Dpla':
         return cls(content_data, data_pointer)

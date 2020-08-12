@@ -278,8 +278,8 @@ class Ssb:
                                 new_params.append(param)
                                 logger.warning(f"Unknown special process id: {param}")
                         elif argument_spec.type == 'Direction':
-                            if param in self._scriptdata.directions__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.directions__by_id[param]))
+                            if param in self._scriptdata.directions__by_ssb_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.directions__by_ssb_id[param]))
                             else:
                                 new_params.append(param)
                                 logger.warning(f"Unknown direction id: {param}")

@@ -199,6 +199,7 @@
       <!--Directions-->
       <!--**********************************************-->
       <!--Sprites have 8 directions-->
+      <!--_id is the ID used in SSA. For SSB the ID is the index in the node (so DOWN is 0)-->
       <Directions>
         <Direction _id="1">Down</Direction>
         <Direction _id="2">DownRight</Direction>

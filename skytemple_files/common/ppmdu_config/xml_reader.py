@@ -253,9 +253,9 @@ class Pmd2XmlReader:
                             face_position_modes.append(Pmd2ScriptFacePositionMode(i, e_mode.text))
                     ###########################
                     elif e.tag == 'Directions':
-                        for e_dir in e:
+                        for idx, e_dir in enumerate(e):
                             i = self._xml_int(e_dir.attrib['_id'])
-                            directions[i] = Pmd2ScriptDirection(i, e_dir.text)
+                            directions[i] = Pmd2ScriptDirection(i, e_dir.text, idx)
                     ###########################
                     elif e.tag == 'CommonRoutineInfo':
                         for e_cri in e:

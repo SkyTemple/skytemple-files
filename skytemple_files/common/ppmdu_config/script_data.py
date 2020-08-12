@@ -18,6 +18,7 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import warnings
 from enum import Enum, IntEnum
 from typing import List, Dict, Optional
 
@@ -197,9 +198,18 @@ class Pmd2ScriptFacePositionMode(AutoString):
 
 
 class Pmd2ScriptDirection(AutoString):
-    def __init__(self, id: int, name: str):
-        self.id = id
+    def __init__(self, ssa_id: int, name: str, ssb_id: int = None):
+        self.ssa_id = ssa_id
+        self.ssb_id = ssb_id if ssb_id is not None else ssa_id - 1
         self.name = name
+
+    @property
+    def id(self):
+        """
+        For backwards compatibility.
+        """
+        warnings.warn("Please use self.ssa_id instead.", DeprecationWarning)
+        return self.ssa_id
 
 
 class Pmd2ScriptData(AutoString):
@@ -299,7 +309,7 @@ class Pmd2ScriptData(AutoString):
         return {n.name: n for n in self.face_position_modes}
 
     @property
-    def directions(self):
+    def directions(self) -> Dict[int, Pmd2ScriptDirection]:
         return self._directions
 
     @directions.setter
@@ -307,8 +317,12 @@ class Pmd2ScriptData(AutoString):
         self._directions = value
 
     @property
-    def directions__by_id(self):
+    def directions__by_ssa_id(self) -> Dict[int, Pmd2ScriptDirection]:
         return self.directions
+
+    @property
+    def directions__by_ssb_id(self) -> Dict[int, Pmd2ScriptDirection]:
+        return {d.ssb_id: d for d in self._directions.values()}
 
     @property
     def directions__by_name(self):

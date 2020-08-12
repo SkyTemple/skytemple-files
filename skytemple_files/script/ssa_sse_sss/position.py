@@ -44,7 +44,7 @@ class SsaPosition(AutoString):
         self.direction: Union[Pmd2ScriptDirection, None] = None
         if direction is not None:
             try:
-                self.direction = scriptdata.directions__by_id[direction]
+                self.direction = scriptdata.directions__by_ssa_id[direction]
             except KeyError:
                 logger.warning(f"Unknown direction id: {direction}")
                 self.direction = Pmd2ScriptDirection(direction, 'UNKNOWN')

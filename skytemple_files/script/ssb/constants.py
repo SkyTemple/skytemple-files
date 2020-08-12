@@ -20,7 +20,7 @@ from typing import Union, TypeVar, Iterable
 from skytemple_files.common.ppmdu_config.script_data import *
 from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant, DungeonModeConstants
 
-PREFIX_DIRECTION = 'DIRECTION_'
+PREFIX_DIRECTION = 'DIR_'
 PREFIX_PROCESS_SPECIAL = 'PROCESS_SPECIAL_'
 PREFIX_MENU = 'MENU_'
 PREFIX_LEVEL = 'LEVEL_'
@@ -37,7 +37,15 @@ CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
 
 # Mappings for renamed constants, for backwards compatibility
 CONSTANT_ALIASES = {
-    'MENU_DUNGEON_RESULT': 'MENU_DUNGEON_INITIALIZE_TEAM'
+    'MENU_DUNGEON_RESULT': 'MENU_DUNGEON_INITIALIZE_TEAM',
+    # Bug in SkyTemple 0.0.4, where the direction IDs were mapped against the SSA ids.
+    'DIRECTION_DOWN': 'DIR_DOWNRIGHT',
+    'DIRECTION_DOWNRIGHT': 'DIR_RIGHT',
+    'DIRECTION_RIGHT': 'DIR_UPRIGHT',
+    'DIRECTION_UPRIGHT': 'DIR_UP',
+    'DIRECTION_UP': 'DIR_UPLEFT',
+    'DIRECTION_UPLEFT': 'DIR_LEFT',
+    'DIRECTION_LEFT': 'DIR_DOWNLEFT'
 }
 
 
@@ -65,10 +73,16 @@ class DungeonMode(Enum):
         raise ValueError(f"Invalid DungeonMode: {string}")
 
 
+class SsbScriptDirection(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+
 SsbConstantPmdScriptMappable = Union[
     Pmd2ScriptEntity, Pmd2ScriptObject, Pmd2ScriptRoutine,
     Pmd2ScriptFaceName, Pmd2ScriptFacePositionMode, Pmd2ScriptGameVar,
-    Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection,
+    Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection, SsbScriptDirection,
     Pmd2ScriptBgm,
     DungeonMode
 ]
@@ -113,7 +127,7 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptRoutine):
             return cls(PREFIX_CORO + value.name, value=value)
         elif isinstance(value, Pmd2ScriptFaceName):
-            return cls(PREFIX_FACE + value.name, value=value)
+            return cls(PREFIX_FACE + value.name.replace('-', '_'), value=value)
         elif isinstance(value, Pmd2ScriptFacePositionMode):
             return cls(PREFIX_FACE_POS + value.name.upper(), value=value)
         elif isinstance(value, Pmd2ScriptGameVar):
@@ -127,6 +141,8 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptBgm):
             return cls(PREFIX_BGM + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptDirection):
+            return cls(PREFIX_DIRECTION + value.name.upper(), value=SsbScriptDirection(value.ssb_id, value.name))
+        elif isinstance(value, SsbScriptDirection):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=value)
         elif isinstance(value, DungeonMode):
             return cls(PREFIX_DMODE + value.name, value=value)
@@ -148,7 +164,7 @@ class SsbConstant(SsbOpParamConstant):
             elif constant_as_string.startswith(PREFIX_FACE_POS):
                 return cls._in_dict_insensitive(script_data.face_position_modes__by_name, constant_as_string[len(PREFIX_FACE_POS):])
             elif constant_as_string.startswith(PREFIX_FACE):
-                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE):]]
+                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE):].replace('_', '-')]
             elif constant_as_string.startswith(PREFIX_VAR):
                 return script_data.game_variables__by_name[constant_as_string[len(PREFIX_VAR):]]
             elif constant_as_string.startswith(PREFIX_LEVEL):
@@ -169,7 +185,8 @@ class SsbConstant(SsbOpParamConstant):
                     cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_BGM):])
                 )
             elif constant_as_string.startswith(PREFIX_DIRECTION):
-                return cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
+                pmd2_dir = cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
+                return SsbScriptDirection(pmd2_dir.ssb_id, pmd2_dir.name)
             elif constant_as_string.startswith(PREFIX_DMODE):
                 return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE):])
         except KeyError:

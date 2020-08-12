@@ -96,8 +96,8 @@ for i, l in enumerate(bg_list.level):
             loop=0,
             optimize=False
         )
-        for i, f in enumerate(frames):
-            f.save(filename_h + '.' + str(i) + '.png')
+        #for i, f in enumerate(frames):
+        #    f.save(filename_h + '.' + str(i) + '.png')
     except (NotImplementedError, SystemError) as ex:
         print(f"error for {l.bma_name}: {repr(ex)}")
         print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)))

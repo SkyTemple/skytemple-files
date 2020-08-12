@@ -56,14 +56,14 @@ async def main(executor):
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'sky_jp.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_unpatched.nds'))
 
     script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
     # total, opening. decompiling, parsing, compiling, serializing
     times: List[Tuple[float, float, float, float, float, float]] = []
 
-    static_data = Pmd2XmlReader.load_default(for_version='EoS_JP')
+    static_data = Pmd2XmlReader.load_default(for_version='EoS_NA')
     awaitables = []
     for i, file_name in enumerate(get_files_from_rom_with_extension(rom, 'ssb')):
         # TODO: Those scripts fail for JP.

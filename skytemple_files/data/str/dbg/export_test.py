@@ -32,8 +32,5 @@ for filename in get_files_from_rom_with_extension(rom, 'str'):
     bin = rom.getFileByName(filename)
     str = StrHandler.deserialize(bin)
 
-    #cc = ['↑', '↓']
-    cc = ['ª', 'º']
     for i, string in enumerate(str.strings):
-        if 16792 < i >= 16322:
-            print(f"{i} {string}")
+        print(f"{i} {string}")

@@ -80,6 +80,7 @@
     <Game id="EoS_NA" id2="EoSWVC_NA">
       <!-- arm9 -->
       <Bin filepath="arm9.bin" loadaddress="0x2000000">
+        <Block name="DungeonList"       beg="0x9E3A0"   end="0x9E670"/>
         <Block name="ScriptVars"        beg="0x9D870"   end="0x9DFA0"/>
         <Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>
         <Block name="Entities"          beg="0xA7FF0"   end="0xA9208"/>
@@ -135,6 +136,7 @@
       <Bin filepath="arm9.bin" loadaddress="0x2000000">
         <!--<Block name="ScriptVars"        beg="0x9D870"   end="0x9DFA0"/>-->
         <!--<Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>-->
+        <Block name="DungeonList"        beg="0x9E924" end="0x9EBF4"/>
         <Block name="Entities"           beg="0xA8890" end="0xA9AA8"/>
         <Block name="Events"             beg="0xA5BD8" end="0xA715C"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
@@ -282,7 +284,7 @@
         <StringBlock name="Speed Change Feedback"                  beg="2878"  end="2883"/>
         <StringBlock name="Potential Recruit Strings"              beg="2883"  end="2886"/>
         <StringBlock name="Gummi Feedback"                         beg="2886"  end="2897"/>
-        <StringBlock name="Traps Feedback.."                       beg="2897"  end="2922"/>
+        <StringBlock name="Traps Feedback"                         beg="2897"  end="2922"/>
         <StringBlock name="More Dungeon Feedback"                  beg="2922"  end="3068"/>
         <StringBlock name="Something's Stirring String"            beg="3068"  end="3076"/>
         <StringBlock name="More Dungeon Feedback"                  beg="3076"  end="3171"/>
@@ -323,11 +325,16 @@
         <StringBlock name="Trap Names"                             beg="13504"  end="13530"/>
         <StringBlock name="Trap Descriptions"                      beg="13530"  end="13554"/>
         <StringBlock name="Statuses Names and Descriptions"        beg="13554"  end="13761"/>
-        <StringBlock name="Type Names"                             beg="13770"  end="13989"/>
+        <StringBlock name="Type Names"                             beg="13770"  end="13789"/>
         <StringBlock name="Ability Names"                          beg="13789"  end="13913"/>
         <StringBlock name="Ability Descriptions"                   beg="13913"  end="14037"/>
         <StringBlock name="Debug Menu Strings"                     beg="15459"  end="15971"/>
         <StringBlock name="Portrait Names"                         beg="16076"  end="16108"/>
+        <StringBlock name="Ground Map Names"                       beg="16434"  end="16564"/>
+        <StringBlock name="Dungeon Names (Main)"                   beg="16564"  end="16820"/>
+        <StringBlock name="Dungeon Names (Selection)"              beg="16823"  end="17079"/>
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="17082"  end="17338"/>
+        <StringBlock name="Dungeon Names (Banner)"                 beg="17339"  end="17595"/>
         <StringBlock name="Spinda's Juice Bar Strings"             beg="17800"  end="17900"/>
         <StringBlock name="Recycle Shop Strings"                   beg="17900"  end="17960"/>
         <StringBlock name="Staff Roll"                             beg="17960"  end="18451"/>
@@ -413,7 +420,7 @@
         <StringBlock name="Speed Change Feedback"                  beg="2878"  end="2883"/>
         <StringBlock name="Potential Recruit Strings"              beg="2883"  end="2886"/>
         <StringBlock name="Gummi Feedback"                         beg="2886"  end="2897"/>
-        <StringBlock name="Traps Feedback.."                       beg="2897"  end="2922"/>
+        <StringBlock name="Traps Feedback"                         beg="2897"  end="2922"/>
         <StringBlock name="More Dungeon Feedback"                  beg="3076"  end="3171"/>
         <StringBlock name="Something's Stirring String"            beg="3068"  end="3076"/>
         <StringBlock name="Some Fake items Dialogue"               beg="3171"  end="3184"/>
@@ -453,11 +460,16 @@
         <StringBlock name="Trap Names"                             beg="13506"  end="13532"/>
         <StringBlock name="Trap Descriptions"                      beg="13532"  end="13556"/>
         <StringBlock name="Statuses Names and Descriptions"        beg="13556"  end="13763"/>
-        <StringBlock name="Type Names"                             beg="13772"  end="13991"/>
+        <StringBlock name="Type Names"                             beg="13772"  end="13791"/>
         <StringBlock name="Ability Names"                          beg="13791"  end="13915"/>
         <StringBlock name="Ability Descriptions"                   beg="13915"  end="14039"/>
         <StringBlock name="Debug Menu Strings"                     beg="15461"  end="15973"/>
         <StringBlock name="Portrait Names"                         beg="16078"  end="16110"/>
+        <StringBlock name="Ground Map Names"                       beg="16436"  end="16566"/>
+        <StringBlock name="Dungeon Names (Main)"                   beg="16566"  end="16822"/>
+        <StringBlock name="Dungeon Names (Selection)"              beg="16825"  end="17081"/>
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="17084"  end="17340"/>
+        <StringBlock name="Dungeon Names (Banner)"                 beg="17341"  end="17597"/>
         <StringBlock name="Spinda's Juice Bar Strings"             beg="17831"  end="17931"/>
         <StringBlock name="Recycle Shop Strings"                   beg="17931"  end="17991"/>
         <StringBlock name="Staff Roll"                             beg="17991"  end="18482"/>

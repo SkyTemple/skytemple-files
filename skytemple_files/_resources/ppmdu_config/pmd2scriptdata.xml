@@ -1709,8 +1709,8 @@
         <OpCode id="0x81"  name="Flash"                                  params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x82"  name="Hold"                                   params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x83"  name="item_GetVariable"                       params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="slot"/>
+          <Argument id="1" type="GameVar" name="var"/>
         </OpCode>
         <OpCode id="0x84"  name="item_Set"                               params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -1723,7 +1723,7 @@
         </OpCode>
         <OpCode id="0x86"  name="item_SetVariable"                       params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="1" type="GameVar" name="var"/>
         </OpCode>
         <OpCode id="0x87"  name="Jump"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="jump_address"/>

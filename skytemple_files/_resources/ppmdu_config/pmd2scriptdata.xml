@@ -996,16 +996,69 @@
       <!--Process Special IDs-->
       <!--**********************************************-->
       <ProcessSpecialIDs>
-        <!--TODO-->
+        <!-- See function 0x022E7118 [US], 0x022E7A58 [EU] -->
+        <Special id="1"  name="ReturnDungeon" /> <!-- named after what it logs -->
+        <Special id="2"  name="InitMainTeamAfterQuiz" />
+        <!-- Special 3 and 4 branch of into functions with a LOT of switch cases.
+             Both seem to reset the active roster to the main characters most of the time...?
+             Both seem to be team management functions for their special episodes...? -->
+        <Special id="5"  name="NextDay" />
+        <!-- Special 6 is unused but definitely does a lot of things! No arguments though (it seems) -->
+        <Special id="7"  name="DungeonHadRequestDone" return="had_request_done" /> <!-- True, when the player finished a mission -->
+        <!-- Special 8 and 9 are unused again but also do something. -->
+        <Special id="10" name="GetSOSMailCount" return="count" />
+        <Special id="11" name="GetSOSMissionRetriesLeft" return="retries" />
+        <!-- The following are more or less guesses based on P01P04A/enter11.ssb and some other maps -->
+        <Special id="12" name="InitRandomNpcJobs" param_1="type" /> <!-- 0 is random NPC, 1 is bottle -->
+        <Special id="13" name="GetRandomNpcJobType" return="type" />
+        <Special id="14" name="GetRandomNpcJobSubType" resturn="sub_type" />
+        <Special id="15" name="GetRandomNpcJobStillAvailable" return="still_available" />
+        <Special id="16" name="AcceptRandomNpcJob" />
+        <!-- 17 just returns 0, probably a removed debug function.
+             Might be related to some kind of debug camera control.
+             18 seems to execute the debug camera. -->
+        <Special id="19" name="KeyWaitPress" />
+        <Special id="20" name="KeyWaitInit" />
+        <Special id="21" name="KeyWaitCheck" />
+        <!-- 22 and 23 have something to do with processing inputs during the title screen sequence,
+             but I'm not 100% sure which one does what. 24 too, and seems to indicate that the
+             sequence is only skipable if a save file exits? -->
         <Special id="25" name="JumpToTitleScreen" />
-
+        <!-- 26 does something related the demo title screen sequence. -->
+        <Special id="27" name="ReturnToTitleScreen" param_1="fade_duration" />
+        <Special id="28" name="IsRecuritableInTeam" param_1="recruit_table_index" return="is_in_team" />
+        <Special id="29" name="GetRecuritableCurrentLevel" param_1="recruit_table_index" return="recruitable_level_or_zero" />
+        <Special id="30" name="RecuritableCanAdd" param_1="recruit_table_index" return="can_add" />
+        <Special id="31" name="AddRecruitableToTeam" param_1="recruit_table_index" />
         <Special id="32" name="CountItemTypeInBag"  param_1="itemid" return="nbitems" />
-        
+        <Special id="33" name="CountTableItemTypeInBag"  return="nbitems" /> <!-- Reads from item table slot 0 instead -->
+        <Special id="34" name="CountItemTypeInStorage"  param_1="itemid" return="nbitems" />
+        <!-- 35 is unused but probably also item related, maybe CountTableItemTypeInStorage? -->
+        <Special id="36" name="AddItemToBag" param_1="itemid" />
         <Special id="37" name="AddTableItemToBag" />
+        <!-- 38 is unused but probably also item related, maybe AddItemToStorage? -->
         <Special id="39" name="AddTableItemToStorage" />
         <Special id="40" name="RemoveItemsTypeInBag"  param_1="itemid" />
-
-        <Special id="56" name="IsBagFull" />
+        <Special id="41" name="RemoveTableItemsTypeInBag" />
+        <!-- 42 is unused but probably also item related, maybe RemoveItemsTypeInStorage? -->
+        <!-- 43 is unused but probably also item related, maybe RemoveTableItemsTypeInStorage? -->
+        <Special id="44" name="PrepareMenuAcceptTeamMember" param_1="recruit_table_index" />
+        <Special id="45" name="GetHeroKind" return="kind_table_idx" />
+        <Special id="46" name="GetPartnerKind" return="kind_table_idx" />
+        <Special id="47" name="IsTeamSetupHeroAndPartnerOnly" return="bool" /> <!-- Only true if hero is leader! -->
+        <Special id="48" name="IsTeamSetupPartnerAndHeroOnly" return="bool" /> <!-- Only true if partner is leader! -->
+        <Special id="49" name="IsTeamSetupContainsPartnerAndHero" return="bool" />
+        <Special id="50" name="IsTeamSetupSolo" return="bool" />
+        <Special id="51" name="SetTeamSetupHeroAndPartnerOnly"/>
+        <Special id="52" name="SetTeamSetupHeroOnly"/>
+        <!-- 53 is used when ending the demo game. Not sure what it does. -->
+        <Special id="54" name="StatusUpdate"/> <!-- That's what it's called on the debug map. It sets a single value, but I don't know the effect. -->
+        <!-- 55 is sometimes used at the end of dungeons before the exploration results. Don't know what it does. -->
+        <Special id="56" name="IsBagFull" return="bool" />
+        <!-- 57 and 58 are unused but sure do something! Don't know what though. 57 might be "IsStorageFull"? -->
+        <!-- 59 is something related to the lottery. -->
+        <Special id="60" name="SendSkyGiftToGuildmaster"/>
+        <!-- 61 and 62 are unusued but do something. -->
       </ProcessSpecialIDs>
 
       <!--**********************************************-->

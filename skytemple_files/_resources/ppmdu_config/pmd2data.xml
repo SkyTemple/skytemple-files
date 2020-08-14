@@ -109,6 +109,9 @@
         <Block name="Objects"                   beg="0x42C14" end="0x44618"/>
         <Block name="CRoutines"                 beg="0x405E8" end="0x41BD0"/>
         <Block name="GroundStatePntrs"          beg="0x48AB4" end="0x48AC8"/>
+        <Block name="RecruitmentTableSpecies"   beg="0x44698" end="0x446C4"/>
+        <Block name="RecruitmentTableLevels"    beg="0x4466C" end="0x44698"/>
+        <Block name="RecruitmentTableLocations" beg="0x44654" end="0x4466A"/>
         <Pointer name="GroundStateMap"          beg="0x48A80"/>
         <Pointer name="UnionallRAMAddress"      beg="0x48A64"/>
         <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>
@@ -157,6 +160,9 @@
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
         <Block name="ScriptOpCodes"             beg="0x3C470" end="0x3D068"/>
         <Block name="GroundStatePntrs"          beg="0x48CB4" end="0x48CC8"/>
+        <Block name="RecruitmentTableSpecies"   beg="0x44888" end="0x448B4"/>
+        <Block name="RecruitmentTableLevels"    beg="0x4485C" end="0x44888"/>
+        <Block name="RecruitmentTableLocations" beg="0x44844" end="0x4485A"/>
         <Pointer name="GroundStateMap"          beg="0x48C80"/>
         <Pointer name="UnionallRAMAddress"      beg="0x48C64"/>
         <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>

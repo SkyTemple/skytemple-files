@@ -112,12 +112,11 @@ class BpcTilemapDecompressor:
                 raise ValueError("BPC Tilemap Decompressor: Reached EOF while writing decompressed data.")
         elif CMD_2_SEEK_OFFSET <= cmd < CMD_2_COPY_LOW:
             # cmd - CMD_2_SEEK_OFFSET is the nb of words to write with the next byte as low byte
-            value_at_pos = read_uintle(self.decompressed_data, self.bytes_written, 2)
-            value_at_pos |= self._read()
+            cmd_value = self._read()
             if DEBUG:
                 print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
             for i in range(CMD_2_SEEK_OFFSET-1, cmd):
-                self._write(value_at_pos)
+                self._write(read_uintle(self.decompressed_data, self.bytes_written, 2) | cmd_value)
         else:  # elif cmd > CMD_2_COPY_LOW:
             # cmd - CMD_2_COPY_LOW is the nb of words to write with the sequence of bytes as low byte
             if DEBUG:

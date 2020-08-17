@@ -232,7 +232,7 @@ class MovementType(Enum):
     STANDARD = 0
     UNKNOWN1 = 1
     HOVERING = 2
-    UNKNOWN2 = 3
+    PHASE_THROUGH_WALLS = 3
     LAVA = 4
     WATER = 5
 

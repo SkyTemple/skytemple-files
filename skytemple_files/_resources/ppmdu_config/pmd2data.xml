@@ -112,6 +112,7 @@
         <Block name="RecruitmentTableSpecies"   beg="0x44698" end="0x446C4"/>
         <Block name="RecruitmentTableLevels"    beg="0x4466C" end="0x44698"/>
         <Block name="RecruitmentTableLocations" beg="0x44654" end="0x4466A"/>
+        <Block name="LevelTilemapList"          beg="0x44AEC" end="0x44D74"/>
         <Pointer name="GroundStateMap"          beg="0x48A80"/>
         <Pointer name="UnionallRAMAddress"      beg="0x48A64"/>
         <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>
@@ -163,6 +164,7 @@
         <Block name="RecruitmentTableSpecies"   beg="0x44888" end="0x448B4"/>
         <Block name="RecruitmentTableLevels"    beg="0x4485C" end="0x44888"/>
         <Block name="RecruitmentTableLocations" beg="0x44844" end="0x4485A"/>
+        <Block name="LevelTilemapList"          beg="0x44CDC" end="0x44F64"/>
         <Pointer name="GroundStateMap"          beg="0x48C80"/>
         <Pointer name="UnionallRAMAddress"      beg="0x48C64"/>
         <Fn name="FuncThatCallsCommandParsing"  beg="0xF24"/>

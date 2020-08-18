@@ -6,6 +6,9 @@ including sprites of objects and actors on them.
 This is also an example on how to use the following file handlers:
 - BMA, BPL, PPC, BPA
 - BG_LIST_DAT
+- DUNGEON_BIN
+- DMA, DPC, DPCI, DPL, DPLA
+- MAPPA
 - MD
 - SSA
 - LSD
@@ -13,6 +16,7 @@ This is also an example on how to use the following file handlers:
 - (BIN_PACK)
 - (AT4PX, PKDPX)
 - (Compressions)
+- (Hardcoded Lists)
 """
 #  Copyright 2020 Parakoopa
 #
@@ -44,10 +48,19 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_ppmdu_config_for_rom, get_rom_folder
+from skytemple_files.common.util import get_ppmdu_config_for_rom, get_rom_folder, get_binary_from_rom_ppmdu
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.model import Md
+from skytemple_files.graphics.bma.model import Bma
 from skytemple_files.graphics.bpc.model import BPC_TILE_DIM
+from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
+from skytemple_files.graphics.dma.model import Dma
+from skytemple_files.graphics.dpc.model import Dpc
+from skytemple_files.graphics.dpci.model import Dpci
+from skytemple_files.graphics.dpl.model import Dpl
+from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.hardcoded.dungeons import HardcodedDungeons
+from skytemple_files.hardcoded.ground_dungeon_tilesets import HardcodedGroundDungeonTilesets, GroundTilesetMapping
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.layer import SsaLayer
 from skytemple_files.script.ssa_sse_sss.object import SsaObject
@@ -112,6 +125,60 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
         except (NotImplementedError, SystemError) as ex:
             print(f"error for {l.bma_name}: {repr(ex)}", file=sys.stderr)
             print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)), file=sys.stderr)
+
+
+def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
+    os.makedirs(dungeon_map_bg_dir, exist_ok=True)
+    dungeon_bin = FileType.DUNGEON_BIN.deserialize(rom.getFileByName('DUNGEON/dungeon.bin'), config)
+
+    ground_dungeon_tilesets = HardcodedGroundDungeonTilesets.get_ground_dungeon_tilesets(
+        get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0011.bin']),
+        config
+    )
+    dungeons = HardcodedDungeons.get_dungeon_list(
+        get_binary_from_rom_ppmdu(rom, config.binaries['arm9.bin']),
+        config
+    )
+    mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName('BALANCE/mappa_s.bin'))
+    
+    levels_by_id = config.script_data.level_list__by_id
+
+    level_list_bin = rom.getFileByName('MAP_BG/bg_list.dat')
+    bg_list = FileType.BG_LIST_DAT.deserialize(level_list_bin)
+
+    for i, entry in enumerate(ground_dungeon_tilesets):
+        if entry.ground_level >= 0xFFFF:
+            continue
+        level = levels_by_id[entry.ground_level]
+        print(f"{i + 1}/{len(ground_dungeon_tilesets)-1} - {level.name}")
+
+        mappa_idx = dungeons[entry.dungeon_id].mappa_index
+        tileset_id = mappa.floor_lists[mappa_idx][0].layout.tileset_id
+        dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
+        dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
+        dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')
+        dpci: Dpci = dungeon_bin.get(f'dungeon{tileset_id}.dpci')
+        dpc: Dpc = dungeon_bin.get(f'dungeon{tileset_id}.dpc')
+
+        bma: Bma = bg_list.level[level.mapid].get_bma(rom)
+
+        duration = round(1000 / 60 * max(16, min(dpla.durations_per_frame_for_colors)))
+
+        drawer = DmaDrawer(dma)
+        rules = drawer.rules_from_bma(bma)
+        mappings = drawer.get_mappings_for_rules(rules, treat_outside_as_wall=True)
+        frames = drawer.draw(mappings, dpci, dpc, dpl, dpla)
+        frames[0].save(
+            os.path.join(dungeon_map_bg_dir, level.name + '.gif'),
+            save_all=True,
+            append_images=frames[1:],
+            duration=duration,
+            loop=0,
+            optimize=False
+        )
+        frames[0].save(
+            os.path.join(dungeon_map_bg_dir, level.name + '.png')
+        )
 
 
 def draw_maps(rom: NintendoDSRom, map_dir, scriptdata: Pmd2ScriptData):
@@ -317,14 +384,15 @@ def triangle(draw, x, y, fill, direction):
 
 
 def run_main(rom_path, export_dir, actor_mapping_path=None, opt_draw_invisible_actors_objects=True):
-    global monster_bin_pack_file, monster_md, draw_invisible_actors_objects
+    global monster_bin_pack_file, monster_md, draw_invisible_actors_objects, ground_dungeon_tilesets
     draw_invisible_actors_objects = opt_draw_invisible_actors_objects
 
     print("Loading ROM and core files...")
     os.makedirs(export_dir, exist_ok=True)
     rom = NintendoDSRom.fromFile(rom_path)
+    config = get_ppmdu_config_for_rom(rom)
 
-    scriptdata = get_ppmdu_config_for_rom(rom).script_data
+    scriptdata = config.script_data
     if actor_mapping_path:
         with open(actor_mapping_path, 'r') as f:
             actor_mapping = json.load(f)
@@ -335,8 +403,11 @@ def run_main(rom_path, export_dir, actor_mapping_path=None, opt_draw_invisible_a
     monster_md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
 
     map_bg_dir = os.path.join(export_dir, 'MAP_BG')
+    dungeon_map_bg_dir = os.path.join(export_dir, 'MAP_BG_DUNGEON_TILESET')
     print("-- DRAWING BACKGROUNDS --")
     draw_map_bgs(rom, map_bg_dir)
+    print("-- DRAWING REST ROOM AND BOSS ROOM BACKGROUNDS --")
+    draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config)
     print("-- DRAWING MAP ENTITIES --")
     draw_maps(rom, os.path.join(export_dir, 'MAP'), scriptdata)
 
@@ -351,8 +422,10 @@ def main():
     to 2GB of RAM.
 
     The export directory will contain the following subdirs:
-    - MAP_BG - Map backgrounds of all maps in the game, as static PNG files and animated GIF files.
-    - MAP - All script maps in the game:
+    - MAP_BG                 - Map backgrounds of all maps in the game, as static PNG files and animated GIF files.
+    - MAP_BG_DUNGEON_TILESET - Map backgrounds of all maps in the game that use dungeon tilesets for rendering in game,
+                               rendered as GIFs.
+    - MAP                    - All script maps in the game:
        - {map_name} - A directory for a map. The dimensions of all images in this directory are taken 
                       from the MapBG with the same name.
           - {scene_name} - A directory for a scene (SSA/SSE/SSS)

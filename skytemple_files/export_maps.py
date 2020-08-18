@@ -143,8 +143,8 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
     
     levels_by_id = config.script_data.level_list__by_id
 
-    level_list_bin = rom.getFileByName('MAP_BG/bg_list.dat')
-    bg_list = FileType.BG_LIST_DAT.deserialize(level_list_bin)
+    bg_list_bin = rom.getFileByName('MAP_BG/bg_list.dat')
+    bg_list = FileType.BG_LIST_DAT.deserialize(bg_list_bin)
 
     for i, entry in enumerate(ground_dungeon_tilesets):
         if entry.ground_level >= 0xFFFF:

@@ -251,8 +251,10 @@ def draw_scene_for__rest(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: Ssa
 
 def draw_actor(img: Image.Image, draw, actor: SsaActor):
     """Draws the sprite for an actor"""
-    if actor.actor.entid == 0 and draw_invisible_actors_objects:
-        return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)
+    if actor.actor.entid == 0:
+        if draw_invisible_actors_objects:
+            return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)
+        return
 
     actor_sprite_id = monster_md[actor.actor.entid].sprite_index
 

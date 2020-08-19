@@ -34,6 +34,7 @@ from skytemple_files.container.dungeon_bin.sub.sir0_image_1034 import DbinSir0Im
 from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DplaHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
+from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
@@ -110,6 +111,7 @@ class FileType:
     BIN_PACK = BinPackHandler
 
     MD = MdHandler
+    LEVEL_BIN_ENTRY = LevelBinEntryHandler
 
     # These handlers assume the content to be Sir0 wrapped by default:
     MAPPA_BIN = MappaBinHandler

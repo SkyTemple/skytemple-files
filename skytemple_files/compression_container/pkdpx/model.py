@@ -34,7 +34,7 @@ class Pkdpx:
         """Returns the uncompressed data stored in the container"""
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.PX.decompress(self.compressed_data, self.compression_flags)
+        data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x14], self.compression_flags)
         # Sanity assertion, if everything is implemented correctly this doesn't fail.
         assert len(data) == self.length_decompressed
         return data

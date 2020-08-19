@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
+from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 
 
 class Sir0:
@@ -52,31 +53,4 @@ class Sir0:
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     @classmethod
     def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: int) -> List[int]:
-        decoded = []
-        # This is used to sum up all offsets and obtain the offset relative to the file, and not the last offset
-        offsetsum = 0
-        # temp buffer to assemble longer offsets
-        buffer = 0
-        # This contains whether the byte read on the previous turn of the loop had the bit flag
-        # indicating to append the next byte!
-        last_had_bit_flag = False
-        for curbyte in data[pointer_offset_list_pointer:len(data)]:
-            if not last_had_bit_flag and curbyte == 0:
-                break
-            # Ignore the first bit, using the 0x7F bitmask, as its reserved.
-            # And append or assign the next byte's value to the buffer.
-            buffer |= curbyte & 0x7F
-
-            if (0x80 & curbyte) != 0:
-                last_had_bit_flag = True
-                # If first bit is 1, bitshift left the current buffer, to append the next byte.
-                buffer <<= 7
-            else:
-                last_had_bit_flag = False
-                # If we don't need to append, add the value of the current buffer to the offset sum this far,
-                # and add that value to the output vector. Then clear the buffer.
-                offsetsum += buffer
-                decoded.append(offsetsum)
-                buffer = 0
-
-        return decoded
+        return decode_sir0_pointer_offsets(data, pointer_offset_list_pointer)

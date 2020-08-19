@@ -19,6 +19,7 @@
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.model import Sir0
+from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 
 
 class Sir0Writer:
@@ -89,28 +90,4 @@ class Sir0Writer:
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     def _encode_pointer_offsets(self, buffer: bytearray, pointer_offsets: List[int]):
-        cursor = 0
-        # used to add up the sum of all the offsets up to the current one
-        offset_so_far = 0
-        for offset in pointer_offsets:
-            offset_to_encode = offset - offset_so_far
-            # This tells the loop whether it needs to encode null bytes, if at least one higher byte was non-zero
-            has_higher_non_zero = False
-            # Set the value to the latest offset, so we can properly subtract it from the next offset.
-            offset_so_far = offset
-
-            # Encode every bytes of the 4 bytes integer we have to
-            for i in range(4, 0, -1):
-                currentbyte = (offset_to_encode >> (7 * (i - 1))) & 0x7F
-                # the lowest byte to encode is special
-                if i == 1:
-                    # If its the last byte to append, leave the highest bit to 0 !
-                    buffer[cursor] = currentbyte
-                    cursor += 1
-                elif currentbyte != 0 or has_higher_non_zero:
-                    # if any bytes but the lowest one! If not null OR if we have encoded a higher non-null byte before!
-                    buffer[cursor] = currentbyte | 0x80
-                    cursor += 1
-                    has_higher_non_zero = True
-
-        return cursor + 1
+        return encode_sir0_pointer_offsets(buffer, pointer_offsets)

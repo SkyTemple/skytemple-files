@@ -48,6 +48,7 @@ class DmaDrawer:
             elif (chunk + 1) / 2 % 1 == 0 and (chunk + 1) / 2 > 0:
                 rule = DmaType.FLOOR
             active_row.append(rule)
+        rules.append(active_row)
         return rules
 
     def get_mappings_for_rules(self, rules: List[List[DmaType]], variation_index=None,

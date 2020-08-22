@@ -32,12 +32,24 @@ class LevelUpMove(AutoString):
         self.move_id = move_id
         self.level_id = level_id
 
+    def __eq__(self, other):
+        if not isinstance(other, LevelUpMove):
+            return False
+        return self.move_id == other.move_id and self.level_id == other.level_id
+
 
 class MoveLearnset(AutoString):
     def __init__(self, level_up_moves: List[LevelUpMove], tm_hm_moves: List[int], egg_moves: List[int]):
         self.level_up_moves = level_up_moves
         self.tm_hm_moves = tm_hm_moves
         self.egg_moves = egg_moves
+
+    def __eq__(self, other):
+        if not isinstance(other, MoveLearnset):
+            return False
+        return self.level_up_moves == other.level_up_moves \
+               and self.tm_hm_moves == other.tm_hm_moves \
+               and self.egg_moves == other.egg_moves
 
 
 class WazaP(Sir0Serializable, AutoString):
@@ -64,20 +76,22 @@ class WazaP(Sir0Serializable, AutoString):
             pointer_level_up = read_uintle(list_pointers, 0, 4)
             pointer_tm_hm = read_uintle(list_pointers, 4, 4)
             pointer_egg = read_uintle(list_pointers, 8, 4)
+            if pointer_level_up == 0xAAAAAAAA or pointer_tm_hm == 0xAAAAAAAA or pointer_egg == 0xAAAAAAAA:
+                break
 
             # Read Level Up Data
             if pointer_level_up != 0:
-                level_up_raw = decode_sir0_pointer_offsets(data, pointer_level_up, False)
+                level_up_raw = self._decode_ints(data, pointer_level_up)
                 for move_id, level_id in chunks(level_up_raw, 2):
                     level_up.append(LevelUpMove(move_id, level_id))
 
             # TM/HM Move data
             if pointer_tm_hm:
-                tm_hm = decode_sir0_pointer_offsets(data, pointer_tm_hm, False)
+                tm_hm = self._decode_ints(data, pointer_tm_hm)
 
             # TM/HM Move data
             if pointer_egg:
-                egg = decode_sir0_pointer_offsets(data, pointer_egg, False)
+                egg = self._decode_ints(data, pointer_egg)
 
             self.learnsets.append(MoveLearnset(
                 level_up, tm_hm, egg
@@ -92,3 +106,12 @@ class WazaP(Sir0Serializable, AutoString):
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.data.waza_p.writer import WazaPWriter
         return WazaPWriter(self).write()
+
+    def __eq__(self, other):
+        if not isinstance(other, WazaP):
+            return False
+        return self.learnsets == other.learnsets and self.move_data == other.move_data
+
+    @staticmethod
+    def _decode_ints(data: bytes, pnt_start: int) -> List[int]:
+        return decode_sir0_pointer_offsets(data, pnt_start, False)

@@ -18,7 +18,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle
+from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
 
@@ -92,13 +92,8 @@ class MappaFloorTerrainSettings:
             and self.unk7 == other.unk7
 
     def to_mappa(self):
-        val = 0
-        for v in (self.unk7, self.unk6, self.unk5, self.unk4, self.unk3, self.generate_imperfect_rooms,
-                  self.unk1, self.has_secondary_terrain):
-            if v:
-                val += 1
-            val <<= 1
-        return val >> 1
+        return generate_bitfield((self.unk7, self.unk6, self.unk5, self.unk4, self.unk3, self.generate_imperfect_rooms,
+                                  self.unk1, self.has_secondary_terrain))
 
 
 class MappaFloorDarknessLevel(Enum):

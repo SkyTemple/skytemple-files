@@ -17,7 +17,7 @@
 import bisect
 import re
 import warnings
-from typing import List, Tuple, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING, Iterable
 
 import pkg_resources
 from ndspy.fnt import Folder
@@ -159,6 +159,16 @@ def iter_bytes_4bit_le(data: bytes, start=0, end=None):
         lower = byte[0] & 0x0f
         yield lower
         yield upper
+
+
+def generate_bitfield(vs: Iterable[bool]):
+    """Generates a bitfield from the values in `vs`. Highest bit to lowest!"""
+    val = 0
+    for v in vs:
+        if v:
+            val += 1
+        val <<= 1
+    return val >> 1
 
 
 def get_files_from_rom_with_extension(rom: NintendoDSRom, ext: str) -> List[str]:

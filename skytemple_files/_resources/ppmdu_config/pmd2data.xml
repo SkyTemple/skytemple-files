@@ -87,6 +87,9 @@
         <Block name="Events"            beg="0xA5488"   end="0xA68BC"/>
         <Block name="ItemTablesPtrs1"   beg="0xB0948"   end="0xB09B0"/>
         <Block name="SMDEventsFunTable" beg="0xB0B90"   end="0xB0D8C"/>
+        <Block name="DungeonRestrictions" beg="0xA0C64" end="0xA1864"/>
+        <Block name="SecondaryTerrains"  beg="0xA1AE8"  end="0xA1BB0"/>
+        <Block name="MapMarkerPlacements" beg="0xA94D0" end="0xA9E80"/>
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
@@ -143,6 +146,9 @@
         <Block name="DungeonList"        beg="0x9E924" end="0x9EBF4"/>
         <Block name="Entities"           beg="0xA8890" end="0xA9AA8"/>
         <Block name="Events"             beg="0xA5BD8" end="0xA715C"/>
+        <Block name="DungeonRestrictions" beg="0xA11E8" end="0xA1DE8"/>
+        <Block name="SecondaryTerrains"  beg="0xA206C" end="0xA2134"/>
+        <Block name="MapMarkerPlacements" beg="0xA9D70" end="0xAA720"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>

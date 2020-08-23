@@ -18,6 +18,7 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 
@@ -64,3 +65,36 @@ print(set(range(0, 100)) - set([x.mappa_index for x in dungeon_list]))
 # Try setting and see if still same.
 HardcodedDungeons.set_dungeon_list(dungeon_list, arm9_us, ppmdu_us)
 assert dungeon_list == HardcodedDungeons.get_dungeon_list(arm9_us, ppmdu_us)
+
+# DungeonRestrictions
+lst = HardcodedDungeons.get_dungeon_restrictions(arm9_us, ppmdu_us)
+for e in lst:
+    print(e)
+HardcodedDungeons.set_dungeon_restrictions(lst, arm9_us, ppmdu_us)
+assert lst == HardcodedDungeons.get_dungeon_restrictions(arm9_us, ppmdu_us)
+
+# SecondaryTerrains
+lst = HardcodedDungeons.get_secondary_terrains(arm9_us, ppmdu_us)
+for e in lst:
+    print(e)
+HardcodedDungeons.set_secondary_terrains(lst, arm9_us, ppmdu_us)
+assert lst == HardcodedDungeons.get_secondary_terrains(arm9_us, ppmdu_us)
+
+# MapMarkerPlacements - TODO: They don't line up with dungeon IDs at all!
+lst = HardcodedDungeons.get_marker_placements(arm9_us, ppmdu_us)
+str_blk = ppmdu_us.string_index_data.string_blocks['Dungeon Names (Selection)']
+dungeon_strs = FileType.STR.deserialize(rom_us.getFileByName('MESSAGE/text_e.str')).strings[str_blk.begin:str_blk.end]
+for i, e in enumerate(lst):
+    print("--------")
+    if len(dungeon_strs) <= i:
+        print(f'unk{i}')
+    else:
+        print(dungeon_strs[i])
+    if e.map_id == -1:
+        print('n/a')
+    else:
+        print(ppmdu_us.script_data.level_list__by_id[e.map_id].name)
+    print(e.reference_id)
+    print("x", e.x, "y", e.y)
+HardcodedDungeons.set_marker_placements(lst, arm9_us, ppmdu_us)
+assert lst == HardcodedDungeons.get_marker_placements(arm9_us, ppmdu_us)

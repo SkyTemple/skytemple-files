@@ -58,6 +58,8 @@ from skytemple_files.compression.px.handler import PxHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
+from skytemple_files.graphics.wte.handler import WteHandler
+from skytemple_files.graphics.wtu.handler import WtuHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
@@ -95,6 +97,9 @@ class FileType:
     DPC = DpcHandler
     DPCI = DpciHandler
     DMA = DmaHandler
+
+    WTE = WteHandler
+    WTU = WtuHandler
 
     WAN = WanHandler
     WAT = WanHandler

@@ -75,7 +75,14 @@
         <BinPackFile idxfirst="1006"                type="WTU"                       name="%d.wtu"/>
         <BinPackFile idxfirst="1007" idxlast="1012" type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1013"                type="WTU"                       name="%d.wtu"/>
-        <BinPackFile idxfirst="1014" idxlast="1021" type="DBIN_WTE_WTU"              name="%d.wtewtu"/>
+        <BinPackFile idxfirst="1014"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1015"                type="WTU"                       name="%d.wtu"/>
+        <BinPackFile idxfirst="1016"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1017"                type="WTU"                       name="%d.wtu"/>
+        <BinPackFile idxfirst="1018"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1019"                type="WTU"                       name="%d.wtu"/>
+        <BinPackFile idxfirst="1020"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1021"                type="WTU"                       name="%d.wtu"/>
         <BinPackFile idxfirst="1022"                type="DBIN_IMAGE_1022"           name="%d.img1022"/>
         <BinPackFile idxfirst="1023"                type="SIR0"                      name="%d.sir0"/>
         <BinPackFile idxfirst="1024" idxlast="1025" type="WTE"                       name="%d.wte"/>

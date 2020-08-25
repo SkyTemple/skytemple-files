@@ -17,6 +17,7 @@
 
 import os
 
+from PIL import Image
 from ndspy.rom import NintendoDSRom
 from skytemple_files.graphics.wte.handler import WteHandler
 
@@ -36,3 +37,19 @@ assert original.identifier == fake.identifier
 assert original.image_data == fake.image_data
 assert original.palette == fake.palette
 
+for fn in ['FONT/frame.wte', 'FONT/frame0.wte', 'FONT/frame1.wte',
+           'FONT/frame2.wte', 'FONT/frame3.wte', 'FONT/frame4.wte']:
+    fake = WteHandler.new(original.to_pil(), original.identifier)
+    original = WteHandler.deserialize(rom.getFileByName(fn))
+    new = WteHandler.new(Image.open(os.path.join(out_dir, 'frame_import.png')), original.identifier)
+    pal = new.palette
+    new.palette = original.palette
+    new.palette[0*16*3:1*16*3] = pal[0*16*3:1*16*3]
+    new.palette[1*16*3:2*16*3] = pal[0*16*3:1*16*3]
+    new.palette[2*16*3:3*16*3] = pal[0*16*3:1*16*3]
+    new.palette[3*16*3:4*16*3] = pal[0*16*3:1*16*3]
+    new.to_pil().save(os.path.join(out_dir, fn.replace('/', '_') + '.mod.png'))
+
+    rom.setFileByName(fn, WteHandler.serialize(new))
+
+rom.saveToFile(os.path.join(out_dir, 'wte_test.nds'))

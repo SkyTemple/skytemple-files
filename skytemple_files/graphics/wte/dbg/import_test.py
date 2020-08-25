@@ -18,26 +18,21 @@
 import os
 
 from ndspy.rom import NintendoDSRom
-
-from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_files_from_rom_with_extension, get_ppmdu_config_for_rom
-from skytemple_files.graphics.wtu.handler import WtuHandler
+from skytemple_files.graphics.wte.handler import WteHandler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
+os.makedirs(out_dir, exist_ok=True)
 
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
-config = get_ppmdu_config_for_rom(rom)
-dungeon_bin = FileType.DUNGEON_BIN.deserialize(rom.getFileByName('DUNGEON/dungeon.bin'), config)
 
-for fn in get_files_from_rom_with_extension(rom, 'wtu'):
-    print(fn)
-    wtu = WtuHandler.deserialize(rom.getFileByName(fn))
-    print(wtu)
-    assert wtu == WtuHandler.deserialize(WtuHandler.serialize(wtu))
+original = WteHandler.deserialize(rom.getFileByName('FONT/frame.wte'))
+fake = WteHandler.new(original.to_pil(), original.identifier)
 
-for i, file in enumerate(dungeon_bin):
-    fn = dungeon_bin.get_filename(i)
-    if fn.endswith('.wtu'):
-        print(f'dungeon.bin:{fn}')
-        print(file)
-        assert file == WtuHandler.deserialize(WtuHandler.serialize(file))
+original.to_pil().save(os.path.join(out_dir, 'original.png'))
+fake.to_pil().save(os.path.join(out_dir, 'fake.png'))
+
+assert original.identifier == fake.identifier
+assert original.image_data == fake.image_data
+assert original.palette == fake.palette
+

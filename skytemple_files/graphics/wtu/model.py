@@ -26,6 +26,14 @@ class WtuEntry(AutoString):
         self.unk2 = unk2
         self.unk3 = unk3
 
+    def __eq__(self, other):
+        if not isinstance(other, WtuEntry):
+            return False
+        return self.unk0 == other.unk0 and \
+               self.unk1 == other.unk1 and \
+               self.unk2 == other.unk2 and \
+               self.unk3 == other.unk3
+
 
 class Wtu(AutoString):
     def __init__(self, data: bytes):
@@ -37,7 +45,7 @@ class Wtu(AutoString):
         self.unkC = read_uintle(data, 0xC, 4)
 
         self.entries = []
-        for i in range(0, number_entries * WTU_ENTRY_LEN, WTU_ENTRY_LEN):
+        for i in range(0x10, 0x10 + number_entries * WTU_ENTRY_LEN, WTU_ENTRY_LEN):
             self.entries.append(WtuEntry(
                 read_uintle(data, i + 0x00, 2),
                 read_uintle(data, i + 0x02, 2),
@@ -48,3 +56,10 @@ class Wtu(AutoString):
     @staticmethod
     def matches(data, header_pnt):
         return data[header_pnt:header_pnt+len(MAGIC_NUMBER)] == MAGIC_NUMBER
+
+    def __eq__(self, other):
+        if not isinstance(other, Wtu):
+            return False
+        return self.identifier == other.identifier and \
+               self.unkC == other.unkC and \
+               self.entries == other.entries

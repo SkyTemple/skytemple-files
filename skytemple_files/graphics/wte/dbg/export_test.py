@@ -36,6 +36,7 @@ for fn in get_files_from_rom_with_extension(rom, 'wte'):
     wte = WteHandler.deserialize(rom.getFileByName(fn))
     wte.to_pil().save(os.path.join(out_dir, fn.replace('/', '_') + '.png'))
     print(wte)
+    assert wte == WteHandler.deserialize(WteHandler.serialize(wte))
 
 for i, file in enumerate(dungeon_bin):
     fn = dungeon_bin.get_filename(i)
@@ -43,3 +44,4 @@ for i, file in enumerate(dungeon_bin):
         print(f'dungeon.bin:{fn}')
         file.to_pil().save(os.path.join(out_dir, 'dungeon.bin__' + fn.replace('/', '_') + '.png'))
         print(file)
+        assert file == WteHandler.deserialize(WteHandler.serialize(file))

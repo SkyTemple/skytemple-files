@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from PIL import Image
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.wte.model import Wte
@@ -25,6 +26,7 @@ class WteHandler(DataHandler[Wte]):
     Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
+
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> 'Wte':
         from skytemple_files.common.types.file_types import FileType
@@ -34,6 +36,10 @@ class WteHandler(DataHandler[Wte]):
     def serialize(cls, data: 'Wte', **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
+
+    @classmethod
+    def new(cls, img: Image.Image, identifier: int) -> Wte:
+        return Wte.from_pil(img, identifier)
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'Wte':

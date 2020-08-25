@@ -27,9 +27,21 @@ logger = logging.getLogger(__name__)
 
 
 class Wte(Sir0Serializable, AutoString):
-    def __init__(self, data: bytes, header_pnt: int):
+    def __init__(self, data: Optional[bytes], header_pnt: int):
+        """Construts a Wte model. Setting data to None will initialize an empty model."""
+        if data is None:
+            self.identifier = -1
+            self.unk10 = 0
+            self.width = 0
+            self.height = 0
+            self.image_data = bytes()
+            self.palette = []
+            self.is_weird: Optional[bool] = None
+            return
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
+
         assert self.matches(data, header_pnt), "The Wte file must begin with the WTE magic number"
         pointer_image = read_uintle(data, header_pnt + 0x4, 4)
         image_length = read_uintle(data, header_pnt + 0x8, 4)
@@ -44,8 +56,8 @@ class Wte(Sir0Serializable, AutoString):
         self.image_data = self._read_image(data, pointer_image, image_length)
         self.palette = self._read_palette(data, pointer_pal, number_pal_colors)
 
-        # This flag indicates whether or not the image data in this Wte file is weird (0x0 size
-        # or image data outside dimensions).
+        # This flag indicates whether or not the image data in this Wte file is weird (0x0 size,
+        # image data outside dimensions, empty palette).
         # It is set after calling to_pil!
         # If it's weird, a warning in the UI about changing it should be displayed.
         self.is_weird: Optional[bool] = None
@@ -80,12 +92,28 @@ class Wte(Sir0Serializable, AutoString):
                 break  # ???
             pil_img_data[i] = px
         im = Image.frombuffer('P', (self.width, self.height), pil_img_data, 'raw', 'P', 0, 1)
+        if len(self.palette) <= 0:
+            self.is_weird = True
         im.putpalette(self.palette)
         return im
 
     @classmethod
-    def from_pil(cls, img: Image.Image):
-        raise NotImplementedError()  # todo
+    def from_pil(cls, img: Image.Image, identifier: int) -> 'Wte':
+        if img.mode != 'P':
+            raise ValueError('Can not convert PIL image to WTE: Must be indexed image (=using a palette)')
+
+        wte = cls(None, 0)
+        wte.identifier = identifier
+        wte.width = img.width
+        wte.height = img.height
+
+        raw_pil_image = img.tobytes('raw', 'P')
+        wte.image_data = bytearray(int(wte.width * wte.height / 2))
+        for i, (pix0, pix1) in enumerate(chunks(raw_pil_image, 2)):
+            wte.image_data[i] = pix0 + (pix1 << 4)
+
+        wte.palette = [x for x in memoryview(img.palette.palette)]
+        return wte
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:
         return data[pointer_image:pointer_image+image_length]
@@ -99,3 +127,13 @@ class Wte(Sir0Serializable, AutoString):
             pal.append(b)
             assert x == 0x80
         return pal
+
+    def __eq__(self, other):
+        if not isinstance(other, Wte):
+            return False
+        return self.identifier == other.identifier and \
+            self.unk10 == other.unk10 and \
+            self.width == other.width and \
+            self.height == other.height and \
+            self.image_data == other.image_data and \
+            self.palette == other.palette

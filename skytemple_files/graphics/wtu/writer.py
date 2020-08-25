@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.wtu.model import Wtu
+from skytemple_files.graphics.wtu.model import Wtu, MAGIC_NUMBER, WTU_ENTRY_LEN
 
 
 class WtuWriter:
@@ -25,4 +25,16 @@ class WtuWriter:
         self.model = model
 
     def write(self) -> bytes:
-        raise NotImplementedError()  # todo
+        buffer = bytearray(16 + 8 * len(self.model.entries))
+        buffer[0:4] = MAGIC_NUMBER
+        write_uintle(buffer, len(self.model.entries), 0x4, 4)
+        write_uintle(buffer, self.model.identifier, 0x8, 4)
+        write_uintle(buffer, self.model.unkC, 0xC, 4)
+
+        for i, e in enumerate(self.model.entries):
+            write_uintle(buffer, e.unk0, 0x10 + (i * WTU_ENTRY_LEN) + 0x00, 2)
+            write_uintle(buffer, e.unk1, 0x10 + (i * WTU_ENTRY_LEN) + 0x02, 2)
+            write_uintle(buffer, e.unk2, 0x10 + (i * WTU_ENTRY_LEN) + 0x04, 2)
+            write_uintle(buffer, e.unk3, 0x10 + (i * WTU_ENTRY_LEN) + 0x06, 2)
+
+        return buffer

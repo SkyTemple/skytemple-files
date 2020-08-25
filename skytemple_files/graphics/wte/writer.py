@@ -18,7 +18,7 @@
 from typing import Optional
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.wte.model import Wte
+from skytemple_files.graphics.wte.model import Wte, MAGIC_NUMBER
 
 
 class WteWriter:
@@ -26,4 +26,46 @@ class WteWriter:
         self.model = model
 
     def write(self) -> Tuple[bytes, List[int], Optional[int]]:
-        raise NotImplementedError()  # todo
+        pointer_offsets = []
+        buffer = bytearray()
+
+        # Image data
+        image_pointer = len(buffer)
+        buffer += self.model.image_data
+        # Padding
+        if len(buffer) % 16 != 0:
+            buffer += bytes(0 for _ in range(0, 16 - (len(buffer) % 16)))
+
+        # Palette
+        palette_pointer = len(buffer)
+        palette_buffer = bytearray(4 * len(self.model.palette))
+        j = 0
+        for i, p in enumerate(self.model.palette):
+            write_uintle(palette_buffer, p, j)
+            j += 1
+            if i % 3 == 2:
+                # Insert the fourth color
+                write_uintle(palette_buffer, 0x80, j)
+                j += 1
+
+        buffer += palette_buffer
+
+        # Header
+        header = bytearray(0x20)
+        header[0:4] = MAGIC_NUMBER
+        pointer_offsets.append(len(buffer))
+        write_uintle(header, image_pointer, 0x04, 4)
+        write_uintle(header, len(self.model.image_data), 0x08, 4)
+        write_uintle(header, self.model.identifier, 0x0C, 4)
+        write_uintle(header, self.model.unk10, 0x10, 4)
+        write_uintle(header, self.model.width, 0x14, 2)
+        write_uintle(header, self.model.height, 0x16, 2)
+        pointer_offsets.append(len(buffer) + 0x18)
+        write_uintle(header, palette_pointer, 0x18, 4)
+        write_uintle(header, int(len(self.model.palette) / 3), 0x1C, 4)
+        write_uintle(header, 0, 0x20, 4)
+
+        header_pointer = len(buffer)
+        buffer += header
+
+        return buffer, pointer_offsets, header_pointer

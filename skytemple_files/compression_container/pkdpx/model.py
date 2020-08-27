@@ -62,5 +62,5 @@ class Pkdpx:
         new_container.compression_flags = flags
         new_container.length_decompressed = len(data)
         new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x12
+        new_container.length_compressed = len(px_data) + 0x14
         return new_container

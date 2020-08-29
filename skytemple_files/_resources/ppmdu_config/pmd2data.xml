@@ -275,7 +275,7 @@
       </Languages>
       <StringBlocks>
         <StringBlock name="Explorer Ranks Names"                   beg="374"  end="387"/>
-        <StringBlock name="Default Team Names"                     beg="562"  end="567"/>
+        <StringBlock name="Default Team Names"                     beg="561"  end="567"/>
         <StringBlock name="Job Debriefing Related Strings"         beg="606"  end="672"/>
         <StringBlock name="Member Joined Menu"                     beg="676"  end="682"/>
         <StringBlock name="Some Item Menu Strings"                 beg="682"  end="696"/>
@@ -411,7 +411,7 @@
       </Languages>
       <StringBlocks>
         <StringBlock name="Explorer Ranks Names"                   beg="374"  end="387"/>
-        <StringBlock name="Default Team Names"                     beg="562"  end="567"/>
+        <StringBlock name="Default Team Names"                     beg="561"  end="567"/>
         <StringBlock name="Job Debriefing Related Strings"         beg="606"  end="672"/>
         <StringBlock name="Member Joined Menu"                     beg="676"  end="682"/>
         <StringBlock name="Some Item Menu Strings"                 beg="682"  end="696"/>

@@ -17,7 +17,10 @@
 import logging
 from typing import Optional
 
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data

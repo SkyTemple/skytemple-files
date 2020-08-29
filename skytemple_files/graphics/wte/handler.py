@@ -14,7 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from PIL import Image
+try:
+    from PIL import Image
+except ImportError:
+    from pil import Image
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.wte.model import Wte

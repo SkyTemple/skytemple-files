@@ -97,23 +97,20 @@ class Wte(Sir0Serializable, AutoString):
         im.putpalette(self.palette)
         return im
 
-    @classmethod
-    def from_pil(cls, img: Image.Image, identifier: int) -> 'Wte':
+    def from_pil(self, img: Image.Image) -> 'Wte':
         if img.mode != 'P':
             raise ValueError('Can not convert PIL image to WTE: Must be indexed image (=using a palette)')
 
-        wte = cls(None, 0)
-        wte.identifier = identifier
-        wte.width = img.width
-        wte.height = img.height
+        self.width = img.width
+        self.height = img.height
 
         raw_pil_image = img.tobytes('raw', 'P')
-        wte.image_data = bytearray(int(wte.width * wte.height / 2))
+        self.image_data = bytearray(int(self.width * self.height / 2))
         for i, (pix0, pix1) in enumerate(chunks(raw_pil_image, 2)):
-            wte.image_data[i] = pix0 + (pix1 << 4)
+            self.image_data[i] = pix0 + (pix1 << 4)
 
-        wte.palette = [x for x in memoryview(img.palette.palette)]
-        return wte
+        self.palette = [x for x in memoryview(img.palette.palette)]
+        return self
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:
         return data[pointer_image:pointer_image+image_length]

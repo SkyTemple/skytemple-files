@@ -49,6 +49,14 @@ class DungeonBinPack(BinPack):
         fdef = self.files_def.get(index)
         return fdef.name.replace('%d', str(index)).replace('%i', str(index - fdef.idxfirst))
 
+    def get_files_with_ext(self, ext):
+        files = []
+        for idx in range(0, len(self)):
+            fn = self.get_filename(idx)
+            if fn.endswith('.' + ext):
+                files.append(fn)
+        return files
+
     def serialize_subfiles(self):
         """Serializes all loaded modules and updates self._files again."""
         for idx, model in self._loaded_models.items():

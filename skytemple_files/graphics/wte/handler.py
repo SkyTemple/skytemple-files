@@ -39,7 +39,10 @@ class WteHandler(DataHandler[Wte]):
 
     @classmethod
     def new(cls, img: Image.Image, identifier: int) -> Wte:
-        return Wte.from_pil(img, identifier)
+        wte = Wte(None, 0)
+        wte.from_pil(img)
+        wte.identifier = identifier
+        return wte
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'Wte':

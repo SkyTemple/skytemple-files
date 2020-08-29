@@ -421,7 +421,7 @@ class Pmd2ScriptData(AutoString):
         return {o.id: o for o in self.level_list}
 
     @property
-    def level_list__by_name(self):
+    def level_list__by_name(self) -> Dict[str, Pmd2ScriptLevel]:
         return {o.name: o for o in self.level_list}
 
     @property

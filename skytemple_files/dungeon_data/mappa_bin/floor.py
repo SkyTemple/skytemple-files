@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 
 class StubMappaFloor:
-    """A mappa floor that only refernces an index for all of it's data."""
+    """A mappa floor that only referneces an index for all of it's data."""
     def __init__(
         self, layout_idx: int, monsters_idx: int, traps_idx: int, floor_items_idx: int,
         shop_items_idx: int, monster_house_items_idx: int, buried_items_idx: int,
@@ -134,9 +134,8 @@ class MappaFloor(AutoString, XmlSerializable):
 
     @staticmethod
     def _from_cache(read, pnt, load_callback):
-        if pnt not in read.read_cache:
-            read.read_cache[pnt] = load_callback(pnt)
-        return read.read_cache[pnt]
+        # TODO: Caching needs a deep copy
+        return load_callback(pnt)
 
     def to_xml(self) -> Element:
         floor_xml = Element(XML_FLOOR)

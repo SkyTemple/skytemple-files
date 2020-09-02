@@ -19,7 +19,11 @@ from itertools import chain
 from typing import Optional
 
 from skytemple_files.common.util import *
+from skytemple_files.dungeon_data.mappa_bin.item_list import GUARANTEED
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
+from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapType
+
+HIGHEST_MAX_WEIGHT = 10000
 
 
 class MappaBinWriter:
@@ -61,6 +65,13 @@ class MappaBinWriter:
         monster_data_pointer = []
         for i, monster_list in enumerate(monster_lists):
             monster_data_pointer.append(monster_data_start + monster_data_cursor)
+            highest_observed_weight = max(monster.weight for monster in monster_list)
+            highest_observed_weight2 = max(monster.weight2 for monster in monster_list)
+
+            if highest_observed_weight != HIGHEST_MAX_WEIGHT or highest_observed_weight2 != HIGHEST_MAX_WEIGHT:
+                raise ValueError("Error saving Pokémon spawn data, they do not add up to 100% "
+                                 "(spawn weight max is not 10000).")
+
             single_monster_list_data = bytes(chain.from_iterable(monster.to_mappa() for monster in monster_list)) + bytes(8)
             len_single = len(single_monster_list_data)
             monster_data[monster_data_cursor:monster_data_cursor+len_single] = single_monster_list_data
@@ -81,6 +92,12 @@ class MappaBinWriter:
         for trap_list in trap_lists:
             trap_data_pointer.append(trap_data_start + trap_data_cursor)
             single_trap_list_data = trap_list.to_mappa()
+
+            max_trap_weight = max(weight for weight in trap_list.weights.values())
+            if max_trap_weight != HIGHEST_MAX_WEIGHT:
+                raise ValueError("Error saving trap spawn data, they do not add up to 100% "
+                                 "(spawn weight max is not 10000).")
+
             len_single = len(single_trap_list_data)
             assert len_single == 50
             trap_data[trap_data_cursor:trap_data_cursor+len_single] = single_trap_list_data
@@ -105,6 +122,13 @@ class MappaBinWriter:
         item_data_pointer = []
         for item_list in item_lists:
             item_data_pointer.append(item_data_start + item_data_cursor)
+
+            max_item_weight = max(i for i in item_list.items.values() if i != GUARANTEED)
+            max_category_weight = max(i for i in item_list.categories.values() if i != GUARANTEED)
+            if max_item_weight != HIGHEST_MAX_WEIGHT or max_category_weight != HIGHEST_MAX_WEIGHT:
+                raise ValueError("Error saving item spawn data, they do not add up to 100% "
+                                 "(spawn weight max is not 10000).")
+
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
             assert item_data_cursor + len_single < len(item_data)

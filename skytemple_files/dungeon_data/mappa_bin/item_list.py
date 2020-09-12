@@ -38,22 +38,22 @@ Probability = int
 
 # TODO: Put this information into ppmdu config?
 class MappaItemCategory(Enum):
-    THROWN_PIERCE = 0, 1, 6
-    THROWN_ROCK = 1, 7, 4
-    BERRIES_SEEDS_VITAMINS = 2, 69, 39
-    FOODS_GUMMIES = 3, 109, 28
-    HOLD = 4, 13, 55
-    TMS = 5, 188, 105
-    POKE = 6, 183, 1
-    UNK7 = 7, None, None
-    OTHER = 8, 139, 43
-    ORBS = 9, 301, 58
-    LINK_BOX = 0xA, 362, 1
-    UNKB = 0xB, None, None
-    UNKC = 0xC, None, None
-    UNKD = 0xD, None, None
-    UNKE = 0xE, None, None
-    UNKF = 0xF, None, None
+    THROWN_PIERCE = 0, 1, 6, [], [9]
+    THROWN_ROCK = 1, 7, 4, [9], []
+    BERRIES_SEEDS_VITAMINS = 2, 69, 40, [], [116, 117, 118]
+    FOODS_GUMMIES = 3, 109, 29, [116, 117, 118], []
+    HOLD = 4, 13, 56, [], []
+    TMS = 5, 188, 105, [], []
+    POKE = 6, 183, 1, [], []
+    UNK7 = 7, None, None, [], []
+    OTHER = 8, 139, 44, [], [186]
+    ORBS = 9, 301, 59, [], []
+    LINK_BOX = 0xA, 362, 1, [], []
+    UNKB = 0xB, None, None, [], []
+    UNKC = 0xC, None, None, [], []
+    UNKD = 0xD, None, None, [], []
+    UNKE = 0xE, None, None, [], []
+    UNKF = 0xF, None, None, [], []
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -61,9 +61,26 @@ class MappaItemCategory(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, first_item_id: Optional[int], number_of_items: Optional[int]):
+    def __init__(
+            self, _: str, first_item_id: Optional[int], number_of_items: Optional[int],
+            excluded_item_ids: List[int], extra_item_ids: List[int]
+    ):
         self.first_item_id = first_item_id
         self.number_of_items = number_of_items
+        self.excluded_item_ids = excluded_item_ids
+        self.extra_item_ids = extra_item_ids
+
+    def is_item_in_cat(self, item_id: int):
+        return item_id in self.extra_item_ids or (
+                self.first_item_id <= item_id < self.first_item_id + self.number_of_items
+                and item_id not in self.excluded_item_ids
+        )
+
+    def item_ids(self):
+        return [
+            x for x in range(self.first_item_id, self.first_item_id + self.number_of_items)
+            if x not in self.excluded_item_ids
+        ] + self.extra_item_ids
 
 
 class MappaItemList(AutoString, XmlSerializable):

@@ -349,6 +349,7 @@ def randomize_items():
     for i, cat in enumerate(cats_as_list):
         categories[cat] = weights[i]
 
+        # TODO: Work with .item_ids() instead, since there are some exceptions (see foods/vitamins).
         if cat.number_of_items is not None:
             allowed_cat_item_ids = [x for x in ALLOWED_ITEM_IDS if x in
                                     range(cat.first_item_id, cat.first_item_id + cat.number_of_items)]

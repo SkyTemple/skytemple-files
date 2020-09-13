@@ -51,14 +51,14 @@ class DungeonRestrictionDirection(Enum):
 
 class DungeonRestriction(AutoString):
     def __init__(
-            self, direction: DungeonRestrictionDirection, unknown_defeat_check: bool, enemies_grant_exp: bool,
+            self, direction: DungeonRestrictionDirection, enemies_evolve_when_team_member_koed: bool, enemies_grant_exp: bool,
             recruiting_allowed: bool, level_reset: bool, money_allowed: bool, leader_can_be_changed: bool,
             dont_save_before_entering: bool, iq_skills_disabled: bool, traps_remain_invisible_on_attack: bool,
             enemies_can_drop_chests: bool, max_rescue_attempts: int, max_items_allowed: int, max_party_members: int,
             null7: int, turn_limit: int, nullA: int, nullB: int
     ):
         self.direction = direction
-        self.unknown_defeat_check = unknown_defeat_check
+        self.enemies_evolve_when_team_member_koed = enemies_evolve_when_team_member_koed
         self.enemies_grant_exp = enemies_grant_exp
         self.recruiting_allowed = recruiting_allowed
         self.level_reset = level_reset
@@ -80,7 +80,7 @@ class DungeonRestriction(AutoString):
     def from_bytes(cls, b: bytes) -> 'DungeonRestriction':
         bitfield0 = read_uintle(b, 0)
         bitfield1 = read_uintle(b, 1)
-        dir_bool, unknown_defeat_check, enemies_grant_exp, recruiting_allowed, \
+        dir_bool, enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed, \
             level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering = \
             (bool(bitfield0 >> i & 1) for i in range(8))
         iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests = \
@@ -88,7 +88,7 @@ class DungeonRestriction(AutoString):
         assert read_uintle(b, 2) == 0
         assert read_uintle(b, 3) == 0
         return cls(
-            DungeonRestrictionDirection(int(dir_bool)), unknown_defeat_check, enemies_grant_exp, recruiting_allowed,
+            DungeonRestrictionDirection(int(dir_bool)), enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed,
             level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering,
             iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests,
             read_sintle(b, 4), read_sintle(b, 5), read_sintle(b, 6),
@@ -98,7 +98,7 @@ class DungeonRestriction(AutoString):
     def to_bytes(self) -> bytes:
         bitfield0 = generate_bitfield((self.dont_save_before_entering, self.leader_can_be_changed, self.money_allowed,
                                        self.level_reset, self.recruiting_allowed, self.enemies_grant_exp,
-                                       self.unknown_defeat_check, bool(self.direction.value)))
+                                       self.enemies_evolve_when_team_member_koed, bool(self.direction.value)))
         bitfield1 = generate_bitfield((False, False, False, False, False,
                                       self.enemies_can_drop_chests, self.traps_remain_invisible_on_attack,
                                       self.iq_skills_disabled))
@@ -122,7 +122,7 @@ class DungeonRestriction(AutoString):
         if not isinstance(other, DungeonRestriction):
             return False
         return self.direction == other.direction and \
-               self.unknown_defeat_check == other.unknown_defeat_check and \
+               self.enemies_evolve_when_team_member_koed == other.enemies_evolve_when_team_member_koed and \
                self.enemies_grant_exp == other.enemies_grant_exp and \
                self.recruiting_allowed == other.recruiting_allowed and \
                self.level_reset == other.level_reset and \

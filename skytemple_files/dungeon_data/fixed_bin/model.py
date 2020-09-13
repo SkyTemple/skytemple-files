@@ -14,18 +14,184 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional
+from enum import Enum, auto
+from typing import Optional, Union
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+END_OF_LIST_PADDING = b'\xaa\xaa\xaa\xaa'
+
+
+class FloorType(Enum):
+    FLOOR = auto()
+    WALL = auto()
+    SECONDARY = auto()
+    FLOOR_OR_WALL = auto()
+
+
+class RoomType(Enum):
+    ROOM = auto()
+    HALLWAY = auto()
+
+
+class TileRuleType(Enum):
+    FLOOR_ROOM                  = 0x00, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                ''
+    WALL_HALLWAY               = 0x01, 'Wall, Hallway; Absolute Mover', \
+                                 FloorType.WALL, RoomType.HALLWAY, False, True, \
+                                 ''
+    WALL_HALLWAY_IMPASSABLE    = 0x02, 'Wall, Hallway; Impassable', \
+                                 FloorType.WALL, RoomType.HALLWAY, True, False, \
+                                 ''
+    WALL_HALLWAY_DEFAULT       = 0x03, 'Wall, Hallway', \
+                                 FloorType.WALL, RoomType.HALLWAY, False, False, \
+                                 ''
+    LEADER_SPAWN               = 0x04, 'Leader Spawn Floor', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    SECONDARY_ROOM             = 0x05, 'Secondary, Room', \
+                                 FloorType.SECONDARY, RoomType.ROOM, False, False, \
+                                 ''
+    SECONDARY_HALLWAY_VOID     = 0x06, 'Chasm, Hallway', \
+                                 FloorType.SECONDARY, RoomType.HALLWAY, False, False, \
+                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
+    SECONDARY_HALLWAY_VOID_ALL = 0x07, 'Chasm, Hallway; All Chasm', \
+                                 FloorType.SECONDARY, RoomType.HALLWAY, True, False, \
+                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!). ' \
+                                 'All tiles outside of defined room are made the tileset\'s defined secondary terrain.'
+    WARP_ZONE                  = 0x08, 'Warp Zone, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 'Creates a Warp Zone.'
+    FLOOR_HALLWAY              = 0x09, 'Floor, Hallway', \
+                                 FloorType.FLOOR, RoomType.HALLWAY, False, False, \
+                                 ''
+    SECONDARY_HALLWAY_VOID_IMPASSABLE = 0x0A, 'Chasm, Hallway; Impassable', \
+                                 FloorType.SECONDARY, RoomType.HALLWAY, True, False, \
+                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
+    FLOOR_HALLWAY_FLAG_0A      = 0x0B, 'Floor, Hallway; Flag 0xA', \
+                                 FloorType.FLOOR, RoomType.HALLWAY, False, False, \
+                                 'Tile flag 0xA is set to 1 (Unknown what this does).'
+    FL_WA_ROOM_FLAG_0C         = 0x0C, 'Floor or Wall, Room; Key Door (0xC)', \
+                                 FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
+                                 'Tile flag 0xC is set to 1 and spawns a key Door. ' \
+                                 'Whether Wall or Floor is used depends on an unknown factor.'
+    FL_WA_ROOM_FLAG_0D         = 0x0D, 'Floor or Wall, Room; Key Door (0xD)', \
+                                 FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
+                                 'Tile flag 0xD is set to 1 and spawns a key Door. ' \
+                                 'Whether Wall or Floor is used depends on an unknown factor.'
+    WALL_HALLWAY_IMPASSABLE_2  = 0x0E, 'Wall, Hallway; Impassable', \
+                                 FloorType.WALL, RoomType.HALLWAY, True, False, \
+                                 ''
+    WALL_HALLWAY_DEFAULT_2     = 0x0F, 'Wall, Hallway', \
+                                 FloorType.WALL, RoomType.HALLWAY, False, False, \
+                                 ''
+    FLOOR_ROOM_60              = 0x60, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    FLOOR_ROOM_61              = 0x61, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    FLOOR_ROOM_62              = 0x62, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    FLOOR_ROOM_63              = 0x63, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    WARP_ZONE_2                = 0x6B, 'Warp Zone, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 'Creates a Warp Zone.'
+    FLOOR_ROOM_64              = 0x6C, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+    FLOOR_ROOM_65              = 0x6D, 'Floor, Room', \
+                                 FloorType.FLOOR, RoomType.ROOM, False, False, \
+                                 ''
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, explanation: str, floor_type: FloorType, room_type: RoomType,
+            impassable: bool, absolute_mover: bool, notes: str
+    ):
+        self.explanation = explanation
+        self.floor_type = floor_type
+        self.room_type = room_type
+        self.impassable = impassable
+        self.absolute_mover = absolute_mover
+        self.notes = notes
+
+    @classmethod
+    def has_value(cls, value):
+        return value in cls._value2member_map_
+
+    def __str__(self):
+        return f'TileRule<"{self.explanation}">'
+
+    def __repr__(self):
+        return str(self)
+
+
+class TileRule(AutoString):
+    def __init__(self, tr_type: TileRuleType, parameter: int):
+        self.tr_type = tr_type
+        self.parameter = parameter
+
+
+class EntityRule(AutoString):
+    def __init__(self, entity_rule_id: int, parameter: int):
+        self.entity_rule_id = entity_rule_id
+        self.parameter = parameter
+
+
+FixedFloorActionRule = Union[TileRule, EntityRule]
+
+
+class FixedFloor:
+    def __init__(self, data: bytes, floor_pointer: int):
+        self.width = read_uintle(data, floor_pointer, 2)
+        self.height = read_uintle(data, floor_pointer + 2, 2)
+        self.unk4 = read_uintle(data, floor_pointer + 4, 2)
+        self.actions = self.read_actions(data, floor_pointer + 6, self.width * self.height)
+
+    @classmethod
+    def read_actions(cls, data: bytes, action_list_start: int, max_actions: int) -> List[FixedFloorActionRule]:
+        cursor = action_list_start
+        actions = []
+        while len(actions) < max_actions:
+            action, repeat_times = cls._read_action(data, cursor)
+            cursor += 4
+            actions += [action] * (repeat_times + 1)
+        assert len(actions) == max_actions, "The number of actions encoded does not match the width & height of the map."
+        return actions
+
+    @classmethod
+    def _read_action(cls, data: bytes, action_pointer: int) -> Tuple[FixedFloorActionRule, int]:
+        action_value = read_uintle(data, action_pointer, 2)
+        action_id = action_value & 0xFFF
+        parameter = action_value >> 0xC
+
+        repeat_times = read_uintle(data, action_pointer + 2, 2)
+        if TileRuleType.has_value(action_id):
+            return TileRule(TileRuleType(action_id), parameter), repeat_times
+        return EntityRule(action_id - 16, parameter), repeat_times
 
 
 class FixedBin(Sir0Serializable):
-
-    def __init__(self, data: bytes, header_start: int):
+    def __init__(self, data: bytes, floor_list_offset: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
+        cursor = floor_list_offset
+        self.fixed_floors = []
+        while data[cursor:cursor+4] != END_OF_LIST_PADDING:
+            self.fixed_floors.append(FixedFloor(data, read_uintle(data, cursor, 4)))
+            cursor += 4
+            assert cursor < len(data)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.fixed_bin.writer import FixedBinWriter

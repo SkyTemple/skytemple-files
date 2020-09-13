@@ -83,6 +83,7 @@ class MappaMonster(AutoString, XmlSerializable):
     def __eq__(self, other):
         if not isinstance(other, MappaMonster):
             return False
-        return self.level == other.level \
+        return self.md_index == other.md_index \
+               and self.level == other.level \
                and self.weight == other.weight \
                and self.weight2 == other.weight2

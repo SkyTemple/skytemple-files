@@ -211,14 +211,12 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     from skytemple_files.common.types.file_types import FileType
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
-    if pil.mode != 'P':
+    if pil.width != img_dim or pil.height != img_dim:
+        raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
+    if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
         # todo: the transparent color is just some random color, we don't actually want transparency...
         converter = ImageConverter(pil, img_dim, img_dim, (123, 156, 145))
         pil = converter.convert(num_palettes=1, colors_per_palette=16)
-    if pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
-        raise ValueError('Can not convert PIL image to Kao: Palette must contain 16 RGB colors.')
-    if pil.width != img_dim or pil.height != img_dim:
-        raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
     new_palette = bytearray(pil.palette.palette)
 
     # We have to cut the image back into this annoying tiling format :(

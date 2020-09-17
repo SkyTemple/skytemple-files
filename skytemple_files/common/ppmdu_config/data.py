@@ -18,7 +18,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Dict
+from typing import List, Dict, Union, Pattern
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
@@ -159,8 +159,28 @@ class Pmd2Patch(AutoString):
         self.open_bins = open_bins
 
 
+class Pmd2PatchStringReplacementGame(AutoString):
+    def __init__(self, game_id: str, replace: str):
+        self.game_id = game_id
+        self.replace = replace
+
+
+class Pmd2PatchStringReplacement(AutoString):
+    def __init__(self, filename: str, regexp: Pattern, games: List[Pmd2PatchStringReplacementGame]):
+        self.filename = filename
+        self.regexp = regexp
+        self.games = games
+
+
+class Pmd2SimplePatch(AutoString):
+    def __init__(self, id: str, includes: List[Pmd2PatchInclude], string_replacements: List[Pmd2PatchStringReplacement]):
+        self.id = id
+        self.includes = includes
+        self.string_replacements = string_replacements
+
+
 class Pmd2AsmPatchesConstants(AutoString):
-    def __init__(self, loose_bin_files: List[Pmd2LooseBinFile], patch_dir: Pmd2PatchDir, patches: List[Pmd2Patch]):
+    def __init__(self, loose_bin_files: List[Pmd2LooseBinFile], patch_dir: Pmd2PatchDir, patches: List[Union[Pmd2Patch, Pmd2SimplePatch]]):
         self.loose_bin_files: Dict[str, Pmd2LooseBinFile] = {var.srcdata: var for var in loose_bin_files}
         self.patch_dir = patch_dir
         self.patches: Dict[str, Pmd2Patch] = {var.id: var for var in patches}

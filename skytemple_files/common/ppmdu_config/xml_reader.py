@@ -16,6 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
+import re
 from typing import Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
@@ -441,7 +442,10 @@ class Pmd2AsmPatchesConstantsXmlReader:
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
                         for e_node in e_game:
-                            patches.append(self._parse_patch(e_node))
+                            if e_node.tag == 'Patch':
+                                patches.append(self._parse_patch(e_node))
+                            if e_node.tag == 'SimplePatch':
+                                patches.append(self._parse_simple_patch(e_node))
         return Pmd2AsmPatchesConstants(
             loose_bin_files,
             patch_dir,
@@ -463,6 +467,27 @@ class Pmd2AsmPatchesConstantsXmlReader:
             e_patch.attrib['id'],
             includes,
             open_bins
+        )
+
+    def _parse_simple_patch(self, e_patch) -> Pmd2SimplePatch:
+        includes = []
+        string_replacements = []
+        for e_sub in e_patch:
+            if e_sub.tag == 'Include':
+                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
+            if e_sub.tag == 'Replace':
+                games = []
+                for e_game in e_sub:
+                    games.append(Pmd2PatchStringReplacementGame(
+                        e_game.attrib['id'], e_game.attrib['replace']
+                    ))
+                string_replacements.append(Pmd2PatchStringReplacement(
+                    e_sub.attrib['filename'], re.compile(e_sub.attrib['regexp']), games
+                ))
+        return Pmd2SimplePatch(
+            e_patch.attrib['id'],
+            includes,
+            string_replacements
         )
 
 

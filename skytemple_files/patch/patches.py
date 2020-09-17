@@ -32,6 +32,7 @@ from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
+from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -40,6 +41,7 @@ CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 class PatchType(Enum):
     ACTOR_AND_LEVEL_LIST_LOADER = ActorAndLevelListLoaderPatchHandler
     UNUSED_DUNGEON_CHANCE_PATCH = UnusedDungeonChancePatch
+    MOVE_SHORTCUTS = MoveShortcutsPatch
 
 
 class PatchPackageError(RuntimeError):
@@ -85,7 +87,7 @@ class Patcher:
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
         self._arm_patcher.apply(patch, self._config.binaries,
                                 os.path.join(self._patch_dirs[name], patch_dir_for_version),
-                                stub_path_for_version)
+                                stub_path_for_version, self._config.game_edition)
 
     def add_pkg(self, zip_path: str):
         """Loads a skypatch file. Raises PatchPackageError on error."""

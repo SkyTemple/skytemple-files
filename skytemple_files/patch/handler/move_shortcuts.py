@@ -24,7 +24,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
 OFFSET_EU = 0x158F0
-#OFFSET_US = 0x64024 todo
+OFFSET_US = 0x1587C
 
 
 class MoveShortcutsPatch(AbstractPatchHandler):
@@ -49,7 +49,7 @@ class MoveShortcutsPatch(AbstractPatchHandler):
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                raise NotImplementedError()  # todo
+                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
                 return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()

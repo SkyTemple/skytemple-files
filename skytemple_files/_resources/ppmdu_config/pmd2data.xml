@@ -91,6 +91,7 @@
         <Block name="SecondaryTerrains"  beg="0xA1AE8"  end="0xA1BB0"/>
         <Block name="MapMarkerPlacements" beg="0xA94D0" end="0xA9E80"/>
         <Block name="RankUpTable"        beg="0xA2B44" end="0xA2C14"/>
+        <Block name="MonsterSpriteData"  beg="0xA2D08" end="0xA31B8"/>
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
@@ -153,6 +154,7 @@
         <Block name="SecondaryTerrains"  beg="0xA206C" end="0xA2134"/>
         <Block name="MapMarkerPlacements" beg="0xA9D70" end="0xAA720"/>
         <Block name="RankUpTable"        beg="0xA30C8" end="0xA3198"/>
+        <Block name="MonsterSpriteData"  beg="0xA332C" end="0xA37DC"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>

@@ -314,7 +314,7 @@
         <StringBlock name="Battle Feedback Messages"               beg="3201"  end="3589"/>
         <StringBlock name="Misson Feedback"                        beg="3589"  end="3656"/>
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
-        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3887"/>
+        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
         <StringBlock name="Kirila Secret Bazaar Greeting"          beg="3889"  end="3890"/>
         <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>
@@ -449,7 +449,7 @@
         <StringBlock name="Battle Feedback Messages"               beg="3201"  end="3589"/>
         <StringBlock name="Misson Feedback"                        beg="3589"  end="3656"/>
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
-        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3887"/>
+        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
         <StringBlock name="Kirila Secret Bazaar Greeting"          beg="3889"  end="3890"/>
         <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>

@@ -22,7 +22,7 @@ def get_resources(file_exts):
 
 setup(
     name='skytemple-files',
-    version='0.1.0a9',
+    version='0.1.0a10',
     packages=find_packages(),
     package_data={'skytemple_files': get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md'])},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',
@@ -35,7 +35,7 @@ setup(
         'appdirs >= 1.4.0',
         'explorerscript >= 0.0.5',
         'skytemple-rust >= 0.0.1',
-        'tilequant >= 0.0.1',
+        'tilequant >= 0.2.0',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==6.2.1; sys_platform == "darwin"'
     ],

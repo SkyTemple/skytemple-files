@@ -24,9 +24,25 @@ from skytemple_files.dungeon_data.fixed_bin.model import FixedBin
 class FixedBinWriter:
     def __init__(self, model: FixedBin):
         self.model = model
-        self.data = None
-        self.bytes_written = 0
 
     def write(self) -> Tuple[bytes, List[int], Optional[int]]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
-        raise NotImplementedError()
+        fixed_floors = bytearray()
+        pointers = []
+        for floor in self.model.fixed_floors:
+            pointers.append(len(fixed_floors))
+            fixed_floors += floor.to_bytes()
+
+        # Padding
+        if len(fixed_floors) % 4 != 0:
+            fixed_floors += bytes(0xAA for _ in range(0, 4 - (len(fixed_floors) % 4)))
+
+        header_buffer = bytearray((len(self.model.fixed_floors) + 1) * 4)
+        pointer_offsets = []
+        i = 0
+        for i, pointer in enumerate(pointers):
+            pointer_offsets.append(len(fixed_floors) + i * 4)
+            write_uintle(header_buffer, pointer, i * 4, 4)
+        write_uintle(header_buffer, 0xAAAAAAAA, (i + 1) * 4, 4)
+
+        return fixed_floors + header_buffer, pointer_offsets, len(fixed_floors)

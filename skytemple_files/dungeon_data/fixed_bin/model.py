@@ -14,9 +14,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import Optional, Union
 
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -137,59 +139,97 @@ class TileRuleType(Enum):
         return str(self)
 
 
-class TileRule(AutoString):
-    def __init__(self, tr_type: TileRuleType, parameter: int):
+class FixedFloorActionRule(ABC, AutoString):
+    def __init__(self, direction: Optional[Pmd2ScriptDirection]):
+        self.direction = direction
+
+    @abstractmethod
+    def _get_action_id(self):
+        pass
+
+    def __int__(self):
+        return (self._get_action_id() & 0xFFF) + ((self.direction.ssa_id if self.direction is not None else 0) << 0xC)
+
+
+class TileRule(FixedFloorActionRule):
+    def __init__(self, tr_type: TileRuleType, direction: Optional[Pmd2ScriptDirection] = None):
+        super().__init__(direction)
         self.tr_type = tr_type
-        self.parameter = parameter
+
+    def _get_action_id(self):
+        return self.tr_type.value
 
 
-class EntityRule(AutoString):
-    def __init__(self, entity_rule_id: int, parameter: int):
+class EntityRule(FixedFloorActionRule):
+    def __init__(self, entity_rule_id: int, direction: Optional[Pmd2ScriptDirection] = None):
+        super().__init__(direction)
         self.entity_rule_id = entity_rule_id
-        self.parameter = parameter
 
-
-FixedFloorActionRule = Union[TileRule, EntityRule]
+    def _get_action_id(self):
+        return self.entity_rule_id + 16
 
 
 class FixedFloor:
-    def __init__(self, data: bytes, floor_pointer: int):
+    def __init__(self, data: bytes, floor_pointer: int, static_data: Pmd2Data):
         self.width = read_uintle(data, floor_pointer, 2)
         self.height = read_uintle(data, floor_pointer + 2, 2)
         self.unk4 = read_uintle(data, floor_pointer + 4, 2)
+        self.static_data = static_data
         self.actions = self.read_actions(data, floor_pointer + 6, self.width * self.height)
 
-    @classmethod
-    def read_actions(cls, data: bytes, action_list_start: int, max_actions: int) -> List[FixedFloorActionRule]:
+    def read_actions(self, data: bytes, action_list_start: int, max_actions: int) -> List[FixedFloorActionRule]:
         cursor = action_list_start
         actions = []
         while len(actions) < max_actions:
-            action, repeat_times = cls._read_action(data, cursor)
+            action, repeat_times = self._read_action(data, cursor)
             cursor += 4
             actions += [action] * (repeat_times + 1)
         assert len(actions) == max_actions, "The number of actions encoded does not match the width & height of the map."
         return actions
 
-    @classmethod
-    def _read_action(cls, data: bytes, action_pointer: int) -> Tuple[FixedFloorActionRule, int]:
+    def _read_action(self, data: bytes, action_pointer: int) -> Tuple[FixedFloorActionRule, int]:
         action_value = read_uintle(data, action_pointer, 2)
         action_id = action_value & 0xFFF
         parameter = action_value >> 0xC
+        direction = None
+        if parameter > 0:
+            direction = self.static_data.script_data.directions__by_ssa_id[parameter]
 
         repeat_times = read_uintle(data, action_pointer + 2, 2)
         if TileRuleType.has_value(action_id):
-            return TileRule(TileRuleType(action_id), parameter), repeat_times
-        return EntityRule(action_id - 16, parameter), repeat_times
+            return TileRule(
+                TileRuleType(action_id), direction
+            ), repeat_times
+        return EntityRule(
+            action_id - 16, direction
+        ), repeat_times
+
+    def to_bytes(self) -> bytes:
+        header = bytearray(6)
+        write_uintle(header, self.width, 0x00, 2)
+        write_uintle(header, self.height, 0x02, 2)
+        write_uintle(header, self.unk4, 0x04, 2)
+        return header + self._actions_to_bytes()
+
+    def _actions_to_bytes(self) -> bytes:
+        actions: List[Tuple[FixedFloorActionRule, int]] = shrink_list(self.actions)
+        buffer = bytearray(4 * len(actions))
+
+        for i, (action, n_times) in enumerate(actions):
+            write_uintle(buffer, int(action), i * 4, 2)
+            write_uintle(buffer, n_times - 1, i * 4 + 0x02, 2)
+
+        return buffer
 
 
 class FixedBin(Sir0Serializable):
-    def __init__(self, data: bytes, floor_list_offset: int):
+    def __init__(self, data: bytes, floor_list_offset: int, static_data: Pmd2Data):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         cursor = floor_list_offset
         self.fixed_floors = []
         while data[cursor:cursor+4] != END_OF_LIST_PADDING:
-            self.fixed_floors.append(FixedFloor(data, read_uintle(data, cursor, 4)))
+            self.fixed_floors.append(FixedFloor(data, read_uintle(data, cursor, 4), static_data))
             cursor += 4
             assert cursor < len(data)
 
@@ -199,4 +239,4 @@ class FixedBin(Sir0Serializable):
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'FixedBin':
-        return cls(content_data, data_pointer)
+        return cls(content_data, data_pointer, static_data)

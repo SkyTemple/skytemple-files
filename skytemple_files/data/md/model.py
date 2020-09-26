@@ -327,7 +327,7 @@ class Md:
                 'evo_method': EvolutionMethod(ru(0x0A)),
                 'evo_param1': ru(0x0C),
                 'evo_param2': ru(0x0E),
-                'sprite_index': ru(0x10),
+                'sprite_index': rs(0x10),
                 'gender': Gender(ru(0x12, 1)),
                 'body_size': ru(0x13, 1),
                 'type_primary': PokeType(ru(0x14, 1)),

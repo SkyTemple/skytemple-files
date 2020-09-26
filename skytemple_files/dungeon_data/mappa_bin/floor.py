@@ -137,54 +137,66 @@ class MappaFloor(AutoString, XmlSerializable):
         # TODO: Caching needs a deep copy
         return load_callback(pnt)
 
-    def to_xml(self) -> Element:
+    def to_xml(
+            self, export_layout=True, export_monsters=True, export_traps=True,
+            export_floor_items=True, export_shop_items=True, export_monster_house_items=True,
+            export_buried_items=True, export_unk1_items=True, export_unk2_items=True
+    ) -> Element:
         floor_xml = Element(XML_FLOOR)
 
-        layout_xml = self.layout.to_xml()
-        validate_xml_tag(layout_xml, XML_FLOOR_LAYOUT)
+        if export_layout:
+            layout_xml = self.layout.to_xml()
+            validate_xml_tag(layout_xml, XML_FLOOR_LAYOUT)
+            floor_xml.append(layout_xml)
 
-        monsters_xml = Element(XML_MONSTER_LIST)
-        for monster in self.monsters:
-            monster_xml = monster.to_xml()
-            validate_xml_tag(monster_xml, XML_MONSTER)
-            monsters_xml.append(monster_xml)
+        if export_monsters:
+            monsters_xml = Element(XML_MONSTER_LIST)
+            for monster in self.monsters:
+                monster_xml = monster.to_xml()
+                validate_xml_tag(monster_xml, XML_MONSTER)
+                monsters_xml.append(monster_xml)
+                floor_xml.append(monsters_xml)
 
-        traps_xml = self.traps.to_xml()
-        validate_xml_tag(traps_xml, XML_TRAP_LIST)
+        if export_traps:
+            traps_xml = self.traps.to_xml()
+            validate_xml_tag(traps_xml, XML_TRAP_LIST)
+            floor_xml.append(traps_xml)
 
-        floor_items_xml = self.floor_items.to_xml()
-        validate_xml_tag(floor_items_xml, XML_ITEM_LIST)
-        floor_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR)
+        if export_floor_items:
+            floor_items_xml = self.floor_items.to_xml()
+            validate_xml_tag(floor_items_xml, XML_ITEM_LIST)
+            floor_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR)
+            floor_xml.append(floor_items_xml)
 
-        shop_items_xml = self.shop_items.to_xml()
-        validate_xml_tag(shop_items_xml, XML_ITEM_LIST)
-        shop_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__SHOP)
+        if export_shop_items:
+            shop_items_xml = self.shop_items.to_xml()
+            validate_xml_tag(shop_items_xml, XML_ITEM_LIST)
+            shop_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__SHOP)
+            floor_xml.append(shop_items_xml)
 
-        monster_house_items_xml = self.monster_house_items.to_xml()
-        validate_xml_tag(monster_house_items_xml, XML_ITEM_LIST)
-        monster_house_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE)
+        if export_monster_house_items:
+            monster_house_items_xml = self.monster_house_items.to_xml()
+            validate_xml_tag(monster_house_items_xml, XML_ITEM_LIST)
+            monster_house_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE)
+            floor_xml.append(monster_house_items_xml)
 
-        buried_items_xml = self.buried_items.to_xml()
-        validate_xml_tag(buried_items_xml, XML_ITEM_LIST)
-        buried_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__BURIED)
+        if export_buried_items:
+            buried_items_xml = self.buried_items.to_xml()
+            validate_xml_tag(buried_items_xml, XML_ITEM_LIST)
+            buried_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__BURIED)
+            floor_xml.append(buried_items_xml)
 
-        unk_items1_xml = self.unk_items1.to_xml()
-        validate_xml_tag(unk_items1_xml, XML_ITEM_LIST)
-        unk_items1_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK1)
+        if export_unk1_items:
+            unk_items1_xml = self.unk_items1.to_xml()
+            validate_xml_tag(unk_items1_xml, XML_ITEM_LIST)
+            unk_items1_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK1)
+            floor_xml.append(unk_items1_xml)
 
-        unk_items2_xml = self.unk_items2.to_xml()
-        validate_xml_tag(unk_items2_xml, XML_ITEM_LIST)
-        unk_items2_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK2)
-
-        floor_xml.append(layout_xml)
-        floor_xml.append(monsters_xml)
-        floor_xml.append(traps_xml)
-        floor_xml.append(floor_items_xml)
-        floor_xml.append(shop_items_xml)
-        floor_xml.append(monster_house_items_xml)
-        floor_xml.append(buried_items_xml)
-        floor_xml.append(unk_items1_xml)
-        floor_xml.append(unk_items2_xml)
+        if export_unk2_items:
+            unk_items2_xml = self.unk_items2.to_xml()
+            validate_xml_tag(unk_items2_xml, XML_ITEM_LIST)
+            unk_items2_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK2)
+            floor_xml.append(unk_items2_xml)
 
         return floor_xml
 

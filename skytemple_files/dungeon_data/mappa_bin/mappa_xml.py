@@ -45,7 +45,9 @@ def mappa_floor_xml_import(xml: Element, floor: MappaFloor):
     """Imports all data available in the mappa floor XML into the given model."""
     for child in xml:
         if child.tag == XML_FLOOR_LAYOUT:
+            floor_number_before = floor.layout.floor_number
             floor.layout = MappaFloorLayout.from_xml(child)
+            floor.layout.floor_number = floor_number_before
         elif child.tag == XML_MONSTER_LIST:
             monsters = []
             for monster in child:

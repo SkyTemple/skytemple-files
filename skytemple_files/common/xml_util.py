@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
 from typing import List
+from xml.dom import minidom
+from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
 
@@ -44,3 +46,9 @@ def validate_xml_attribs(ele: Element, attribs: List[str]):
     for attrib in attribs:
         if attrib not in ele.attrib:
             raise XmlValidateError(f"Invalid XML. Expected attribute {attrib} for XML tag {ele.tag}.")
+
+
+def prettify(elem):
+    rough_string = ElementTree.tostring(elem, 'utf-8')
+    reparsed = minidom.parseString(rough_string)
+    return reparsed.toprettyxml(indent="  ")

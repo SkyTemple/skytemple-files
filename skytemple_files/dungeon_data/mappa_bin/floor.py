@@ -155,7 +155,7 @@ class MappaFloor(AutoString, XmlSerializable):
                 monster_xml = monster.to_xml()
                 validate_xml_tag(monster_xml, XML_MONSTER)
                 monsters_xml.append(monster_xml)
-                floor_xml.append(monsters_xml)
+            floor_xml.append(monsters_xml)
 
         if export_traps:
             traps_xml = self.traps.to_xml()

@@ -553,9 +553,9 @@ def monster_xml_import(xml: ElementTree,
     The lists can already be filled, they will be cleared and re-filled when data is avaiable.
     Returns the game version.
     """
-    genent_counter = 0
+    genent_counter = 1 if md_gender1 is None and len([s for s in xml if s.tag == XML_GENENT]) == 1 else 0
     moveset_counter = 0
-    portraits_counter = 0
+    portraits_counter = 1 if portraits is None and len([s for s in xml if s.tag == XML_PORTRAITS]) == 1 else 0
     for sub_node in xml:
         if sub_node.tag == XML_GENENT:
             if genent_counter == 0:

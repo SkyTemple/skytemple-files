@@ -52,7 +52,7 @@ languages = {}
 for lang in config.string_index_data.languages:
     languages[lang.name] = FileType.STR.deserialize(rom.getFileByName('MESSAGE/' + lang.filename))
 
-"""
+
 for md_base_index in range(0, NUM_ENTITIES):
     md_gender1 = None
     md_gender2 = None
@@ -104,7 +104,7 @@ for md_base_index in range(0, NUM_ENTITIES):
     fn = f'{md_base_index:04}_{languages["English"].strings[string_id].replace("?", "_")}.xml'
     print(fn)
     write_xml(xml, fn)
-"""
+
 
 # try to replace Bulbasaur data with Charmanders
 charmander_xml = ElementTree.parse(os.path.join(output_dir, '0004_Charmander.xml')).getroot()

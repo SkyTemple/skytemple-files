@@ -41,7 +41,7 @@ class MdWriter:
             self._write_data(entry.evo_method.value)
             self._write_data(entry.evo_param1)
             self._write_data(entry.evo_param2)
-            self._write_data(entry.sprite_index)
+            self._write_data(entry.sprite_index, signed=True)
             self._write_data(entry.gender.value, 1)
             self._write_data(entry.body_size, 1)
             self._write_data(entry.type_primary.value, 1)

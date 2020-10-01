@@ -33,9 +33,9 @@ setup(
         'ndspy >= 3.0.0',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
-        'explorerscript >= 0.0.5',
+        'explorerscript >= 0.0.6',
         'skytemple-rust >= 0.0.1',
-        'tilequant >= 0.2.0',
+        'tilequant >= 0.2.1',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==6.2.1; sys_platform == "darwin"'
     ],

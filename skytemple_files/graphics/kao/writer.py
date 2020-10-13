@@ -61,6 +61,7 @@ class KaoWriter:
                         k.modified = False
                     if i < start_index:
                         start_index = i
+                    if si < start_subindex:
                         start_subindex = si
 
             if start_index == maxsize:

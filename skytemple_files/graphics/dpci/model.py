@@ -71,3 +71,12 @@ class Dpci:
 
     def to_bytes(self):
         return bytes(itertools.chain.from_iterable(self.tiles))
+
+    def import_tiles(self, tiles: List[bytearray], contains_null_tile=False):
+        """
+        Replace the tiles.
+        If contains_null_tile is False, the null tile is added to the list, at the beginning.
+        """
+        if not contains_null_tile:
+            tiles = [bytearray(int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))] + tiles
+        self.tiles = tiles

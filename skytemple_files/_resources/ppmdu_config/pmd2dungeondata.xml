@@ -18,15 +18,15 @@
         <BinPackFile idxfirst="340"  idxlast="509"  type="DBIN_AT4PX_DPC"            name="dungeon%i.dpc"/>
         <BinPackFile idxfirst="510"  idxlast="679"  type="DBIN_AT4PX_DPCI"           name="dungeon%i.dpci"/>
         <BinPackFile idxfirst="680"  idxlast="849"  type="DPL"                       name="dungeon%i.dpl"/>
-        <!-- Dungeon background images animated paletted (tilesets 170+) - Count: 28 -->
+        <!-- Dungeon background images animated paletted (tilesets 170+) - Count: 29 -->
         <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_DPLA"            name="dungeon_bg%i.dpla"/>
-        <!-- Dungeon background images tile mappings (tilesets 170+) - Count: 28 -->
+        <!-- Dungeon background images tile mappings (tilesets 170+) - Count: 29 -->
         <BinPackFile idxfirst="879"  idxlast="907"  type="DBIN_AT4PX_DPC"            name="dungeon_bg%i.dpc"/>
-        <!-- Dungeon background images tile graphics (tilesets 170+) - Count: 28 -->
+        <!-- Dungeon background images tile graphics (tilesets 170+) - Count: 29 -->
         <BinPackFile idxfirst="908"  idxlast="936"  type="DBIN_AT4PX_DPCI"           name="dungeon_bg%i.dpci"/>
-        <!-- Dungeon background images chunk mappings (tilesets 170+) - Count: 28 -->
+        <!-- Dungeon background images chunk mappings (tilesets 170+) - Count: 29 -->
         <BinPackFile idxfirst="937"  idxlast="965"  type="DBIN_SIR0_PKDPX_DBG"       name="dungeon_bg%i.dbg"/>
-        <!-- Dungeon background images palettes (tilesets 170+) - Count: 28 -->
+        <!-- Dungeon background images palettes (tilesets 170+) - Count: 29 -->
         <BinPackFile idxfirst="966"  idxlast="994"  type="DPL"                       name="dungeon_bg%i.dpl"/>
         <BinPackFile idxfirst="995"                 type="DBIN_RAW_IMAGE_4BPP"       name="%d.img"/>
         <BinPackFile idxfirst="996"                 type="SIR0"                      name="%d.sir0"/>

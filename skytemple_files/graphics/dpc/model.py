@@ -92,6 +92,7 @@ class Dpc:
                 raise ValueError(f"The image to import can only use the first 12 palettes. "
                                  f"Tried to use palette {tm.pal_idx}")
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
+        self.re_fill_chunks()
         return tiles, palettes
 
     def to_bytes(self):
@@ -100,3 +101,30 @@ class Dpc:
         for i, tm in enumerate(all_tilemaps):
             write_uintle(data, tm.to_int(), i * 2, 2)
         return data
+
+    def import_tile_mappings(
+            self, tile_mappings: List[List[TilemapEntry]],
+            contains_null_chunk=False, correct_tile_ids=True
+    ):
+        """
+        Replace the tile mappings of the specified layer.
+        If contains_null_tile is False, the null chunk is added to the list, at the beginning.
+
+        If correct_tile_ids is True, then the tile id of tile_mappings is also increased by one. Use this,
+        if you previously used import_tiles with contains_null_tile=False
+        """
+        if correct_tile_ids:
+            for chunk in tile_mappings:
+                for entry in chunk:
+                    if not contains_null_chunk:
+                        entry.idx += 1
+        if not contains_null_chunk:
+            tile_mappings = [[TilemapEntry.from_int(0) for _ in range(0, 9)]] + tile_mappings
+        self.chunks = tile_mappings
+        self.re_fill_chunks()
+
+    def re_fill_chunks(self):
+        if len(self.chunks) > 400:
+            raise ValueError("A dungeon background or tilemap can not have more than 400 chunks.")
+        self.chunks += [[TilemapEntry.from_int(0) for _ in range(0, 9)]] * (400 - len(self.chunks))
+    

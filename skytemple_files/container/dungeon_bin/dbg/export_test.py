@@ -34,6 +34,7 @@ from skytemple_files.graphics.dpla.model import Dpla
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(os.path.join(output_dir, 'raw'), exist_ok=True)
+os.makedirs(os.path.join(output_dir, 'test'), exist_ok=True)
 
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
 
@@ -156,3 +157,9 @@ for i, file in enumerate(dungeon_bin.get_files_bytes()):
         file = sir0.content
     with open(os.path.join(output_dir, 'raw', fn), 'wb') as f:
         f.write(file)
+
+for i, file in enumerate(dungeon_bin):
+    fn = dungeon_bin.get_filename(i)
+    if fn.endswith('.pkdpx.sir0'):
+        with open(os.path.join(output_dir, 'test', fn), 'wb') as f:
+            f.write(file.decompress())

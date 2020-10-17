@@ -31,6 +31,7 @@ from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx import DbinSir0PkdpxHa
 from skytemple_files.container.dungeon_bin.sub.sir0_1035 import DbinSir01035Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1034 import DbinSir0Image1034Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import DbinSir0PkdpxDbgHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DplaHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
@@ -46,6 +47,7 @@ from skytemple_files.graphics.bma.handler import BmaHandler
 from skytemple_files.graphics.bpa.handler import BpaHandler
 from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpl.handler import BplHandler
+from skytemple_files.graphics.dbg.handler import DbgHandler
 from skytemple_files.graphics.dma.handler import DmaHandler
 from skytemple_files.graphics.dpc.handler import DpcHandler
 from skytemple_files.graphics.dpci.handler import DpciHandler
@@ -97,6 +99,7 @@ class FileType:
     DPC = DpcHandler
     DPCI = DpciHandler
     DMA = DmaHandler
+    DBG = DbgHandler
 
     WTE = WteHandler
     WTU = WtuHandler
@@ -132,6 +135,7 @@ class FileType:
     DBIN_AT4PX_DPCI = DbinAt4pxDpciHandler
     DBIN_SIR0_AT4PX = DbinSir0At4pxHandler
     DBIN_SIR0_PKDPX = DbinSir0PkdpxHandler
+    DBIN_SIR0_PKDPX_DBG = DbinSir0PkdpxDbgHandler
     DBIN_SIR0_WEIRD_DATA_FILE = DbinSir0WeirdDataFileHandler
     DBIN_SIR0_IMAGE_1033 = DbinSir0Image1033Handler
     DBIN_SIR0_IMAGE_1034 = DbinSir0Image1034Handler

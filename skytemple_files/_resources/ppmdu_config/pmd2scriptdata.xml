@@ -1650,7 +1650,7 @@
         </OpCode>
         <OpCode id="0x61"  name="CancelCut"                              params="0"  stringidx="-1" unk2="1"  unk3="0"  />
         <OpCode id="0x62"  name="CancelRecoverCommon"                    params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="0" type="Routine" name="routine_to_jump_to"/>
         </OpCode>
         <OpCode id="0x63"  name="Case"                                   params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="int"/>

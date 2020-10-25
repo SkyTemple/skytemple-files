@@ -286,7 +286,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def face_names__by_id(self):
-        return self.face_names
+        return {n.id: n for n in self.face_names}
 
     @property
     def face_names__by_name(self):

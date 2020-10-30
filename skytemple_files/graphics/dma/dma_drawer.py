@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 from random import choice
-from typing import List
+from typing import List, Optional
 
 from PIL import Image
 
@@ -92,7 +92,7 @@ class DmaDrawer:
                 active_row.append(variation)
         return mappings
 
-    def draw(self, mappings: List[List[int]], dpci: Dpci, dpc: Dpc, dpl: Dpl, dpla: Dpla) -> List[Image.Image]:
+    def draw(self, mappings: List[List[int]], dpci: Dpci, dpc: Dpc, dpl: Dpl, dpla: Optional[Dpla]) -> List[Image.Image]:
         chunks = dpc.chunks_to_pil(dpci, dpl.palettes, 1)
 
         chunk_dim = DPCI_TILE_DIM * DPC_TILING_DIM
@@ -114,18 +114,19 @@ class DmaDrawer:
         images.append(fimg)
 
         # Pal ani
-        number_frames = int(len(dpla.colors[0]) / 3)
-        has_a_second_palette = len(dpla.colors) > 16 and len(dpla.colors[16]) > 0
+        if dpla:
+            number_frames = int(len(dpla.colors[0]) / 3)
+            has_a_second_palette = len(dpla.colors) > 16 and len(dpla.colors[16]) > 0
 
-        for fidx in range(0, number_frames):
-            pal_copy = dpl.palettes.copy()
-            img_copy = fimg.copy()
-            # Put palette 11
-            pal_copy[10] = dpla.get_palette_for_frame(0, fidx)
-            if has_a_second_palette:
-                # Put palette 12
-                pal_copy[11] = dpla.get_palette_for_frame(1, fidx)
-            img_copy.putpalette(itertools.chain.from_iterable(pal_copy))
-            images.append(img_copy)
+            for fidx in range(0, number_frames):
+                pal_copy = dpl.palettes.copy()
+                img_copy = fimg.copy()
+                # Put palette 11
+                pal_copy[10] = dpla.get_palette_for_frame(0, fidx)
+                if has_a_second_palette:
+                    # Put palette 12
+                    pal_copy[11] = dpla.get_palette_for_frame(1, fidx)
+                img_copy.putpalette(itertools.chain.from_iterable(pal_copy))
+                images.append(img_copy)
 
         return images

@@ -90,7 +90,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
             floors.append(MappaFloor.from_mappa(read, floor_data))
             pointer += FLOOR_IDX_ENTRY_LEN
             floor_data = read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN]
-            if pointer >= read.dungeon_list_index_start:
+            if pointer > read.dungeon_list_index_start - FLOOR_IDX_ENTRY_LEN:
                 break
         return floors
 

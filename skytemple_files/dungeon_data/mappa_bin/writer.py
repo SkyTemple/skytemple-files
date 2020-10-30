@@ -43,6 +43,9 @@ class MappaBinWriter:
             for floor in floor_list:
                 data[cursor:cursor+18] = floor.to_mappa()
                 cursor += 18
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0x00 for _ in range(0, 16 - (len(data) % 16)))
         # Floor list LUT
         start_floor_list_lut = len(data)
         floor_list_lut = bytearray(4 * len(floor_lists))
@@ -52,12 +55,18 @@ class MappaBinWriter:
             write_uintle(floor_list_lut, cursor_floor_data, i * 4, 4)
             cursor_floor_data += (len(floor_list) + 1) * 18
         data += floor_list_lut
+        # Padding
+        if len(data) % 4 != 0:
+            data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Floor layout data
         start_floor_layout_data = len(data)
         layout_data = bytearray(32 * len(floor_layouts))
         for i, layout in enumerate(floor_layouts):
             layout_data[i * 32: (i + 1) * 32] = layout.to_mappa()
         data += layout_data
+        # Padding
+        if len(data) % 4 != 0:
+            data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Monster spawn data
         monster_data_start = len(data)
         monster_data = bytearray(sum((len(monsters) + 1) * 8 for monsters in monster_lists))
@@ -71,6 +80,9 @@ class MappaBinWriter:
             monster_data[monster_data_cursor:monster_data_cursor+len_single] = single_monster_list_data
             monster_data_cursor += len_single
         data += monster_data
+        # Padding
+        if len(data) % 4 != 0:
+            data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Monster spawn LUT
         start_monster_lut = len(data)
         monster_lut = bytearray(4 * len(monster_data_pointer))
@@ -78,6 +90,9 @@ class MappaBinWriter:
             pointer_offsets.append(start_monster_lut + i * 4)
             write_uintle(monster_lut, pnt, i * 4, 4)
         data += monster_lut
+        # Padding
+        if len(data) % 4 != 0:
+            data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Trap lists data
         trap_data_start = len(data)
         trap_data = bytearray(len(trap_lists) * 50)

@@ -41,7 +41,7 @@ class Wtu(AutoString):
             data = memoryview(data)
         assert self.matches(data, 0), "The Wtu file must begin with the WTU magic number"
         number_entries = read_uintle(data, 0x4, 4)
-        self.identifier = read_uintle(data, 0x8, 4)
+        self.image_mode = read_uintle(data, 0x8, 4)
         self.unkC = read_uintle(data, 0xC, 4)
 
         self.entries = []

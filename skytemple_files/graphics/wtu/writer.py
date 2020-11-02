@@ -28,7 +28,7 @@ class WtuWriter:
         buffer = bytearray(16 + 8 * len(self.model.entries))
         buffer[0:4] = MAGIC_NUMBER
         write_uintle(buffer, len(self.model.entries), 0x4, 4)
-        write_uintle(buffer, self.model.identifier, 0x8, 4)
+        write_uintle(buffer, self.model.image_mode, 0x8, 4)
         write_uintle(buffer, self.model.unkC, 0xC, 4)
 
         for i, e in enumerate(self.model.entries):

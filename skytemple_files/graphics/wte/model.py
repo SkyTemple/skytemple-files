@@ -164,10 +164,7 @@ class Wte(Sir0Serializable, AutoString):
             im.putpalette(self.palette[3*(2**self.color_depth.bpp)*variation:])
         return im
 
-    def from_pil_canvas(self, img: Image.Image, pal: Image.Image, depth: ColorDepth) -> 'Wte':
-        if img.mode != 'P':
-            raise ValueError('Can not convert PIL image to WTE: Must be indexed image (=using a palette)')
-
+    def from_pil(self, img: Image.Image, pal: Image.Image, depth: ColorDepth) -> 'Wte':
         try:
             self.adjust_actual_dimensions(img.width, img.height)
         except AttributeError:
@@ -177,6 +174,15 @@ class Wte(Sir0Serializable, AutoString):
         self.height = img.height
         dimensions = self.actual_dimensions()
         self.color_depth = depth
+        
+        if pal==None:
+            img = img.convert(mode="RGB").quantize(colors=2**depth.bpp, dither=Image.NONE)
+            self.palette = [x for x in memoryview(img.palette.palette)[:(2**depth.bpp)*3]]
+        else:
+            self.palette = list(pal.convert(mode="RGB").tobytes())
+            dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
+            dummy_pal.putpalette(self.palette[:(2**depth.bpp)*3])
+            img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
         
         raw_pil_image = img.tobytes('raw', 'P')
         
@@ -188,7 +194,8 @@ class Wte(Sir0Serializable, AutoString):
             x = i // pixels_per_byte
             self.image_data[x] += pix<<b
             i+=1
-        self.palette = [x for x in memoryview(img.palette.palette)]
+            if i%dimensions[0]==self.width:
+                i += dimensions[0] - self.width
         return self
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:

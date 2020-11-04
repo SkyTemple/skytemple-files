@@ -109,14 +109,17 @@ class Wte(Sir0Serializable, AutoString):
         while 8*(2**height)<canvas_height:
             height+=1
         if width>=8 or height>=8: # Max theoretical size: (2**(7+3), 2**(7+3)) = (1024, 1024)
-            raise AttributeError('Canvas size too large')
+            raise ValueError('Canvas size too large.')
         self.actual_dim = width + (height<<3)
     
     def get_mode(self) -> int:
         return self.actual_dim+(self.color_depth.value<<8)
     
     def max_variation(self) -> int:
-        return (len(self.palette)//3)//(2**self.color_depth.bpp)
+        if self.color_depth.has_image:
+            return (len(self.palette)//3)//(2**self.color_depth.bpp)
+        else:
+            return 1
     
     def to_pil_palette(self) -> Image.Image:
         if self.color_depth.bpp==0:
@@ -164,38 +167,51 @@ class Wte(Sir0Serializable, AutoString):
             im.putpalette(self.palette[3*(2**self.color_depth.bpp)*variation:])
         return im
 
-    def from_pil(self, img: Image.Image, pal: Image.Image, depth: ColorDepth) -> 'Wte':
-        try:
-            self.adjust_actual_dimensions(img.width, img.height)
-        except AttributeError:
-            raise AttributeError('This image is too large to fit into a WTE file')
-        
-        self.width = img.width
-        self.height = img.height
-        dimensions = self.actual_dimensions()
-        self.color_depth = depth
+    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], depth: ColorDepth) -> 'Wte':
+        if img!=None:
+            try:
+                self.adjust_actual_dimensions(img.width, img.height)
+            except ValueError as ve:
+                raise ValueError('This image is too big to fit into a WTE file.')
+            
+            self.width = img.width
+            self.height = img.height
+            dimensions = self.actual_dimensions()
+            self.color_depth = depth
+        else:
+            self.color_depth = ColorDepth.COLOR_NONE
         
         if pal==None:
-            img = img.convert(mode="RGB").quantize(colors=2**depth.bpp, dither=Image.NONE)
-            self.palette = [x for x in memoryview(img.palette.palette)[:(2**depth.bpp)*3]]
+            if img!=None:
+                if not self.color_depth.has_image:
+                    img = img.convert(mode="RGB").quantize(dither=Image.NONE)
+                    self.palette = [x for x in memoryview(img.palette.palette)]
+                else:
+                    img = img.convert(mode="RGB").quantize(colors=2**depth.bpp, dither=Image.NONE)
+                    self.palette = [x for x in memoryview(img.palette.palette)[:(2**depth.bpp)*3]]
+            else:
+                raise AttributeError('At least one of these elements must be specified: image or palette.')
         else:
             self.palette = list(pal.convert(mode="RGB").tobytes())
-            dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
-            dummy_pal.putpalette(self.palette[:(2**depth.bpp)*3])
-            img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
-        
-        raw_pil_image = img.tobytes('raw', 'P')
-        
-        self.image_data = bytearray(dimensions[0] // 8 * self.height * depth.bpp)
-        i = 0
-        pixels_per_byte = 8 // depth.bpp
-        for pix in raw_pil_image:
-            b = (i % pixels_per_byte)*depth.bpp
-            x = i // pixels_per_byte
-            self.image_data[x] += pix<<b
-            i+=1
-            if i%dimensions[0]==self.width:
-                i += dimensions[0] - self.width
+            if self.color_depth.has_image:
+                dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
+                dummy_pal.putpalette(self.palette[:(2**depth.bpp)*3])
+                img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
+        if self.color_depth.has_image:
+            raw_pil_image = img.tobytes('raw', 'P')
+            
+            self.image_data = bytearray(dimensions[0] // 8 * self.height * depth.bpp)
+            i = 0
+            pixels_per_byte = 8 // depth.bpp
+            for pix in raw_pil_image:
+                b = (i % pixels_per_byte)*depth.bpp
+                x = i // pixels_per_byte
+                self.image_data[x] += pix<<b
+                i+=1
+                if i%dimensions[0]==self.width:
+                    i += dimensions[0] - self.width
+        else:
+            self.image_data = bytearray(0)
         return self
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:

@@ -33,6 +33,7 @@ class ColorDepth(Enum):
     COLOR_NONE = 0x00, 'Palette Only', 0, False
     COLOR_2BPP = 0x02, '2 bits per pixel (4 colors)', 2, True
     COLOR_4BPP = 0x03, '4 bits per pixel (16 colors)', 4, True
+    COLOR_8BPP = 0x04, '8 bits per pixel (256 colors)', 8, True
     
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -58,7 +59,6 @@ class Wte(Sir0Serializable, AutoString):
             self.height = 0
             self.image_data = bytes()
             self.palette = []
-            self.is_weird: Optional[bool] = None
             return
 
         if not isinstance(data, memoryview):
@@ -78,12 +78,6 @@ class Wte(Sir0Serializable, AutoString):
 
         self.image_data = self._read_image(data, pointer_image, image_length)
         self.palette = self._read_palette(data, pointer_pal, number_pal_colors)
-
-        # This flag indicates whether or not the image data in this Wte file is weird (0x0 size,
-        # image data outside dimensions, empty palette).
-        # It is set after calling to_pil!
-        # If it's weird, a warning in the UI about changing it should be displayed.
-        self.is_weird: Optional[bool] = None
 
     @staticmethod
     def matches(data, header_pnt):
@@ -115,6 +109,11 @@ class Wte(Sir0Serializable, AutoString):
     def get_mode(self) -> int:
         return self.actual_dim+(self.color_depth.value<<8)
     
+    def has_image(self) -> bool:
+        return self.color_depth.has_image
+    def has_palette(self) -> bool:
+        return len(self.palette)>0
+    
     def max_variation(self) -> int:
         if self.color_depth.has_image:
             return (len(self.palette)//3)//(2**self.color_depth.bpp)
@@ -127,22 +126,22 @@ class Wte(Sir0Serializable, AutoString):
         else:
             colors_per_line : int = 2**self.color_depth.bpp
         palette : List[int] = self.palette
-        if len(palette)%(colors_per_line*3)!=0:
-            palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
-        img = Image.frombytes(mode="RGB", data=bytes(self.palette), size=(colors_per_line, len(self.palette)//colors_per_line//3))
+        if not self.has_palette():
+            palette = [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
+        else:
+            if len(palette)%(colors_per_line*3)!=0:
+                palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
+        img = Image.frombytes(mode="RGB", data=bytes(palette), size=(colors_per_line, len(palette)//colors_per_line//3))
         return img
     
     def to_pil_canvas(self, variation: int) -> Image.Image:
         return self.to_pil(variation).crop(box=[0,0,self.width,self.height])
         
     def to_pil(self, variation: int) -> Image.Image:
-        self.is_weird = False
         dimensions = self.actual_dimensions()
         pil_img_data = bytearray(dimensions[0] * dimensions[1])
-        if not self.color_depth.has_image:
+        if not self.has_image():
             assert len(self.image_data) == 0
-            logger.warning('Wte is palette-only.')
-            self.is_weird = True
             im = self.to_pil_palette()
             return im.resize((im.width*16, im.height*16), resample=Image.NEAREST)
         
@@ -151,23 +150,20 @@ class Wte(Sir0Serializable, AutoString):
             byte_handler = iter_bytes_2bit_le
         elif self.color_depth==ColorDepth.COLOR_4BPP:
             byte_handler = iter_bytes_4bit_le
+        elif self.color_depth==ColorDepth.COLOR_8BPP:
+            byte_handler = lambda x:x
         
         for i, px in enumerate(byte_handler(self.image_data)):
-            if i >= len(pil_img_data):
-                logger.warning('Wte had more image data than width and height defined, it was discarded!')
-                self.is_weird = True
-                break  # ???
             pil_img_data[i] = px
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
-        if len(self.palette) <= 0:
-            self.is_weird = True
+        if not self.has_palette():
             nb_colors = 2**self.color_depth.bpp
             im.putpalette([min((i//3)*(256//nb_colors), 255) for i in range(nb_colors*3)])
         else:
             im.putpalette(self.palette[3*(2**self.color_depth.bpp)*variation:])
         return im
 
-    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], depth: ColorDepth) -> 'Wte':
+    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], depth: ColorDepth, discard_palette: bool) -> 'Wte':
         if img!=None:
             try:
                 self.adjust_actual_dimensions(img.width, img.height)
@@ -183,7 +179,7 @@ class Wte(Sir0Serializable, AutoString):
         
         if pal==None:
             if img!=None:
-                if not self.color_depth.has_image:
+                if not self.has_image():
                     img = img.convert(mode="RGB").quantize(dither=Image.NONE)
                     self.palette = [x for x in memoryview(img.palette.palette)]
                 else:
@@ -195,9 +191,13 @@ class Wte(Sir0Serializable, AutoString):
             self.palette = list(pal.convert(mode="RGB").tobytes())
             if self.color_depth.has_image:
                 dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
-                dummy_pal.putpalette(self.palette[:(2**depth.bpp)*3])
+                palette : List[int] = self.palette[:(2**depth.bpp)*3]
+                # Copy the first color data to the invalid palette entries
+                # This is to prevent the quantizer to use those
+                # invalid entries
+                dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
                 img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
-        if self.color_depth.has_image:
+        if self.has_image():
             raw_pil_image = img.tobytes('raw', 'P')
             
             self.image_data = bytearray(dimensions[0] // 8 * self.height * depth.bpp)
@@ -212,6 +212,8 @@ class Wte(Sir0Serializable, AutoString):
                     i += dimensions[0] - self.width
         else:
             self.image_data = bytearray(0)
+        if discard_palette:
+            self.palette = []
         return self
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:

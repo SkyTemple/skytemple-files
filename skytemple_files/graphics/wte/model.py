@@ -50,7 +50,7 @@ class ColorDepth(Enum):
 
 class Wte(Sir0Serializable, AutoString):
     def __init__(self, data: Optional[bytes], header_pnt: int):
-        """Construts a Wte model. Setting data to None will initialize an empty model."""
+        """Constructs a Wte model. Setting data to None will initialize an empty model."""
         if data is None:
             self.color_depth = ColorDepth.COLOR_NONE
             self.actual_dim = 0
@@ -144,20 +144,14 @@ class Wte(Sir0Serializable, AutoString):
             assert len(self.image_data) == 0
             im = self.to_pil_palette()
             return im.resize((im.width*16, im.height*16), resample=Image.NEAREST)
-        
-        byte_handler = None
-        if self.color_depth==ColorDepth.COLOR_2BPP:
-            byte_handler = iter_bytes_2bit_le
-        elif self.color_depth==ColorDepth.COLOR_4BPP:
-            byte_handler = iter_bytes_4bit_le
-        elif self.color_depth==ColorDepth.COLOR_8BPP:
-            byte_handler = lambda x:x
-        
-        for i, px in enumerate(byte_handler(self.image_data)):
-            pil_img_data[i] = px
+
+        pixels_per_byte = 8 // self.color_depth.bpp
+        nb_colors = 2**self.color_depth.bpp
+        for i, px in enumerate(self.image_data):
+            for j in range(pixels_per_byte):
+                pil_img_data[i*pixels_per_byte+j] = (px>>(self.color_depth.bpp*j))%nb_colors
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
         if not self.has_palette():
-            nb_colors = 2**self.color_depth.bpp
             im.putpalette([min((i//3)*(256//nb_colors), 255) for i in range(nb_colors*3)])
         else:
             im.putpalette(self.palette[3*(2**self.color_depth.bpp)*variation:])
@@ -167,7 +161,7 @@ class Wte(Sir0Serializable, AutoString):
         if img!=None:
             try:
                 self.adjust_actual_dimensions(img.width, img.height)
-            except ValueError as ve:
+            except ValueError:
                 raise ValueError('This image is too big to fit into a WTE file.')
             
             self.width = img.width
@@ -193,8 +187,7 @@ class Wte(Sir0Serializable, AutoString):
                 dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
                 palette : List[int] = self.palette[:(2**depth.bpp)*3]
                 # Copy the first color data to the invalid palette entries
-                # This is to prevent the quantizer to use those
-                # invalid entries
+                # This is to prevent the quantizer to use those invalid entries
                 dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
                 img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
         if self.has_image():

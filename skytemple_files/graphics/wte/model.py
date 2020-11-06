@@ -29,7 +29,7 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 MAGIC_NUMBER = b'WTE\0'
 logger = logging.getLogger(__name__)
 
-class ColorDepth(Enum):
+class WteImageType(Enum):
     COLOR_NONE = 0x00, 'Palette Only', 0, False
     COLOR_2BPP = 0x02, '2 bits per pixel (4 colors)', 2, True
     COLOR_4BPP = 0x03, '4 bits per pixel (16 colors)', 4, True
@@ -52,7 +52,7 @@ class Wte(Sir0Serializable, AutoString):
     def __init__(self, data: Optional[bytes], header_pnt: int):
         """Constructs a Wte model. Setting data to None will initialize an empty model."""
         if data is None:
-            self.color_depth = ColorDepth.COLOR_NONE
+            self.image_type = WteImageType.NONE
             self.actual_dim = 0
             self.unk10 = 0
             self.width = 0
@@ -68,7 +68,7 @@ class Wte(Sir0Serializable, AutoString):
         pointer_image = read_uintle(data, header_pnt + 0x4, 4)
         image_length = read_uintle(data, header_pnt + 0x8, 4)
         self.actual_dim = read_uintle(data, header_pnt + 0xC, 1)
-        self.color_depth = ColorDepth(read_uintle(data, header_pnt + 0xD, 1))
+        self.image_type = WteImageType(read_uintle(data, header_pnt + 0xD, 1))
         self.unk10 = read_uintle(data, header_pnt + 0x10, 4)
         self.width = read_uintle(data, header_pnt + 0x14, 2)
         self.height = read_uintle(data, header_pnt + 0x16, 2)
@@ -107,24 +107,25 @@ class Wte(Sir0Serializable, AutoString):
         self.actual_dim = width + (height<<3)
     
     def get_mode(self) -> int:
-        return self.actual_dim+(self.color_depth.value<<8)
+        return self.actual_dim+(self.image_type.value<<8)
     
     def has_image(self) -> bool:
-        return self.color_depth.has_image
+        return self.image_type.has_image
     def has_palette(self) -> bool:
         return len(self.palette)>0
     
-    def max_variation(self) -> int:
-        if self.color_depth.has_image:
-            return (len(self.palette)//3)//(2**self.color_depth.bpp)
+    def nb_palette_variants(self) -> int:
+        if self.image_type.has_image:
+            return (len(self.palette)//3)//(2**self.image_type.bpp)
         else:
             return 1
     
     def to_pil_palette(self) -> Image.Image:
-        if self.color_depth.bpp==0:
+        """Returns the palette as an image where each pixel represents each color of the palette. """
+        if self.image_type.bpp==0:
             colors_per_line : int = 16
         else:
-            colors_per_line : int = 2**self.color_depth.bpp
+            colors_per_line : int = 2**self.image_type.bpp
         palette : List[int] = self.palette
         if not self.has_palette():
             palette = [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
@@ -135,7 +136,11 @@ class Wte(Sir0Serializable, AutoString):
         return img
     
     def to_pil_canvas(self, variation: int) -> Image.Image:
-        return self.to_pil(variation).crop(box=[0,0,self.width,self.height])
+        im : Image.Image = self.to_pil(variation)
+        if not self.has_image():
+            return im
+        else:
+            return im.crop(box=[0,0,self.width,self.height])
         
     def to_pil(self, variation: int) -> Image.Image:
         dimensions = self.actual_dimensions()
@@ -145,19 +150,19 @@ class Wte(Sir0Serializable, AutoString):
             im = self.to_pil_palette()
             return im.resize((im.width*16, im.height*16), resample=Image.NEAREST)
 
-        pixels_per_byte = 8 // self.color_depth.bpp
-        nb_colors = 2**self.color_depth.bpp
+        pixels_per_byte = 8 // self.image_type.bpp
+        nb_colors = 2**self.image_type.bpp
         for i, px in enumerate(self.image_data):
             for j in range(pixels_per_byte):
-                pil_img_data[i*pixels_per_byte+j] = (px>>(self.color_depth.bpp*j))%nb_colors
+                pil_img_data[i*pixels_per_byte+j] = (px>>(self.image_type.bpp*j))%nb_colors
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
         if not self.has_palette():
             im.putpalette([min((i//3)*(256//nb_colors), 255) for i in range(nb_colors*3)])
         else:
-            im.putpalette(self.palette[3*(2**self.color_depth.bpp)*variation:])
+            im.putpalette(self.palette[3*(2**self.image_type.bpp)*variation:])
         return im
 
-    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], depth: ColorDepth, discard_palette: bool) -> 'Wte':
+    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], img_type: WteImageType, discard_palette: bool) -> 'Wte':
         if img!=None:
             try:
                 self.adjust_actual_dimensions(img.width, img.height)
@@ -167,9 +172,9 @@ class Wte(Sir0Serializable, AutoString):
             self.width = img.width
             self.height = img.height
             dimensions = self.actual_dimensions()
-            self.color_depth = depth
+            self.image_type = img_type
         else:
-            self.color_depth = ColorDepth.COLOR_NONE
+            self.image_type = WteImageType.NONE
         
         if pal==None:
             if img!=None:
@@ -177,15 +182,15 @@ class Wte(Sir0Serializable, AutoString):
                     img = img.convert(mode="RGB").quantize(dither=Image.NONE)
                     self.palette = [x for x in memoryview(img.palette.palette)]
                 else:
-                    img = img.convert(mode="RGB").quantize(colors=2**depth.bpp, dither=Image.NONE)
-                    self.palette = [x for x in memoryview(img.palette.palette)[:(2**depth.bpp)*3]]
+                    img = img.convert(mode="RGB").quantize(colors=2**img_type.bpp, dither=Image.NONE)
+                    self.palette = [x for x in memoryview(img.palette.palette)[:(2**img_type.bpp)*3]]
             else:
                 raise AttributeError('At least one of these elements must be specified: image or palette.')
         else:
             self.palette = list(pal.convert(mode="RGB").tobytes())
-            if self.color_depth.has_image:
+            if self.image_type.has_image:
                 dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
-                palette : List[int] = self.palette[:(2**depth.bpp)*3]
+                palette : List[int] = self.palette[:(2**img_type.bpp)*3]
                 # Copy the first color data to the invalid palette entries
                 # This is to prevent the quantizer to use those invalid entries
                 dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
@@ -193,11 +198,11 @@ class Wte(Sir0Serializable, AutoString):
         if self.has_image():
             raw_pil_image = img.tobytes('raw', 'P')
             
-            self.image_data = bytearray(dimensions[0] // 8 * self.height * depth.bpp)
+            self.image_data = bytearray(dimensions[0] // 8 * self.height * img_type.bpp)
             i = 0
-            pixels_per_byte = 8 // depth.bpp
+            pixels_per_byte = 8 // img_type.bpp
             for pix in raw_pil_image:
-                b = (i % pixels_per_byte)*depth.bpp
+                b = (i % pixels_per_byte)*img_type.bpp
                 x = i // pixels_per_byte
                 self.image_data[x] += pix<<b
                 i+=1

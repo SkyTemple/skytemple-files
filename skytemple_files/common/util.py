@@ -161,20 +161,6 @@ def iter_bytes_4bit_le(data: bytes, start=0, end=None):
         yield lower
         yield upper
 
-def iter_bytes_2bit_le(data: bytes, start=0, end=None):
-    """
-    Generator that generates four 2 bit integers for each byte in the bytes-like object data.
-    The 2 bit integers are expected to be stored little endian in the bytes.
-    """
-    for byte in iter_bytes(data, 1, start, end):
-        upper2 = byte[0] >> 6
-        lower2 = (byte[0] >> 4) & 0x03
-        upper1 = (byte[0] >> 2) & 0x03
-        lower1 = byte[0] & 0x03
-        yield lower1
-        yield upper1
-        yield lower2
-        yield upper2
 
 def generate_bitfield(vs: Iterable[bool]):
     """Generates a bitfield from the values in `vs`. Highest bit to lowest!"""

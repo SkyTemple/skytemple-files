@@ -60,6 +60,6 @@ class Wtu(AutoString):
     def __eq__(self, other):
         if not isinstance(other, Wtu):
             return False
-        return self.identifier == other.identifier and \
+        return self.image_mode == other.image_mode and \
                self.unkC == other.unkC and \
                self.entries == other.entries

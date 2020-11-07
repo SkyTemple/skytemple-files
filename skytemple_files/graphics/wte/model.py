@@ -30,7 +30,7 @@ MAGIC_NUMBER = b'WTE\0'
 logger = logging.getLogger(__name__)
 
 class WteImageType(Enum):
-    COLOR_NONE = 0x00, 'Palette Only', 0, False
+    NONE       = 0x00, 'Palette Only', 0, False
     COLOR_2BPP = 0x02, '2 bits per pixel (4 colors)', 2, True
     COLOR_4BPP = 0x03, '4 bits per pixel (16 colors)', 4, True
     COLOR_8BPP = 0x04, '8 bits per pixel (256 colors)', 8, True
@@ -67,8 +67,11 @@ class Wte(Sir0Serializable, AutoString):
         assert self.matches(data, header_pnt), "The Wte file must begin with the WTE magic number"
         pointer_image = read_uintle(data, header_pnt + 0x4, 4)
         image_length = read_uintle(data, header_pnt + 0x8, 4)
+
+        # actual_bim and image_type both forms the image_mode
         self.actual_dim = read_uintle(data, header_pnt + 0xC, 1)
         self.image_type = WteImageType(read_uintle(data, header_pnt + 0xD, 1))
+        
         self.unk10 = read_uintle(data, header_pnt + 0x10, 4)
         self.width = read_uintle(data, header_pnt + 0x14, 2)
         self.height = read_uintle(data, header_pnt + 0x16, 2)
@@ -95,7 +98,8 @@ class Wte(Sir0Serializable, AutoString):
     def actual_dimensions(self) -> Tuple[int, int]:
         return (8*(2**(self.actual_dim & 0x07)), 8*(2**((self.actual_dim>>3) & 0x07)))
 
-    def adjust_actual_dimensions(self, canvas_width: int, canvas_height: int):
+    def _adjust_actual_dimensions(self, canvas_width: int, canvas_height: int):
+        """ Adjusts the actual dimensions specified by the image mode so the image can fit into those dimensions. """
         width = 0
         while 8*(2**width)<canvas_width:
             width+=1
@@ -107,27 +111,37 @@ class Wte(Sir0Serializable, AutoString):
         self.actual_dim = width + (height<<3)
     
     def get_mode(self) -> int:
+        """ Returns the mode used by this file. This is to update the corresponding WTU file. """
         return self.actual_dim+(self.image_type.value<<8)
     
     def has_image(self) -> bool:
+        """ Returns if this WTE file has actual image data. """
         return self.image_type.has_image
     def has_palette(self) -> bool:
+        """ Returns if this WTE file has actual palette data. """
         return len(self.palette)>0
     
     def nb_palette_variants(self) -> int:
+        """ Returns how many palette variants this image has. """
         if self.image_type.has_image:
-            return (len(self.palette)//3)//(2**self.image_type.bpp)
+            nb_total_colors = len(self.palette)//3
+            nb_colors_per_variant = 2**self.image_type.bpp
+            if nb_total_colors%nb_colors_per_variant==0:
+                return nb_total_colors//nb_colors_per_variant
+            else:
+                return (nb_total_colors//nb_colors_per_variant)+1
         else:
             return 1
     
     def to_pil_palette(self) -> Image.Image:
-        """Returns the palette as an image where each pixel represents each color of the palette. """
+        """ Returns the palette as an image where each pixel represents each color of the palette. """
         if self.image_type.bpp==0:
             colors_per_line : int = 16
         else:
             colors_per_line : int = 2**self.image_type.bpp
         palette : List[int] = self.palette
         if not self.has_palette():
+            # Generates a default grayscale palette if the file doesn't have one
             palette = [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
         else:
             if len(palette)%(colors_per_line*3)!=0:
@@ -136,6 +150,8 @@ class Wte(Sir0Serializable, AutoString):
         return img
     
     def to_pil_canvas(self, variation: int) -> Image.Image:
+        """ Returns the image with its data part size (the width and height specified in the WTE header).
+            If this file has no image, returns an image representation of the palette instead. """
         im : Image.Image = self.to_pil(variation)
         if not self.has_image():
             return im
@@ -143,6 +159,9 @@ class Wte(Sir0Serializable, AutoString):
             return im.crop(box=[0,0,self.width,self.height])
         
     def to_pil(self, variation: int) -> Image.Image:
+        """ Returns the image with its actual size (the one specified by the image mode).
+            If this file has no image, returns an image representation of the palette instead. """
+        
         dimensions = self.actual_dimensions()
         pil_img_data = bytearray(dimensions[0] * dimensions[1])
         if not self.has_image():
@@ -157,15 +176,21 @@ class Wte(Sir0Serializable, AutoString):
                 pil_img_data[i*pixels_per_byte+j] = (px>>(self.image_type.bpp*j))%nb_colors
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
         if not self.has_palette():
+            # Generates a default grayscale palette if the file doesn't have one
             im.putpalette([min((i//3)*(256//nb_colors), 255) for i in range(nb_colors*3)])
         else:
             im.putpalette(self.palette[3*(2**self.image_type.bpp)*variation:])
         return im
 
-    def from_pil(self, img: Optional[Image.Image], pal: Optional[Image.Image], img_type: WteImageType, discard_palette: bool) -> 'Wte':
-        if img!=None:
+    def from_pil(self, img: Optional[Image.Image], pal: Image.Image, img_type: WteImageType, discard_palette: bool) -> 'Wte':
+        """ Replace the image/palette data by the new ones passed in arguments. """
+
+        if pal==None:
+            raise AttributeError('The palette must be specified.')
+        
+        if img!=None and img_type.has_image:
             try:
-                self.adjust_actual_dimensions(img.width, img.height)
+                self._adjust_actual_dimensions(img.width, img.height)
             except ValueError:
                 raise ValueError('This image is too big to fit into a WTE file.')
             
@@ -175,26 +200,21 @@ class Wte(Sir0Serializable, AutoString):
             self.image_type = img_type
         else:
             self.image_type = WteImageType.NONE
+
+        if not self.has_image():
+            self.width = 0
+            self.height = 0
+            self.actual_dim = 0
         
-        if pal==None:
-            if img!=None:
-                if not self.has_image():
-                    img = img.convert(mode="RGB").quantize(dither=Image.NONE)
-                    self.palette = [x for x in memoryview(img.palette.palette)]
-                else:
-                    img = img.convert(mode="RGB").quantize(colors=2**img_type.bpp, dither=Image.NONE)
-                    self.palette = [x for x in memoryview(img.palette.palette)[:(2**img_type.bpp)*3]]
-            else:
-                raise AttributeError('At least one of these elements must be specified: image or palette.')
-        else:
-            self.palette = list(pal.convert(mode="RGB").tobytes())
-            if self.image_type.has_image:
-                dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
-                palette : List[int] = self.palette[:(2**img_type.bpp)*3]
-                # Copy the first color data to the invalid palette entries
-                # This is to prevent the quantizer to use those invalid entries
-                dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
-                img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
+        self.palette = list(pal.convert(mode="RGB").tobytes())
+        if self.image_type.has_image:
+            dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
+            palette : List[int] = self.palette[:(2**img_type.bpp)*3]
+            # Copy the first color data to the invalid palette entries
+            # This is to prevent the quantizer to use those invalid entries
+            dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
+            img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
+        
         if self.has_image():
             raw_pil_image = img.tobytes('raw', 'P')
             
@@ -230,7 +250,8 @@ class Wte(Sir0Serializable, AutoString):
     def __eq__(self, other):
         if not isinstance(other, Wte):
             return False
-        return self.identifier == other.identifier and \
+        return self.actual_dim == other.actual_dim and \
+            self.image_type == other.image_type and \
             self.unk10 == other.unk10 and \
             self.width == other.width and \
             self.height == other.height and \

@@ -163,7 +163,47 @@ class MonsterSpawnStats(AutoString):
                self.unkA == other.unkA
 
 
-class HardcodedFixedFloorEntityTables:
+class FixedFloorProperties(AutoString):
+    def __init__(self, music_track: int, unk4: bool, unk5: bool, moves_enabled: bool, orbs_enabled: bool,
+                 unk8: bool, unk9: bool, unk10: bool, null: int):
+        self.music_track = music_track
+        self.unk4 = unk4
+        self.unk5 = unk5
+        self.moves_enabled = moves_enabled
+        self.orbs_enabled = orbs_enabled
+        self.unk8 = unk8
+        self.unk9 = unk9
+        self.unk10 = unk10
+        self.null = null
+
+    def to_bytes(self) -> bytes:
+        buffer = bytearray(12)
+        write_uintle(buffer, self.music_track, 0, 4)
+        write_uintle(buffer, self.unk4, 4, 1)
+        write_uintle(buffer, self.unk5, 5, 1)
+        write_uintle(buffer, self.moves_enabled, 6, 1)
+        write_uintle(buffer, self.orbs_enabled, 7, 1)
+        write_uintle(buffer, self.unk8, 8, 1)
+        write_uintle(buffer, self.unk9, 9, 1)
+        write_uintle(buffer, self.unk10, 10, 1)
+        write_uintle(buffer, self.null, 11, 1)
+        return buffer
+
+    def __eq__(self, other):
+        if not isinstance(other, FixedFloorProperties):
+            return False
+        return self.music_track == other.music_track and \
+               self.unk4 == other.unk4 and \
+               self.unk5 == other.unk5 and \
+               self.moves_enabled == other.moves_enabled and \
+               self.orbs_enabled == other.orbs_enabled and \
+               self.unk8 == other.unk8 and \
+               self.unk9 == other.unk9 and \
+               self.unk10 == other.unk10 and \
+               self.null == other.null
+
+
+class HardcodedFixedFloorTables:
     @classmethod
     def get_entity_spawn_table(cls, overlay29: bytes, config: Pmd2Data) -> List[EntitySpawnEntry]:
         """
@@ -293,6 +333,60 @@ class HardcodedFixedFloorEntityTables:
         """
         cls._set(overlay10, values, config,
                  config.binaries['overlay/overlay_0010.bin'].blocks['MonsterSpawnStatsTable'], 12)
+
+    @classmethod
+    def get_fixed_floor_properties(cls, overlay10: bytes, config: Pmd2Data) -> List[FixedFloorProperties]:
+        """
+        Returns the list of properties for fixed floors.
+        """
+        block = config.binaries['overlay/overlay_0010.bin'].blocks['FixedFloorProperties']
+        lst = []
+        for i in range(block.begin, block.end, 12):
+            lst.append(FixedFloorProperties(
+                read_uintle(overlay10, i + 0x00, 4),
+                bool(read_uintle(overlay10, i + 0x04, 1)),
+                bool(read_uintle(overlay10, i + 0x05, 1)),
+                bool(read_uintle(overlay10, i + 0x06, 1)),
+                bool(read_uintle(overlay10, i + 0x07, 1)),
+                bool(read_uintle(overlay10, i + 0x08, 1)),
+                bool(read_uintle(overlay10, i + 0x09, 1)),
+                bool(read_uintle(overlay10, i + 0x0A, 1)),
+                read_uintle(overlay10, i + 0x0B, 1)
+            ))
+        return lst
+
+    @classmethod
+    def set_fixed_floor_properties(cls, overlay10: bytes, values: List[FixedFloorProperties], config: Pmd2Data):
+        """
+        Sets the list of properties for fixed floors.
+        The length of the list must exactly match the original ROM's length (see get_fixed_floor_properties).
+        """
+        cls._set(overlay10, values, config,
+                 config.binaries['overlay/overlay_0010.bin'].blocks['FixedFloorProperties'], 12)
+
+    @classmethod
+    def get_fixed_floor_overrides(cls, overlay10: bytes, config: Pmd2Data) -> List[int]:
+        """
+        Returns the list of overrides for fixed floors.
+        """
+        block = config.binaries['overlay/overlay_0029.bin'].blocks['FixedFloorOverrides']
+        lst = []
+        for i in range(block.begin, block.end):
+            lst.append(read_uintle(overlay10, i, 1))
+        return lst
+
+    @classmethod
+    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: List[int], config: Pmd2Data):
+        """
+        Sets the list of overrides for fixed floors.
+        The length of the list must exactly match the original ROM's length (see get_fixed_floor_overrides).
+        """
+        block = config.binaries['overlay/overlay_0029.bin'].blocks['FixedFloorOverrides']
+        expected_length = block.end - block.begin
+        if len(values) != expected_length:
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+        for entry, i in zip(values, range(block.begin, block.end)):
+            overlay29[i] = entry
 
     @classmethod
     def _set(cls, binary: bytes, values: List, config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int):

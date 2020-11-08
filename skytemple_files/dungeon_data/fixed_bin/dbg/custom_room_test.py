@@ -22,7 +22,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 from skytemple_files.dungeon_data.fixed_bin.model import TileRule, TileRuleType, EntityRule
-from skytemple_files.hardcoded.fixed_floor_entities import HardcodedFixedFloorEntityTables, EntitySpawnEntry, ItemSpawn, \
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables, EntitySpawnEntry, ItemSpawn, \
     MonsterSpawn, TileSpawn
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
@@ -38,11 +38,11 @@ fixed = FixedBinHandler.deserialize(fixed_bin, static_data=static_data)
 ov29 = get_binary_from_rom_ppmdu(rom, static_data.binaries['overlay/overlay_0029.bin'])
 ov10 = get_binary_from_rom_ppmdu(rom, static_data.binaries['overlay/overlay_0010.bin'])
 
-entity_table = HardcodedFixedFloorEntityTables.get_entity_spawn_table(ov29, static_data)
-item_table = HardcodedFixedFloorEntityTables.get_item_spawn_list(ov29, static_data)
-tile_table = HardcodedFixedFloorEntityTables.get_tile_spawn_list(ov29, static_data)
-monster_table = HardcodedFixedFloorEntityTables.get_monster_spawn_list(ov29, static_data)
-monster_stats_table = HardcodedFixedFloorEntityTables.get_monster_spawn_stats_table(ov10, static_data)
+entity_table = HardcodedFixedFloorTables.get_entity_spawn_table(ov29, static_data)
+item_table = HardcodedFixedFloorTables.get_item_spawn_list(ov29, static_data)
+tile_table = HardcodedFixedFloorTables.get_tile_spawn_list(ov29, static_data)
+monster_table = HardcodedFixedFloorTables.get_monster_spawn_list(ov29, static_data)
+monster_stats_table = HardcodedFixedFloorTables.get_monster_spawn_stats_table(ov10, static_data)
 
 T = TileRule
 WH = TileRuleType.WALL_HALLWAY
@@ -118,17 +118,17 @@ fixed.fixed_floors[1].actions = [
 ]
 
 ov29_before = bytes(ov29)
-HardcodedFixedFloorEntityTables.set_item_spawn_list(ov29, item_table, static_data)
-HardcodedFixedFloorEntityTables.set_tile_spawn_list(ov29, tile_table, static_data)
-HardcodedFixedFloorEntityTables.set_monster_spawn_list(ov29, monster_table, static_data)
-HardcodedFixedFloorEntityTables.set_entity_spawn_table(ov29, entity_table, static_data)
+HardcodedFixedFloorTables.set_item_spawn_list(ov29, item_table, static_data)
+HardcodedFixedFloorTables.set_tile_spawn_list(ov29, tile_table, static_data)
+HardcodedFixedFloorTables.set_monster_spawn_list(ov29, monster_table, static_data)
+HardcodedFixedFloorTables.set_entity_spawn_table(ov29, entity_table, static_data)
 set_binary_in_rom_ppmdu(rom, static_data.binaries['overlay/overlay_0029.bin'], ov29)
 
 assert ov29_before != get_binary_from_rom_ppmdu(rom, static_data.binaries['overlay/overlay_0029.bin'])
-assert item_table == HardcodedFixedFloorEntityTables.get_item_spawn_list(ov29, static_data)
-assert monster_table == HardcodedFixedFloorEntityTables.get_monster_spawn_list(ov29, static_data)
-assert tile_table == HardcodedFixedFloorEntityTables.get_tile_spawn_list(ov29, static_data)
-assert entity_table == HardcodedFixedFloorEntityTables.get_entity_spawn_table(ov29, static_data)
+assert item_table == HardcodedFixedFloorTables.get_item_spawn_list(ov29, static_data)
+assert monster_table == HardcodedFixedFloorTables.get_monster_spawn_list(ov29, static_data)
+assert tile_table == HardcodedFixedFloorTables.get_tile_spawn_list(ov29, static_data)
+assert entity_table == HardcodedFixedFloorTables.get_entity_spawn_table(ov29, static_data)
 
 fixed_bin_after = FixedBinHandler.serialize(fixed)
 assert fixed_bin != fixed_bin_after

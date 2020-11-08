@@ -30,7 +30,7 @@ from skytemple_files.graphics.dpc.model import Dpc
 from skytemple_files.graphics.dpci.model import Dpci
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
-from skytemple_files.hardcoded.fixed_floor_entities import HardcodedFixedFloorEntityTables
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
@@ -46,9 +46,9 @@ dungeon_bin = FileType.DUNGEON_BIN.deserialize(rom.getFileByName('DUNGEON/dungeo
 mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName('BALANCE/mappa_s.bin'))
 monster_bin = FileType.BIN_PACK.deserialize(rom.getFileByName('MONSTER/monster.bin'))
 monster_md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
-entity_table = HardcodedFixedFloorEntityTables.get_entity_spawn_table(ov29, static_data)
-item_table = HardcodedFixedFloorEntityTables.get_item_spawn_list(ov29, static_data)
-monster_table = HardcodedFixedFloorEntityTables.get_monster_spawn_list(ov29, static_data)
+entity_table = HardcodedFixedFloorTables.get_entity_spawn_table(ov29, static_data)
+item_table = HardcodedFixedFloorTables.get_item_spawn_list(ov29, static_data)
+monster_table = HardcodedFixedFloorTables.get_monster_spawn_list(ov29, static_data)
 
 
 def draw_monster_sprite(img: Image.Image, x: int, y: int, monster_id: int, direction: Pmd2ScriptDirection):

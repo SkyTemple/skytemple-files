@@ -19,7 +19,7 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
-from skytemple_files.hardcoded.fixed_floor_entities import HardcodedFixedFloorEntityTables
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
 rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
@@ -41,30 +41,42 @@ def print_and_test(binary, getter, setter):
 
 print_and_test(
     ov29,
-    HardcodedFixedFloorEntityTables.get_entity_spawn_table,
-    HardcodedFixedFloorEntityTables.set_entity_spawn_table
+    HardcodedFixedFloorTables.get_entity_spawn_table,
+    HardcodedFixedFloorTables.set_entity_spawn_table
 )
 
 print_and_test(
     ov29,
-    HardcodedFixedFloorEntityTables.get_item_spawn_list,
-    HardcodedFixedFloorEntityTables.set_item_spawn_list
+    HardcodedFixedFloorTables.get_item_spawn_list,
+    HardcodedFixedFloorTables.set_item_spawn_list
 )
 
 print_and_test(
     ov29,
-    HardcodedFixedFloorEntityTables.get_monster_spawn_list,
-    HardcodedFixedFloorEntityTables.set_monster_spawn_list
+    HardcodedFixedFloorTables.get_monster_spawn_list,
+    HardcodedFixedFloorTables.set_monster_spawn_list
 )
 
 print_and_test(
     ov29,
-    HardcodedFixedFloorEntityTables.get_tile_spawn_list,
-    HardcodedFixedFloorEntityTables.set_tile_spawn_list
+    HardcodedFixedFloorTables.get_tile_spawn_list,
+    HardcodedFixedFloorTables.set_tile_spawn_list
 )
 
 print_and_test(
     ov10,
-    HardcodedFixedFloorEntityTables.get_monster_spawn_stats_table,
-    HardcodedFixedFloorEntityTables.set_monster_spawn_stats_table
+    HardcodedFixedFloorTables.get_monster_spawn_stats_table,
+    HardcodedFixedFloorTables.set_monster_spawn_stats_table
+)
+
+print_and_test(
+    ov10,
+    HardcodedFixedFloorTables.get_fixed_floor_properties,
+    HardcodedFixedFloorTables.set_fixed_floor_properties
+)
+
+print_and_test(
+    ov29,
+    HardcodedFixedFloorTables.get_fixed_floor_overrides,
+    HardcodedFixedFloorTables.set_fixed_floor_overrides
 )

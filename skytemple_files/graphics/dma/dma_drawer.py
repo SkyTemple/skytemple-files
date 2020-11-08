@@ -85,7 +85,7 @@ class DmaDrawer:
                     rule_cell != DmaType.FLOOR, treat_outside_as_wall
                 )
                 variations = self.dma.get(rule_cell, solid_neighbors)
-                if variation_index:
+                if variation_index is not None:
                     variation = variations[variation_index]
                 else:
                     variation = choice(variations)

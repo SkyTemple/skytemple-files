@@ -89,13 +89,13 @@ class TileRuleType(Enum):
     WALL_HALLWAY_DEFAULT_2     = 0x0F, 'Wall, Hallway', \
                                  FloorType.WALL, RoomType.HALLWAY, False, False, \
                                  ''
-    FLOOR_ROOM_60              = 0x60, 'Floor, Room', \
+    ATTENDANT1_SPAWN           = 0x60, 'Attendant1 Spawn Floor', \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    FLOOR_ROOM_61              = 0x61, 'Floor, Room', \
+    ATTENDANT2_SPAWN           = 0x61, 'Attendant2 Spawn Floor', \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    FLOOR_ROOM_62              = 0x62, 'Floor, Room', \
+    ATTENDANT3_SPAWN           = 0x62, 'Attendant3 Spawn Floor', \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
     FLOOR_ROOM_63              = 0x63, 'Floor, Room', \

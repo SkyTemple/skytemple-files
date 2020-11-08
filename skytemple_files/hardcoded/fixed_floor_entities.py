@@ -94,25 +94,34 @@ class MonsterSpawn(AutoString):
 
 
 class TileSpawn(AutoString):
-    def __init__(self, unk0: int, unk1: int, room_id: int, flags: int):
-        self.unk0 = unk0
-        self.unk1 = unk1
+    def __init__(self, trap_id: int, trap_data: int, room_id: int, flags: int):
+        self.trap_id = trap_id
+        self.trap_data = trap_data
         self.room_id = room_id
         self.flags = flags
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)
-        write_uintle(buffer, self.unk0, 0, 1)
-        write_uintle(buffer, self.unk1, 1, 1)
+        write_uintle(buffer, self.trap_id, 0, 1)
+        write_uintle(buffer, self.trap_data, 1, 1)
         write_uintle(buffer, self.room_id, 2, 1)
         write_uintle(buffer, self.flags, 3, 1)
         return buffer
 
+    def can_be_broken(self):
+        return not (self.trap_data & 1)
+
+    def trap_is_visible(self):
+        return self.flags & 1
+
+    def is_secondary_terrain(self):
+        return self.flags & 0b1000
+
     def __eq__(self, other):
         if not isinstance(other, TileSpawn):
             return False
-        return self.unk0 == other.unk0 and \
-               self.unk1 == other.unk1 and \
+        return self.trap_id == other.trap_id and \
+               self.trap_data == other.trap_data and \
                self.room_id == other.room_id and \
                self.flags == other.flags
 

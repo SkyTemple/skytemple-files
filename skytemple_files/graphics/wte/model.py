@@ -68,7 +68,7 @@ class Wte(Sir0Serializable, AutoString):
         pointer_image = read_uintle(data, header_pnt + 0x4, 4)
         image_length = read_uintle(data, header_pnt + 0x8, 4)
 
-        # actual_bim and image_type both forms the image_mode
+        # actual_dim and image_type both forms the image mode
         self.actual_dim = read_uintle(data, header_pnt + 0xC, 1)
         self.image_type = WteImageType(read_uintle(data, header_pnt + 0xD, 1))
         
@@ -133,19 +133,23 @@ class Wte(Sir0Serializable, AutoString):
         else:
             return 1
     
+    def get_palette(self) -> List[int]:
+        """ Returns the palette that will be used to display the image. """
+        colors_per_line : int = 2**self.image_type.bpp
+        if not self.has_palette():
+            # Generates a default grayscale palette if the file doesn't have one
+            return [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
+        else:
+            return self.palette
+        
     def to_pil_palette(self) -> Image.Image:
         """ Returns the palette as an image where each pixel represents each color of the palette. """
         if self.image_type.bpp==0:
             colors_per_line : int = 16
         else:
             colors_per_line : int = 2**self.image_type.bpp
-        palette : List[int] = self.palette
-        if not self.has_palette():
-            # Generates a default grayscale palette if the file doesn't have one
-            palette = [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
-        else:
-            if len(palette)%(colors_per_line*3)!=0:
-                palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
+        palette : List[int] = self.get_palette()
+        palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
         img = Image.frombytes(mode="RGB", data=bytes(palette), size=(colors_per_line, len(palette)//colors_per_line//3))
         return img
     
@@ -175,11 +179,7 @@ class Wte(Sir0Serializable, AutoString):
             for j in range(pixels_per_byte):
                 pil_img_data[i*pixels_per_byte+j] = (px>>(self.image_type.bpp*j))%nb_colors
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
-        if not self.has_palette():
-            # Generates a default grayscale palette if the file doesn't have one
-            im.putpalette([min((i//3)*(256//nb_colors), 255) for i in range(nb_colors*3)])
-        else:
-            im.putpalette(self.palette[3*(2**self.image_type.bpp)*variation:])
+        im.putpalette(self.get_palette()[3*(2**self.image_type.bpp)*variation:])
         return im
 
     def from_pil(self, img: Optional[Image.Image], pal: Image.Image, img_type: WteImageType, discard_palette: bool) -> 'Wte':

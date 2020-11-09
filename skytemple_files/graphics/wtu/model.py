@@ -20,19 +20,19 @@ WTU_ENTRY_LEN = 8
 
 
 class WtuEntry(AutoString):
-    def __init__(self, unk0: int, unk1: int, unk2: int, unk3: int):
-        self.unk0 = unk0
-        self.unk1 = unk1
-        self.unk2 = unk2
-        self.unk3 = unk3
+    def __init__(self, x: int, y: int, width: int, height: int):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
 
     def __eq__(self, other):
         if not isinstance(other, WtuEntry):
             return False
-        return self.unk0 == other.unk0 and \
-               self.unk1 == other.unk1 and \
-               self.unk2 == other.unk2 and \
-               self.unk3 == other.unk3
+        return self.x == other.x and \
+               self.y == other.y and \
+               self.width == other.width and \
+               self.height == other.height
 
 
 class Wtu(AutoString):
@@ -42,10 +42,11 @@ class Wtu(AutoString):
         assert self.matches(data, 0), "The Wtu file must begin with the WTU magic number"
         number_entries = read_uintle(data, 0x4, 4)
         self.image_mode = read_uintle(data, 0x8, 4)
-        self.unkC = read_uintle(data, 0xC, 4)
+        # The size of this header; Wtu entries start from this address
+        self.header_size = read_uintle(data, 0xC, 4)
 
         self.entries = []
-        for i in range(0x10, 0x10 + number_entries * WTU_ENTRY_LEN, WTU_ENTRY_LEN):
+        for i in range(self.header_size, self.header_size + number_entries * WTU_ENTRY_LEN, WTU_ENTRY_LEN):
             self.entries.append(WtuEntry(
                 read_uintle(data, i + 0x00, 2),
                 read_uintle(data, i + 0x02, 2),
@@ -61,5 +62,5 @@ class Wtu(AutoString):
         if not isinstance(other, Wtu):
             return False
         return self.image_mode == other.image_mode and \
-               self.unkC == other.unkC and \
+               self.header_size == other.header_size and \
                self.entries == other.entries

@@ -140,7 +140,8 @@ class Wte(Sir0Serializable, AutoString):
             # Generates a default grayscale palette if the file doesn't have one
             return [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
         else:
-            return self.palette
+            # This is to make all colors unique for the first variant
+            return make_palette_colors_unique([self.palette[:colors_per_line*3]])[0]+self.palette[colors_per_line*3:]
         
     def to_pil_palette(self) -> Image.Image:
         """ Returns the palette as an image where each pixel represents each color of the palette. """
@@ -149,7 +150,8 @@ class Wte(Sir0Serializable, AutoString):
         else:
             colors_per_line : int = 2**self.image_type.bpp
         palette : List[int] = self.get_palette()
-        palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
+        if len(palette)%(colors_per_line*3)!=0:
+            palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
         img = Image.frombytes(mode="RGB", data=bytes(palette), size=(colors_per_line, len(palette)//colors_per_line//3))
         return img
     
@@ -208,20 +210,29 @@ class Wte(Sir0Serializable, AutoString):
         
         self.palette = list(pal.convert(mode="RGB").tobytes())
         if self.image_type.has_image:
-            dummy_pal : Image.Image = Image.new(mode='P', size=(1,1))
             palette : List[int] = self.palette[:(2**img_type.bpp)*3]
-            # Copy the first color data to the invalid palette entries
-            # This is to prevent the quantizer to use those invalid entries
-            dummy_pal.putpalette(palette+((768-len(palette))//3)*self.palette[:3])
-            img = img.convert(mode="RGB").quantize(dither=Image.NONE, palette=dummy_pal)
-        
-        if self.has_image():
-            raw_pil_image = img.tobytes('raw', 'P')
+            img = img.convert(mode="RGB")
+            ## Note: this should become a function
+            ## Basically quantizes the image to a given palette
+            ## By choosing the color that has the minimum cumulated difference between RGB values
+            ## This is slow, but at least it preserves exact color matches unlike the PIL quantizer
             
+            raw_image = []
+            for c in zip(img.tobytes('raw', 'R'), img.tobytes('raw', 'G'), img.tobytes('raw', 'B')):
+                min_color = -1
+                min_diff = 0
+                for i in range(len(palette)//3):
+                    diff = abs(c[0]-palette[i*3])+abs(c[1]-palette[i*3+1])+abs(c[2]-palette[i*3+2])
+                    if min_color<0 or diff<min_diff:
+                        min_color = i
+                        min_diff = diff
+                
+                raw_image.append(min_color)
+            ## 
             self.image_data = bytearray(dimensions[0] // 8 * self.height * img_type.bpp)
             i = 0
             pixels_per_byte = 8 // img_type.bpp
-            for pix in raw_pil_image:
+            for pix in raw_image:
                 b = (i % pixels_per_byte)*img_type.bpp
                 x = i // pixels_per_byte
                 self.image_data[x] += pix<<b

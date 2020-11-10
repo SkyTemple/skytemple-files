@@ -75,11 +75,11 @@ class TileRuleType(Enum):
     FLOOR_HALLWAY_FLAG_0A      = 0x0B, 'Floor, Hallway; Flag 0xA', \
                                  FloorType.FLOOR, RoomType.HALLWAY, False, False, \
                                  'Tile flag 0xA is set to 1 (Unknown what this does).'
-    FL_WA_ROOM_FLAG_0C         = 0x0C, 'Floor or Wall, Room; Key Door (0xC)', \
+    FL_WA_ROOM_FLAG_0C         = 0x0C, 'F/W, Room; Key Door (0xC)', \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
                                  'Tile flag 0xC is set to 1 and spawns a key Door. ' \
                                  'Whether Wall or Floor is used depends on an unknown factor.'
-    FL_WA_ROOM_FLAG_0D         = 0x0D, 'Floor or Wall, Room; Key Door (0xD)', \
+    FL_WA_ROOM_FLAG_0D         = 0x0D, 'F/W, Room; Key Door (0xD)', \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
                                  'Tile flag 0xD is set to 1 and spawns a key Door. ' \
                                  'Whether Wall or Floor is used depends on an unknown factor.'

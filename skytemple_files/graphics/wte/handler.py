@@ -14,13 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
 try:
     from PIL import Image
 except ImportError:
     from pil import Image
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.graphics.wte.model import Wte
+from skytemple_files.graphics.wte.model import Wte, WteImageType
 from skytemple_files.graphics.wte.writer import WteWriter
 
 
@@ -41,10 +42,9 @@ class WteHandler(DataHandler[Wte]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def new(cls, img: Image.Image, identifier: int) -> Wte:
+    def new(cls, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> Wte:
         wte = Wte(None, 0)
-        wte.from_pil(img)
-        wte.identifier = identifier
+        wte.from_pil(img, img_type, discard_palette)
         return wte
 
     @classmethod

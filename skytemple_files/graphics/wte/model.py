@@ -140,7 +140,6 @@ class Wte(Sir0Serializable, AutoString):
             # Generates a default grayscale palette if the file doesn't have one
             return [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
         else:
-            # This is to make all colors unique for the first variant
             return self.palette
         
     def to_pil_palette(self) -> Image.Image:

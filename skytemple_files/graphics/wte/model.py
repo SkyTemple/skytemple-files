@@ -141,21 +141,19 @@ class Wte(Sir0Serializable, AutoString):
             return [min((i//3)*(256//colors_per_line), 255) for i in range(colors_per_line*3)]
         else:
             # This is to make all colors unique for the first variant
-            return make_palette_colors_unique([self.palette[:colors_per_line*3]])[0]+self.palette[colors_per_line*3:]
+            return self.palette
         
     def to_pil_palette(self) -> Image.Image:
         """ Returns the palette as an image where each pixel represents each color of the palette. """
-        if self.image_type.bpp==0:
-            colors_per_line : int = 16
-        else:
-            colors_per_line : int = 2**self.image_type.bpp
-        palette : List[int] = self.get_palette()
-        if len(palette)%(colors_per_line*3)!=0:
-            palette += [0] * ((colors_per_line*3) - (len(palette)%(colors_per_line*3)))
-        img = Image.frombytes(mode="RGB", data=bytes(palette), size=(colors_per_line, len(palette)//colors_per_line//3))
+        colors_per_line = 16
+        palette : List[int] = [i for i in range(len(self.get_palette())//3)]
+        if len(palette)%colors_per_line!=0:
+            palette += [0] * (colors_per_line - len(palette)%colors_per_line)
+        img = Image.frombytes(mode="P", data=bytes(palette), size=(colors_per_line, len(palette)//colors_per_line))
+        img.putpalette(self.get_palette())
         return img
     
-    def to_pil_canvas(self, variation: int) -> Image.Image:
+    def to_pil_canvas(self, variation: int = 0) -> Image.Image:
         """ Returns the image with its data part size (the width and height specified in the WTE header).
             If this file has no image, returns an image representation of the palette instead. """
         im : Image.Image = self.to_pil(variation)
@@ -164,7 +162,7 @@ class Wte(Sir0Serializable, AutoString):
         else:
             return im.crop(box=[0,0,self.width,self.height])
         
-    def to_pil(self, variation: int) -> Image.Image:
+    def to_pil(self, variation: int = 0) -> Image.Image:
         """ Returns the image with its actual size (the one specified by the image mode).
             If this file has no image, returns an image representation of the palette instead. """
         
@@ -184,13 +182,12 @@ class Wte(Sir0Serializable, AutoString):
         im.putpalette(self.get_palette()[3*(2**self.image_type.bpp)*variation:])
         return im
 
-    def from_pil(self, img: Optional[Image.Image], pal: Image.Image, img_type: WteImageType, discard_palette: bool) -> 'Wte':
-        """ Replace the image/palette data by the new ones passed in arguments. """
-
-        if pal==None:
-            raise AttributeError('The palette must be specified.')
+    def from_pil(self, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> 'Wte':
+        """ Replace the image data by the new one passed in argument. """
+        if img.mode != 'P':
+            raise AttributeError('Can not convert PIL image to WTE: Must be indexed image (=using a palette)')
         
-        if img!=None and img_type.has_image:
+        if img_type.has_image:
             try:
                 self._adjust_actual_dimensions(img.width, img.height)
             except ValueError:
@@ -199,36 +196,14 @@ class Wte(Sir0Serializable, AutoString):
             self.width = img.width
             self.height = img.height
             dimensions = self.actual_dimensions()
-            self.image_type = img_type
         else:
-            self.image_type = WteImageType.NONE
-
-        if not self.has_image():
             self.width = 0
             self.height = 0
             self.actual_dim = 0
-        
-        self.palette = list(pal.convert(mode="RGB").tobytes())
+
+        self.image_type = img_type
         if self.image_type.has_image:
-            palette : List[int] = self.palette[:(2**img_type.bpp)*3]
-            img = img.convert(mode="RGB")
-            ## Note: this should become a function
-            ## Basically quantizes the image to a given palette
-            ## By choosing the color that has the minimum cumulated difference between RGB values
-            ## This is slow, but at least it preserves exact color matches unlike the PIL quantizer
-            
-            raw_image = []
-            for c in zip(img.tobytes('raw', 'R'), img.tobytes('raw', 'G'), img.tobytes('raw', 'B')):
-                min_color = -1
-                min_diff = 0
-                for i in range(len(palette)//3):
-                    diff = abs(c[0]-palette[i*3])+abs(c[1]-palette[i*3+1])+abs(c[2]-palette[i*3+2])
-                    if min_color<0 or diff<min_diff:
-                        min_color = i
-                        min_diff = diff
-                
-                raw_image.append(min_color)
-            ## 
+            raw_image = img.tobytes("raw", "P")
             self.image_data = bytearray(dimensions[0] // 8 * self.height * img_type.bpp)
             i = 0
             pixels_per_byte = 8 // img_type.bpp
@@ -243,6 +218,8 @@ class Wte(Sir0Serializable, AutoString):
             self.image_data = bytearray(0)
         if discard_palette:
             self.palette = []
+        else:
+            self.palette = [x for x in memoryview(img.palette.palette)]
         return self
 
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:

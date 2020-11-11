@@ -108,6 +108,11 @@
         <Fn name="SaveScriptVariableValue"  beg="0x4B820"/>
         <Fn name="SaveScriptVariableValueWithOffset" beg="0x4B988"/>
       </Bin>
+      <!-- overlay_0010 -->
+      <Bin filepath="overlay/overlay_0010.bin" loadaddress="0x22BCA80">
+        <Block name="MonsterSpawnStatsTable" beg="0x8EB8" end="0x935C"/>
+        <Block name="FixedFloorProperties"   beg="0xA1F0" end="0xADF0"/>
+      </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
         <Block name="ScriptOpCodes"             beg="0x03C3D0" end="0x03CFC8"/>
@@ -137,7 +142,13 @@
         <Block name="QuizzAnswerStrs"     beg="0x20F0" end="0x224E"/>
       </Bin>
       <!-- overlay_0029 -->
-      <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DC240"/>
+      <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DC240">
+        <Block name="EntitySpawnTable"    beg="0x740AC" end="0x74D48"/>
+        <Block name="ItemSpawnTable"      beg="0x73EB4" end="0x740AC"/>
+        <Block name="MonsterSpawnTable"   beg="0x73CD4" end="0x73EB4"/>
+        <Block name="TileSpawnTable"      beg="0x73B90" end="0x73BBC"/>
+        <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
+      </Bin>
     </Game>
 
     <!--Europe-->
@@ -169,6 +180,11 @@
         <Fn name="SaveScriptVariableValue"  beg="0x4BB58"/>
         <Fn name="SaveScriptVariableValueWithOffset" beg="0x4BCC0"/>
       </Bin>
+      <!-- overlay_0010 -->
+      <Bin filepath="overlay/overlay_0010.bin" loadaddress="0x22BD3C0">
+        <Block name="MonsterSpawnStatsTable" beg="0x8ED0" end="0x9374"/>
+        <Block name="FixedFloorProperties"   beg="0xA208" end="0xAE08"/>
+      </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
         <Block name="ScriptOpCodes"             beg="0x3C470" end="0x3D068"/>
@@ -193,7 +209,13 @@
         <Block name="StartersHeroIds"     beg="0x1F78" end="0x1FB8"/>
       </Bin>
       <!-- overlay_0029 -->
-      <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DCB80"/>
+      <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DCB80">
+        <Block name="EntitySpawnTable"    beg="0x74378" end="0x75014"/>
+        <Block name="ItemSpawnTable"      beg="0x74180" end="0x74378"/>
+        <Block name="MonsterSpawnTable"   beg="0x73FA0" end="0x74180"/>
+        <Block name="TileSpawnTable"      beg="0x73E5C" end="0x73E88"/>
+        <Block name="FixedFloorOverrides" beg="0x73EA0" end="0x73FA0"/>
+      </Bin>
     </Game>
 
     <!--Japan-->

@@ -17,6 +17,7 @@
 import bisect
 import re
 import warnings
+from itertools import groupby
 from typing import List, Tuple, TYPE_CHECKING, Iterable
 
 import pkg_resources
@@ -377,6 +378,10 @@ def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+
+def shrink_list(lst):
+    return [(element, len(list(i))) for element, i in groupby(lst)]
 
 
 class AutoString:

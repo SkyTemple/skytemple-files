@@ -109,6 +109,11 @@ class MonsterSpawnType(Enum):
     # Spawn types from 0x0B to 0x0F are weird when forced
     # but they are used in fixed floor 110
     # So they may be used properly in that floor
+    UNKNOWN_1 = 0xB, 'Unknown 1'
+    UNKNOWN_2 = 0xC, 'Unknown 2'
+    UNKNOWN_3 = 0xD, 'Unknown 3'
+    UNKNOWN_4 = 0xE, 'Unknown 4'
+    UNKNOWN_5 = 0xF, 'Unknown 5'
     
     # The one that welcomes you in the bazaar
     BAZAAR_HOST = 0x10, 'Bazaar Host'

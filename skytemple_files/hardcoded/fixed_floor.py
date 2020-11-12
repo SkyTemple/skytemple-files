@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List
+from enum import Enum
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary, Pmd2BinaryBlock
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString
@@ -71,26 +72,87 @@ class ItemSpawn(AutoString):
                self.null3 == other.null3
 
 
+class MonsterSpawnType(Enum):
+    # Note: this is based on observations when changing the spawn type
+    # So this may be not accurate
+    # All seem to have different ways to init their stats
+
+    # A normal enemy, this isn't used in fixed rooms, so it might be
+    # the type used for normal spawns in random generated floors
+    ENEMY_NORMAL = 0x00, 'Normal Enemy'
+    # An outlaw enemy 
+    OUTLAW = 0x01, 'Outlaw'
+    # A strange enemy that has the same behavior as the outlaw type
+    ENEMY_OUTLAW = 0x02, 'Outlaw Enemy'
+    # An outlaw enemy running away from you
+    OUTLAW_RUN = 0x03, 'Outlaw Running Away'
+
+    # The spawn types used for battles against rival teams
+    # One for the leader
+    TEAM_LEADER = 0x04, 'Team Leader'
+    # And one for their members
+    TEAM_MEMBER = 0x05, 'Team Member'
+    # A strong enemy that uses stats from the fixed stats table
+    ENEMY_STRONG = 0x06, 'Strong Enemy'
+    # An ally waiting to be rescued. If you talk to them, it will ask you
+    # if you want to rescue them
+    ALLY_WFR = 0x07, 'Waiting for Rescue Ally'
+
+    # The 8th spawn type is an enemy type with a broken AI
+    # and spawn type 8 is not used so it is not included in this enum
+
+    # A normal enemy, except that this time it is used in fixed floors
+    ENEMY_NORMAL_2 = 0x09, 'Normal Enemy'
+    # An ally who will help you in battles
+    ALLY_HELP = 0x0A, 'Helping Ally'
+
+    # Spawn types from 0x0B to 0x0F are weird when forced
+    # but they are used in fixed floor 110
+    # So they may be used properly in that floor
+    
+    # The one that welcomes you in the bazaar
+    BAZAAR_HOST = 0x10, 'Bazaar Host'
+    # The shop that lets you heal all your HP, PP and belly
+    BAZAAR_HEAL = 0x11, 'Bazaar Healer'
+    # The shop that lets you buy surprise boxes which contain a random item
+    BAZAAR_SURPRISE = 0x12, 'Bazaar Surprise'
+    # The shop that lets you clean all your sticky items
+    BAZAAR_CLEAN = 0x13, 'Bazaar Clean Sticky Items'
+    # The shop that lets you escape the dungeon
+    BAZAAR_ESCAPE = 0x14, 'Bazaar Escape'
+    
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: int, description: str
+    ):
+        self.description = description
+
 class MonsterSpawn(AutoString):
     def __init__(self, md_idx: int, stats_entry: int, enemy_settings: int):
         self.md_idx = md_idx
         self.stats_entry = stats_entry
         # 3: (?) 6 if the pokémon is an enemy, 0xA if it's an ally, 9 if the only thing that is being spawned is
         # an item. If it's 6 or 0xA, the stats of the pokémon are determined by the stats entry specified on byte 2.
-        self.enemy_settings = enemy_settings
+        self.enemy_settings = MonsterSpawnType(enemy_settings)
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)
         write_uintle(buffer, self.md_idx, 0, 2)
         write_uintle(buffer, self.stats_entry, 2, 1)
-        write_uintle(buffer, self.enemy_settings, 3, 1)
+        write_uintle(buffer, self.enemy_settings.value, 3, 1)
         return buffer
 
     def __eq__(self, other):
         if not isinstance(other, MonsterSpawn):
             return False
         return self.md_idx == other.md_idx and \
-               self.stats_entry == other.stats_entry
+               self.stats_entry == other.stats_entry and \
+               self.enemy_settings == other.enemy_settings
 
 
 class TileSpawn(AutoString):
@@ -165,7 +227,7 @@ class MonsterSpawnStats(AutoString):
 
 class FixedFloorProperties(AutoString):
     def __init__(self, music_track: int, unk4: bool, unk5: bool, moves_enabled: bool, orbs_enabled: bool,
-                 unk8: bool, unk9: bool, unk10: bool, null: int):
+                 unk8: bool, unk9: bool, exit_floor_when_defeating_enemies: bool, null: int):
         self.music_track = music_track
         self.unk4 = unk4
         self.unk5 = unk5
@@ -173,7 +235,7 @@ class FixedFloorProperties(AutoString):
         self.orbs_enabled = orbs_enabled
         self.unk8 = unk8
         self.unk9 = unk9
-        self.unk10 = unk10
+        self.exit_floor_when_defeating_enemies = exit_floor_when_defeating_enemies
         self.null = null
 
     def to_bytes(self) -> bytes:
@@ -185,7 +247,7 @@ class FixedFloorProperties(AutoString):
         write_uintle(buffer, self.orbs_enabled, 7, 1)
         write_uintle(buffer, self.unk8, 8, 1)
         write_uintle(buffer, self.unk9, 9, 1)
-        write_uintle(buffer, self.unk10, 10, 1)
+        write_uintle(buffer, self.exit_floor_when_defeating_enemies, 10, 1)
         write_uintle(buffer, self.null, 11, 1)
         return buffer
 
@@ -199,7 +261,7 @@ class FixedFloorProperties(AutoString):
                self.orbs_enabled == other.orbs_enabled and \
                self.unk8 == other.unk8 and \
                self.unk9 == other.unk9 and \
-               self.unk10 == other.unk10 and \
+               self.exit_floor_when_defeating_enemies == other.exit_floor_when_defeating_enemies and \
                self.null == other.null
 
 
@@ -356,7 +418,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_fixed_floor_properties(cls, overlay10: bytes, values: List[FixedFloorProperties], config: Pmd2Data):
+    def set_fixed_floor_properties(cls, overlay10: bytearray, values: List[FixedFloorProperties], config: Pmd2Data):
         """
         Sets the list of properties for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_properties).
@@ -365,14 +427,14 @@ class HardcodedFixedFloorTables:
                  config.binaries['overlay/overlay_0010.bin'].blocks['FixedFloorProperties'], 12)
 
     @classmethod
-    def get_fixed_floor_overrides(cls, overlay10: bytes, config: Pmd2Data) -> List[int]:
+    def get_fixed_floor_overrides(cls, overlay29: bytes, config: Pmd2Data) -> List[int]:
         """
         Returns the list of overrides for fixed floors.
         """
         block = config.binaries['overlay/overlay_0029.bin'].blocks['FixedFloorOverrides']
         lst = []
         for i in range(block.begin, block.end):
-            lst.append(read_uintle(overlay10, i, 1))
+            lst.append(read_uintle(overlay29, i, 1))
         return lst
 
     @classmethod
@@ -389,7 +451,7 @@ class HardcodedFixedFloorTables:
             overlay29[i] = entry
 
     @classmethod
-    def _set(cls, binary: bytes, values: List, config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int):
+    def _set(cls, binary: bytearray, values: List, config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int):
         expected_length = int((block.end - block.begin) / entry_len)
         if len(values) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

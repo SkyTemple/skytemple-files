@@ -89,9 +89,9 @@ class MonsterSpawnType(Enum):
 
     # The spawn types used for battles against rival teams
     # One for the leader
-    TEAM_LEADER = 0x04, 'Team Leader'
+    TEAM_LEADER = 0x04, 'Rival Team Leader'
     # And one for their members
-    TEAM_MEMBER = 0x05, 'Team Member'
+    TEAM_MEMBER = 0x05, 'Rival Team Member'
     # A strong enemy that uses stats from the fixed stats table
     ENEMY_STRONG = 0x06, 'Strong Enemy'
     # An ally waiting to be rescued. If you talk to them, it will ask you
@@ -106,14 +106,14 @@ class MonsterSpawnType(Enum):
     # An ally who will help you in battles
     ALLY_HELP = 0x0A, 'Helping Ally'
 
-    # Spawn types from 0x0B to 0x0F are weird when forced
-    # but they are used in fixed floor 110
-    # So they may be used properly in that floor
-    UNKNOWN_1 = 0xB, 'Unknown 1'
-    UNKNOWN_2 = 0xC, 'Unknown 2'
-    UNKNOWN_3 = 0xD, 'Unknown 3'
-    UNKNOWN_4 = 0xE, 'Unknown 4'
-    UNKNOWN_5 = 0xF, 'Unknown 5'
+    # Team from another game
+    OTHER_GAME_LEADER = 0xB, 'Other Game Team Leader'
+    OTHER_GAME_MEMBER_2 = 0xC, 'Other Game Team Member 2'
+    OTHER_GAME_MEMBER_3 = 0xD, 'Other Game Team Member 3'
+    OTHER_GAME_MEMBER_4 = 0xE, 'Other Game Team Member 4'
+
+    # This entry is unknown and unused
+    UNKNOWN_F = 0xF, 'Unknown 5'
     
     # The one that welcomes you in the bazaar
     BAZAAR_HOST = 0x10, 'Bazaar Host'

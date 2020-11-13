@@ -153,7 +153,14 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
         print(f"{i + 1}/{len(ground_dungeon_tilesets)-1} - {level.name}")
 
         mappa_idx = dungeons[entry.dungeon_id].mappa_index
-        tileset_id = mappa.floor_lists[mappa_idx][0].layout.tileset_id
+        start_offset = dungeons[entry.dungeon_id].start_after
+        print(entry.dungeon_id)
+        if entry.dungeon_id == 71:
+            print("DEEP CONCEALED RUINS SKIPPED")
+            continue
+        tileset_id = mappa.floor_lists[mappa_idx][start_offset].layout.tileset_id
+        if tileset_id == 170:
+            tileset_id = 1
         dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
         dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
         dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')
@@ -166,7 +173,7 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
 
         drawer = DmaDrawer(dma)
         rules = drawer.rules_from_bma(bma)
-        mappings = drawer.get_mappings_for_rules(rules, treat_outside_as_wall=True)
+        mappings = drawer.get_mappings_for_rules(rules, treat_outside_as_wall=True, variation_index=0)
         frames = drawer.draw(mappings, dpci, dpc, dpl, dpla)
         frames[0].save(
             os.path.join(dungeon_map_bg_dir, level.name + '.gif'),

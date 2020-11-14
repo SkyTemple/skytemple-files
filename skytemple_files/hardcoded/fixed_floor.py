@@ -194,11 +194,11 @@ class TileSpawn(AutoString):
 
 
 class MonsterSpawnStats(AutoString):
-    def __init__(self, level: int, hp: int, null: int,
+    def __init__(self, level: int, hp: int, exp_yield: int,
                  attack: int, special_attack: int, defense: int, special_defense: int, unkA: int):
         self.level = level
         self.hp = hp
-        self.null = null
+        self.exp_yield = exp_yield
         self.attack = attack
         self.special_attack = special_attack
         self.defense = defense
@@ -209,7 +209,7 @@ class MonsterSpawnStats(AutoString):
         buffer = bytearray(12)
         write_uintle(buffer, self.level, 0, 2)
         write_uintle(buffer, self.hp, 2, 2)
-        write_uintle(buffer, self.null, 4, 2)
+        write_uintle(buffer, self.exp_yield, 4, 2)
         write_uintle(buffer, self.attack, 6, 1)
         write_uintle(buffer, self.special_attack, 7, 1)
         write_uintle(buffer, self.defense, 8, 1)
@@ -222,7 +222,7 @@ class MonsterSpawnStats(AutoString):
             return False
         return self.level == other.level and \
                self.hp == other.hp and \
-               self.null == other.null and \
+               self.exp_yield == other.exp_yield and \
                self.attack == other.attack and \
                self.special_attack == other.special_attack and \
                self.defense == other.defense and \
@@ -290,7 +290,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_entity_spawn_table(cls, overlay29: bytes, values: List[EntitySpawnEntry], config: Pmd2Data):
+    def set_entity_spawn_table(cls, overlay29: bytearray, values: List[EntitySpawnEntry], config: Pmd2Data):
         """
         Sets the list of entity spawns.
         The length of the list must exactly match the original ROM's length (see get_entity_spawn_table).
@@ -315,7 +315,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_item_spawn_list(cls, overlay29: bytes, values: List[ItemSpawn], config: Pmd2Data):
+    def set_item_spawn_list(cls, overlay29: bytearray, values: List[ItemSpawn], config: Pmd2Data):
         """
         Returns the list of items that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_item_spawn_list).
@@ -339,7 +339,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_monster_spawn_list(cls, overlay29: bytes, values: List[MonsterSpawn], config: Pmd2Data):
+    def set_monster_spawn_list(cls, overlay29: bytearray, values: List[MonsterSpawn], config: Pmd2Data):
         """
         Returns the list of monsters that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_monster_spawn_list).
@@ -364,7 +364,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_tile_spawn_list(cls, overlay29: bytes, values: List[TileSpawn], config: Pmd2Data):
+    def set_tile_spawn_list(cls, overlay29: bytearray, values: List[TileSpawn], config: Pmd2Data):
         """
         Returns the list of tiles that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_tile_spawn_list).
@@ -393,7 +393,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_monster_spawn_stats_table(cls, overlay10: bytes, values: List[MonsterSpawnStats], config: Pmd2Data):
+    def set_monster_spawn_stats_table(cls, overlay10: bytearray, values: List[MonsterSpawnStats], config: Pmd2Data):
         """
         Returns the list of monsters that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_monster_spawn_stats_table).

@@ -151,14 +151,20 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
             continue
         level = levels_by_id[entry.ground_level]
         print(f"{i + 1}/{len(ground_dungeon_tilesets)-1} - {level.name}")
+        print(entry)
 
         mappa_idx = dungeons[entry.dungeon_id].mappa_index
         start_offset = dungeons[entry.dungeon_id].start_after
-        print(entry.dungeon_id)
+        length = dungeons[entry.dungeon_id].number_floors
         if entry.dungeon_id == 71:
             print("DEEP CONCEALED RUINS SKIPPED")
             continue
-        tileset_id = mappa.floor_lists[mappa_idx][start_offset].layout.tileset_id
+        if entry.unk2 == 1:
+            tileset_id = mappa.floor_lists[mappa_idx][start_offset].layout.tileset_id
+        elif entry.unk2 == 100:
+            tileset_id = mappa.floor_lists[mappa_idx][start_offset + length - 1].layout.tileset_id
+        else:
+            raise ValueError("Unknown unk2")
         if tileset_id == 170:
             tileset_id = 1
         dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
@@ -212,15 +218,10 @@ def draw_maps(rom: NintendoDSRom, map_dir, scriptdata: Pmd2ScriptData):
                             scriptdata)
 
 
-def draw_scene_for__actors_objects(rom: NintendoDSRom, file_name, dim_w, dim_h,  layer: SsaLayer) -> Image.Image:
+def draw_scene_for__objects(rom: NintendoDSRom, file_name, dim_w, dim_h,  layer: SsaLayer) -> Image.Image:
     img = Image.new('RGBA', (dim_w, dim_h), (255, 0, 0, 0))
     draw = ImageDraw.Draw(img, 'RGBA')
     has_written_something = False
-    # Actors
-    for i, actor in enumerate(layer.actors):
-        has_written_something = True
-        draw_actor(img, draw, actor)
-
     # Objects
     for i, object in enumerate(layer.objects):
         has_written_something = True
@@ -231,6 +232,20 @@ def draw_scene_for__actors_objects(rom: NintendoDSRom, file_name, dim_w, dim_h, 
 
     return img
 
+
+def draw_scene_for__actors(rom: NintendoDSRom, file_name, dim_w, dim_h,  layer: SsaLayer) -> Image.Image:
+    img = Image.new('RGBA', (dim_w, dim_h), (255, 0, 0, 0))
+    draw = ImageDraw.Draw(img, 'RGBA')
+    has_written_something = False
+    # Actors
+    for i, actor in enumerate(layer.actors):
+        has_written_something = True
+        draw_actor(img, draw, actor)
+
+    if has_written_something:
+        img.save(file_name)
+
+    return img
 
 def draw_scene_for__rest(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer) -> Image.Image:
     img = Image.new('RGBA', (dim_w, dim_h), (255, 0, 0, 0))
@@ -340,7 +355,8 @@ def draw_scene__merged(map_bg: List[Image.Image], duration, overlays: List[Image
 
 
 def draw_scenes_for(rom, i, count, dir_name, map_name, scene_name, file_name, scriptdata: Pmd2ScriptData):
-    os.makedirs(os.path.join(dir_name, 'ACTORS_OBJECTS'), exist_ok=True)
+    os.makedirs(os.path.join(dir_name, 'ACTORS'), exist_ok=True)
+    os.makedirs(os.path.join(dir_name, 'OBJECTS'), exist_ok=True)
     os.makedirs(os.path.join(dir_name, 'PERF_TRIGGER'), exist_ok=True)
     print(f"{i + 1}/{count} - {map_name} - {scene_name}")
     ssa = FileType.SSA.deserialize(rom.getFileByName(file_name), scriptdata=scriptdata)
@@ -350,10 +366,14 @@ def draw_scenes_for(rom, i, count, dir_name, map_name, scene_name, file_name, sc
 
     imgs = []
     for layer_id, layer in enumerate(ssa.layer_list):
-        # ACTORS_OBJECTS
+        # OBJECTS
         # -> .png
-        png_name_actobjs = os.path.join(dir_name, 'ACTORS_OBJECTS', f'layer_{layer_id}.png')
-        imgs.append(draw_scene_for__actors_objects(rom, png_name_actobjs, dim_w, dim_h, layer))
+        png_name_actobjs = os.path.join(dir_name, 'OBJECTS', f'layer_{layer_id}.png')
+        imgs.append(draw_scene_for__objects(rom, png_name_actobjs, dim_w, dim_h, layer))
+        # ACTORS_
+        # -> .png
+        png_name_actobjs = os.path.join(dir_name, 'ACTORS', f'layer_{layer_id}.png')
+        imgs.append(draw_scene_for__actors(rom, png_name_actobjs, dim_w, dim_h, layer))
         # PERF_TRIGGER
         # -> .png
         png_name_perftrgs = os.path.join(dir_name, 'PERF_TRIGGER', f'layer_{layer_id}.png')
@@ -441,8 +461,8 @@ def main():
               - {map_name}_{scene_name}_all_merged.webp - All assets of the scene as one animated WebP
                                                           image. The Map BG of the same name (BPL name)
                                                           is used as a background.
-              - ACTORS_OBJECTS - A directory containing PNG files for each layer with all actors and
-                                 objects on them.
+              - OBJECTS - A directory containing PNG files for each layer with all objects on them.
+              - ACTORS  - A directory containing PNG files for each layer with all actors on them.
               - PERF_TRIGGER - A directory with PNG files for each layer, with markers for 
                                          all performers, triggers and position marks.
 

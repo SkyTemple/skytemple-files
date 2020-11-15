@@ -1288,7 +1288,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x4"   name="back_SetBackScrollSpeed"                params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="0" type="sint" name="unk0"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x5"   name="back_SetBanner"                         params="2"  stringidx="1"  unk2="0"  unk3="0"   >
@@ -2417,19 +2417,19 @@
           <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
           <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="x"/>
-            <Argument type="uint" name="y"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x11c" name="Slide3PositionOffset"                   params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x11d" name="Slide3PositionOffsetRandom"             params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x11e" name="SlideHeight"                            params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -2470,14 +2470,14 @@
            <!-- This is an Opcode with a variable length of arguments. (params=-1) -->
           <Argument id="0" type="uint" name="unk0"/>
           <RepeatingArgumentGroup id="1">
-            <Argument type="uint" name="unk1"/>
-            <Argument type="uint" name="unk2"/>
+            <Argument type="sint" name="x"/>
+            <Argument type="sint" name="y"/>
           </RepeatingArgumentGroup>
         </OpCode>
         <OpCode id="0x126" name="SlidePositionOffset"                    params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="x"/>
-          <Argument id="2" type="uint" name="y"/>
+          <Argument id="1" type="sint" name="x"/>
+          <Argument id="2" type="sint" name="y"/>
         </OpCode>
         <OpCode id="0x127" name="sound_FadeOut"                          params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>

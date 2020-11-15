@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import itertools
 from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import Optional, Union
@@ -210,6 +211,35 @@ class FixedFloor:
         write_uintle(header, self.height, 0x02, 2)
         write_uintle(header, self.unk4, 0x04, 2)
         return header + self._actions_to_bytes()
+
+    def resize(self, width, height):
+        # Convert existing data into a grid
+        rows = []
+        current_row = None
+        for i, el in enumerate(self.actions):
+            if i % self.width == 0:
+                if current_row is not None:
+                    rows.append(current_row)
+                current_row = []
+            current_row.append(el)
+        rows.append(current_row)
+
+        # Shrink / enlarge the grid
+        # Y: Enlarge
+        for _ in range(0, height - len(rows)):
+            rows.append([])
+        # Y: Shrink
+        rows = rows[:height]
+        for row_i, row in enumerate(rows):
+            # X: Enlarge
+            for _ in range(0, width - len(row)):
+                row.append(TileRule(TileRuleType.FLOOR_ROOM, None))
+            # X: Shrink
+            rows[row_i] = row[:width]
+
+        self.actions = list(itertools.chain.from_iterable(rows))
+        self.width = width
+        self.height = height
 
     def _actions_to_bytes(self) -> bytes:
         actions: List[Tuple[FixedFloorActionRule, int]] = shrink_list(self.actions)

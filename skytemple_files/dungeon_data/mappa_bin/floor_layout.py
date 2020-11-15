@@ -97,9 +97,30 @@ class MappaFloorTerrainSettings:
 
 
 class MappaFloorDarknessLevel(Enum):
-    NO_DARKNESS = 0
-    HEAVY_DARKNESS = 1
-    LIGHT_DARKNESS = 2
+    NO_DARKNESS = 0, "No darkness"
+    HEAVY_DARKNESS = 1, "1-tile vision (Heavy darkness)"
+    LIGHT_DARKNESS = 2, "2-tile vision (Light darkness)"
+    THREE_TILE = 3, "3-tile vision"
+    FOUR_TILE = 4, "4-tile vision"
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MappaFloorDarknessLevel.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 # I hate this class.

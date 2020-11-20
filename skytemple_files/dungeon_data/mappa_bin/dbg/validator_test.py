@@ -37,8 +37,8 @@ for i, dungeon in enumerate(dungeons):
     print(i, dungeon)
 print("")
 
-validator = DungeonValidator(dungeons, mappa.floor_lists)
-validator.validate()
+validator = DungeonValidator(mappa.floor_lists)
+validator.validate(dungeons)
 for e in validator.errors:
     if not isinstance(e, DungeonTotalFloorCountInvalidError):
         print(repr(e))

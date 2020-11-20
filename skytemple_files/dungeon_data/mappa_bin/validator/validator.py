@@ -24,8 +24,8 @@ from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
 class DungeonValidator:
-    def __init__(self, dungeons: List[DungeonDefinition], floors: List[List[MappaFloor]]):
-        self.dungeons = dungeons
+    def __init__(self, floors: List[List[MappaFloor]]):
+        self.dungeons = None
         self.floors = floors
 
         self._errors: List[DungeonValidatorError] = []
@@ -48,9 +48,10 @@ class DungeonValidator:
             raise ValueError("Call validate first.")
         return self._invalid_dungeons
 
-    def validate(self) -> bool:
+    def validate(self, dungeons: List[DungeonDefinition]) -> bool:
         # Reset
-        self.__init__(self.dungeons, self.floors)
+        self.__init__(self.floors)
+        self.dungeons = dungeons
         self._validated = True
 
         for dungeon_id, dungeon in enumerate(self.dungeons):
@@ -143,7 +144,7 @@ class DungeonValidator:
         current_i = None
         for i, dungeon in enumerate(self.dungeons):
             if dungeon.mappa_index == mappa_index:
-                if dungeon.start_after > start_index_prev and dungeon.start_after <= floor_id:
+                if start_index_prev < dungeon.start_after <= floor_id:
                     current_i = i
                     start_index_prev = dungeon.start_after
         if current_i is None:

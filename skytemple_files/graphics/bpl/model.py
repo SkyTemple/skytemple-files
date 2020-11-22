@@ -165,5 +165,5 @@ class Bpl:
         """Sets the palette properly, adding dummy grayscale entries if needed. """
         self.palettes = palettes
         self.number_palettes = len(palettes)
-        while len(self.palettes)<0x10:
-            self.palettes.append([(i//3)*16 for i in range(16*3)])
+        while len(self.palettes)<BPL_MAX_PAL:
+            self.palettes.append([(i//3)*BPL_MAX_PAL for i in range(BPL_MAX_PAL*3)])

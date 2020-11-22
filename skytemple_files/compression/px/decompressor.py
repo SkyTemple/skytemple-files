@@ -120,7 +120,8 @@ class PxDecompressor:
         Returns index or False
         """
         for idx, byte in enumerate(self.flags):
-            nbl = byte & 0xF
+            # The game compares with the entire byte, not just the lower nibble of the flag
+            nbl = byte
             if nbl == high_nibble:
                 return idx
         return False

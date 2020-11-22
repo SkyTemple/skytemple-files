@@ -250,7 +250,8 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
     new_img_compressed = FileType.AT4PX.serialize(FileType.AT4PX.compress(new_img))
-
+    if len(new_img_compressed)>800:
+        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).")
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.AT4PX.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

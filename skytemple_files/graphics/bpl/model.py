@@ -25,6 +25,9 @@ BPL_PAL_LEN = 15
 BPL_IMG_PAL_LEN = BPL_PAL_LEN + 1
 # Maximum number of palettes
 BPL_MAX_PAL = 16
+# Maximum number of normal palettes
+BPL_NORMAL_MAX_PAL = 14
+
 # Number of color bytes per palette entry. Fourth is always 0x00.
 BPL_PAL_ENTRY_LEN = 4
 # Size of a single palette in bytes
@@ -72,7 +75,7 @@ class Bpl:
                 self.palettes.append(self.current_palette)
                 self.current_palette = [0, 0, 0]  # Transparent first color - see above!
                 colors_read_for_current_palette = 0
-
+        self.set_palettes(self.palettes)
         # If the second flag is set (has_second_color_table) then there should be
         # more data. Otherwise not!
         #assert len(data) - pal_end == 0 if not self.has_second_color_table else len(data) - pal_end > 0
@@ -148,8 +151,19 @@ class Bpl:
         return f_palettes
 
     def is_palette_affected_by_animation(self, pal_idx):
-        """Returns whether or not the palette with that index is affected by animation"""
+        """Returns whether or not the palette with that index is affected by animation. """
         if not self.has_palette_animation:
             return False
         spec = self.animation_specs[pal_idx]
         return spec.number_of_frames > 0
+
+    def get_real_palettes(self):
+        """Gets the actual palettes defined (without dummy grayscale entries). """
+        return self.palettes[:self.number_palettes]
+        
+    def set_palettes(self, palettes):
+        """Sets the palette properly, adding dummy grayscale entries if needed. """
+        self.palettes = palettes
+        self.number_palettes = len(palettes)
+        while len(self.palettes)<BPL_MAX_PAL:
+            self.palettes.append([(i//3)*BPL_MAX_PAL for i in range(BPL_MAX_PAL*3)])

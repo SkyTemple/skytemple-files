@@ -164,16 +164,9 @@ class Bpc:
         warnings by the tiled_image module when this is the case.
         The mapping to BPA tiles has to be done programmatically using set_tile or set_chunk.
 
-        The palette rendering restrictions are honored (palettes 15/16 unusable).
-
         """
         width = width_in_mtiles * self.tiling_width * BPC_TILE_DIM
         height = math.ceil(self.layers[layer].chunk_tilemap_len / width_in_mtiles) * self.tiling_height * BPC_TILE_DIM
-        # Limit to 14 palettes
-        palettes = palettes.copy()
-        for p in range(14, 16):
-            if len(palettes) > p:
-                palettes[p] = [0] * 3 * 16
         return to_pil(
             self.layers[layer].tilemap, self.layers[layer].tiles, palettes, BPC_TILE_DIM,
             width, height, self.tiling_width, self.tiling_height
@@ -184,14 +177,7 @@ class Bpc:
         Convert a single chunk of the BPC to one big PIL image. For general notes, see chunks_to_pil.
 
         Does NOT export BPA tiles. Chunks that reference BPA tiles are replaced with empty tiles.
-
-        The palette rendering restrictions are honored (palettes 15/16 unusable).
         """
-        # Limit to 14 palettes
-        palettes = palettes.copy()
-        for p in range(14, 16):
-            if len(palettes) > p:
-                palettes[p] = [0] * 3 * 16
         mtidx = chunk_idx * self.tiling_width * self.tiling_height
         return to_pil(
             self.layers[layer].tilemap[mtidx:mtidx + 9], self.layers[layer].tiles, palettes, BPC_TILE_DIM,

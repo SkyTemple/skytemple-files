@@ -44,7 +44,7 @@ class BplWriter:
         self._write_16uintle(self.model.number_palettes)
         self._write_16uintle(self.model.has_palette_animation)
 
-        for palette in self.model.palettes:
+        for palette in self.model.get_real_palettes():
             # Palettes [Starts with transparent color! This is removed!]
             for i, color in enumerate(palette[3:]):
                 self._write_byte(color)

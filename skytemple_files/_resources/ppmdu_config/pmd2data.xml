@@ -593,12 +593,10 @@
           <!--Open each binaries for processing and include the appropriate files-->
           <!--The openfile statements will be appropriately generated based on the data in this file, and on the rom path!-->
           <OpenBin filepath="arm9.bin">
-            <Include filename ="pmd2_asm_mods/src/levellistloader_arm9.asm"/>
-            <Include filename ="pmd2_asm_mods/src/actorlistloader_arm9.asm"/>
+		  <Include filename ="pmd2_asm_mods/src/selector_arm9.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-            <Include filename ="pmd2_asm_mods/src/levellistloader_overlay11.asm"/>
-            <Include filename ="pmd2_asm_mods/src/actorlistloader_overlay11.asm"/>
+		  <Include filename ="pmd2_asm_mods/src/selector_overlay11.asm"/>
           </OpenBin>
         </Patch>
 

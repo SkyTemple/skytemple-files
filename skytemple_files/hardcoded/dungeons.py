@@ -148,8 +148,8 @@ class SecondaryTerrainTableEntry(Enum):
 
 
 class MapMarkerPlacement(AutoString):
-    def __init__(self, map_id: int, reference_id: int, x: int, y: int):
-        self.map_id = map_id
+    def __init__(self, level_id: int, reference_id: int, x: int, y: int):
+        self.level_id = level_id
         self.reference_id = reference_id
         self.x = x
         self.y = y
@@ -165,7 +165,7 @@ class MapMarkerPlacement(AutoString):
 
     def to_bytes(self) -> bytes:
         buff = bytearray(MAP_MARKER_PLACEMENTS_ENTRY_LEN)
-        write_sintle(buff, self.map_id, 0, 2)
+        write_sintle(buff, self.level_id, 0, 2)
         write_sintle(buff, self.reference_id, 2, 2)
         write_sintle(buff, self.x, 4, 2)
         write_sintle(buff, self.y, 6, 2)
@@ -174,7 +174,7 @@ class MapMarkerPlacement(AutoString):
     def __eq__(self, other):
         if not isinstance(other, MapMarkerPlacement):
             return False
-        return self.map_id == other.map_id and \
+        return self.level_id == other.level_id and \
                self.reference_id == other.reference_id and \
                self.x == other.x and \
                self.y == other.y

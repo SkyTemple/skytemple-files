@@ -215,7 +215,7 @@ class FixedFloor:
     def resize(self, width, height):
         # Convert existing data into a grid
         rows = []
-        current_row = None
+        current_row = []
         for i, el in enumerate(self.actions):
             if i % self.width == 0:
                 if current_row is not None:

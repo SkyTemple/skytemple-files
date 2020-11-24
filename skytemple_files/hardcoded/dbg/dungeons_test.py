@@ -90,10 +90,10 @@ for i, e in enumerate(lst):
         print(f'unk{i}')
     else:
         print(dungeon_strs[i])
-    if e.map_id == -1:
+    if e.level_id == -1:
         print('n/a')
     else:
-        print(ppmdu_us.script_data.level_list__by_id[e.map_id].name)
+        print(ppmdu_us.script_data.level_list__by_id[e.level_id].name)
     print(e.reference_id)
     print("x", e.x, "y", e.y)
 HardcodedDungeons.set_marker_placements(lst, arm9_us, ppmdu_us)

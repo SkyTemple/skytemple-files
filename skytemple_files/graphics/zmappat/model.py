@@ -30,9 +30,9 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 logger = logging.getLogger(__name__)
 class ZMappaTVariation(Enum):
-    SEMI_OPAQUE = 0x00, 'Semi-opaque'
-    TRANSPARENT = 0x01, 'Transparent'
-    FULL_OPAQUE = 0x02, 'Opaque'
+    SEMI_OPAQUE = 0x00, 'Semi-Opaque', "sopaque"
+    TRANSPARENT = 0x01, 'Transparent', "trans"
+    OPAQUE      = 0x02, 'Opaque', "opaque"
     
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -41,13 +41,14 @@ class ZMappaTVariation(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: int, description: str
+            self, _: int, description: str, filename: str
     ):
         self.description = description
+        self.filename = filename
 
 class ZMappaT(Sir0Serializable, AutoString):
     def __init__(self, data: Optional[bytes], header_pnt: int):
-        """Constructs a Wte model. Setting data to None will initialize an empty model."""
+        """Constructs a ZMappaT model. Setting data to None will initialize an empty model."""
         if data is None:
             self.tiles = []
             self.masks = []

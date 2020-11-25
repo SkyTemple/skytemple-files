@@ -28,7 +28,6 @@ from skytemple_files.container.dungeon_bin.sub.at4px_dpci import DbinAt4pxDpciHa
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import DbinSir0At4pxDmaHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx import DbinSir0PkdpxHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_1035 import DbinSir01035Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_image_1034 import DbinSir0Image1034Handler
 from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import DbinSir0PkdpxDbgHandler
@@ -62,6 +61,7 @@ from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.graphics.wte.handler import WteHandler
 from skytemple_files.graphics.wtu.handler import WtuHandler
+from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
@@ -139,7 +139,7 @@ class FileType:
     DBIN_SIR0_WEIRD_DATA_FILE = DbinSir0WeirdDataFileHandler
     DBIN_SIR0_IMAGE_1033 = DbinSir0Image1033Handler
     DBIN_SIR0_IMAGE_1034 = DbinSir0Image1034Handler
-    DBIN_SIR0_1035 = DbinSir01035Handler
+    DBIN_SIR0_ZMAPPAT = ZMappaTHandler
 
     # Please don't use these directly, use them via the ppmdu_config instead!
     # (skytemple_files.common.util.get_ppmdu_config_for_rom).

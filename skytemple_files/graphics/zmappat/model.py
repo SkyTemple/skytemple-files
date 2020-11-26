@@ -114,7 +114,8 @@ class ZMappaT(Sir0Serializable, AutoString):
         im = Image.frombuffer('P', dimensions, pil_img_data, 'raw', 'P', 0, 1)
         return im
     def _to_pil_chunk_minimized(self, chunks, variation:ZMappaTVariation) -> Image.Image:
-        """ Returns an image using the chunks given."""
+        """ Returns an image using the chunks given.
+        This is the minimized version. """
         dimensions = (4*(ZMAPPAT_NB_TILES_PER_LINE//2), 4*(ZMAPPAT_NB_TILES_PER_VARIATION//ZMAPPAT_NB_TILES_PER_LINE)//2)
         pil_img_data = bytearray(ZMAPPAT_NB_TILES_PER_VARIATION*4)
 
@@ -152,7 +153,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         return im
 
     def from_pil(self, imgs: List[Image.Image], masks: List[Image.Image]) -> 'ZMappaT':
-        """ Replace the tile data by the new ones passed in argument. """
+        """ Replace the tile/mask data by the new ones passed in argument. """
         if len(imgs)!=ZMAPPAT_NB_VARIATIONS or len(masks)!=ZMAPPAT_NB_VARIATIONS:
             raise ValueError("Tile and masks list must have exactly 3 items")
         new_tiles = []
@@ -172,7 +173,8 @@ class ZMappaT(Sir0Serializable, AutoString):
         self.palette = [x for x in memoryview(imgs[0].palette.palette)]
     
     def from_pil_minimized(self, imgs: List[Image.Image], masks: List[Image.Image]) -> 'ZMappaT':
-        """ Replace the tile data by the new ones passed in argument. """
+        """ Replace the tile/mask data by the new ones passed in argument.
+        This is for the minimized version. """
         if len(imgs)!=ZMAPPAT_NB_VARIATIONS or len(masks)!=ZMAPPAT_NB_VARIATIONS:
             raise ValueError("Tile and masks list must have exactly 3 items")
         new_tiles = []

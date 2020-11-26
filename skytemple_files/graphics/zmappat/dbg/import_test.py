@@ -30,21 +30,21 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
 tiles = []
 masks = []
 for i in range(3):
-    fn = f'dungeon.bin__1035.zmappat.img-{i}.png'
+    fn = f'dungeon.bin__minimap.zmappat.img-{i}.png'
     tiles.append(Image.open(os.path.join(out_dir, fn), 'r'))
-    fn = f'dungeon.bin__1035.zmappat.mask-{i}.png'
+    fn = f'dungeon.bin__minimap.zmappat.mask-{i}.png'
     masks.append(Image.open(os.path.join(out_dir, fn), 'r'))
 zmappat = ZMappaTHandler.new(tiles, masks, False)
 tiles = []
 masks = []
 for i in range(3):
-    fn = f'dungeon.bin__1035.zmappat.img-min-{i}.png'
+    fn = f'dungeon.bin__minimap.zmappat.img-min-{i}.png'
     tiles.append(Image.open(os.path.join(out_dir, fn), 'r'))
-    fn = f'dungeon.bin__1035.zmappat.mask-min-{i}.png'
+    fn = f'dungeon.bin__minimap.zmappat.mask-min-{i}.png'
     masks.append(Image.open(os.path.join(out_dir, fn), 'r'))
 zmappat_min = ZMappaTHandler.new(tiles, masks, True)
 assert zmappat==zmappat_min
-with open(os.path.join(out_dir, 'dungeon.bin__1035.zmappat'), 'rb') as f:
+with open(os.path.join(out_dir, 'dungeon.bin__minimap.zmappat'), 'rb') as f:
     zmappat_ref = ZMappaTHandler.deserialize(f.read())
     f.close()
 assert zmappat_min==zmappat_ref

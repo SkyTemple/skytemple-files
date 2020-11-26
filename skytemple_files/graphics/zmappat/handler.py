@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import List
 
 try:
     from PIL import Image
@@ -42,7 +43,7 @@ class ZMappaTHandler():
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def new(cls, img: Image.Image, mask: Image.Image, minimized = False) -> ZMappaT:
+    def new(cls, img: List[Image.Image], mask: List[Image.Image], minimized=False) -> ZMappaT:
         zmappat = ZMappaT(None, 0)
         if minimized:
             zmappat.from_pil_minimized(img, mask)
@@ -52,7 +53,7 @@ class ZMappaTHandler():
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'ZMappaT':
-        return ZMappaT(data)
+        return ZMappaT(data, 0)
 
     @classmethod
     def serialize_raw(cls, data: 'ZMappaT', **kwargs) -> bytes:

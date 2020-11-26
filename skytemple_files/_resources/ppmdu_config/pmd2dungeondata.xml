@@ -63,7 +63,7 @@
         <BinPackFile idxfirst="1032"                type="WTU"                       name="1031.wtu"/>
         <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMAGE_1033"      name="%d.img1033.sir0"/>
         <BinPackFile idxfirst="1034"                type="DBIN_SIR0_IMAGE_1034"      name="%d.img1034.sir0"/>
-        <BinPackFile idxfirst="1035"                type="DBIN_SIR0_ZMAPPAT"         name="%d.zmappat"/>
+        <BinPackFile idxfirst="1035"                type="DBIN_SIR0_ZMAPPAT"         name="minimap.zmappat"/>
       </DungeonBinFiles>
 
       <!--**********************************************-->

@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-
-# TODO
-DbinSir01035Handler = None
+ZMAPPAT_TILE_SIZE = 0x80
+ZMAPPAT_PALETTE_COLORS = 0x10
+ZMAPPAT_NB_TILES_PER_VARIATION = 256
+ZMAPPAT_NB_VARIATIONS = 3
+ZMAPPAT_NB_TILES_PER_LINE = 16

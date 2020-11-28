@@ -36,7 +36,7 @@ class Dpla:
         for i in range(pointer_to_pointers, len(data), 4):
             toc_pointers.append(read_uintle(data, i, 4))
 
-        # A list of colors stored in this file. The colors are lists of RGB value tuples: [(R, G, B), (R, G, B)...]
+        # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
         self.colors = []
         self.durations_per_frame_for_colors = []
         for pnt in toc_pointers:

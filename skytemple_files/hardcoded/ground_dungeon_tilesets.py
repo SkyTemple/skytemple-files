@@ -25,7 +25,7 @@ class GroundTilesetMapping(AutoString):
     def __init__(self, ground_level: int, dungeon_tileset: int, unk2: int, unk3: int):
         self.ground_level = ground_level
         self.dungeon_id = dungeon_tileset
-        self.unk2 = unk2
+        self.unk2 = unk2  # TODO: Rename in floor_id
         self.unk3 = unk3
 
     def __eq__(self, other):

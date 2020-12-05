@@ -1,4 +1,4 @@
-__version__ = '0.1.0rc1'
+__version__ = '0.1.0rc2'
 import os
 
 from setuptools import setup, find_packages

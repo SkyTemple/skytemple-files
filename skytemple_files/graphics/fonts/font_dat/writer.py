@@ -28,8 +28,13 @@ class FontDatWriter:
     def write(self) -> bytes:
         buffer = bytearray(FONT_ENTRY_LEN * len(self.model.entries))
         write_uintle(buffer, len(self.model.entries), 0x00, 4)
-        
-        for i, e in enumerate(self.model.entries):
+
+        # Font Data
+        last = (None, None)
+        for i, e in enumerate(sorted(self.model.entries, key=lambda x:(x.table, x.char))):
+            if last==(e.char, e.table):
+                raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")
+            last = (e.char, e.table)
             off_start = 0x4 + (i * FONT_ENTRY_LEN)
             write_uintle(buffer, e.char, off_start + 0x00)
             write_uintle(buffer, e.table, off_start + 0x01)

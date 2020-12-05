@@ -28,10 +28,11 @@ class FontSir0Writer:
 
     def write(self) -> Tuple[bytes, List[int], Optional[int]]:
         pointer_offsets = []
-        
+
+        sorted_entries = sorted(self.model.entries, key=lambda x:(x.table, x.char))
         buffer = bytearray()
         # Image data
-        for i, e in enumerate(self.model.entries):
+        for i, e in enumerate(sorted_entries):
             buffer += e.data
 
         if len(buffer)%16!=0:
@@ -39,7 +40,11 @@ class FontSir0Writer:
         # Character pointers
         char_pointer = bytearray(len(self.model.entries) * FONT_SIR0_ENTRY_LEN)
         char_pointer_offset = len(buffer)
-        for i, e in enumerate(self.model.entries):
+        last = (None, None)
+        for i, e in enumerate(sorted_entries):
+            if last==(e.char, e.table):
+                raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")
+            last = (e.char, e.table)
             pointer_offsets.append(len(buffer)+i * FONT_SIR0_ENTRY_LEN)
             write_uintle(char_pointer, i * FONT_SIR0_DATA_LEN, i * FONT_SIR0_ENTRY_LEN, 4)
             write_uintle(char_pointer, e.char, i * FONT_SIR0_ENTRY_LEN + 0x4)

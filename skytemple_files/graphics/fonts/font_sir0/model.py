@@ -19,7 +19,7 @@ from typing import Dict, Optional
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
-from skytemple_files.graphics.fonts.abstract import AbstractFont
+from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -31,7 +31,7 @@ except ImportError:
 
 
 
-class FontSir0Entry(AutoString):
+class FontSir0Entry(AbstractFontEntry):
     def __init__(self, char: int, table: int, width: int, cat: int, padding: int, data: bytes):
         self.char = char
         self.table = table
@@ -54,6 +54,25 @@ class FontSir0Entry(AutoString):
             attrs[XML_CHAR__PADDING] = str(self.padding)
         xml_entry = Element(XML_CHAR, attrs)
         return xml_entry
+    
+    @classmethod
+    def get_class_properties(cls) -> List[str]:
+        return ["char", "width", "cat", "padding"]
+
+    def get_properties(self) -> Dict[str, int]:
+        """Returns a dictionnary of the properties of the entry"""
+        return {"char":self.char, "width":self.width, "cat":self.cat, "padding":self.padding}
+
+    def set_properties(self, properties: Dict[str, int]):
+        """Sets a list of the properties of the entry"""
+        if "char" in properties:
+            self.char = properties["char"]
+        if "width" in properties:
+            self.width = properties["width"]
+        if "cat" in properties:
+            self.cat = properties["cat"]
+        if "padding" in properties:
+            self.padding = properties["padding"]
     
     @classmethod
     def from_pil(cls, img: Image, char: int, table: int, width: int, cat: int, padding: int) -> 'FontSir0Entry':
@@ -105,6 +124,24 @@ class FontSir0(Sir0Serializable, AbstractFont):
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
         return FontSir0Writer(self).write()
+    
+    def get_entry_properties(self) -> List[str]:
+        return FontSir0Entry.get_class_properties()
+
+    def delete_entry(self, entry: AbstractFontEntry):
+        self.entries.remove(entry)
+    
+    def create_entry_for_table(self, table) -> AbstractFontEntry:
+        entry = FontSir0Entry(0, table, 0, FONT_DEFAULT_CAT, FONT_DEFAULT_PADDING, bytes(FONT_SIR0_DATA_LEN))
+        self.entries.append(entry)
+        return entry
+        
+    def get_entries_from_table(self, table) -> List[AbstractFontEntry]:
+        entries = []
+        for item in self.entries:
+            if item.table == table:
+                entries.append(item)
+        return entries
     
     def to_pil(self) -> Dict[int, 'Image']:
         tables = dict()

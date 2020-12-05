@@ -15,6 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from enum import Enum
+
+class FontType(Enum):
+    FONT_DAT = 0x00
+    FONT_SIR0 = 0x01
+
 FONT_ENTRY_LEN = 0x1C
 FONT_DEFAULT_BPROW = 2
 

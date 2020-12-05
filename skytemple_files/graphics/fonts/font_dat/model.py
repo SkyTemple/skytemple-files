@@ -15,11 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Dict
+from typing import Dict, Type
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
-from skytemple_files.graphics.fonts.abstract import *
+from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
 try:
@@ -27,22 +27,38 @@ try:
 except ImportError:
     from pil import Image
 
-
-
-class FontDatEntry(AutoString):
+class FontDatEntry(AbstractFontEntry):
     def __init__(self, char: int, table: int, width: int, bprow: int, data: bytes):
         self.char = char
         self.table = table
         self.width = width
         self.bprow = bprow # bytes per row; never checked by the game
         self.data = data
+    
+    @classmethod
+    def get_class_properties(cls) -> List[str]:
+        return ["char", "width", "bprow"]
+
+    def get_properties(self) -> Dict[str, int]:
+        """Returns a dictionnary of the properties of the entry"""
+        return {"char":self.char, "width":self.width, "bprow":self.bprow}
+
+    def set_properties(self, properties: Dict[str, int]):
+        """Sets a list of the properties of the entry"""
+        if "char" in properties:
+            self.char = properties["char"]
+        if "width" in properties:
+            self.width = properties["width"]
+        if "bprow" in properties:
+            self.bprow = properties["bprow"]
 
     def to_pil(self) -> Image:
         data = []
-        for i in range(len(self.data)//self.bprow):
+        bprow = FONT_DEFAULT_BPROW # Unused, so always use default
+        for i in range(len(self.data)//bprow):
             pos = 0
-            for j in range(self.bprow):
-                v = self.data[i*self.bprow+j]
+            for j in range(bprow):
+                v = self.data[i*bprow+j]
                 for x in range(8):
                     if pos<12:
                         if v&(2**x):
@@ -64,9 +80,10 @@ class FontDatEntry(AutoString):
         return xml_entry
     
     @classmethod
-    def from_pil(cls, img: Image, char: int, table: int, width: int, bprow: int) -> 'FontDatEntry':
+    def from_pil(cls, img: Image, char: int, table: int, width: int, bprow_field: int) -> 'FontDatEntry':
         if img.mode!='P':
             raise AttributeError("This must be a color indexed image!")
+        bprow = FONT_DEFAULT_BPROW # Unused, so always use default
         data = []
         raw_data = img.tobytes("raw", "P")
         for i in range(12):
@@ -76,7 +93,7 @@ class FontDatEntry(AutoString):
                 pos = -bprow + j//8
                 if v:
                     data[pos] = data[pos]|(2**(j%8))
-        return FontDatEntry(char, table, width, bprow, bytes(data))
+        return FontDatEntry(char, table, width, bprow_field, bytes(data))
     
     def __eq__(self, other):
         if not isinstance(other, FontDatEntry):
@@ -102,6 +119,25 @@ class FontDat(AbstractFont):
                 read_uintle(data, i + 0x03),
                 data[i + 0x4:i + FONT_ENTRY_LEN]
             ))
+    
+    def get_entry_properties(self) -> List[str]:
+        return FontDatEntry.get_class_properties()
+    
+    def delete_entry(self, entry: AbstractFontEntry):
+        self.entries.remove(entry)
+    
+    def create_entry_for_table(self, table) -> AbstractFontEntry:
+        entry = FontDatEntry(0, table, 0, FONT_DEFAULT_BPROW, bytes(FONT_ENTRY_LEN-0x4))
+        self.entries.append(entry)
+        return entry
+    
+    def get_entries_from_table(self, table) -> List[AbstractFontEntry]:
+        entries = []
+        for item in self.entries:
+            if item.table == table:
+                entries.append(item)
+        return entries
+
     def to_pil(self) -> Dict[int, 'Image']:
         tables = dict()
         for t in FONT_VALID_TABLES:

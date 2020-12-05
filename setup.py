@@ -1,3 +1,4 @@
+__version__ = '0.1.0rc1'
 import os
 
 from setuptools import setup, find_packages
@@ -22,7 +23,7 @@ def get_resources(file_exts):
 
 setup(
     name='skytemple-files',
-    version='0.1.0rc1',
+    version=__version__,
     packages=find_packages(),
     package_data={'skytemple_files': get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md'])},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',

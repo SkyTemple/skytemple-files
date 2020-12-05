@@ -12,6 +12,8 @@ jobs:
       # For tags we assume the version in setup.py is correct!
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
       - name: Rewrite version for dev if not tag
         if: "!startsWith(github.ref, 'refs/tags/')"
         run: |

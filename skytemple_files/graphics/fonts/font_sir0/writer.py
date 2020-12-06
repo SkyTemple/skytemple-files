@@ -19,6 +19,7 @@ from typing import Optional
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts.font_sir0 import *
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
 
 

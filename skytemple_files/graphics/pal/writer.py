@@ -1,3 +1,4 @@
+"""Converts Pal models back into the binary format used by the game"""
 #  Copyright 2020 Parakoopa
 #
 #  This file is part of SkyTemple.
@@ -15,25 +16,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from enum import Enum
+from skytemple_files.common.util import *
+from skytemple_files.graphics.pal.model import Pal
 
-class FontType(Enum):
-    FONT_DAT = 0x00
-    FONT_SIR0 = 0x01
-    GRAPHIC_FONT = 0x02
 
-FONT_DEFAULT_BPROW = 2
-FONT_DEFAULT_CAT = 0x02
-FONT_DEFAULT_PADDING = 0xFF
+class PalWriter:
+    def __init__(self, model: Pal):
+        self.model = model
 
-FONT_VALID_TABLES = [0x00, 0x81, 0x82, 0x83, 0x84, 0x87]
+    def write(self) -> bytes:
+        buffer = bytes(self.model.palette)
 
-XML_FONT = "Font"
-XML_TABLE = "Table"
-XML_TABLE__ID = "tableid"
-XML_CHAR = "Char"
-XML_CHAR__ID = "id"
-XML_CHAR__WIDTH = "width"
-XML_CHAR__BPROW = "bprow"
-XML_CHAR__CAT = "category"
-XML_CHAR__PADDING = "padding"
+        return buffer

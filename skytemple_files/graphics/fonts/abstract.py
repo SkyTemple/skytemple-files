@@ -40,6 +40,10 @@ class AbstractFontEntry(AutoString):
 class AbstractFont(ABC, AutoString):
     
     @abstractmethod
+    def get_entry_image_size(self) -> int:
+        """Gets the size of image entries of this table"""
+    
+    @abstractmethod
     def get_entry_properties(self) -> List[str]:
         """Gets the properties of entries of this table"""
     

@@ -15,6 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-FONT_SIR0_DATA_LEN = 72
-FONT_SIR0_ENTRY_LEN = 0xC
-FONT_SIR0_SIZE = 12
+BANNER_FONT_ENTRY_LEN = 0x8
+BANNER_FONT_DATA_LEN = 576
+BANNER_FONT_SIZE = 24

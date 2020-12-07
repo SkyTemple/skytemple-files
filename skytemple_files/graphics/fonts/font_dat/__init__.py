@@ -16,3 +16,4 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 FONT_DAT_ENTRY_LEN = 0x1C
+FONT_DAT_SIZE = 12

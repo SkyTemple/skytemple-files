@@ -56,6 +56,7 @@ from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
 from skytemple_files.compression.px.handler import PxHandler
+from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
@@ -64,6 +65,7 @@ from skytemple_files.graphics.wtu.handler import WtuHandler
 from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
 from skytemple_files.graphics.fonts.font_dat.handler import FontDatHandler
 from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
+from skytemple_files.graphics.fonts.banner_font.handler import BannerFontHandler
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.graphics.pal.handler import PalHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
@@ -84,6 +86,8 @@ class FileType:
 
     PX = PxHandler
     GENERIC_NRL = GenericNrlHandler
+    
+    RLE_NIBBLE = RleNibbleHandler
 
     BGP = BgpHandler
 
@@ -107,6 +111,7 @@ class FileType:
 
     FONT_DAT = FontDatHandler
     FONT_SIR0 = FontSir0Handler
+    BANNER_FONT = BannerFontHandler
     GRAPHIC_FONT = GraphicFontHandler
     
     WTE = WteHandler

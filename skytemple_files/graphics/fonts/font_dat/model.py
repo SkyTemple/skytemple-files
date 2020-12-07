@@ -19,6 +19,7 @@ from typing import Dict, Type
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts.font_dat import *
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
@@ -52,7 +53,7 @@ class FontDatEntry(AbstractFontEntry):
         if "bprow" in properties:
             self.bprow = properties["bprow"]
 
-    def to_pil(self) -> Image:
+    def to_pil(self) -> Image.Image:
         data = []
         bprow = FONT_DEFAULT_BPROW # Unused, so always use default
         for i in range(len(self.data)//bprow):
@@ -80,7 +81,7 @@ class FontDatEntry(AbstractFontEntry):
         return xml_entry
     
     @classmethod
-    def from_pil(cls, img: Image, char: int, table: int, width: int, bprow_field: int) -> 'FontDatEntry':
+    def from_pil(cls, img: Image.Image, char: int, table: int, width: int, bprow_field: int) -> 'FontDatEntry':
         if img.mode!='P':
             raise AttributeError("This must be a color indexed image!")
         bprow = FONT_DEFAULT_BPROW # Unused, so always use default
@@ -101,6 +102,7 @@ class FontDatEntry(AbstractFontEntry):
         return self.char == other.char and \
                self.table == other.table and \
                self.width == other.width and \
+               self.bprow == other.bprow and \
                self.data == other.data
 
 
@@ -111,13 +113,13 @@ class FontDat(AbstractFont):
         number_entries = read_uintle(data, 0, 4)
 
         self.entries = []
-        for i in range(4, 4 + number_entries * FONT_ENTRY_LEN, FONT_ENTRY_LEN):
+        for i in range(4, 4 + number_entries * FONT_DAT_ENTRY_LEN, FONT_DAT_ENTRY_LEN):
             self.entries.append(FontDatEntry(
                 read_uintle(data, i + 0x00),
                 read_uintle(data, i + 0x01),
                 read_uintle(data, i + 0x02),
                 read_uintle(data, i + 0x03),
-                data[i + 0x4:i + FONT_ENTRY_LEN]
+                data[i + 0x4:i + FONT_DAT_ENTRY_LEN]
             ))
     
     def get_entry_properties(self) -> List[str]:
@@ -127,7 +129,7 @@ class FontDat(AbstractFont):
         self.entries.remove(entry)
     
     def create_entry_for_table(self, table) -> AbstractFontEntry:
-        entry = FontDatEntry(0, table, 0, FONT_DEFAULT_BPROW, bytes(FONT_ENTRY_LEN-0x4))
+        entry = FontDatEntry(0, table, 0, FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN-0x4))
         self.entries.append(entry)
         return entry
     
@@ -138,7 +140,7 @@ class FontDat(AbstractFont):
                 entries.append(item)
         return entries
 
-    def to_pil(self) -> Dict[int, 'Image']:
+    def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Image.new(mode='P', size=(12*16, 12*16), color=0)
@@ -148,7 +150,7 @@ class FontDat(AbstractFont):
                 tables[item.table].paste(item.to_pil(), box=((item.char%16)*12, (item.char//16)*12))
         return tables
 
-    def export_to_xml(self) -> Tuple[Element, Dict[int, 'Image']]:
+    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
         
         tables = dict()
@@ -164,7 +166,7 @@ class FontDat(AbstractFont):
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
     
-    def import_from_xml(self, xml: Element, tables: Dict[int, 'Image']):
+    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)
         for child in xml:

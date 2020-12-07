@@ -56,13 +56,13 @@ class AbstractFont(ABC, AutoString):
         """Create an entry for a table"""
     
     @abstractmethod
-    def to_pil(self) -> Dict[int, 'Image']:
+    def to_pil(self) -> Dict[int, Image.Image]:
         """Returns all tables as a dictionnary of images"""
 
     @abstractmethod
-    def export_to_xml(self) -> Tuple[Element, Dict[int, 'Image']]:
+    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         """Exports all entries as xml with tables as a dictionnary of images"""
     
     @abstractmethod
-    def import_from_xml(self, xml: Element, tables: Dict[int, 'Image']):
+    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         """Imports all entries font xml with tables as a dictionnary of images"""

@@ -64,6 +64,8 @@ from skytemple_files.graphics.wtu.handler import WtuHandler
 from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
 from skytemple_files.graphics.fonts.font_dat.handler import FontDatHandler
 from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
+from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
+from skytemple_files.graphics.pal.handler import PalHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
@@ -105,6 +107,7 @@ class FileType:
 
     FONT_DAT = FontDatHandler
     FONT_SIR0 = FontSir0Handler
+    GRAPHIC_FONT = GraphicFontHandler
     
     WTE = WteHandler
     WTU = WtuHandler
@@ -120,6 +123,8 @@ class FileType:
     SSE = SsaHandler
     SSS = SsaHandler
     SSB = SsbHandler
+    
+    PAL = PalHandler
 
     SIR0 = Sir0Handler
     BIN_PACK = BinPackHandler

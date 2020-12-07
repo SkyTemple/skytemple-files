@@ -19,6 +19,7 @@ from typing import Dict, Optional
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts.font_sir0 import *
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
@@ -40,7 +41,7 @@ class FontSir0Entry(AbstractFontEntry):
         self.padding = padding
         self.data = data
 
-    def to_pil(self) -> Image:
+    def to_pil(self) -> Image.Image:
         data = b''.join([bytes([v%16, v//16]) for v in self.data])
         image = Image.frombytes(mode='P', size=(12,12), data=data)
         return image
@@ -75,7 +76,7 @@ class FontSir0Entry(AbstractFontEntry):
             self.padding = properties["padding"]
     
     @classmethod
-    def from_pil(cls, img: Image, char: int, table: int, width: int, cat: int, padding: int) -> 'FontSir0Entry':
+    def from_pil(cls, img: Image.Image, char: int, table: int, width: int, cat: int, padding: int) -> 'FontSir0Entry':
         if img.mode!='P':
             raise AttributeError("This must be a color indexed image!")
         data = []
@@ -93,6 +94,8 @@ class FontSir0Entry(AbstractFontEntry):
         return self.char == other.char and \
                self.table == other.table and \
                self.width == other.width and \
+               self.cat == other.cat and \
+               self.padding == other.padding and \
                self.data == other.data
 
 
@@ -143,7 +146,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 entries.append(item)
         return entries
     
-    def to_pil(self) -> Dict[int, 'Image']:
+    def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Image.new(mode='P', size=(12*16, 12*16), color=0)
@@ -153,7 +156,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 tables[item.table].paste(item.to_pil(), box=((item.char%16)*12, (item.char//16)*12))
         return tables
 
-    def export_to_xml(self) -> Tuple[Element, Dict[int, 'Image']]:
+    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
         
         tables = dict()
@@ -169,7 +172,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
     
-    def import_from_xml(self, xml: Element, tables: Dict[int, 'Image']):
+    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)
         for child in xml:

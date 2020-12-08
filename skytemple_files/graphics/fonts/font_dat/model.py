@@ -61,13 +61,13 @@ class FontDatEntry(AbstractFontEntry):
             for j in range(bprow):
                 v = self.data[i*bprow+j]
                 for x in range(8):
-                    if pos<12:
+                    if pos<FONT_DAT_SIZE:
                         if v&(2**x):
                             data.append(0xf)
                         else:
                             data.append(0x0)
                     pos += 1
-        image = Image.frombytes(mode='P', size=(12,12), data=bytes(data))
+        image = Image.frombytes(mode='P', size=(FONT_DAT_SIZE,FONT_DAT_SIZE), data=bytes(data))
         return image
 
     def to_xml(self) -> Element:
@@ -87,10 +87,10 @@ class FontDatEntry(AbstractFontEntry):
         bprow = FONT_DEFAULT_BPROW # Unused, so always use default
         data = []
         raw_data = img.tobytes("raw", "P")
-        for i in range(12):
+        for i in range(FONT_DAT_SIZE):
             data += [0]*bprow
-            for j in range(12):
-                v = raw_data[i*12+j]
+            for j in range(FONT_DAT_SIZE):
+                v = raw_data[i*FONT_DAT_SIZE+j]
                 pos = -bprow + j//8
                 if v:
                     data[pos] = data[pos]|(2**(j%8))
@@ -122,6 +122,9 @@ class FontDat(AbstractFont):
                 data[i + 0x4:i + FONT_DAT_ENTRY_LEN]
             ))
     
+    def get_entry_image_size(self) -> int:
+        return FONT_DAT_SIZE
+        
     def get_entry_properties(self) -> List[str]:
         return FontDatEntry.get_class_properties()
     
@@ -143,11 +146,11 @@ class FontDat(AbstractFont):
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(mode='P', size=(12*16, 12*16), color=0)
+            tables[t] = Image.new(mode='P', size=(FONT_DAT_SIZE*16, FONT_DAT_SIZE*16), color=0)
             tables[t].putpalette([min(255, 256-(i//3)*16) for i in range(16*3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
-                tables[item.table].paste(item.to_pil(), box=((item.char%16)*12, (item.char//16)*12))
+                tables[item.table].paste(item.to_pil(), box=((item.char%16)*FONT_DAT_SIZE, (item.char//16)*FONT_DAT_SIZE))
         return tables
 
     def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
@@ -180,9 +183,9 @@ class FontDat(AbstractFont):
                     charid = int(char.get(XML_CHAR__ID))
                     width = int(char.get(XML_CHAR__WIDTH))
                     bprow = int(char.get(XML_CHAR__BPROW, default=FONT_DEFAULT_BPROW))
-                    x = (charid%16)*12
-                    y = (charid//16)*12
-                    self.entries.append(FontDatEntry.from_pil(tables[t].crop(box=[x, y, x+12, y+12]), charid, t, width, bprow))
+                    x = (charid%16)*FONT_DAT_SIZE
+                    y = (charid//16)*FONT_DAT_SIZE
+                    self.entries.append(FontDatEntry.from_pil(tables[t].crop(box=[x, y, x+FONT_DAT_SIZE, y+FONT_DAT_SIZE]), charid, t, width, bprow))
         pass
     def __eq__(self, other):
         if not isinstance(other, FontDat):

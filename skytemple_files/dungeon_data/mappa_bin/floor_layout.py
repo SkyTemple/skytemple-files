@@ -58,9 +58,28 @@ class MappaFloorWeather(Enum):
 
 
 class MappaFloorSecondaryTerrainType(Enum):
-    WATER = 0
-    LAVA = 1
-    VOID = 10
+    NONE = 0, "Disabled? (0)"
+    HAS_1 = 1, "Enabled (1)"
+    HAS_10 = 10, "Enabled (10)"
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MappaFloorSecondaryTerrainType.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class MappaFloorTerrainSettings:

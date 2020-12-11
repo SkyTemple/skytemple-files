@@ -96,6 +96,8 @@
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
         <Pointer name="NotifyNote"       beg="0xAFEF8"/>
+        <Block name="DefaultHeroId"  beg="0xAFEFC" end="0xAFEFE"/>
+        <Block name="DefaultPartnerId"  beg="0xAFEFE" end="0xAFF00"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -170,6 +172,8 @@
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>
         <Pointer name="NotifyNote"       beg="0xB0814"/>
+        <Block name="DefaultHeroId"  beg="0xB0818" end="0xB081A"/>
+        <Block name="DefaultPartnerId"  beg="0xB081A" end="0xB081C"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->

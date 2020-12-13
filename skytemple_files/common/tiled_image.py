@@ -262,7 +262,7 @@ def from_pil(
 
         # The "real" value is the value of the color in the currently used palette of the tile
         real_pix = pix - (tile_palette_indices[tile_id] * single_palette_size)
-        if real_pix > single_palette_size or real_pix < 0:
+        if real_pix > (single_palette_size - 1) or real_pix < 0:
             # The color is out of range!
             if not force_import:
                 raise ValueError(f"Can not convert PIL image to PMD tiled image: "

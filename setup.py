@@ -43,8 +43,6 @@ setup(
     entry_points='''
         [console_scripts]
         skytemple_export_maps=skytemple_files.export_maps:main
-        skytemple_dungeon_randomizer=skytemple_files.dungeon_randomizer:main
-        skytemple_ground_actor_randomizer=skytemple_files.ground_actor_randomizer:main
     ''',
     classifiers=[
         'Development Status :: 4 - Beta',

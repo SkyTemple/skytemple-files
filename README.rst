@@ -35,16 +35,14 @@ SkyTemple Files
 
 Python library to work with the files inside the ROM of Pokémon Mystery Dungeon Explorers of Sky.
 
-This is still very WIP, so I didn't feel like
-putting a proper README here! But you'll find
-README's containing the documentation for file types
-in the directories for the file handlers.
+The main handlers for file types can be found in the members of the class ``skytemple_files.common.types.file_types.FileType``.
 
-Directly in the package (``skytemple_files`` directory) you can find a few example scripts that help with understanding
-how to use this library. After installing the package you will have them as cli commands: ``skytemple_<name>``. So for
-``dungeon_randomizer.py`` it's ``skytemple_dungeon_randomizer``::
+You can find the handlers inside the packages of this Python package, with ``README.rst`` files explaining the
+file formats. Additional documentation for misc. things can be found in the ``/docs`` directory. For usage examples
+see the ``dbg`` packages and the SkyTemple main application.
 
-  $ skytemple_dungeon_randomizer input.nds output.nds
+Directly in the package (``skytemple_files`` directory) you can find a few an example script that help with understanding
+how to use this library. After installing the package you will have is as a cli command: ``skytemple_export_maps``.
 
 In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
 be installed and in the system's ``PATH`` to be able to apply ROM patches.

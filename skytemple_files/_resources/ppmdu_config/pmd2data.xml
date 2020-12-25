@@ -101,6 +101,7 @@
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
+        <Pointer name="MemoryAllocTable"                beg="0xB3380"/>
         <Block name="GameVarsValues"               beg="0x2AB0AC" end="0x2AB360"/>
         <Pointer name="DungeonData"                beg="0x2482f8"/>
         <Block name="DungeonCurrentId"             beg="0x2AB4FE" end="0x2AB4FF"/>
@@ -177,6 +178,7 @@
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
+        <Pointer name="MemoryAllocTable"                beg="0xB3CC0"/>
         <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
         <!-- END RAM values -->
         <Fn name="DebugPrint"            beg="0xC2C8"/>

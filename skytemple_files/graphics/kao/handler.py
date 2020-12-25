@@ -27,7 +27,9 @@ class KaoHandler(DataHandler[Kao]):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         # First 160 bytes are padding
-        first_toc = next(x for x, val in enumerate(data) if val != 0)
+        first_toc = (SUBENTRIES*SUBENTRY_LEN)
+        # The following line won't work; what if the first byte of the first pointer is 0?
+        # first_toc = next(x for x, val in enumerate(data) if val != 0)
         assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
         # first pointer = end of TOC
         first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)

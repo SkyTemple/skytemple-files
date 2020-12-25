@@ -41,6 +41,34 @@ class Pmd2DungeonItem(AutoString):
         return hash(self.id)
 
 
+class Pmd2DungeonDungeon(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2DungeonDungeon):
+            return False
+        return self.id == other.id  # name is not relevant here
+
+    def __hash__(self):
+        return hash(self.id)
+
+
+class Pmd2DungeonAbility(AutoString):
+    def __init__(self, id: int, name: str):
+        self.id = id
+        self.name = name
+
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2DungeonAbility):
+            return False
+        return self.id == other.id  # name is not relevant here
+
+    def __hash__(self):
+        return hash(self.id)
+
+
 class Pmd2DungeonBinFiles(AutoString):
     def __init__(self, files: List[Pmd2BinPackFile]):
         self._files = files
@@ -56,6 +84,11 @@ class Pmd2DungeonBinFiles(AutoString):
 
 
 class Pmd2DungeonData(AutoString):
-    def __init__(self, dungeon_bin_files: Pmd2DungeonBinFiles, items: List[Pmd2DungeonItem]):
+    def __init__(
+            self, dungeon_bin_files: Pmd2DungeonBinFiles, items: List[Pmd2DungeonItem],
+            dungeons: List[Pmd2DungeonDungeon], abilities: List[Pmd2DungeonAbility]
+    ):
         self.dungeon_bin_files = dungeon_bin_files
         self.items = items
+        self.dungeons = dungeons
+        self.abilities = abilities

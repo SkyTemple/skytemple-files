@@ -1424,6 +1424,335 @@
         <Item>Purify Veil</Item>
       </Items>
 
+      <!--**********************************************-->
+      <!--Dungeon names, for convenience. The names are taken from the string files, position index is the ID-->
+      <!--Only contains the 191 actual dungeons, not the extra strings.-->
+      <!--**********************************************-->
+      <Dungeons>
+        <Dungeon>Test Dungeon</Dungeon>
+        <Dungeon>Beach Cave</Dungeon>
+        <Dungeon>Beach Cave Pit</Dungeon>
+        <Dungeon>Drenched Bluff</Dungeon>
+        <Dungeon>Mt. Bristle</Dungeon>
+        <Dungeon>Mt. Bristle Peak</Dungeon>
+        <Dungeon>Waterfall Cave</Dungeon>
+        <Dungeon>Apple Woods</Dungeon>
+        <Dungeon>Craggy Coast</Dungeon>
+        <Dungeon>Side Path</Dungeon>
+        <Dungeon>Mt. Horn</Dungeon>
+        <Dungeon>Rock Path</Dungeon>
+        <Dungeon>Foggy Forest</Dungeon>
+        <Dungeon>Forest Path</Dungeon>
+        <Dungeon>Steam Cave</Dungeon>
+        <Dungeon>Upper Steam Cave</Dungeon>
+        <Dungeon>Steam Cave Peak</Dungeon>
+        <Dungeon>Amp Plains</Dungeon>
+        <Dungeon>Far Amp Plains</Dungeon>
+        <Dungeon>Amp Clearing</Dungeon>
+        <Dungeon>Northern Desert</Dungeon>
+        <Dungeon>Quicksand Cave</Dungeon>
+        <Dungeon>Quicksand Pit</Dungeon>
+        <Dungeon>Underground Lake</Dungeon>
+        <Dungeon>Crystal Cave</Dungeon>
+        <Dungeon>Crystal Crossing</Dungeon>
+        <Dungeon>Crystal Lake</Dungeon>
+        <Dungeon>Chasm Cave</Dungeon>
+        <Dungeon>Dark Hill</Dungeon>
+        <Dungeon>Sealed Ruin</Dungeon>
+        <Dungeon>Deep Sealed Ruin</Dungeon>
+        <Dungeon>Sealed Ruin Pit</Dungeon>
+        <Dungeon>Dusk Forest</Dungeon>
+        <Dungeon>Deep Dusk Forest</Dungeon>
+        <Dungeon>Treeshroud Forest</Dungeon>
+        <Dungeon>Brine Cave</Dungeon>
+        <Dungeon>Lower Brine Cave</Dungeon>
+        <Dungeon>Brine Cave Pit</Dungeon>
+        <Dungeon>Hidden Land</Dungeon>
+        <Dungeon>Hidden Highland</Dungeon>
+        <Dungeon>Old Ruins</Dungeon>
+        <Dungeon>Temporal Tower</Dungeon>
+        <Dungeon>Temporal Spire</Dungeon>
+        <Dungeon>Temporal Pinnacle</Dungeon>
+        <Dungeon>Mystifying Forest</Dungeon>
+        <Dungeon>Mystifying Forest Clearing</Dungeon>
+        <Dungeon>Blizzard Island</Dungeon>
+        <Dungeon>Crevice Cave</Dungeon>
+        <Dungeon>Lower Crevice Cave</Dungeon>
+        <Dungeon>Crevice Cave Pit</Dungeon>
+        <Dungeon>Surrounded Sea</Dungeon>
+        <Dungeon>Miracle Sea</Dungeon>
+        <Dungeon>Deep Miracle Sea</Dungeon>
+        <Dungeon>Miracle Seabed</Dungeon>
+        <Dungeon>Ice Aegis Cave</Dungeon>
+        <Dungeon>Regice Chamber</Dungeon>
+        <Dungeon>Rock Aegis Cave</Dungeon>
+        <Dungeon>Regirock Chamber</Dungeon>
+        <Dungeon>Steel Aegis Cave</Dungeon>
+        <Dungeon>Registeel Chamber</Dungeon>
+        <Dungeon>Aegis Cave Pit</Dungeon>
+        <Dungeon>Regigigas Chamber</Dungeon>
+        <Dungeon>Mt. Travail</Dungeon>
+        <Dungeon>The Nightmare</Dungeon>
+        <Dungeon>Spacial Rift</Dungeon>
+        <Dungeon>Deep Spacial Rift</Dungeon>
+        <Dungeon>Spacial Rift Bottom</Dungeon>
+        <Dungeon>Dark Crater</Dungeon>
+        <Dungeon>Deep Dark Crater</Dungeon>
+        <Dungeon>Dark Crater Pit</Dungeon>
+        <Dungeon>Concealed Ruins</Dungeon>
+        <Dungeon>Deep Concealed Ruins</Dungeon>
+        <Dungeon>Marine Resort</Dungeon>
+        <Dungeon>Bottomless Sea</Dungeon>
+        <Dungeon>Bottomless Sea Depths</Dungeon>
+        <Dungeon>Shimmer Desert</Dungeon>
+        <Dungeon>Shimmer Desert Pit</Dungeon>
+        <Dungeon>Mt. Avalanche</Dungeon>
+        <Dungeon>Mt. Avalanche Peak</Dungeon>
+        <Dungeon>Giant Volcano</Dungeon>
+        <Dungeon>Giant Volcano Peak</Dungeon>
+        <Dungeon>World Abyss</Dungeon>
+        <Dungeon>World Abyss Pit</Dungeon>
+        <Dungeon>Sky Stairway</Dungeon>
+        <Dungeon>Sky Stairway Apex</Dungeon>
+        <Dungeon>Mystery Jungle</Dungeon>
+        <Dungeon>Deep Mystery Jungle</Dungeon>
+        <Dungeon>Serenity River</Dungeon>
+        <Dungeon>Landslide Cave</Dungeon>
+        <Dungeon>Lush Prairie</Dungeon>
+        <Dungeon>Tiny Meadow</Dungeon>
+        <Dungeon>Labyrinth Cave</Dungeon>
+        <Dungeon>Oran Forest</Dungeon>
+        <Dungeon>Lake Afar</Dungeon>
+        <Dungeon>Happy Outlook</Dungeon>
+        <Dungeon>Mt. Mistral</Dungeon>
+        <Dungeon>Shimmer Hill</Dungeon>
+        <Dungeon>Lost Wilderness</Dungeon>
+        <Dungeon>Midnight Forest</Dungeon>
+        <Dungeon>Zero Isle North</Dungeon>
+        <Dungeon>Zero Isle East</Dungeon>
+        <Dungeon>Zero Isle West</Dungeon>
+        <Dungeon>Zero Isle South</Dungeon>
+        <Dungeon>Zero Isle Center</Dungeon>
+        <Dungeon>Destiny Tower</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>Oblivion Forest</Dungeon>
+        <Dungeon>Treacherous Waters</Dungeon>
+        <Dungeon>Southeastern Islands</Dungeon>
+        <Dungeon>Inferno Cave</Dungeon>
+        <Dungeon>1st Station Pass</Dungeon>
+        <Dungeon>2nd Station Pass</Dungeon>
+        <Dungeon>3rd Station Pass</Dungeon>
+        <Dungeon>4th Station Pass</Dungeon>
+        <Dungeon>5th Station Pass</Dungeon>
+        <Dungeon>6th Station Pass</Dungeon>
+        <Dungeon>7th Station Pass</Dungeon>
+        <Dungeon>8th Station Pass</Dungeon>
+        <Dungeon>9th Station Pass</Dungeon>
+        <Dungeon>Sky Peak Summit Pass</Dungeon>
+        <Dungeon>5th Station Clearing</Dungeon>
+        <Dungeon>Sky Peak Summit</Dungeon>
+        <Dungeon>Star Cave</Dungeon>
+        <Dungeon>Deep Star Cave</Dungeon>
+        <Dungeon>Deep Star Cave</Dungeon>
+        <Dungeon>Star Cave Depths</Dungeon>
+        <Dungeon>Star Cave Pit</Dungeon>
+        <Dungeon>Murky Forest</Dungeon>
+        <Dungeon>Eastern Cave</Dungeon>
+        <Dungeon>Fortune Ravine</Dungeon>
+        <Dungeon>Fortune Ravine Depths</Dungeon>
+        <Dungeon>Fortune Ravine Pit</Dungeon>
+        <Dungeon>Barren Valley</Dungeon>
+        <Dungeon>Deep Barren Valley</Dungeon>
+        <Dungeon>Barren Valley Clearing</Dungeon>
+        <Dungeon>Dark Wasteland</Dungeon>
+        <Dungeon>Temporal Tower</Dungeon>
+        <Dungeon>Temporal Spire</Dungeon>
+        <Dungeon>Dusk Forest</Dungeon>
+        <Dungeon>Black Swamp</Dungeon>
+        <Dungeon>Spacial Cliffs</Dungeon>
+        <Dungeon>Dark Ice Mountain</Dungeon>
+        <Dungeon>Dark Ice Mountain Peak</Dungeon>
+        <Dungeon>Dark Ice Mountain Pinnacle</Dungeon>
+        <Dungeon>Icicle Forest</Dungeon>
+        <Dungeon>Vast Ice Mountain</Dungeon>
+        <Dungeon>Vast Ice Mountain Peak</Dungeon>
+        <Dungeon>Vast Ice Mountain Pinnacle</Dungeon>
+        <Dungeon>Southern Jungle</Dungeon>
+        <Dungeon>Boulder Quarry</Dungeon>
+        <Dungeon>Deep Boulder Quarry</Dungeon>
+        <Dungeon>Boulder Quarry Clearing</Dungeon>
+        <Dungeon>Right Cave Path</Dungeon>
+        <Dungeon>Left Cave Path</Dungeon>
+        <Dungeon>Limestone Cavern</Dungeon>
+        <Dungeon>Deep Limestone Cavern</Dungeon>
+        <Dungeon>Limestone Cavern Depths</Dungeon>
+        <Dungeon>Spring Cave</Dungeon>
+        <Dungeon>Upper Spring Cave</Dungeon>
+        <Dungeon>Upper Spring Cave</Dungeon>
+        <Dungeon>Middle Spring Cave</Dungeon>
+        <Dungeon>Lower Spring Cave</Dungeon>
+        <Dungeon>Spring Cave Depths</Dungeon>
+        <Dungeon>Spring Cave Pit</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>[M:D1]Dummy</Dungeon>
+        <Dungeon>Star Cave</Dungeon>
+        <Dungeon>Shaymin Village</Dungeon>
+        <Dungeon>Armaldo's Shelter</Dungeon>
+        <Dungeon>Luminous Spring</Dungeon>
+        <Dungeon>Hot Spring</Dungeon>
+        <Dungeon>Rescue</Dungeon>
+        <Dungeon>Normal/Fly Maze</Dungeon>
+        <Dungeon>Dark/Fire Maze</Dungeon>
+        <Dungeon>Rock/Water Maze</Dungeon>
+        <Dungeon>Grass Maze</Dungeon>
+        <Dungeon>Elec/Steel Maze</Dungeon>
+        <Dungeon>Ice/Ground Maze</Dungeon>
+        <Dungeon>Fight/Psych Maze</Dungeon>
+        <Dungeon>Poison/Bug Maze</Dungeon>
+        <Dungeon>Dragon Maze</Dungeon>
+        <Dungeon>Ghost Maze</Dungeon>
+        <Dungeon>Explorer Maze</Dungeon>
+        <Dungeon>Final Maze</Dungeon>
+      </Dungeons>
+
+      <!--**********************************************-->
+      <!--Ability names, for convenience. The names are taken from the string files, position index is the ID-->
+      <!--**********************************************-->
+      <Abilities>
+        <Ability>Unknown</Ability>
+        <Ability>Stench</Ability>
+        <Ability>Thick Fat</Ability>
+        <Ability>Rain Dish</Ability>
+        <Ability>Drizzle</Ability>
+        <Ability>Arena Trap</Ability>
+        <Ability>Intimidate</Ability>
+        <Ability>Rock Head</Ability>
+        <Ability>Air Lock</Ability>
+        <Ability>Hyper Cutter</Ability>
+        <Ability>Shadow Tag</Ability>
+        <Ability>Speed Boost</Ability>
+        <Ability>Battle Armor</Ability>
+        <Ability>Sturdy</Ability>
+        <Ability>Suction Cups</Ability>
+        <Ability>Clear Body</Ability>
+        <Ability>Torrent</Ability>
+        <Ability>Guts</Ability>
+        <Ability>Rough Skin</Ability>
+        <Ability>Shell Armor</Ability>
+        <Ability>Natural Cure</Ability>
+        <Ability>Damp</Ability>
+        <Ability>Limber</Ability>
+        <Ability>Magnet Pull</Ability>
+        <Ability>White Smoke</Ability>
+        <Ability>Synchronize</Ability>
+        <Ability>Overgrow</Ability>
+        <Ability>Swift Swim</Ability>
+        <Ability>Sand Stream</Ability>
+        <Ability>Sand Veil</Ability>
+        <Ability>Keen Eye</Ability>
+        <Ability>Inner Focus</Ability>
+        <Ability>Static</Ability>
+        <Ability>Shed Skin</Ability>
+        <Ability>Huge Power</Ability>
+        <Ability>Volt Absorb</Ability>
+        <Ability>Water Absorb</Ability>
+        <Ability>Forecast</Ability>
+        <Ability>Serene Grace</Ability>
+        <Ability>Poison Point</Ability>
+        <Ability>Trace</Ability>
+        <Ability>Oblivious</Ability>
+        <Ability>Truant</Ability>
+        <Ability>Run Away</Ability>
+        <Ability>Sticky Hold</Ability>
+        <Ability>Cloud Nine</Ability>
+        <Ability>Illuminate</Ability>
+        <Ability>Early Bird</Ability>
+        <Ability>Hustle</Ability>
+        <Ability>Drought</Ability>
+        <Ability>LightningRod</Ability>
+        <Ability>CompoundEyes</Ability>
+        <Ability>Marvel Scale</Ability>
+        <Ability>Wonder Guard</Ability>
+        <Ability>Insomnia</Ability>
+        <Ability>Levitate</Ability>
+        <Ability>Plus</Ability>
+        <Ability>Pressure</Ability>
+        <Ability>Liquid Ooze</Ability>
+        <Ability>Color Change</Ability>
+        <Ability>Soundproof</Ability>
+        <Ability>Effect Spore</Ability>
+        <Ability>Flame Body</Ability>
+        <Ability>Minus</Ability>
+        <Ability>Own Tempo</Ability>
+        <Ability>Magma Armor</Ability>
+        <Ability>Water Veil</Ability>
+        <Ability>Swarm</Ability>
+        <Ability>Cute Charm</Ability>
+        <Ability>Immunity</Ability>
+        <Ability>Blaze</Ability>
+        <Ability>Pickup</Ability>
+        <Ability>Flash Fire</Ability>
+        <Ability>Vital Spirit</Ability>
+        <Ability>Chlorophyll</Ability>
+        <Ability>Pure Power</Ability>
+        <Ability>Shield Dust</Ability>
+        <Ability>Ice Body</Ability>
+        <Ability>Stall</Ability>
+        <Ability>Anger Point</Ability>
+        <Ability>Tinted Lens</Ability>
+        <Ability>Hydration</Ability>
+        <Ability>Frisk</Ability>
+        <Ability>Mold Breaker</Ability>
+        <Ability>Unburden</Ability>
+        <Ability>Dry Skin</Ability>
+        <Ability>Anticipation</Ability>
+        <Ability>Scrappy</Ability>
+        <Ability>Super Luck</Ability>
+        <Ability>Gluttony</Ability>
+        <Ability>Solar Power</Ability>
+        <Ability>Skill Link</Ability>
+        <Ability>Reckless</Ability>
+        <Ability>Sniper</Ability>
+        <Ability>Slow Start</Ability>
+        <Ability>Heatproof</Ability>
+        <Ability>Download</Ability>
+        <Ability>Simple</Ability>
+        <Ability>Tangled Feet</Ability>
+        <Ability>Adaptability</Ability>
+        <Ability>Technician</Ability>
+        <Ability>Iron Fist</Ability>
+        <Ability>Motor Drive</Ability>
+        <Ability>Unaware</Ability>
+        <Ability>Rivalry</Ability>
+        <Ability>Bad Dreams</Ability>
+        <Ability>No Guard</Ability>
+        <Ability>Normalize</Ability>
+        <Ability>Solid Rock</Ability>
+        <Ability>Quick Feet</Ability>
+        <Ability>Filter</Ability>
+        <Ability>Klutz</Ability>
+        <Ability>Steadfast</Ability>
+        <Ability>Flower Gift</Ability>
+        <Ability>Poison Heal</Ability>
+        <Ability>Magic Guard</Ability>
+        <Ability>$$$</Ability>
+        <Ability>Honey Gather</Ability>
+        <Ability>Aftermath</Ability>
+        <Ability>Snow Cloak</Ability>
+        <Ability>Snow Warning</Ability>
+        <Ability>Forewarn</Ability>
+        <Ability>Storm Drain</Ability>
+        <Ability>Leaf Guard</Ability>
+      </Abilities>
+
     </Game>
 
   </DungeonData>

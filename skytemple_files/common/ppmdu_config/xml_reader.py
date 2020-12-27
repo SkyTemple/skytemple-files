@@ -17,15 +17,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import re
-from typing import Union
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 
-import pkg_resources
-
 from skytemple_files.common.ppmdu_config.data import *
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonItem, \
-    Pmd2DungeonDungeon, Pmd2DungeonAbility
+    Pmd2DungeonDungeon
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
@@ -380,7 +377,6 @@ class Pmd2XmlReader:
         dungeon_bin_files = None
         items = []
         dungeons = []
-        abilities = []
         for e_game in dungeon_root:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
@@ -403,15 +399,10 @@ class Pmd2XmlReader:
                     if e.tag == 'Dungeons':
                         for i, e_dungeon in enumerate(e):
                             dungeons.append(Pmd2DungeonDungeon(i, e_dungeon.text))
-                    ###########################
-                    if e.tag == 'Abilities':
-                        for i, e_ability in enumerate(e):
-                            abilities.append(Pmd2DungeonAbility(i, e_ability.text))
         return Pmd2DungeonData(
             dungeon_bin_files,
             items,
-            dungeons,
-            abilities
+            dungeons
         )
 
     @staticmethod

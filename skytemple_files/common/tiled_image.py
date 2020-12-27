@@ -220,7 +220,7 @@ def from_pil(
     raw_pil_image = pil.tobytes('raw', 'P')
     number_of_tiles = int(len(raw_pil_image) / tile_dim / tile_dim)
 
-    tiles: List[bytearray] = [None for _ in range(0, number_of_tiles)]
+    tiles_with_sum: List[Tuple[int, bytearray]] = [None for _ in range(0, number_of_tiles)]
     tilemap: List[TilemapEntry] = [None for _ in range(0, number_of_tiles)]
     the_two_px_to_write = [0, 0]
 
@@ -256,7 +256,7 @@ def from_pil(
             if tile_id not in already_initialised_tiles:
                 already_initialised_tiles.append(tile_id)
                 # Begin a new tile
-                tiles[tile_id] = bytearray(int(tile_dim * tile_dim / 2))
+                tiles_with_sum[tile_id] = [0, bytearray(int(tile_dim * tile_dim / 2))]
                 # Get the palette index from the first pixel
                 tile_palette_indices[tile_id] = math.floor(pix / single_palette_size)
 
@@ -287,21 +287,22 @@ def from_pil(
         # Only store when we are on the second pixel
         if idx % 2 == 1:
             # Little endian:
-            tiles[tile_id][nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
+            tiles_with_sum[tile_id][0] += (the_two_px_to_write[0] + the_two_px_to_write[1])
+            tiles_with_sum[tile_id][1][nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
 
-    final_tiles: List[bytearray] = []
+    final_tiles_with_sum: List[Tuple[int, bytearray]] = []
     len_final_tiles = 0
     # Create tilemap and optimize tiles list
-    for tile_id, tile in enumerate(tiles):
+    for tile_id, tile_with_sum in enumerate(tiles_with_sum):
         reusable_tile_idx = None
         flip_x = False
         flip_y = False
         if optimize:
-            reusable_tile_idx, flip_x, flip_y = search_for_tile(final_tiles, tile, tile_dim)
+            reusable_tile_idx, flip_x, flip_y = search_for_tile_with_sum(final_tiles_with_sum, tile_with_sum, tile_dim)
         if reusable_tile_idx is not None:
             tile_id_to_use = reusable_tile_idx
         else:
-            final_tiles.append(tile)
+            final_tiles_with_sum.append(tile_with_sum)
             tile_id_to_use = len_final_tiles
             len_final_tiles += 1
         tilemap[tile_id] = TilemapEntry(
@@ -310,7 +311,9 @@ def from_pil(
             flip_x=flip_x,
             flip_y=flip_y
         )
-
+    final_tiles: List[bytearray] = []
+    for s, tile in final_tiles_with_sum:
+        final_tiles.append(tile)
     return final_tiles, tilemap, palettes
 
 
@@ -326,6 +329,28 @@ def search_for_chunk(chunk, tile_mappings):
             return chk_fst_tile_idx
     return None
 
+
+def search_for_tile_with_sum(tiles_with_sum: List[Tuple[int, bytearray]], tile_with_sum: Tuple[int, bytearray], tile_dim) -> Tuple[Union[int, None], bool, bool]:
+    """
+    Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
+    Increases performance by comparing the bytes sum of each tile before actually compare them
+    """
+    s = tile_with_sum[0]
+    tile = tile_with_sum[1]
+    for i, tile_tuple in enumerate(tiles_with_sum):
+        sum_tile = tile_tuple[0]
+        if sum_tile==s:
+            tile_in_tiles = tile_tuple[1]
+            if tile_in_tiles == tile:
+                return i, False, False
+            x_flipped = _flip_tile_x(tile_in_tiles, tile_dim)
+            if x_flipped == tile:
+                return i, True, False
+            if _flip_tile_y(tile_in_tiles, tile_dim) == tile:
+                return i, False, True
+            if _flip_tile_y(x_flipped, tile_dim) == tile:
+                return i, True, True
+    return None, False, False
 
 def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
     """

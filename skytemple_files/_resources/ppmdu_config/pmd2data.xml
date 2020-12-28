@@ -320,8 +320,8 @@
         <StringBlock name="Kangaskhan Storage Strings"             beg="783"  end="812"/>
         <StringBlock name="Evolution Strings"                      beg="1068"  end="1097"/>
         <StringBlock name="Music tracks names"                     beg="1276"  end="1418"/>
-        <StringBlock name="Personality Quizz Questions"            beg="1418"  end="1485"/>
-        <StringBlock name="Personality Quizz Answers"              beg="1485"  end="1660"/>
+        <StringBlock name="Personality Quiz Questions"             beg="1418"  end="1485"/>
+        <StringBlock name="Personality Quiz Answers"               beg="1485"  end="1660"/>
         <StringBlock name="Personality Quiz result strings"        beg="1660"  end="1708"/>
         <StringBlock name="Personality string natures"             beg="1737"  end="1741"/>
         <StringBlock name="Weather Change Feedback"                beg="2628"  end="2636"/>
@@ -456,8 +456,8 @@
         <StringBlock name="Kangaskhan Storage Strings"             beg="783"  end="812"/>
         <StringBlock name="Evolution Strings"                      beg="1068"  end="1097"/>
         <StringBlock name="Music tracks names"                     beg="1276"  end="1418"/>
-        <StringBlock name="Personality Quizz Questions"            beg="1418"  end="1485"/>
-        <StringBlock name="Personality Quizz Answers"              beg="1485"  end="1660"/>
+        <StringBlock name="Personality Quiz Questions"             beg="1418"  end="1485"/>
+        <StringBlock name="Personality Quiz Answers"               beg="1485"  end="1660"/>
         <StringBlock name="Personality Quiz result strings"        beg="1660"  end="1708"/>
         <StringBlock name="Personality string natures"             beg="1737"  end="1741"/>
         <StringBlock name="Weather Change Feedback"                beg="2628"  end="2636"/>

@@ -38,6 +38,7 @@ from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
@@ -137,6 +138,7 @@ class FileType:
     MD = MdHandler
     LEVEL_BIN_ENTRY = LevelBinEntryHandler
     WAZA_P = WazaPHandler
+    TBL_TALK = TblTalkHandler
 
     # These handlers assume the content to be Sir0 wrapped by default:
     MAPPA_BIN = MappaBinHandler

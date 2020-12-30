@@ -28,6 +28,7 @@ PREFIX_FACE_POS = 'FACE_POS_'
 PREFIX_FACE = 'FACE_'
 PREFIX_OBJECT = 'OBJECT_'
 PREFIX_ACTOR = 'ACTOR_'
+PREFIX_EFFECT = 'EFFECT_'
 PREFIX_CORO = 'CORO_'
 PREFIX_BGM = 'BGM_'
 PREFIX_VAR = '$'
@@ -83,7 +84,7 @@ SsbConstantPmdScriptMappable = Union[
     Pmd2ScriptEntity, Pmd2ScriptObject, Pmd2ScriptRoutine,
     Pmd2ScriptFaceName, Pmd2ScriptFacePositionMode, Pmd2ScriptGameVar,
     Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection, SsbScriptDirection,
-    Pmd2ScriptBgm,
+    Pmd2ScriptBgm, Pmd2ScriptSpriteEffect,
     DungeonMode
 ]
 T = TypeVar('T')
@@ -140,6 +141,8 @@ class SsbConstant(SsbOpParamConstant):
             return cls(PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptBgm):
             return cls(PREFIX_BGM + cls._cvrt_camel(value.name), value=value)
+        elif isinstance(value, Pmd2ScriptSpriteEffect):
+            return cls(PREFIX_EFFECT + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptDirection):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=SsbScriptDirection(value.ssb_id, value.name))
         elif isinstance(value, SsbScriptDirection):
@@ -183,6 +186,11 @@ class SsbConstant(SsbOpParamConstant):
                 return cls._in_dict_insensitive(
                     script_data.bgms__by_name,
                     cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_BGM):])
+                )
+            elif constant_as_string.startswith(PREFIX_EFFECT):
+                return cls._in_dict_insensitive(
+                    script_data.sprite_effects__by_name,
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_EFFECT):])
                 )
             elif constant_as_string.startswith(PREFIX_DIRECTION):
                 pmd2_dir = cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
@@ -237,6 +245,8 @@ class SsbConstant(SsbOpParamConstant):
         for x in rom_data.process_specials:
             yield cls.create_for(x)
         for x in rom_data.bgms:
+            yield cls.create_for(x)
+        for x in rom_data.sprite_effects:
             yield cls.create_for(x)
         for x in rom_data.directions.values():
             yield cls.create_for(x)

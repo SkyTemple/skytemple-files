@@ -18,7 +18,6 @@ import os
 from decimal import Decimal
 from typing import List
 
-from xml.dom import minidom
 from xml.etree import ElementTree
 
 from ndspy.rom import NintendoDSRom
@@ -31,7 +30,11 @@ base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(output_dir, exist_ok=True)
 
 #rom = NintendoDSRom.fromFile(os.path.join(base_dir, '/tmp/x.nds'))
-rom = NintendoDSRom.fromFile('/home/marco/dev/skytemple/demos/island/island.nds')
+rom = NintendoDSRom.fromFile('/tmp/test.nds')
+
+with open('/home/marco/dev/skytemple/skytemple/ppmd_statsutil/sky_rom/data/BALANCE/mappa_s.bin', 'rb') as f:
+    rom.setFileByName('BALANCE/mappa_s.bin', f.read())
+    rom.saveToFile('/tmp/test2.nds')
 
 mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
 mappa = MappaBinHandler.deserialize(mappa_bin)
@@ -66,11 +69,6 @@ for item_list in items:
     if has_guaranteed:
         item_list_with_guaranteed_items.append(item_list)
 
-
-def prettify(elem):
-    rough_string = ElementTree.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="  ")
 
 
 print(".")

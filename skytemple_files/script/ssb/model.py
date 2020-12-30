@@ -289,6 +289,12 @@ class Ssb:
                             else:
                                 logger.warning(f"Unknown BGM id: {param}")
                                 new_params.append(param)
+                        elif argument_spec.type == 'Effect':
+                            if param in self._scriptdata.sprite_effects__by_id:
+                                new_params.append(SsbConstant.create_for(self._scriptdata.sprite_effects__by_id[param]))
+                            else:
+                                logger.warning(f"Unknown effect id: {param}")
+                                new_params.append(param)
                         elif argument_spec.type == 'String':
                             try:
                                 new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))

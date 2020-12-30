@@ -1065,8 +1065,142 @@
       <!--Sprite Effect IDs-->
       <!--**********************************************-->
       <SpriteEffectIDs>
-        <!--TODO: Will eventually contains a list of all the common sprite effects so we can figure out what offset is for what effect-->
-        <Efect id="92" name="SweatDrop" />
+        <Effect id="0"  name="None" />
+        <Effect id="1"  name="PoisionBubble" />
+        <Effect id="2"  name="WaterSplash" />
+        <Effect id="3"  name="LandmineExplosion" />
+        <Effect id="5"  name="LightShine" />
+        <Effect id="6"  name="FireAttack" />
+        <Effect id="15" name="Hearts" />
+        <Effect id="15" name="Hearts" />
+        <Effect id="16" name="Rain" />
+        <Effect id="17" name="Confuse" />
+        <Effect id="18" name="FlowerAttackUp" />
+        <Effect id="19" name="FlowerAttackDown" />
+        <Effect id="20" name="Hail" />
+        <Effect id="23" name="TrappedInIce" />
+        <Effect id="25" name="Yawn" />
+        <Effect id="26" name="SweetKiss" />
+        <Effect id="27" name="LightFromAbove" />
+        <Effect id="28" name="ThreeBlueCircles" />
+        <Effect id="29" name="BubblesPop" />
+        <Effect id="30" name="Clapping" />
+        <Effect id="31" name="LightShineBright" />
+        <Effect id="32" name="SlashAttack" />
+        <Effect id="43" name="SteamClouds" />
+        <Effect id="44" name="SmallShine" />
+        <Effect id="45" name="WhiteCircle" />
+        <Effect id="46" name="SpiderWeb" />
+        <Effect id="49" name="DoubleSlash" />
+        <Effect id="50" name="BellAndMusic" />
+        <Effect id="51" name="GiantZ" />
+        <Effect id="52" name="BlueCirclesUp" />
+        <Effect id="53" name="RocksFalling" />
+        <Effect id="54" name="RocksHitting" />
+        <Effect id="55" name="RocksFalling2" />
+        <Effect id="56" name="LargeGreyCirleWithSmaller" />
+        <Effect id="57" name="FireExplosion" />
+        <Effect id="58" name="WaterExplosion" />
+        <Effect id="60" name="Singing" />
+        <Effect id="61" name="MusicNotesSpinning" />
+        <Effect id="62" name="SweatDropsFromBothSides" />
+        <Effect id="63" name="Curse" />
+        <Effect id="64" name="WhiteSpinningArc" />
+        <Effect id="65" name="SmokeBomb" />
+        <Effect id="66" name="ExplosionBig" />
+        <Effect id="67" name="BrightFlashingCircle" />
+        <Effect id="68" name="RainbowCircles" />
+        <Effect id="69" name="BlackBall" />
+        <Effect id="70" name="Encore" />
+        <Effect id="71" name="SweatDropsFromBothSidesSmall" />
+        <Effect id="73" name="SpinningSpaceCloud" />
+        <Effect id="74" name="ExplosionSmall" />
+        <Effect id="75" name="PurpleFlames" />
+        <Effect id="76" name="ExplosionMedium" />
+        <Effect id="77" name="ThreeOrangeLightsOut" />
+        <Effect id="78" name="ThreeFlamesInFireBoom" />
+        <Effect id="79" name="SpinningFlameWheel" />
+        <Effect id="80" name="GreenCircleUnfilledOut" />
+        <Effect id="81" name="TargetLocked" />
+        <Effect id="82" name="GreenCircleBecomesCube" />
+        <Effect id="83" name="SpinningWindAttack" />
+        <Effect id="84" name="TwoCirclesIn" />
+        <Effect id="85" name="WhiteLightShineIn" />
+        <Effect id="86" name="AirBlades" />
+        <Effect id="87" name="RedCircleIn" />
+        <Effect id="88" name="ExclamationMark" />
+        <Effect id="89" name="QuestionMark" />
+        <Effect id="90" name="Joyous" />
+        <Effect id="91" name="Shocked" />
+        <Effect id="92" name="SweatDrop" />
+        <Effect id="93" name="Laughing" />
+        <Effect id="94" name="Angry" />
+        <Effect id="95" name="BittenByBigMaw" />
+        <Effect id="96" name="BittenBySmallMaw" />
+        <Effect id="97" name="TrappedByElectricCage" />
+        <Effect id="98" name="TrappedByElectricCageCollapse" />
+        <Effect id="99" name="SmokePuff" />
+        <Effect id="100" name="SmokePuffSmall" />
+        <Effect id="101" name="LettersFallingDown" />
+        <Effect id="102" name="LettersLyingOnGround" />
+        <Effect id="103" name="LightEngulfing" />
+        <Effect id="104" name="LightShining" />
+        <Effect id="105" name="LightColoredFocusing" />
+        <Effect id="106" name="LightColoredFocusingFaster" />
+        <Effect id="107" name="LightColoredPulsing" />
+        <Effect id="108" name="LightColoredPulsing2" />
+        <Effect id="109" name="LightStarsIn" />
+        <Effect id="110" name="LightStarsSpinning" />
+        <Effect id="111" name="LightEndEngulfing" />
+        <Effect id="112" name="LightEndShining" />
+        <Effect id="113" name="LightningStrike" />
+        <Effect id="114" name="LightningExplosion" />
+        <Effect id="115" name="StonesTrapping" />
+        <Effect id="116" name="BlackHandSlapping" />
+        <Effect id="117" name="TwoShellsClosingAndOpening" />
+        <Effect id="118" name="ClappingPurpleCircle" />
+        <Effect id="119" name="FlickeringArrow" />
+        <Effect id="120" name="FieryAttackFast" />
+        <Effect id="121" name="WhiteCircleUnderneath" />
+        <Effect id="122" name="MagnifyingGlass" />
+        <Effect id="123" name="PurpleSmokeAttack" />
+        <Effect id="124" name="BlueWheels" />
+        <Effect id="125" name="CottonBallsSpinning" />
+        <Effect id="126" name="VinesAttackingSpiral" />
+        <Effect id="127" name="PunchAttack" />
+        <Effect id="128" name="AbsorbAttack" />
+        <Effect id="131" name="PunchAttackGiant" />
+        <Effect id="132" name="FlamesAroundOut" />
+        <Effect id="133" name="BoneSpinning" />
+        <Effect id="134" name="FeathersFalling" />
+        <Effect id="135" name="BigShineFast" />
+
+        <Effect id="171" name="SweatDropsFromBothSidesMedium" />
+        <Effect id="172" name="TwoArrowsAtSideLeft" />
+        <Effect id="173" name="TwoSpinningCircles" />
+        <Effect id="174" name="TwoArrowsAtSideRight" />
+        <Effect id="448" name="ShockedMirrored" />
+        <Effect id="536" name="LightExplosion" />
+        <Effect id="537" name="LightExplosionLightning" />
+        <Effect id="551" name="WhiteLightEngulfing" />
+        <Effect id="554" name="WhiteLightEngulfingOut" />
+        <Effect id="622" name="SweatDropSlow" />
+        <Effect id="623" name="AngryMirrored" />
+        <Effect id="624" name="AppleOnHead" />
+        <Effect id="625" name="StuckInYellowWater" />
+        <Effect id="626" name="StuckInYellowWaterDeep" />
+        <Effect id="627" name="StuckInYellowWaterMedium" />
+        <Effect id="628" name="StuckInYellowWaterMedium2" />
+        <Effect id="629" name="StuckInYellowWaterDeep2" />
+        <Effect id="638" name="LightEngulfing2" />
+        <Effect id="641" name="Confetti" />
+        <Effect id="642" name="Eating" />
+        <Effect id="643" name="EatingSlow" />
+        <Effect id="650" name="LaprasWaterShadow" />
+        <Effect id="685" name="StatsDownEffect" />
+        <Effect id="691" name="StatsUpEffect" />
+        <Effect id="698" name="VeryHeavyRain" />
+        <!-- TODO: There are more. -->
       </SpriteEffectIDs>
 
       <!--**********************************************-->
@@ -2308,7 +2442,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x102" name="SetEffect"                              params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
+          <Argument id="0" type="Effect" name="unk0"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x103" name="SetFunctionAttribute"                   params="1"  stringidx="-1" unk2="0"  unk3="0"   >

@@ -32,7 +32,9 @@ from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
+from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
+from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -42,6 +44,8 @@ class PatchType(Enum):
     ACTOR_AND_LEVEL_LIST_LOADER = ActorAndLevelListLoaderPatchHandler
     UNUSED_DUNGEON_CHANCE_PATCH = UnusedDungeonChancePatch
     MOVE_SHORTCUTS = MoveShortcutsPatch
+    DISABLE_TIPS = DisableTipsPatch
+    SAME_TYPE_PARTNER = SameTypePartnerPatch
 
 
 class PatchPackageError(RuntimeError):

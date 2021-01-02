@@ -80,7 +80,7 @@
     <Game id="EoS_NA" id2="EoSWVC_NA">
       <!-- arm9 -->
       <Bin filepath="arm9.bin" loadaddress="0x2000000">
-        <Block name="CardRemovedImgData" beg="0x92AE8"   end="0x94AE8"/>
+        <Block name="CartRemovedImgData" beg="0x92AE8"   end="0x94AE8"/>
         <Block name="DungeonList"       beg="0x9E3A0"   end="0x9E670"/>
         <Block name="ScriptVars"        beg="0x9D870"   end="0x9DFA0"/>
         <Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>
@@ -160,7 +160,7 @@
       <!--#TODO-->
       <!-- arm9 -->
       <Bin filepath="arm9.bin" loadaddress="0x2000000">
-        <Block name="CardRemovedImgData" beg="0x92EE4"   end="0x94EE4"/>
+        <Block name="CartRemovedImgData" beg="0x92EE4"   end="0x94EE4"/>
         <!--<Block name="ScriptVars"        beg="0x9D870"   end="0x9DFA0"/>-->
         <!--<Block name="ScriptVarsLocals"  beg="0x9CECC"   end="0x9CF0C"/>-->
         <Block name="DungeonList"        beg="0x9E924" end="0x9EBF4"/>

@@ -62,6 +62,7 @@ from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.graphics.wte.handler import WteHandler
 from skytemple_files.graphics.wtu.handler import WtuHandler
+from skytemple_files.graphics.chr.handler import ChrHandler
 from skytemple_files.graphics.colvec.handler import ColvecHandler
 from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
 from skytemple_files.graphics.fonts.font_dat.handler import FontDatHandler
@@ -114,6 +115,8 @@ class FileType:
     FONT_SIR0 = FontSir0Handler
     BANNER_FONT = BannerFontHandler
     GRAPHIC_FONT = GraphicFontHandler
+    
+    CHR = ChrHandler
     
     WTE = WteHandler
     WTU = WtuHandler

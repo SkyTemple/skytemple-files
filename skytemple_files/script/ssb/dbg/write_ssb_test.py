@@ -1,5 +1,5 @@
 """Tests if the SSB writer is working, by simple loading the scripts and writing them back and checking if same."""
-#  Copyright 2020 Parakoopa
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

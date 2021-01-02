@@ -1,5 +1,5 @@
 """Converts Bpc models back into the binary format used by the game"""
-#  Copyright 2020 Parakoopa
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

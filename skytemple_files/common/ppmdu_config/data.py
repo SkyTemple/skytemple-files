@@ -2,7 +2,7 @@
 Main static configuration for SkyTemple itself and a ROM.
 For now, the documentation of fields is in the pmd2data.xml.
 """
-#  Copyright 2020 Parakoopa
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

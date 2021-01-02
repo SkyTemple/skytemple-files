@@ -1,5 +1,5 @@
 """Module to read ppmdu "PMD2" XML files into the config data model"""
-#  Copyright 2020 Parakoopa
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

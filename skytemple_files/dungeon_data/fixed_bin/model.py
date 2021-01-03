@@ -217,12 +217,10 @@ class FixedFloor:
         rows = []
         current_row = []
         for i, el in enumerate(self.actions):
-            if i % self.width == 0:
-                if current_row is not None:
-                    rows.append(current_row)
-                current_row = []
             current_row.append(el)
-        rows.append(current_row)
+            if i % self.width == self.width - 1:
+                rows.append(current_row)
+                current_row = []
 
         # Shrink / enlarge the grid
         # Y: Enlarge

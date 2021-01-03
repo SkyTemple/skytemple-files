@@ -57,6 +57,14 @@ XML_GENENT_IQ_GROUP = "IQGroup"
 XML_GENENT_ABILITY_PRIMARY = "PrimaryAbility"
 XML_GENENT_ABILITY_SECONDARY = "SecondaryAbility"
 XML_GENENT_BITFLAG1 = "Bitfield"
+XML_GENENT_BITFLAG1__UNK0 = "Unk0"
+XML_GENENT_BITFLAG1__UNK1 = "Unk1"
+XML_GENENT_BITFLAG1__UNK2 = "Unk2"
+XML_GENENT_BITFLAG1__UNK3 = "Unk3"
+XML_GENENT_BITFLAG1__UNK4 = "CanMove"
+XML_GENENT_BITFLAG1__UNK5 = "Unk5"
+XML_GENENT_BITFLAG1__UNK6 = "CanEvolve"
+XML_GENENT_BITFLAG1__UNK7 = "ItemRequiredForSpawning"
 XML_GENENT_EXP_YIELD = "ExpYield"
 XML_GENENT_RECRUIT_RATE1 = "RecruitRate1"
 XML_GENENT_RECRUIT_RATE2 = "RecruitRate2"
@@ -115,7 +123,6 @@ XML_GENENT__MAP__SIMPLE = {
     XML_GENENT_IQ_GROUP: 'iq_group',
     XML_GENENT_ABILITY_PRIMARY: 'ability_primary',
     XML_GENENT_ABILITY_SECONDARY: 'ability_secondary',
-    XML_GENENT_BITFLAG1: 'bitflag1',
     XML_GENENT_EXP_YIELD: 'exp_yield',
     XML_GENENT_RECRUIT_RATE1: 'recruit_rate1',
     XML_GENENT_RECRUIT_RATE2: 'recruit_rate2',
@@ -231,6 +238,17 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
         items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item3))
         items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item4))
         xml.append(items)
+        # Bitfield
+        items = Element(XML_GENENT_BITFLAG1)
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK0, int(value.bitfield1_0)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK1, int(value.bitfield1_1)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK2, int(value.bitfield1_2)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK3, int(value.bitfield1_3)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK4, int(value.can_move)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK5, int(value.bitfield1_5)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK6, int(value.can_evolve)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK7, int(value.item_required_for_spawning)))
+        xml.append(items)
         return xml
 
     @classmethod
@@ -329,6 +347,72 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                 for item_xml, attr_name in zip(sub_xml, update):
                     validate_xml_tag(item_xml, XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID)
                     setattr(value_to_update, attr_name, int(item_xml.text))
+            if sub_xml.tag == XML_GENENT_BITFLAG1:
+                unk0 = None
+                unk1 = None
+                unk2 = None
+                unk3 = None
+                unk4 = None
+                unk5 = None
+                unk6 = None
+                unk7 = None
+                for value_xml in sub_xml:
+                    if value_xml.tag == XML_GENENT_BITFLAG1__UNK0:
+                        unk0 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK1:
+                        unk1 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK2:
+                        unk2 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK3:
+                        unk3 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK4:
+                        unk4 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK5:
+                        unk5 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK6:
+                        unk6 = bool(int(value_xml.text))
+                    elif value_xml.tag == XML_GENENT_BITFLAG1__UNK7:
+                        unk7 = bool(int(value_xml.text))
+                if unk0 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK0}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk1 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK1}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk2 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK2}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk3 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK3}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk4 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK4}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk5 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK5}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk6 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK6}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                if unk7 is None:
+                    raise XmlValidateError(
+                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK7}' missing for a {XML_GENENT_BASE_STATS}."
+                    )
+                value_to_update.bitfield1_0 = unk0
+                value_to_update.bitfield1_1 = unk1
+                value_to_update.bitfield1_2 = unk2
+                value_to_update.bitfield1_3 = unk3
+                value_to_update.can_move = unk4
+                value_to_update.bitfield1_5 = unk5
+                value_to_update.can_evolve = unk6
+                value_to_update.item_required_for_spawning = unk7
 
 
 class MovesetXml(XmlConverter[MoveLearnset]):

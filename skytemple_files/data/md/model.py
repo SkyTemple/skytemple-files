@@ -244,7 +244,7 @@ class ShadowSize(Enum):
 
 
 class MdEntry(AutoString):
-    def __init__(self, **data):
+    def __init__(self, *, bitflag1: int, **data):
         self.md_index: int = -1
         self.entid: int = -1
         self.unk31: int = -1
@@ -263,7 +263,9 @@ class MdEntry(AutoString):
         self.iq_group: IQGroup = IQGroup.INVALID
         self.ability_primary: Ability = Ability.NONE
         self.ability_secondary: Ability = Ability.NONE
-        self.bitflag1: int = -1
+        self.bitfield1_0, self.bitfield1_1, self.bitfield1_2, self.bitfield1_3, \
+            self.can_move, self.bitfield1_5, self.can_evolve, self.item_required_for_spawning = \
+            (bool(bitflag1 >> i & 1) for i in range(8))
         self.exp_yield: int = -1
         self.recruit_rate1: int = -1
         self.base_hp: int = -1

@@ -50,7 +50,9 @@ class MdWriter:
             self._write_data(entry.iq_group.value, 1)
             self._write_data(entry.ability_primary.value, 1)
             self._write_data(entry.ability_secondary.value, 1)
-            self._write_data(entry.bitflag1)
+            self._write_data(generate_bitfield((
+                entry.item_required_for_spawning, entry.can_evolve, entry.bitfield1_5, entry.can_move,
+                entry.bitfield1_3, entry.bitfield1_2, entry.bitfield1_1, entry.bitfield1_0)))
             self._write_data(entry.exp_yield)
             self._write_data(entry.recruit_rate1, signed=True)
             self._write_data(entry.base_hp)

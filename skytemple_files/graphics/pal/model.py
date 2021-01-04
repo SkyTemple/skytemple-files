@@ -26,13 +26,13 @@ class Pal(AutoString):
     def get_palette_2bpc(self) -> List[int]:
         """Returns the palette converting the data from 2 bpc to 3 bpc"""
         data = []
-        for x in range(len(self.palette//2)):
+        for x in range(len(self.palette)//2):
             v = 0
             for i in range(2):
                 v += self.palette[x*2+i]*(256**i)
             data.append((v%32)*8)
-            data.append(((v<<5)%32)*8)
-            data.append(((v<<10)%32)*8)
+            data.append(((v>>5)%32)*8)
+            data.append(((v>>10)%32)*8)
         return data
         
     def get_palette(self) -> List[int]:
@@ -50,11 +50,11 @@ class Pal(AutoString):
     def set_palette_2bpc(self, data: List[int]):
         """Sets the palette converting the data given from 3 bpc to 2 bpc"""
         self.palette = []
-        for x in range(len(data//3)):
+        for x in range(len(data)//3):
             color = []
             for i in range(3):
                 color.append(data[x*3+i])
-            v = color[0]//8 + (color[1]//8)>>5 + (color[2]//8)>>10
+            v = (color[0]//8) + ((color[1]//8)<<5) + ((color[2]//8)<<10)
             self.palette.append(v%256)
             self.palette.append(v//256)
     

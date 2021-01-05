@@ -14,6 +14,15 @@ def getWanFilePath(baseDir, dirName, index):
         inFile = file
     return inFile
 
+def ReadbackChara(baseDir, index, anim_name_map, sdwImg):
+    print(format(index, '04d'))
+    inDir = os.path.join(baseDir, 'Sprite', format(index, '04d'))
+
+    wan = exWriter.ImportSheets(inDir)
+    shutil.rmtree(inDir)
+    exWriter.ExportSheets(inDir, sdwImg, wan, anim_name_map)
+
+
 def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     monsterPath = getWanFilePath(baseDir, 'monster', index)
     m_groundPath = getWanFilePath(baseDir, 'm_ground', index)

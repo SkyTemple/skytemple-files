@@ -1,3 +1,4 @@
+import math
 import sys
 import os
 import glob
@@ -7,6 +8,7 @@ import xml.dom.minidom as minidom
 from chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, AnimStat, ImgPiece, \
     MINUS_FRAME, DIM_TABLE, TEX_SIZE
 import chara_wan.utils as exUtils
+from skytemple_tilequant.aikku.image_converter import AikkuImageConverter as QuantConverter, DitheringMode
 
 
 
@@ -277,10 +279,10 @@ def ImportWan(in_file):
     ptrAnimInfo = int.from_bytes(in_file.read(4), 'little')
     ptrImageDataInfo = int.from_bytes(in_file.read(4), 'little')
     if ptrAnimInfo == 0 or ptrImageDataInfo == 0:
-        raise Exception('  Null pointer in Wan Header!')
+        raise ValueError('Null pointer in Wan Header!')
     imgType = int.from_bytes(in_file.read(2), 'little')
     if imgType != 1:
-        raise Exception('  Not a chara!')
+        raise NotImplementedError('Non-character sprite import currently not supported.')
 
     updateUnusedStats([], 'Unk#12', int.from_bytes(in_file.read(2), 'little'))
 
@@ -289,7 +291,7 @@ def ImportWan(in_file):
     ptrImageDataTable = int.from_bytes(in_file.read(4), 'little')
     ptrPaletteInfo = int.from_bytes(in_file.read(4), 'little')
     if ptrImageDataTable == 0 or ptrPaletteInfo == 0:
-        raise Exception('  Null pointer in Image Data Info!')
+        raise ValueError('Null pointer in Image Data Info!')
     # Unk#13 - ALWAYS 0
     int.from_bytes(in_file.read(2), 'little')
     # Is256ColorSpr - ALWAYS 0
@@ -401,7 +403,7 @@ def ImportWan(in_file):
         in_file.seek(curLocation)
 
     if ptrOffsetsTable == 0:
-        raise Exception("Zero Offset")
+        raise ValueError("Read a zero for offset table pointer.")
 
     ptrFramesRefTableEnd = ptrOffsetsTable
 
@@ -500,7 +502,7 @@ def ImportWan(in_file):
     return wan
 
 
-def ImportSheets(inDir):
+def ImportSheets(inDir, strict=False):
 
     if DEBUG_PRINT:
         if not os.path.isdir(os.path.join(inDir, '_pieces_in')):
@@ -523,8 +525,7 @@ def ImportSheets(inDir):
         backref_node = anim_node.find('CopyOf')
         if backref_node is not None:
             backref = backref_node.text
-            if index > -1:
-                anim_stats[index] = AnimStat(index, name, None, backref)
+            anim_stat = AnimStat(index, name, None, backref)
         else:
             frame_width = anim_node.find('FrameWidth')
             frame_height = anim_node.find('FrameHeight')
@@ -545,9 +546,14 @@ def ImportSheets(inDir):
                 duration = int(dur_node.text)
                 anim_stat.durations.append(duration)
 
-            if index > -1:
-                anim_stats[index] = anim_stat
             anim_names[name.lower()] = index
+            if index == -1 and strict:
+                raise ValueError("{0} has its own sheet and does not have an index!".format(name))
+
+        if index > -1:
+            if index in anim_stats:
+                raise ValueError("{0} and {1} both have the an index of {2}!".format(anim_stats[index].name, name, index))
+            anim_stats[index] = anim_stat
 
     copy_indices = {}
     for idx in anim_stats:
@@ -575,29 +581,39 @@ def ImportSheets(inDir):
             offset_img = Image.open(os.path.join(inDir, anim_name + '-Offsets.png')).convert("RGBA")
             shadow_img = Image.open(os.path.join(inDir, anim_name + '-Shadow.png')).convert("RGBA")
 
-            anim_sheets[index] = (anim_img, offset_img, shadow_img)
+            anim_sheets[index] = (anim_img, offset_img, shadow_img, anim_name)
 
     # raise warning if there exist anim stats without anims, or anims without anim stats
     if len(anim_names) > 0:
         orphans = []
         for k in anim_names:
             orphans.append(k)
-        raise Exception("Xml found with no sheet: {0}".format(', '.join(orphans)))
+        raise ValueError("Xml found with no sheet: {0}".format(', '.join(orphans)))
     if len(extra_sheets) > 0:
-        raise Exception("Sheet found with no xml: {0}".format(', '.join(extra_sheets)))
+        raise ValueError("Sheet found with no xml: {0}".format(', '.join(extra_sheets)))
 
     animGroupData = []
     frames = []
     frameToSequence = []
     for idx in range(MAX_ANIMS):
         if idx in anim_sheets:
-            anim_img, offset_img, shadow_img = anim_sheets[idx]
-            # TODO: raise warning if there's missing shadow or offsets
+            anim_img, offset_img, shadow_img, anim_name = anim_sheets[idx]
             tileSize = anim_stats[idx].size
             durations = anim_stats[idx].durations
 
-            # TODO: check against inconsistent sizing
-            # TODO: check against inconsistent duration counts
+            # check against inconsistent sizing
+            if anim_img.size != offset_img.size or anim_img.size != shadow_img.size:
+                raise ValueError("Anim, Offset, and Shadow sheets for {0} must be the same size!".format(anim_name))
+
+            if anim_img.size[0] % tileSize[0] != 0 or anim_img.size[1] % tileSize[1] != 0:
+                raise ValueError("Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
+                    anim_img.size[0], anim_img.size[1], tileSize[0], tileSize[1], anim_name))
+
+            total_frames = anim_img.size[0] // tileSize[0]
+            # check against inconsistent duration counts
+            if total_frames != len(durations):
+                raise ValueError("Number of frames in {0} does not match durations specified in xml!".format(anim_name))
+
             group = []
             total_dirs = anim_img.size[1] // tileSize[1]
             for dir in range(8):
@@ -621,7 +637,9 @@ def ImportSheets(inDir):
                     frame_offset = exUtils.getOffsetFromRGB(offset_img, tile_bounds, True, True, True, True, False)
                     offsets = FrameOffset(None, None, None, None)
                     if frame_offset[2] is None:
-                        # warn about no offset for this frame, probably?
+                        # raise warning if there's missing shadow or offsets
+                        if strict:
+                            raise ValueError("No frame offset found in frame {0} for {1}".format((jj, dir), anim_name))
                         offsets = FrameOffset(rel_center, rel_center, rel_center, rel_center)
                     else:
                         offsets.center = frame_offset[2]
@@ -636,6 +654,8 @@ def ImportSheets(inDir):
                     shadow = rel_center
                     if shadow_offset[4] is not None:
                         shadow = shadow_offset[4]
+                    elif strict:
+                        raise ValueError("No shadow offset found in frame {0} for {1}".format((jj, dir), anim_name))
                     shadow_diff = exUtils.addLoc(shadow, rect, True)
                     shadow = exUtils.addLoc(shadow, rel_center, True)
 
@@ -701,21 +721,96 @@ def ImportSheets(inDir):
     # final_frames is now a list of unique graphics where flips are treated as separate but refer to the originals
     # now, create metaframes and image data
     # palette is needed first.  get palette data
-    palette_map = {}
-    for frame in final_frames:
-        tex = frame[0]
-        exUtils.addToPalette(palette_map, tex)
 
+    # use tilequant to modify all anim images at once and force to 16 colors or less (including transparent)
+    # first, generate an image containing all frames in final_frames
+
+    max_width = 0
+    max_height = 0
+    for frame in final_frames:
+        frame_tex = frame[0]
+        max_width = max(max_width, frame_tex.size[0])
+        max_height = max(max_height, frame_tex.size[1])
+
+    max_width = exUtils.roundUpToMult(max_width, 2)
+    max_height = exUtils.roundUpToMult(max_height, 2)
+
+    max_tiles = int(math.ceil(math.sqrt(len(final_frames))))
+    combinedImg = Image.new('RGBA', (max_tiles * max_width, max_tiles * max_height), (0, 0, 0, 0))
+
+    crop_bounds = []
+    for idx, frame in enumerate(final_frames):
+        frame_tex = frame[0]
+        round_width = exUtils.roundUpToMult(frame_tex.size[0], 2)
+        round_height = exUtils.roundUpToMult(frame_tex.size[1], 2)
+        tile_pos = (idx % max_tiles * max_width, idx // max_tiles * max_height)
+        paste_bounds = (tile_pos[0] + (max_width - round_width) // 2,
+                        tile_pos[1] + (max_height - round_height) // 2,
+                        tile_pos[0] + (max_width - round_width) // 2 + frame_tex.size[0],
+                        tile_pos[1] + (max_height - round_height) // 2 + frame_tex.size[1])
+        crop_bounds.append(paste_bounds)
+        combinedImg.paste(frame_tex, paste_bounds, frame_tex)
+
+    colors = combinedImg.getcolors()
+
+    if strict and len(colors) > 16:
+        raise ValueError("Number of (nontransparent) colors over 15: {0}".format(len(colors)))
+
+    transparent = (0, 127, 151, 255)
+    foundTrans = True
+    while foundTrans:
+        foundTrans = False
+        for count, color in colors:
+            if color == transparent:
+                transparent = (0, 127, transparent[3] - 1, 255)
+                foundTrans = True
+                break
+
+    datas = combinedImg.getdata()
+    return_datas = []
+    for idx in range(len(datas)):
+        if datas[idx][3] == 0:
+            return_datas.append(transparent)
+        else:
+            return_datas.append(datas[idx])
+    combinedImg.putdata(return_datas)
+
+    # TODO: wan can actually handle more than 16 colors so long as a single image piece itself only has 16 colors
+    # to actually allow over 16 colors, an algorithm would be needed to get the color list for every individual frame
+    # and then combine the color lists such that there are as few distinct palettes as possible
+    # and that no palettes have over 16 colors (transparency included)
+
+    # then, run through tilequant
+    converter = QuantConverter(combinedImg, transparent, combinedImg.size[0], combinedImg.size[1])
+    reducedImg = converter.convert(num_palettes=1, colors_per_palette=16, dithering_mode=DitheringMode.NONE).convert("RGBA")
+
+    datas = reducedImg.getdata()
+    for idx in range(len(datas)):
+        if return_datas[idx] != transparent:
+            return_datas[idx] = datas[idx]
+    reducedImg.putdata(return_datas)
+
+    palette = reducedImg.getcolors()
+    palette_map = {}
     singlePalette = []
-    # add transparent at the START
-    singlePalette.append((0, 0, 0, 0))
-    for color in palette_map:
-        palette_map[color] = len(singlePalette)
-        singlePalette.append(color)
-    palette_map[(0, 0, 0, 0)] = 0
-    # raise warning if over the palette limit
-    if len(singlePalette) > 16:
-        raise Exception("Number of (nontransparent) colors over 15: {0}".format(len(singlePalette)))
+    for count, rgba in palette:
+        palette_map[rgba] = len(singlePalette)
+        singlePalette.append(rgba)
+
+        # transparent is always 0
+        if rgba == transparent:
+            prev_zero = singlePalette[0]
+            singlePalette[0] = rgba
+            singlePalette[-1] = prev_zero
+            palette_map[prev_zero] = palette_map[rgba]
+            palette_map[rgba] = 0
+
+    # then, cut up the image and return to the original final_frames
+    for idx in range(len(final_frames)):
+        frame_tex, offsets, shadow_diff, flip = final_frames[idx]
+        frame_tex = reducedImg.crop(crop_bounds[idx])
+        final_frames[idx] = (frame_tex, offsets, shadow_diff, flip)
+
     while len(singlePalette) < 16:
         singlePalette.append((32, 169, 32, 255))
         singlePalette.append((65, 117, 100, 255))
@@ -730,7 +825,6 @@ def ImportSheets(inDir):
     frameData = []
     offsetData = []
     for idx, frame in enumerate(final_frames):
-
         if DEBUG_PRINT:
             frame[0].save(os.path.join(inDir, '_frames_in', 'F-' + format(idx, '02d') + '.png'))
 
@@ -741,22 +835,11 @@ def ImportSheets(inDir):
             addFlippedImgData(frameData, flipped_frame, final_frames[flip], frame)
         else:
             # will append to imgData and frameData
-            addImgData(imgData, frameData, palette_map, frame)
+            addImgData(imgData, frameData, palette_map, transparent, frame)
         offsets = frame[1]
         offsets.AddLoc((-shadow_diff[0], -shadow_diff[1]))
         offsetData.append(offsets)
 
-    # adjust transparent color to a substitute color
-    transparent = (0, 127, 151, 255)
-    foundTrans = True
-    while foundTrans:
-        foundTrans = False
-        for color in singlePalette:
-            if color == transparent:
-                transparent = (0, 127, transparent[3] - 1, 255)
-                foundTrans = True
-                break
-    singlePalette[0] = transparent
 
     # apply the mappings to the animations, correcting the frame indices and shadow offsets
     for idx, frame in enumerate(frames):
@@ -890,6 +973,9 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
         # some groups may be empty
         if animsPerGroup == 0:
             continue
+
+        if anim_name_map[idx][0] == '':
+            raise ValueError("Animation #{0} needs a name!".format(idx))
 
         dupe_idx = -1
         for cmp_idx in ANIM_ORDER:
@@ -1185,11 +1271,11 @@ def addFlippedImgData(frameData, metaFrame, old_frame, new_frame):
     frameData.append(newMetaFrame)
 
 
-def addImgData(imgData, frameData, palette_map, frame):
+def addImgData(imgData, frameData, palette_map, transparent, frame):
     img = frame[0]
     pt_zero = frame[2]
     # chop the frames into images and metaframes - need psy's algorithm for this
-    piece_locs = chopImgToPieceLocs(img)
+    piece_locs = chopImgToPieceLocs(img, transparent)
 
     metaFrame = []
     # create new metaframe piece data from the pieces
@@ -1268,7 +1354,7 @@ def convertPieceToImgStrip(piece, palette_map):
     imgStrip.imgPx = strips
     return imgStrip
 
-def chopImgToPieceLocs(img):
+def chopImgToPieceLocs(img, transparent):
     chopped_imgs = []
     smallest_dim = 3
     for idx, dim in enumerate(DIM_TABLE):
@@ -1277,7 +1363,7 @@ def chopImgToPieceLocs(img):
                 smallest_dim = idx
     if img.size[0] > 8 * TEX_SIZE or img.size[1] > 8 * TEX_SIZE:
         roundUp = (exUtils.roundUpToMult(img.size[0], TEX_SIZE), exUtils.roundUpToMult(img.size[1], TEX_SIZE))
-        fullImg = Image.new('RGBA', roundUp, (0, 0, 0, 0))
+        fullImg = Image.new('RGBA', roundUp, transparent)
         fullImg.paste(img, (0, 0), img)
 
         yy = 0
@@ -1304,7 +1390,7 @@ def chopImgToPieceLocs(img):
     else:
         newWidth = DIM_TABLE[smallest_dim][0] * TEX_SIZE
         newHeight = DIM_TABLE[smallest_dim][1] * TEX_SIZE
-        newImg = Image.new('RGBA', (newWidth, newHeight), (0, 0, 0, 0))
+        newImg = Image.new('RGBA', (newWidth, newHeight), transparent)
         newImg.paste(img, (0, 0), img)
         chopped_imgs.append((newImg, (0, 0)))
     return chopped_imgs

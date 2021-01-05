@@ -44,7 +44,7 @@ DIM_TABLE = [(1, 1), (2, 2), (4, 4), (8, 8), \
              (1, 2), (1, 4), (2, 4), (4, 8)]
 
 
-class WanFile(object):
+class WanFile():
 
     def __init__(self, imgData, frameData, animGroupData, offsetData, customPalette):
         self.imgData = imgData
@@ -55,7 +55,7 @@ class WanFile(object):
         self.sdwSize = 1
 
 
-class SequenceFrame(object):
+class SequenceFrame():
 
     def __init__(self, frameIndex, duration, flag, offset, shadow):
         self.frameIndex = frameIndex
@@ -90,7 +90,7 @@ class SequenceFrame(object):
             self.flag = (self.flag & ~FRAME_ReturnMask)
 
 
-class MetaFramePiece(object):
+class MetaFramePiece():
 
     def __init__(self, imgIndex, attr0, attr1, attr2):
         self.imgIndex = imgIndex
@@ -251,7 +251,7 @@ class MetaFramePiece(object):
 
 
 
-class FrameOffset(object):
+class FrameOffset():
 
     def __init__(self, head, lhand, rhand, center):
         self.head = head
@@ -289,13 +289,13 @@ class FrameOffset(object):
         inImg.putpixel((start[0] - exOffset[0], start[1] - exOffset[1]), srcColor)
 
 
-class ImgPiece(object):
+class ImgPiece():
     def __init__(self):
         self.imgPx = []
         self.zSort = 0
 
 
-class AnimStat(object):
+class AnimStat():
 
     def __init__(self, index, name, size, backref):
         self.index = index

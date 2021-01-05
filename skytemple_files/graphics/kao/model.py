@@ -17,9 +17,7 @@
 
 import math
 
-import warnings
-
-from skytemple_tilequant.image_converter import ImageConverter
+from skytemple_tilequant.aikku.image_converter import AikkuImageConverter, DitheringMode
 
 try:
     from PIL import Image
@@ -214,9 +212,8 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     if pil.width != img_dim or pil.height != img_dim:
         raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
     if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
-        # todo: the transparent color is just some random color, we don't actually want transparency...
-        converter = ImageConverter(pil, img_dim, img_dim, (123, 156, 145))
-        pil = converter.convert(num_palettes=1, colors_per_palette=16)
+        converter = AikkuImageConverter(pil, None, img_dim, img_dim)
+        pil = converter.convert(num_palettes=1, colors_per_palette=16, dithering_mode=DitheringMode.NONE)
     new_palette = bytearray(pil.palette.palette)
 
     # We have to cut the image back into this annoying tiling format :(

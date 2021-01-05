@@ -1,8 +1,25 @@
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
+#
+#  This file is part of SkyTemple.
+#
+#  SkyTemple is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SkyTemple is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import math
 import sys
 import os
 import glob
 from PIL import Image
+from io import BytesIO
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 from chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, AnimStat, ImgPiece, \
@@ -25,10 +42,9 @@ DEBUG_PRINT = False
 
 
 
+def ExportWan(wan):
+    out_file = BytesIO()
 
-
-
-def ExportWan(out_file, wan):
     out_file.write(b'\x53\x49\x52\x30')
     sir0_ptrs = [4, 8]
     # 4- WAN header ptr
@@ -260,13 +276,20 @@ def ExportWan(out_file, wan):
     out_file.write(ptrWAN.to_bytes(4, 'little'))
     out_file.write(ptrSir0.to_bytes(4, 'little'))
 
+    out_file.seek(0)
+    return out_file.read()
+
 
 # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
 # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero
 # m_ground_0587_0xbd0a10.wan - Latios.  Unknown difference
 # monster_0433_0x3dd1c0.sir0 - Giratina Origin.  Extra zeroes after file end.
 # monster_0438_0x3ec6d0.sir0 - Shaymin Sky.  Extra zeroes after file end.
-def ImportWan(in_file):
+def ImportWan(data):
+    in_file = BytesIO()
+    in_file.write(data)
+    in_file.seek(0)
+
 
     wan = WanFile([], [], [], [], [])
     wan.customPalette = []

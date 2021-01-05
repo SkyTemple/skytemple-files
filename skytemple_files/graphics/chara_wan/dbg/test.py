@@ -1,3 +1,19 @@
+#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
+#
+#  This file is part of SkyTemple.
+#
+#  SkyTemple is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SkyTemple is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 import os
 import shutil
@@ -38,11 +54,11 @@ def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     outDir = os.path.join(baseDir, 'example')
 
     with open(monsterPath, "rb") as monster_file:
-        monster = exWriter.ImportWan(monster_file)
+        monster = exWriter.ImportWan(monster_file.read())
     with open(m_groundPath, "rb") as m_ground_file:
-        m_ground = exWriter.ImportWan(m_ground_file)
+        m_ground = exWriter.ImportWan(m_ground_file.read())
     with open(m_attackPath, "rb") as m_attack_file:
-        m_attack = exWriter.ImportWan(m_attack_file)
+        m_attack = exWriter.ImportWan(m_attack_file.read())
 
     wan = exWriter.MergeWan([monster, m_ground, m_attack])
 
@@ -65,8 +81,8 @@ def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     m_attackBackPath = os.path.join(outDir, os.path.split(m_attackPath)[1])
 
     with open(monsterBackPath, 'wb') as file:
-        exWriter.ExportWan(file, split_wan[0])
+        file.write(exWriter.ExportWan(split_wan[0]))
     with open(m_groundBackPath, 'wb') as file:
-        exWriter.ExportWan(file, split_wan[1])
+        file.write(exWriter.ExportWan(split_wan[1]))
     with open(m_attackBackPath, 'wb') as file:
-        exWriter.ExportWan(file, split_wan[2])
+        file.write(exWriter.ExportWan(split_wan[2]))

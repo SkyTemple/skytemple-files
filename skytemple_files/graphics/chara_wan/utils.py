@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+
 def centerBounds(bounds, center):
     minX = min(bounds[0] - center[0], center[0] - bounds[2])
     minY = min(bounds[1] - center[1], center[1] - bounds[3])

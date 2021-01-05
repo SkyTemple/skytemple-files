@@ -20,7 +20,8 @@ import shutil
 import math
 import glob
 import chara_wan.writer as exWriter
-
+import chara_wan.split_merge as exSplitMerge
+import chara_wan.sheets as exSheets
 
 
 def getWanFilePath(baseDir, dirName, index):
@@ -34,9 +35,9 @@ def ReadbackChara(baseDir, index, anim_name_map, sdwImg):
     print(format(index, '04d'))
     inDir = os.path.join(baseDir, 'Sprite', format(index, '04d'))
 
-    wan = exWriter.ImportSheets(inDir)
+    wan = exSheets.ImportSheets(inDir)
     shutil.rmtree(inDir)
-    exWriter.ExportSheets(inDir, sdwImg, wan, anim_name_map)
+    exSheets.ExportSheets(inDir, sdwImg, wan, anim_name_map)
 
 
 def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
@@ -60,12 +61,12 @@ def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     with open(m_attackPath, "rb") as m_attack_file:
         m_attack = exWriter.ImportWan(m_attack_file.read())
 
-    wan = exWriter.MergeWan([monster, m_ground, m_attack])
+    wan = exSplitMerge.MergeWan([monster, m_ground, m_attack])
 
-    exWriter.ExportSheets(os.path.join(outDir, format(index, '04d')), sdwImg, wan, anim_name_map)
+    exSheets.ExportSheets(os.path.join(outDir, format(index, '04d')), sdwImg, wan, anim_name_map)
 
     # typical import flow; take a sheet, split into 3 sir0, import to those 3 simultaneously
-    wan = exWriter.ImportSheets(os.path.join(outDir, format(index, '04d')))
+    wan = exSheets.ImportSheets(os.path.join(outDir, format(index, '04d')))
 
     anim_presence = []
     # monster
@@ -74,7 +75,7 @@ def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     anim_presence.append([True, False, False, False, False, False, True, True, False, False, False, False, True])
     # attack
     anim_presence.append([False, True, True, True, True, False, False, False, True, True, True, True, True])
-    split_wan = exWriter.SplitWan(wan, anim_presence)
+    split_wan = exSplitMerge.SplitWan(wan, anim_presence)
 
     monsterBackPath = os.path.join(outDir, os.path.split(monsterPath)[1])
     m_groundBackPath = os.path.join(outDir, os.path.split(m_groundPath)[1])

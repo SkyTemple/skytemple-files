@@ -17,6 +17,7 @@ import chara_wan.wan_utils as exWanUtils
 def MergeWan(wan_files):
 
     # custom palettes are always the same
+    sdwSize = wan_files[0].sdwSize
     customPalette = wan_files[0].customPalette
     # merge all pieces and remap the frames that reference them
     imgData = []
@@ -42,7 +43,14 @@ def MergeWan(wan_files):
             if ii < len(wan.animGroupData) and len(wan.animGroupData[ii]) > 0:
                 animGroupData[ii] = wan.animGroupData[ii]
 
-    return WanFile(imgData, frameData, animGroupData, offsetData, customPalette)
+    wan = WanFile()
+    wan.imgData = imgData
+    wan.frameData = frameData
+    wan.animGroupData = animGroupData
+    wan.offsetData = offsetData
+    wan.customPalette = customPalette
+    wan.sdwSize = sdwSize
+    return wan
 
 
 def SplitWan(wan, anim_presence):
@@ -67,7 +75,13 @@ def SplitWan(wan, anim_presence):
         imgData = []
         transferStrippedImgData(wan.imgData, imgData, frameData)
 
-        new_wan = WanFile(imgData, frameData, animGroupData, offsetData, wan.customPalette)
+        new_wan = WanFile()
+        new_wan.imgData = imgData
+        new_wan.frameData = frameData
+        new_wan.animGroupData = animGroupData
+        new_wan.offsetData = offsetData
+        new_wan.customPalette = wan.customPalette
+        new_wan.sdwSize = wan.sdwSize
         wan_files.append(new_wan)
     return wan_files
 

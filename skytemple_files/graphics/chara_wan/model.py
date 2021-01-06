@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 from PIL import Image
+from io import BytesIO
 import chara_wan.utils as exUtils
 
 CENTER_X = 256
@@ -62,18 +63,265 @@ DIM_TABLE = [(1, 1), (2, 2), (4, 4), (8, 8), \
 DEBUG_PRINT = False
 
 
-class WanFile():
+class WanFile:
 
-    def __init__(self, imgData, frameData, animGroupData, offsetData, customPalette):
-        self.imgData = imgData
-        self.frameData = frameData
-        self.animGroupData = animGroupData
-        self.offsetData = offsetData
-        self.customPalette = customPalette
-        self.sdwSize = 1
+    def __init__(self, data=None):
+        if data is None:
+            self.imgData = []
+            self.frameData = []
+            self.animGroupData = []
+            self.offsetData = []
+            self.customPalette = []
+            self.sdwSize = 1
+        else:
+            self.ImportWan(data)
+            self.sdwSize = 1
 
 
-class SequenceFrame():
+    # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
+    # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero
+    # m_ground_0587_0xbd0a10.wan - Latios.  Unknown difference
+    # monster_0433_0x3dd1c0.sir0 - Giratina Origin.  Extra zeroes after file end.
+    # monster_0438_0x3ec6d0.sir0 - Shaymin Sky.  Extra zeroes after file end.
+    def ImportWan(self, data):
+        in_file = BytesIO()
+        in_file.write(data)
+        in_file.seek(0)
+
+        self.customPalette = []
+        # Read SIR0 Header: ptr to WAN header
+        in_file.seek(4)
+        ptrWAN = int.from_bytes(in_file.read(4), 'little')
+
+        # Read WAN header: ptr to AnimInfo, ptr to ImageDataInfo
+        in_file.seek(ptrWAN)
+        ptrAnimInfo = int.from_bytes(in_file.read(4), 'little')
+        ptrImageDataInfo = int.from_bytes(in_file.read(4), 'little')
+        if ptrAnimInfo == 0 or ptrImageDataInfo == 0:
+            raise ValueError('Null pointer in Wan Header!')
+        imgType = int.from_bytes(in_file.read(2), 'little')
+        if imgType != 1:
+            raise NotImplementedError('Non-character sprite import currently not supported.')
+
+        updateUnusedStats([], 'Unk#12', int.from_bytes(in_file.read(2), 'little'))
+
+        # Read ImageDataInfo: ptr to ImageDataTable block, ptr to PaletteInfo, NbImgs, print Unk#13 and Is256ColorSpr
+        in_file.seek(ptrImageDataInfo)
+        ptrImageDataTable = int.from_bytes(in_file.read(4), 'little')
+        ptrPaletteInfo = int.from_bytes(in_file.read(4), 'little')
+        if ptrImageDataTable == 0 or ptrPaletteInfo == 0:
+            raise ValueError('Null pointer in Image Data Info!')
+        # Unk#13 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Is256ColorSpr - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#11 - ALWAYS 1 unless completely empty?
+        updateUnusedStats([], 'Unk#11', int.from_bytes(in_file.read(2), 'little'))
+        nbImgs = int.from_bytes(in_file.read(2), 'little')
+        # print('  NbImgs:' + str(nbImgs))
+
+        # Read PaletteInfo: ptr to PaletteDataBlock, print NbColorsPerRow and All unknowns
+        in_file.seek(ptrPaletteInfo)
+        ptrPaletteDataBlock = int.from_bytes(in_file.read(4), 'little')
+        # Unk#3 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        nbColorsPerRow = max(1, int.from_bytes(in_file.read(2), 'little'))
+        # Unk#4 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#5 - ALWAYS 255
+        int.from_bytes(in_file.read(2), 'little')
+
+        # Read PaletteDataBlock: Save contents
+        in_file.seek(ptrPaletteDataBlock)
+        self.customPalette = []
+        totalColors = (ptrPaletteInfo - ptrPaletteDataBlock) // 4
+        totalPalettes = totalColors // nbColorsPerRow
+        for ii in range(totalPalettes):
+            palette = []
+            for jj in range(nbColorsPerRow):
+                red = int.from_bytes(in_file.read(1), 'little')
+                blue = int.from_bytes(in_file.read(1), 'little')
+                green = int.from_bytes(in_file.read(1), 'little')
+                in_file.read(1)
+                palette.append((red, blue, green, 255))
+            self.customPalette.append(palette)
+
+        ##Read ImageDataTable: list of all ptr to CompressedImages (use the Nb of images variable to know when to stop)
+        in_file.seek(ptrImageDataTable)
+        ptrImgs = []
+        for img in range(nbImgs):
+            ptrImgs.append(int.from_bytes(in_file.read(4), 'little'))
+
+        ##Read CompTable: Read all Image data and assemble; add byte arrays into a list.
+        self.imgData = []  ##one continuous list of bytes
+        for ptrImg in ptrImgs:
+            in_file.seek(ptrImg)
+            imgPiece = ImgPiece()
+            imgPiece.imgPx = []
+            ##Read pixels or zero padding.
+            while True:
+                ptrPixSrc = int.from_bytes(in_file.read(4), 'little')
+                amt = int.from_bytes(in_file.read(2), 'little')
+                # amt is ALWAYS a multiple of 32.  values 1-31 x 32 have been observed
+                if ptrPixSrc == 0 and amt == 0:
+                    break
+                # Unk#14 - ALWAYS 0
+                int.from_bytes(in_file.read(2), 'little')
+                # z-sort is always consistent for a full image strip
+                imgPiece.zSort = int.from_bytes(in_file.read(4), 'little')
+
+                pxStrip = []
+                if ptrPixSrc == 0:
+                    for zero in range(amt):
+                        pxStrip.append(0)
+                else:
+                    ptrCurrent = in_file.tell()
+                    in_file.seek(ptrPixSrc)
+                    for pix in range(amt):
+                        pxStrip.append(int.from_bytes(in_file.read(1), 'little'))
+                    in_file.seek(ptrCurrent)
+                imgPiece.imgPx.append(pxStrip)
+            self.imgData.append(imgPiece)
+
+        ##Read AnimInfo: ptr to MetaFramesRefTable, ptr to AnimGroupTable
+        in_file.seek(ptrAnimInfo)
+        ptrMetaFramesRefTable = int.from_bytes(in_file.read(4), 'little')
+        ptrOffsetsTable = int.from_bytes(in_file.read(4), 'little')
+        ptrAnimGroupTable = int.from_bytes(in_file.read(4), 'little')
+        nbAnimGroups = int.from_bytes(in_file.read(2), 'little')
+        # Unk#6 - Max number of blocks that a frame takes
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#7 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#8 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#9 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # Unk#10 - ALWAYS 0
+        int.from_bytes(in_file.read(2), 'little')
+        # get ptr to AnimSequenceTable
+        in_file.seek(ptrAnimGroupTable)
+        ptrAnimGroups = []
+        for ptrAnimSeq in range(nbAnimGroups):
+            ##read the location
+            animLoc = int.from_bytes(in_file.read(4), 'little')
+            ##read the length
+            animLength = int.from_bytes(in_file.read(2), 'little')
+            # Unk#16 - ALWAYS 0
+            int.from_bytes(in_file.read(2), 'little')
+            ##save curlocation
+            curLocation = in_file.tell()
+            ##go to seq location
+            in_file.seek(animLoc)
+            ptrAnims = []
+            for ii in range(animLength):
+                ##read all anims
+                animPtr = int.from_bytes(in_file.read(4), 'little')
+                ptrAnims.append(animPtr)
+            ptrAnimGroups.append(ptrAnims)
+            in_file.seek(curLocation)
+
+        if ptrOffsetsTable == 0:
+            raise ValueError("Read a zero for offset table pointer.")
+
+        ptrFramesRefTableEnd = ptrOffsetsTable
+
+        # Read MetaFramesRefTable: list of all ptr to Meta Frames
+        # stop when reached particleOffsetsTable
+        # or on AnimSequenceTable, if the above is zero
+        in_file.seek(ptrMetaFramesRefTable)
+        ptrMetaFrames = []
+        while in_file.tell() < ptrFramesRefTableEnd:
+            ptrMetaFrames.append(int.from_bytes(in_file.read(4), 'little'))
+        # print('  NbMetaframes:' + str(len(ptrMetaFrames)))
+
+        ##Read MetaFrames: for each meta frame group, read until "end of meta frame group" bit is reached.
+        self.frameData = []
+        for idx, ptrMetaFrame in enumerate(ptrMetaFrames):
+            in_file.seek(ptrMetaFrame)
+            metaFrameData = []
+            while True:
+                imgIndex = int.from_bytes(in_file.read(2), 'little', signed=True)
+                # Unk#0 - ALWAYS 0 EXCEPT for just ONE official sprite:
+                # m_ground,0546,Unk#0,171,0,2560
+                int.from_bytes(in_file.read(2), 'little')
+                attr0 = int.from_bytes(in_file.read(2), 'little')
+                attr1 = int.from_bytes(in_file.read(2), 'little')
+                attr2 = int.from_bytes(in_file.read(2), 'little')
+                newFramePiece = MetaFramePiece(imgIndex, attr0, attr1, attr2)
+
+                # values of interest:
+                # resolution y
+                # color palette mode - ALWAYS 0
+                # mosaic mode - ALWAYS 0
+                # obj mode - ALWAYS Normal
+                # obj disable -
+                updateUnusedStats([str(len(self.frameData)), str(len(metaFrameData))],
+                                  'MFDisabled', int(newFramePiece.isDisabled()))
+                # rotation and scaling - ALWAYS 1 when DISABLE is 0
+                # Y offset
+
+                # resolution x
+                # flip vertical
+                # flip horizontal
+                # last frame
+                # unused - leave 0
+                # X offset
+
+                # palette - this will be autocalculated
+                # priority - ALWAYS 3
+                # tileindex - ALWAYS follows the rules of memory placement: 4 blocks = +1 index.  1 block min
+
+                ##document the used config
+                metaFrameData.append(newFramePiece)
+                if newFramePiece.isLast():
+                    break
+
+            self.frameData.append(metaFrameData)
+
+        in_file.seek(ptrOffsetsTable)
+        self.offsetData = []
+        for offset_idx in range(len(ptrMetaFrames)):
+            headX = int.from_bytes(in_file.read(2), 'little', signed=True)
+            headY = int.from_bytes(in_file.read(2), 'little', signed=True)
+            lhandX = int.from_bytes(in_file.read(2), 'little', signed=True)
+            lhandY = int.from_bytes(in_file.read(2), 'little', signed=True)
+            rhandX = int.from_bytes(in_file.read(2), 'little', signed=True)
+            rhandY = int.from_bytes(in_file.read(2), 'little', signed=True)
+            centerX = int.from_bytes(in_file.read(2), 'little', signed=True)
+            centerY = int.from_bytes(in_file.read(2), 'little', signed=True)
+            self.offsetData.append(FrameOffset((headX, headY), (lhandX, lhandY), (rhandX, rhandY), (centerX, centerY)))
+
+        ##read all anim pointers
+        self.animGroupData = []
+        for ptrAnimGroup in ptrAnimGroups:
+            animGroup = []
+            for a_idx, ptrAnim in enumerate(ptrAnimGroup):
+                # if repeating the same pointer, it's the same animation. skip
+                if a_idx > 0 and ptrAnim == ptrAnimGroup[a_idx - 1]:
+                    continue
+                in_file.seek(ptrAnim)
+                animSequence = []
+                while True:
+                    frameDur = int.from_bytes(in_file.read(1), 'little')
+                    flag = int.from_bytes(in_file.read(1), 'little')
+                    frameIndex = int.from_bytes(in_file.read(2), 'little')
+                    sprOffX = int.from_bytes(in_file.read(2), 'little', signed=True)
+                    sprOffY = int.from_bytes(in_file.read(2), 'little', signed=True)
+                    sdwOffX = int.from_bytes(in_file.read(2), 'little', signed=True)
+                    sdwOffY = int.from_bytes(in_file.read(2), 'little', signed=True)
+                    if frameDur == 0:
+                        break
+                    else:
+                        animSequence.append(SequenceFrame(frameIndex, frameDur, flag,
+                                                        (sprOffX, sprOffY), (sdwOffX, sdwOffY)))
+                animGroup.append(animSequence)
+            self.animGroupData.append(animGroup)
+
+
+
+
+class SequenceFrame:
 
     def __init__(self, frameIndex, duration, flag, offset, shadow):
         self.frameIndex = frameIndex
@@ -108,7 +356,7 @@ class SequenceFrame():
             self.flag = (self.flag & ~FRAME_ReturnMask)
 
 
-class MetaFramePiece():
+class MetaFramePiece:
 
     def __init__(self, imgIndex, attr0, attr1, attr2):
         self.imgIndex = imgIndex
@@ -269,7 +517,7 @@ class MetaFramePiece():
 
 
 
-class FrameOffset():
+class FrameOffset:
 
     def __init__(self, head, lhand, rhand, center):
         self.head = head
@@ -307,13 +555,13 @@ class FrameOffset():
         inImg.putpixel((start[0] - exOffset[0], start[1] - exOffset[1]), srcColor)
 
 
-class ImgPiece():
+class ImgPiece:
     def __init__(self):
         self.imgPx = []
         self.zSort = 0
 
 
-class AnimStat():
+class AnimStat:
 
     def __init__(self, index, name, size, backref):
         self.index = index
@@ -325,4 +573,9 @@ class AnimStat():
         self.hitFrame = -1
         self.returnFrame = -1
 
+
+def updateUnusedStats(log_params, name, val):
+    #stats.append([log_params[0], log_params[1], name, log_params[2:], val])
+    if DEBUG_PRINT and val != 0:
+        print('  ' + name + ':' + str(val))
 

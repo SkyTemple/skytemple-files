@@ -22,6 +22,7 @@ import glob
 import chara_wan.writer as exWriter
 import chara_wan.split_merge as exSplitMerge
 import chara_wan.sheets as exSheets
+from chara_wan.model import WanFile
 
 
 def getWanFilePath(baseDir, dirName, index):
@@ -55,11 +56,11 @@ def ConvertJoinSeparateChara(baseDir, index, anim_name_map, sdwImg):
     outDir = os.path.join(baseDir, 'example')
 
     with open(monsterPath, "rb") as monster_file:
-        monster = exWriter.ImportWan(monster_file.read())
+        monster = WanFile(monster_file.read())
     with open(m_groundPath, "rb") as m_ground_file:
-        m_ground = exWriter.ImportWan(m_ground_file.read())
+        m_ground = WanFile(m_ground_file.read())
     with open(m_attackPath, "rb") as m_attack_file:
-        m_attack = exWriter.ImportWan(m_attack_file.read())
+        m_attack = WanFile(m_attack_file.read())
 
     wan = exSplitMerge.MergeWan([monster, m_ground, m_attack])
 

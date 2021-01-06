@@ -394,7 +394,12 @@ def ImportSheets(inDir, strict=False):
         for copy_idx in copies:
             animGroupData[copy_idx] = exWanUtils.duplicateAnimGroup(animGroupData[idx])
 
-    wan = WanFile(imgData, frameData, animGroupData, offsetData, [singlePalette])
+    wan = WanFile()
+    wan.imgData = imgData
+    wan.frameData = frameData
+    wan.animGroupData = animGroupData
+    wan.offsetData = offsetData
+    wan.customPalette = [singlePalette]
     wan.sdwSize = sdwSize
     # return the wan file
     return wan

@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 from PIL import Image
-import chara_wan.utils as exUtils
+import skytemple_files.graphics.chara_wan.utils as exUtils
 
 CENTER_X = 256
 CENTER_Y = 0

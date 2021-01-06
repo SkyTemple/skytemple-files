@@ -16,11 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.graphics.chara_wan.handler import CharaWanHandler
 from skytemple_files.graphics.wan_wat.model import Wan
 
 
 class WanHandler(DataHandler[Wan]):
     """Handler for Wat/Wan images. This interface is NOT stable."""
+
+    # Alternate read/write handler for character WAN files
+    CHARA = CharaWanHandler
+
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Wan:
         return Wan(data)

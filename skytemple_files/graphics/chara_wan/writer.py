@@ -14,19 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import math
-import sys
-import os
-from PIL import Image
 from io import BytesIO
-from chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece, \
-    MINUS_FRAME, DIM_TABLE, TEX_SIZE, DEBUG_PRINT
 
-
-
-
-
-
+from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece, \
+    MINUS_FRAME, DIM_TABLE, DEBUG_PRINT
 
 
 def ExportWan(wan):

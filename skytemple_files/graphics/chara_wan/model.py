@@ -65,7 +65,7 @@ DEBUG_PRINT = False
 
 class WanFile:
 
-    def __init__(self, data=None):
+    def __init__(self, data: Optional[bytes], header_pnt: int):
         if data is None:
             self.imgData = []
             self.frameData = []
@@ -77,6 +77,14 @@ class WanFile:
             self.ImportWan(data)
             self.sdwSize = 1
 
+    @classmethod
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
+                    static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+        return cls(content_data, data_pointer)
+
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+        from skytemple_files.graphics.chara_wan.writer import ExportWan
+        return ExportWan(self)
 
     # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
     # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero

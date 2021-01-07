@@ -23,8 +23,10 @@ from skytemple_files.graphics.chara_wan.writer import ImportWan, ExportWan
 class CharaWanHandler(DataHandler[WanFile]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> 'WanFile':
-        return ImportWan(bytes)
+        from skytemple_files.common.types.file_types import FileType
+        return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), WanFile)
 
     @classmethod
     def serialize(cls, data: 'WanFile', **kwargs) -> bytes:
-        return ExportWan(data)
+        from skytemple_files.common.types.file_types import FileType
+        return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

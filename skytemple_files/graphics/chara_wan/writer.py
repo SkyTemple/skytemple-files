@@ -226,36 +226,10 @@ def ExportWan(wan):
     padUntilDiv(out_file, b'\xAA', 16)
 
     # sir0 pointers
-    ptrSir0 = out_file.tell()
-    for idx, offset in enumerate(sir0_ptrs):
-        offset_to_encode = offset
-        if idx > 0:
-            offset_to_encode -= sir0_ptrs[idx - 1]
-        # This tells the loop whether it needs to encode null bytes, if at least one higher byte was non-zero
-        has_higher_non_zero = False
-        # Encode every bytes of the 4 bytes integer we have to
-        for i in range(4, 0, -1):
-            currentbyte = (offset_to_encode >> (7 * (i - 1))) & 0x7F
-            # the lowest byte to encode is special
-            if i == 1:
-                # If its the last byte to append, leave the highest bit to 0 !
-                out_file.write(currentbyte.to_bytes(1, 'little'))
-            elif currentbyte != 0 or has_higher_non_zero:
-                # if any bytes but the lowest one! If not null OR if we have encoded a higher non-null byte before!
-                out_file.write((currentbyte | 0x80).to_bytes(1, 'little'))
-                has_higher_non_zero = True
-    # null terminate the sir0 header list
-    out_file.write(b'\x00')
-
-    # fill with AA until divisible by 16
-    padUntilDiv(out_file, b'\xAA', 16)
-
-    out_file.seek(4)
-    out_file.write(ptrWAN.to_bytes(4, 'little'))
-    out_file.write(ptrSir0.to_bytes(4, 'little'))
-
+    # dont worry about this it'll be wrapped
+    
     out_file.seek(0)
-    return out_file.read()
+    return out_file.read(), sir0_ptrs, 0
 
 
 

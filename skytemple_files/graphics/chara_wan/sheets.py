@@ -16,16 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.import math
 
 import math
-import sys
 import os
 import glob
 from PIL import Image
 import xml.etree.ElementTree as ET
-import xml.dom.minidom as minidom
-from chara_wan.model import WanFile, SequenceFrame, FrameOffset, AnimStat, ImgPiece, MetaFramePiece, \
-    MINUS_FRAME, DEBUG_PRINT, DIM_TABLE, TEX_SIZE
-import chara_wan.utils as exUtils
-import chara_wan.wan_utils as exWanUtils
+
+from skytemple_files.common.xml_util import prettify
+from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, FrameOffset, AnimStat, ImgPiece, \
+    MetaFramePiece, MINUS_FRAME, DEBUG_PRINT, DIM_TABLE, TEX_SIZE
+import skytemple_files.graphics.chara_wan.utils as exUtils
+import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
 from skytemple_tilequant.aikku.image_converter import AikkuImageConverter as QuantConverter, DitheringMode
 
 
@@ -34,7 +34,7 @@ DRAW_CENTER_Y = -4
 
 MAX_ANIMS = 44
 
-ANIM_ORDER = [0, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 19, 20, \
+ANIM_ORDER = [0, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 19, 20,
               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
 
 
@@ -612,7 +612,7 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
                 dur_node.text = str(duration)
 
     with open(os.path.join(outDir, 'AnimData.xml'), 'w') as f:
-        f.write(minidom.parseString(ET.tostring(root)).toprettyxml(indent="\t"))
+        f.write(prettify(root))
 
 
 def mapDuplicateImportImgs(imgs, final_imgs, img_map):

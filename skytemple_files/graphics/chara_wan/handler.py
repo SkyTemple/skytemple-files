@@ -16,8 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.import math
 
 from skytemple_files.common.types.data_handler import DataHandler
-from chara_wan.model import WanFile
-from chara_wan.writer import ImportWan, ExportWan
+from skytemple_files.graphics.chara_wan.model import WanFile
+from skytemple_files.graphics.chara_wan.writer import ImportWan, ExportWan
+
 
 class CharaWanHandler(DataHandler[WanFile]):
     @classmethod

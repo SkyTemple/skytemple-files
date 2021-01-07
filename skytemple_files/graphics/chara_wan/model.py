@@ -17,7 +17,7 @@
 import sys
 from PIL import Image
 from io import BytesIO
-import chara_wan.utils as exUtils
+import skytemple_files.graphics.chara_wan.utils as exUtils
 
 CENTER_X = 256
 CENTER_Y = 0

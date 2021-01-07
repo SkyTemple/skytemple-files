@@ -9,8 +9,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece, \
-    MINUS_FRAME, DIM_TABLE, TEX_SIZE, DEBUG_PRINT
+from skytemple_files.graphics.chara_wan.model import SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece
+
 
 def animGroupsEqual(anim1, anim2):
     if len(anim1) != len(anim2):

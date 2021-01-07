@@ -14,10 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import sys
+from typing import Optional, Tuple, List
+
 from PIL import Image
 from io import BytesIO
 import skytemple_files.graphics.chara_wan.utils as exUtils
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 CENTER_X = 256
 CENTER_Y = 0
@@ -65,7 +67,7 @@ DEBUG_PRINT = False
 
 class WanFile:
 
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes = None, header_pnt: int = 0):
         if data is None:
             self.imgData = []
             self.frameData = []
@@ -74,7 +76,7 @@ class WanFile:
             self.customPalette = []
             self.sdwSize = 1
         else:
-            self.ImportWan(data)
+            self.ImportWan(data, header_pnt)
             self.sdwSize = 1
 
     @classmethod
@@ -91,16 +93,12 @@ class WanFile:
     # m_ground_0587_0xbd0a10.wan - Latios.  Unknown difference
     # monster_0433_0x3dd1c0.sir0 - Giratina Origin.  Extra zeroes after file end.
     # monster_0438_0x3ec6d0.sir0 - Shaymin Sky.  Extra zeroes after file end.
-    def ImportWan(self, data):
+    def ImportWan(self, data, ptrWAN=0):
         in_file = BytesIO()
         in_file.write(data)
         in_file.seek(0)
 
         self.customPalette = []
-        # Read SIR0 Header: ptr to WAN header
-        in_file.seek(4)
-        ptrWAN = int.from_bytes(in_file.read(4), 'little')
-
         # Read WAN header: ptr to AnimInfo, ptr to ImageDataInfo
         in_file.seek(ptrWAN)
         ptrAnimInfo = int.from_bytes(in_file.read(4), 'little')

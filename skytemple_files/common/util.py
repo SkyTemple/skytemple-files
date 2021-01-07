@@ -177,6 +177,11 @@ def get_files_from_rom_with_extension(rom: NintendoDSRom, ext: str) -> List[str]
     return _get_files_from_rom_with_extension__recursion('', rom.filenames, ext)
 
 
+def get_files_from_folder_with_extension(folder: Folder, ext: str) -> List[str]:
+    """Returns paths to files in the ROM ending with the specified extension."""
+    return _get_files_from_rom_with_extension__recursion('', folder, ext)
+
+
 def _get_files_from_rom_with_extension__recursion(path: str, folder: Folder, ext: str) -> List[str]:
     if ext == '':
         # Use all files

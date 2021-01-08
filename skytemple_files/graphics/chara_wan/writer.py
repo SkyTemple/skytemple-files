@@ -23,14 +23,7 @@ from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, Met
 def ExportWan(wan):
     out_file = BytesIO()
 
-    out_file.write(b'\x53\x49\x52\x30')
-    sir0_ptrs = [4, 8]
-    # 4- WAN header ptr
-    write_ptr(out_file, 0, sir0_ptrs)
-    # 8 - SIR0 pointer list ptr
-    write_ptr(out_file, 0, sir0_ptrs)
-    # 12 - zeroes
-    out_file.write((0).to_bytes(4, 'little'))
+    sir0_ptrs = []
     # Metaframes
     ptrMetaFrames = []
     for metaFrame in wan.frameData:
@@ -227,9 +220,9 @@ def ExportWan(wan):
 
     # sir0 pointers
     # dont worry about this it'll be wrapped
-    
+
     out_file.seek(0)
-    return out_file.read(), sir0_ptrs, 0
+    return out_file.read(), sir0_ptrs, ptrWAN
 
 
 

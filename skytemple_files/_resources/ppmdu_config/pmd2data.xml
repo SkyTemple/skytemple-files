@@ -99,6 +99,8 @@
         <Pointer name="NotifyNote"       beg="0xAFEF8"/>
         <Block name="DefaultHeroId"  beg="0xAFEFC" end="0xAFEFE"/>
         <Block name="DefaultPartnerId"  beg="0xAFEFE" end="0xAFF00"/>
+        <Block name="HeroStartLevel"  beg="0x48880" end="0x48881"/>
+        <Block name="PartnerStartLevel"  beg="0x488F0" end="0x488F1"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -177,6 +179,8 @@
         <Pointer name="NotifyNote"       beg="0xB0814"/>
         <Block name="DefaultHeroId"  beg="0xB0818" end="0xB081A"/>
         <Block name="DefaultPartnerId"  beg="0xB081A" end="0xB081C"/>
+        <Block name="HeroStartLevel"  beg="0x48B9C" end="0x48B9D"/>
+        <Block name="PartnerStartLevel"  beg="0x48C0C" end="0x48C0D"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->

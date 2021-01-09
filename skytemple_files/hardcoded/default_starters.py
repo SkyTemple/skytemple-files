@@ -53,3 +53,35 @@ class HardcodedDefaultStarters:
         """
         block = config.binaries['arm9.bin'].blocks['DefaultHeroId']
         write_uintle(arm9, value, block.begin, 2)
+
+    @staticmethod
+    def get_partner_level(arm9: bytes, config: Pmd2Data) -> int:
+        """
+        Gets the level of the partner starter
+        """
+        block = config.binaries['arm9.bin'].blocks['PartnerStartLevel']
+        return read_uintle(arm9, block.begin, 1)
+
+    @staticmethod
+    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data):
+        """
+        Sets the level of the partner starter
+        """
+        block = config.binaries['arm9.bin'].blocks['PartnerStartLevel']
+        write_uintle(arm9, value, block.begin, 1)
+
+    @staticmethod
+    def get_player_level(arm9: bytes, config: Pmd2Data) -> int:
+        """
+        Gets the level of the player starter
+        """
+        block = config.binaries['arm9.bin'].blocks['HeroStartLevel']
+        return read_uintle(arm9, block.begin, 1)
+
+    @staticmethod
+    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data):
+        """
+        Sets the level of the player starter
+        """
+        block = config.binaries['arm9.bin'].blocks['HeroStartLevel']
+        write_uintle(arm9, value, block.begin, 1)

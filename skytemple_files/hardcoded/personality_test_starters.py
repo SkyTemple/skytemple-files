@@ -19,6 +19,7 @@ from typing import List
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle
+from skytemple_files.hardcoded.default_starters import HardcodedDefaultStarters
 
 
 class HardcodedPersonalityTestStarters:
@@ -65,3 +66,31 @@ class HardcodedPersonalityTestStarters:
             raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
         for i, v in enumerate(value):
             write_uintle(overlay13, v, block.begin + (i * 2), 2)
+
+    @staticmethod
+    def get_partner_level(arm9: bytes, config: Pmd2Data) -> int:
+        """
+        Gets the level of the partner starter
+        """
+        return HardcodedDefaultStarters.get_partner_level(arm9, config)
+
+    @staticmethod
+    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data):
+        """
+        Sets the level of the partner starter
+        """
+        return HardcodedDefaultStarters.set_partner_level(value, arm9, config)
+
+    @staticmethod
+    def get_player_level(arm9: bytes, config: Pmd2Data) -> int:
+        """
+        Gets the level of the player starter
+        """
+        return HardcodedDefaultStarters.get_player_level(arm9, config)
+
+    @staticmethod
+    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data):
+        """
+        Sets the level of the player starter
+        """
+        return HardcodedDefaultStarters.set_player_level(value, arm9, config)

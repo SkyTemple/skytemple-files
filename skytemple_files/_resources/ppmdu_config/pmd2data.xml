@@ -650,5 +650,6 @@
   <!--=======================================================================-->
   <External filepath="pmd2scriptdata.xml" />
   <External filepath="pmd2dungeondata.xml" />
+  <External filepath="pmd2spritedata.xml" />
 
 </PMD2>

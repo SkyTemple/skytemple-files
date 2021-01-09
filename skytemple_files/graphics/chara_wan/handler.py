@@ -13,23 +13,24 @@
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.import math
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
-from typing import List
+from typing import List, Dict
 
 from PIL import Image
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Sprite
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import list_insert_enlarge
 from skytemple_files.graphics.chara_wan.model import WanFile
 from skytemple_files.graphics.chara_wan.sheets import ExportSheets, ImportSheets
 from skytemple_files.graphics.chara_wan.split_merge import MergeWan, SplitWan
 
-ANIM_NAME_MAP = "???????????????????"
 ANIM_PRESENCE = []
 # monster
 ANIM_PRESENCE.append([True, False, False, False, False, True, True, True, False, False, False, True])
 # ground
-ANIM_PRESENCE.append([True, False, False, False, False, False, True, True, False, False, False, False, True])
+ANIM_PRESENCE.append([True, True, True, True, True, True, True, True, True, True, True, True, True])
 # attack
 ANIM_PRESENCE.append([False, True, True, True, True, False, False, False, True, True, True, True, True])
 
@@ -46,9 +47,15 @@ class CharaWanHandler(DataHandler[WanFile]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def export_sheets(cls, out_dir, wan):
+    def export_sheets(cls, out_dir, wan, anim_names: Dict[int, Pmd2Sprite]):
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), 'Shadow.png'))
-        return ExportSheets(out_dir, shadow_img, wan, ANIM_NAME_MAP)
+        anim_name_map = []
+        for sprite_idx, sprite in anim_names.items():
+            sprite_map = []
+            for index_index, index in sprite.indices.items():
+                list_insert_enlarge(sprite_map, index_index, index.name, lambda: "")
+            list_insert_enlarge(anim_name_map, sprite_idx, sprite_map, lambda: [])
+        return ExportSheets(out_dir, shadow_img, wan, anim_name_map)
 
     @classmethod
     def import_sheets(cls, in_dir, strict=False):

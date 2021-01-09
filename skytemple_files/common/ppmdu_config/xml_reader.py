@@ -82,6 +82,7 @@ class Pmd2XmlReader:
         script_data = None
         dungeon_data = None
         string_encoding = None
+        animation_names = {}
         for e in self._root:
             ###########################
             if e.tag == 'GameEditions':
@@ -180,6 +181,17 @@ class Pmd2XmlReader:
                 for e_game in e:
                     if id_matches_edition(e_game, self._game_edition):
                         string_encoding = e_game.attrib['codec']
+            ###########################
+            elif e.tag == 'AnimationNames':
+                for e_game in e:
+                    if id_matches_edition(e_game, self._game_edition):
+                        for e_sprite in e_game:
+                            indices = {}
+                            for e_index in e_sprite:
+                                idx = self._xml_int(e_index.attrib['id'])
+                                indices[idx] = Pmd2Index(idx, e_index.text)
+                            idx = self._xml_int(e_sprite.attrib['id'])
+                            animation_names[idx] = Pmd2Sprite(idx, indices)
 
         game_edition_for_this_rom = None
         for game_edition in game_editions:
@@ -197,7 +209,8 @@ class Pmd2XmlReader:
             asm_patches_constants,
             script_data,
             dungeon_data,
-            string_encoding
+            string_encoding,
+            animation_names
         )
 
     def _parse_script_data(self, script_root) -> Pmd2ScriptData:

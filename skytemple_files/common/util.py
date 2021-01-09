@@ -389,6 +389,14 @@ def shrink_list(lst):
     return [(element, len(list(i))) for element, i in groupby(lst)]
 
 
+def list_insert_enlarge(lst, index, value, filler_fn):
+    """Inserts an element value at index index in lst. If the list is not big enough,
+    it is enlarged and empty slots are filled with the return value of filler_fn."""
+    if len(lst) <= index:
+        lst += [filler_fn() for _ in range(index - len(lst))]
+    lst.append(value)
+
+
 class AutoString:
     """Utility base class, that implements convenient __str__ and __repr__ based on object attributes."""
 

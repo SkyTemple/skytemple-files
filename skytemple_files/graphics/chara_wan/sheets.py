@@ -52,6 +52,8 @@ def ImportSheets(inDir, strict=False):
     tree = ET.parse(os.path.join(inDir, 'AnimData.xml'))
     root = tree.getroot()
     sdwSize = int(root.find('ShadowSize').text)
+    if sdwSize < 0 or sdwSize > 2:
+        raise ValueError("Invalid shadow size: {0}".format(sdwSize))
     anims_node = root.find('Anims')
     for anim_node in anims_node.iter('Anim'):
         name = anim_node.find('Name').text
@@ -149,7 +151,14 @@ def ImportSheets(inDir, strict=False):
             total_frames = anim_img.size[0] // tileSize[0]
             # check against inconsistent duration counts
             if total_frames != len(durations):
-                raise ValueError("Number of frames in {0} does not match durations specified in xml!".format(anim_name))
+                raise ValueError("Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(anim_name, len(durations)))
+
+            if anim_stats[idx].rushFrame >= len(durations):
+                raise ValueError("RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].rushFrame, len(durations), anim_name))
+            if anim_stats[idx].hitFrame >= len(durations):
+                raise ValueError("HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].hitFrame, len(durations), anim_name))
+            if anim_stats[idx].returnFrame >= len(durations):
+                raise ValueError("ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].returnFrame, len(durations), anim_name))
 
             group = []
             total_dirs = anim_img.size[1] // tileSize[1]

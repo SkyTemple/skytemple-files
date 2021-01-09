@@ -44,7 +44,7 @@ The array can be jagged.
 
 For reference, wan files in monster.bin almost always have animations 0, 5, 6, 7, and 11.
 wan files in m_ground.bin almost always have animations 0, 7, and 8.  However, some (often cutscene important ones) can have animations from any index.
-wan files in m_attack.bin almost always get animations 1, 2, 3, 4, 8, 9, 10, 11, 12.  Failure to include any of these essentials risks their animations when performing attacks to look odd.
+wan files in m_attack.bin almost always get animations 1, 2, 3, 4, 8, 9, 10, 11, 12.  Failure to include any of these essentials risks their attack animations to fail. The few sprites without these animations are those that exist purely in the cutscenes.
 
 
 File Format

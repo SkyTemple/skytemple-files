@@ -187,9 +187,9 @@ class Pmd2AsmPatchesConstants(AutoString):
 
 
 class Pmd2Index(AutoString):
-    def __init__(self, id: int, name: str):
+    def __init__(self, id: int, names: List[str]):
         self.id = id
-        self.name = name
+        self.names = names
 
 
 class Pmd2Sprite(AutoString):

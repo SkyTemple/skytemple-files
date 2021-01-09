@@ -188,8 +188,11 @@ class Pmd2XmlReader:
                         for e_sprite in e_game:
                             indices = {}
                             for e_index in e_sprite:
+                                names = []
                                 idx = self._xml_int(e_index.attrib['id'])
-                                indices[idx] = Pmd2Index(idx, e_index.text)
+                                indices[idx] = Pmd2Index(idx, names)
+                                for e_name in e_index:
+                                    names.append(e_name.text)
                             idx = self._xml_int(e_sprite.attrib['id'])
                             animation_names[idx] = Pmd2Sprite(idx, indices)
 

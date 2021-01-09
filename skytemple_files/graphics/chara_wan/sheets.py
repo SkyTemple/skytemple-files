@@ -21,12 +21,12 @@ import glob
 from PIL import Image
 import xml.etree.ElementTree as ET
 
+from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, FrameOffset, AnimStat, ImgPiece, \
     MetaFramePiece, MINUS_FRAME, DEBUG_PRINT, DIM_TABLE, TEX_SIZE
 import skytemple_files.graphics.chara_wan.utils as exUtils
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
-from skytemple_tilequant.aikku.image_converter import AikkuImageConverter as QuantConverter, DitheringMode
 
 
 DRAW_CENTER_X = 0
@@ -107,12 +107,12 @@ def ImportSheets(inDir, strict=False):
     for filepath in glob.glob(os.path.join(inDir, '*-Anim.png')):
         _, file = os.path.split(filepath)
         anim_parts = file.split('-')
-        anim_name = anim_parts[0].lower()
-        if anim_name not in anim_names:
+        anim_name = anim_parts[0]
+        if anim_name.lower() not in anim_names:
             extra_sheets.append(anim_name)
         else:
-            index = anim_names[anim_name]
-            del anim_names[anim_name]
+            index = anim_names[anim_name.lower()]
+            del anim_names[anim_name.lower()]
 
             anim_img = Image.open(os.path.join(inDir, anim_name + '-Anim.png')).convert("RGBA")
             offset_img = Image.open(os.path.join(inDir, anim_name + '-Offsets.png')).convert("RGBA")
@@ -317,9 +317,8 @@ def ImportSheets(inDir, strict=False):
     # and then combine the color lists such that there are as few distinct palettes as possible
     # and that no palettes have over 16 colors (transparency included)
 
-    # then, run through tilequant
-    converter = QuantConverter(combinedImg, transparent, combinedImg.size[0], combinedImg.size[1])
-    reducedImg = converter.convert(num_palettes=1, colors_per_palette=16, dithering_mode=DitheringMode.NONE).convert("RGBA")
+    # then, run through simple_quant
+    reducedImg = simple_quant(combinedImg).convert("RGBA")
 
     datas = reducedImg.getdata()
     for idx in range(len(datas)):

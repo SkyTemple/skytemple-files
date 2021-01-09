@@ -47,14 +47,11 @@ class CharaWanHandler(DataHandler[WanFile]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def export_sheets(cls, out_dir, wan, anim_names: Dict[int, Pmd2Sprite]):
+    def export_sheets(cls, out_dir, wan, sprite_def: Pmd2Sprite):
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), 'Shadow.png'))
         anim_name_map = []
-        for sprite_idx, sprite in anim_names.items():
-            sprite_map = []
-            for index_index, index in sprite.indices.items():
-                list_insert_enlarge(sprite_map, index_index, index.name, lambda: "")
-            list_insert_enlarge(anim_name_map, sprite_idx, sprite_map, lambda: [])
+        for index_index, index in sprite_def.indices.items():
+            list_insert_enlarge(anim_name_map, index_index, index.names, lambda: "")
         return ExportSheets(out_dir, shadow_img, wan, anim_name_map)
 
     @classmethod

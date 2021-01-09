@@ -14,23 +14,3 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.graphics.bgp.model import Bgp
-from skytemple_files.graphics.bgp.writer import BgpWriter
-
-
-class BgpHandler(DataHandler[Bgp]):
-    @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Bgp:
-        from skytemple_files.common.types.file_types import FileType
-        return Bgp(FileType.COMMON_AT.deserialize(data).decompress())
-
-    @classmethod
-    def serialize(cls, data: Bgp, **kwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(
-                BgpWriter(data).write()
-            )
-        )

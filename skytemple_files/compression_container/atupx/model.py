@@ -19,33 +19,29 @@ from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 
-class At4px(CommonAt):
+class Atupx(CommonAt):
     def __init__(self, data: bytes=None):
         """
-        Create a AT4PX container from already compressed data.
+        Create a ATUPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
         """
         if data:
             self.length_compressed = self.cont_size(data)
-            self.compression_flags = read_bytes(data, 7, 9)
-            self.length_decompressed = read_uintle(data, 0x10, 2)
-            self.compressed_data = data[0x12:]
+            self.length_decompressed = read_uintle(data, 7, 4)
+            self.compressed_data = data[0xb:]
 
     def decompress(self) -> bytes:
         """Returns the uncompressed data stored in the container"""
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x12], self.compression_flags)
-        # Sanity assertion, if everything is implemented correctly this doesn't fail.
-        assert len(data) == self.length_decompressed
+        data = FileType.CUSTOM_999.decompress(self.compressed_data[:self.length_compressed - 0xb], self.length_decompressed)
         return data
 
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
-        return b'AT4PX'\
+        return b'ATUPX'\
                + self.length_compressed.to_bytes(2, 'little') \
-               + self.compression_flags \
-               + self.length_decompressed.to_bytes(2, 'little') \
+               + self.length_decompressed.to_bytes(4, 'little') \
                + self.compressed_data
 
     @classmethod
@@ -54,14 +50,13 @@ class At4px(CommonAt):
 
     @classmethod
     def compress(cls, data: bytes) -> CommonAt:
-        """Create a new AT4PX container from originally uncompressed data."""
+        """Create a new ATUPX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 
         new_container = cls()
-        flags, px_data = FileType.PX.compress(data)
+        compressed_data = FileType.CUSTOM_999.compress(data)
 
-        new_container.compression_flags = flags
+        new_container.compressed_data = compressed_data
         new_container.length_decompressed = len(data)
-        new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x12
+        new_container.length_compressed = len(compressed_data) + 0xb
         return new_container

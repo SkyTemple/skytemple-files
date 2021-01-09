@@ -17,40 +17,35 @@
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.at4pn.model import At4pn
+from skytemple_files.compression_container.at3px.model import At3px
 
 
-class At4pnHandler(DataHandler[At4pn]):
+class At3pxHandler(DataHandler[At3px]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> At4pn:
-        """Load a AT4PX container into a high-level representation"""
+    def deserialize(cls, data: bytes, **kwargs) -> At3px:
+        """Load a AT3PX container into a high-level representation"""
         if not cls.matches(data):
-            raise ValueError("The provided data is not an AT4PN container.")
-        return At4pn(data)
+            raise ValueError("The provided data is not an AT3PX container.")
+        return At3px(data)
 
     @classmethod
-    def serialize(cls, data: At4pn, **kwargs) -> bytes:
-        """Convert the high-level AT4PN representation back into bytes."""
+    def serialize(cls, data: At3px, **kwargs) -> bytes:
+        """Convert the high-level AT3PX representation back into a BitStream."""
         return data.to_bytes()
 
     @classmethod
-    def new(cls, data: bytes) -> At4pn:
-        """Turn uncompressed data into a new AT4PN container"""
-        return At4pn(data, new=True)
+    def compress(cls, data: bytes) -> At3px:
+        """Turn uncompressed data into a new AT3PX container"""
+        return At3px.compress(data)
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of an AT4PN container starting at the given offset in data."""
+        """Get the size of an AT3PX container starting at the given offset in data."""
         if not cls.matches(data, byte_offset):
-            raise ValueError("The provided data is not an AT4PN container.")
-        return At4pn.cont_size(data, byte_offset)
+            raise ValueError("The provided data is not an AT3PX container.")
+        return At4px.cont_size(data, byte_offset)
 
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data is a At4pn container"""
-        return read_bytes(data, byte_offset, 5) == b'AT4PN'
-
-    # For compatibility with other AT formats
-    @classmethod
-    def compress(cls, data: bytes) -> At4pn:
-        return At4pn.compress(data)
+        """Check if the given data stream is a At3px container"""
+        return read_bytes(data, byte_offset, 5) == b'AT3PX'

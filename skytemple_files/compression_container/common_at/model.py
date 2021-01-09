@@ -15,22 +15,25 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.graphics.bgp.model import Bgp
-from skytemple_files.graphics.bgp.writer import BgpWriter
+from abc import ABC, abstractmethod
+from skytemple_files.common.util import *
 
 
-class BgpHandler(DataHandler[Bgp]):
+
+class CommonAt(ABC):
+
+    @abstractmethod
+    def decompress(self) -> bytes:
+        """Returns the uncompressed data stored in the container"""
+
+    @abstractmethod
+    def to_bytes(self) -> bytes:
+        """Converts the container back into a bit (compressed) representation"""
+
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Bgp:
-        from skytemple_files.common.types.file_types import FileType
-        return Bgp(FileType.COMMON_AT.deserialize(data).decompress())
+    def cont_size(cls, data: bytes, byte_offset=0):
+        """Returns the container size"""
 
     @classmethod
-    def serialize(cls, data: Bgp, **kwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(
-                BgpWriter(data).write()
-            )
-        )
+    def compress(cls, data: bytes) -> 'CommonAt':
+        """Create a new AT container from originally uncompressed data."""

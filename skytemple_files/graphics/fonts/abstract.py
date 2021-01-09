@@ -26,7 +26,7 @@ try:
 except ImportError:
     from pil import Image
 
-class AbstractFontEntry(AutoString):
+class AbstractFontEntry(ABC, AutoString):
     @classmethod
     def get_class_properties(cls) -> List[str]:
         """Returns a list of the properties of this class"""

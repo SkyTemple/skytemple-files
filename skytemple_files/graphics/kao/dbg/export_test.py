@@ -32,16 +32,23 @@ bin = rom.getFileByName('FONT/kaomado.kao')
 
 kao = KaoHandler.deserialize(bin)
 
+data_length_before = 0
+data_length_after = 0
 for idx, subidx, kao_image in kao:
     if kao_image:
+        print(f"== {idx} - {subidx} ==")
         im = kao_image.get()
-        at4px_before = FileType.AT4PX.deserialize(kao_image.compressed_img_data)
+        at4px_before = FileType.COMMON_AT.deserialize(kao_image.compressed_img_data)
+        print(f"Size before: {at4px_before.length_compressed}")
+        data_length_before += at4px_before.length_compressed
         # Test replacing the image (with the old one, so should be the same result)
         kao_image.set(im)
-        at4px_after = FileType.AT4PX.deserialize(kao_image.compressed_img_data)
+        at4px_after = FileType.COMMON_AT.deserialize(kao_image.compressed_img_data)
         im_after = kao_image.get()
         im_after.save(f'/tmp/{idx}_{subidx}.png')
         im.save(os.path.join(os.path.dirname(__file__), 'dbg_output', f'{idx}_{subidx}.png'))
-        print(f"== {idx} - {subidx} ==")
-        print(f"Size before: {at4px_before.length_compressed}")
+        data_length_after += at4px_after.length_compressed
         print(f"Size after : {at4px_after.length_compressed}")
+print(f"== WHOLE KAO ==")
+print(f"Size before: {data_length_before}")
+print(f"Size after : {data_length_after}")

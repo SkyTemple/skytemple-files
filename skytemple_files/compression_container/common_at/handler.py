@@ -47,14 +47,11 @@ class CommonAtType(Enum):
         self.auto_allowed = auto_allowed
 
 # Pre-built lists for compression
-COMMON_AT_BEST_3 = COMMON_AT_BEST_4 = COMMON_AT_MUST_COMPRESS_3 = COMMON_AT_MUST_COMPRESS_4 = COMMON_AT_PKD = [CommonAtType.ATUPX]
-"""
 COMMON_AT_BEST_3 = [CommonAtType.AT4PN, CommonAtType.ATUPX, CommonAtType.AT3PX, CommonAtType.PKDPX]
 COMMON_AT_BEST_4 = [CommonAtType.AT4PN, CommonAtType.ATUPX, CommonAtType.AT4PX, CommonAtType.PKDPX]
 COMMON_AT_MUST_COMPRESS_3 = [CommonAtType.ATUPX, CommonAtType.AT3PX, CommonAtType.PKDPX]
 COMMON_AT_MUST_COMPRESS_4 = [CommonAtType.ATUPX, CommonAtType.AT4PX, CommonAtType.PKDPX]
 COMMON_AT_PKD = [CommonAtType.PKDPX]
-"""
 
 DEBUG = False
 

@@ -80,7 +80,10 @@ def ExportWan(wan):
         ptrImgs.append(out_file.tell())
         for img_write in imgTable:
             # pixelSource
-            write_ptr(out_file, img_write[0], sir0_ptrs)
+            if img_write[0] == 0:
+                out_file.write(img_write[0].to_bytes(4, 'little'))
+            else:
+                write_ptr(out_file, img_write[0], sir0_ptrs)
             # amt
             out_file.write(img_write[1].to_bytes(2, 'little'))
             # unk#14
@@ -147,11 +150,12 @@ def ExportWan(wan):
     # AnimGroupTable
     ptrAnimGroupTable = out_file.tell()
     for idx, groupSequencesPtrs in enumerate(animSeqPtrList):
-        groupPtr = animGroupSequencePtrs[idx]
         if len(groupSequencesPtrs) == 0:
-            groupPtr = 0
-        # location of the first sequence in the group
-        write_ptr(out_file, groupPtr, sir0_ptrs)
+            out_file.write((0).to_bytes(4, 'little'))
+        else:
+            groupPtr = animGroupSequencePtrs[idx]
+            # location of the first sequence in the group
+            write_ptr(out_file, groupPtr, sir0_ptrs)
         # number of sequences in group
         out_file.write(len(groupSequencesPtrs).to_bytes(2, 'little'))
         # Unk#16
@@ -238,8 +242,7 @@ def padUntilDiv(out_file, bt, div):
 
 
 def write_ptr(out_file, value, sir0_ptrs):
-    if value > 0:
-        sir0_ptrs.append(out_file.tell())
+    sir0_ptrs.append(out_file.tell())
     out_file.write(value.to_bytes(4, 'little'))
 
 

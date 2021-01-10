@@ -1,15 +1,14 @@
-AT3PX File Format
+AT File Format
 =================
 
-The AT3PX container is a format very similar to AT4PX, the only difference is that the decompressed data field is omitted, 
-which free 2 bytes as opposed to AT4PX.
+The common file format for AT3PX, AT4PX, PKDPX and AT4PN files.
+All those files formats can be swapped when the game needs one of those.
 
-Its not unusual to find AT3PX containers wrapped itself by a SIR0_ container.
-Its content is compressed using a custom compression format dubbed `PX`_ Compression for the lack of a better name.
+Its not unusual to find AT containers wrapped itself by a SIR0_ container.
 
 Usage
 -----
-Use the class ``At3pxHandler`` of the ``handler`` module, to open and save
+Use the class ``CommonAtHandler`` of the ``handler`` module, to open and save
 models from binary data. The model that the handler returns is in the
 module ``model``.
 
@@ -19,17 +18,10 @@ File Format
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
 | Offset  | Length | Type      | Name                | Description                                                 |
 +=========+========+===========+=====================+=============================================================+
-| 0x00    | 5      | string    | Magic Number        | ASCII "AT3PX"                                               |
+| 0x00    | 5      | string    | Magic Number        | Varies depending on the AT container                        |
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
-| 0x05    | 2      | uint16le  | Container Length    | The length from the beginning of the header(!) to the end   |
-|         |        |           |                     | of the compressed data.                                     |
-+---------+--------+-----------+---------------------+-------------------------------------------------------------+
-| 0x07    | 9      |           | Control Flags       | A list of flags to be used in decompressing the container's |
-|         |        |           |                     | content.                                                    |
-|         |        |           |                     | More detail about their purpose in the PX_ README.          |
-|         |        |           |                     | Flags are stored in lower half of each byte.                |
-+---------+--------+-----------+---------------------+-------------------------------------------------------------+
-| 0x10    | Varies | PX_       | PX_ Compressed Data                                                               |
+| 0x05    | 2      | uint16le  | Container Length    | For most the length of the whole container                  |
+|         |        |           |                     | Only the length of the data for AT4PN files                 |
 +---------+--------+-----------+---------------------+-------------------------------------------------------------+
 
 Credits
@@ -58,5 +50,7 @@ Based on following documentations:
 .. _Zhorken:                        https://github.com/Zhorken
 
 .. _PKDPX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/pkdpx
+.. _AT3PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at3px
+.. _AT4PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at4px
+.. _AT4PN:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at4pn
 .. _SIR0:                           https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/container/sir0
-.. _PX:                             https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression/px

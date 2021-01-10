@@ -43,7 +43,7 @@ class At3pxHandler(DataHandler[At3px]):
         """Get the size of an AT3PX container starting at the given offset in data."""
         if not cls.matches(data, byte_offset):
             raise ValueError("The provided data is not an AT3PX container.")
-        return At4px.cont_size(data, byte_offset)
+        return At3px.cont_size(data, byte_offset)
 
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):

@@ -57,7 +57,7 @@ def draw_monster_sprite(img: Image.Image, x: int, y: int, monster_id: int, direc
         return False
 
     sprite = FileType.WAN.deserialize(
-        FileType.PKDPX.deserialize(monster_bin[sprite_index]).decompress()
+        FileType.COMMON_AT.deserialize(monster_bin[sprite_index]).decompress()
     )
     ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
 

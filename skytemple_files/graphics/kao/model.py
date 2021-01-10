@@ -26,6 +26,7 @@ except ImportError:
 from typing import Union, Tuple
 
 from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
@@ -245,7 +246,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
-    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img))
+    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
     if len(new_img_compressed)>800:
         raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).")
     # You can check if compression works, by uncompressing and checking the image again:

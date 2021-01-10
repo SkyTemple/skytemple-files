@@ -27,7 +27,7 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, it
     read_uintle
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
-from skytemple_files.compression_container.at4px.model import At4px
+from skytemple_files.compression_container.common_at.model import CommonAt
 
 from itertools import islice
 
@@ -53,7 +53,7 @@ def corrupt171():
     img171 = dungeon_bin[171].decompress()
     # Make the first entry tile 2
     img171 = b'\x02' * len(img171)
-    dungeon_bin[171] = FileType.AT4PX.compress(img171)
+    dungeon_bin[171] = FileType.COMMON_AT.compress(img171)
 
 
 def corrupt341():
@@ -102,7 +102,7 @@ def corrupt341():
 
     with open('/tmp/corrupt.bin', 'wb') as f:
         f.write(img341new)
-    dungeon_bin[341] = FileType.AT4PX.compress(img341new)
+    dungeon_bin[341] = FileType.COMMON_AT.compress(img341new)
 
 
 def corrupt511():
@@ -115,7 +115,7 @@ def corrupt511():
             img511new[i] = img511[i]
         else:
             img511new[i] = 2
-    dungeon_bin[511] = FileType.AT4PX.compress(img511new)
+    dungeon_bin[511] = FileType.COMMON_AT.compress(img511new)
 
 # -- /
 

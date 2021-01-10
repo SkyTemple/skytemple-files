@@ -47,11 +47,16 @@ class CommonAtType(Enum):
         self.auto_allowed = auto_allowed
 
 # Pre-built lists for compression
-COMMON_AT_BEST_3 = [CommonAtType.ATUPX, CommonAtType.AT4PN, CommonAtType.AT3PX]
-COMMON_AT_BEST_4 = [CommonAtType.ATUPX, CommonAtType.AT4PN, CommonAtType.AT4PX]
-COMMON_AT_MUST_COMPRESS_3 = [CommonAtType.ATUPX, CommonAtType.AT3PX]
-COMMON_AT_MUST_COMPRESS_4 = [CommonAtType.ATUPX, CommonAtType.AT4PX]
+COMMON_AT_BEST_3 = COMMON_AT_BEST_4 = COMMON_AT_MUST_COMPRESS_3 = COMMON_AT_MUST_COMPRESS_4 = COMMON_AT_PKD = [CommonAtType.ATUPX]
+"""
+COMMON_AT_BEST_3 = [CommonAtType.AT4PN, CommonAtType.ATUPX, CommonAtType.AT3PX, CommonAtType.PKDPX]
+COMMON_AT_BEST_4 = [CommonAtType.AT4PN, CommonAtType.ATUPX, CommonAtType.AT4PX, CommonAtType.PKDPX]
+COMMON_AT_MUST_COMPRESS_3 = [CommonAtType.ATUPX, CommonAtType.AT3PX, CommonAtType.PKDPX]
+COMMON_AT_MUST_COMPRESS_4 = [CommonAtType.ATUPX, CommonAtType.AT4PX, CommonAtType.PKDPX]
 COMMON_AT_PKD = [CommonAtType.PKDPX]
+"""
+
+DEBUG = False
 
 class CommonAtHandler(DataHandler[CommonAt]):
     allowed_types = set()
@@ -62,13 +67,15 @@ class CommonAtHandler(DataHandler[CommonAt]):
     @classmethod
     def allow(cls, compression_type: CommonAtType):
         cls.allowed_types.add(compression_type)
-        print(cls.allowed_types)
+        if DEBUG:
+            print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
     @classmethod
     def disallow(cls, compression_type: CommonAtType):
         try:
             cls.allowed_types.remove(compression_type)
         except KeyError as ke:pass #TODO, add warning
-        print(cls.allowed_types)
+        if DEBUG:
+            print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
     
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> CommonAt:
@@ -76,7 +83,8 @@ class CommonAtHandler(DataHandler[CommonAt]):
         for t in CommonAtType:
             if t.handler!=None:
                 if t.handler.matches(data):
-                    print(t)
+                    if DEBUG:
+                        print("*** COMMON AT DEBUG: Opened =", t)
                     return t.handler.deserialize(data, **kwargs)
         raise ValueError(f"The provided data is not an AT container ({read_bytes(data, 0, 5)}).")
 
@@ -90,16 +98,21 @@ class CommonAtHandler(DataHandler[CommonAt]):
         """Turn uncompressed data into a new AT container"""
         new_data = None
         new_size = -1
+        if DEBUG:
+            print("*** COMMON AT DEBUG: Compress Start")
         for t in compression_type:
             if t in CommonAtHandler.allowed_types:
                 try:
                     cont = t.handler.compress(data)
                     size = len(cont.to_bytes())
-                    print(t, size)
+                    if DEBUG:
+                        print("*** COMMON AT DEBUG: Compress", t, "size", size)
                     if new_data==None or size<new_size:
                         new_data = cont
                         new_size = size
                 except:pass
+        if DEBUG:
+            print("*** COMMON AT DEBUG: Compress End")
         if new_data==None:
             raise ValueError("No useable compression algorithm.")
         return new_data

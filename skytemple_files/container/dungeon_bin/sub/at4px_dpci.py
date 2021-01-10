@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dpci.model import Dpci
-
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 
 class DbinAt4pxDpciHandler(DataHandler[Dpci]):
 
@@ -31,5 +31,5 @@ class DbinAt4pxDpciHandler(DataHandler[Dpci]):
         from skytemple_files.common.types.file_types import FileType
         serialized = FileType.DPCI.serialize(data)
         return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(serialized)
+            FileType.COMMON_AT.compress(serialized, COMMON_AT_BEST_3)
         )

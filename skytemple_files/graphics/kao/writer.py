@@ -110,7 +110,7 @@ class KaoWriter:
                         continue
                     image_data_bs = self.kao.original_data
                     image_data_start = pnt
-                    image_data_end = image_data_start + KAO_IMG_PAL_B_SIZE + FileType.AT4PX.cont_size(
+                    image_data_end = image_data_start + KAO_IMG_PAL_B_SIZE + FileType.COMMON_AT.cont_size(
                         image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE
                     )
                 # Update the TOC entry to point to the current image offset

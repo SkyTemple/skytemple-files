@@ -17,14 +17,14 @@
 
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.compression_container.at4px.model import At4px
+from skytemple_files.compression_container.common_at.model import CommonAt
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 
-
-class DbinSir0At4pxHandler(DataHandler[At4px]):
-    """A proxy data handler for At4px wrapped in Sir0."""
+class DbinSir0At4pxHandler(DataHandler[CommonAt]):
+    """A proxy data handler for At wrapped in Sir0."""
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> At4px:
+    def deserialize(cls, data: bytes, **kwargs) -> CommonAt:
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.deserialize(data)
         # We don't support more than the two default pointers, since we will also on serialize with those!
@@ -33,29 +33,29 @@ class DbinSir0At4pxHandler(DataHandler[At4px]):
         assert sir0.data_pointer == 0,  "The Sir0 contains a data pointer. That is not supported."
         # XXX: The developers messed up and somehow managed to include parts of
         # the sir0 "footer" in the compressed size.
-        return FileType.AT4PX.deserialize(sir0.content)
+        return FileType.COMMON_AT.deserialize(sir0.content)
 
     @classmethod
-    def serialize(cls, data: At4px, **kwargs) -> bytes:
+    def serialize(cls, data: CommonAt, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.wrap(FileType.AT4PX.serialize(data), [], None)
+        sir0 = FileType.SIR0.wrap(FileType.COMMON_AT.serialize(data), [], None)
         return FileType.SIR0.serialize(sir0)
 
     @classmethod
-    def compress(cls, data: bytes) -> At4px:
+    def compress(cls, data: bytes) -> CommonAt:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PX.compress(data)
+        return FileType.COMMON_AT.compress(data, COMMON_AT_BEST_3)
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         """Get the size of an AT4PX container starting at the given offset in data."""
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.deserialize(data)
-        return FileType.AT4PX.cont_size(sir0.content, byte_offset)
+        return FileType.COMMON_AT.cont_size(sir0.content, byte_offset)
 
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data stream is a At4px container"""
+        """Check if the given data stream is an At container"""
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.deserialize(data)
-        return FileType.AT4PX.matches(sir0.content, byte_offset)
+        return FileType.COMMON_AT.matches(sir0.content, byte_offset)

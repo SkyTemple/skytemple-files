@@ -106,7 +106,7 @@ XML_STATS_GROWTH_LEVEL__DEFENSE = "Defense"
 XML_STATS_GROWTH_LEVEL__SP_DEFENSE = "SpDefense"
 XML_PORTRAITS = "Portraits"
 XML_PORTRAITS_PORTRAIT = "Portrait"
-XML_PORTRAITS_PORTRAIT__IMAGE = "At4pxImage"
+XML_PORTRAITS_PORTRAIT__IMAGE = "At4pxImage" #TODO: Change this to AtImage (could broke already exported xml data)
 XML_PORTRAITS_PORTRAIT__PALETTE = "Palette"
 
 XML_GENENT__MAP__SIMPLE = {

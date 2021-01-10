@@ -39,7 +39,7 @@ for filename in get_files_from_rom_with_extension(rom, 'bgp'):
     bin = rom.getFileByName(filename)
     with open(filename_h, 'wb') as f:
         tb = time()
-        d = FileType.AT4PX.deserialize(bin).decompress()
+        d = FileType.COMMON_AT.deserialize(bin).decompress()
         print(f"Decrompressing this takes {time() - tb}s.")
         f.write(d)
 

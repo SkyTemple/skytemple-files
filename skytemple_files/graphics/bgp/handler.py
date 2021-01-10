@@ -18,7 +18,7 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bgp.model import Bgp
 from skytemple_files.graphics.bgp.writer import BgpWriter
-
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_4
 
 class BgpHandler(DataHandler[Bgp]):
     @classmethod
@@ -31,6 +31,7 @@ class BgpHandler(DataHandler[Bgp]):
         from skytemple_files.common.types.file_types import FileType
         return FileType.COMMON_AT.serialize(
             FileType.COMMON_AT.compress(
-                BgpWriter(data).write()
+                BgpWriter(data).write(),
+                COMMON_AT_BEST_4
             )
         )

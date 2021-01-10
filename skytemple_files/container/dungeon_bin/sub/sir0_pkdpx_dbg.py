@@ -21,7 +21,7 @@ from skytemple_files.graphics.dbg.model import Dbg
 
 
 class DbinSir0PkdpxDbgHandler(DataHandler[Dbg]):
-    """A proxy data handler for Dbg compressed as Pkdpx wrapped in Sir0."""
+    """A proxy data handler for Dbg compressed as At container wrapped in Sir0."""
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Dbg:

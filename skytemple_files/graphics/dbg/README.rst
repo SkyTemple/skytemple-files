@@ -11,7 +11,7 @@ right before these files in the dungeon.bin.
 
 The name is not official.
 
-The file can only be found SIR0 wrapped and PKDPX compressed in the dungeon.bin file.
+The file can only be found SIR0 wrapped and AT compressed in the dungeon.bin file.
 
 Usage
 -----
@@ -19,7 +19,7 @@ Use the class ``DbgHandler`` of the ``handler`` module, to open and save
 models from binary data. The model that the handler returns is in the
 module ``model``.
 
-To read/write the SIR0 wrapped and PKDPX compressed versions of this file instead,
+To read/write the SIR0 wrapped and AT compressed versions of this file instead,
 you can use the file handler in ``skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg``.
 
 File Format

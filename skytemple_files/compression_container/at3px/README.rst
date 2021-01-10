@@ -3,8 +3,9 @@ AT3PX File Format
 
 The AT3PX container is a format very similar to AT4PX, the only difference is that the decompressed data field is omitted, 
 which free 2 bytes as opposed to AT4PX.
+This is natively supported by the game, but never used. This is likely because this format can't provide the decompressed
+size, which is used sometimes by the game (but not always!)
 
-Its not unusual to find AT3PX containers wrapped itself by a SIR0_ container.
 Its content is compressed using a custom compression format dubbed `PX`_ Compression for the lack of a better name.
 
 Usage

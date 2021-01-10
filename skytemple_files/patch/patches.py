@@ -36,6 +36,7 @@ from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
+from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
@@ -46,6 +47,7 @@ class PatchType(Enum):
     MOVE_SHORTCUTS = MoveShortcutsPatch
     DISABLE_TIPS = DisableTipsPatch
     SAME_TYPE_PARTNER = SameTypePartnerPatch
+    SUPPORT_ATUPX = AtupxSupportPatchHandler
 
 
 class PatchPackageError(RuntimeError):

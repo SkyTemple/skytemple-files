@@ -14,7 +14,7 @@ This is also an example on how to use the following file handlers:
 - LSD
 - WAN, WAT
 - (BIN_PACK)
-- (AT4PX, PKDPX)
+- (COMMON_AT)
 - (Compressions)
 - (Hardcoded Lists)
 """
@@ -282,7 +282,7 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
 
     try:
         sprite = FileType.WAN.deserialize(
-            FileType.PKDPX.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
+            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
         )
         ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
     except (ValueError, TypeError) as e:

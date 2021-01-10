@@ -2,7 +2,7 @@ PX Compression
 ==============
 
 The PX compression format, for a lack of better name, is a custom compression format.
-Most of the files using this compression method are contained within either PKDPX_ or AT4PX_ containers.
+Most of the files using this compression method are contained within either PKDPX_, AT4PX_ or AT3PX_ containers.
 
 Usage
 -----
@@ -56,4 +56,5 @@ Based on following documentations:
 .. _Zhorken:                        https://github.com/Zhorken
 
 .. _AT4PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at4px
+.. _AT3PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at3px
 .. _PKDPX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/pkdpx

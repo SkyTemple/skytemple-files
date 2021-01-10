@@ -23,7 +23,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry
 from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.compression_container.at4px.model import At4px
+from skytemple_files.compression_container.common_at.model import CommonAt
 
 from itertools import islice
 
@@ -74,9 +74,9 @@ def output_raw_palette(fn: str, file: Dpl):
     out_img.save(os.path.join(output_dir, fn + '.png'))
 
 
-def output_at4px_water_tiles(fn: str, at4px: At4px, pal: Dpla):
-    print("Outputting water AT4PX as image.")
-    img_bin = at4px.decompress()
+def output_at_water_tiles(fn: str, common_at: CommonAt, pal: Dpla):
+    print("Outputting water AT as image.")
+    img_bin = common_at.decompress()
     tiles = list(iter_bytes(img_bin, int(8 * 8 / 2)))
     # create a dummy tile map containing all the tiles
     tilemap = []
@@ -96,9 +96,9 @@ def output_at4px_water_tiles(fn: str, at4px: At4px, pal: Dpla):
     out_img.save(os.path.join(output_dir, fn + '.png'))
 
 
-def output_at4px_dungeon_tiles(fn: str, at4px: At4px, pal: Dpla):
-    print("Outputting dungeon AT4PX as image.")
-    img_bin = at4px.decompress()
+def output_at_dungeon_tiles(fn: str, common_at: CommonAt, pal: Dpla):
+    print("Outputting dungeon AT as image.")
+    img_bin = common_at.decompress()
     tiles = list(iter_bytes(img_bin, int(8 * 8)))
     # create a dummy tile map containing all the tiles
     tilemap = []
@@ -133,15 +133,15 @@ for i, file in enumerate(dungeon_bin):
     print(i, type(file), fn)
     if isinstance(file, Dpla):
         output_dpla(fn, file)
-    elif isinstance(file, At4px):
+    elif isinstance(file, CommonAt):
         # As the palette, we use one of the first 170 files, matching the modulo index.
         # TODO: This is currently using the animated palette actually...
         pal = dungeon_bin[i % 170]
         assert isinstance(pal, Dpla)
         if fdef.name == "dungeon%i.bpci":
-            output_at4px_water_tiles(fn, file, pal)
+            output_at_water_tiles(fn, file, pal)
         else:
-            output_at4px_dungeon_tiles(fn, file, pal)
+            output_at_dungeon_tiles(fn, file, pal)
     elif isinstance(file, Dpl):
         output_raw_palette(fn, file)
     elif isinstance(file, bytes):
@@ -160,6 +160,6 @@ for i, file in enumerate(dungeon_bin.get_files_bytes()):
 
 for i, file in enumerate(dungeon_bin):
     fn = dungeon_bin.get_filename(i)
-    if fn.endswith('.pkdpx.sir0'):
+    if fn.endswith('.at.sir0'):
         with open(os.path.join(output_dir, 'test', fn), 'wb') as f:
             f.write(file.decompress())

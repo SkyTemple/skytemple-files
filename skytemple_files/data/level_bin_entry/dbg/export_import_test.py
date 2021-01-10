@@ -32,7 +32,7 @@ all_level_ups_bin_decompressed = []
 # Collect all level up data
 for entry_bin in m_level:
     entry_bin_sir0 = FileType.SIR0.deserialize(entry_bin)
-    entry_bin_unpacked = FileType.PKDPX.deserialize(entry_bin_sir0.content)
+    entry_bin_unpacked = FileType.COMMON_AT.deserialize(entry_bin_sir0.content)
     entry_bin_decompressed = entry_bin_unpacked.decompress()
     all_level_ups_bin_decompressed.append(entry_bin_decompressed)
     entry = FileType.LEVEL_BIN_ENTRY.deserialize(entry_bin_decompressed)
@@ -44,8 +44,8 @@ for entry_bin in m_level:
 new_bytes_for_entries = []
 for i, entry in enumerate(all_level_ups):
     new_bytes_unpacked = FileType.LEVEL_BIN_ENTRY.serialize(entry)
-    new_bytes_pkdpx = FileType.PKDPX.serialize(FileType.PKDPX.compress(new_bytes_unpacked))
-    new_bytes = FileType.SIR0.wrap(new_bytes_pkdpx, [])
+    new_bytes_at = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_bytes_unpacked))
+    new_bytes = FileType.SIR0.wrap(new_bytes_at, [])
     # Compare!
     new_bytes_for_entries.append(new_bytes)
     assert all_level_ups_bin_decompressed[i] == new_bytes_unpacked

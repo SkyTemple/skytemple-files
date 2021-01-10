@@ -82,7 +82,7 @@ for md_base_index in range(0, NUM_ENTITIES):
     stat_id = md_base_index - 1
     if stat_id > -1 and stat_id < len(level_bin):
         stats = FileType.LEVEL_BIN_ENTRY.deserialize(
-            FileType.PKDPX.deserialize(FileType.SIR0.deserialize(level_bin[stat_id]).content).decompress()
+            FileType.COMMON_AT.deserialize(FileType.SIR0.deserialize(level_bin[stat_id]).content).decompress()
         )
 
     if stat_id > -1 and stat_id < kao.toc_len:
@@ -120,7 +120,7 @@ for lang_name, lang_model in languages.items():
 moveset = waza_p.learnsets[1]
 moveset2 = waza_p.learnsets[1]
 stats = FileType.LEVEL_BIN_ENTRY.deserialize(
-    FileType.PKDPX.deserialize(FileType.SIR0.deserialize(level_bin[0]).content).decompress()
+    FileType.COMMON_AT.deserialize(FileType.SIR0.deserialize(level_bin[0]).content).decompress()
 )
 portraits = []
 for kao_i in range(0, SUBENTRIES):

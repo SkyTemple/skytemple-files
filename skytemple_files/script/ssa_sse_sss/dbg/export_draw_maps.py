@@ -110,7 +110,7 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
     actor_sprite_id = monster_md[actor.actor.entid].sprite_index
 
     sprite = FileType.WAN.deserialize(
-        FileType.PKDPX.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
+        FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
     )
     ani_group = sprite.get_animations_for_group(sprite.anim_groups[11])
     frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0

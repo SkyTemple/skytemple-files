@@ -12,7 +12,7 @@ This file format, used together with `DPCI`_ is the equivalent of `BPC`_ files b
 
 The name is not official.
 
-The file can only be found AT4PX compressed in the dungeon.bin file.
+The file can only be found AT compressed in the dungeon.bin file.
 
 Usage
 -----
@@ -20,7 +20,7 @@ Use the class ``DpciHandler`` of the ``handler`` module, to open and save
 models from binary data. The model that the handler returns is in the
 module ``model``.
 
-To read/write the AT4PX compressed versions of this file instead, you can
+To read/write the AT compressed versions of this file instead, you can
 use the file handler in ``skytemple_files.container.dungeon_bin.sub.at4px_dpc``.
 
 File Format

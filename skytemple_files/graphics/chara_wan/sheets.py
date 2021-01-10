@@ -631,14 +631,14 @@ def mapDuplicateImportImgs(imgs, final_imgs, img_map):
             imgs_equal = exUtils.imgsEqual(final_img[0], img[0])
             # if offsets are not synchronized, they are counted as different
             if imgs_equal:
-                imgs_equal = offsetsEqual(final_img[1], img[1], img[0].size[0])
+                imgs_equal = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0])
             if imgs_equal:
                 img_map[idx] = (final_idx, (0, 0))
                 dupe = True
                 break
             imgs_flip = exUtils.imgsEqual(final_img[0], img[0], True)
             if imgs_flip:
-                imgs_flip = offsetsEqual(final_img[1], img[1], img[0].size[0], True)
+                imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
             if imgs_flip:
                 flip = final_idx
 
@@ -794,25 +794,3 @@ def chopImgToPieceLocs(img, transparent):
         chopped_imgs.append((newImg, (0, 0)))
     return chopped_imgs
 
-
-def offsetsEqual(offset1, offset2, imgWidth, flip=False):
-    if flip:
-        center = (imgWidth - offset2.center[0] - 1, offset2.center[1])
-        head = (imgWidth - offset2.head[0] - 1, offset2.head[1])
-        lhand = (imgWidth - offset2.lhand[0] - 1, offset2.lhand[1])
-        rhand = (imgWidth - offset2.rhand[0] - 1, offset2.rhand[1])
-    else:
-        center = offset2.center
-        head = offset2.head
-        lhand = offset2.lhand
-        rhand = offset2.rhand
-
-    if offset1.center != center:
-        return False
-    if offset1.head != head:
-        return False
-    if offset1.lhand != lhand:
-        return False
-    if offset1.rhand != rhand:
-        return False
-    return True

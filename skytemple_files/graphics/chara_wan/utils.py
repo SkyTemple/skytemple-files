@@ -16,6 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 
+class MultipleOffsetError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
+
 def centerBounds(bounds, center):
     minX = min(bounds[0] - center[0], center[0] - bounds[2])
     minY = min(bounds[1] - center[1], center[1] - bounds[3])
@@ -86,15 +92,30 @@ def getOffsetFromRGB(img, bounds, black, r, g, b, white):
             color = datas[i + j * img.size[0]]
             if color[3] == 255:
                 if black and color[0] == 0 and color[1] == 0 and color[2] == 0:
-                    results[0] = (i - bounds[0], j - bounds[1])
+                    if results[0] is None:
+                        results[0] = (i - bounds[0], j - bounds[1])
+                    else:
+                        raise MultipleOffsetError("Multiple black pixels found!")
                 if r and color[0] == 255:
-                    results[1] = (i - bounds[0], j - bounds[1])
+                    if results[1] is None:
+                        results[1] = (i - bounds[0], j - bounds[1])
+                    else:
+                        raise MultipleOffsetError("Multiple red pixels found!")
                 if g and color[1] == 255:
-                    results[2] = (i - bounds[0], j - bounds[1])
+                    if results[2] is None:
+                        results[2] = (i - bounds[0], j - bounds[1])
+                    else:
+                        raise MultipleOffsetError("Multiple green pixels found!")
                 if b and color[2] == 255:
-                    results[3] = (i - bounds[0], j - bounds[1])
+                    if results[3] is None:
+                        results[3] = (i - bounds[0], j - bounds[1])
+                    else:
+                        raise MultipleOffsetError("Multiple blue pixels found!")
                 if white and color[0] == 255 and color[1] == 255 and color[2] == 255:
-                    results[4] = (i - bounds[0], j - bounds[1])
+                    if results[4] is None:
+                        results[4] = (i - bounds[0], j - bounds[1])
+                    else:
+                        raise MultipleOffsetError("Multiple white pixels found!")
     return results
 
 
@@ -123,4 +144,27 @@ def imgsEqual(img1, img2, flip=False):
             if data_1[idx1] != data_2[idx2]:
                 return False
 
+    return True
+
+
+def offsetsEqual(offset1, offset2, imgWidth, flip=False):
+    if flip:
+        center = (imgWidth - offset2.center[0] - 1, offset2.center[1])
+        head = (imgWidth - offset2.head[0] - 1, offset2.head[1])
+        lhand = (imgWidth - offset2.lhand[0] - 1, offset2.lhand[1])
+        rhand = (imgWidth - offset2.rhand[0] - 1, offset2.rhand[1])
+    else:
+        center = offset2.center
+        head = offset2.head
+        lhand = offset2.lhand
+        rhand = offset2.rhand
+
+    if offset1.center != center:
+        return False
+    if offset1.head != head:
+        return False
+    if offset1.lhand != lhand:
+        return False
+    if offset1.rhand != rhand:
+        return False
     return True

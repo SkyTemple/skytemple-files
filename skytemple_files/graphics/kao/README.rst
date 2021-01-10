@@ -81,8 +81,8 @@ Structure of one portrait:
 | 0x00    | 48     |          | Color Palette       | 16 colors RGB color palette (3 bytes RGB). First color is   |
 |         |        |          |                     | transparent.                                                |
 +---------+--------+----------+---------------------+-------------------------------------------------------------+
-| 0x30    | Varies | AT_   | Compressed Image    | This contains the actual image data for the portrait.       |
-|         |        |          |                     | Its a compressed AT_ container that contains             |
+| 0x30    | Varies | AT_      | Compressed Image    | This contains the actual image data for the portrait.       |
+|         |        |          |                     | Its a compressed AT_ container that contains                |
 |         |        |          |                     | the raw pixels of the image. The image itself, once         |
 |         |        |          |                     | decompressed, is stored as an indexed 4 bits per            |
 |         |        |          |                     | pixels, 40x40, tiled image. Once decompressed each images   |

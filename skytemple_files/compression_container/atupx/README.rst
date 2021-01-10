@@ -50,3 +50,4 @@ Based on following documentations:
 .. Links:
 
 .. _AT6P Decompressor Class:  https://github.com/pleonex/tinke/blob/master/Plugins/999HRPERDOOR/999HRPERDOOR/AT6P.cs
+.. _CUSTOM999:  https://github.com/SkyTemple/skytemple-files/tree/master/skytemple_files/compression/custom_999

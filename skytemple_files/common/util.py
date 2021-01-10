@@ -15,12 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
+import math
 import re
 import warnings
 from itertools import groupby
 from typing import List, Tuple, TYPE_CHECKING, Iterable
 
 import pkg_resources
+from PIL import Image
+from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
@@ -175,6 +178,11 @@ def generate_bitfield(vs: Iterable[bool]):
 def get_files_from_rom_with_extension(rom: NintendoDSRom, ext: str) -> List[str]:
     """Returns paths to files in the ROM ending with the specified extension."""
     return _get_files_from_rom_with_extension__recursion('', rom.filenames, ext)
+
+
+def get_files_from_folder_with_extension(folder: Folder, ext: str) -> List[str]:
+    """Returns paths to files in the ROM ending with the specified extension."""
+    return _get_files_from_rom_with_extension__recursion('', folder, ext)
 
 
 def _get_files_from_rom_with_extension__recursion(path: str, folder: Folder, ext: str) -> List[str]:
@@ -382,6 +390,39 @@ def chunks(lst, n):
 
 def shrink_list(lst):
     return [(element, len(list(i))) for element, i in groupby(lst)]
+
+
+def list_insert_enlarge(lst, index, value, filler_fn):
+    """Inserts an element value at index index in lst. If the list is not big enough,
+    it is enlarged and empty slots are filled with the return value of filler_fn."""
+    if len(lst) <= index:
+        lst += [filler_fn() for _ in range(index - len(lst))]
+    lst.append(value)
+
+
+def simple_quant(img: Image.Image) -> Image.Image:
+    """
+    Simple single-palette image quantization. Reduces to 15 colors and adds one transparent color at index 0.
+    The transparent (alpha=0) pixels in the input image are converted to that color.
+    If you need to do tiled multi-palette quantization, use Tilequant instead!
+    """
+    if img.mode != 'RGBA':
+        img = img.convert('RGBA')
+    transparency_map = [px[3] == 0 for px in img.getdata()]
+    qimg = img.quantize(15, dither=NONE)
+    # Get the original palette and add the transparent color
+    qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])
+    # Shift up all pixel values by 1 and add the transparent pixels
+    pixels = qimg.load()
+    k = 0
+    for j in range(img.size[1]):
+        for i in range(img.size[0]):
+            if transparency_map[k]:
+                pixels[i, j] = 0
+            else:
+                pixels[i, j] += 1
+            k += 1
+    return qimg
 
 
 class AutoString:

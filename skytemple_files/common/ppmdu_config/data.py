@@ -186,6 +186,18 @@ class Pmd2AsmPatchesConstants(AutoString):
         self.patches: Dict[str, Pmd2Patch] = {var.id: var for var in patches}
 
 
+class Pmd2Index(AutoString):
+    def __init__(self, id: int, names: List[str]):
+        self.id = id
+        self.names = names
+
+
+class Pmd2Sprite(AutoString):
+    def __init__(self, id: int, indices: Dict[int, Pmd2Index]):
+        self.id = id
+        self.indices: Dict[int, Pmd2Index] = {k: indices[k] for k in sorted(indices)}
+
+
 class Pmd2Data(AutoString):
     def __init__(self,
                  game_edition: Pmd2GameEdition,
@@ -196,7 +208,8 @@ class Pmd2Data(AutoString):
                  asm_patches_constants: Pmd2AsmPatchesConstants,
                  script_data: Pmd2ScriptData,
                  dungeon_data: Pmd2DungeonData,
-                 string_encoding: str):
+                 string_encoding: str,
+                 animation_names: Dict[int, Pmd2Sprite]):
         self.game_edition = game_edition.id
         self.game_version = game_edition.version
         self.game_region = self.get_region_constant_for_region_name(game_edition.region)
@@ -208,6 +221,7 @@ class Pmd2Data(AutoString):
         self.script_data = script_data
         self.dungeon_data = dungeon_data
         self.string_encoding = string_encoding
+        self.animation_names: Dict[int, Pmd2Sprite] = {k: animation_names[k] for k in sorted(animation_names)}
 
     @staticmethod
     def get_region_constant_for_region_name(region):

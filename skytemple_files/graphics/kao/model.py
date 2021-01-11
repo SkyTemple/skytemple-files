@@ -252,4 +252,4 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # >>> unc = FileType.AT4PX.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()
 
-    return new_palette, new_img_compressed
+    return new_palette[:KAO_IMG_PAL_B_SIZE], new_img_compressed

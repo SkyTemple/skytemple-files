@@ -129,6 +129,8 @@ class SsbWriter:
         len_of_string_tables = 2 * number_of_strings
         previous_languages_block_sizes = 0
         string_lengths: Dict[str, int] = {}
+        if len({len(i) for i in self.model.strings.values()}) != 1:
+            raise ValueError("Could not compile script: All languages must have the same amount of strings.")
         for lang in header_cls.supported_langs():
             start_of_string_table = self.bytes_written
             string_table_bytes_written = 0

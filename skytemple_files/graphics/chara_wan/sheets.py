@@ -18,6 +18,8 @@
 import math
 import os
 import glob
+from enum import Enum
+
 from PIL import Image
 import xml.etree.ElementTree as ET
 
@@ -37,6 +39,14 @@ MAX_ANIMS = 44
 ANIM_ORDER = [0, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 19, 20,
               21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
 
+
+class FlipMode(Enum):
+    # Image is unique / new
+    NONE = 0
+    # Image is an exact copy of another image
+    COPY = 1
+    # Image is a flipped copy of another image
+    FLIP = 2
 
 
 def ImportSheets(inDir, strict=False):
@@ -257,7 +267,7 @@ def ImportSheets(inDir, strict=False):
                 chosen_diff = diff
         # now that we have our chosen diff
         # set the frame in final_frames to the chosen diff
-        final_frames[key] = (final_frames[key][0], final_frames[key][1], chosen_diff, final_frames[key][3])
+        final_frames[key] = (final_frames[key][0], final_frames[key][1], chosen_diff, final_frames[key][3], final_frames[key][4])
         # and then set the diff mapping to their shadow diff - chosen diff
         for start in reverse_frame_map[key]:
             frame_map[start] = (frame_map[start][0], exUtils.addLoc(chosen_diff, frames[start][2], True))
@@ -352,9 +362,9 @@ def ImportSheets(inDir, strict=False):
 
     # then, cut up the image and return to the original final_frames
     for idx in range(len(final_frames)):
-        frame_tex, offsets, shadow_diff, flip = final_frames[idx]
+        frame_tex, offsets, shadow_diff, flip, flip_mode = final_frames[idx]
         frame_tex = reducedImg.crop(crop_bounds[idx])
-        final_frames[idx] = (frame_tex, offsets, shadow_diff, flip)
+        final_frames[idx] = (frame_tex, offsets, shadow_diff, flip, flip_mode)
 
     while len(singlePalette) < 16:
         singlePalette.append((32, 169, 32, 255))
@@ -377,7 +387,7 @@ def ImportSheets(inDir, strict=False):
         flip = frame[3]
         if flip > -1:
             flipped_frame = frameData[flip]
-            addFlippedImgData(frameData, flipped_frame, final_frames[flip], frame)
+            addFlippedImgData(frame[4], frameData, flipped_frame, final_frames[flip], frame)
         else:
             # will append to imgData and frameData
             addImgData(imgData, frameData, palette_map, transparent, frame)
@@ -627,39 +637,46 @@ def mapDuplicateImportImgs(imgs, final_imgs, img_map):
     for idx, img in enumerate(imgs):
         dupe = False
         flip = -1
+        flip_mode = FlipMode.NONE
         for final_idx, final_img in enumerate(final_imgs):
             imgs_equal = exUtils.imgsEqual(final_img[0], img[0])
             # if offsets are not synchronized, they are counted as different
             if imgs_equal:
                 imgs_equal = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0])
-            if imgs_equal:
-                img_map[idx] = (final_idx, (0, 0))
-                dupe = True
-                break
-            imgs_flip = exUtils.imgsEqual(final_img[0], img[0], True)
-            if imgs_flip:
-                imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
-            if imgs_flip:
-                flip = final_idx
+                if imgs_equal:
+                    img_map[idx] = (final_idx, (0, 0))
+                    dupe = True
+                    break
+                else:
+                    flip_mode = FlipMode.COPY
+                    flip = final_idx
+            else:
+                imgs_flip = exUtils.imgsEqual(final_img[0], img[0], True)
+                if imgs_flip:
+                    imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
+                if imgs_flip:
+                    flip_mode = FlipMode.FLIP
+                    flip = final_idx
 
         if not dupe:
             img_map[idx] = (len(final_imgs), (0, 0))
-            final_imgs.append((img[0], img[1], img[2], flip))
+            final_imgs.append((img[0], img[1], img[2], flip, flip_mode))
 
 
-def addFlippedImgData(frameData, metaFrame, old_frame, new_frame):
+def addFlippedImgData(flipMode: FlipMode, frameData, metaFrame, old_frame, new_frame):
     x_border = old_frame[2][0]
     newMetaFrame = []
     for piece in metaFrame:
         newPiece = MetaFramePiece(piece.imgIndex, piece.attr0, piece.attr1, piece.attr2)
-        newPiece.setHFlip(True)
-        # move the piece in the reflected position.
-        range = newPiece.GetBounds()
-        endX = range[2]
-        origEndX = x_border + endX
-        flipStartX = -origEndX + old_frame[0].size[0]
-        newX = flipStartX - x_border
-        newPiece.setXOffset(newX)
+        if flipMode == FlipMode.FLIP:
+            newPiece.setHFlip(True)
+            # move the piece in the reflected position.
+            range = newPiece.GetBounds()
+            endX = range[2]
+            origEndX = x_border + endX
+            flipStartX = -origEndX + old_frame[0].size[0]
+            newX = flipStartX - x_border
+            newPiece.setXOffset(newX)
         newMetaFrame.append(newPiece)
 
     # regardless of flip, the center point may be treated differently between frames.  correct it.

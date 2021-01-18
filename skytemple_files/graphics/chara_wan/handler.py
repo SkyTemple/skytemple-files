@@ -30,7 +30,7 @@ ANIM_PRESENCE = []
 # monster
 ANIM_PRESENCE.append([True, False, False, False, False, True, True, True, False, False, False, True])
 # ground
-ANIM_PRESENCE.append([True, True, True, True, True, True, True, True, True, True, True, True, True])
+ANIM_PRESENCE.append([True] * 44)
 # attack
 ANIM_PRESENCE.append([False, True, True, True, True, False, False, False, True, True, True, True, True])
 

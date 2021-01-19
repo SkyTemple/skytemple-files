@@ -69,3 +69,6 @@ class BinPack:
 
     def __iter__(self):
         return iter(self._files)
+
+    def append(self, item):
+        return self._files.append(item)

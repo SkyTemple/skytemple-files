@@ -79,6 +79,9 @@ class Dpla:
         return len(self.colors[palette_idx * DPLA_COLORS_PER_PALETTE]) > 0
 
     def get_duration_for_palette(self, palette_idx):
+        """
+        :deprecated: Do not use this. Colors are animated separately. There is no speed for an entire palette.
+        """
         return self.durations_per_frame_for_colors[palette_idx * DPLA_COLORS_PER_PALETTE]
 
     def get_frame_count_for_palette(self, palette_idx):
@@ -97,6 +100,9 @@ class Dpla:
             self.colors[palid * DPLA_COLORS_PER_PALETTE:(palid + 1) * DPLA_COLORS_PER_PALETTE] = [[] for _ in range(0, 16)]
 
     def set_duration_for_palette(self, palid, duration):
+        """
+        :deprecated: Do not use this. Colors are animated separately. There is no speed for an entire palette.
+        """
         self.durations_per_frame_for_colors[palid * DPLA_COLORS_PER_PALETTE:(palid + 1) * DPLA_COLORS_PER_PALETTE] = [duration] * 16
 
     def apply_palette_animations(self, palettes, frame_idx):
@@ -107,6 +113,9 @@ class Dpla:
         > The first 16 colors of the DPLA model are placed in the palette 11 (if color 0 has at least one frame).
         > The second 16 colors of the DPLA model are placed in the palette 12 (if color 16 has at least one frame).
         > If the model has more colors, they are ignored.
+
+        :deprecated: Do not use this. Colors are animated separately. There is no speed for an entire palette. This is
+                     not accurate.
         """
         palettes = palettes.copy()
         if self.has_for_palette(0):

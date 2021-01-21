@@ -59,7 +59,7 @@ pack_file = rom.getFileByName('MONSTER/monster.bin')
 bin_pack = FileType.BIN_PACK.deserialize(pack_file)
 for s_i, sprite in enumerate(bin_pack):
     print(f"Actor kind {s_i}")
-    sprite_bin_decompressed = FileType.PKDPX.deserialize(sprite).decompress()
+    sprite_bin_decompressed = FileType.COMMON_AT.deserialize(sprite).decompress()
     wan_model = FileType.WAN.deserialize(sprite_bin_decompressed)
     basename = f'actor_{s_i}'
 

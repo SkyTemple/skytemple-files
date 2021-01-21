@@ -18,19 +18,20 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.bgp.model import Bgp
 from skytemple_files.graphics.bgp.writer import BgpWriter
-
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_4
 
 class BgpHandler(DataHandler[Bgp]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Bgp:
         from skytemple_files.common.types.file_types import FileType
-        return Bgp(FileType.AT4PX.deserialize(data).decompress())
+        return Bgp(FileType.COMMON_AT.deserialize(data).decompress())
 
     @classmethod
     def serialize(cls, data: Bgp, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PX.serialize(
-            FileType.AT4PX.compress(
-                BgpWriter(data).write()
+        return FileType.COMMON_AT.serialize(
+            FileType.COMMON_AT.compress(
+                BgpWriter(data).write(),
+                COMMON_AT_MUST_COMPRESS_4
             )
         )

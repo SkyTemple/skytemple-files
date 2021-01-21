@@ -16,9 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.model import CommonAt
 
 
-class At4px:
+class At4px(CommonAt):
     def __init__(self, data: bytes=None):
         """
         Create a AT4PX container from already compressed data.
@@ -52,7 +53,7 @@ class At4px:
         return read_uintle(data, byte_offset + 5, 2)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'At4px':
+    def compress(cls, data: bytes) -> CommonAt:
         """Create a new AT4PX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

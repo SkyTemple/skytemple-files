@@ -49,3 +49,8 @@ class At4pnHandler(DataHandler[At4pn]):
     def matches(cls, data: bytes, byte_offset=0):
         """Check if the given data is a At4pn container"""
         return read_bytes(data, byte_offset, 5) == b'AT4PN'
+
+    # For compatibility with other AT formats
+    @classmethod
+    def compress(cls, data: bytes) -> At4pn:
+        return At4pn.compress(data)

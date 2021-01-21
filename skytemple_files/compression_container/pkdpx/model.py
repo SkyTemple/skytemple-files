@@ -16,9 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.model import CommonAt
 
 
-class Pkdpx:
+class Pkdpx(CommonAt):
     def __init__(self, data: bytes=None):
         """
         Create a PKDPX container from already compressed data.
@@ -52,7 +53,7 @@ class Pkdpx:
         return read_uintle(data, byte_offset + 5, 2)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'Pkdpx':
+    def compress(cls, data: bytes) -> CommonAt:
         """Create a new PKDPX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

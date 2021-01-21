@@ -112,7 +112,7 @@ for i, monster in enumerate(monster_md.entries):
         continue
     print(f"Monster {i} - Sprite {monster.sprite_index}")
     sprite = sprites[monster.sprite_index]
-    sprite_bin_decompressed = FileType.PKDPX.deserialize(sprite).decompress()
+    sprite_bin_decompressed = FileType.COMMON_AT.deserialize(sprite).decompress()
     wan_model = FileType.WAN.deserialize(sprite_bin_decompressed)
 
     img = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))

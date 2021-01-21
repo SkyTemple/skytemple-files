@@ -16,20 +16,20 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.graphics.dpc.model import Dpc
-
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 
 class DbinAt4pxDpcHandler(DataHandler[Dpc]):
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Dpc:
         from skytemple_files.common.types.file_types import FileType
-        at4px = FileType.AT4PX.deserialize(data)
-        return FileType.DPC.deserialize(at4px.decompress())
+        at = FileType.COMMON_AT.deserialize(data)
+        return FileType.DPC.deserialize(at.decompress())
 
     @classmethod
     def serialize(cls, data: Dpc, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         serialized = FileType.DPC.serialize(data)
-        return FileType.AT4PX.serialize(
-            FileType.AT4PX.compress(serialized)
+        return FileType.COMMON_AT.serialize(
+            FileType.COMMON_AT.compress(serialized, COMMON_AT_BEST_3)
         )

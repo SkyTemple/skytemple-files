@@ -16,9 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.model import CommonAt
 
-
-class At4pn:
+class At4pn(CommonAt):
     def __init__(self, data: bytes, new=False):
         """
         Create a AT4PN container from data.
@@ -43,3 +43,12 @@ class At4pn:
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         return read_uintle(data, byte_offset + 5, 2)
+
+
+    # For compatibility with other AT formats
+    def decompress(self) -> bytes:
+        return self.get()
+
+    @classmethod
+    def compress(cls, data: bytes) -> CommonAt:
+        return At4pn(data, new=True)

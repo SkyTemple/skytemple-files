@@ -15,8 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-# directly based off https://github.com/PsyCommando/ppmdu/blob/master/src/ppmdu/fmts/px_compression.cpp
-
 from skytemple_files.common.util import *
 
 MAX_COPY = 0x7

@@ -98,28 +98,15 @@ class W16Image(ABC):
         tiles_concat = bytes(itertools.chain.from_iterable(tiles))
         return pal[0], tiles_concat
 
-
-class W16At4pxImage(W16Image):
+class W16AtImage(W16Image):
     @classmethod
     def compress(cls, data: bytes) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PX.serialize(FileType.AT4PX.compress(data))
+        return FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(data))
 
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PX.deserialize(self.compressed_img_data).decompress()
-
-
-class W16At4pnImage(W16Image):
-    @classmethod
-    def compress(cls, data: bytes) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PN.serialize(FileType.AT4PN.new(data))
-
-    def decompress(self) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        return FileType.AT4PN.deserialize(self.compressed_img_data).get()
-
+        return FileType.COMMON_AT.deserialize(self.compressed_img_data).decompress()
 
 class W16RawImage(W16Image):
     @classmethod
@@ -163,10 +150,8 @@ class W16:
             # Read image
             next_pointer = read_uintle(data, (i+1) * 8, 4)
             img_data = data[pointer + len_pal_bytes:next_pointer]
-            if FileType.AT4PX.matches(img_data):
-                self._files.append(W16At4pxImage(entry_data, img_data, pal))
-            elif FileType.AT4PN.matches(img_data):
-                self._files.append(W16At4pnImage(entry_data, img_data, pal))
+            if FileType.COMMON_AT.matches(img_data):
+                self._files.append(W16AtImage(entry_data, img_data, pal))
             else:
                 self._files.append(W16RawImage(entry_data, img_data, pal))
 

@@ -251,7 +251,7 @@ class PxCompressor:
         # Count the nb of occurrences for each nibble
         nibbles_matches = []
         for i in range(0, len(nibbles)):
-            nibbles[i] = nibbles.count(nibbles[i])
+            nibbles_matches.append(nibbles.count(nibbles[i]))
 
         # We got at least 3 values that come back 3 times
         if nibbles_matches.count(3) == 3:

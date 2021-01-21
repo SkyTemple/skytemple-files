@@ -11,7 +11,7 @@ This file format is in it's purpose roughly the equivalent of `BMA`_ files but f
 
 The name is not official.
 
-The file can only be found SIR0 wrapped and AT4PX compressed in the dungeon.bin file.
+The file can only be found SIR0 wrapped and AT compressed in the dungeon.bin file.
 
 Usage
 -----
@@ -19,7 +19,7 @@ Use the class ``DmaHandler`` of the ``handler`` module, to open and save
 models from binary data. The model that the handler returns is in the
 module ``model``.
 
-To read/write the SIR0 wrapped & AT4PX compressed versions of this file instead, you can
+To read/write the SIR0 wrapped & AT compressed versions of this file instead, you can
 use the file handler in ``skytemple_files.container.dungeon_bin.sub.at4px_dpc``.
 
 The model further clusters the chunk types as specified below.

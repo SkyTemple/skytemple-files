@@ -5,7 +5,7 @@ The BGP file format is used to store full-screen background images, most notably
 background of the main menu. Please note, that many background seen in the game are actually stored as level map
 backgrounds, see BMA_.
 
-The entire file is stored using AT4PX_ compression!
+The entire file is stored using AT_ compression!
 
 Usage
 -----
@@ -129,4 +129,4 @@ Based on following documentations:
 
 .. _BPC:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bpc
 .. _BMA:                            https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/graphics/bma
-.. _AT4PX:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/at4px
+.. _AT:                          https://github.com/SkyTemple/skytemple-files/blob/master/skytemple_files/compression_container/common_at

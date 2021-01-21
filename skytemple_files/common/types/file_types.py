@@ -53,9 +53,13 @@ from skytemple_files.graphics.dpci.handler import DpciHandler
 from skytemple_files.graphics.dpl.handler import DplHandler
 from skytemple_files.graphics.dpla.handler import DplaHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
+from skytemple_files.compression_container.common_at.handler import CommonAtHandler
+from skytemple_files.compression_container.at3px.handler import At3pxHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
+from skytemple_files.compression_container.atupx.handler import AtupxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
 from skytemple_files.compression.px.handler import PxHandler
+from skytemple_files.compression.custom_999.handler import Custom999Handler
 from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.w16.handler import W16Handler
@@ -82,11 +86,15 @@ class FileType:
 
     KAO = KaoHandler
 
+    COMMON_AT = CommonAtHandler
+    AT3PX = At3pxHandler
     AT4PX = At4pxHandler
+    ATUPX = AtupxHandler
     PKDPX = PkdpxHandler
     AT4PN = At4pnHandler
 
     PX = PxHandler
+    CUSTOM_999 = Custom999Handler
     GENERIC_NRL = GenericNrlHandler
     
     RLE_NIBBLE = RleNibbleHandler

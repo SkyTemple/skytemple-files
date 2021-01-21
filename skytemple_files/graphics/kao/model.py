@@ -26,6 +26,7 @@ except ImportError:
 from typing import Union, Tuple
 
 from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
@@ -41,11 +42,11 @@ class KaoImage:
         if not isinstance(whole_kao_data, memoryview):
             whole_kao_data = memoryview(whole_kao_data)
 
-        """Construct a KaoImage using a raw image buffer (16 color palette, followed by AT4PX)"""
+        """Construct a KaoImage using a raw image buffer (16 color palette, followed by AT)"""
         from skytemple_files.common.types.file_types import FileType
 
-        cont_len = FileType.AT4PX.cont_size(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE)
-        # palette size + at4px container size
+        cont_len = FileType.COMMON_AT.cont_size(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE)
+        # palette size + at container size
         self.original_size = KAO_IMG_PAL_B_SIZE + cont_len
         self.pal_data = read_bytes(whole_kao_data, start_pnt, KAO_IMG_PAL_B_SIZE)
         self.compressed_img_data = read_bytes(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len)
@@ -62,7 +63,7 @@ class KaoImage:
         return KAO_IMG_PAL_B_SIZE + len(self.compressed_img_data)
 
     def get_internal(self) -> bytes:
-        """Returns the portrait as 16 color palette followed by AT4PX compressed image data"""
+        """Returns the portrait as 16 color palette followed by AT compressed image data"""
         return bytes(self.pal_data) + bytes(self.compressed_img_data)
 
     def set(self, pil: Image) -> 'KaoImage':
@@ -169,7 +170,7 @@ def kao_to_pil(kao: KaoImage) -> Image:
     from skytemple_files.common.types.file_types import FileType
 
     # Generates an array where every three entries a new color begins (r, g, b, r, g, b...)
-    uncompressed_image_data = FileType.AT4PX.deserialize(kao.compressed_img_data).decompress()
+    uncompressed_image_data = FileType.COMMON_AT.deserialize(kao.compressed_img_data).decompress()
 
     return uncompressed_kao_to_pil(kao.pal_data, uncompressed_image_data)
 
@@ -205,7 +206,7 @@ def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data):
 
 
 def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
-    """Converts a PIL image (with a 16 bit palette) to a kao palette and at4px compressed image data"""
+    """Converts a PIL image (with a 16 bit palette) to a kao palette and at compressed image data"""
     from skytemple_files.common.types.file_types import FileType
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
@@ -245,11 +246,13 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
-    new_img_compressed = FileType.AT4PX.serialize(FileType.AT4PX.compress(new_img))
+    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
     if len(new_img_compressed)>800:
-        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).")
+        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                             f"If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                             f"which might be able to better compress this image.")
     # You can check if compression works, by uncompressing and checking the image again:
-    # >>> unc = FileType.AT4PX.unserialize(new_img_compressed).decompress()
+    # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()
 
     return new_palette[:KAO_IMG_PAL_B_SIZE], new_img_compressed

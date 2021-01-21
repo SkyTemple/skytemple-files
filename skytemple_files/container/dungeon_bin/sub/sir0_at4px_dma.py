@@ -23,13 +23,13 @@ class DbinSir0At4pxDmaHandler(DataHandler[Dma]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Dma:
         from skytemple_files.common.types.file_types import FileType
-        at4px = FileType.DBIN_SIR0_AT4PX.deserialize(data)
-        return FileType.DMA.deserialize(at4px.decompress())
+        common_at = FileType.DBIN_SIR0_AT4PX.deserialize(data)
+        return FileType.DMA.deserialize(common_at.decompress())
 
     @classmethod
     def serialize(cls, data: Dma, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         serialized = FileType.DMA.serialize(data)
         return FileType.DBIN_SIR0_AT4PX.serialize(
-            FileType.AT4PX.compress(serialized)
+            FileType.COMMON_AT.compress(serialized)
         )

@@ -248,7 +248,9 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
 
     new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
     if len(new_img_compressed)>800:
-        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).")
+        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                             f"If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                             f"which might be able to better compress this image.")
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

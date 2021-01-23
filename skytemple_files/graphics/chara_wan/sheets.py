@@ -423,7 +423,9 @@ def ImportSheets(inDir, strict=False):
     return wan
 
 
-def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
+def ExportSheets(outDir, sdwImg, wan, anim_name_map):
+
+
     if not os.path.isdir(outDir):
         os.makedirs(outDir)
 
@@ -436,14 +438,14 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
     anim_stats = []
     maxFrameBounds = (10000, 10000, -10000, -10000)
     # get max bounds across all frames
-    for idx, metaFrame in enumerate(effectData.frameData):
+    for idx, metaFrame in enumerate(wan.frameData):
         for mt_idx, metaFramePiece in enumerate(metaFrame):
             # update bounds based on image
             fBounds = metaFramePiece.GetBounds()
             maxFrameBounds = exUtils.combineExtents(maxFrameBounds, fBounds)
 
         # update bounds based on offsets
-        offset = effectData.offsetData[idx]
+        offset = wan.offsetData[idx]
         maxFrameBounds = exUtils.combineExtents(maxFrameBounds, offset.GetBounds())
 
     # round up to nearest x8
@@ -455,7 +457,7 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
     offsets = []
     frames_bounds_tight = []
     piece_imgs = {}
-    for idx, metaFrame in enumerate(effectData.frameData):
+    for idx, metaFrame in enumerate(wan.frameData):
         has_minus = False
         draw_queue = []
         for mt_idx, metaFramePiece in enumerate(metaFrame):
@@ -474,7 +476,7 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
             if parent_idx in piece_imgs:
                 img = piece_imgs[parent_idx]
             else:
-                img = metaFramePiece.GeneratePiece(effectData.imgData, effectData.customPalette, parent_idx)
+                img = metaFramePiece.GeneratePiece(wan.imgData, wan.customPalette, parent_idx)
                 piece_imgs[parent_idx] = img
             draw_queue.append((img, metaFramePiece))
 
@@ -491,7 +493,7 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
         # create an image for particle offsets
         particleImg = Image.new('RGBA', (maxFrameBounds[2] - maxFrameBounds[0], maxFrameBounds[3] - maxFrameBounds[1]),
                                 (0, 0, 0, 0))
-        offset = effectData.offsetData[idx]
+        offset = wan.offsetData[idx]
         offset.DrawOn(particleImg, (maxFrameBounds[0], maxFrameBounds[1]))
         if DEBUG_PRINT:
             particleImg.save(os.path.join(outDir, '_frames', 'F-' + format(idx, '02d') + '-Offsets.png'))
@@ -513,7 +515,8 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
     shadow_rect = (sdwImg.size[0] // -2, sdwImg.size[1] // -2, sdwImg.size[0] // 2, sdwImg.size[1] // 2)
     shadow_rect_tight = exUtils.getCoveredBounds(sdwImg)
     shadow_rect_tight = exUtils.addToBounds(shadow_rect_tight, shadow_rect)
-    for idx, animGroup in enumerate(effectData.animGroupData):
+    for idx, animGroup in enumerate(wan.animGroupData):
+
         maxBounds = (10000, 10000, -10000, -10000)
         for g_idx, singleAnim in enumerate(animGroup):
             for a_idx, animFrame in enumerate(singleAnim):
@@ -528,20 +531,20 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
         groupBounds.append(maxBounds)
 
     # create animations
-    for idx, animGroup in enumerate(effectData.animGroupData):
+    for idx, animGroup in enumerate(wan.animGroupData):
         animsPerGroup = len(animGroup)
         # some groups may be empty
         if animsPerGroup == 0:
             continue
 
-        if anim_name_map[idx][0] == '':
+        if idx >= len(anim_name_map) or anim_name_map[idx][0] == '':
             raise ValueError("Animation #{0} needs a name!".format(idx))
 
         dupe_idx = -1
         for cmp_idx in ANIM_ORDER:
             if cmp_idx == idx:
                 break
-            cmp_group = effectData.animGroupData[cmp_idx]
+            cmp_group = wan.animGroupData[cmp_idx]
             if exWanUtils.animGroupsEqual(animGroup, cmp_group):
                 dupe_idx = cmp_idx
                 break
@@ -597,7 +600,7 @@ def ExportSheets(outDir, sdwImg, effectData, anim_name_map):
     # export the xml
     root = ET.Element("AnimData")
     shadow_node = ET.SubElement(root, "ShadowSize")
-    shadow_node.text = str(effectData.sdwSize)
+    shadow_node.text = str(wan.sdwSize)
 
     anims_node = ET.SubElement(root, "Anims")
     for stat in anim_stats:

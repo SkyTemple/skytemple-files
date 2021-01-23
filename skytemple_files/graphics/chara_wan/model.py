@@ -88,6 +88,12 @@ class WanFile:
         from skytemple_files.graphics.chara_wan.writer import ExportWan
         return ExportWan(self)
 
+    def get_filled_anims(self):
+        anim_req = []
+        for anim_group in self.animGroupData:
+            anim_req.append(len(anim_group) > 0)
+        return anim_req
+
     # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
     # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero
     # m_ground_0587_0xbd0a10.wan - Latios.  Unknown difference

@@ -90,6 +90,10 @@ class MappaItemList(AutoString, XmlSerializable):
 
     @classmethod
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int):
+        return cls.from_bytes(read.data, read.items, pointer)
+        
+    @classmethod
+    def from_bytes(cls, data: bytes, item_list: Pmd2DungeonItem, pointer: int):
         processing_categories = True
         item_or_cat_id = 0
         orig_pointer = pointer
@@ -99,7 +103,7 @@ class MappaItemList(AutoString, XmlSerializable):
         categories = {}
 
         while item_or_cat_id <= MAX_ITEM_ID:
-            val = read_uintle(read.data, pointer, 2)
+            val = read_uintle(data, pointer, 2)
             len_read += 2
             skip = val > CMD_SKIP and val != GUARANTEED
 
@@ -113,14 +117,14 @@ class MappaItemList(AutoString, XmlSerializable):
                 if processing_categories:
                     categories[MappaItemCategory(item_or_cat_id)] = weight
                 else:
-                    items[read.items[item_or_cat_id]] = weight
+                    items[item_list[item_or_cat_id]] = weight
                 item_or_cat_id += 1
             if item_or_cat_id >= 0xF and processing_categories:
                 processing_categories = False
                 item_or_cat_id -= 0x10
             pointer += 2
 
-        assert read.data[orig_pointer:orig_pointer+len_read] == MappaItemList(categories, items).to_mappa()
+        assert data[orig_pointer:orig_pointer+len_read] == MappaItemList(categories, items).to_mappa()
 
         return MappaItemList(categories, items)
 

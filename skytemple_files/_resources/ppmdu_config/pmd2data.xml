@@ -615,10 +615,15 @@
 
         <!-- A patch to provide support for ATUPX containers -->
         <Patch id="ProvideATUPXSupport" >
-          <!--Open each binaries for processing and include the appropriate files-->
-          <!--The openfile statements will be appropriately generated based on the data in this file, and on the rom path!-->
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/atupx_support/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract hardcoded item lists -->
+        <Patch id="ExtractHardcodedItemLists" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_item_lists/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
         

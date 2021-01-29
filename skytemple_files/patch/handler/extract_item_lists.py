@@ -42,7 +42,7 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts the hardcoded item lists used for mission/treasure boxes rewards and to files. Provides support for reading them from the rom file system.'
+        return 'Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.'
 
     @property
     def author(self) -> str:

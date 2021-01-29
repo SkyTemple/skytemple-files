@@ -309,8 +309,14 @@ def from_pil(
             idx=tile_id_to_use,
             pal_idx=tile_palette_indices[tile_id],
             flip_x=flip_x,
-            flip_y=flip_y
+            flip_y=flip_y,
+            ignore_too_large=True
         )
+    if len_final_tiles > 1024:
+        raise ValueError(f"An image selected to import is too complex. It has too many unique tiles "
+                         f"({len_final_tiles}, max allowed are 1024).\nTry to have less unique tiles. Unique tiles "
+                         f"are 8x8 sections of the images that can't be found anywhere else in the image (including "
+                         f"flipped or with a different sub-palette).")
     final_tiles: List[bytearray] = []
     for s, tile in final_tiles_with_sum:
         final_tiles.append(tile)

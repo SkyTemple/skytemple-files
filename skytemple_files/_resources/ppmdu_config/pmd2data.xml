@@ -109,6 +109,11 @@
         <Pointer name="DungeonData"                beg="0x353538"/>
         <Block name="DungeonCurrentId"             beg="0x2AB4FE" end="0x2AB4FF"/>
         <!-- END RAM values -->
+        <Fn name="GetDebugFlag1"           beg="0xC110"/>
+        <Fn name="SetDebugFlag1"           beg="0xC118"/>
+        <Fn name="DebugPrint0"           beg="0xC1FC"/>
+        <Fn name="GetDebugFlag2"           beg="0xC234"/>
+        <Fn name="SetDebugFlag2"           beg="0xC23C"/>
         <Fn name="DebugPrint"           beg="0xC240"/>
         <Fn name="DebugPrint2"          beg="0xC30C"/>
         <Fn name="SaveScriptVariableValue"  beg="0x4B820"/>
@@ -188,6 +193,11 @@
         <Pointer name="DungeonData"                beg="0x354138"/>
         <Block name="GameVarsValues"     beg="0x2AB9EC" end="0x2ABCA0"/>
         <!-- END RAM values -->
+        <Fn name="GetDebugFlag1"           beg="0xC198"/>
+        <Fn name="SetDebugFlag1"           beg="0xC1A0"/>
+        <Fn name="DebugPrint0"           beg="0xC284"/>
+        <Fn name="GetDebugFlag2"           beg="0xC2BC"/>
+        <Fn name="SetDebugFlag2"           beg="0xC2C4"/>
         <Fn name="DebugPrint"            beg="0xC2C8"/>
         <Fn name="DebugPrint2"           beg="0xC284"/>
         <Fn name="SaveScriptVariableValue"  beg="0x4BB58"/>

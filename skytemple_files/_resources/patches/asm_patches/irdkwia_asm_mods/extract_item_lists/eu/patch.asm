@@ -1,6 +1,6 @@
 ; For use with ARMIPS
 ; 2021/01/27
-; For Explorers of Sky NA Only
+; For Explorers of Sky EU Only
 ; ------------------------------------------------------------------------------
 ; Use filestreams instead of hardcoded lists 
 ; ------------------------------------------------------------------------------

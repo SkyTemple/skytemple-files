@@ -23,6 +23,7 @@ from skytemple_files.graphics.fonts.font_dat import *
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
+from skytemple_files.common.i18n_util import f, _
 try:
     from PIL import Image
 except ImportError:
@@ -83,7 +84,7 @@ class FontDatEntry(AbstractFontEntry):
     @classmethod
     def from_pil(cls, img: Image.Image, char: int, table: int, width: int, bprow_field: int) -> 'FontDatEntry':
         if img.mode!='P':
-            raise AttributeError("This must be a color indexed image!")
+            raise AttributeError(_("This must be a color indexed image!"))
         bprow = FONT_DEFAULT_BPROW # Unused, so always use default
         data = []
         raw_data = img.tobytes("raw", "P")

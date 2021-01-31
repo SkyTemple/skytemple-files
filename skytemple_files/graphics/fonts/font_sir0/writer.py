@@ -21,6 +21,7 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_sir0 import *
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
+from skytemple_files.common.i18n_util import f, _
 
 
 class FontSir0Writer:
@@ -44,7 +45,7 @@ class FontSir0Writer:
         last = (None, None)
         for i, e in enumerate(sorted_entries):
             if last==(e.char, e.table):
-                raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")
+                raise ValueError(_("Character {e.char} in table {e.table} is be defined multiple times in a font file!"))
             last = (e.char, e.table)
             pointer_offsets.append(len(buffer)+i * FONT_SIR0_ENTRY_LEN)
             write_uintle(char_pointer, i * FONT_SIR0_DATA_LEN, i * FONT_SIR0_ENTRY_LEN, 4)

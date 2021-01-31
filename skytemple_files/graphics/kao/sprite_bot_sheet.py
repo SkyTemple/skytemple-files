@@ -20,6 +20,7 @@ from typing import Generator, Tuple, Optional, Callable, List
 from PIL import Image
 
 from skytemple_files.graphics.kao.model import Kao, KAO_IMG_IMG_DIM, KAO_IMG_METAPIXELS_DIM, SUBENTRIES, KaoImage
+from skytemple_files.common.i18n_util import f, _
 
 PORTRAIT_SIZE = KAO_IMG_IMG_DIM * KAO_IMG_METAPIXELS_DIM
 PORTRAIT_TILE_X = 5
@@ -82,12 +83,12 @@ class SpriteBotSheet:
         """
         # make sure the dimensions are sound
         if img.size[0] % PORTRAIT_SIZE != 0 or img.size[1] % PORTRAIT_SIZE != 0:
-            raise ValueError(f"Portrait has an invalid size of {img.size}, Not divisble by {PORTRAIT_SIZE}x{PORTRAIT_SIZE}")
+            raise ValueError(f(_("Portrait has an invalid size of {img.size}, Not divisble by {PORTRAIT_SIZE}x{PORTRAIT_SIZE}")))
 
         img_tile_size = (img.size[0] // PORTRAIT_SIZE, img.size[1] // PORTRAIT_SIZE)
         max_size = (PORTRAIT_TILE_X * PORTRAIT_SIZE, PORTRAIT_TILE_Y * PORTRAIT_SIZE)
         if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
-            raise ValueError(f"Portrait has an invalid size of {img.size}, exceeding max of {max_size}")
+            raise ValueError(f(_("Portrait has an invalid size of {img.size}, exceeding max of {max_size}")))
 
         in_data = img.convert('RGBA').getdata()
         occupied = [[]] * PORTRAIT_TILE_X
@@ -123,9 +124,9 @@ class SpriteBotSheet:
                     rogue_tiles.append(rogue_str)
 
         if len(rogue_pixels) > 0:
-            raise ValueError(f"Semi-transparent pixels found at: {rogue_pixels}")
+            raise ValueError(f(_("Semi-transparent pixels found at: {rogue_pixels}")))
         if len(rogue_tiles) > 0:
-            raise ValueError(f"The following emotions have transparent pixels: {rogue_tiles}")
+            raise ValueError(f(_("The following emotions have transparent pixels: {rogue_tiles}")))
 
         # make sure all mirrored emotions have their original emotions
         # make sure if there is one mirrored emotion, there is all mirrored emotions
@@ -143,7 +144,7 @@ class SpriteBotSheet:
                     flipped_tiles.append(rogue_str)
 
         if has_one_flip and len(flipped_tiles) > 0:
-            raise ValueError(f"File should have original and flipped versions of emotions: {str(flipped_tiles)}")
+            raise ValueError(f(_("File should have original and flipped versions of emotions: {str(flipped_tiles)}")))
 
         return occupied
 

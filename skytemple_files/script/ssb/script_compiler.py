@@ -31,6 +31,7 @@ from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
 from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
     SSB_PADDING_BEFORE_ROUTINE_INFO
+from skytemple_files.common.i18n_util import f, _
 logger = logging.getLogger(__name__)
 
 
@@ -103,7 +104,7 @@ class ScriptCompiler:
 
         model = Ssb.create_empty(self.rom_data.script_data)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
-            raise SsbCompilerError("The routine data lists for the decompiler must have the same lengths.")
+            raise SsbCompilerError(_("The routine data lists for the decompiler must have the same lengths."))
 
         # Build routines and opcodes.
         if len(routine_ops) > 0:
@@ -116,7 +117,7 @@ class ScriptCompiler:
 
             for i, r in enumerate(routine_infos):
                 if r is None:
-                    raise SsbCompilerError(f"Routine {i} not found.")
+                    raise SsbCompilerError(f(_("Routine {i} not found.")))
 
             input_routine_structure: List[
                 Tuple[SsbRoutineInfo, str, List[SsbOperation]]
@@ -133,16 +134,16 @@ class ScriptCompiler:
                 # Assert, that the data contains all coroutines from the ROM schema and sort all three lists by this
                 if len(input_routine_structure) != len(self.rom_data.script_data.common_routine_info):
                     raise SsbCompilerError(
-                        f"The script must contain exactly {len(self.rom_data.script_data.common_routine_info)} coroutines."
+                        f(_("The script must contain exactly {len(self.rom_data.script_data.common_routine_info)} coroutines."))
                     )
                 if len(routine_infos) != len(set(named_coroutines)):
-                    raise SsbCompilerError(f"The script must not contain any duplicate coroutines.")
+                    raise SsbCompilerError(f(_("The script must not contain any duplicate coroutines.")))
                 try:
                     input_routine_structure = sorted(
                         input_routine_structure, key=lambda k: self.rom_data.script_data.common_routine_info__by_name[k[1]].id
                     )
                 except KeyError as err:
-                    raise SsbCompilerError(f"Unknown coroutine {err}") from err
+                    raise SsbCompilerError(f(_("Unknown coroutine {err}"))) from err
 
             # Build Routine Infos
             built_routine_info_with_offset: List[Tuple[int, SsbRoutineInfo]] = []
@@ -151,13 +152,13 @@ class ScriptCompiler:
             opcode_index_mem_offset_mapping: Dict[int, int] = {}
             bytes_written_last_rtn = 0
 
-            for i, (input_info, _, input_ops) in enumerate(input_routine_structure):
+            for i, (input_info, __, input_ops) in enumerate(input_routine_structure):
                 if (
                         has_coroutines and input_info.type != SsbRoutineType.COROUTINE
                 ) or (
                         not has_coroutines and input_info.type == SsbRoutineType.COROUTINE
                 ):
-                    raise SsbCompilerError(f"Coroutines and regular routines can not be mixed in a script file.")
+                    raise SsbCompilerError(f(_("Coroutines and regular routines can not be mixed in a script file.")))
 
                 routine_start_cursor = opcode_cursor
                 # Build OPs
@@ -169,7 +170,7 @@ class ScriptCompiler:
                     bytes_written_last_rtn = 0
                     for in_op in input_ops:
                         if in_op.op_code.name not in self.rom_data.script_data.op_codes__by_name:
-                            raise SsbCompilerError(f"Unknown operation {in_op.op_code.name}.")
+                            raise SsbCompilerError(f(_("Unknown operation {in_op.op_code.name}.")))
                         op_codes: List[Pmd2ScriptOpCode] = self.rom_data.script_data.op_codes__by_name[in_op.op_code.name]
                         if len(op_codes) > 1:
                             # Can be either a variable length opcode or the "normal" variant.
@@ -180,8 +181,8 @@ class ScriptCompiler:
                             elif self._correct_param_list_len(in_op.params) > normal_op_code.params:
                                 op_code = var_len_op_code
                             else:
-                                raise SsbCompilerError(f"The number of parameters for {normal_op_code.name} "
-                                                       f"must be at least {normal_op_code.params}, is {self._correct_param_list_len(in_op.params)}.")
+                                raise SsbCompilerError(f(_("The number of parameters for {normal_op_code.name} "
+                                                          "must be at least {normal_op_code.params}, is {self._correct_param_list_len(in_op.params)}.")))
                         else:
                             op_code = op_codes[0]
                         new_params: List[int] = []
@@ -194,8 +195,8 @@ class ScriptCompiler:
                             pass
                         elif self._correct_param_list_len(in_op.params) != op_code.params:
                             # TODO: This might be a confusing count for end users in the case of position markers.
-                            raise SsbCompilerError(f"The number of parameters for {op_code.name} "
-                                                   f"must be {op_code.params}, is {self._correct_param_list_len(in_op.params)}.")
+                            raise SsbCompilerError(f(_("The number of parameters for {op_code.name} "
+                                                       "must be {op_code.params}, is {self._correct_param_list_len(in_op.params)}.")))
                         for param in in_op.params:
                             if isinstance(param, SsbOpParamPositionMarker):
                                 # Handle multi-argument case position markers
@@ -273,11 +274,11 @@ class ScriptCompiler:
                 # Multi language regular case. All languages must be known.
                 for lang, string in param.strings.items():
                     if lang not in built_strings:
-                        raise SsbCompilerError(f"Unknown language for string: {lang}")
+                        raise SsbCompilerError(f(_("Unknown language for string: {lang}")))
                     built_strings[lang].append(string)
             return StringIndexPlaceholder(i)
 
-        raise SsbCompilerError(f"Invalid parameter supplied for an operation: {param}")
+        raise SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}")))
 
     @staticmethod
     def _correct_param_list_len(params: List[SsbOpParam]):

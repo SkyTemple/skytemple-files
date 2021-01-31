@@ -21,6 +21,7 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.util import read_uintle, AutoString, write_uintle
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_TRAP_LIST, XML_TRAP, XML_TRAP__NAME, XML_TRAP__WEIGHT
+from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -100,12 +101,12 @@ class MappaTrapList(AutoString, XmlSerializable):
             validate_xml_attribs(child, [XML_TRAP__NAME, XML_TRAP__WEIGHT])
             name = child.get(XML_TRAP__NAME)
             if not hasattr(MappaTrapType, name):
-                raise XmlValidateError(f"Unknown trap {name}.")
+                raise XmlValidateError(f(_("Unknown trap {name}.")))
             weights[getattr(MappaTrapType, name)] = int(child.get(XML_TRAP__WEIGHT))
         try:
             return cls(weights)
         except ValueError as ex:
-            raise XmlValidateError("Trap lists need an entry for all of the 25 traps") from ex
+            raise XmlValidateError(_("Trap lists need an entry for all of the 25 traps")) from ex
 
     def __eq__(self, other):
         if not isinstance(other, MappaTrapList):

@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 
 NUM_PREVIOUS_ENTRIES = 600
@@ -35,6 +36,7 @@ PATCH_CODE_END_EU = 0xA54D8
 PATCH_CHECK_ADDR_APPLIED_EU = 0x1F74C
 PATCH_CHECK_INSTR_APPLIED_EU = 0xEA0000D4
 
+
 class AtupxSupportPatchHandler(AbstractPatchHandler):
 
     @property
@@ -43,7 +45,7 @@ class AtupxSupportPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Provide support for ATUPX containers, which use a different algorithm than PX compression.\nRequires the ActorAndLevelLoader, as it frees the space needed to implement this.'
+        return _('Provide support for ATUPX containers, which use a different algorithm than PX compression.\nRequires the ActorAndLevelLoader, as it frees the space needed to implement this.')
 
     @property
     def author(self) -> str:
@@ -73,11 +75,12 @@ class AtupxSupportPatchHandler(AbstractPatchHandler):
                     data = binary[PATCH_CODE_START_EU:PATCH_CODE_END_EU]
             for x in data:
                 if x!=0xff: #Check if every byte is 0xff
-                    raise RuntimeError("This patch can't be applied if ActorAndLevelLoader isn't applied.")
+                    raise RuntimeError(_("This patch can't be applied if ActorAndLevelLoader isn't applied."))
         
         try:
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

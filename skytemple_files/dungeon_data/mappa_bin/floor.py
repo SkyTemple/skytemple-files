@@ -26,6 +26,7 @@ from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
+from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -236,11 +237,11 @@ class MappaFloor(AutoString, XmlSerializable):
             elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2 and data['unk_items2'] is None:
                 data['unk_items2'] = MappaItemList.from_xml(child)
             else:
-                raise XmlValidateError(f'Floor parsing: Unexpected {child.tag}')
+                raise XmlValidateError(f(_('Floor parsing: Unexpected {child.tag}')))
 
         for k, v in data.items():
             if v is None:
-                raise XmlValidateError(f'Missing {k} for Floor data.')
+                raise XmlValidateError(f(_('Missing {k} for Floor data.')))
 
         return cls(**data)
 

@@ -17,6 +17,7 @@
 from typing import List
 
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
+from skytemple_files.common.i18n_util import f, _
 
 
 class DungeonValidatorError(BaseException):
@@ -33,19 +34,19 @@ class DungeonValidatorError(BaseException):
 class InvalidFloorListReferencedError(DungeonValidatorError):
     @property
     def name(self):
-        return 'Invalid Floor List'
+        return _('Invalid Floor List')
 
     def __str__(self):
-        return "References a dungeon floor list that doesn't exist."
+        return _("References a dungeon floor list that doesn't exist.")
 
 
 class InvalidFloorReferencedError(DungeonValidatorError):
     @property
     def name(self):
-        return 'Invalid Floor'
+        return _('Invalid Floor')
 
     def __str__(self):
-        return "References floor that is out of bounds in the floor list for this group."
+        return _("References floor that is out of bounds in the floor list for this group.")
 
 
 class FloorReusedError(DungeonValidatorError):
@@ -56,11 +57,11 @@ class FloorReusedError(DungeonValidatorError):
 
     @property
     def name(self):
-        return 'Re-uses Floor'
+        return _('Re-uses Floor')
 
     def __str__(self):
-        name = self.reused_of_dungeon_name if self.reused_of_dungeon_name is not None else f'dungeon {self.reused_of_dungeon_with_id}'
-        return f"Re-uses floors that are already used by {name}."
+        name = self.reused_of_dungeon_name if self.reused_of_dungeon_name is not None else f'{_("dungeon")} {self.reused_of_dungeon_with_id}'
+        return f(_("Re-uses floors that are already used by {name}."))
 
 
 class DungeonTotalFloorCountInvalidError(DungeonValidatorError):
@@ -81,7 +82,8 @@ class DungeonMissingFloorError(DungeonValidatorError):
 
     @property
     def name(self):
-        return 'Unused Floors'
+        return _('Unused Floors')
 
     def __str__(self):
-        return f"Has {len(self.floors_in_mappa_not_referenced)} extra floors in it's floor list, which are not assigned to any dungeon."
+        return f(_("Has {len(self.floors_in_mappa_not_referenced)} extra floors in it's floor list, "
+                   "which are not assigned to any dungeon."))

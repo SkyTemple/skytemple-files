@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
-import math
 import re
 import warnings
 from itertools import groupby
@@ -29,6 +28,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
+from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
@@ -307,7 +307,7 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
             break
 
     if not matched_edition:
-        raise ValueError("This ROM is not supported by SkyTemple.")
+        raise ValueError(_("This ROM is not supported by SkyTemple."))
 
     # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
     config = Pmd2XmlReader.load_default(matched_edition)
@@ -333,7 +333,7 @@ def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):
                 overlays = rom.loadArm9Overlays([ov_id])
                 if len(overlays) > 0:
                     return overlays[ov_id].data
-    raise ValueError(f"Binary {binary.filepath} not found.")
+    raise ValueError(f(_("Binary {binary.filepath} not found.")))
 
 
 def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: bytes):
@@ -355,7 +355,7 @@ def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: byte
                 if len(overlays) > 0:
                     rom.files[overlays[ov_id].fileID] = data
                     return
-    raise ValueError(f"Binary {binary.filepath} not found.")
+    raise ValueError(f(_("Binary {binary.filepath} not found.")))
 
 
 def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
@@ -365,10 +365,10 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     file_name = path_list[-1]
     folder: Folder = rom.filenames.subfolder(dir_name)
     if folder is None:
-        raise FileNotFoundError(f"Folder {dir_name} does not exist.")
+        raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
     folder_first_file_id = folder.firstID
     if file_name in folder.files:
-        raise FileExistsError(f"File {file_name} already exists in this folder.")
+        raise FileExistsError(f(_("File {file_name} already exists in this folder.")))
     index_of_new_file = bisect.bisect(folder.files, file_name)
     folder.files.insert(index_of_new_file, file_name)
 

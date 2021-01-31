@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'w\x00\x00\xaa')
 OFFSET_EU = 0x642C8
@@ -35,8 +36,8 @@ class UnusedDungeonChancePatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return "Fixes the 'Unusued' chance for dungeons. It now determines a chance that a room randomly has " \
-               "walls in it, with some of it replaced by secondary terrain."
+        return _("Fixes the 'Unusued' chance for dungeons. It now determines a chance that a room randomly has " \
+                 "walls in it, with some of it replaced by secondary terrain.")
 
     @property
     def author(self) -> str:

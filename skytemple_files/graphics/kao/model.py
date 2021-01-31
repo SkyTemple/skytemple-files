@@ -27,6 +27,7 @@ from typing import Union, Tuple
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
+from skytemple_files.common.i18n_util import f, _
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
@@ -155,7 +156,7 @@ class KaoIterator:
             try:
                 ret = self.kao.get(self.current_index, self.current_subindex)
             except ValueError as ex:
-                warnings.warn(f"Could not load KAO at {old_index},{old_subindex}: {ex}")
+                warnings.warn(f(_("Could not load KAO at {old_index},{old_subindex}: {ex}")))
             self.current_subindex += 1
             if self.current_subindex >= self.max_subindex:
                 self.current_index += 1
@@ -211,7 +212,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.width != img_dim or pil.height != img_dim:
-        raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
+        raise ValueError(f(_('Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')))
     if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
         pil = simple_quant(pil)
     new_palette = bytearray(pil.palette.palette)
@@ -248,9 +249,9 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
 
     new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
     if len(new_img_compressed)>800:
-        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
-                             f"If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
-                             f"which might be able to better compress this image.")
+        raise AttributeError(f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                                 "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                                 "which might be able to better compress this image.")))
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

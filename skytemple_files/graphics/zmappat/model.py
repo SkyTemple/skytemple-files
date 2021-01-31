@@ -27,14 +27,15 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.zmappat import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.i18n_util import f, _
 
 logger = logging.getLogger(__name__)
 
 
 class ZMappaTVariation(Enum):
-    SEMI_OPAQUE = 0x00, 'Semi-Opaque', "sopaque"
-    TRANSPARENT = 0x01, 'Transparent', "trans"
-    OPAQUE = 0x02, 'Opaque', "opaque"
+    SEMI_OPAQUE = 0x00, _('Semi-Opaque'), "sopaque"
+    TRANSPARENT = 0x01, _('Transparent'), "trans"
+    OPAQUE = 0x02, _('Opaque'), "opaque"
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -165,12 +166,12 @@ class ZMappaT(Sir0Serializable, AutoString):
     def from_pil(self, imgs: List[Image.Image], masks: List[Image.Image]) -> 'ZMappaT':
         """ Replace the tile/mask data by the new ones passed in argument. """
         if len(imgs) != ZMAPPAT_NB_VARIATIONS or len(masks) != ZMAPPAT_NB_VARIATIONS:
-            raise ValueError("Tile and masks list must have exactly 3 items")
+            raise ValueError(_("Tile and masks list must have exactly 3 items"))
         new_tiles = []
         new_masks = []
         for v in range(ZMAPPAT_NB_VARIATIONS):
             if imgs[v].mode != 'P' or masks[v].mode != 'P':
-                raise AttributeError('Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)')
+                raise AttributeError(_('Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)'))
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION):
                 x_tile = i % ZMAPPAT_NB_TILES_PER_LINE
                 y_tile = i // ZMAPPAT_NB_TILES_PER_LINE
@@ -186,12 +187,12 @@ class ZMappaT(Sir0Serializable, AutoString):
         """ Replace the tile/mask data by the new ones passed in argument.
         This is for the minimized version. """
         if len(imgs) != ZMAPPAT_NB_VARIATIONS or len(masks) != ZMAPPAT_NB_VARIATIONS:
-            raise ValueError("Tile and masks list must have exactly 3 items")
+            raise ValueError(_("Tile and masks list must have exactly 3 items"))
         new_tiles = []
         new_masks = []
         for v in range(ZMAPPAT_NB_VARIATIONS):
             if imgs[v].mode != 'P' or masks[v].mode != 'P':
-                raise AttributeError('Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)')
+                raise AttributeError(_('Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)'))
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION // 4):
                 x_tile = i % (ZMAPPAT_NB_TILES_PER_LINE // 2)
                 y_tile = i // (ZMAPPAT_NB_TILES_PER_LINE // 2)

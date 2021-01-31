@@ -19,6 +19,7 @@ from typing import Union, TypeVar, Iterable
 
 from skytemple_files.common.ppmdu_config.script_data import *
 from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant, DungeonModeConstants
+from skytemple_files.common.i18n_util import f, _
 
 PREFIX_DIRECTION = 'DIR_'
 PREFIX_PROCESS_SPECIAL = 'PROCESS_SPECIAL_'
@@ -71,7 +72,7 @@ class DungeonMode(Enum):
             return cls.REQUEST
         if string == 'OPEN_AND_REQUEST':
             return cls.OPEN_AND_REQUEST
-        raise ValueError(f"Invalid DungeonMode: {string}")
+        raise ValueError(f(_("Invalid DungeonMode: {string}")))
 
 
 class SsbScriptDirection(AutoString):
@@ -198,8 +199,8 @@ class SsbConstant(SsbOpParamConstant):
             elif constant_as_string.startswith(PREFIX_DMODE):
                 return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE):])
         except KeyError:
-            raise ValueError(f"Unknown constant {constant_as_string}.")
-        raise ValueError(f"Unknown constant {constant_as_string}.")
+            raise ValueError(f(_("Unknown constant {constant_as_string}.")))
+        raise ValueError(f(_("Unknown constant {constant_as_string}.")))
 
     @staticmethod
     def _cvrt_camel(string) -> str:

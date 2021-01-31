@@ -26,6 +26,7 @@ except ImportError:
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
+from skytemple_files.common.i18n_util import f, _
 
 BPA_PIXEL_BITLEN = 4
 BPA_TILE_DIM = 8
@@ -164,7 +165,7 @@ class Bpa:
             if first_image_dims is None:
                 first_image_dims = (image.width, image.height)
             if (image.width, image.height) != first_image_dims:
-                raise ValueError("The dimensions of all images must be the same.")
+                raise ValueError(_("The dimensions of all images must be the same."))
         self.tiles = []
         self.number_of_frames = len(frames)
         self.number_of_tiles = int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM))

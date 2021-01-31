@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 import math
+from skytemple_files.common.i18n_util import f, _
 
 try:
     from PIL import Image
@@ -89,8 +90,8 @@ class Dpc:
         palettes = palettes[:DPL_MAX_PAL]
         for tm in all_tilemaps:
             if tm.pal_idx > DPL_MAX_PAL - 1:
-                raise ValueError(f"The image to import can only use the first 12 palettes. "
-                                 f"Tried to use palette {tm.pal_idx}")
+                raise ValueError(f(_("The image to import can only use the first 12 palettes. "
+                                     "Tried to use palette {tm.pal_idx}")))
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
         self.re_fill_chunks()
         return tiles, palettes
@@ -125,6 +126,5 @@ class Dpc:
 
     def re_fill_chunks(self):
         if len(self.chunks) > 400:
-            raise ValueError("A dungeon background or tilemap can not have more than 400 chunks.")
+            raise ValueError(_("A dungeon background or tilemap can not have more than 400 chunks."))
         self.chunks += [[TilemapEntry.from_int(0) for _ in range(0, 9)]] * (400 - len(self.chunks))
-    

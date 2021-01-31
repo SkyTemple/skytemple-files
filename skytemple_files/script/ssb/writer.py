@@ -24,6 +24,7 @@ from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu, \
     SSB_HEADER_JP_LENGTH, SsbHeaderJp
 from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
+from skytemple_files.common.i18n_util import f, _
 logger = logging.getLogger(__name__)
 
 
@@ -130,7 +131,7 @@ class SsbWriter:
         previous_languages_block_sizes = 0
         string_lengths: Dict[str, int] = {}
         if len({len(i) for i in self.model.strings.values()}) != 1:
-            raise ValueError("Could not compile script: All languages must have the same amount of strings.")
+            raise ValueError(_("Could not compile script: All languages must have the same amount of strings."))
         for lang in header_cls.supported_langs():
             start_of_string_table = self.bytes_written
             string_table_bytes_written = 0

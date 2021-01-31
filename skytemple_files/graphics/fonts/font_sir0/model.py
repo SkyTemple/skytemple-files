@@ -25,6 +25,7 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.i18n_util import f, _
 try:
     from PIL import Image
 except ImportError:
@@ -78,7 +79,7 @@ class FontSir0Entry(AbstractFontEntry):
     @classmethod
     def from_pil(cls, img: Image.Image, char: int, table: int, width: int, cat: int, padding: int) -> 'FontSir0Entry':
         if img.mode!='P':
-            raise AttributeError("This must be a color indexed image!")
+            raise AttributeError(_("This must be a color indexed image!"))
         data = []
         raw_data = img.tobytes("raw", "P")
         for i in range(FONT_SIR0_DATA_LEN):

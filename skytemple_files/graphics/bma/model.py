@@ -28,6 +28,7 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
 from skytemple_files.graphics.bpl.model import Bpl, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
+from skytemple_files.common.i18n_util import f, _
 
 # Mask palette used for image composition
 MASK_PAL = [
@@ -443,12 +444,12 @@ class Bma:
         expected_height = self.tiling_height * self.map_height_chunks * BPC_TILE_DIM
         if (False if lower_img is None else lower_img.width != expected_width) \
                 or (False if upper_img is None else upper_img.width != expected_width):
-            raise ValueError(f"Can not import map background: Width of both images must match the current map width: "
-                             f"{expected_width}px")
+            raise ValueError(f(_("Can not import map background: Width of both images must match the current map width: "
+                                 "{expected_width}px")))
         if (False if lower_img is None else lower_img.height != expected_height) \
                 or (False if upper_img is None else upper_img.height != expected_height):
-            raise ValueError(f"Can not import map background: Height of both images must match the current map height: "
-                             f"{expected_height}px")
+            raise ValueError(f(_("Can not import map background: Height of both images must match the current map height: "
+                                 "{expected_height}px")))
         upper_palette_palette_color_offset = 0
         if upper_img is not None and lower_img is not None and how_many_palettes_lower_layer < BPL_MAX_PAL:
             # Combine palettes

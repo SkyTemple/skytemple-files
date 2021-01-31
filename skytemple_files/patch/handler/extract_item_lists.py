@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0xE1E0
 PATCH_CHECK_INSTR_APPLIED_US = 0xE1A00008
@@ -42,7 +43,7 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.'
+        return _('Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.')
 
     @property
     def author(self) -> str:
@@ -107,7 +108,7 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
                 while ranges[0][1]-ranges[0][0]<path_len:
                     del ranges[0]
                     if len(ranges)==0:
-                        raise RuntimeError("Don't have enough space to put filenames! ")
+                        raise RuntimeError(_("Don't have enough space to put filenames! "))
                 
                 rom.arm9 = rom.arm9[:ranges[0][0]]+path.encode(encoding="ascii")+bytes(path_len-len(path))+rom.arm9[ranges[0][0]+path_len:]
                 write_uintle(buffer, ARM9_START+ranges[0][0], i*4, 4)

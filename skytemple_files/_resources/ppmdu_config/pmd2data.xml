@@ -880,6 +880,13 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to extract dungeon data -->
+        <Patch id="ExtractDungeonData" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch that fixes the unused dungeon chance -->
         <Patch id="UnusedDungeonChancePatch" >
           <OpenBin filepath="overlay/overlay_0029.bin">

@@ -38,6 +38,7 @@ from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPatchHandler
+from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
@@ -50,6 +51,7 @@ class PatchType(Enum):
     SAME_TYPE_PARTNER = SameTypePartnerPatch
     SUPPORT_ATUPX = AtupxSupportPatchHandler
     EXTRACT_ITEM_LISTS = ExtractItemListsPatchHandler
+    EXTRACT_DUNGEON_DATA = ExtractDungeonDataPatchHandler
 
 
 class PatchPackageError(RuntimeError):

@@ -39,6 +39,7 @@ from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonCha
 from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPatchHandler
 from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
+from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
@@ -52,6 +53,7 @@ class PatchType(Enum):
     SUPPORT_ATUPX = AtupxSupportPatchHandler
     EXTRACT_ITEM_LISTS = ExtractItemListsPatchHandler
     EXTRACT_DUNGEON_DATA = ExtractDungeonDataPatchHandler
+    FIX_EVOLUTION = FixEvolutionPatchHandler
 
 
 class PatchPackageError(RuntimeError):

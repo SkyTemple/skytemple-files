@@ -848,6 +848,7 @@
       <!--###############################-->
       <!--Explorers of Sky-->
       <!--###############################-->
+      
       <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
         <!-- for JP the cmn_eos_jp.asm needs to be implemented to actually work! -->
 
@@ -884,6 +885,13 @@
         <Patch id="ExtractDungeonData" >
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract dungeon data -->
+        <Patch id="FixEvolutionGlitch" >
+          <OpenBin filepath="overlay/overlay_0016.bin">
+	  	<Include filename ="irdkwia_asm_mods/fix_evolution/patch.asm"/>
 	  </OpenBin>
         </Patch>
         

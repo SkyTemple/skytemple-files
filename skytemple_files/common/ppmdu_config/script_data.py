@@ -113,9 +113,10 @@ class Pmd2ScriptSpriteEffect(AutoString):
 
 
 class Pmd2ScriptBgm(AutoString):
-    def __init__(self, id: int, name: str):
+    def __init__(self, id: int, name: str, loops=False):
         self.id = id
         self.name = name
+        self.loops = loops
 
 
 class Pmd2ScriptLevel(AutoString):

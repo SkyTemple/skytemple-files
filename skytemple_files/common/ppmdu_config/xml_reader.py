@@ -304,7 +304,8 @@ class Pmd2XmlReader:
                     elif e.tag == 'BackgroundMusicIDs':
                         for i, e_bgm in enumerate(e):
                             bgms.append(Pmd2ScriptBgm(
-                                i, e_bgm.text
+                                i, e_bgm.text,
+                                self._xml_bool(e_bgm.attrib['loops']) if 'loops' in e_bgm.attrib else False
                             ))
                     ###########################
                     elif e.tag == 'LevelList':

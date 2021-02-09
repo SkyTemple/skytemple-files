@@ -895,6 +895,16 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to enable exp. share -->
+        <Patch id="AddExperienceShare" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch that fixes the unused dungeon chance -->
         <Patch id="UnusedDungeonChancePatch" >
           <OpenBin filepath="overlay/overlay_0029.bin">

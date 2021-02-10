@@ -11,6 +11,7 @@
 .definelabel IsExpEnabledInDungeon, 0x0205171C
 .definelabel GetLvlStats, 0x0205379C
 .definelabel HookSummary, 0x0205A588
+.definelabel EuclidianDivision, 0x0208FEA4
 .definelabel ExpShare, 0x02097DF8
 .definelabel ReadjustExpFunc, 0x02097DE8
 .definelabel SummaryFunc, 0x02097DDC
@@ -26,6 +27,8 @@
 .definelabel PartyPkmnNb, 0x22B
 .definelabel MaxLvl, 0x64
 .definelabel PartyPkmnSize, 0x44
+.definelabel PercentageShared, 0x64
+.definelabel MaxPercent, 0x64
 
 
 .org HookSummary
@@ -55,6 +58,15 @@
 	bl IsExpEnabledInDungeon
 	cmp r0, #0x0
 	beq end_loop
+	
+	; Add a percentage of exp shared
+	; Constant at ExpShare + 0x3C
+	mov r0, PercentageShared
+	mul r0, r9, r0
+	mov r1, MaxPercent
+	bl EuclidianDivision
+	movs r9, r0
+	beq end_loop ; Directly go to the end if the result is 0
 	
 	ldr r6,=PartyPkmnStructPtr
 	ldr r6,[r6, #+0x0]

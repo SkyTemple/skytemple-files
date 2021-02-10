@@ -41,7 +41,7 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
 
     @property
     def version(self) -> str:
-        return '0.0.2'
+        return '0.0.1'
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:

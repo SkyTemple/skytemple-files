@@ -7,7 +7,6 @@
 
 .definelabel HookLvlUpJump1, 0x0230323C
 .definelabel HookLvlUpJump2, 0x02059018
-.definelabel HookLvlUpJump3, 0x02051A54
 .definelabel HookLvlUpJump4, 0x0234BC9C
 .definelabel HookLvlUpJump5, 0x0234BC34
 .definelabel HookLvlUpJump6, 0x02300E38
@@ -53,7 +52,7 @@
 	cmp r0,MaxLvl
 	beq end_hook
 	ldr r0,[r13, #+0x8]
-	bl HookLvlUpJump3
+	bl IsExpEnabledInDungeon
 	cmp r0,#0x0
 	beq end_hook
 	ldr r0,[r9, #+0x20]

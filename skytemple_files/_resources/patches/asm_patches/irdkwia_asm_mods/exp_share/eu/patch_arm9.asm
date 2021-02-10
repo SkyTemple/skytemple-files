@@ -7,15 +7,19 @@
 
 .definelabel GetSpecialEpisode, 0x0204CC70
 .definelabel PartyPkmnStructPtr, 0x020B138C
+.definelabel IsLevel1Dungeon, 0x02051650
+.definelabel IsExpEnabledInDungeon, 0x02051A54
 .definelabel GetLvlStats, 0x02053B18
 .definelabel HookSummary, 0x0205A904
-.definelabel ExpShare, 0x02098234
-.definelabel ReadjustExpFunc, 0x02098224
-.definelabel SummaryFunc, 0x02098218
+.definelabel ExpShare, 0x020981F4
+.definelabel ReadjustExpFunc, 0x020981E4
+.definelabel SummaryFunc, 0x020981D8
 
 .definelabel ExpGainAll, 0x0230B238
 .definelabel ReadjustExp, 0x02303AE4
 .definelabel HookLvlUp, 0x02303224
+
+.definelabel DungeonDataStructPtr, 0x02354138
 
 ;.definelabel BuffRead, 0x0 ; Add it if it is even implemented
 
@@ -30,7 +34,7 @@
 .endarea
 
 .org ExpShare
-.area 0x80 ; Haven't really checked the size
+.area 0xC0 ; Haven't really checked the size
 	; Remove this area if you want ExpShare to be enabled during
 	; Special Episodes
 	bl GetSpecialEpisode
@@ -38,6 +42,20 @@
 	cmp r0,r1 ; Check the special episode value
 	bne end_loop
 	; End of the area to remove
+	
+	; No Exp. Share if it's a level 1 or no exp. dungeon
+	ldr r11,=DungeonDataStructPtr
+	ldr r11,[r11,#+0x0]
+	ldrb r11,[r11, #+0x748]
+	mov r0,r11
+	bl IsLevel1Dungeon
+	cmp r0, #0x0
+	bne end_loop
+	mov r0,r11
+	bl IsExpEnabledInDungeon
+	cmp r0, #0x0
+	beq end_loop
+	
 	ldr r3,=PartyPkmnStructPtr
 	ldr r3,[r3, #+0x0]
 	;ldr r11,=BuffRead

@@ -22,12 +22,12 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-PATCH_CODE_START_US = 0x97E1C
+PATCH_CODE_START_US = 0x97DDC
 PATCH_CODE_END_US = 0x97EB8
 PATCH_CHECK_ADDR_APPLIED_US = 0x5A588
 PATCH_CHECK_INSTR_APPLIED_US = 0xE0410000
 
-PATCH_CODE_START_EU = 0x98218
+PATCH_CODE_START_EU = 0x981D8
 PATCH_CODE_END_EU = 0x982B4
 PATCH_CHECK_ADDR_APPLIED_EU = 0x5A904
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE0410000
@@ -41,7 +41,9 @@ class ExpSharePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Implements shared experience points between all members (GtI style). This is disabled during Special Episodes. \nNeeds the ExtractDungeonData patch to be applied to free some space used by this.'
+        return 'Implements shared experience points between all members (GtI style). \n' \
+                'This is disabled during Special Episodes and dungeons with level 1 or no exp. restrictions. \n' \
+                'Needs the ExtractDungeonData patch to be applied to free some space used by this.'
 
     @property
     def author(self) -> str:

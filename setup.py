@@ -36,7 +36,7 @@ setup(
         'ndspy >= 3.0.0',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
-        'explorerscript >= 0.0.7',
+        'explorerscript >= 0.1.0',
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',

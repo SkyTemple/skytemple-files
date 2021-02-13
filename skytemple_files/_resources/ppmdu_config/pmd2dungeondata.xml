@@ -50,7 +50,7 @@
         <BinPackFile idxfirst="1019"                type="WTU"                       name="1018.wtu"/>
         <BinPackFile idxfirst="1020"                type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1021"                type="WTU"                       name="1020.wtu"/>
-        <BinPackFile idxfirst="1022"                type="DBIN_IMAGE_1022"           name="%d.img1022"/>
+        <BinPackFile idxfirst="1022"                type="DBIN_SIR0_IMG_ITM"         name="items.itm.img"/>
         <BinPackFile idxfirst="1023"                type="SIR0"                      name="%d.sir0"/>
         <BinPackFile idxfirst="1024" idxlast="1025" type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1026" idxlast="1027" type="BGP"                       name="%d.bgp"/>
@@ -61,8 +61,8 @@
         <BinPackFile idxfirst="1030"                type="DPL"                       name="%d.dpl"/>
         <BinPackFile idxfirst="1031"                type="WTE"                       name="%d.wte"/>
         <BinPackFile idxfirst="1032"                type="WTU"                       name="1031.wtu"/>
-        <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMAGE_1033"      name="%d.img1033.sir0"/>
-        <BinPackFile idxfirst="1034"                type="DBIN_SIR0_COLVEC"      	name="colormap.colvec"/>
+        <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMG_TRP"         name="traps.trp.img"/>
+        <BinPackFile idxfirst="1034"                type="DBIN_SIR0_COLVEC"          name="colormap.colvec"/>
         <BinPackFile idxfirst="1035"                type="DBIN_SIR0_ZMAPPAT"         name="minimap.zmappat"/>
       </DungeonBinFiles>
 

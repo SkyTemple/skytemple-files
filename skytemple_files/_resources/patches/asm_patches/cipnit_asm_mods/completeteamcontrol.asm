@@ -217,8 +217,7 @@
 	mov r1,1h
 	strb r1,[r0,7h]
 	str r6,[r5]
-	pop r0
-	bx r0
+	pop r15
 
 @Change_Leader:	;Before the turns of partners are executed, if manual mode is on, this code either changes control to your next pokemon and jumps back to the start of the round function, or, if your last pokemon moved, it changes control to your first pokemon, then skips the turns of partners. 
 	push r14

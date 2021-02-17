@@ -46,7 +46,7 @@
 	bl @EquipPenalty	;original: ldrb r0,[r9,7h]
 
 .org NA_022F499C	;All of the above also applies to taking items from pokemon
-	bl @DequipPenalty	;original: ldrb r0,[r5,7h]
+	bl @EquipPenalty	;original: ldrb r0,[r5,7h]
 
 .close
 
@@ -63,7 +63,8 @@
 @ManualModeOn:
 	.byte 0h
 @ModeSwitchTimer:
-	.byte 0h,0h,0h
+	.byte 0h
+	.align 4
 @CurrentLeader:
 	.word 0h
 
@@ -74,7 +75,7 @@
 	.align 4
 
 @Mode_Switch:	;Switches modes when you press start on the leader's turn
-	push r1-r5,r14
+	push r1-r5,r12,r14
 	ldr r1,=@ModeSwitchTimer
 	ldrb r2,[r1]
 	cmp r2,0h
@@ -111,24 +112,13 @@
 	mov r0,r4
 	mov r2,1h
 	mov r3,0h
-	mov r5,r12	;i don't know if it's ok to do this
 	bl NA_0234B508	;this function puts a message in the dialogue
-	mov r12,r5
 	mov r0,0h
 @@modeswitch_return:
-	pop r1-r5,r15
+	pop r1-r5,r12,r15
 .pool
 
 @EquipPenalty:
-	ldr r0,=@CurrentLeader
-	ldr r0,[r0]
-	cmp r0,r4
-	mov r0,0h
-	moveq r0,1h
-	bx r14
-.pool
-
-@DequipPenalty:
 	ldr r0,=@CurrentLeader
 	ldr r0,[r0]
 	cmp r0,r4
@@ -202,8 +192,7 @@
 	ldr r1,[r4,0B4h]	;r4 has the current pokemon's entity address
 	ldrh r2,[r1]
 	mov r3,4000h
-	and r3,r2,r3
-	cmp r3,0h
+	tst r2,r3
 	movne r0,0h
 	subne r2,r2,r3
 	strh r2,[r1]

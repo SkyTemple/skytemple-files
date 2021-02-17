@@ -874,6 +874,13 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to extract move code -->
+        <Patch id="ExtractMoveCode" >
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_move_code/selector_overlay29.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to extract hardcoded item lists -->
         <Patch id="ExtractHardcodedItemLists" >
           <OpenBin filepath="arm9.bin">

@@ -41,6 +41,7 @@ from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPat
 from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
 from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
+from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
@@ -56,6 +57,7 @@ class PatchType(Enum):
     EXTRACT_DUNGEON_DATA = ExtractDungeonDataPatchHandler
     FIX_EVOLUTION = FixEvolutionPatchHandler
     EXP_SHARE = ExpSharePatchHandler
+    EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
 
 
 class PatchPackageError(RuntimeError):

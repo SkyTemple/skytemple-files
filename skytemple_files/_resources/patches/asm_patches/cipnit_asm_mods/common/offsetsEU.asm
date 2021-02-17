@@ -1,6 +1,5 @@
 
 ov_36 equ 023A7080h	;CHANGE THIS IF END45'S OVERLAY IS CHANGED
-CompleteTeamControl_RAMPosition equ FILL THIS IN
 
 ov_29 equ 022DCB80h
 .definelabel NA_022EB408, 022EBDB8h	;Function - team submenu option recorder

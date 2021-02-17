@@ -296,5 +296,5 @@ roundover:
 	bl NA_022EC094		;skipping the turns of partners
 .pool
 
-
+	.endarea
 .close

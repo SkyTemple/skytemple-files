@@ -66,10 +66,11 @@
 @CurrentLeader:
 	.word 0h
 
-@Message_SetToAuto:   ;[CS:S]Control mode set to[CR] [CS:C]automatic[CR][CS:S].[CR]
-	.byte 5Bh, 43h, 53h, 3Ah, 53h, 5Dh, 43h, 6Fh, 6Eh, 74h, 72h, 6Fh, 6Ch, 20h, 6Dh, 6Fh, 64h, 65h, 20h, 73h, 65h, 74h, 20h, 74h, 6Fh, 5Bh, 43h, 52h, 5Dh, 20h, 5Bh, 43h, 53h, 3Ah, 43h, 5Dh, 61h, 75h, 74h, 6Fh, 6Dh, 61h, 74h, 69h, 63h, 5Bh, 43h, 52h, 5Dh, 5Bh, 43h, 53h, 3Ah, 53h, 5Dh, 2Eh, 5Bh, 43h, 52h, 5Dh, 00, 00, 00, 00
-@Message_SetToManual: ;[CS:S]Control mode set to[CR] [CS:E]manual[CR][CS:S].[CR]
-	.byte 5Bh, 43h, 53h, 3Ah, 53h, 5Dh, 43h, 6Fh, 6Eh, 74h, 72h, 6Fh, 6Ch, 20h, 6Dh, 6Fh, 64h, 65h, 20h, 73h, 65h, 74h, 20h, 74h, 6Fh, 5Bh, 43h, 52h, 5Dh, 20h, 5Bh, 43h, 53h, 3Ah, 45h, 5Dh, 6Dh, 61h, 6Eh, 75h, 61h, 6Ch, 5Bh, 43h, 52h, 5Dh, 5Bh, 43h, 53h, 3Ah, 53h, 5Dh, 2Eh, 5Bh, 43h, 52h, 5Dh, 00, 00, 00, 00, 00, 00, 00
+@Message_SetToAuto:
+	.ascii "[CS:S]Control mode set to[CR] [CS:C]automatic[CR][CS:S].[CR]", 0
+@Message_SetToManual:
+	.ascii "[CS:S]Control mode set to[CR] [CS:E]manual[CR][CS:S].[CR]", 0
+	.align 4
 
 @Mode_Switch:	;Switches modes when you press start on the leader's turn
 	push r1-r5,r14

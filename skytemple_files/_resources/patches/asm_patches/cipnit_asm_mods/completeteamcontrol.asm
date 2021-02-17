@@ -292,7 +292,7 @@ roundover:
 	pop r0-r12
 	add r13,r13,4h
 	mov r3,0h
-	bl NA_022EC094		;skipping the turns of partners
+	b NA_022EC094		;skipping the turns of partners
 .pool
 
 	.endarea

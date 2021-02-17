@@ -57,7 +57,8 @@
 
 
 .open "overlay_0036.bin", ov_36
-.org CompleteTeamControl_RAMPosition
+.orga 0x10
+.area 3F0h - 10h
 
 @ManualModeOn:
 	.byte 0h

@@ -275,7 +275,7 @@ find:
 	mov r1,r2
 	mov r8,0h
 	ldr r12,=NA_02301D10
-	bl NA_022EBD10		;jumping to the start of the round function
+	b NA_022EBD10		;jumping to the start of the round function
 roundover:
 	mov r6,r8
 	bl @leaderchanger	;first pokemon gets to be the leader again

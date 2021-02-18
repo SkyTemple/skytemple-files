@@ -47,7 +47,6 @@ class FarOffPalOverdrive(AbstractPatchHandler):
     def version(self) -> str:
         return '0'
 
-
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
@@ -56,7 +55,6 @@ class FarOffPalOverdrive(AbstractPatchHandler):
             if config.game_region == GAME_REGION_EU:
                 return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
-
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         apply()

@@ -28,7 +28,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 #This isn't just about checking if my mod is applied - this is also important for checking if this mod will interfere with other mods already installed to the ROM.
 ov29EU = 0x022DCB80
 ov29US = 0x022DC240
-totalchecks = 7
+totaloverlay29checks = 6
 
 CHECK_EU[0] = 0x022F2894 -ov29EU   #where the game checks if you're pressing start
 CHECK_US[0] = 0x022F1EE0 -ov29US
@@ -55,7 +55,7 @@ CHECK_US[5] = 0x0230506C -ov29US
 BYTES_EU[5] = bytes(b'\xFE\x17\xD0\xE1')
 BYTES_US[5] = BYTES_EU[5]
 CHECK_EU[6] = 0x02388154 -0x02383420   #Jump to team submenu option recorder function
-CHECK_US[6] = 0x02387530 -0x02382820
+CHECK_US[6] = 0x02387530 -0x02382820   #this is in overlay 31
 BYTES_EU[6] = bytes(b'\x17\x8F\xFD\xEB')
 BYTES_US[6] = bytes(b'\xB4\x8F\xFD\xEB')
 
@@ -83,14 +83,18 @@ class CompleteTeamControl(AbstractPatchHandler):
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                for x < totalchecks:
+                for x < totaloverlay29checks:
                     if overlay29[CHECK_US[x]:CHECK_US[x]+4] != BYTES_US[x]
                         return 1
+                if overlay31[CHECK_US[6]:CHECK_US[6]+4] != BYTES_US[6]
+                    return 1
                 return 0
             if config.game_region == GAME_REGION_EU:
-                for x < totalchecks:
+                for x < totaloverlay29checks:
                     if overlay29[CHECK_EU[x]:CHECK_EU[x]+4] != BYTES_EU[x]
                         return 1
+                if overlay31[CHECK_EU[6]:CHECK_EU[6]+4] != BYTES_EU[6]
+                    return 1
                 return 0
         raise NotImplementedError()
 

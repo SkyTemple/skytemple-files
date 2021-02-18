@@ -41,10 +41,10 @@ from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPat
 from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
 from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
-from skytemple_files.patch.handler.CompleteTeamControl import CompleteTeamControl
-from skytemple_files.patch.handler.FarOffPalOverdrive import FarOffPalOverdrive
-from skytemple_files.patch.handler.PartnersTriggerHiddenTraps import PartnersTriggerHiddenTraps
-from skytemple_files.patch.handler.ReduceJumpcutPauseTime import ReduceJumpcutPauseTime
+from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
+from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
+from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
+from skytemple_files.patch.handler.reduce_jumpcut_pause_time import ReduceJumpcutPauseTime
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 

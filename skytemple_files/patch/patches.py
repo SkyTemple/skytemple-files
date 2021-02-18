@@ -33,6 +33,7 @@ from skytemple_files.patch.arm_patcher import ArmPatcher
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
 from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
+from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
@@ -64,6 +65,7 @@ class PatchType(Enum):
     FAR_OFF_PAL_OVERDRIVE = FarOffPalOverdrive
     PARTNERS_TRIGGER_HIDDEN_TRAPS = PartnersTriggerHiddenTraps
     REDUCE_JUMPCUT_PAUSE_TIME = ReduceJumpcutPauseTime
+    EXTRA_SPACE = ExtraSpacePatch
 
 
 class PatchPackageError(RuntimeError):

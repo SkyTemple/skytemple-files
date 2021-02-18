@@ -33,7 +33,7 @@ class FarOffPalOverdrive(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'Far-Off Pal Overdrive'
+        return 'FarOffPalOverdrive'
 
     @property
     def description(self) -> str:

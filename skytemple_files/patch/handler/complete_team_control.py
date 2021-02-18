@@ -21,7 +21,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 # This isn't just about checking if my mod is applied - this is also important for checking if this mod will interfere with other mods already installed to the ROM.
 ov29EU = 0x022DCB80
@@ -66,7 +66,7 @@ class CompleteTeamControl(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'Complete Team Control'
+        return 'CompleteTeamControl'
 
     @property
     def description(self) -> str:

@@ -33,7 +33,7 @@ class ReduceJumpcutPauseTime(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'Reduce Jumpcut Pause Time'
+        return 'ReduceJumpcutPauseTime'
 
     @property
     def description(self) -> str:

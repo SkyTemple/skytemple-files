@@ -957,29 +957,29 @@
           </Replace>
         </SimplePatch>
 
-	<SimplePatch id="FarOffPalOverdrive">
-		  <Include filename="cipnit_asm_mods/faroffpaloverdrive.asm"/>
-		  <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
-		    <Game id="EoS_NA" replace='_REGION equ "US"' />
-		    <Game id="EoS_EU" replace='_REGION equ "EU"' />
-		  </Replace>
-		</SimplePatch>
+        <SimplePatch id="FarOffPalOverdrive">
+          <Include filename="cipnit_asm_mods/faroffpaloverdrive.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
 
-	<SimplePatch id="PartnersTriggerHiddenTraps">
-		  <Include filename="cipnit_asm_mods/partnerstriggerhiddentraps.asm"/>
-		  <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
-		    <Game id="EoS_NA" replace='_REGION equ "US"' />
-		    <Game id="EoS_EU" replace='_REGION equ "EU"' />
-		  </Replace>
-		</SimplePatch>
+        <SimplePatch id="PartnersTriggerHiddenTraps">
+          <Include filename="cipnit_asm_mods/partnerstriggerhiddentraps.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
 
-	<SimplePatch id="ReduceJumpcutPauseTime">
-		  <Include filename="cipnit_asm_mods/reducejumpcutpausetime.asm"/>
-		  <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
-		    <Game id="EoS_NA" replace='_REGION equ "US"' />
-		    <Game id="EoS_EU" replace='_REGION equ "EU"' />
-		  </Replace>
-		</SimplePatch>
+        <SimplePatch id="ReduceJumpcutPauseTime">
+          <Include filename="cipnit_asm_mods/reducejumpcutpausetime.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
 
       </Game>
     </Patches>

@@ -285,6 +285,8 @@
         <Block name="DungeonDebugMenu" beg="0xE0C" end="0xE34"/>
       </Bin>
       <Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BCA80"/>
+      <!-- THIS IS END45'S 'EXTRA SPACE' OVERLAY. IT REQUIRES THE 'ExtraSpace' PATCH -->
+      <Bin filepath="overlay/overlay_0036.bin" loadaddress="0x023A7080"/>
     </Game>
 
     <!--Europe-->
@@ -491,6 +493,8 @@
         <Block name="DungeonDebugMenu" beg="0xD74" end="0xD9C"/>
       </Bin>
       <Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BD3C0"/>
+      <!-- THIS IS END45'S 'EXTRA SPACE' OVERLAY. IT REQUIRES THE 'ExtraSpace' PATCH -->
+      <Bin filepath="overlay/overlay_0036.bin" loadaddress="0x023A7080"/>
     </Game>
 
     <!--Japan-->

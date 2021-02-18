@@ -82,6 +82,7 @@ class CompleteTeamControl(AbstractPatchHandler):
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay31 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0031.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 x = 0

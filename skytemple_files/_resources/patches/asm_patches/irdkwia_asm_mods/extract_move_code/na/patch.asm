@@ -2,7 +2,8 @@
 ; 2021/02/14
 ; For Explorers of Sky NA Only
 ; ------------------------------------------------------------------------------
-; Use filestreams to load move effects code ------------------------------------------------------------------------------
+; Use filestreams to load move effects code
+; ------------------------------------------------------------------------------
 
 .definelabel StartTable, 0x0232F8A0
 .definelabel StartMFunc, 0x02330134
@@ -12,12 +13,23 @@
 .definelabel BufferRead, FileName - 0x8
 .definelabel CachedValue, BufferRead - 0x4
 
+.definelabel InvalidateInstructionCache, 0x0207A324
+.definelabel InvalidateAndCleanDataCache, 0x0207A270
 
 .org StartTable
 .area CachedValue-StartTable
 	mov r1,#0x1
 	strb r1,[r5, #+0x162]
 	stmdb  r13!,{r5,r7,r8}
+	
+	; Bonjour, est-ce que vous connaissez le C-A-C-H-E ?
+	bl InvalidateInstructionCache
+	bl InvalidateAndCleanDataCache
+	mov  r0,#0x0
+	mcr p15,0,r0,c7,c5,4
+	mcr p15,0,r0,c7,c5,6
+	mcr p15,0,r0,c7,c0,4
+	
 	ldr r5, =CachedValue
 	ldr r0, [r5, #+0x0]
 	cmp r0,r6
@@ -60,7 +72,7 @@ read_code:
 	mov r2,#0x8
 	bl FStreamRead
 	
-	; Get the mission floor byte
+	; Read the code
 	mov r0,r7
 	ldr r1,[r8, #+0x0]
 	mov r2,#0x0
@@ -75,6 +87,15 @@ read_code:
 	bl FStreamClose
 	bl FStreamDealloc
 end_read_code:
+
+	; Non mais, est-ce que vous connaissez VRAIMENT le C-A-C-H-E ?
+	bl InvalidateInstructionCache
+	bl InvalidateAndCleanDataCache
+	mov  r0,#0x0
+	mcr p15,0,r0,c7,c5,4
+	mcr p15,0,r0,c7,c5,6
+	mcr p15,0,r0,c7,c0,4
+	
 	ldmia  r13!,{r5,r7,r8}
 	b StartMFunc
 	.pool

@@ -65,10 +65,14 @@ class PatchType(Enum):
     FAR_OFF_PAL_OVERDRIVE = FarOffPalOverdrive
     PARTNERS_TRIGGER_HIDDEN_TRAPS = PartnersTriggerHiddenTraps
     REDUCE_JUMPCUT_PAUSE_TIME = ReduceJumpcutPauseTime
-    EXTRA_SPACE = ExtraSpacePatch
+    #EXTRA_SPACE = ExtraSpacePatch
 
 
 class PatchPackageError(RuntimeError):
+    pass
+
+
+class PatchDependencyError(RuntimeError):
     pass
 
 
@@ -105,10 +109,12 @@ class Patcher:
             for patch_name in patch.depends_on():
                 try:
                     if not self.is_applied(patch_name):
-                        raise ValueError(f"The patch '{patch_name}' needs to be applied before you can apply '{name}'.")
+                        raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
+                                                   f"apply '{name}'.")
                 except ValueError as err:
-                    raise ValueError(f"The patch '{patch_name}' needs to be applied before you can apply '{name}'. "
-                                     f"This patch could not be found.") from err
+                    raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
+                                               f"apply '{name}'. "
+                                               f"This patch could not be found.") from err
         patch.apply(
             partial(self._apply_armips, name),
             self._rom, self._config

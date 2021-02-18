@@ -37,8 +37,8 @@ class TilemapEntry:
         self.idx = idx
         if idx > 0x3FF and not ignore_too_large:
             raise ValueError(f(_("Tile Mapping can not be processed. The tile number referenced ({idx}) is bigger "
-                                 f"than the maximum ({0x3FF}). If you are importing an image, please try to have "
-                                 f"less unique tiles.")))
+                                 "than the maximum ({0x3FF}). If you are importing an image, please try to have "
+                                 "less unique tiles.")))
         self.flip_x = flip_x
         self.flip_y = flip_y
         self.pal_idx = pal_idx

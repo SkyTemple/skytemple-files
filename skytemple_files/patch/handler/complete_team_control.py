@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -62,7 +62,7 @@ BYTES_EU[6] = bytes(b'\x17\x8F\xFD\xEB')
 BYTES_US[6] = bytes(b'\xB4\x8F\xFD\xEB')
 
 
-class CompleteTeamControl(AbstractPatchHandler):
+class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -79,6 +79,9 @@ class CompleteTeamControl(AbstractPatchHandler):
     @property
     def version(self) -> str:
         return '1.2'
+
+    def depends_on(self) -> List[str]:
+        return ['ExtraSpace']
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])

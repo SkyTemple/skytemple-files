@@ -30,7 +30,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2AsmPatchesCon
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2AsmPatchesConstantsXmlReader
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
 from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
 from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
@@ -100,7 +100,16 @@ class Patcher:
     def apply(self, name: str):
         if name not in self._loaded_patches:
             raise ValueError(f"The patch '{name}' was not found.")
-        self._loaded_patches[name].apply(
+        patch = self._loaded_patches[name]
+        if isinstance(patch, DependantPatch):
+            for patch_name in patch.depends_on():
+                try:
+                    if not self.is_applied(patch_name):
+                        raise ValueError(f"The patch '{patch_name}' needs to be applied before you can apply '{name}'.")
+                except ValueError as err:
+                    raise ValueError(f"The patch '{patch_name}' needs to be applied before you can apply '{name}'. "
+                                     f"This patch could not be found.") from err
+        patch.apply(
             partial(self._apply_armips, name),
             self._rom, self._config
         )

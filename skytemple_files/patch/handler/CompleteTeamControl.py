@@ -83,17 +83,21 @@ class CompleteTeamControl(AbstractPatchHandler):
         overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                for x < totaloverlay29checks:
-                    if overlay29[CHECK_US[x]:CHECK_US[x]+4] != BYTES_US[x]
+                x=0
+                while x < totaloverlay29checks:
+                    if overlay29[CHECK_US[x]:CHECK_US[x]+4] != BYTES_US[x]:
                         return 1
-                if overlay31[CHECK_US[6]:CHECK_US[6]+4] != BYTES_US[6]
+                    x+=1
+                if overlay31[CHECK_US[6]:CHECK_US[6]+4] != BYTES_US[6]:
                     return 1
                 return 0
             if config.game_region == GAME_REGION_EU:
-                for x < totaloverlay29checks:
-                    if overlay29[CHECK_EU[x]:CHECK_EU[x]+4] != BYTES_EU[x]
+                x=0
+                while x < totaloverlay29checks:
+                    if overlay29[CHECK_EU[x]:CHECK_EU[x]+4] != BYTES_EU[x]:
                         return 1
-                if overlay31[CHECK_EU[6]:CHECK_EU[6]+4] != BYTES_EU[6]
+                    x+=1
+                if overlay31[CHECK_EU[6]:CHECK_EU[6]+4] != BYTES_EU[6]:
                     return 1
                 return 0
         raise NotImplementedError()

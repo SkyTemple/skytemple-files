@@ -14,59 +14,50 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
 from typing import Callable
 
-from skytemple_files.common.util import *
+from ndspy.rom import NintendoDSRom
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-
-NUM_PREVIOUS_ENTRIES = 600
-
-
-PATCH_CODE_START_US = 0xA48F8
-PATCH_CODE_END_US = 0x0A4ED8
-PATCH_CHECK_ADDR_APPLIED_US = 0x1F6B0
-PATCH_CHECK_INSTR_APPLIED_US = 0xEA0000D4
-PATCH_CODE_START_EU = 0xA4EF8
-PATCH_CODE_END_EU = 0xA54D8
-PATCH_CHECK_ADDR_APPLIED_EU = 0x1F74C
-PATCH_CHECK_INSTR_APPLIED_EU = 0xEA0000D4
+from skytemple_files.common.util import get_binary_from_rom_ppmdu
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 
-class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
+ORIGINAL_BYTESEQ = bytes(b'\x3C\x00\x50\xE3')
+OFFSET_EU = 0x022FA32C -0x022DCB80
+OFFSET_US = 0x022F9920 -0x022DC240
+
+
+class ReduceJumpcutPauseTime(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'ProvideATUPXSupport'
+        return 'ReduceJumpcutPauseTime'
 
     @property
     def description(self) -> str:
-        return 'Provide support for ATUPX containers, which use a different algorithm than PX compression.\nRequires the ActorAndLevelLoader, as it frees the space needed to implement this.'
+        return 'Reduces the amount of time the game pauses for before changing the PoV when far-off pals is enabled, from 60 frames to 12. This is already applied in the CTC hack.'
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Cipnit'
 
     @property
     def version(self) -> str:
-        return '0.0.1'
-
-    def depends_on(self) -> List[str]:
-        return ['ActorAndLevelLoader']
+        return '1'
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED_US
+                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED_EU
+                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        try:
-            apply()
-        except RuntimeError as ex:
-            raise ex
+        apply()
 
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

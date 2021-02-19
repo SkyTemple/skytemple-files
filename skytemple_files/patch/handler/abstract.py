@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -79,4 +79,14 @@ class AbstractPatchHandler(ABC):
         TODO: Not supported yet. For future implementation.
         See apply method for info on how it will work.
         May raise NotImplementedError, if not supported.
+        """
+
+
+class DependantPatch(ABC):
+    """Extra interface to be implemented by patches that require other patches to be applied first."""
+
+    @abstractmethod
+    def depends_on(self) -> List[str]:
+        """
+        A list of patches (names) that need to be applied before this patch can be applied.
         """

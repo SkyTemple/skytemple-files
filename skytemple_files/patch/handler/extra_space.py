@@ -41,11 +41,9 @@ class ExtraSpacePatch(AbstractPatchHandler):
         return '0.1.0'
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        # TODO
-        raise NotImplementedError()
+        return 36 in rom.loadArm9Overlays([36])
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        # Apply the patch
         apply()
 
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):

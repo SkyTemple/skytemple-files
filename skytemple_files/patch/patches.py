@@ -65,7 +65,7 @@ class PatchType(Enum):
     FAR_OFF_PAL_OVERDRIVE = FarOffPalOverdrive
     PARTNERS_TRIGGER_HIDDEN_TRAPS = PartnersTriggerHiddenTraps
     REDUCE_JUMPCUT_PAUSE_TIME = ReduceJumpcutPauseTime
-    #EXTRA_SPACE = ExtraSpacePatch
+    EXTRA_SPACE = ExtraSpacePatch
 
 
 class PatchPackageError(RuntimeError):

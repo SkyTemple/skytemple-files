@@ -948,6 +948,14 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
           </Replace>
         </SimplePatch>
+
+        <SimplePatch id="ExtraSpace">
+          <Include filename="end_asm_mods/src/ExtraSpace.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
 	      
 	      <SimplePatch id="CompleteTeamControl">
           <Include filename="cipnit_asm_mods/completeteamcontrol.asm"/>

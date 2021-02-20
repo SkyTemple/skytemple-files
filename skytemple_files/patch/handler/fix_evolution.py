@@ -21,9 +21,11 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.util import _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x2B48
 PATCH_CHECK_INSTR_APPLIED_US = 0xEBF2611C
+
 
 class FixEvolutionPatchHandler(AbstractPatchHandler):
 
@@ -33,7 +35,7 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters.'
+        return _('Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters.')
 
     @property
     def author(self) -> str:
@@ -54,5 +56,6 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

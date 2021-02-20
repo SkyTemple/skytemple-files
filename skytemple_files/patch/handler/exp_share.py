@@ -19,6 +19,7 @@ from typing import Callable
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.common.util import _
 
 PATCH_CODE_START_US = 0x97DDC
 PATCH_CODE_END_US = 0x97EB8
@@ -39,9 +40,9 @@ class ExpSharePatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return 'Implements shared experience points between all members (GtI style). \n' \
-                'This is disabled during Special Episodes and dungeons with level 1 or no exp. restrictions. \n' \
-                'Needs the ExtractDungeonData patch to be applied to free some space used by this.'
+        return _('Implements shared experience points between all members (GtI style). \n'
+                 'This is disabled during Special Episodes and dungeons with level 1 or no exp. restrictions. \n'
+                 'Needs the ExtractDungeonData patch to be applied to free some space used by this.')
 
     @property
     def author(self) -> str:

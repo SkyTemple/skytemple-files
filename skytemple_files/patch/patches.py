@@ -110,12 +110,12 @@ class Patcher:
             for patch_name in patch.depends_on():
                 try:
                     if not self.is_applied(patch_name):
-                        raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
-                                                   f"apply '{name}'.")
+                        raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
+                                                       "apply '{name}'.")))
                 except ValueError as err:
-                    raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
-                                               f"apply '{name}'. "
-                                               f"This patch could not be found.") from err
+                    raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
+                                                   "apply '{name}'. "
+                                                   "This patch could not be found."))) from err
         patch.apply(
             partial(self._apply_armips, name),
             self._rom, self._config

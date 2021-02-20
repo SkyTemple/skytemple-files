@@ -22,6 +22,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.common.util import _
 
 # This isn't just about checking if my mod is applied - this is also important for checking if this mod will interfere with other mods already installed to the ROM.
 ov29EU = 0x022DCB80
@@ -70,7 +71,7 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return 'Pressing start in a dungeon toggles between automatic and manual mode. In manual mode, you can control your partners on their turns. You must apply the extra code overlay made by End45 before applying this patch.'
+        return _('Pressing start in a dungeon toggles between automatic and manual mode. In manual mode, you can control your partners on their turns. You must apply the extra code overlay made by End45 before applying this patch.')
 
     @property
     def author(self) -> str:

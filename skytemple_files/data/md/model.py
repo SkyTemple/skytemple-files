@@ -354,7 +354,7 @@ class Md:
                 'unk18': rs(0x2D, 1),
                 'shadow_size': ShadowSize(rs(0x2E, 1)),
                 'chance_spawn_asleep': rs(0x2F, 1),
-                'hp_regeneration': rs(0x30, 1),
+                'hp_regeneration': ru(0x30, 1),
                 'unk21_h': rs(0x31, 1),
                 'base_form_index': rs(0x32),
                 'exclusive_item1': rs(0x34),

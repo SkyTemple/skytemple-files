@@ -52,6 +52,8 @@ from skytemple_files.graphics.dpc.handler import DpcHandler
 from skytemple_files.graphics.dpci.handler import DpciHandler
 from skytemple_files.graphics.dpl.handler import DplHandler
 from skytemple_files.graphics.dpla.handler import DplaHandler
+from skytemple_files.graphics.img_itm.handler import ImgItmHandler
+from skytemple_files.graphics.img_trp.handler import ImgTrpHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.compression_container.common_at.handler import CommonAtHandler
 from skytemple_files.compression_container.at3px.handler import At3pxHandler
@@ -167,6 +169,8 @@ class FileType:
     DBIN_SIR0_WEIRD_DATA_FILE = DbinSir0WeirdDataFileHandler
     DBIN_SIR0_IMAGE_1033 = DbinSir0Image1033Handler
     DBIN_SIR0_COLVEC = ColvecHandler
+    DBIN_SIR0_IMG_ITM = ImgItmHandler
+    DBIN_SIR0_IMG_TRP = ImgTrpHandler
     DBIN_SIR0_ZMAPPAT = ZMappaTHandler
 
     # Please don't use these directly, use them via the ppmdu_config instead!

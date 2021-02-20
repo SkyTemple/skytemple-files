@@ -1209,104 +1209,104 @@
       <BackgroundMusicIDs>
         <Bgm>Nothing0</Bgm>
         <Bgm>PokemonExplorationTeamTheme</Bgm>
-        <Bgm>TopMenuTheme</Bgm>
-        <Bgm>MarowakDojo</Bgm>
-        <Bgm>TheGatekeepers</Bgm>
+        <Bgm loops="true">TopMenuTheme</Bgm>
+        <Bgm loops="true">MarowakDojo</Bgm>
+        <Bgm loops="true">TheGatekeepers</Bgm>
         <Bgm>JobClear</Bgm>
-        <Bgm>WelcomeToTheWorldOfPokemon</Bgm>
-        <Bgm>WigglytuffsGuild</Bgm>
-        <Bgm>WigglytuffsGuildRemix</Bgm>
-        <Bgm>TreasureTown</Bgm>
-        <Bgm>DoYourBestAsAlways</Bgm>
-        <Bgm>MonsterHouse</Bgm>
-        <Bgm>KecleonsShop</Bgm>
-        <Bgm>Outlaw</Bgm>
-        <Bgm>InTheDepthsOfThePit</Bgm>
-        <Bgm>BossBattle</Bgm>
-        <Bgm>DialgasFightToTheFinish</Bgm>
-        <Bgm>BattleAgainstDusknoir</Bgm>
-        <Bgm>DefyTheLegends</Bgm>
+        <Bgm loops="true">WelcomeToTheWorldOfPokemon</Bgm>
+        <Bgm loops="true">WigglytuffsGuild</Bgm>
+        <Bgm loops="true">WigglytuffsGuildRemix</Bgm>
+        <Bgm loops="true">TreasureTown</Bgm>
+        <Bgm loops="true">DoYourBestAsAlways</Bgm>
+        <Bgm loops="true">MonsterHouse</Bgm>
+        <Bgm loops="true">KecleonsShop</Bgm>
+        <Bgm loops="true">Outlaw</Bgm>
+        <Bgm loops="true">InTheDepthsOfThePit</Bgm>
+        <Bgm loops="true">BossBattle</Bgm>
+        <Bgm loops="true">DialgasFightToTheFinish</Bgm>
+        <Bgm loops="true">BattleAgainstDusknoir</Bgm>
+        <Bgm loops="true">DefyTheLegends</Bgm>
         <Bgm>MissionFailure</Bgm>
         <Bgm>MissionSuccess</Bgm>
-        <Bgm>BeachCave</Bgm>
-        <Bgm>DrenchedBluff</Bgm>
-        <Bgm>MtBristle</Bgm>
-        <Bgm>WaterfallCave</Bgm>
-        <Bgm>AppleWoods</Bgm>
-        <Bgm>CraggyCoast</Bgm>
-        <Bgm>CaveAndSidePath</Bgm>
-        <Bgm>MtHorn</Bgm>
-        <Bgm>FoggyForest</Bgm>
-        <Bgm>SteamCave</Bgm>
-        <Bgm>UpperSteamCave</Bgm>
-        <Bgm>AmpPlains</Bgm>
-        <Bgm>FarAmpPlains</Bgm>
-        <Bgm>NorthernDesert</Bgm>
-        <Bgm>QuicksandCave</Bgm>
-        <Bgm>QuicksandPit</Bgm>
-        <Bgm>CrystalCave</Bgm>
-        <Bgm>CrystalCrossing</Bgm>
-        <Bgm>ChasmCave</Bgm>
-        <Bgm>DarkHill</Bgm>
-        <Bgm>SealedRuin</Bgm>
-        <Bgm>SealedRuinPit</Bgm>
-        <Bgm>DuskForest</Bgm>
-        <Bgm>DeepDuskForest</Bgm>
-        <Bgm>RandomDungeonTheme2</Bgm>
-        <Bgm>BrineCave</Bgm>
-        <Bgm>LowerBrineCave</Bgm>
-        <Bgm>HiddenLand</Bgm>
-        <Bgm>HiddenHighland</Bgm>
-        <Bgm>TemporalTower</Bgm>
-        <Bgm>TemporalSpire</Bgm>
-        <Bgm>MystifyingForest</Bgm>
-        <Bgm>BlizzardIslandRescueTeamMedley</Bgm>
-        <Bgm>SurroundedSea</Bgm>
-        <Bgm>RandomDungeonTheme1</Bgm>
-        <Bgm>AegisCave</Bgm>
-        <Bgm>ConcealedRuins</Bgm>
-        <Bgm>MtTravail</Bgm>
-        <Bgm>InTheNightmare</Bgm>
-        <Bgm>MiracleSea</Bgm>
-        <Bgm>TreeshroudForest</Bgm>
-        <Bgm>DarkCrater</Bgm>
-        <Bgm>DeepDarkCrater</Bgm>
+        <Bgm loops="true">BeachCave</Bgm>
+        <Bgm loops="true">DrenchedBluff</Bgm>
+        <Bgm loops="true">MtBristle</Bgm>
+        <Bgm loops="true">WaterfallCave</Bgm>
+        <Bgm loops="true">AppleWoods</Bgm>
+        <Bgm loops="true">CraggyCoast</Bgm>
+        <Bgm loops="true">CaveAndSidePath</Bgm>
+        <Bgm loops="true">MtHorn</Bgm>
+        <Bgm loops="true">FoggyForest</Bgm>
+        <Bgm loops="true">SteamCave</Bgm>
+        <Bgm loops="true">UpperSteamCave</Bgm>
+        <Bgm loops="true">AmpPlains</Bgm>
+        <Bgm loops="true">FarAmpPlains</Bgm>
+        <Bgm loops="true">NorthernDesert</Bgm>
+        <Bgm loops="true">QuicksandCave</Bgm>
+        <Bgm loops="true">QuicksandPit</Bgm>
+        <Bgm loops="true">CrystalCave</Bgm>
+        <Bgm loops="true">CrystalCrossing</Bgm>
+        <Bgm loops="true">ChasmCave</Bgm>
+        <Bgm loops="true">DarkHill</Bgm>
+        <Bgm loops="true">SealedRuin</Bgm>
+        <Bgm loops="true">SealedRuinPit</Bgm>
+        <Bgm loops="true">DuskForest</Bgm>
+        <Bgm loops="true">DeepDuskForest</Bgm>
+        <Bgm loops="true">RandomDungeonTheme2</Bgm>
+        <Bgm loops="true">BrineCave</Bgm>
+        <Bgm loops="true">LowerBrineCave</Bgm>
+        <Bgm loops="true">HiddenLand</Bgm>
+        <Bgm loops="true">HiddenHighland</Bgm>
+        <Bgm loops="true">TemporalTower</Bgm>
+        <Bgm loops="true">TemporalSpire</Bgm>
+        <Bgm loops="true">MystifyingForest</Bgm>
+        <Bgm loops="true">BlizzardIslandRescueTeamMedley</Bgm>
+        <Bgm loops="true">SurroundedSea</Bgm>
+        <Bgm loops="true">RandomDungeonTheme1</Bgm>
+        <Bgm loops="true">AegisCave</Bgm>
+        <Bgm loops="true">ConcealedRuins</Bgm>
+        <Bgm loops="true">MtTravail</Bgm>
+        <Bgm loops="true">InTheNightmare</Bgm>
+        <Bgm loops="true">MiracleSea</Bgm>
+        <Bgm loops="true">TreeshroudForest</Bgm>
+        <Bgm loops="true">DarkCrater</Bgm>
+        <Bgm loops="true">DeepDarkCrater</Bgm>
         <Bgm>IntroUnused</Bgm>
         <Bgm>PerfectSentryDuty</Bgm>
         <Bgm>GoodSentryDuty</Bgm>
         <Bgm>DecentSentryDuty</Bgm>
         <Bgm>FailedSentryDuty</Bgm>
-        <Bgm>OnTheBeachAtDusk</Bgm>
-        <Bgm>Goodnight</Bgm>
-        <Bgm>GoodnightAlternateUnused</Bgm>
-        <Bgm>AtTheEndOfTheDay</Bgm>
-        <Bgm>GuildmasterWigglytuff</Bgm>
-        <Bgm>GrowingAnxiety</Bgm>
-        <Bgm>ThePowerOfDarkness</Bgm>
+        <Bgm loops="true">OnTheBeachAtDusk</Bgm>
+        <Bgm loops="true">Goodnight</Bgm>
+        <Bgm loops="true">GoodnightAlternateUnused</Bgm>
+        <Bgm loops="true">AtTheEndOfTheDay</Bgm>
+        <Bgm loops="true">GuildmasterWigglytuff</Bgm>
+        <Bgm loops="true">GrowingAnxiety</Bgm>
+        <Bgm loops="true">ThePowerOfDarkness</Bgm>
         <Bgm>OhNo</Bgm>
-        <Bgm>TimeGear</Bgm>
-        <Bgm>TimeGearRemix</Bgm>
-        <Bgm>ISawSomethingAgain</Bgm>
-        <Bgm>InTheFuture</Bgm>
-        <Bgm>PlanetsParalysis</Bgm>
-        <Bgm>ThroughTheSeaOfTime</Bgm>
-        <Bgm>InTheHandsOfFate</Bgm>
-        <Bgm>TimeRestored</Bgm>
-        <Bgm>DontEverForget</Bgm>
-        <Bgm>AWishForPeace</Bgm>
+        <Bgm loops="true">TimeGear</Bgm>
+        <Bgm loops="true">TimeGearRemix</Bgm>
+        <Bgm loops="true">ISawSomethingAgain</Bgm>
+        <Bgm loops="true">InTheFuture</Bgm>
+        <Bgm loops="true">PlanetsParalysis</Bgm>
+        <Bgm loops="true">ThroughTheSeaOfTime</Bgm>
+        <Bgm loops="true">InTheHandsOfFate</Bgm>
+        <Bgm loops="true">TimeRestored</Bgm>
+        <Bgm loops="true">DontEverForget</Bgm>
+        <Bgm loops="true">AWishForPeace</Bgm>
         <Bgm>OnTheBeachAtDuskShortened</Bgm>
-        <Bgm>MemoriesReturned</Bgm>
+        <Bgm loops="true">MemoriesReturned</Bgm>
         <Bgm>EndingThemeIntro</Bgm>
-        <Bgm>EndingTheme</Bgm>
-        <Bgm>EpilogueTheme</Bgm>
+        <Bgm loops="true">EndingTheme</Bgm>
+        <Bgm loops="true">EpilogueTheme</Bgm>
         <Bgm>TitleThemeAlternate1Unused</Bgm>
         <Bgm>TitleThemeAlternate2Unused</Bgm>
-        <Bgm>MurkyForest</Bgm>
-        <Bgm>SkyPeakCave</Bgm>
-        <Bgm>SouthernJungle</Bgm>
-        <Bgm>SkyPeakCoast</Bgm>
-        <Bgm>SpringCave</Bgm>
-        <Bgm>LowerSpringCave</Bgm>
+        <Bgm loops="true">MurkyForest</Bgm>
+        <Bgm loops="true">SkyPeakCave</Bgm>
+        <Bgm loops="true">SouthernJungle</Bgm>
+        <Bgm loops="true">SkyPeakCoast</Bgm>
+        <Bgm loops="true">SpringCave</Bgm>
+        <Bgm loops="true">LowerSpringCave</Bgm>
         <Bgm>Ocean1</Bgm>
         <Bgm>Storm</Bgm>
         <Bgm>StormInside</Bgm>
@@ -1315,7 +1315,7 @@
         <Bgm>Earthquake3</Bgm>
         <Bgm>Rain1</Bgm>
         <Bgm>HeavyFeeling</Bgm>
-        <Bgm>TemporalPinnacle</Bgm>
+        <Bgm loops="true">TemporalPinnacle</Bgm>
         <Bgm>Nothing109</Bgm>
         <Bgm>BoulderCrushingNoise</Bgm>
         <Bgm>HighPitchedWhistle</Bgm>
@@ -1328,63 +1328,63 @@
         <Bgm>AnotherGlowingNoise</Bgm>
         <Bgm>RainbowStoneshipNoise</Bgm>
         <Bgm>VibratingNoise</Bgm>
-        <Bgm>HaveToGetHome</Bgm>
-        <Bgm>FartherAway</Bgm>
-        <Bgm>PalkiasOnslaught</Bgm>
+        <Bgm loops="true">HaveToGetHome</Bgm>
+        <Bgm loops="true">FartherAway</Bgm>
+        <Bgm loops="true">PalkiasOnslaught</Bgm>
         <Bgm>Nothing124</Bgm>
         <Bgm>Rain2</Bgm>
         <Bgm>Eating</Bgm>
         <Bgm>OnTheCeiling</Bgm>
         <Bgm>StormyOcean1</Bgm>
-        <Bgm>PelipperIsland</Bgm>
+        <Bgm loops="true">PelipperIsland</Bgm>
         <Bgm>TitleTheme</Bgm>
-        <Bgm>Heartwarming</Bgm>
-        <Bgm>DownADarkPath</Bgm>
-        <Bgm>RisingFear</Bgm>
-        <Bgm>TeamSkull</Bgm>
-        <Bgm>Sympathy</Bgm>
-        <Bgm>BeyondTheDream</Bgm>
-        <Bgm>AirOfUnease</Bgm>
-        <Bgm>OneForAllAllForOne</Bgm>
-        <Bgm>BoulderQuarry</Bgm>
-        <Bgm>SpringCaveDepths</Bgm>
-        <Bgm>StarCave</Bgm>
-        <Bgm>DeepStarCave</Bgm>
-        <Bgm>LimestoneCavern</Bgm>
-        <Bgm>DeepLimestoneCavern</Bgm>
-        <Bgm>RandomDungeonTheme3</Bgm>
-        <Bgm>FortuneRavine</Bgm>
-        <Bgm>FortuneRavineDepths</Bgm>
-        <Bgm>BarrenValley</Bgm>
-        <Bgm>DarkWasteland</Bgm>
-        <Bgm>SpacialCliffs</Bgm>
-        <Bgm>DarkIceMountain</Bgm>
-        <Bgm>IcicleForest</Bgm>
-        <Bgm>VastIceMountain</Bgm>
-        <Bgm>VastIceMountainPeak</Bgm>
-        <Bgm>SkyPeakForest</Bgm>
-        <Bgm>SkyPeakPrairie</Bgm>
-        <Bgm>SkyPeakSnowfield</Bgm>
-        <Bgm>SkyPeakFinalPass</Bgm>
-        <Bgm>SpindasCafe</Bgm>
+        <Bgm loops="true">Heartwarming</Bgm>
+        <Bgm loops="true">DownADarkPath</Bgm>
+        <Bgm loops="true">RisingFear</Bgm>
+        <Bgm loops="true">TeamSkull</Bgm>
+        <Bgm loops="true">Sympathy</Bgm>
+        <Bgm loops="true">BeyondTheDream</Bgm>
+        <Bgm loops="true">AirOfUnease</Bgm>
+        <Bgm loops="true">OneForAllAllForOne</Bgm>
+        <Bgm loops="true">BoulderQuarry</Bgm>
+        <Bgm loops="true">SpringCaveDepths</Bgm>
+        <Bgm loops="true">StarCave</Bgm>
+        <Bgm loops="true">DeepStarCave</Bgm>
+        <Bgm loops="true">LimestoneCavern</Bgm>
+        <Bgm loops="true">DeepLimestoneCavern</Bgm>
+        <Bgm loops="true">RandomDungeonTheme3</Bgm>
+        <Bgm loops="true">FortuneRavine</Bgm>
+        <Bgm loops="true">FortuneRavineDepths</Bgm>
+        <Bgm loops="true">BarrenValley</Bgm>
+        <Bgm loops="true">DarkWasteland</Bgm>
+        <Bgm loops="true">SpacialCliffs</Bgm>
+        <Bgm loops="true">DarkIceMountain</Bgm>
+        <Bgm loops="true">IcicleForest</Bgm>
+        <Bgm loops="true">VastIceMountain</Bgm>
+        <Bgm loops="true">VastIceMountainPeak</Bgm>
+        <Bgm loops="true">SkyPeakForest</Bgm>
+        <Bgm loops="true">SkyPeakPrairie</Bgm>
+        <Bgm loops="true">SkyPeakSnowfield</Bgm>
+        <Bgm loops="true">SkyPeakFinalPass</Bgm>
+        <Bgm loops="true">SpindasCafe</Bgm>
         <Bgm>LudicoloDance</Bgm>
-        <Bgm>IllusionStoneChamber</Bgm>
-        <Bgm>ItCantBe</Bgm>
-        <Bgm>DefendGlobe</Bgm>
+        <Bgm loops="true">IllusionStoneChamber</Bgm>
+        <Bgm loops="true">ItCantBe</Bgm>
+        <Bgm loops="true">DefendGlobe</Bgm>
         <Bgm>DefendGlobeEnding</Bgm>
-        <Bgm>TeamCharmsTheme</Bgm>
+        <Bgm loops="true">TeamCharmsTheme</Bgm>
         <Bgm>HereComesTeamCharm</Bgm>
-        <Bgm>ForANewLife</Bgm>
-        <Bgm>LivingSpirit</Bgm>
-        <Bgm>ProudAccomplishment</Bgm>
-        <Bgm>InTheMorningSun</Bgm>
-        <Bgm>ANewWorld</Bgm>
-        <Bgm>ThoughtsForFriends</Bgm>
-        <Bgm>LifeGoesOnEnding</Bgm>
-        <Bgm>ItsNotAMiracle</Bgm>
+        <Bgm loops="true">ForANewLife</Bgm>
+        <Bgm loops="true">LivingSpirit</Bgm>
+        <Bgm loops="true">ProudAccomplishment</Bgm>
+        <Bgm loops="true">InTheMorningSun</Bgm>
+        <Bgm loops="true">ANewWorld</Bgm>
+        <Bgm loops="true">ThoughtsForFriends</Bgm>
+        <Bgm loops="true">LifeGoesOnEnding</Bgm>
+        <Bgm loops="true">ItsNotAMiracle</Bgm>
         <Bgm>AMessageOnTheWind</Bgm>
-        <Bgm>AFunExploration</Bgm>
-        <Bgm>ShayminVillage</Bgm>
+        <Bgm loops="true">AFunExploration</Bgm>
+        <Bgm loops="true">ShayminVillage</Bgm>
         <Bgm>TeamCharmsThemeIntroOnly</Bgm>
         <Bgm>Earthquake4</Bgm>
         <Bgm>Earthquake5</Bgm>

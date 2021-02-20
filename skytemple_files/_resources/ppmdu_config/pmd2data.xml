@@ -151,7 +151,7 @@
         <Block name="StartersStrings"     beg="0x200C" end="0x206C"/>
         <Block name="QuizzQuestionStrs"   beg="0x206C" end="0x20F0"/>
         <Block name="QuizzAnswerStrs"     beg="0x20F0" end="0x224E"/>
-	<Block name="UnknownMenu1"    beg="0x2D8C" end="0x2DD4"/>
+	      <Block name="UnknownMenu1"    beg="0x2D8C" end="0x2DD4"/>
       </Bin>
       <!-- overlay_0029 -->
       <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DC240">
@@ -161,125 +161,132 @@
         <Block name="TileSpawnTable"      beg="0x73B90" end="0x73BBC"/>
         <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
       </Bin>
-      
-      	<Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80" />
-	<Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329520">
-	  <Block name="ContinueChoice"    beg="0x12048" end="0x12068"/>
-	  <Block name="SubMenu"    beg="0x12068" end="0x120B0"/>
-	  <Block name="MainMenu"    beg="0x120B0" end="0x12150"/>
-	  <Block name="MainMenuConfirm"    beg="0x1222C" end="0x12244"/>
-	  <Block name="MainDebugMenu1"    beg="0x122F0" end="0x12350"/>
-	  <Block name="MainDebugMenu2"    beg="0x12370" end="0x123AC"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0002.bin" loadaddress="0x02329520" />
-	<Bin filepath="overlay/overlay_0003.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0004.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0005.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80" />
-	<Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238A140" />
-	<Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238A140">
-	  <Block name="FootprintDebugMenu"    beg="0x3960" end="0x39A8"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0015.bin" loadaddress="0x0238A140">
-	  <Block name="BankMainMenu"    beg="0xF14" end="0xF3C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0016.bin" loadaddress="0x0238A140">
-	  <Block name="EvoMenuConfirm"    beg="0x2BC8" end="0x2BE0"/>
-	  <Block name="EvoSubMenu"    beg="0x2BE0" end="0x2C00"/>
-	  <Block name="EvoMainMenu"    beg="0x2C00" end="0x2C20"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0017.bin" loadaddress="0x0238A140">	  		  <Block name="AssemblyMenuConfirm"    beg="0x1A44" end="0x1A5C"/>
-	  <Block name="AssemblyMainMenu1"    beg="0x1A5C" end="0x1A74"/>
-	  <Block name="AssemblyMainMenu2"    beg="0x1A74" end="0x1A94"/>
-	  <Block name="AssemblySubMenu1"    beg="0x1A94" end="0x1ABC"/>
-	  <Block name="AssemblySubMenu2"    beg="0x1ABC" end="0x1AEC"/>
-	  <Block name="AssemblySubMenu3"    beg="0x1AEC" end="0x1B1C"/>
-	  <Block name="AssemblySubMenu4"    beg="0x1B1C" end="0x1B54"/>
-	  <Block name="AssemblySubMenu5"    beg="0x1B54" end="0x1B8C"/>
-	  <Block name="AssemblySubMenu6"    beg="0x1B8C" end="0x1BC4"/>
-	  <Block name="AssemblySubMenu7"    beg="0x1BC4" end="0x1C04"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0018.bin" loadaddress="0x0238A140" >
-	  <Block name="MovesMenuConfirm"    beg="0x31E0" end="0x31F8"/>
-	  <Block name="MovesSubMenu1"    beg="0x31F8" end="0x3218"/>
-	  <Block name="MovesSubMenu2"    beg="0x3218" end="0x3238"/>
-	  <Block name="MovesMainMenu"    beg="0x3238" end="0x3258"/>
-	  <Block name="MovesSubMenu3"    beg="0x3258" end="0x3280"/>
-	  <Block name="MovesSubMenu4"    beg="0x3280" end="0x32B0"/>
-	  <Block name="MovesSubMenu5"    beg="0x32B0" end="0x32F8"/>
-	  <Block name="MovesSubMenu6"    beg="0x32F8" end="0x3340"/>
-	  <Block name="MovesSubMenu7"    beg="0x3340" end="0x3388"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0019.bin" loadaddress="0x0238A140" >
-	  <Block name="BarMenuConfirm1"    beg="0x40C8" end="0x40E0"/>
-	  <Block name="BarMenuConfirm2"    beg="0x40E0" end="0x40F8"/>
-	  <Block name="BarMainMenu"    beg="0x4110" end="0x4130"/>
-	  <Block name="BarSubMenu1"    beg="0x4130" end="0x4150"/>
-	  <Block name="BarSubMenu2"    beg="0x4150" end="0x4180"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0020.bin" loadaddress="0x0238A140" >
-	  <Block name="RecycleMenuConfirm1"    beg="0x2E44" end="0x2E5C"/>
-	  <Block name="RecycleMenuConfirm2"    beg="0x2E5C" end="0x2E74"/>
-	  <Block name="RecycleSubMenu1"    beg="0x2E74" end="0x2E8C"/>
-	  <Block name="RecycleSubMenu2"    beg="0x2E8C" end="0x2EAC"/>
-	  <Block name="RecycleMainMenu1"    beg="0x2EAC" end="0x2ED4"/>
-	  <Block name="RecycleMainMenu2"    beg="0x2F48" end="0x2F68"/>
-	  <Block name="RecycleMainMenu3"    beg="0x2FB8" end="0x2FD0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0021.bin" loadaddress="0x0238A140">	  	    <Block name="SynthesisMenuConfirm"    beg="0x28F8" end="0x2910"/>	  	    <Block name="SynthesisSubMenu1"    beg="0x2910" end="0x2928"/>
-	  <Block name="SynthesisSubMenu2"    beg="0x2928" end="0x2948"/>
-	  <Block name="SynthesisMainMenu1"    beg="0x2948" end="0x2968"/>
-	  <Block name="SynthesisMainMenu2"    beg="0x2968" end="0x2990"/>
-	  <Block name="SynthesisSubMenu3"    beg="0x2990" end="0x29C0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0022.bin" loadaddress="0x0238A140">
-	  <Block name="ShopMenuConfirm"    beg="0x4728" end="0x4740"/>
-	  <Block name="ShopMainMenu1"    beg="0x4740" end="0x4760"/>
-	  <Block name="ShopMainMenu2"    beg="0x4760" end="0x4780"/>
-	  <Block name="ShopMainMenu3"    beg="0x4780" end="0x47B0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0023.bin" loadaddress="0x0238A140">
-	  <Block name="StorageMenuConfirm"    beg="0x31BC" end="0x31D4"/>
-	  <Block name="StorageMainMenu1"    beg="0x31D4" end="0x31F4"/>
-	  <Block name="StorageMainMenu2"    beg="0x31F4" end="0x3214"/>
-	  <Block name="StorageMainMenu3"    beg="0x3214" end="0x3234"/>
-	  <Block name="StorageMainMenu4"    beg="0x3234" end="0x325C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0024.bin" loadaddress="0x0238A140">
-	  <Block name="HatcherMenuConfirm"    beg="0x23E0" end="0x23F8"/>
-	  <Block name="HatcherMainMenu"    beg="0x23F8" end="0x2418"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0025.bin" loadaddress="0x0238A140">
-	  <Block name="AppraiserMenuConfirm"    beg="0x1374" end="0x138C"/>
-	  <Block name="AppraiserMainMenu"    beg="0x138C" end="0x13AC"/>
-	  <Block name="AppraiserSubMenu"    beg="0x13AC" end="0x13CC"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0026.bin" loadaddress="0x0238A140" />
-	<Bin filepath="overlay/overlay_0027.bin" loadaddress="0x0238A140">
-	  <Block name="DiscardItemsMenuConfirm"    beg="0x281C" end="0x2834"/>
-	  <Block name="DiscardItemsSubMenu1"    beg="0x2834" end="0x2854"/>
-	  <Block name="DiscardItemsSubMenu2"    beg="0x2854" end="0x2874"/>
-	  <Block name="DiscardItemsMainMenu"    beg="0x2874" end="0x289C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0028.bin" loadaddress="0x0238A140" />
-	<Bin filepath="overlay/overlay_0030.bin" loadaddress="0x02382820" />
-	<Bin filepath="overlay/overlay_0031.bin" loadaddress="0x02382820">	  		  <Block name="DungeonMainMenu"    beg="0x75B4" end="0x75F4"/>
-	  <Block name="DungeonSubMenu1"    beg="0x7650" end="0x7670"/>
-	  <Block name="DungeonSubMenu2"    beg="0x7670" end="0x7690"/>
-	  <Block name="DungeonSubMenu3"    beg="0x7690" end="0x76B0"/>
-	  <Block name="DungeonSubMenu4"    beg="0x76B0" end="0x76D0"/>
-	  <Block name="DungeonSubMenu5"    beg="0x78FC" end="0x7914"/>
-	  <Block name="DungeonSubMenu6"    beg="0x7980" end="0x79C8"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0032.bin" loadaddress="0x02382820" />
-	<Bin filepath="overlay/overlay_0033.bin" loadaddress="0x02382820" />
-	<Bin filepath="overlay/overlay_0034.bin" loadaddress="0x022DC240">	  		  <Block name="UnknownMenuConfirm"    beg="0xDE4" end="0xDFC"/>
-	  <Block name="DungeonDebugMenu"    beg="0xE0C" end="0xE34"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BCA80" />
+
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80"/>
+      <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329520">
+        <Block name="ContinueChoice" beg="0x12048" end="0x12068"/>
+        <Block name="SubMenu" beg="0x12068" end="0x120B0"/>
+        <Block name="MainMenu" beg="0x120B0" end="0x12150"/>
+        <Block name="MainMenuConfirm" beg="0x1222C" end="0x12244"/>
+        <Block name="MainDebugMenu1" beg="0x122F0" end="0x12350"/>
+        <Block name="MainDebugMenu2" beg="0x12370" end="0x123AC"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0002.bin" loadaddress="0x02329520"/>
+      <Bin filepath="overlay/overlay_0003.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0004.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0005.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238A140"/>
+      <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238A140">
+        <Block name="FootprintDebugMenu" beg="0x3960" end="0x39A8"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0015.bin" loadaddress="0x0238A140">
+        <Block name="BankMainMenu" beg="0xF14" end="0xF3C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0016.bin" loadaddress="0x0238A140">
+        <Block name="EvoMenuConfirm" beg="0x2BC8" end="0x2BE0"/>
+        <Block name="EvoSubMenu" beg="0x2BE0" end="0x2C00"/>
+        <Block name="EvoMainMenu" beg="0x2C00" end="0x2C20"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0017.bin" loadaddress="0x0238A140">
+        <Block name="AssemblyMenuConfirm" beg="0x1A44" end="0x1A5C"/>
+        <Block name="AssemblyMainMenu1" beg="0x1A5C" end="0x1A74"/>
+        <Block name="AssemblyMainMenu2" beg="0x1A74" end="0x1A94"/>
+        <Block name="AssemblySubMenu1" beg="0x1A94" end="0x1ABC"/>
+        <Block name="AssemblySubMenu2" beg="0x1ABC" end="0x1AEC"/>
+        <Block name="AssemblySubMenu3" beg="0x1AEC" end="0x1B1C"/>
+        <Block name="AssemblySubMenu4" beg="0x1B1C" end="0x1B54"/>
+        <Block name="AssemblySubMenu5" beg="0x1B54" end="0x1B8C"/>
+        <Block name="AssemblySubMenu6" beg="0x1B8C" end="0x1BC4"/>
+        <Block name="AssemblySubMenu7" beg="0x1BC4" end="0x1C04"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0018.bin" loadaddress="0x0238A140">
+        <Block name="MovesMenuConfirm" beg="0x31E0" end="0x31F8"/>
+        <Block name="MovesSubMenu1" beg="0x31F8" end="0x3218"/>
+        <Block name="MovesSubMenu2" beg="0x3218" end="0x3238"/>
+        <Block name="MovesMainMenu" beg="0x3238" end="0x3258"/>
+        <Block name="MovesSubMenu3" beg="0x3258" end="0x3280"/>
+        <Block name="MovesSubMenu4" beg="0x3280" end="0x32B0"/>
+        <Block name="MovesSubMenu5" beg="0x32B0" end="0x32F8"/>
+        <Block name="MovesSubMenu6" beg="0x32F8" end="0x3340"/>
+        <Block name="MovesSubMenu7" beg="0x3340" end="0x3388"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0019.bin" loadaddress="0x0238A140">
+        <Block name="BarMenuConfirm1" beg="0x40C8" end="0x40E0"/>
+        <Block name="BarMenuConfirm2" beg="0x40E0" end="0x40F8"/>
+        <Block name="BarMainMenu" beg="0x4110" end="0x4130"/>
+        <Block name="BarSubMenu1" beg="0x4130" end="0x4150"/>
+        <Block name="BarSubMenu2" beg="0x4150" end="0x4180"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0020.bin" loadaddress="0x0238A140">
+        <Block name="RecycleMenuConfirm1" beg="0x2E44" end="0x2E5C"/>
+        <Block name="RecycleMenuConfirm2" beg="0x2E5C" end="0x2E74"/>
+        <Block name="RecycleSubMenu1" beg="0x2E74" end="0x2E8C"/>
+        <Block name="RecycleSubMenu2" beg="0x2E8C" end="0x2EAC"/>
+        <Block name="RecycleMainMenu1" beg="0x2EAC" end="0x2ED4"/>
+        <Block name="RecycleMainMenu2" beg="0x2F48" end="0x2F68"/>
+        <Block name="RecycleMainMenu3" beg="0x2FB8" end="0x2FD0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0021.bin" loadaddress="0x0238A140">
+        <Block name="SynthesisMenuConfirm" beg="0x28F8" end="0x2910"/>
+        <Block name="SynthesisSubMenu1" beg="0x2910" end="0x2928"/>
+        <Block name="SynthesisSubMenu2" beg="0x2928" end="0x2948"/>
+        <Block name="SynthesisMainMenu1" beg="0x2948" end="0x2968"/>
+        <Block name="SynthesisMainMenu2" beg="0x2968" end="0x2990"/>
+        <Block name="SynthesisSubMenu3" beg="0x2990" end="0x29C0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0022.bin" loadaddress="0x0238A140">
+        <Block name="ShopMenuConfirm" beg="0x4728" end="0x4740"/>
+        <Block name="ShopMainMenu1" beg="0x4740" end="0x4760"/>
+        <Block name="ShopMainMenu2" beg="0x4760" end="0x4780"/>
+        <Block name="ShopMainMenu3" beg="0x4780" end="0x47B0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0023.bin" loadaddress="0x0238A140">
+        <Block name="StorageMenuConfirm" beg="0x31BC" end="0x31D4"/>
+        <Block name="StorageMainMenu1" beg="0x31D4" end="0x31F4"/>
+        <Block name="StorageMainMenu2" beg="0x31F4" end="0x3214"/>
+        <Block name="StorageMainMenu3" beg="0x3214" end="0x3234"/>
+        <Block name="StorageMainMenu4" beg="0x3234" end="0x325C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0024.bin" loadaddress="0x0238A140">
+        <Block name="HatcherMenuConfirm" beg="0x23E0" end="0x23F8"/>
+        <Block name="HatcherMainMenu" beg="0x23F8" end="0x2418"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0025.bin" loadaddress="0x0238A140">
+        <Block name="AppraiserMenuConfirm" beg="0x1374" end="0x138C"/>
+        <Block name="AppraiserMainMenu" beg="0x138C" end="0x13AC"/>
+        <Block name="AppraiserSubMenu" beg="0x13AC" end="0x13CC"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0026.bin" loadaddress="0x0238A140"/>
+      <Bin filepath="overlay/overlay_0027.bin" loadaddress="0x0238A140">
+        <Block name="DiscardItemsMenuConfirm" beg="0x281C" end="0x2834"/>
+        <Block name="DiscardItemsSubMenu1" beg="0x2834" end="0x2854"/>
+        <Block name="DiscardItemsSubMenu2" beg="0x2854" end="0x2874"/>
+        <Block name="DiscardItemsMainMenu" beg="0x2874" end="0x289C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0028.bin" loadaddress="0x0238A140"/>
+      <Bin filepath="overlay/overlay_0030.bin" loadaddress="0x02382820"/>
+      <Bin filepath="overlay/overlay_0031.bin" loadaddress="0x02382820">
+        <Block name="DungeonMainMenu" beg="0x75B4" end="0x75F4"/>
+        <Block name="DungeonSubMenu1" beg="0x7650" end="0x7670"/>
+        <Block name="DungeonSubMenu2" beg="0x7670" end="0x7690"/>
+        <Block name="DungeonSubMenu3" beg="0x7690" end="0x76B0"/>
+        <Block name="DungeonSubMenu4" beg="0x76B0" end="0x76D0"/>
+        <Block name="DungeonSubMenu5" beg="0x78FC" end="0x7914"/>
+        <Block name="DungeonSubMenu6" beg="0x7980" end="0x79C8"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0032.bin" loadaddress="0x02382820"/>
+      <Bin filepath="overlay/overlay_0033.bin" loadaddress="0x02382820"/>
+      <Bin filepath="overlay/overlay_0034.bin" loadaddress="0x022DC240">
+        <Block name="UnknownMenuConfirm" beg="0xDE4" end="0xDFC"/>
+        <Block name="DungeonDebugMenu" beg="0xE0C" end="0xE34"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BCA80"/>
+      <!-- THIS IS END45'S 'EXTRA SPACE' OVERLAY. IT REQUIRES THE 'ExtraSpace' PATCH -->
+      <Bin filepath="overlay/overlay_0036.bin" loadaddress="0x023A7080"/>
     </Game>
 
     <!--Europe-->
@@ -350,7 +357,7 @@
       <Bin filepath="overlay/overlay_0013.bin" loadaddress="0x238AC80">
         <Block name="StartersPartnerIds"  beg="0x1F4C" end="0x1F76"/>
         <Block name="StartersHeroIds"     beg="0x1F78" end="0x1FB8"/>
-	<Block name="UnknownMenu1"    beg="0x2D8C" end="0x2DD4"/>
+        <Block name="UnknownMenu1"    beg="0x2D8C" end="0x2DD4"/>
       </Bin>
       <!-- overlay_0029 -->
       <Bin filepath="overlay/overlay_0029.bin" loadaddress="0x22DCB80">
@@ -360,128 +367,134 @@
         <Block name="TileSpawnTable"      beg="0x73E5C" end="0x73E88"/>
         <Block name="FixedFloorOverrides" beg="0x73EA0" end="0x73FA0"/>
       </Bin>
-      
-      
-      	<Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0" />
-	<Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329D40">
-	  <Block name="ContinueChoice"    beg="0x11F74" end="0x11F94"/>
-	  <Block name="SubMenu"    beg="0x11F94" end="0x11FDC"/>
-	  <Block name="MainMenu"    beg="0x11FDC" end="0x1207C"/>
-	  <Block name="MainMenuConfirm"    beg="0x12158" end="0x12170"/>
-	  <Block name="MainDebugMenu1"    beg="0x1221C" end="0x1227C"/>
-	  <Block name="MainDebugMenu2"    beg="0x1229C" end="0x122D4"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0002.bin" loadaddress="0x02329D40" />
-	<Bin filepath="overlay/overlay_0003.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0004.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0005.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200" />
-	<Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238AC80" />
-	<Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238AC80">
-	  <Block name="FootprintDebugMenu"    beg="0x39C0" end="0x3A08"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0015.bin" loadaddress="0x0238AC80">
-	  <Block name="BankMainMenu"    beg="0xF40" end="0xF68"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0016.bin" loadaddress="0x0238AC80">
-	  <Block name="EvoMenuConfirm"    beg="0x2BCC" end="0x2BE4"/>
-	  <Block name="EvoSubMenu"    beg="0x2BE4" end="0x2C04"/>
-	  <Block name="EvoMainMenu"    beg="0x2C04" end="0x2C24"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0017.bin" loadaddress="0x0238AC80">	  		  <Block name="AssemblyMenuConfirm"    beg="0x1A44" end="0x1A5C"/>
-	  <Block name="AssemblyMainMenu1"    beg="0x1A5C" end="0x1A74"/>
-	  <Block name="AssemblyMainMenu2"    beg="0x1A74" end="0x1A94"/>
-	  <Block name="AssemblySubMenu1"    beg="0x1A94" end="0x1ABC"/>
-	  <Block name="AssemblySubMenu2"    beg="0x1ABC" end="0x1AEC"/>
-	  <Block name="AssemblySubMenu3"    beg="0x1AEC" end="0x1B1C"/>
-	  <Block name="AssemblySubMenu4"    beg="0x1B1C" end="0x1B54"/>
-	  <Block name="AssemblySubMenu5"    beg="0x1B54" end="0x1B8C"/>
-	  <Block name="AssemblySubMenu6"    beg="0x1B8C" end="0x1BC4"/>
-	  <Block name="AssemblySubMenu7"    beg="0x1BC4" end="0x1C04"/>
-	</Bin>
-	
-	<Bin filepath="overlay/overlay_0018.bin" loadaddress="0x0238AC80" >
-	  <Block name="MovesMenuConfirm"    beg="0x31E0" end="0x31F8"/>
-	  <Block name="MovesSubMenu1"    beg="0x31F8" end="0x3218"/>
-	  <Block name="MovesSubMenu2"    beg="0x3218" end="0x3238"/>
-	  <Block name="MovesMainMenu"    beg="0x3238" end="0x3258"/>
-	  <Block name="MovesSubMenu3"    beg="0x3258" end="0x3280"/>
-	  <Block name="MovesSubMenu4"    beg="0x3280" end="0x32B0"/>
-	  <Block name="MovesSubMenu5"    beg="0x32B0" end="0x32F8"/>
-	  <Block name="MovesSubMenu6"    beg="0x32F8" end="0x3340"/>
-	  <Block name="MovesSubMenu7"    beg="0x3340" end="0x3388"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0019.bin" loadaddress="0x0238AC80" >
-	  <Block name="BarMenuConfirm1"    beg="0x40BC" end="0x40D4"/>
-	  <Block name="BarMenuConfirm2"    beg="0x40D4" end="0x40EC"/>
-	  <Block name="BarMainMenu"    beg="0x4104" end="0x4124"/>
-	  <Block name="BarSubMenu1"    beg="0x4124" end="0x4144"/>
-	  <Block name="BarSubMenu2"    beg="0x4144" end="0x4174"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0020.bin" loadaddress="0x0238AC80" >
-	  <Block name="RecycleMenuConfirm1"    beg="0x2E44" end="0x2E5C"/>
-	  <Block name="RecycleMenuConfirm2"    beg="0x2E5C" end="0x2E74"/>
-	  <Block name="RecycleSubMenu1"    beg="0x2E74" end="0x2E8C"/>
-	  <Block name="RecycleSubMenu2"    beg="0x2E8C" end="0x2EAC"/>
-	  <Block name="RecycleMainMenu1"    beg="0x2EAC" end="0x2ED4"/>
-	  <Block name="RecycleMainMenu2"    beg="0x2F48" end="0x2F68"/>
-	  <Block name="RecycleMainMenu3"    beg="0x2FB8" end="0x2FD0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0021.bin" loadaddress="0x0238AC80">	  	    <Block name="SynthesisMenuConfirm"    beg="0x28F8" end="0x2910"/>	  	    <Block name="SynthesisSubMenu1"    beg="0x2910" end="0x2928"/>
-	  <Block name="SynthesisSubMenu2"    beg="0x2928" end="0x2948"/>
-	  <Block name="SynthesisMainMenu1"    beg="0x2948" end="0x2968"/>
-	  <Block name="SynthesisMainMenu2"    beg="0x2968" end="0x2990"/>
-	  <Block name="SynthesisSubMenu3"    beg="0x2990" end="0x29C0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0022.bin" loadaddress="0x0238AC80">
-	  <Block name="ShopMenuConfirm"    beg="0x4728" end="0x4740"/>
-	  <Block name="ShopMainMenu1"    beg="0x4740" end="0x4760"/>
-	  <Block name="ShopMainMenu2"    beg="0x4760" end="0x4780"/>
-	  <Block name="ShopMainMenu3"    beg="0x4780" end="0x47B0"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0023.bin" loadaddress="0x0238AC80">
-	  <Block name="StorageMenuConfirm"    beg="0x31BC" end="0x31D4"/>
-	  <Block name="StorageMainMenu1"    beg="0x31D4" end="0x31F4"/>
-	  <Block name="StorageMainMenu2"    beg="0x31F4" end="0x3214"/>
-	  <Block name="StorageMainMenu3"    beg="0x3214" end="0x3234"/>
-	  <Block name="StorageMainMenu4"    beg="0x3234" end="0x325C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0024.bin" loadaddress="0x0238AC80">
-	  <Block name="HatcherMenuConfirm"    beg="0x23E0" end="0x23F8"/>
-	  <Block name="HatcherMainMenu"    beg="0x23F8" end="0x2418"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0025.bin" loadaddress="0x0238AC80">
-	  <Block name="AppraiserMenuConfirm"    beg="0x1374" end="0x138C"/>
-	  <Block name="AppraiserMainMenu"    beg="0x138C" end="0x13AC"/>
-	  <Block name="AppraiserSubMenu"    beg="0x13AC" end="0x13CC"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0026.bin" loadaddress="0x0238AC80" />
-	<Bin filepath="overlay/overlay_0027.bin" loadaddress="0x0238AC80">
-	  <Block name="DiscardItemsMenuConfirm"    beg="0x281C" end="0x2834"/>
-	  <Block name="DiscardItemsSubMenu1"    beg="0x2834" end="0x2854"/>
-	  <Block name="DiscardItemsSubMenu2"    beg="0x2854" end="0x2874"/>
-	  <Block name="DiscardItemsMainMenu"    beg="0x2874" end="0x289C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0028.bin" loadaddress="0x0238AC80" />
-	<Bin filepath="overlay/overlay_0030.bin" loadaddress="0x02383420" />
-	<Bin filepath="overlay/overlay_0031.bin" loadaddress="0x02383420">
-	  <Block name="DungeonMainMenu"    beg="0x75D8" end="0x7618"/>
-	  <Block name="DungeonSubMenu1"    beg="0x7674" end="0x7694"/>
-	  <Block name="DungeonSubMenu2"    beg="0x7694" end="0x76B4"/>
-	  <Block name="DungeonSubMenu3"    beg="0x76B4" end="0x76D4"/>
-	  <Block name="DungeonSubMenu4"    beg="0x76D4" end="0x76F4"/>
-	  <Block name="DungeonSubMenu5"    beg="0x7920" end="0x7938"/>
-	  <Block name="DungeonSubMenu6"    beg="0x79A4" end="0x79EC"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0032.bin" loadaddress="0x02383420" />
-	<Bin filepath="overlay/overlay_0033.bin" loadaddress="0x02383420" />
-	<Bin filepath="overlay/overlay_0034.bin" loadaddress="0x022DCB80">	  		  <Block name="UnknownMenuConfirm"    beg="0xD4C" end="0xD64"/>
-	  <Block name="DungeonDebugMenu"    beg="0xD74" end="0xD9C"/>
-	</Bin>
-	<Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BD3C0" />
+
+
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0"/>
+      <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329D40">
+        <Block name="ContinueChoice" beg="0x11F74" end="0x11F94"/>
+        <Block name="SubMenu" beg="0x11F94" end="0x11FDC"/>
+        <Block name="MainMenu" beg="0x11FDC" end="0x1207C"/>
+        <Block name="MainMenuConfirm" beg="0x12158" end="0x12170"/>
+        <Block name="MainDebugMenu1" beg="0x1221C" end="0x1227C"/>
+        <Block name="MainDebugMenu2" beg="0x1229C" end="0x122D4"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0002.bin" loadaddress="0x02329D40"/>
+      <Bin filepath="overlay/overlay_0003.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0004.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0005.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238AC80"/>
+      <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238AC80">
+        <Block name="FootprintDebugMenu" beg="0x39C0" end="0x3A08"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0015.bin" loadaddress="0x0238AC80">
+        <Block name="BankMainMenu" beg="0xF40" end="0xF68"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0016.bin" loadaddress="0x0238AC80">
+        <Block name="EvoMenuConfirm" beg="0x2BCC" end="0x2BE4"/>
+        <Block name="EvoSubMenu" beg="0x2BE4" end="0x2C04"/>
+        <Block name="EvoMainMenu" beg="0x2C04" end="0x2C24"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0017.bin" loadaddress="0x0238AC80">
+        <Block name="AssemblyMenuConfirm" beg="0x1A44" end="0x1A5C"/>
+        <Block name="AssemblyMainMenu1" beg="0x1A5C" end="0x1A74"/>
+        <Block name="AssemblyMainMenu2" beg="0x1A74" end="0x1A94"/>
+        <Block name="AssemblySubMenu1" beg="0x1A94" end="0x1ABC"/>
+        <Block name="AssemblySubMenu2" beg="0x1ABC" end="0x1AEC"/>
+        <Block name="AssemblySubMenu3" beg="0x1AEC" end="0x1B1C"/>
+        <Block name="AssemblySubMenu4" beg="0x1B1C" end="0x1B54"/>
+        <Block name="AssemblySubMenu5" beg="0x1B54" end="0x1B8C"/>
+        <Block name="AssemblySubMenu6" beg="0x1B8C" end="0x1BC4"/>
+        <Block name="AssemblySubMenu7" beg="0x1BC4" end="0x1C04"/>
+      </Bin>
+
+      <Bin filepath="overlay/overlay_0018.bin" loadaddress="0x0238AC80">
+        <Block name="MovesMenuConfirm" beg="0x31E0" end="0x31F8"/>
+        <Block name="MovesSubMenu1" beg="0x31F8" end="0x3218"/>
+        <Block name="MovesSubMenu2" beg="0x3218" end="0x3238"/>
+        <Block name="MovesMainMenu" beg="0x3238" end="0x3258"/>
+        <Block name="MovesSubMenu3" beg="0x3258" end="0x3280"/>
+        <Block name="MovesSubMenu4" beg="0x3280" end="0x32B0"/>
+        <Block name="MovesSubMenu5" beg="0x32B0" end="0x32F8"/>
+        <Block name="MovesSubMenu6" beg="0x32F8" end="0x3340"/>
+        <Block name="MovesSubMenu7" beg="0x3340" end="0x3388"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0019.bin" loadaddress="0x0238AC80">
+        <Block name="BarMenuConfirm1" beg="0x40BC" end="0x40D4"/>
+        <Block name="BarMenuConfirm2" beg="0x40D4" end="0x40EC"/>
+        <Block name="BarMainMenu" beg="0x4104" end="0x4124"/>
+        <Block name="BarSubMenu1" beg="0x4124" end="0x4144"/>
+        <Block name="BarSubMenu2" beg="0x4144" end="0x4174"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0020.bin" loadaddress="0x0238AC80">
+        <Block name="RecycleMenuConfirm1" beg="0x2E44" end="0x2E5C"/>
+        <Block name="RecycleMenuConfirm2" beg="0x2E5C" end="0x2E74"/>
+        <Block name="RecycleSubMenu1" beg="0x2E74" end="0x2E8C"/>
+        <Block name="RecycleSubMenu2" beg="0x2E8C" end="0x2EAC"/>
+        <Block name="RecycleMainMenu1" beg="0x2EAC" end="0x2ED4"/>
+        <Block name="RecycleMainMenu2" beg="0x2F48" end="0x2F68"/>
+        <Block name="RecycleMainMenu3" beg="0x2FB8" end="0x2FD0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0021.bin" loadaddress="0x0238AC80">
+        <Block name="SynthesisMenuConfirm" beg="0x28F8" end="0x2910"/>
+        <Block name="SynthesisSubMenu1" beg="0x2910" end="0x2928"/>
+        <Block name="SynthesisSubMenu2" beg="0x2928" end="0x2948"/>
+        <Block name="SynthesisMainMenu1" beg="0x2948" end="0x2968"/>
+        <Block name="SynthesisMainMenu2" beg="0x2968" end="0x2990"/>
+        <Block name="SynthesisSubMenu3" beg="0x2990" end="0x29C0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0022.bin" loadaddress="0x0238AC80">
+        <Block name="ShopMenuConfirm" beg="0x4728" end="0x4740"/>
+        <Block name="ShopMainMenu1" beg="0x4740" end="0x4760"/>
+        <Block name="ShopMainMenu2" beg="0x4760" end="0x4780"/>
+        <Block name="ShopMainMenu3" beg="0x4780" end="0x47B0"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0023.bin" loadaddress="0x0238AC80">
+        <Block name="StorageMenuConfirm" beg="0x31BC" end="0x31D4"/>
+        <Block name="StorageMainMenu1" beg="0x31D4" end="0x31F4"/>
+        <Block name="StorageMainMenu2" beg="0x31F4" end="0x3214"/>
+        <Block name="StorageMainMenu3" beg="0x3214" end="0x3234"/>
+        <Block name="StorageMainMenu4" beg="0x3234" end="0x325C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0024.bin" loadaddress="0x0238AC80">
+        <Block name="HatcherMenuConfirm" beg="0x23E0" end="0x23F8"/>
+        <Block name="HatcherMainMenu" beg="0x23F8" end="0x2418"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0025.bin" loadaddress="0x0238AC80">
+        <Block name="AppraiserMenuConfirm" beg="0x1374" end="0x138C"/>
+        <Block name="AppraiserMainMenu" beg="0x138C" end="0x13AC"/>
+        <Block name="AppraiserSubMenu" beg="0x13AC" end="0x13CC"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0026.bin" loadaddress="0x0238AC80"/>
+      <Bin filepath="overlay/overlay_0027.bin" loadaddress="0x0238AC80">
+        <Block name="DiscardItemsMenuConfirm" beg="0x281C" end="0x2834"/>
+        <Block name="DiscardItemsSubMenu1" beg="0x2834" end="0x2854"/>
+        <Block name="DiscardItemsSubMenu2" beg="0x2854" end="0x2874"/>
+        <Block name="DiscardItemsMainMenu" beg="0x2874" end="0x289C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0028.bin" loadaddress="0x0238AC80"/>
+      <Bin filepath="overlay/overlay_0030.bin" loadaddress="0x02383420"/>
+      <Bin filepath="overlay/overlay_0031.bin" loadaddress="0x02383420">
+        <Block name="DungeonMainMenu" beg="0x75D8" end="0x7618"/>
+        <Block name="DungeonSubMenu1" beg="0x7674" end="0x7694"/>
+        <Block name="DungeonSubMenu2" beg="0x7694" end="0x76B4"/>
+        <Block name="DungeonSubMenu3" beg="0x76B4" end="0x76D4"/>
+        <Block name="DungeonSubMenu4" beg="0x76D4" end="0x76F4"/>
+        <Block name="DungeonSubMenu5" beg="0x7920" end="0x7938"/>
+        <Block name="DungeonSubMenu6" beg="0x79A4" end="0x79EC"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0032.bin" loadaddress="0x02383420"/>
+      <Bin filepath="overlay/overlay_0033.bin" loadaddress="0x02383420"/>
+      <Bin filepath="overlay/overlay_0034.bin" loadaddress="0x022DCB80">
+        <Block name="UnknownMenuConfirm" beg="0xD4C" end="0xD64"/>
+        <Block name="DungeonDebugMenu" beg="0xD74" end="0xD9C"/>
+      </Bin>
+      <Bin filepath="overlay/overlay_0035.bin" loadaddress="0x022BD3C0"/>
+      <!-- THIS IS END45'S 'EXTRA SPACE' OVERLAY. IT REQUIRES THE 'ExtraSpace' PATCH -->
+      <Bin filepath="overlay/overlay_0036.bin" loadaddress="0x023A7080"/>
     </Game>
 
     <!--Japan-->
@@ -848,6 +861,7 @@
       <!--###############################-->
       <!--Explorers of Sky-->
       <!--###############################-->
+      
       <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
         <!-- for JP the cmn_eos_jp.asm needs to be implemented to actually work! -->
 
@@ -877,6 +891,30 @@
         <Patch id="ExtractHardcodedItemLists" >
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/extract_item_lists/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract dungeon data -->
+        <Patch id="ExtractDungeonData" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract dungeon data -->
+        <Patch id="FixEvolutionGlitch" >
+          <OpenBin filepath="overlay/overlay_0016.bin">
+	  	<Include filename ="irdkwia_asm_mods/fix_evolution/patch.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to enable exp. share -->
+        <Patch id="AddExperienceShare" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
         
@@ -910,7 +948,47 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
           </Replace>
         </SimplePatch>
-        
+
+        <SimplePatch id="ExtraSpace">
+          <Include filename="end_asm_mods/src/ExtraSpace.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+	      
+	      <SimplePatch id="CompleteTeamControl">
+          <Include filename="cipnit_asm_mods/completeteamcontrol.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"' />
+            <Game id="EoS_EU" replace='_REGION equ "EU"' />
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="FarOffPalOverdrive">
+          <Include filename="cipnit_asm_mods/faroffpaloverdrive.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="PartnersTriggerHiddenTraps">
+          <Include filename="cipnit_asm_mods/partnerstriggerhiddentraps.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="ReduceJumpcutPauseTime">
+          <Include filename="cipnit_asm_mods/reducejumpcutpausetime.asm"/>
+          <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
       </Game>
     </Patches>
 

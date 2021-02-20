@@ -31,18 +31,17 @@ def main():
     base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'sky_jp.nds'))
-
-    with open(os.path.join(output_dir, "enter23.ssb"), 'wb') as f:
-        f.write(rom.getFileByName('SCRIPT/D42P21A/enter23.ssb'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
+        if 'm16a0102' not in file_name:
+            continue
         print(file_name)
 
         out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
 
         bin_before = rom.getFileByName(file_name)
-        ssb = SsbHandler.deserialize(bin_before, Pmd2XmlReader.load_default('EoS_JP'))
+        ssb = SsbHandler.deserialize(bin_before)
 
         with open(out_file_name, 'w') as f:
             f.write(export_ssb_as_txt(ssb))

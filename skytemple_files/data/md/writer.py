@@ -67,7 +67,7 @@ class MdWriter:
             self._write_data(entry.unk18, 1, signed=True)
             self._write_data(entry.shadow_size.value, 1, signed=True)
             self._write_data(entry.chance_spawn_asleep, 1, signed=True)
-            self._write_data(entry.hp_regeneration, 1, signed=True)
+            self._write_data(entry.hp_regeneration, 1)
             self._write_data(entry.unk21_h, 1, signed=True)
             self._write_data(entry.base_form_index, signed=True)
             self._write_data(entry.exclusive_item1, signed=True)

@@ -16,13 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Callable
 
-from ndspy.rom import NintendoDSRom
-
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import f, _
-
 
 NUM_PREVIOUS_ENTRIES = 600
 
@@ -37,7 +34,7 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x1F74C
 PATCH_CHECK_INSTR_APPLIED_EU = 0xEA0000D4
 
 
-class AtupxSupportPatchHandler(AbstractPatchHandler):
+class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -55,28 +52,18 @@ class AtupxSupportPatchHandler(AbstractPatchHandler):
     def version(self) -> str:
         return '0.0.1'
 
+    def depends_on(self) -> List[str]:
+        return ['ActorAndLevelLoader']
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED_US
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED_US
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED_EU
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED_EU
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        if not self.is_applied(rom, config):
-            # Check if space is available
-            bincfg = config.binaries['arm9.bin']
-            binary = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
-            if config.game_version == GAME_VERSION_EOS:
-                if config.game_region == GAME_REGION_US:
-                    data = binary[PATCH_CODE_START_US:PATCH_CODE_END_US]
-                elif config.game_region == GAME_REGION_EU:
-                    data = binary[PATCH_CODE_START_EU:PATCH_CODE_END_EU]
-            for x in data:
-                if x!=0xff: #Check if every byte is 0xff
-                    raise RuntimeError(_("This patch can't be applied if ActorAndLevelLoader isn't applied."))
-        
         try:
             apply()
         except RuntimeError as ex:

@@ -170,12 +170,14 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             unique_main_calls = list(sorted(set(main_calls)))
             unique_main_calls.append(end_m_functions)
 
+            last_call = None
             for i in range(len(unique_main_calls)-1):
                 start = unique_main_calls[i]
                 end = unique_main_calls[i+1]
                 func_data = data[start-start_ov29:end-start_ov29]
                 main_func[start] = AsmFunction(func_data, start)
                 main_func[start].process()
+                last_call = start
 
             nb_moves = len(main_calls)
             header = bytearray(4+2*nb_moves+len(main_func)*8)
@@ -188,6 +190,9 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
                 x = t[1]
                 id_codes[k] = i
                 fdata = bytearray(x.compile(start_m_functions))
+                if k==last_call:
+                    # Add a branch to the end for the last case since it doesn't have one
+                    fdata += bytearray([0x63, 0x09, 0x00, 0xEA])
                 write_uintle(header, current_ptr, 4+2*nb_moves+i*8, 4)
                 write_uintle(header, len(fdata), 4+2*nb_moves+i*8+4, 4)
                 code_data += fdata

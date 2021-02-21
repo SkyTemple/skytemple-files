@@ -23,6 +23,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.util import _
 OV_FILE_IDX = 36
 OV_FILE_PATH = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'end_asm_mods', 'src', 'overlay_0036.bin')
 
@@ -35,7 +36,7 @@ class ExtraSpacePatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return "This patch adds a new overlay 36 to the game, which is loaded at address 0x023A7080 and provides extra space for patches to place code and data in."
+        return _("This patch adds a new overlay 36 to the game, which is loaded at address 0x023A7080 and provides extra space for patches to place code and data in.")
 
     @property
     def author(self) -> str:

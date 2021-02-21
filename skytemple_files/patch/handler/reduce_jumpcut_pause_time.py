@@ -22,11 +22,12 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.util import _
 
 
 ORIGINAL_BYTESEQ = bytes(b'\x3C\x00\x50\xE3')
-OFFSET_EU = 0x022FA32C -0x022DCB80
-OFFSET_US = 0x022F9920 -0x022DC240
+OFFSET_EU = 0x022FA32C - 0x022DCB80
+OFFSET_US = 0x022F9920 - 0x022DC240
 
 
 class ReduceJumpcutPauseTime(AbstractPatchHandler):
@@ -37,7 +38,7 @@ class ReduceJumpcutPauseTime(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Reduces the amount of time the game pauses for before changing the PoV when far-off pals is enabled, from 60 frames to 12. This is already applied in the CTC hack.'
+        return _('Reduces the amount of time the game pauses for before changing the PoV when far-off pals is enabled, from 60 frames to 12. This is already applied in the CTC hack.')
 
     @property
     def author(self) -> str:

@@ -22,6 +22,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.util import _
 
 
 ORIGINAL_BYTESEQ = bytes(b'\x38\x80\xBD\x18')
@@ -37,7 +38,7 @@ class FarOffPalOverdrive(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Makes the game always move the PoV to your partners when they use moves or are attacked, even if the partner is only one tile away, when far-off pals is enabled. Recommended for CTC since the PoV stays on your last pokemon at the end of a manual movement round without this, and CTC already reduces the amount of time the game pauses for between PoV changes.'
+        return _('Makes the game always move the PoV to your partners when they use moves or are attacked, even if the partner is only one tile away, when far-off pals is enabled. Recommended for CTC since the PoV stays on your last pokemon at the end of a manual movement round without this, and CTC already reduces the amount of time the game pauses for between PoV changes.')
 
     @property
     def author(self) -> str:

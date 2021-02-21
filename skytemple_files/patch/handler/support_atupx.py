@@ -19,6 +19,7 @@ from typing import Callable
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.common.i18n_util import f, _
 
 NUM_PREVIOUS_ENTRIES = 600
 
@@ -41,7 +42,7 @@ class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return 'Provide support for ATUPX containers, which use a different algorithm than PX compression.\nRequires the ActorAndLevelLoader, as it frees the space needed to implement this.'
+        return _('Provide support for ATUPX containers, which use a different algorithm than PX compression.\nRequires the ActorAndLevelLoader, as it frees the space needed to implement this.')
 
     @property
     def author(self) -> str:

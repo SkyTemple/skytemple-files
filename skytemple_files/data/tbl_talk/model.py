@@ -18,14 +18,16 @@ from enum import Enum
 
 from skytemple_files.data.tbl_talk import *
 from skytemple_files.common.util import *
+from skytemple_files.common.i18n_util import f, _
+
 
 class TalkType(Enum):
-    HEALTHY = 0x0, 'Healthy'
-    HALF_LIFE = 0x1, 'Half Life'
-    PINCH = 0x2, 'Pinch'
-    LEVEL_UP = 0x3, 'Level Up'
-    WAIT = 0x4, 'Wait'
-    GROUND_WAIT = 0x5, 'Ground Wait'
+    HEALTHY = 0x0, _('Healthy')
+    HALF_LIFE = 0x1, _('Half Life')
+    PINCH = 0x2, _('Pinch')
+    LEVEL_UP = 0x3, _('Level Up')
+    WAIT = 0x4, _('Wait')
+    GROUND_WAIT = 0x5, _('Ground Wait')
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)

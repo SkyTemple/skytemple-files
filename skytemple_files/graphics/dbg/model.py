@@ -22,6 +22,7 @@ from skytemple_files.common.util import read_uintle, write_uintle, chunks
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
 from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
 from skytemple_files.graphics.dpl.model import Dpl, DPL_PAL_LEN, DPL_MAX_PAL
+from skytemple_files.common.i18n_util import f, _
 
 try:
     from PIL import Image
@@ -81,11 +82,11 @@ class Dbg:
         expected_width = DBG_TILING_DIM * DBG_WIDTH_AND_HEIGHT * DPCI_TILE_DIM
         expected_height = DBG_TILING_DIM * DBG_WIDTH_AND_HEIGHT * DPCI_TILE_DIM
         if img.width != expected_width:
-            raise ValueError(f"Can not import map background: Width of image must match the expected width: "
-                             f"{expected_width}px")
+            raise ValueError(f(_("Can not import map background: Width of image must match the expected width: "
+                                 "{expected_width}px")))
         if img.height != expected_height:
-            raise ValueError(f"Can not import map background: Height of image must match the expected height: "
-                             f"{expected_height}px")
+            raise ValueError(f(_("Can not import map background: Height of image must match the expected height: "
+                                "{expected_height}px")))
 
         # Import tiles, tile mappings and chunks mappings
         tiles, all_possible_tile_mappings, palettes = from_pil(

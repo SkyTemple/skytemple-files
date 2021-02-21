@@ -46,6 +46,7 @@ from skytemple_files.patch.handler.complete_team_control import CompleteTeamCont
 from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
 from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
 from skytemple_files.patch.handler.reduce_jumpcut_pause_time import ReduceJumpcutPauseTime
+from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 
@@ -98,23 +99,23 @@ class Patcher:
 
     def is_applied(self, name: str):
         if name not in self._loaded_patches:
-            raise ValueError(f"The patch '{name}' was not found.")
+            raise ValueError(f(_("The patch '{name}' was not found.")))
         return self._loaded_patches[name].is_applied(self._rom, self._config)
 
     def apply(self, name: str):
         if name not in self._loaded_patches:
-            raise ValueError(f"The patch '{name}' was not found.")
+            raise ValueError(f(_("The patch '{name}' was not found.")))
         patch = self._loaded_patches[name]
         if isinstance(patch, DependantPatch):
             for patch_name in patch.depends_on():
                 try:
                     if not self.is_applied(patch_name):
-                        raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
-                                                   f"apply '{name}'.")
+                        raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
+                                                       "apply '{name}'.")))
                 except ValueError as err:
-                    raise PatchDependencyError(f"The patch '{patch_name}' needs to be applied before you can "
-                                               f"apply '{name}'. "
-                                               f"This patch could not be found.") from err
+                    raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
+                                                   "apply '{name}'. "
+                                                   "This patch could not be found."))) from err
         patch.apply(
             partial(self._apply_armips, name),
             self._rom, self._config
@@ -141,9 +142,9 @@ class Patcher:
             config_xml = os.path.join(tmpdir.name, 'config.xml')
             PatchPackageConfigMerger(config_xml, self._config.game_edition).merge(self._config.asm_patches_constants)
         except FileNotFoundError as ex:
-            raise PatchPackageError("config.xml missing in patch package.") from ex
+            raise PatchPackageError(_("config.xml missing in patch package.")) from ex
         except ParseError as ex:
-            raise PatchPackageError("Syntax error in the config.xml while reading patch package.") from ex
+            raise PatchPackageError(_("Syntax error in the config.xml while reading patch package.")) from ex
 
         # Evalulate the module
         try:
@@ -153,25 +154,25 @@ class Patcher:
             patch = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(patch)
         except FileNotFoundError as ex:
-            raise PatchPackageError("patch.py missing in patch package.") from ex
+            raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
-            raise PatchPackageError("The patch.py of the patch package contains a syntay error.") from ex
+            raise PatchPackageError(_("The patch.py of the patch package contains a syntay error.")) from ex
 
         try:
             handler = patch.PatchHandler()
         except AttributeError as ex:
-            raise PatchPackageError("The patch.py of the patch package does not contain a 'PatchHandler'.") from ex
+            raise PatchPackageError(_("The patch.py of the patch package does not contain a 'PatchHandler'.")) from ex
 
         try:
             self.add_manually(handler, tmpdir.name)
         except ValueError as ex:
-            raise PatchPackageError("The patch package does not contain an entry for the handler's patch name "
-                                    "in the config.xml.") from ex
+            raise PatchPackageError(_("The patch package does not contain an entry for the handler's patch name "
+                                      "in the config.xml.")) from ex
 
     def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str):
         # Try to find the patch in the config
         if handler.name not in self._config.asm_patches_constants.patches.keys():
-            raise ValueError(f"No patch for handler '{handler.name}' found in the configuration.")
+            raise ValueError(f(_("No patch for handler '{handler.name}' found in the configuration.")))
         self._loaded_patches[handler.name] = handler
         self._patch_dirs[handler.name] = os.path.realpath(patch_base_dir)
 

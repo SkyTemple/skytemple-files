@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'8@-\xe9')
 OFFSET_EU = 0x70F70
@@ -35,7 +36,7 @@ class DisableTipsPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return "Disables the tip textboxes shown in dungeons at the beginning of the game."
+        return _("Disables the tip textboxes shown in dungeons at the beginning of the game.")
 
     @property
     def author(self) -> str:

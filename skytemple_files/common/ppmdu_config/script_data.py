@@ -24,6 +24,7 @@ from typing import List, Dict, Optional
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
+from skytemple_files.common.i18n_util import f, _
 
 
 class GameVariableType(IntEnum):
@@ -176,7 +177,7 @@ class Pmd2ScriptOpCode(SsbOpCode):
         self.arguments: List[Pmd2ScriptOpCodeArgument] = arguments
         self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
         self.repeating_argument_group: Pmd2ScriptOpCodeRepeatingArgumentGroup = repeating_argument_group
-        self.description = "This function has no description."  # todo
+        self.description = _("This function has no description.")  # todo
 
 
 class Pmd2ScriptGroundStateStruct(AutoString):

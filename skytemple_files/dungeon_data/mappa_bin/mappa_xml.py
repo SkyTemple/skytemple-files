@@ -29,6 +29,7 @@ from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
+from skytemple_files.common.i18n_util import f, _
 
 
 def mappa_floor_xml_export(floor: MappaFloor, export_layout=True, export_monsters=True, export_traps=True,
@@ -68,5 +69,5 @@ def mappa_floor_xml_import(xml: Element, floor: MappaFloor):
         elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2:
             floor.unk_items2 = MappaItemList.from_xml(child)
         else:
-            raise XmlValidateError(f'Floor parsing: Unexpected {child.tag}')
+            raise XmlValidateError(f(_('Floor parsing: Unexpected {child.tag}')))
 

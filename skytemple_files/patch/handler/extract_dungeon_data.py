@@ -16,12 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Callable
 
-from ndspy.rom import NintendoDSRom
-
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
+from skytemple_files.common.util import _
 PATCH_CHECK_ADDR_APPLIED_US = 0x4F7F8
 PATCH_CHECK_INSTR_APPLIED_US = 0x359F1010
 PATCH_CHECK_ADDR_APPLIED_EU = 0x4FB30
@@ -51,7 +50,7 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system.'
+        return _('Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system.')
 
     @property
     def author(self) -> str:
@@ -133,5 +132,6 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

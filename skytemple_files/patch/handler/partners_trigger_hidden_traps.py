@@ -22,11 +22,12 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.util import _
 
 
 ORIGINAL_BYTESEQ = bytes(b'\x20\x00\xD4\xE5')
-OFFSET_EU = 0x023061C8 -0x022DCB80
-OFFSET_US = 0x0230579C -0x022DC240
+OFFSET_EU = 0x023061C8 - 0x022DCB80
+OFFSET_US = 0x0230579C - 0x022DC240
 
 
 class PartnersTriggerHiddenTraps(AbstractPatchHandler):
@@ -37,7 +38,7 @@ class PartnersTriggerHiddenTraps(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Recommended for CTC. Without this patch, partners cannot trigger hidden traps - this balances the game, as making your partners dodge traps with manual movement is easy, but this patch is not recommended for mods which use pitfall traps, as they instakill partners which step on them.'
+        return _('Recommended for CTC. Without this patch, partners cannot trigger hidden traps - this balances the game, as making your partners dodge traps with manual movement is easy, but this patch is not recommended for mods which use pitfall traps, as they instakill partners which step on them.')
 
     @property
     def author(self) -> str:

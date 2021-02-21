@@ -26,14 +26,16 @@ except ImportError:
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.i18n_util import f, _
 MAGIC_NUMBER = b'WTE\0'
 logger = logging.getLogger(__name__)
 
+
 class WteImageType(Enum):
-    NONE       = 0x00, 'Palette Only', 0, False
-    COLOR_2BPP = 0x02, '2 bits per pixel (4 colors)', 2, True
-    COLOR_4BPP = 0x03, '4 bits per pixel (16 colors)', 4, True
-    COLOR_8BPP = 0x04, '8 bits per pixel (256 colors)', 8, True
+    NONE       = 0x00, _('Palette Only'), 0, False
+    COLOR_2BPP = 0x02, _('2 bits per pixel (4 colors)'), 2, True
+    COLOR_4BPP = 0x03, _('4 bits per pixel (16 colors)'), 4, True
+    COLOR_8BPP = 0x04, _('8 bits per pixel (256 colors)'), 8, True
     
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -184,13 +186,13 @@ class Wte(Sir0Serializable, AutoString):
     def from_pil(self, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> 'Wte':
         """ Replace the image data by the new one passed in argument. """
         if img.mode != 'P':
-            raise AttributeError('Can not convert PIL image to WTE: Must be indexed image (=using a palette)')
+            raise AttributeError(_('Can not convert PIL image to WTE: Must be indexed image (=using a palette)'))
         
         if img_type.has_image:
             try:
                 self._adjust_actual_dimensions(img.width, img.height)
             except ValueError:
-                raise ValueError('This image is too big to fit into a WTE file.')
+                raise ValueError(_('This image is too big to fit into a WTE file.'))
             
             self.width = img.width
             self.height = img.height

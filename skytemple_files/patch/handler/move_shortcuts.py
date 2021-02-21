@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
 OFFSET_EU = 0x158F0
@@ -35,7 +36,7 @@ class MoveShortcutsPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return "Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y)."
+        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y).")
 
     @property
     def author(self) -> str:

@@ -20,6 +20,7 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_dat import *
 from skytemple_files.graphics.fonts.font_dat.model import FontDat
+from skytemple_files.common.i18n_util import f, _
 
 
 class FontDatWriter:
@@ -34,7 +35,7 @@ class FontDatWriter:
         last = (None, None)
         for i, e in enumerate(sorted(self.model.entries, key=lambda x:(x.table, x.char))):
             if last==(e.char, e.table):
-                raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")
+                raise ValueError(_("Character {e.char} in table {e.table} is defined multiple times in a font file!"))
             last = (e.char, e.table)
             off_start = 0x4 + (i * FONT_DAT_ENTRY_LEN)
             write_uintle(buffer, e.char, off_start + 0x00)

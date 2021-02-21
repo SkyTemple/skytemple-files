@@ -25,6 +25,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary, Pmd2SimplePatch
 from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir
+from skytemple_files.common.i18n_util import f, _
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 Y9_BIN = 'y9.bin'
@@ -126,14 +127,14 @@ class ArmPatcher:
                                               stderr=subprocess.STDOUT)
                     retcode = result.wait()
                 except FileNotFoundError as ex:
-                    raise ArmipsNotInstalledError("ARMIPS could not be found. Make sure, that "
-                                                  "'armips' is inside your system's PATH.") from ex
+                    raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
+                                                    "'armips' is inside your system's PATH.")) from ex
                 finally:
                     # Restore cwd
                     os.chdir(original_cwd)
 
                 if retcode != 0:
-                    raise PatchError("ARMIPS reported an error while applying the patch.",
+                    raise PatchError(_("ARMIPS reported an error while applying the patch."),
                                      str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
 
                 # Load the binaries back into the ROM
@@ -162,4 +163,4 @@ class ArmPatcher:
         except (PatchError, ArmipsNotInstalledError):
             raise
         except BaseException as ex:
-            raise RuntimeError(f"Error while applying the patch: {ex}") from ex
+            raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex

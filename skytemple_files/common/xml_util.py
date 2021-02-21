@@ -20,6 +20,7 @@ from typing import List
 from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
+from skytemple_files.common.i18n_util import f, _
 
 
 class XmlValidateError(ValueError):
@@ -39,13 +40,13 @@ class XmlSerializable(ABC):
 
 def validate_xml_tag(ele: Element, tag: str):
     if ele.tag != tag:
-        raise XmlValidateError(f"Invalid XML. Expected tag {tag}, got tag {ele.tag}.")
+        raise XmlValidateError(f(_("Invalid XML. Expected tag {tag}, got tag {ele.tag}.")))
 
 
 def validate_xml_attribs(ele: Element, attribs: List[str]):
     for attrib in attribs:
         if attrib not in ele.attrib:
-            raise XmlValidateError(f"Invalid XML. Expected attribute {attrib} for XML tag {ele.tag}.")
+            raise XmlValidateError(f(_("Invalid XML. Expected attribute {attrib} for XML tag {ele.tag}.")))
 
 
 def prettify(elem):

@@ -42,5 +42,10 @@ def reload_locale():
 def f(s):
     """f-strings as a function, for use with translatable strings: f'{techticks}' == f('{techticks}')"""
     frame = currentframe().f_back
-    s = s.replace("'", "\\'").replace('\n','\\n')
-    return eval(f"f'{s}'", frame.f_locals, frame.f_globals)
+    s1 = s.replace("'", "\\'").replace('\n','\\n')
+    try:
+        return eval(f"f'{s1}'", frame.f_locals, frame.f_globals)
+    except SyntaxError as e:
+        if "f-string expression part cannot include a backslash" in str(e):
+            s1 = s.replace('"', '\\"').replace('\n','\\n')
+            return eval(f'f"{s1}"', frame.f_locals, frame.f_globals)

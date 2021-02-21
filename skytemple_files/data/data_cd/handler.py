@@ -16,16 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.data.waza_cd.model import WazaCD
-from skytemple_files.data.waza_cd.writer import WazaCDWriter
+from skytemple_files.data.data_cd.model import DataCD
+from skytemple_files.data.data_cd.writer import DataCDWriter
 
 
-class WazaCDHandler(DataHandler[WazaCD]):
+class DataCDHandler(DataHandler[DataCD]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'WazaCD':
-        return WazaCD(data)
+    def deserialize(cls, data: bytes, **kwargs) -> 'DataCD':
+        return DataCD(data)
 
     @classmethod
-    def serialize(cls, data: 'WazaCD', **kwargs) -> bytes:
-        return WazaCDWriter(data).write()
+    def serialize(cls, data: 'DataCD', **kwargs) -> bytes:
+        return DataCDWriter(data).write()
 

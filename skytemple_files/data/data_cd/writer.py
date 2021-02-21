@@ -18,27 +18,27 @@
 from typing import Optional, Dict
 
 from skytemple_files.common.util import *
-from skytemple_files.data.waza_cd.model import WazaCD
+from skytemple_files.data.data_cd.model import DataCD
 
 
-class WazaCDWriter:
-    def __init__(self, model: WazaCD):
+class DataCDWriter:
+    def __init__(self, model: DataCD):
         self.model = model
 
     def write(self) -> bytes:
-        nb_moves = len(self.model.moves_effects)
+        nb_items = len(self.model.items_effects)
         
-        header = bytearray(4+2*nb_moves+len(self.model.effects_code)*8)
-        write_uintle(header, 4+2*nb_moves, 0, 4)
+        header = bytearray(4+2*nb_items+len(self.model.effects_code)*8)
+        write_uintle(header, 4+2*nb_items, 0, 4)
         code_data = bytearray(0)
         current_ptr = len(header)
         for i, c in enumerate(self.model.effects_code):
-            write_uintle(header, current_ptr, 4+2*nb_moves+i*8, 4)
-            write_uintle(header, len(c), 4+2*nb_moves+i*8+4, 4)
+            write_uintle(header, current_ptr, 4+2*nb_items+i*8, 4)
+            write_uintle(header, len(c), 4+2*nb_items+i*8+4, 4)
             code_data += bytearray(c)
             current_ptr += len(c)
         
-        for i, x in enumerate(self.model.moves_effects):
+        for i, x in enumerate(self.model.items_effects):
             write_uintle(header, x, 4+2*i, 2)
         file_data = header + code_data
         return bytes(file_data)

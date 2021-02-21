@@ -47,6 +47,7 @@ from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdri
 from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
 from skytemple_files.patch.handler.reduce_jumpcut_pause_time import ReduceJumpcutPauseTime
 from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
+from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -69,6 +70,7 @@ class PatchType(Enum):
     REDUCE_JUMPCUT_PAUSE_TIME = ReduceJumpcutPauseTime
     EXTRA_SPACE = ExtraSpacePatch
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
+    EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
 
 
 class PatchPackageError(RuntimeError):

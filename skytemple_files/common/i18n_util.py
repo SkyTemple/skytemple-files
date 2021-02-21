@@ -15,10 +15,28 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-import gettext
 from inspect import currentframe
+try:
+    import builtins
+    _ = builtins._
+except Exception:
+    _ = lambda a: a
 
-_ = gettext.gettext
+
+def reload_locale():
+    global _
+    import builtins
+    _ = builtins._
+    try:
+        from explorerscript import util
+        util._ = _
+    except ImportError:
+        pass
+    try:
+        from desmume import i18n_util
+        i18n_util._ = _
+    except ImportError:
+        pass
 
 
 def f(s):

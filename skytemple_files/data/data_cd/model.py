@@ -18,15 +18,15 @@ from typing import Optional
 
 from skytemple_files.common.util import *
 
-class WazaCD(AutoString):
+class DataCD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         limit = read_uintle(data, 0, 4)
-        self.moves_effects = []
+        self.items_effects = []
         self.effects_code = []
         for x in range(4, limit, 2):
-            self.moves_effects.append(read_uintle(data, x, 2))
+            self.items_effects.append(read_uintle(data, x, 2))
 
         last_ptr = read_uintle(data, limit, 4)
         for x in range(limit, last_ptr, 8):
@@ -34,19 +34,19 @@ class WazaCD(AutoString):
             length = read_uintle(data, x+4, 4)
             self.effects_code.append(data[start:start+length])
 
-    def nb_moves(self) -> bytes:
-        return len(self.moves_effects)
-    def get_move_effect_id(self, move_id: int) -> int:
-        return self.moves_effects[move_id]
-    def set_move_effect_id(self, move_id: int, effect_id: int):
-        self.moves_effects[move_id] = effect_id
+    def nb_items(self) -> bytes:
+        return len(self.items_effects)
+    def get_item_effect_id(self, item_id: int) -> int:
+        return self.items_effects[item_id]
+    def set_item_effect_id(self, item_id: int, effect_id: int):
+        self.items_effects[item_id] = effect_id
         
     def get_all_of(self, effect_id: int) -> int:
-        move_ids = []
-        for i, x in enumerate(self.moves_effects):
+        item_ids = []
+        for i, x in enumerate(self.items_effects):
             if x==effect_id:
-                move_ids.append(i)
-        return move_ids
+                item_ids.append(i)
+        return item_ids
     
     def nb_effects(self) -> bytes:
         return len(self.effects_code)
@@ -55,10 +55,10 @@ class WazaCD(AutoString):
     
     def del_effect_code(self, effect_id: int):
         if len(self.get_all_of(effect_id))!=0:
-            raise ValueError("To delete this effect, no moves must use it.")
-        for i in range(len(self.moves_effects)):
-            if self.moves_effects[i]>effect_id:
-                self.moves_effects[i] -= 1
+            raise ValueError("To delete this effect, no items must use it.")
+        for i in range(len(self.items_effects)):
+            if self.items_effects[i]>effect_id:
+                self.items_effects[i] -= 1
         
         del self.effects_code[effect_id]
     
@@ -69,7 +69,7 @@ class WazaCD(AutoString):
         self.effects_code[effect_id] = data
     
     def __eq__(self, other):
-        if not isinstance(other, WazaCD):
+        if not isinstance(other, DataCD):
             return False
-        return self.moves_effects == other.moves_effects and \
+        return self.items_effects == other.items_effects and \
                self.effects_code == other.effects_code

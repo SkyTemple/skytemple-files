@@ -53,6 +53,7 @@ class KaoImage:
         self.compressed_img_data = read_bytes(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len)
         self.as_pil = None  # lazy loading
         self.modified = False
+        self.empty = False
 
     def get(self) -> Image:
         """Returns the portrait as a PIL image with a 16-bit color palette"""

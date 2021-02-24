@@ -23,7 +23,7 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_fro
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
-rom_us = NintendoDSRom.fromFile('/home/marco/dev/skytemple/skytemple/skyworkcopy_us_dungeon_bg_test_corrupt.nds')
+rom_us = NintendoDSRom.fromFile('/tmp/rando.nds')
 ppmdu_us = get_ppmdu_config_for_rom(rom_us)
 arm9_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['arm9.bin'])
 

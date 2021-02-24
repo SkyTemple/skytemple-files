@@ -156,7 +156,7 @@ class Patcher:
         except FileNotFoundError as ex:
             raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
-            raise PatchPackageError(_("The patch.py of the patch package contains a syntay error.")) from ex
+            raise PatchPackageError(_("The patch.py of the patch package contains a syntax error.")) from ex
 
         try:
             handler = patch.PatchHandler()

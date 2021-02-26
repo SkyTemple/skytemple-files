@@ -242,7 +242,66 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
             #print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
             # Little endian:
             new_img[nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
-
+    # Palette reordering algorithm
+    # Tries to reorder the palette to have a more favorable data
+    # configuration for the PX algorithm
+    pairs = dict()
+    for x in range(len(new_img)-1):
+        l = [new_img[x]%16, new_img[x]//16, new_img[x+1]%16, new_img[x+1]//16]
+        if l.count(l[0])==3 or (l.count(l[0])==1 and l.count(l[1])==3):
+            a = l[0]
+            for b in l:
+                if b!=a:
+                    break
+            if a>=b:
+                c=b
+                b=a
+                a=c
+            if (a,b) in pairs:
+                pairs[(a,b)]+=1
+            else:
+                pairs[(a,b)]=1
+    new_order = [0]
+    for k, v in sorted(pairs.items(), key=lambda x: -x[1]):
+        k0_in_no = k[0] in new_order
+        k1_in_no = k[1] in new_order
+        if k0_in_no and k1_in_no:
+            continue
+        elif k0_in_no or k1_in_no:
+            if k0_in_no:
+                to_check = k[0]
+                to_add = k[1]
+            elif k1_in_no:
+                to_check = k[1]
+                to_add = k[0]
+            i = new_order.index(to_check)
+            if i>0:
+                if new_order[i-1]==-1:
+                    new_order.insert(i, to_add)
+                if len(new_order)==i+1 or new_order[i+1]==-1:
+                    new_order.insert(i+1, to_add)
+        else:
+            new_order.append(-1)
+            new_order.append(k[0])
+            new_order.append(k[1])
+    while -1 in new_order:
+        new_order.remove(-1)
+    for x in range(16):
+        if not x in new_order:
+            new_order.append(x)
+    new_img_new = bytearray(800)
+    for i, v in enumerate(new_img):
+        new_v = (new_order.index(v%16)) + (new_order.index(v//16)) * 16
+        new_img_new[i]=new_v
+    new_palette_new = bytearray(KAO_IMG_PAL_B_SIZE)
+    for i, v in enumerate(new_order):
+        new_palette_new[i*3] = new_palette[v*3]
+        new_palette_new[i*3+1] = new_palette[v*3+1]
+        new_palette_new[i*3+2] = new_palette[v*3+2]
+    new_img = new_img_new
+    new_palette = new_palette_new
+    # End of palette reordering
+    
     # You can check if this works correctly, by checking if the reverse action returns the
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()

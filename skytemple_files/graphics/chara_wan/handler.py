@@ -23,7 +23,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Sprite
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import list_insert_enlarge
 from skytemple_files.graphics.chara_wan.model import WanFile
-from skytemple_files.graphics.chara_wan.sheets import ExportSheets, ExportSheetsAsZip, ImportSheets
+from skytemple_files.graphics.chara_wan.sheets import ExportSheets, ExportSheetsAsZip, ImportSheets, ImportSheetsFromZip
 from skytemple_files.graphics.chara_wan.split_merge import MergeWan, SplitWan
 
 ANIM_PRESENCE = []
@@ -65,6 +65,10 @@ class CharaWanHandler(DataHandler[WanFile]):
     @classmethod
     def import_sheets(cls, in_dir, strict=False):
         return ImportSheets(in_dir, strict)
+
+    @classmethod
+    def import_sheets_from_zip(cls, zip_file, strict=False):
+        return ImportSheetsFromZip(zip_file, strict)
 
     @classmethod
     def merge_wan(cls, wan_monster: WanFile, wan_ground: WanFile, wan_attack: WanFile):

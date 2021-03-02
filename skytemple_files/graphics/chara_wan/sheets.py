@@ -24,6 +24,7 @@ from PIL import Image
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 import io
+import tempfile
 
 from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
@@ -422,6 +423,14 @@ def ImportSheets(inDir, strict=False):
     wan.customPalette = [singlePalette]
     wan.sdwSize = sdwSize
     # return the wan file
+    return wan
+
+
+def ImportSheetsFromZip(zipFile, strict=False):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        with ZipFile(zipFile, 'r') as zipObj:
+            zipObj.extractall(tmp_dir)
+        wan = ImportSheets(tmp_dir, strict)
     return wan
 
 

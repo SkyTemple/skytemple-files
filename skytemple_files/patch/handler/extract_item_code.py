@@ -22,6 +22,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.asm_tools import AsmFunction
+from skytemple_files.common.i18n_util import _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x3F76C
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3500F67
@@ -43,6 +44,7 @@ DATA_SEG_EU = 0x0231D120
 
 ITEM_CODE_PATH = "BALANCE/item_cd.bin"
 
+
 class ExtractItemCodePatchHandler(AbstractPatchHandler):
 
     @property
@@ -51,7 +53,7 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts item effects code and put it in files. '
+        return _('Extracts item effects code and put it in files.')
 
     @property
     def author(self) -> str:
@@ -155,5 +157,6 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

@@ -22,6 +22,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.asm_tools import AsmFunction
+from skytemple_files.common.i18n_util import _
 PATCH_CHECK_ADDR_APPLIED_US = 0x53664
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3A01001
 PATCH_CHECK_ADDR_APPLIED_EU = 0x53764
@@ -40,6 +41,7 @@ END_M_FUNC_EU = 0x0233310C
 
 MOVE_CODE_PATH = "BALANCE/waza_cd.bin"
 
+
 class ExtractMoveCodePatchHandler(AbstractPatchHandler):
 
     @property
@@ -48,7 +50,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts move effects code and put it in files. '
+        return _('Extracts move effects code and put it in files.')
 
     @property
     def author(self) -> str:
@@ -130,5 +132,6 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

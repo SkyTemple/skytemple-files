@@ -118,5 +118,6 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

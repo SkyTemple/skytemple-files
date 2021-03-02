@@ -22,9 +22,8 @@ from enum import Enum
 
 from PIL import Image
 import xml.etree.ElementTree as ET
-from zipfile import ZipFile
-import io
-import tempfile
+from zipfile import ZipFile, ZIP_DEFLATED
+from tempfile import TemporaryDirectory
 
 from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
@@ -427,7 +426,7 @@ def ImportSheets(inDir, strict=False):
 
 
 def ImportSheetsFromZip(zipFile, strict=False):
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with TemporaryDirectory() as tmp_dir:
         with ZipFile(zipFile, 'r') as zipObj:
             zipObj.extractall(tmp_dir)
         wan = ImportSheets(tmp_dir, strict)
@@ -648,206 +647,16 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
 
 
 def ExportSheetsAsZip(zipFile, sdwImg, wan, anim_name_map):
-    def image_to_byte_array(image: Image):
-        imgByteArr = io.BytesIO()
-        image.save(imgByteArr, format='png')
-        imgByteArr = imgByteArr.getvalue()
-        return imgByteArr
-
-    if not os.path.exists(os.path.dirname(zipFile)):
-        os.makedirs(os.path.dirname(zipFile))
-
-    anim_stats = []
-    maxFrameBounds = (10000, 10000, -10000, -10000)
-    # get max bounds across all frames
-    for idx, metaFrame in enumerate(wan.frameData):
-        for mt_idx, metaFramePiece in enumerate(metaFrame):
-            # update bounds based on image
-            fBounds = metaFramePiece.GetBounds()
-            maxFrameBounds = exUtils.combineExtents(maxFrameBounds, fBounds)
-
-        # update bounds based on offsets
-        offset = wan.offsetData[idx]
-        maxFrameBounds = exUtils.combineExtents(maxFrameBounds, offset.GetBounds())
-
-    # round up to nearest x8
-    maxFrameBounds = exUtils.centerBounds(maxFrameBounds, (DRAW_CENTER_X, DRAW_CENTER_Y))
-    maxFrameBounds = exUtils.roundUpBox(maxFrameBounds)
-
-    # create all frames, and visual representation of offsets tied to each frame
-    frames = []
-    offsets = []
-    frames_bounds_tight = []
-    piece_imgs = {}
-    for idx, metaFrame in enumerate(wan.frameData):
-        has_minus = False
-        draw_queue = []
-        for mt_idx, metaFramePiece in enumerate(metaFrame):
-            # create the piece
-            parent_idx = MINUS_FRAME
-            if metaFramePiece.imgIndex == MINUS_FRAME:
-                has_minus = True
-                prev_idx = mt_idx - 1
-                while metaFrame[prev_idx].imgIndex == MINUS_FRAME or metaFrame[
-                    prev_idx].getTileNum() != metaFramePiece.getTileNum():
-                    prev_idx = prev_idx - 1
-                parent_idx = metaFrame[prev_idx].imgIndex
-            else:
-                parent_idx = metaFramePiece.imgIndex
-
-            if parent_idx in piece_imgs:
-                img = piece_imgs[parent_idx]
-            else:
-                img = metaFramePiece.GeneratePiece(wan.imgData, wan.customPalette, parent_idx)
-                piece_imgs[parent_idx] = img
-            draw_queue.append((img, metaFramePiece))
-
-        # create an image to represent the full metaFrameGroup
-        groupImg = Image.new('RGBA', (maxFrameBounds[2] - maxFrameBounds[0], maxFrameBounds[3] - maxFrameBounds[1]),
-                             (0, 0, 0, 0))
-        while len(draw_queue) > 0:
-            img, metaFramePiece = draw_queue.pop()
-            metaFramePiece.DrawOn(groupImg, img, (maxFrameBounds[0], maxFrameBounds[1]))
-        frames.append(groupImg)
-
-        # create an image for particle offsets
-        particleImg = Image.new('RGBA', (maxFrameBounds[2] - maxFrameBounds[0], maxFrameBounds[3] - maxFrameBounds[1]),
-                                (0, 0, 0, 0))
-        offset = wan.offsetData[idx]
-        offset.DrawOn(particleImg, (maxFrameBounds[0], maxFrameBounds[1]))
-        offsets.append(particleImg)
-
-        # create a tighter bounds representation of the frame, down to the pixel
-        frame_rect = exUtils.getCoveredBounds(groupImg)
-        frame_rect = exUtils.addToBounds(frame_rect, maxFrameBounds)
-        frame_rect = exUtils.combineExtents(frame_rect, offset.GetBounds())
-        frames_bounds_tight.append(frame_rect)
-
-    # get max bounds for all animations
-    groupBounds = []
-    shadow_rect = (sdwImg.size[0] // -2, sdwImg.size[1] // -2, sdwImg.size[0] // 2, sdwImg.size[1] // 2)
-    shadow_rect_tight = exUtils.getCoveredBounds(sdwImg)
-    shadow_rect_tight = exUtils.addToBounds(shadow_rect_tight, shadow_rect)
-    for idx, animGroup in enumerate(wan.animGroupData):
-
-        maxBounds = (10000, 10000, -10000, -10000)
-        for g_idx, singleAnim in enumerate(animGroup):
-            for a_idx, animFrame in enumerate(singleAnim):
-                frame_rect = frames_bounds_tight[animFrame.frameIndex]
-                frameBounds = exUtils.addToBounds(frame_rect, animFrame.offset)
-                maxBounds = exUtils.combineExtents(maxBounds, frameBounds)
-                shadowBounds = exUtils.addToBounds(shadow_rect_tight, animFrame.shadow)
-                maxBounds = exUtils.combineExtents(maxBounds, shadowBounds)
-        # round up to nearest x8
-        maxBounds = exUtils.centerBounds(maxBounds, (DRAW_CENTER_X, DRAW_CENTER_Y))
-        maxBounds = exUtils.roundUpBox(maxBounds)
-        groupBounds.append(maxBounds)
-
-    zip_file_bytes_io = io.BytesIO()
-
-    with ZipFile(zipFile, 'w') as zip_file:
-        # create animations
-        for idx, animGroup in enumerate(wan.animGroupData):
-            animsPerGroup = len(animGroup)
-            # some groups may be empty
-            if animsPerGroup == 0:
-                continue
-
-            if idx >= len(anim_name_map) or anim_name_map[idx][0] == '':
-                raise ValueError("Animation #{0} needs a name!".format(idx))
-
-            dupe_idx = -1
-            for cmp_idx in ANIM_ORDER:
-                if cmp_idx == idx:
-                    break
-                cmp_group = wan.animGroupData[cmp_idx]
-                if exWanUtils.animGroupsEqual(animGroup, cmp_group):
-                    dupe_idx = cmp_idx
-                    break
-
-            if dupe_idx > -1:
-                anim_stats.append(AnimStat(idx, anim_name_map[idx][0], None, anim_name_map[dupe_idx][0]))
-                for extra_idx in range(1, len(anim_name_map[idx])):
-                    anim_stats.append(AnimStat(-1, anim_name_map[idx][extra_idx], None, anim_name_map[dupe_idx][0]))
-                continue
-
-            maxBounds = groupBounds[idx]
-            maxSize = (maxBounds[2] - maxBounds[0], maxBounds[3] - maxBounds[1])
-            new_stat = AnimStat(idx, anim_name_map[idx][0], maxSize, None)
-
-            framesPerAnim = 0
-            for g_idx, singleAnim in enumerate(animGroup):
-                framesPerAnim = max(framesPerAnim, len(singleAnim))
-
-            animImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
-            particleImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
-            shadowImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
-            for g_idx, singleAnim in enumerate(animGroup):
-                for a_idx, animFrame in enumerate(singleAnim):
-                    if a_idx >= len(new_stat.durations):
-                        new_stat.durations.append(animFrame.duration)
-                    if animFrame.IsRushPoint():
-                        new_stat.rushFrame = a_idx
-                    if animFrame.IsHitPoint():
-                        new_stat.hitFrame = a_idx
-                    if animFrame.IsReturnPoint():
-                        new_stat.returnFrame = a_idx
-
-                    frameImg = frames[animFrame.frameIndex]
-                    tilePos = (a_idx * maxSize[0], g_idx * maxSize[1])
-                    pastePos = (tilePos[0] - maxBounds[0] + maxFrameBounds[0] + animFrame.offset[0],
-                                tilePos[1] - maxBounds[1] + maxFrameBounds[1] + animFrame.offset[1])
-                    animImg.paste(frameImg, pastePos, frameImg)
-                    offsetImg = offsets[animFrame.frameIndex]
-                    particleImg.paste(offsetImg, pastePos, offsetImg)
-
-                    shadowBounds = exUtils.addToBounds(shadow_rect, animFrame.shadow)
-                    shadowPastePos = (tilePos[0] - maxBounds[0] + shadowBounds[0],
-                                      tilePos[1] - maxBounds[1] + shadowBounds[1])
-                    shadowImg.paste(sdwImg, shadowPastePos, sdwImg)
-            zip_file.writestr(new_stat.name + '-Anim.png', image_to_byte_array(animImg))
-            zip_file.writestr(new_stat.name + '-Offsets.png', image_to_byte_array(particleImg))
-            zip_file.writestr(new_stat.name + '-Shadow.png', image_to_byte_array(shadowImg))
-
-            for extra_idx in range(1, len(anim_name_map[idx])):
-                anim_stats.append(AnimStat(-1, anim_name_map[idx][extra_idx], None, anim_name_map[idx][0]))
-            anim_stats.append(new_stat)
-
-        # export the xml
-        root = ET.Element("AnimData")
-        shadow_node = ET.SubElement(root, "ShadowSize")
-        shadow_node.text = str(wan.sdwSize)
-
-        anims_node = ET.SubElement(root, "Anims")
-        for stat in anim_stats:
-            anim_node = ET.SubElement(anims_node, "Anim")
-            name_node = ET.SubElement(anim_node, "Name")
-            name_node.text = stat.name
-            if stat.index > -1:
-                index_node = ET.SubElement(anim_node, "Index")
-                index_node.text = str(stat.index)
-            if stat.backref is not None:
-                backref_node = ET.SubElement(anim_node, "CopyOf")
-                backref_node.text = stat.backref
-            else:
-                frame_width = ET.SubElement(anim_node, "FrameWidth")
-                frame_width.text = str(stat.size[0])
-                frame_height = ET.SubElement(anim_node, "FrameHeight")
-                frame_height.text = str(stat.size[1])
-                if stat.rushFrame > -1:
-                    rush_frame = ET.SubElement(anim_node, "RushFrame")
-                    rush_frame.text = str(stat.rushFrame)
-                if stat.hitFrame > -1:
-                    hit_frame = ET.SubElement(anim_node, "HitFrame")
-                    hit_frame.text = str(stat.hitFrame)
-                if stat.returnFrame > -1:
-                    return_frame = ET.SubElement(anim_node, "ReturnFrame")
-                    return_frame.text = str(stat.returnFrame)
-                durations_node = ET.SubElement(anim_node, "Durations")
-                for duration in stat.durations:
-                    dur_node = ET.SubElement(durations_node, "Duration")
-                    dur_node.text = str(duration)
-        zip_file.writestr('AnimData.xml', prettify(root))
+    with TemporaryDirectory() as tmp_dir:
+        ExportSheets(tmp_dir, sdwImg, wan, anim_name_map)
+        with ZipFile(zipFile, 'w') as ZipObj:
+            abs_src = os.path.abspath(tmp_dir)
+            for dirname, subdirs, files in os.walk(tmp_dir):
+                for filename in files:
+                    # Avoid absolute path creation
+                    absname = os.path.abspath(os.path.join(dirname, filename))
+                    arcname = absname[len(abs_src) + 1:]
+                    ZipObj.write(absname, arcname)
 
 
 def mapDuplicateImportImgs(imgs, final_imgs, img_map):

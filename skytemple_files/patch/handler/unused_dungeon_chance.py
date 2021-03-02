@@ -36,7 +36,7 @@ class UnusedDungeonChancePatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("Fixes the 'Unusued' chance for dungeons. It now determines a chance that a room randomly has " \
+        return _("Fixes the 'unused' chance for dungeons. It now determines a chance that a room randomly has " \
                  "walls in it, with some of it replaced by secondary terrain.")
 
     @property

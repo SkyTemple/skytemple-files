@@ -19,6 +19,7 @@ from enum import Enum
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary, Pmd2BinaryBlock
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.i18n_util import _
 
 
 class EntitySpawnEntry(AutoString):
@@ -79,52 +80,52 @@ class MonsterSpawnType(Enum):
 
     # A normal enemy, this isn't used in fixed rooms, so it might be
     # the type used for normal spawns in random generated floors
-    ENEMY_NORMAL = 0x00, 'Normal Enemy'
+    ENEMY_NORMAL = 0x00, _('Normal Enemy')
     # An outlaw enemy 
-    OUTLAW = 0x01, 'Outlaw'
+    OUTLAW = 0x01, _('Outlaw')
     # A strange enemy that has the same behavior as the outlaw type
-    ENEMY_OUTLAW = 0x02, 'Outlaw Enemy'
+    ENEMY_OUTLAW = 0x02, _('Outlaw Enemy')
     # An outlaw enemy running away from you
-    OUTLAW_RUN = 0x03, 'Outlaw Running Away'
+    OUTLAW_RUN = 0x03, _('Outlaw Running Away')
 
     # The spawn types used for battles against rival teams
     # One for the leader
-    TEAM_LEADER = 0x04, 'Rival Team Leader'
+    TEAM_LEADER = 0x04, _('Rival Team Leader')
     # And one for their members
-    TEAM_MEMBER = 0x05, 'Rival Team Member'
+    TEAM_MEMBER = 0x05, _('Rival Team Member')
     # A strong enemy that uses stats from the fixed stats table
-    ENEMY_STRONG = 0x06, 'Strong Enemy'
+    ENEMY_STRONG = 0x06, _('Strong Enemy')
     # An ally waiting to be rescued. If you talk to them, it will ask you
     # if you want to rescue them
-    ALLY_WFR = 0x07, 'Waiting for Rescue Ally'
+    ALLY_WFR = 0x07, _('Waiting for Rescue Ally')
 
     # The 8th spawn type is an enemy type with a broken AI
     # and spawn type 8 is not used so it is not included in this enum
 
     # A normal enemy, except that this time it is used in fixed floors
-    ENEMY_NORMAL_2 = 0x09, 'Normal Enemy'
+    ENEMY_NORMAL_2 = 0x09, _('Normal Enemy')
     # An ally who will help you in battles
-    ALLY_HELP = 0x0A, 'Helping Ally'
+    ALLY_HELP = 0x0A, _('Helping Ally')
 
     # Team from another game
-    OTHER_GAME_LEADER = 0xB, 'Other Game Team Leader'
-    OTHER_GAME_MEMBER_2 = 0xC, 'Other Game Team Member 2'
-    OTHER_GAME_MEMBER_3 = 0xD, 'Other Game Team Member 3'
-    OTHER_GAME_MEMBER_4 = 0xE, 'Other Game Team Member 4'
+    OTHER_GAME_LEADER = 0xB, _('Other Game Team Leader')
+    OTHER_GAME_MEMBER_2 = 0xC, _('Other Game Team Member 2')
+    OTHER_GAME_MEMBER_3 = 0xD, _('Other Game Team Member 3')
+    OTHER_GAME_MEMBER_4 = 0xE, _('Other Game Team Member 4')
 
     # This entry is unknown and unused
-    UNKNOWN_F = 0xF, 'Unknown 5'
+    UNKNOWN_F = 0xF, _('Unknown 5')
     
     # The one that welcomes you in the bazaar
-    BAZAAR_HOST = 0x10, 'Bazaar Host'
+    BAZAAR_HOST = 0x10, _('Bazaar Host')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you heal all your HP, PP and belly
-    BAZAAR_HEAL = 0x11, 'Bazaar Healer'
+    BAZAAR_HEAL = 0x11, _('Bazaar Healer')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you buy surprise boxes which contain a random item
-    BAZAAR_SURPRISE = 0x12, 'Bazaar Surprise'
+    BAZAAR_SURPRISE = 0x12, _('Bazaar Surprise')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you clean all your sticky items
-    BAZAAR_CLEAN = 0x13, 'Bazaar Clean Sticky Items'
+    BAZAAR_CLEAN = 0x13, _('Bazaar Clean Sticky Items')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you escape the dungeon
-    BAZAAR_ESCAPE = 0x14, 'Bazaar Escape'
+    BAZAAR_ESCAPE = 0x14, _('Bazaar Escape')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -136,6 +137,7 @@ class MonsterSpawnType(Enum):
             self, _: int, description: str
     ):
         self.description = description
+
 
 class MonsterSpawn(AutoString):
     def __init__(self, md_idx: int, stats_entry: int, enemy_settings: int):

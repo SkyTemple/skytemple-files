@@ -26,32 +26,70 @@ MD_ENTRY_LEN = 68
 
 
 class Gender(Enum):
-    INVALID = 0
-    MALE = 1
-    FEMALE = 2
-    GENDERLESS = 3
+    INVALID = 0, _('Invalid')
+    MALE = 1, _('Male')
+    FEMALE = 2, _('Female')
+    GENDERLESS = 3, _('Genderless')
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'Gender.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class PokeType(Enum):
-    NONE = 0x00
-    NORMAL = 0x01
-    FIRE = 0x02
-    WATER = 0x03
-    GRASS = 0x04
-    ELECTRIC = 0x05
-    ICE = 0x06
-    FIGHTING = 0x07
-    POISON = 0x08
-    GROUND = 0x09
-    FLYING = 0x0A
-    PSYCHIC = 0x0B
-    BUG = 0x0C
-    ROCK = 0x0D
-    GHOST = 0x0E
-    DRAGON = 0x0F
-    DARK = 0x10
-    STEEL = 0x11
-    NEUTRAL = 0x12
+    NONE = 0, _("None")
+    NORMAL = 1, _("Normal")
+    FIRE = 2, _("Fire")
+    WATER = 3, _("Water")
+    GRASS = 4, _("Grass")
+    ELECTRIC = 5, _("Electric")
+    ICE = 6, _("Ice")
+    FIGHTING = 7, _("Fighting")
+    POISON = 8, _("Poison")
+    GROUND = 9, _("Ground")
+    FLYING = 10, _("Flying")
+    PSYCHIC = 11, _("Psychic")
+    BUG = 12, _("Bug")
+    ROCK = 13, _("Rock")
+    GHOST = 14, _("Ghost")
+    DRAGON = 15, _("Dragon")
+    DARK = 16, _("Dark")
+    STEEL = 17, _("Steel")
+    NEUTRAL = 18, _("Neutral")
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'PokeType.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class Ability(Enum):
@@ -202,46 +240,122 @@ class Ability(Enum):
 
 
 class IQGroup(Enum):
-    A = 0x0
-    B = 0x1
-    C = 0x2
-    D = 0x3
-    E = 0x4
-    F = 0x5
-    G = 0x6
-    H = 0x7
-    UNUSED8 = 0x8
-    UNUSED9 = 0x9
-    I = 0xA
-    J = 0xB
-    UNUSEDC = 0xC
-    UNUSEDD = 0xD
-    UNUSEDE = 0xE
-    INVALID = 0xF
+    A = 0x0, 'A'
+    B = 0x1, 'B'
+    C = 0x2, 'C'
+    D = 0x3, 'D'
+    E = 0x4, 'E'
+    F = 0x5, 'F'
+    G = 0x6, 'G'
+    H = 0x7, 'H'
+    UNUSED8 = 0x8, _('Unused') + ' 8'
+    UNUSED9 = 0x9, _('Unused') + ' 9'
+    I = 0xA, 'I'
+    J = 0xB, 'J'
+    UNUSEDC = 0xC, _('Unused') + ' C'
+    UNUSEDD = 0xD, _('Unused') + ' D'
+    UNUSEDE = 0xE, _('Unused') + ' E'
+    INVALID = 0xF, _('Invalid')
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'IQGroup.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class EvolutionMethod(Enum):
-    NONE = 0
-    LEVEL = 1       # Params: (Level required, optional evo item ID)
-    IQ = 2          # Params: (IQ required, optional evo item ID)
-    ITEMS = 3       # Params: (item ID, optional evo item ID)
-    UNKNOWN4 = 4
-    LINK_CABLE = 5  # Params: (null, 0x01)
+    NONE = 0, _('None')
+    LEVEL = 1, _('Level')            # Params: (Level required, optional evo item ID)
+    IQ = 2, _('IQ')                  # Params: (IQ required, optional evo item ID)
+    ITEMS = 3, _('Items')            # Params: (item ID, optional evo item ID)
+    UNKNOWN4 = 4, _('Unknown') + ' 4'
+    LINK_CABLE = 5, _('Link Cable')  # Params: (null, 0x01)
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'EvolutionMethod.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class MovementType(Enum):
-    STANDARD = 0
-    UNKNOWN1 = 1
-    HOVERING = 2
-    PHASE_THROUGH_WALLS = 3
-    LAVA = 4
-    WATER = 5
+    STANDARD = 0, _("Standard")
+    UNKNOWN1 = 1, _("Unknown") + ' 1'
+    HOVERING = 2, _("Hovering")
+    PHASE_THROUGH_WALLS = 3, _("Phase Through Walls")   # TRANSLATORS: Movement Type
+    LAVA = 4, _("Lava")
+    WATER = 5, _("Water")
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MovementType.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class ShadowSize(Enum):
-    SMALL = 0
-    MEDIUM = 1
-    LARGE = 2
+    SMALL = 0, _('Small')
+    MEDIUM = 1, _('Medium')
+    LARGE = 2, _('Large')
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'ShadowSize.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
 
 
 class MdEntry(AutoString):

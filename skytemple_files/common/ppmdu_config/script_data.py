@@ -213,6 +213,26 @@ class Pmd2ScriptDirection(AutoString):
         warnings.warn("Please use self.ssa_id instead.", DeprecationWarning)
         return self.ssa_id
 
+    @property
+    def print_name(self):
+        if self.ssa_id == 1:
+            return _('Down')  # TRANSLATORS: Direction
+        elif self.ssa_id == 2:
+            return _('Down Right')  # TRANSLATORS: Direction
+        elif self.ssa_id == 3:
+            return _('Right')  # TRANSLATORS: Direction
+        elif self.ssa_id == 4:
+            return _('Up Right')  # TRANSLATORS: Direction
+        elif self.ssa_id == 5:
+            return _('Up')  # TRANSLATORS: Direction
+        elif self.ssa_id == 6:
+            return _('Up Left')  # TRANSLATORS: Direction
+        elif self.ssa_id == 7:
+            return _('Left')  # TRANSLATORS: Direction
+        elif self.ssa_id == 8:
+            return _('Down Left')  # TRANSLATORS: Direction
+        return self.name
+
 
 class Pmd2ScriptData(AutoString):
     """TODO: Cache the __by_xyz properties."""

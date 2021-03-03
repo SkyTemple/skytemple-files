@@ -25,6 +25,7 @@ from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pm
     Pmd2DungeonDungeon
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
+from skytemple_files.common.i18n_util import _
 
 
 def id_matches_edition(e_game, edition):
@@ -35,7 +36,7 @@ def id_matches_edition(e_game, edition):
 
 
 class Pmd2XmlReader:
-    def __init__(self, file_names: List[str], game_edition: str):
+    def __init__(self, file_names: List[str], game_edition: str, translate_strings=True):
         """
         Create a parser.
         :param file_names: XML files. these will be merged.
@@ -57,9 +58,10 @@ class Pmd2XmlReader:
         self._root = XmlCombiner(roots).combine().getroot()
         self._game_edition = game_edition
         self._game_version = game_edition.split('_')[0]
+        self._translate_strings = translate_strings
 
     @classmethod
-    def load_default(cls, for_version='EoS_EU') -> Pmd2Data:
+    def load_default(cls, for_version='EoS_EU', translate_strings=True) -> Pmd2Data:
         """
         Load the default pmd2data.xml, patched with the skytemple.xml and create a Pmd2Data object for the version
         passed.
@@ -68,7 +70,7 @@ class Pmd2XmlReader:
         return Pmd2XmlReader([
             os.path.join(res_dir, 'pmd2data.xml'),
             os.path.join(res_dir, 'skytemple.xml')
-        ], for_version).parse()
+        ], for_version, translate_strings).parse()
 
     def parse(self) -> Pmd2Data:
         """
@@ -157,13 +159,13 @@ class Pmd2XmlReader:
                                 for e_language in e_sub:
                                     languages.append(Pmd2Language(
                                         e_language.attrib['filename'],
-                                        e_language.attrib['name'],
+                                        self._(e_language.attrib['name']),
                                         e_language.attrib['locale'],
                                     ))
                             if e_sub.tag == 'StringBlocks':
                                 for e_string_block in e_sub:
                                     string_blocks.append(Pmd2StringBlock(
-                                        e_string_block.attrib['name'],
+                                        self._(e_string_block.attrib['name']),
                                         self._xml_int(e_string_block.attrib['beg']),
                                         self._xml_int(e_string_block.attrib['end'])
                                     ))
@@ -436,6 +438,11 @@ class Pmd2XmlReader:
         if s == "true":
             return True
         raise ParseError(f"Invalid boolean '{s}'")
+
+    def _(self, string):
+        if self._translate_strings:
+            return _(string)
+        return string
 
 
 class Pmd2AsmPatchesConstantsXmlReader:

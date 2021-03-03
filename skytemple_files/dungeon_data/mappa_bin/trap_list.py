@@ -28,31 +28,50 @@ if TYPE_CHECKING:
 
 
 class MappaTrapType(Enum):
-    UNUSED = 0
-    MUD_TRAP = 1
-    STICKY_TRAP = 2
-    GRIMY_TRAP = 3
-    SUMMON_TRAP = 4
-    PITFALL_TRAP = 5
-    WARP_TRAP = 6
-    GUST_TRAP = 7
-    SPIN_TRAP = 8
-    SLUMBER_TRAP = 9
-    SLOW_TRAP = 10
-    SEAL_TRAP = 11
-    POISON_TRAP = 12
-    SELFDESTRUCT_TRAP = 13
-    EXPLOSION_TRAP = 14
-    PP_ZERO_TRAP = 15
-    CHESTNUT_TRAP = 16
-    WONDER_TILE = 17
-    POKEMON_TRAP = 18
-    SPIKED_TILE = 19
-    STEALTH_ROCK = 20
-    TOXIC_SPIKES = 21
-    TRIP_TRAP = 22
-    RANDOM_TRAP = 23
-    GRUDGE_TRAP = 24
+    UNUSED = 0, _("Unused")
+    MUD_TRAP = 1, _("Mud Trap")
+    STICKY_TRAP = 2, _("Sticky Trap")
+    GRIMY_TRAP = 3, _("Grimy Trap")
+    SUMMON_TRAP = 4, _("Summon Trap")
+    PITFALL_TRAP = 5, _("Pitfall Trap")
+    WARP_TRAP = 6, _("Warp Trap")
+    GUST_TRAP = 7, _("Gust Trap")
+    SPIN_TRAP = 8, _("Spin Trap")
+    SLUMBER_TRAP = 9, _("Slumber Trap")
+    SLOW_TRAP = 10, _("Slow Trap")
+    SEAL_TRAP = 11, _("Seal Trap")
+    POISON_TRAP = 12, _("Poison Trap")
+    SELFDESTRUCT_TRAP = 13, _("Selfdestruct Trap")
+    EXPLOSION_TRAP = 14, _("Explosion Trap")
+    PP_ZERO_TRAP = 15, _("Pp Zero Trap")
+    CHESTNUT_TRAP = 16, _("Chestnut Trap")
+    WONDER_TILE = 17, _("Wonder Tile")
+    POKEMON_TRAP = 18, _("Pokemon Trap")
+    SPIKED_TILE = 19, _("Spiked Tile")
+    STEALTH_ROCK = 20, _("Stealth Rock")
+    TOXIC_SPIKES = 21, _("Toxic Spikes")
+    TRIP_TRAP = 22, _("Trip Trap")
+    RANDOM_TRAP = 23, _("Random Trap")
+    GRUDGE_TRAP = 24, _("Grudge Trap")
+
+    @property
+    def print_name(self):
+        return self._print_name_
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MappaTrapType.{self.name}'
 
 
 class MappaTrapList(AutoString, XmlSerializable):

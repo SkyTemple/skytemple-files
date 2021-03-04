@@ -1,25 +1,18 @@
 ; For use with ARMIPS
-; 2021/02/14
+; 2021/03/04
 ; For Explorers of Sky EU Only
 ; ------------------------------------------------------------------------------
-; Use filestreams to load move effects code 
+; Use filestreams to load move effects code
 ; ------------------------------------------------------------------------------
 
-.definelabel StartTable, 0x023302E0
-.definelabel StartMFunc, 0x02330B74
-.definelabel EndMFunc, 0x0233310C
-.definelabel FileStream, StartMFunc - 0x48
-.definelabel FileName, FileStream - 0x14
-.definelabel BufferRead, FileName - 0x8
-.definelabel CachedValue, BufferRead - 0x4
-
-.definelabel InvalidateInstructionCache, 0x0207A6BC
-.definelabel InvalidateAndCleanDataCache, 0x0207A608
-
 .org StartTable
-.area CachedValue-StartTable
+.area MetronomeFuncTempStruct-StartTable
+invalidate_cache:
+	str r11,[TemporaryR11]
+	ldr r11,=end_m_func
 	mov r1,#0x1
 	strb r1,[r5, #+0x162]
+hook_start_table: 
 	stmdb  r13!,{r5,r7,r8}
 	
 	; Bonjour, est-ce que vous connaissez le C-A-C-H-E ?
@@ -60,7 +53,6 @@ read_code:
 	mov r2,#0x2
 	bl FStreamRead
 	
-	
 	ldrh r1,[r8, #+0x4]
 	ldr r0,[r8, #+0x0]
 	add r1,r0,r1,lsl #0x3
@@ -97,13 +89,35 @@ end_read_code:
 	mcr p15,0,r0,c7,c0,4
 	
 	ldmia  r13!,{r5,r7,r8}
+	mov r1,#1
 	b StartMFunc
 	.pool
-	.fill (CachedValue-.), 0xCC
+return_effect:
+	bx r11
+end_m_func:
+	ldr r11,[TemporaryR11]
+	cmp r10,#0x0
+	b end_m_func_next
+	.fill (MetronomeFuncTempStruct-.), 0xCC
+.endarea
+
+.org MetronomeFuncTempStruct
+.area 0x8
+	.fill 0x8, 0x0
+.endarea
+
+.org MetronomeFuncTempArea
+.area 0x20
+	.fill 0x20, 0x0
+.endarea
+
+.org TemporaryR11
+.area 0x4
+	.fill 0x4, 0x0
 .endarea
 
 .org CachedValue
-.area 0x8
+.area 0x4
 	.fill 0x4, 0xFF
 .endarea
 
@@ -126,4 +140,50 @@ end_read_code:
 .org StartMFunc
 .area EndMFunc-StartMFunc
 	.fill (EndMFunc-StartMFunc), 0x0
+.endarea
+.org EndMFunc
+.area 0x4
+	b return_effect
+end_m_func_next:
+.endarea
+
+.org MetronomeHook
+.area 0xC
+	mvn r0,#0
+	bl MetronomeGetMove
+	mov r2,r1
+.endarea
+.org MetronomeHook+0x10
+.area 0x14
+	str r2,[r1]
+	mov r1,r0
+	add  r0,r13,#0x28
+	nop
+	nop
+.endarea
+
+.org MetronomeFunc
+.area 0x60
+	mov  r9,r0
+	ldr r0,=MetronomeFuncTempArea
+	stmia  r0,{r3,r4,r6,r7,r8,r9,r11}
+	ldr r0,=MetronomeLastMove
+	ldr r0,[r0, #+0x0]
+	mov r6,r0
+	mov  r4,r1
+	bl MetronomeGetMove
+	mov r1,r0
+	mov r6,r1
+	ldr r0,=MetronomeFuncTempStruct
+	mov  r7,r3
+	bl GetInfoMove
+	ldr r8,=MetronomeFuncTempStruct
+	ldr r11,=after_metronome
+	bl hook_start_table
+after_metronome:
+	ldr r0,=MetronomeFuncTempArea
+	ldmia  r0,{r3,r4,r6,r7,r8,r9,r11}
+	b end_m_func
+	.pool
+	.fill (MetronomeFunc+0x60-.), 0xCC
 .endarea

@@ -32,13 +32,18 @@ START_OV29_US = 0x022DC240
 START_TABLE_US = 0x0232F8AC
 START_M_FUNC_US = 0x02330134
 END_M_FUNC_US = 0x023326CC
+START_METRONOME_DATA_US = 0x935C
 
 START_OV29_EU = 0x022DCB80
 START_TABLE_EU = 0x023302EC
 START_M_FUNC_EU = 0x02330B74
 END_M_FUNC_EU = 0x0233310C
+START_METRONOME_DATA_EU = 0x9374
+
+METRONOME_DATA_LENGTH = 0x540
 
 MOVE_CODE_PATH = "BALANCE/waza_cd.bin"
+METRONOME_DATA_PATH = "BALANCE/metrono.bin"
 
 class ExtractMoveCodePatchHandler(AbstractPatchHandler):
 
@@ -67,19 +72,21 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        if not self.is_applied(rom, config):
-            if config.game_version == GAME_VERSION_EOS:
-                if config.game_region == GAME_REGION_US:
-                    start_ov29 = START_OV29_US
-                    start_table = START_TABLE_US
-                    start_m_functions = START_M_FUNC_US
-                    end_m_functions = END_M_FUNC_US
-                if config.game_region == GAME_REGION_EU:
-                    start_ov29 = START_OV29_EU
-                    start_table = START_TABLE_EU
-                    start_m_functions = START_M_FUNC_EU
-                    end_m_functions = END_M_FUNC_EU
-            
+        if config.game_version == GAME_VERSION_EOS:
+            if config.game_region == GAME_REGION_US:
+                start_ov29 = START_OV29_US
+                start_table = START_TABLE_US
+                start_m_functions = START_M_FUNC_US
+                end_m_functions = END_M_FUNC_US
+                start_metronome_data = START_METRONOME_DATA_US
+            if config.game_region == GAME_REGION_EU:
+                start_ov29 = START_OV29_EU
+                start_table = START_TABLE_EU
+                start_m_functions = START_M_FUNC_EU
+                end_m_functions = END_M_FUNC_EU
+                start_metronome_data = START_METRONOME_DATA_EU
+        
+        if MOVE_CODE_PATH not in rom.filenames:
             main_func = dict()
 
             data = rom.loadArm9Overlays([29])[29].data
@@ -122,10 +129,14 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             for i, x in enumerate(main_calls):
                 write_uintle(header, id_codes[x], 4+2*i, 2)
             file_data = header + code_data
-            if MOVE_CODE_PATH not in rom.filenames:
-                create_file_in_rom(rom, MOVE_CODE_PATH, file_data)
-            else:
-                rom.setFileByName(MOVE_CODE_PATH, file_data)
+            create_file_in_rom(rom, MOVE_CODE_PATH, file_data)
+        if METRONOME_DATA_PATH not in rom.filenames:
+            #Metronome
+            data = rom.loadArm9Overlays([10])[10].data
+            file_data = bytearray(METRONOME_DATA_LENGTH//2)
+            for x in range(start_metronome_data, start_metronome_data+METRONOME_DATA_LENGTH, 8):
+                write_uintle(file_data, read_uintle(data, x, 4), (x-start_metronome_data)//2, 4)
+            create_file_in_rom(rom, METRONOME_DATA_PATH, file_data)
         try:
             apply()
         except RuntimeError as ex:

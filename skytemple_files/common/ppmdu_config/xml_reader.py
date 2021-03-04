@@ -166,6 +166,7 @@ class Pmd2XmlReader:
                             if e_sub.tag == 'StringBlocks':
                                 for e_string_block in e_sub:
                                     string_blocks.append(Pmd2StringBlock(
+                                        e_string_block.attrib['name'],
                                         self._(e_string_block.attrib['name']),
                                         self._xml_int(e_string_block.attrib['beg']),
                                         self._xml_int(e_string_block.attrib['end'])

@@ -121,10 +121,14 @@ class Pmd2Language(AutoString):
 
 
 class Pmd2StringBlock(AutoString):
-    def __init__(self, name: str, begin: int, end: int):
+    def __init__(self, name: str, name_localized: str, begin: int, end: int):
         self.name = name
+        self.name_localized = name_localized
         self.begin = begin
         self.end = end
+
+    def __str__(self):
+        return self.name_localized
 
 
 class Pmd2StringIndexData(AutoString):

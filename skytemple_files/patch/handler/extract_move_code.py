@@ -73,7 +73,6 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-<<<<<<< HEAD
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 start_ov29 = START_OV29_US

@@ -159,6 +159,7 @@ class Pmd2XmlReader:
                                 for e_language in e_sub:
                                     languages.append(Pmd2Language(
                                         e_language.attrib['filename'],
+                                        e_language.attrib['name'],
                                         self._(e_language.attrib['name']),
                                         e_language.attrib['locale'],
                                     ))

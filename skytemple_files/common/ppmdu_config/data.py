@@ -110,10 +110,14 @@ class Pmd2Binary(AutoString):
 
 
 class Pmd2Language(AutoString):
-    def __init__(self, filename: str, name: str, locale: str):
+    def __init__(self, filename: str, name: str, name_localized: str, locale: str):
         self.filename = filename
         self.name = name
+        self.name_localized = name_localized
         self.locale = locale
+
+    def __str__(self):
+        return self.name_localized
 
 
 class Pmd2StringBlock(AutoString):

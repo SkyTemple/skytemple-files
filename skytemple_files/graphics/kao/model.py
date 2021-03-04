@@ -27,6 +27,7 @@ from typing import Union, Tuple
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
+from skytemple_files.common.i18n_util import f, _
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
@@ -52,6 +53,7 @@ class KaoImage:
         self.compressed_img_data = read_bytes(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len)
         self.as_pil = None  # lazy loading
         self.modified = False
+        self.empty = False
 
     def get(self) -> Image:
         """Returns the portrait as a PIL image with a 16-bit color palette"""
@@ -155,7 +157,7 @@ class KaoIterator:
             try:
                 ret = self.kao.get(self.current_index, self.current_subindex)
             except ValueError as ex:
-                warnings.warn(f"Could not load KAO at {old_index},{old_subindex}: {ex}")
+                warnings.warn(f(_("Could not load KAO at {old_index},{old_subindex}: {ex}")))
             self.current_subindex += 1
             if self.current_subindex >= self.max_subindex:
                 self.current_index += 1
@@ -211,7 +213,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.width != img_dim or pil.height != img_dim:
-        raise ValueError(f'Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')
+        raise ValueError(f(_('Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')))
     if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
         pil = simple_quant(pil)
     new_palette = bytearray(pil.palette.palette)
@@ -241,16 +243,75 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
             #print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
             # Little endian:
             new_img[nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
-
+    # Palette reordering algorithm
+    # Tries to reorder the palette to have a more favorable data
+    # configuration for the PX algorithm
+    pairs = dict()
+    for x in range(len(new_img)-1):
+        l = [new_img[x]%16, new_img[x]//16, new_img[x+1]%16, new_img[x+1]//16]
+        if l.count(l[0])==3 or (l.count(l[0])==1 and l.count(l[1])==3):
+            a = l[0]
+            for b in l:
+                if b!=a:
+                    break
+            if a>=b:
+                c=b
+                b=a
+                a=c
+            if (a,b) in pairs:
+                pairs[(a,b)]+=1
+            else:
+                pairs[(a,b)]=1
+    new_order = [0]
+    for k, v in sorted(pairs.items(), key=lambda x: -x[1]):
+        k0_in_no = k[0] in new_order
+        k1_in_no = k[1] in new_order
+        if k0_in_no and k1_in_no:
+            continue
+        elif k0_in_no or k1_in_no:
+            if k0_in_no:
+                to_check = k[0]
+                to_add = k[1]
+            elif k1_in_no:
+                to_check = k[1]
+                to_add = k[0]
+            i = new_order.index(to_check)
+            if i>0:
+                if new_order[i-1]==-1:
+                    new_order.insert(i, to_add)
+                if len(new_order)==i+1 or new_order[i+1]==-1:
+                    new_order.insert(i+1, to_add)
+        else:
+            new_order.append(-1)
+            new_order.append(k[0])
+            new_order.append(k[1])
+    while -1 in new_order:
+        new_order.remove(-1)
+    for x in range(16):
+        if not x in new_order:
+            new_order.append(x)
+    new_img_new = bytearray(800)
+    for i, v in enumerate(new_img):
+        new_v = (new_order.index(v%16)) + (new_order.index(v//16)) * 16
+        new_img_new[i]=new_v
+    new_palette_new = bytearray(KAO_IMG_PAL_B_SIZE)
+    for i, v in enumerate(new_order):
+        new_palette_new[i*3] = new_palette[v*3]
+        new_palette_new[i*3+1] = new_palette[v*3+1]
+        new_palette_new[i*3+2] = new_palette[v*3+2]
+    new_img = new_img_new
+    new_palette = new_palette_new
+    # End of palette reordering
+    
     # You can check if this works correctly, by checking if the reverse action returns the
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
     new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
     if len(new_img_compressed)>800:
-        raise AttributeError(f"This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
-                             f"If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
-                             f"which might be able to better compress this image.")
+        raise AttributeError(f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                                 "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                                 "which might be able to better compress this image.")))
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

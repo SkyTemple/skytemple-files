@@ -20,6 +20,7 @@ from typing import List
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.compression_container.common_at.handler import CommonAtHandler, CommonAtType
+from skytemple_files.common.i18n_util import f, _
 
 try:
     from PIL import Image
@@ -52,7 +53,7 @@ class HardcodedCartRemoved:
         Sets the cartridge removed data
         """
         if img.width!=IMG_WIDTH and img.height!=IMG_HEIGHT:
-            raise AttributeError(f"The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}.")
+            raise AttributeError(f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}.")))
         block = config.binaries['arm9.bin'].blocks['CartRemovedImgData']
         img = img.convert("RGB")
         raw_data = img.tobytes()
@@ -63,5 +64,5 @@ class HardcodedCartRemoved:
             img_data.append(v//256)
         data = CommonAtHandler.serialize(CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX]))
         if len(data)>block.end-block.begin:
-            raise AttributeError(f"This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.begin}).")
+            raise AttributeError(f(_("This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.begin}).")))
         arm9[block.begin:block.end] = data + bytes((block.end-block.begin)-len(data))

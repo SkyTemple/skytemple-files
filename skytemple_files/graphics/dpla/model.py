@@ -18,6 +18,7 @@ from itertools import islice
 from typing import Optional
 
 from skytemple_files.common.util import *
+from skytemple_files.common.i18n_util import f, _
 DPLA_COLORS_PER_PALETTE = 16
 
 
@@ -86,7 +87,7 @@ class Dpla:
 
     def get_frame_count_for_palette(self, palette_idx):
         if not self.has_for_palette(palette_idx):
-            raise ValueError("This palette has no animation.")
+            raise ValueError(_("This palette has no animation."))
         return int(len(self.colors[palette_idx * DPLA_COLORS_PER_PALETTE]) / 3)
 
     def enable_for_palette(self, palid):

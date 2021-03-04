@@ -23,6 +23,7 @@ from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.i18n_util import f, _
 END_OF_LIST_PADDING = b'\xaa\xaa\xaa\xaa'
 
 
@@ -39,76 +40,76 @@ class RoomType(Enum):
 
 
 class TileRuleType(Enum):
-    FLOOR_ROOM                  = 0x00, 'Floor, Room', \
+    FLOOR_ROOM                  = 0x00, _('Floor, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                 ''
-    WALL_HALLWAY               = 0x01, 'Wall, Hallway; Absolute Mover', \
+    WALL_HALLWAY               = 0x01, _('Wall, Hallway; Absolute Mover'), \
                                  FloorType.WALL, RoomType.HALLWAY, False, True, \
                                  ''
-    WALL_HALLWAY_IMPASSABLE    = 0x02, 'Wall, Hallway; Impassable', \
+    WALL_HALLWAY_IMPASSABLE    = 0x02, _('Wall, Hallway; Impassable'), \
                                  FloorType.WALL, RoomType.HALLWAY, True, False, \
                                  ''
-    WALL_HALLWAY_DEFAULT       = 0x03, 'Wall, Hallway', \
+    WALL_HALLWAY_DEFAULT       = 0x03, _('Wall, Hallway'), \
                                  FloorType.WALL, RoomType.HALLWAY, False, False, \
                                  ''
-    LEADER_SPAWN               = 0x04, 'Leader Spawn Floor', \
+    LEADER_SPAWN               = 0x04, _('Leader Spawn Floor'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    SECONDARY_ROOM             = 0x05, 'Secondary, Room', \
+    SECONDARY_ROOM             = 0x05, _('Secondary, Room'), \
                                  FloorType.SECONDARY, RoomType.ROOM, False, False, \
                                  ''
-    SECONDARY_HALLWAY_VOID     = 0x06, 'Chasm, Hallway', \
+    SECONDARY_HALLWAY_VOID     = 0x06, _('Chasm, Hallway'), \
                                  FloorType.SECONDARY, RoomType.HALLWAY, False, False, \
-                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
-    SECONDARY_HALLWAY_VOID_ALL = 0x07, 'Chasm, Hallway; All Chasm', \
+                                 _('Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).')
+    SECONDARY_HALLWAY_VOID_ALL = 0x07, _('Chasm, Hallway; All Chasm'), \
                                  FloorType.SECONDARY, RoomType.HALLWAY, True, False, \
-                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!). ' \
-                                 'All tiles outside of defined room are made the tileset\'s defined secondary terrain.'
-    WARP_ZONE                  = 0x08, 'Warp Zone, Room', \
+                                 _('Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!). '
+                                   'All tiles outside of defined room are made the tileset\'s defined secondary terrain.')
+    WARP_ZONE                  = 0x08, _('Warp Zone, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
-                                 'Creates a Warp Zone.'
-    FLOOR_HALLWAY              = 0x09, 'Floor, Hallway', \
+                                 _('Creates a Warp Zone.')
+    FLOOR_HALLWAY              = 0x09, _('Floor, Hallway'), \
                                  FloorType.FLOOR, RoomType.HALLWAY, False, False, \
                                  ''
-    SECONDARY_HALLWAY_VOID_IMPASSABLE = 0x0A, 'Chasm, Hallway; Impassable', \
+    SECONDARY_HALLWAY_VOID_IMPASSABLE = 0x0A, _('Chasm, Hallway; Impassable'), \
                                  FloorType.SECONDARY, RoomType.HALLWAY, True, False, \
-                                 'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
-    FLOOR_HALLWAY_FLAG_0A      = 0x0B, 'Floor, Hallway; Flag 0xA', \
+                                 _('Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).')
+    FLOOR_HALLWAY_FLAG_0A      = 0x0B, _('Floor, Hallway; Flag 0xA'), \
                                  FloorType.FLOOR, RoomType.HALLWAY, False, False, \
-                                 'Tile flag 0xA is set to 1 (Unknown what this does).'
-    FL_WA_ROOM_FLAG_0C         = 0x0C, 'F/W, Room; Key Door (0xC)', \
+                                 _('Tile flag 0xA is set to 1 (Unknown what this does).')
+    FL_WA_ROOM_FLAG_0C         = 0x0C, _('F/W, Room; Key Door (0xC)'), \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
-                                 'Tile flag 0xC is set to 1 and spawns a key Door. ' \
-                                 'Whether Wall or Floor is used depends on an unknown factor.'
-    FL_WA_ROOM_FLAG_0D         = 0x0D, 'F/W, Room; Key Door (0xD)', \
+                                 _('Tile flag 0xC is set to 1 and spawns a key Door. '
+                                   'Whether Wall or Floor is used depends on an unknown factor.')
+    FL_WA_ROOM_FLAG_0D         = 0x0D, _('F/W, Room; Key Door (0xD)'), \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
-                                 'Tile flag 0xD is set to 1 and spawns a key Door. ' \
-                                 'Whether Wall or Floor is used depends on an unknown factor.'
-    WALL_HALLWAY_IMPASSABLE_2  = 0x0E, 'Wall, Hallway; Impassable', \
+                                 _('Tile flag 0xD is set to 1 and spawns a key Door. '
+                                   'Whether Wall or Floor is used depends on an unknown factor.')
+    WALL_HALLWAY_IMPASSABLE_2  = 0x0E, _('Wall, Hallway; Impassable'), \
                                  FloorType.WALL, RoomType.HALLWAY, True, False, \
                                  ''
-    WALL_HALLWAY_DEFAULT_2     = 0x0F, 'Wall, Hallway', \
+    WALL_HALLWAY_DEFAULT_2     = 0x0F, _('Wall, Hallway'), \
                                  FloorType.WALL, RoomType.HALLWAY, False, False, \
                                  ''
-    ATTENDANT1_SPAWN           = 0x60, 'Attendant1 Spawn Floor', \
+    ATTENDANT1_SPAWN           = 0x60, _('Attendant1 Spawn Floor'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    ATTENDANT2_SPAWN           = 0x61, 'Attendant2 Spawn Floor', \
+    ATTENDANT2_SPAWN           = 0x61, _('Attendant2 Spawn Floor'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    ATTENDANT3_SPAWN           = 0x62, 'Attendant3 Spawn Floor', \
+    ATTENDANT3_SPAWN           = 0x62, _('Attendant3 Spawn Floor'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    FLOOR_ROOM_63              = 0x63, 'Floor, Room', \
+    FLOOR_ROOM_63              = 0x63, _('Floor, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    WARP_ZONE_2                = 0x6B, 'Warp Zone, Room', \
+    WARP_ZONE_2                = 0x6B, _('Warp Zone, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
-                                 'Creates a Warp Zone.'
-    FLOOR_ROOM_64              = 0x6C, 'Floor, Room', \
+                                 _('Creates a Warp Zone.')
+    FLOOR_ROOM_64              = 0x6C, _('Floor, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
-    FLOOR_ROOM_65              = 0x6D, 'Floor, Room', \
+    FLOOR_ROOM_65              = 0x6D, _('Floor, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
 

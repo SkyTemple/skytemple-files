@@ -20,6 +20,7 @@ from typing import Optional
 from skytemple_files.common.util import *
 from skytemple_files.graphics.chr import *
 from skytemple_files.graphics.pal.model import Pal
+from skytemple_files.common.i18n_util import f, _
 
 try:
     from PIL import Image
@@ -66,9 +67,9 @@ class Chr(AutoString):
     
     def from_pil(self, img: Image.Image):
         if img.mode != 'P':
-            raise AttributeError('Cannot convert PIL image to CHR: Must be indexed image (=using a palette)')
+            raise AttributeError(_('Cannot convert PIL image to CHR: Must be indexed image (=using a palette)'))
         if img.width%CHR_TILE_WIDTH!=0 or img.height%CHR_TILE_WIDTH!=0:
-            raise AttributeError(f'Cannot convert PIL image to CHR: width and height must be a multiple of {CHR_TILE_WIDTH}')
+            raise AttributeError(f(_('Cannot convert PIL image to CHR: width and height must be a multiple of {CHR_TILE_WIDTH}')))
         self.tiles = []
         for y in range(img.height//CHR_TILE_WIDTH):
             for x in range(img.width//CHR_TILE_WIDTH):

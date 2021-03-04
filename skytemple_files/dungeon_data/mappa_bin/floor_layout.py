@@ -21,6 +21,7 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
+from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -58,9 +59,9 @@ class MappaFloorWeather(Enum):
 
 
 class MappaFloorSecondaryTerrainType(Enum):
-    NONE = 0, "Disabled? (0)"
-    HAS_1 = 1, "Enabled (1)"
-    HAS_10 = 10, "Enabled (10)"
+    NONE = 0, _("Disabled? (0)")
+    HAS_1 = 1, _("Enabled (1)")
+    HAS_10 = 10, _("Enabled (10)")
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -333,19 +334,19 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             elif child.tag == XML_FLOOR_LAYOUT__MISCSET:
                 misc = child
             else:
-                raise XmlValidateError(f"Unexpected sub-node for {XML_FLOOR_LAYOUT}: {child.tag}")
+                raise XmlValidateError(f(_("Unexpected sub-node for {XML_FLOOR_LAYOUT}: {child.tag}")))
 
         if generator_settings is None:
-            raise XmlValidateError(f"{XML_FLOOR_LAYOUT__GENSET} missing for {XML_FLOOR_LAYOUT}.")
+            raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__GENSET} missing for {XML_FLOOR_LAYOUT}.")))
 
         if chances is None:
-            raise XmlValidateError(f"{XML_FLOOR_LAYOUT__CHANCES} missing for {XML_FLOOR_LAYOUT}.")
+            raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__CHANCES} missing for {XML_FLOOR_LAYOUT}.")))
 
         if terrain_settings is None:
-            raise XmlValidateError(f"{XML_FLOOR_LAYOUT__TERRAINSET} missing for {XML_FLOOR_LAYOUT}.")
+            raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__TERRAINSET} missing for {XML_FLOOR_LAYOUT}.")))
 
         if misc is None:
-            raise XmlValidateError(f"{XML_FLOOR_LAYOUT__MISCSET} missing for {XML_FLOOR_LAYOUT}.")
+            raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__MISCSET} missing for {XML_FLOOR_LAYOUT}.")))
 
         validate_xml_attribs(ele, [
             XML_FLOOR_LAYOUT__STRUCTURE,
@@ -400,19 +401,19 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         ])
 
         if not hasattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)):
-            raise XmlValidateError(f"Invalid structure type {ele.get(XML_FLOOR_LAYOUT__STRUCTURE)}")
+            raise XmlValidateError(f(_("Invalid structure type {ele.get(XML_FLOOR_LAYOUT__STRUCTURE)}")))
         structure = getattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE))
 
         if not hasattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER)):
-            raise XmlValidateError(f"Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}")
+            raise XmlValidateError(f(_("Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}")))
         weather = getattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER))
 
         if not hasattr(MappaFloorSecondaryTerrainType, terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)):
-            raise XmlValidateError(f"Invalid terrain type {terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)}")
+            raise XmlValidateError(f(_("Invalid terrain type {terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)}")))
         sec_terrain_type = getattr(MappaFloorSecondaryTerrainType, terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE))
 
         if not hasattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)):
-            raise XmlValidateError(f"Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}")
+            raise XmlValidateError(f(_("Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}")))
         darkness_level = getattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL))
 
         return cls(

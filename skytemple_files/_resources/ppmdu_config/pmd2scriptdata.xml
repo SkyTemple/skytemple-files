@@ -1282,7 +1282,7 @@
         <Bgm loops="true">AtTheEndOfTheDay</Bgm>
         <Bgm loops="true">GuildmasterWigglytuff</Bgm>
         <Bgm loops="true">GrowingAnxiety</Bgm>
-        <Bgm> loops="true"ThePowerOfDarkness</Bgm>
+        <Bgm loops="true">ThePowerOfDarkness</Bgm>
         <Bgm>OhNo</Bgm>
         <Bgm loops="true">TimeGear</Bgm>
         <Bgm loops="true">TimeGearRemix</Bgm>

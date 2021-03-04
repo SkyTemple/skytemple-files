@@ -1,4 +1,4 @@
-__version__ = '1.1.3'
+__version__ = '1.1.5'
 import os
 
 from setuptools import setup, find_packages
@@ -26,7 +26,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={'skytemple_files':
-                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md']) +
+                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md', '.bin']) +
                   ['graphics/chara_wan/Shadow.png']},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',
     long_description=long_description,
@@ -36,7 +36,7 @@ setup(
         'ndspy >= 3.0.0',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
-        'explorerscript >= 0.0.7',
+        'explorerscript >= 0.1.0',
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',

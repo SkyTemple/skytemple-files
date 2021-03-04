@@ -26,6 +26,7 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.i18n_util import f, _
 try:
     from PIL import Image
 except ImportError:
@@ -66,7 +67,7 @@ class BannerFontEntry(AbstractFontEntry):
     @classmethod
     def from_pil(cls, img: Image.Image, char: int, table: int, width: int) -> 'BannerFontEntry':
         if img.mode!='P':
-            raise AttributeError("This must be a color indexed image!")
+            raise AttributeError(_("This must be a color indexed image!"))
         return BannerFontEntry(char, table, width, img.tobytes("raw", "P"))
     
     def __eq__(self, other):
@@ -201,7 +202,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
                 validate_xml_attribs(child, [XML_HEADER__UNKNOWN])
                 self.unknown = int(child.get(XML_HEADER__UNKNOWN))
             else:
-                raise XmlValidateError(f'Font parsing: Unexpected {child.tag}')
+                raise XmlValidateError(f(_('Font parsing: Unexpected {child.tag}')))
     def __eq__(self, other):
         if not isinstance(other, BannerFont):
             return False

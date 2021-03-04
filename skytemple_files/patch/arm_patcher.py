@@ -25,8 +25,10 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary, Pmd2SimplePatch
 from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir
+from skytemple_files.common.i18n_util import f, _
 
 ASM_ENTRYPOINT_FN = '__main.asm'
+Y9_BIN = 'y9.bin'
 
 
 class PatchError(RuntimeError):
@@ -78,7 +80,17 @@ class ArmPatcher:
                         binary_path = os.path.join(tmp, binary_name.split('/')[-1])
                         # Write binary to tmp dir
                         with open(binary_path, 'wb') as f:
-                            f.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                            try:
+                                f.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                            except ValueError as err:
+                                if binary_name.split('/')[-1] == 'overlay_0036.bin':
+                                    continue  # We ignore if End's extra overlay is missing.
+                                raise err
+                    # For simple patches we also output the overlay table as y9.bin:
+                    binary_path = os.path.join(tmp, Y9_BIN)
+                    # Write binary to tmp dir
+                    with open(binary_path, 'wb') as f:
+                        f.write(self.rom.arm9OverlayTable)
 
                 # Then include other includes
                 for include in patch.includes:
@@ -115,14 +127,14 @@ class ArmPatcher:
                                               stderr=subprocess.STDOUT)
                     retcode = result.wait()
                 except FileNotFoundError as ex:
-                    raise ArmipsNotInstalledError("ARMIPS could not be found. Make sure, that "
-                                                  "'armips' is inside your system's PATH.") from ex
+                    raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
+                                                    "'armips' is inside your system's PATH.")) from ex
                 finally:
                     # Restore cwd
                     os.chdir(original_cwd)
 
                 if retcode != 0:
-                    raise PatchError("ARMIPS reported an error while applying the patch.",
+                    raise PatchError(_("ARMIPS reported an error while applying the patch."),
                                      str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
 
                 # Load the binaries back into the ROM
@@ -130,6 +142,10 @@ class ArmPatcher:
                 if isinstance(patch, Pmd2SimplePatch):
                     # Read in all binaries again
                     opened_binaries = binaries
+                    # Also read in arm9OverlayTable
+                    binary_path = os.path.join(tmp, Y9_BIN)
+                    with open(binary_path, 'rb') as f:
+                        self.rom.arm9OverlayTable = f.read()
                 else:
                     # Read opened binaries again
                     for open_bin in patch.open_bins:
@@ -137,9 +153,14 @@ class ArmPatcher:
                 for binary_name, binary in opened_binaries.items():
                     binary_path = os.path.join(tmp, binary_name.split('/')[-1])
                     with open(binary_path, 'rb') as f:
-                        set_binary_in_rom_ppmdu(self.rom, binary, f.read())
+                        try:
+                            set_binary_in_rom_ppmdu(self.rom, binary, f.read())
+                        except ValueError as err:
+                            if binary_name.split('/')[-1] == 'overlay_0036.bin':
+                                continue  # We ignore if End's extra overlay is missing.
+                            raise err
 
         except (PatchError, ArmipsNotInstalledError):
             raise
         except BaseException as ex:
-            raise RuntimeError(f"Error while applying the patch: {ex}") from ex
+            raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex

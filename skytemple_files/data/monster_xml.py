@@ -30,6 +30,7 @@ from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, 
     MovementType, IQGroup
 from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
 from skytemple_files.graphics.kao.model import KaoImage
+from skytemple_files.common.i18n_util import f, _
 
 
 XML_MONSTER = "Pokemon"
@@ -201,9 +202,9 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
                     if xml_sub.tag == XML_STRINGS__CATEGORY:
                         category = xml_sub.text
                 if name is None:
-                    raise XmlValidateError(f"Invalid XML. '{XML_STRINGS__NAME}' missing for language {xml_lang.tag}.")
+                    raise XmlValidateError(f(_("Invalid XML. '{XML_STRINGS__NAME}' missing for language {xml_lang.tag}.")))
                 if category is None:
-                    raise XmlValidateError(f"Invalid XML. '{XML_STRINGS__CATEGORY}' missing for language {xml_lang.tag}.")
+                    raise XmlValidateError(f(_("Invalid XML. '{XML_STRINGS__CATEGORY}' missing for language {xml_lang.tag}.")))
                 value_to_update[xml_lang.tag] = (name, category)
 
 
@@ -278,19 +279,19 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                         param2 = int(value_xml.text)
                 if pre_evo_index is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX}' missing for a {XML_GENENT_EVOLUTION_REQ}."
+                        cls._missing_err(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, XML_GENENT_EVOLUTION_REQ)
                     )
                 if method is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_EVOLUTION_REQ__EVO_METHOD}' missing for a {XML_GENENT_EVOLUTION_REQ}."
+                        cls._missing_err(XML_GENENT_EVOLUTION_REQ__EVO_METHOD, XML_GENENT_EVOLUTION_REQ)
                     )
                 if param1 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_EVOLUTION_REQ__EVO_PRAM1}' missing for a {XML_GENENT_EVOLUTION_REQ}."
+                        cls._missing_err(XML_GENENT_EVOLUTION_REQ__EVO_PRAM1, XML_GENENT_EVOLUTION_REQ)
                     )
                 if param2 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_EVOLUTION_REQ__EVO_PRAM2}' missing for a {XML_GENENT_EVOLUTION_REQ}."
+                        cls._missing_err(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, XML_GENENT_EVOLUTION_REQ)
                     )
                 value_to_update.pre_evo_index = pre_evo_index
                 value_to_update.evo_method = method
@@ -315,23 +316,23 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                         sp_defense = int(value_xml.text)
                 if hp is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BASE_STATS__HP}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BASE_STATS__HP, XML_GENENT_BASE_STATS)
                     )
                 if attack is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BASE_STATS__ATTACK}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BASE_STATS__ATTACK, XML_GENENT_BASE_STATS)
                     )
                 if sp_attack is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BASE_STATS__SP_ATTACK}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BASE_STATS__SP_ATTACK, XML_GENENT_BASE_STATS)
                     )
                 if defense is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BASE_STATS__DEFENSE}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BASE_STATS__DEFENSE, XML_GENENT_BASE_STATS)
                     )
                 if sp_defense is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__SP_DEFENSE}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_STATS_GROWTH_LEVEL__SP_DEFENSE, XML_GENENT_BASE_STATS)
                     )
                 value_to_update.base_hp = hp
                 value_to_update.base_atk = attack
@@ -341,7 +342,7 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
             if sub_xml.tag == XML_GENENT_EXCLUSIVE_ITEMS:
                 if len(sub_xml) != 4:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_EXCLUSIVE_ITEMS}' needs four item IDs."
+                        f(_("Invalid XML. '{XML_GENENT_EXCLUSIVE_ITEMS}' needs four item IDs."))
                     )
                 update = ('exclusive_item1', 'exclusive_item2', 'exclusive_item3', 'exclusive_item4')
                 for item_xml, attr_name in zip(sub_xml, update):
@@ -375,35 +376,35 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                         unk7 = bool(int(value_xml.text))
                 if unk0 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK0}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK0, XML_GENENT_BASE_STATS)
                     )
                 if unk1 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK1}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK1, XML_GENENT_BASE_STATS)
                     )
                 if unk2 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK2}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK2, XML_GENENT_BASE_STATS)
                     )
                 if unk3 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK3}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK3, XML_GENENT_BASE_STATS)
                     )
                 if unk4 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK4}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK4, XML_GENENT_BASE_STATS)
                     )
                 if unk5 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK5}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK5, XML_GENENT_BASE_STATS)
                     )
                 if unk6 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK6}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK6, XML_GENENT_BASE_STATS)
                     )
                 if unk7 is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_GENENT_BITFLAG1__UNK7}' missing for a {XML_GENENT_BASE_STATS}."
+                        cls._missing_err(XML_GENENT_BITFLAG1__UNK7, XML_GENENT_BASE_STATS)
                     )
                 value_to_update.bitfield1_0 = unk0
                 value_to_update.bitfield1_1 = unk1
@@ -413,6 +414,10 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                 value_to_update.bitfield1_5 = unk5
                 value_to_update.can_evolve = unk6
                 value_to_update.item_required_for_spawning = unk7
+
+    @classmethod
+    def _missing_err(cls, a, b):
+        return f(_("Invalid XML. '{a}' missing for a {b}."))
 
 
 class MovesetXml(XmlConverter[MoveLearnset]):
@@ -454,11 +459,11 @@ class MovesetXml(XmlConverter[MoveLearnset]):
                             move_id = int(xml_level_or_move.text)
                     if level is None:
                         raise XmlValidateError(
-                            f"Invalid XML. '{XML_MOVESET_LEVEL_UP__LEVEL}' missing for a level up moveset entry."
+                            f(_("Invalid XML. '{XML_MOVESET_LEVEL_UP__LEVEL}' missing for a level up moveset entry."))
                         )
                     if move_id is None:
                         raise XmlValidateError(
-                            f"Invalid XML. '{XML_MOVESET__MOVE_ID}' missing for a level up moveset entry."
+                            f(_("Invalid XML. '{XML_MOVESET__MOVE_ID}' missing for a level up moveset entry."))
                         )
                     new_level_up.append(LevelUpMove(move_id, level))
                 value_to_update.level_up_moves = new_level_up
@@ -491,10 +496,11 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
             xml.append(level_xml)
         return xml
 
+    # noinspection PyUnusedLocal
     @classmethod
     def from_xml(cls, xml: Element, value_to_update: LevelBinEntry):
         if len(xml) != 100:
-            raise XmlValidateError("Invalid XML. StatsGrowth must have exactly 100 levels.")
+            raise XmlValidateError(_("Invalid XML. StatsGrowth must have exactly 100 levels."))
         for i, xml_level in enumerate(xml):
             validate_xml_tag(xml_level, XML_STATS_GROWTH_LEVEL)
             required_exp = None
@@ -517,28 +523,34 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
                 elif xml_stat.tag == XML_STATS_GROWTH_LEVEL__SP_DEFENSE:
                     sp_defense = int(xml_stat.text)
             if required_exp is None:
+                x = XML_STATS_GROWTH_LEVEL__REQUIRED_EXP
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__REQUIRED_EXP}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if hp is None:
+                x = XML_STATS_GROWTH_LEVEL__HP
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__HP}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if attack is None:
+                x = XML_STATS_GROWTH_LEVEL__ATTACK
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__ATTACK}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if sp_attack is None:
+                x = XML_STATS_GROWTH_LEVEL__SP_ATTACK
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__SP_ATTACK}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if defense is None:
+                x = XML_STATS_GROWTH_LEVEL__DEFENSE
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__DEFENSE}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if sp_defense is None:
+                x = XML_STATS_GROWTH_LEVEL__SP_DEFENSE
                 raise XmlValidateError(
-                    f"Invalid XML. '{XML_STATS_GROWTH_LEVEL__SP_DEFENSE}' missing for a stats growth level entry."
+                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             value_to_update.levels[i] = LevelEntry(
                 required_exp, hp, attack, sp_attack, defense, sp_defense, 0
@@ -563,7 +575,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
     def from_xml(cls, xml: Element, value_to_update: List[Optional[KaoImage]]):
         if len(value_to_update) != len(xml):
             raise XmlValidateError(
-                f"Incompatible XML. The number of portraits don't match with the expected value of {len(value_to_update)}"
+                f(_("Incompatible XML. The number of portraits don't match with the expected value of {len(value_to_update)}"))
             )
         for i, xml_portrait in enumerate(xml):
             validate_xml_tag(xml_portrait, XML_PORTRAITS_PORTRAIT)
@@ -577,11 +589,11 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
                         palette = xml_image_or_pal.text
                 if image is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_PORTRAITS_PORTRAIT__IMAGE}' missing for a portrait."
+                        f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__IMAGE}' missing for a portrait."))
                     )
                 if palette is None:
                     raise XmlValidateError(
-                        f"Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."
+                        f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."))
                     )
                 try:
                     value_to_update[i] = KaoImage(
@@ -589,7 +601,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
                     )
                 except Exception as err:
                     raise XmlValidateError(
-                        f"Invalid XML. The portrait data of one of the portraits is invalid: {err}"
+                        f(_("Invalid XML. The portrait data of one of the portraits is invalid: {err}"))
                     ) from err
             else:
                 value_to_update[i] = None

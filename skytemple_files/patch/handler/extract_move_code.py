@@ -22,6 +22,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.asm_tools import AsmFunction
+from skytemple_files.common.i18n_util import _
 PATCH_CHECK_ADDR_APPLIED_US = 0x53664
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3A01001
 PATCH_CHECK_ADDR_APPLIED_EU = 0x53764
@@ -53,7 +54,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Extracts move effects code and put it in files. '
+        return _('Extracts move effects code and put it in files.')
 
     @property
     def author(self) -> str:
@@ -72,6 +73,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+<<<<<<< HEAD
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 start_ov29 = START_OV29_US
@@ -141,5 +143,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             raise ex
+
+    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

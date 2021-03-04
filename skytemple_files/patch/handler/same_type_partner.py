@@ -21,6 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'\x07\x00\x00\x1a')
 OFFSET = 0x180C
@@ -34,7 +35,7 @@ class SameTypePartnerPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return "Allows the partner to be of the same type as the player in the personality test."
+        return _("Allows the partner to be of the same type as the player in the personality test.")
 
     @property
     def author(self) -> str:

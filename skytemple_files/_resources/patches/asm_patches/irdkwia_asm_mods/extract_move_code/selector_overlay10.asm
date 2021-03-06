@@ -9,9 +9,9 @@
 
 ; Selects the correct region to apply the patch
 .if PPMD_GameVer == GameVer_EoS_NA
-	.include "na/patch_overlay29.asm"
+	.include "na/patch_overlay10.asm"
 .elseif PPMD_GameVer == GameVer_EoS_EU
-	.include "eu/patch_overlay29.asm"
+	.include "eu/patch_overlay10.asm"
 .endif
 
 .relativeinclude off

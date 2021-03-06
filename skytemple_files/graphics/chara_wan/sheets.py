@@ -22,6 +22,8 @@ from enum import Enum
 
 from PIL import Image
 import xml.etree.ElementTree as ET
+from zipfile import ZipFile, ZIP_DEFLATED
+from tempfile import TemporaryDirectory
 
 from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
@@ -423,6 +425,14 @@ def ImportSheets(inDir, strict=False):
     return wan
 
 
+def ImportSheetsFromZip(zipFile, strict=False):
+    with TemporaryDirectory() as tmp_dir:
+        with ZipFile(zipFile, 'r') as zipObj:
+            zipObj.extractall(tmp_dir)
+        wan = ImportSheets(tmp_dir, strict)
+    return wan
+
+
 def ExportSheets(outDir, sdwImg, wan, anim_name_map):
 
 
@@ -634,6 +644,19 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
 
     with open(os.path.join(outDir, 'AnimData.xml'), 'w') as f:
         f.write(prettify(root))
+
+
+def ExportSheetsAsZip(zipFile, sdwImg, wan, anim_name_map):
+    with TemporaryDirectory() as tmp_dir:
+        ExportSheets(tmp_dir, sdwImg, wan, anim_name_map)
+        with ZipFile(zipFile, 'w') as ZipObj:
+            abs_src = os.path.abspath(tmp_dir)
+            for dirname, subdirs, files in os.walk(tmp_dir):
+                for filename in files:
+                    # Avoid absolute path creation
+                    absname = os.path.abspath(os.path.join(dirname, filename))
+                    arcname = absname[len(abs_src) + 1:]
+                    ZipObj.write(absname, arcname)
 
 
 def mapDuplicateImportImgs(imgs, final_imgs, img_map):

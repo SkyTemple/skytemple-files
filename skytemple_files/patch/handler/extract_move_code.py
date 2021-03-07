@@ -94,7 +94,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             
             switch = AsmFunction(data[start_table-start_ov29:start_m_functions-start_ov29], start_table)
             switch.process()
-            main_calls = switch.process_switch(6, (0,543), {0: 542})
+            main_calls = switch.process_switch(6, (0,559), {0: 542})
             
             unique_main_calls = list(sorted(set(main_calls)))
             unique_main_calls.append(end_m_functions)
@@ -131,6 +131,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
                 write_uintle(header, id_codes[x], 4+2*i, 2)
             file_data = header + code_data
             create_file_in_rom(rom, MOVE_CODE_PATH, file_data)
+        
         if METRONOME_DATA_PATH not in rom.filenames:
             #Metronome
             data = rom.loadArm9Overlays([10])[10].data

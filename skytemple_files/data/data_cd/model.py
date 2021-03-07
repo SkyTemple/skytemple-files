@@ -45,6 +45,9 @@ class DataCD(AutoString):
     def set_item_effect_id(self, item_id: int, effect_id: int):
         self.items_effects[item_id] = effect_id
         
+    def add_item_effect_id(self, effect_id: int):
+        self.items_effects.append(effect_id)
+        
     def get_all_of(self, effect_id: int) -> List[int]:
         item_ids = []
         for i, x in enumerate(self.items_effects):

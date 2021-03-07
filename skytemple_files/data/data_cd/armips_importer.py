@@ -67,6 +67,6 @@ class ArmipsImporter:
 
             out_bin_path = os.path.join(tmp, OUT_BIN)
             if not os.path.exists(out_bin_path):
-                raise ValueError(f(_("The armips source file did not crate a {OUT_BIN}.")))
+                raise ValueError(f(_("The armips source file did not create a {OUT_BIN}.")))
             with open(out_bin_path, 'rb') as file:
                 return file.read()

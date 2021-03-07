@@ -28,34 +28,72 @@ if TYPE_CHECKING:
 
 
 class MappaFloorStructureType(Enum):
-    MEDIUM_LARGE = 0  # Max 6x4
-    SMALL = 1  # Max 2x3
-    SINGLE_MONSTER_HOUSE = 2
-    RING = 3  # Outer ring with 8 rooms inside in a 4 x 2 shape
-    CROSSROADS = 4  # Crossroads (3 rooms at the top, 3 at the bottom, 2 on each side)
-    TWO_ROOMS_ONE_MH = 5  # Two rooms, one is a monster house
-    LINE = 6  # 1 horizontal line with 5 rooms in a row
-    CROSS = 7  # 5 rooms: up, down, left, right, center
-    SMALL_MEDIUM = 8  # Max. 4x2
-    BETTLE = 9  # 1 big room in the center with 3 a on each side
-    OUTER_ROOMS = 10  # All the rooms are in the map borders, none in the center (Max 6x4)
-    MEDIUM = 11  # Max 3x3
-    MEDIUM_LARGE_12 = 12  # Max 6x4
-    MEDIUM_LARGE_13 = 13  # Max 6x4
-    MEDIUM_LARGE_14 = 14  # Max 6x4
-    MEDIUM_LARGE_15 = 15  # Max 6x4
+    MEDIUM_LARGE = 0, _("Medium Large")  # Max 6x4
+    SMALL = 1, _("Small")  # Max 2x3
+    SINGLE_MONSTER_HOUSE = 2, _("Single Monster House")
+    RING = 3, _("Ring")  # Outer ring with 8 rooms inside in a 4 x 2 shape
+    CROSSROADS = 4, _("Crossroads")  # Crossroads (3 rooms at the top, 3 at the bottom, 2 on each side)
+    TWO_ROOMS_ONE_MH = 5, _("Two Rooms, One Monster House")  # Two rooms, one is a monster house
+    LINE = 6, _("Line")  # 1 horizontal line with 5 rooms in a row
+    CROSS = 7, _("Cross")  # 5 rooms: up, down, left, right, center
+    SMALL_MEDIUM = 8, _("Small Medium")  # Max. 4x2
+    BETTLE = 9, _("Beetle")  # 1 big room in the center with 3 a on each side
+    OUTER_ROOMS = 10, _("Outer Rooms")  # All the rooms are in the map borders, none in the center (Max 6x4)
+    MEDIUM = 11, _("Medium")  # Max 3x3
+    MEDIUM_LARGE_12 = 12, _("Medium Large (12)")  # Max 6x4
+    MEDIUM_LARGE_13 = 13, _("Medium Large (13)")  # Max 6x4
+    MEDIUM_LARGE_14 = 14, _("Medium Large (14)")  # Max 6x4
+    MEDIUM_LARGE_15 = 15, _("Medium Large (15)")  # Max 6x4
+
+    @property
+    def print_name(self):
+        return self._print_name_
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MappaFloorStructureType.{self.name}'
 
 
 class MappaFloorWeather(Enum):
-    CLEAR = 0
-    SUNNY = 1
-    SANDSTORM = 2
-    CLOUDY = 3
-    RAINY = 4
-    HAIL = 5
-    FOG = 6
-    SNOW = 7
-    RANDOM = 8
+    CLEAR = 0, _("Clear")
+    SUNNY = 1, _("Sunny")
+    SANDSTORM = 2, _("Sandstorm")
+    CLOUDY = 3, _("Cloudy")
+    RAINY = 4, _("Rainy")
+    HAIL = 5, _("Hail")
+    FOG = 6, _("Fog")
+    SNOW = 7, _("Snow")
+    RANDOM = 8, _("Random")
+
+    @property
+    def print_name(self):
+        return self._print_name_
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'MappaFloorWeather.{self.name}'
 
 
 class MappaFloorSecondaryTerrainType(Enum):
@@ -117,11 +155,11 @@ class MappaFloorTerrainSettings:
 
 
 class MappaFloorDarknessLevel(Enum):
-    NO_DARKNESS = 0, "No darkness"
-    HEAVY_DARKNESS = 1, "1-tile vision (Heavy darkness)"
-    LIGHT_DARKNESS = 2, "2-tile vision (Light darkness)"
-    THREE_TILE = 3, "3-tile vision"
-    FOUR_TILE = 4, "4-tile vision"
+    NO_DARKNESS = 0, _("No darkness")
+    HEAVY_DARKNESS = 1, _("1-tile vision (Heavy darkness)")
+    LIGHT_DARKNESS = 2, _("2-tile vision (Light darkness)")
+    THREE_TILE = 3, _("3-tile vision")
+    FOUR_TILE = 4, _("4-tile vision")
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)

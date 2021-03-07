@@ -5,3 +5,6 @@
 [submodule "skytemple_files/_resources/patches/asm_patches/end_asm_mods"]
 	path = skytemple_files/_resources/patches/asm_patches/end_asm_mods
 	url = https://github.com/End45/EoS-asm-hacks.git
+[submodule "skytemple_files/_resources/patches/asm_patches/irdkwia_move_effects"]
+	path = skytemple_files/_resources/patches/asm_patches/irdkwia_move_effects
+	url = https://github.com/irdkwia/eos-move-effects.git

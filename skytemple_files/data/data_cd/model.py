@@ -17,6 +17,8 @@
 
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
+from skytemple_files.data.data_cd.armips_importer import ArmipsImporter
+
 
 class DataCD(AutoString):
     def __init__(self, data: bytes):
@@ -34,22 +36,25 @@ class DataCD(AutoString):
             length = read_uintle(data, x+4, 4)
             self.effects_code.append(data[start:start+length])
 
-    def nb_items(self) -> bytes:
+    def nb_items(self) -> int:
         return len(self.items_effects)
+
     def get_item_effect_id(self, item_id: int) -> int:
         return self.items_effects[item_id]
+
     def set_item_effect_id(self, item_id: int, effect_id: int):
         self.items_effects[item_id] = effect_id
         
-    def get_all_of(self, effect_id: int) -> int:
+    def get_all_of(self, effect_id: int) -> List[int]:
         item_ids = []
         for i, x in enumerate(self.items_effects):
             if x==effect_id:
                 item_ids.append(i)
         return item_ids
     
-    def nb_effects(self) -> bytes:
+    def nb_effects(self) -> int:
         return len(self.effects_code)
+
     def get_effect_code(self, effect_id: int) -> bytes:
         return self.effects_code[effect_id]
     
@@ -64,6 +69,9 @@ class DataCD(AutoString):
     
     def add_effect_code(self, data: bytes):
         self.effects_code.append(data)
+
+    def import_armips_effect_code(self, effect_id: int, armips_asm: str):
+        self.set_effect_code(effect_id, ArmipsImporter().assemble(armips_asm))
         
     def set_effect_code(self, effect_id: int, data: bytes):
         self.effects_code[effect_id] = data

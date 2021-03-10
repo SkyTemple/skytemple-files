@@ -40,7 +40,7 @@ class RoomType(Enum):
 
 
 class TileRuleType(Enum):
-    FLOOR_ROOM                  = 0x00, _('Floor, Room'), \
+    FLOOR_ROOM                 = 0x00, _('Floor, Room'), \
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                 ''
     WALL_HALLWAY               = 0x01, _('Wall, Hallway; Absolute Mover'), \
@@ -80,11 +80,11 @@ class TileRuleType(Enum):
     FL_WA_ROOM_FLAG_0C         = 0x0C, _('F/W, Room; Key Door (0xC)'), \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
                                  _('Tile flag 0xC is set to 1 and spawns a key Door. '
-                                   'Whether Wall or Floor is used depends on an unknown factor.')
+                                   'If the fixed room id is &lt; 0xA5, this will be a Wall. Otherwise it will be Floor.')
     FL_WA_ROOM_FLAG_0D         = 0x0D, _('F/W, Room; Key Door (0xD)'), \
                                  FloorType.FLOOR_OR_WALL, RoomType.ROOM, True, False, \
                                  _('Tile flag 0xD is set to 1 and spawns a key Door. '
-                                   'Whether Wall or Floor is used depends on an unknown factor.')
+                                   'If the fixed room id is &lt; 0xA5, this will be a Wall. Otherwise it will be Floor.')
     WALL_HALLWAY_IMPASSABLE_2  = 0x0E, _('Wall, Hallway; Impassable'), \
                                  FloorType.WALL, RoomType.HALLWAY, True, False, \
                                  ''

@@ -41,6 +41,9 @@ from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPatchHandler
 from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
 from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
+from skytemple_files.patch.handler.add_type import AddTypePatchHandler
+from skytemple_files.patch.handler.fairy_gummies import ImplementFairyGummiesPatchHandler
+from skytemple_files.patch.handler.extract_bar_list import ExtractBarItemListPatchHandler
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
 from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
 from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
@@ -71,6 +74,9 @@ class PatchType(Enum):
     EXTRA_SPACE = ExtraSpacePatch
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
+    ADD_TYPES = AddTypePatchHandler
+    IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
+    EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler
 
 
 class PatchPackageError(RuntimeError):

@@ -15,11 +15,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
-
 from enum import Enum, auto
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.i18n_util import _
 
 try:
     from PIL import Image
@@ -32,81 +31,81 @@ class MenuDataType(Enum):
     ADVANCED = auto()
 
 class MenuType(Enum):
-    MAIN_MENU = 100, MenuDataType.ADVANCED, 'overlay/overlay_0001.bin', 'MainMenu', "Game Main Menu"
-    SUB_MENU = 101, MenuDataType.ADVANCED, 'overlay/overlay_0001.bin', 'SubMenu', "Game Sub Menu"
-    CONTINUE_CHOICE = 102, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'ContinueChoice', "Continue Choice"
-    DEBUG_MENU_1 = 103, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'MainDebugMenu1', "Main Debug Menu 1"
-    DEBUG_MENU_2 = 104, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'MainDebugMenu2', "Main Debug Menu 2"
-    UNK_MENU_1 = 1300, MenuDataType.NORMAL, 'overlay/overlay_0013.bin', 'UnknownMenu1', "Unknown Menu 1"
-    FOOT_DEBUG_MENU_1 = 1400, MenuDataType.NORMAL, 'overlay/overlay_0014.bin', 'FootprintDebugMenu', "Footprint Debug Menu"
-    BANK_MENU = 1500, MenuDataType.NORMAL, 'overlay/overlay_0015.bin', 'BankMainMenu', "Bank Main Menu"
-    EVO_MENU_CONFIRM = 1601, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoMenuConfirm', "Evolution Menu Confirm"
-    EVO_SUB_MENU = 1602, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoSubMenu', "Evolution Sub Menu"
-    EVO_MAIN_MENU = 1603, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoMainMenu', "Evolution Main Menu"
-    ASSEMBLY_MENU_CONFIRM = 1700, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMenuConfirm', "Assembly Menu Confirm"
-    ASSEMBLY_MAIN_MENU_1 = 1701, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMainMenu1', "Assembly Main Menu 1"
-    ASSEMBLY_MAIN_MENU_2 = 1702, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMainMenu2', "Assembly Main Menu 2"
-    ASSEMBLY_SUB_MENU_1 = 1703, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu1', "Assembly Sub Menu 1"
-    ASSEMBLY_SUB_MENU_2 = 1704, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu2', "Assembly Sub Menu 2"
-    ASSEMBLY_SUB_MENU_3 = 1705, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu3', "Assembly Sub Menu 3"
-    ASSEMBLY_SUB_MENU_4 = 1706, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu4', "Assembly Sub Menu 4"
-    ASSEMBLY_SUB_MENU_5 = 1707, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu5', "Assembly Sub Menu 5"
-    ASSEMBLY_SUB_MENU_6 = 1708, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu6', "Assembly Sub Menu 6"
-    ASSEMBLY_SUB_MENU_7 = 1709, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu7', "Assembly Sub Menu 7"
-    MOVES_MENU_CONFIRM = 1800, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesMenuConfirm', "Moves Menu Confirm"
-    MOVES_SUB_MENU_1 = 1801, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu1', "Moves Sub Menu 1"
-    MOVES_SUB_MENU_2 = 1802, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu2', "Moves Sub Menu 2"
-    MOVES_MAIN_MENU = 1803, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesMainMenu', "Moves Main Menu"
-    MOVES_SUB_MENU_3 = 1804, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu3', "Moves Sub Menu 3"
-    MOVES_SUB_MENU_4 = 1805, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu4', "Moves Sub Menu 4"
-    MOVES_SUB_MENU_5 = 1806, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu5', "Moves Sub Menu 5"
-    MOVES_SUB_MENU_6 = 1807, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu6', "Moves Sub Menu 6"
-    MOVES_SUB_MENU_7 = 1808, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu7', "Moves Sub Menu 7"
-    BAR_MENU_CONFIRM_1 = 1900, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMenuConfirm1', "Bar Menu Confirm 1"
-    BAR_MENU_CONFIRM_2 = 1901, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMenuConfirm2', "Bar Menu Confirm 2"
-    BAR_MAIN_MENU = 1902, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMainMenu', "Bar Main Menu"
-    BAR_SUB_MENU_1 = 1903, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarSubMenu1', "Bar Sub Menu 1"
-    BAR_SUB_MENU_2 = 1904, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarSubMenu2', "Bar Sub Menu 2"
-    RECYCLE_MENU_CONFIRM_1 = 2000, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMenuConfirm1', "Recycle Menu Confirm 1"
-    RECYCLE_MENU_CONFIRM_2 = 2001, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMenuConfirm2', "Recycle Menu Confirm 2"
-    RECYCLE_SUB_MENU_1 = 2002, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleSubMenu1', "Recycle Sub Menu 1"
-    RECYCLE_SUB_MENU_2 = 2003, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleSubMenu2', "Recycle Sub Menu 2"
-    RECYCLE_MAIN_MENU_1 = 2004, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu1', "Recycle Main Menu 1"
-    RECYCLE_MAIN_MENU_2 = 2005, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu2', "Recycle Main Menu 2"
-    RECYCLE_MAIN_MENU_3 = 2006, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu3', "Recycle Main Menu 3"
-    SYNTH_MENU_CONFIRM = 2100, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMenuConfirm', "Synthesis Menu Confirm"
-    SYNTH_SUB_MENU_1 = 2101, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu1', "Synthesis Sub Menu 1"
-    SYNTH_SUB_MENU_2 = 2102, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu2', "Synthesis Sub Menu 2"
-    SYNTH_MAIN_MENU_1 = 2103, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMainMenu1', "Synthesis Main Menu 1"
-    SYNTH_MAIN_MENU_2 = 2104, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMainMenu2', "Synthesis Main Menu 2"
-    SYNTH_SUB_MENU_3 = 2105, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu3', "Synthesis Sub Menu 3"
-    SHOP_MENU_CONFIRM = 2200, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMenuConfirm', "Shop Menu Confirm"
-    SHOP_MAIN_MENU_1 = 2201, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu1', "Shop Main Menu 1"
-    SHOP_MAIN_MENU_2 = 2202, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu2', "Shop Main Menu 2"
-    SHOP_MAIN_MENU_3 = 2203, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu3', "Shop Main Menu 3"
-    STORAGE_MENU_CONFIRM = 2300, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMenuConfirm', "Storage Menu Confirm"
-    STORAGE_MAIN_MENU_1 = 2301, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu1', "Storage Main Menu 1"
-    STORAGE_MAIN_MENU_2 = 2302, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu2', "Storage Main Menu 2"
-    STORAGE_MAIN_MENU_3 = 2303, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu3', "Storage Main Menu 3"
-    STORAGE_MAIN_MENU_4 = 2304, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu4', "Storage Main Menu 4"
-    HATCHER_MENU_CONFIRM = 2400, MenuDataType.NORMAL, 'overlay/overlay_0024.bin', 'HatcherMenuConfirm', "Hatcher Menu Confirm"
-    HATCHER_MAIN_MENU = 2401, MenuDataType.NORMAL, 'overlay/overlay_0024.bin', 'HatcherMainMenu', "Hatcher Main Menu"
-    APPRAISER_MENU_CONFIRM = 2500, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserMenuConfirm', "Appraiser Menu Confirm"
-    APPRAISER_MAIN_MENU = 2501, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserMainMenu', "Appraiser Main Menu"
-    APPRAISER_SUB_MENU = 2502, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserSubMenu', "Appraiser Sub Menu"
-    DISCARD_MENU_CONFIRM = 2700, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsMenuConfirm', "Discard Items Menu Confirm"
-    DISCARD_SUB_MENU_1 = 2701, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsSubMenu1', "Discard Items Sub Menu 1"
-    DISCARD_SUB_MENU_2 = 2702, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsSubMenu2', "Discard Items Sub Menu 2"
-    DISCARD_MAIN_MENU = 2703, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsMainMenu', "Discard Items Main Menu"
-    DUNGEON_MAIN_MENU = 3100, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonMainMenu', "Dungeon Main Menu"
-    DUNGEON_SUB_MENU_1 = 3101, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu1', "Dungeon Sub Menu 1"
-    DUNGEON_SUB_MENU_2 = 3102, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu2', "Dungeon Sub Menu 2"
-    DUNGEON_SUB_MENU_3 = 3103, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu3', "Dungeon Sub Menu 3"
-    DUNGEON_SUB_MENU_4 = 3104, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu4', "Dungeon Sub Menu 4"
-    DUNGEON_SUB_MENU_5 = 3105, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu5', "Dungeon Sub Menu 5"
-    DUNGEON_SUB_MENU_6 = 3106, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu6', "Dungeon Sub Menu 6"
-    UNKNOWN_MENU_CONFIRM = 3400, MenuDataType.NORMAL, 'overlay/overlay_0034.bin', 'UnknownMenuConfirm', "Unknown Menu Confirm"
-    DUNGEON_DEBUG_MENU = 3401, MenuDataType.NORMAL, 'overlay/overlay_0034.bin', 'DungeonDebugMenu', "Dungeon Debug Menu"
+    MAIN_MENU = 100, MenuDataType.ADVANCED, 'overlay/overlay_0001.bin', 'MainMenu', _("Game Main Menu")
+    SUB_MENU = 101, MenuDataType.ADVANCED, 'overlay/overlay_0001.bin', 'SubMenu', _("Game Sub Menu")
+    CONTINUE_CHOICE = 102, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'ContinueChoice', _("Continue Choice")
+    DEBUG_MENU_1 = 103, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'MainDebugMenu1', _("Main Debug Menu") + " 1"
+    DEBUG_MENU_2 = 104, MenuDataType.NORMAL, 'overlay/overlay_0001.bin', 'MainDebugMenu2', _("Main Debug Menu") + " 2"
+    UNK_MENU_1 = 1300, MenuDataType.NORMAL, 'overlay/overlay_0013.bin', 'UnknownMenu1', _("Unknown Menu") + " 1"
+    FOOT_DEBUG_MENU_1 = 1400, MenuDataType.NORMAL, 'overlay/overlay_0014.bin', 'FootprintDebugMenu', _("Footprint Debug Menu")
+    BANK_MENU = 1500, MenuDataType.NORMAL, 'overlay/overlay_0015.bin', 'BankMainMenu', _("Bank Main Menu")
+    EVO_MENU_CONFIRM = 1601, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoMenuConfirm', _("Evolution Menu Confirm")
+    EVO_SUB_MENU = 1602, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoSubMenu', _("Evolution Sub Menu")
+    EVO_MAIN_MENU = 1603, MenuDataType.NORMAL, 'overlay/overlay_0016.bin', 'EvoMainMenu', _("Evolution Main Menu")
+    ASSEMBLY_MENU_CONFIRM = 1700, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMenuConfirm', _("Assembly Menu Confirm")
+    ASSEMBLY_MAIN_MENU_1 = 1701, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMainMenu1', _("Assembly Main Menu") + " 1"
+    ASSEMBLY_MAIN_MENU_2 = 1702, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblyMainMenu2', _("Assembly Main Menu") + " 2"
+    ASSEMBLY_SUB_MENU_1 = 1703, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu1', _("Assembly Sub Menu") + " 1"
+    ASSEMBLY_SUB_MENU_2 = 1704, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu2', _("Assembly Sub Menu") + " 2"
+    ASSEMBLY_SUB_MENU_3 = 1705, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu3', _("Assembly Sub Menu") + " 3"
+    ASSEMBLY_SUB_MENU_4 = 1706, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu4', _("Assembly Sub Menu") + " 4"
+    ASSEMBLY_SUB_MENU_5 = 1707, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu5', _("Assembly Sub Menu") + " 5"
+    ASSEMBLY_SUB_MENU_6 = 1708, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu6', _("Assembly Sub Menu") + " 6"
+    ASSEMBLY_SUB_MENU_7 = 1709, MenuDataType.NORMAL, 'overlay/overlay_0017.bin', 'AssemblySubMenu7', _("Assembly Sub Menu") + " 7"
+    MOVES_MENU_CONFIRM = 1800, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesMenuConfirm', _("Moves Menu Confirm")
+    MOVES_SUB_MENU_1 = 1801, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu1', _("Moves Sub Menu") + " 1"
+    MOVES_SUB_MENU_2 = 1802, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu2', _("Moves Sub Menu") + " 2"
+    MOVES_MAIN_MENU = 1803, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesMainMenu', _("Moves Main Menu")
+    MOVES_SUB_MENU_3 = 1804, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu3', _("Moves Sub Menu") + " 3"
+    MOVES_SUB_MENU_4 = 1805, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu4', _("Moves Sub Menu") + " 4"
+    MOVES_SUB_MENU_5 = 1806, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu5', _("Moves Sub Menu") + " 5"
+    MOVES_SUB_MENU_6 = 1807, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu6', _("Moves Sub Menu") + " 6"
+    MOVES_SUB_MENU_7 = 1808, MenuDataType.NORMAL, 'overlay/overlay_0018.bin', 'MovesSubMenu7', _("Moves Sub Menu") + " 7"
+    BAR_MENU_CONFIRM_1 = 1900, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMenuConfirm1', _("Bar Menu Confirm") + " 1"
+    BAR_MENU_CONFIRM_2 = 1901, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMenuConfirm2', _("Bar Menu Confirm") + " 2"
+    BAR_MAIN_MENU = 1902, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarMainMenu', _("Bar Main Menu")
+    BAR_SUB_MENU_1 = 1903, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarSubMenu1', _("Bar Sub Menu") + " 1"
+    BAR_SUB_MENU_2 = 1904, MenuDataType.NORMAL, 'overlay/overlay_0019.bin', 'BarSubMenu2', _("Bar Sub Menu") + " 2"
+    RECYCLE_MENU_CONFIRM_1 = 2000, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMenuConfirm1', _("Recycle Menu Confirm") + " 1"
+    RECYCLE_MENU_CONFIRM_2 = 2001, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMenuConfirm2', _("Recycle Menu Confirm") + " 2"
+    RECYCLE_SUB_MENU_1 = 2002, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleSubMenu1', _("Recycle Sub Menu") + " 1"
+    RECYCLE_SUB_MENU_2 = 2003, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleSubMenu2', _("Recycle Sub Menu") + " 2"
+    RECYCLE_MAIN_MENU_1 = 2004, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu1', _("Recycle Main Menu") + " 1"
+    RECYCLE_MAIN_MENU_2 = 2005, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu2', _("Recycle Main Menu") + " 2"
+    RECYCLE_MAIN_MENU_3 = 2006, MenuDataType.NORMAL, 'overlay/overlay_0020.bin', 'RecycleMainMenu3', _("Recycle Main Menu") + " 3"
+    SYNTH_MENU_CONFIRM = 2100, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMenuConfirm', _("Synthesis Menu Confirm")
+    SYNTH_SUB_MENU_1 = 2101, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu1', _("Synthesis Sub Menu") + " 1"
+    SYNTH_SUB_MENU_2 = 2102, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu2', _("Synthesis Sub Menu") + " 2"
+    SYNTH_MAIN_MENU_1 = 2103, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMainMenu1', _("Synthesis Main Menu") + " 1"
+    SYNTH_MAIN_MENU_2 = 2104, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisMainMenu2', _("Synthesis Main Menu") + " 2"
+    SYNTH_SUB_MENU_3 = 2105, MenuDataType.NORMAL, 'overlay/overlay_0021.bin', 'SynthesisSubMenu3', _("Synthesis Sub Menu") + " 3"
+    SHOP_MENU_CONFIRM = 2200, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMenuConfirm', _("Shop Menu Confirm")
+    SHOP_MAIN_MENU_1 = 2201, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu1', _("Shop Main Menu") + " 1"
+    SHOP_MAIN_MENU_2 = 2202, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu2', _("Shop Main Menu") + " 2"
+    SHOP_MAIN_MENU_3 = 2203, MenuDataType.NORMAL, 'overlay/overlay_0022.bin', 'ShopMainMenu3', _("Shop Main Menu") + " 3"
+    STORAGE_MENU_CONFIRM = 2300, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMenuConfirm', _("Storage Menu Confirm")
+    STORAGE_MAIN_MENU_1 = 2301, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu1', _("Storage Main Menu") + " 1"
+    STORAGE_MAIN_MENU_2 = 2302, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu2', _("Storage Main Menu") + " 2"
+    STORAGE_MAIN_MENU_3 = 2303, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu3', _("Storage Main Menu") + " 3"
+    STORAGE_MAIN_MENU_4 = 2304, MenuDataType.NORMAL, 'overlay/overlay_0023.bin', 'StorageMainMenu4', _("Storage Main Menu") + " 4"
+    HATCHER_MENU_CONFIRM = 2400, MenuDataType.NORMAL, 'overlay/overlay_0024.bin', 'HatcherMenuConfirm', _("Hatcher Menu Confirm")
+    HATCHER_MAIN_MENU = 2401, MenuDataType.NORMAL, 'overlay/overlay_0024.bin', 'HatcherMainMenu', _("Hatcher Main Menu")
+    APPRAISER_MENU_CONFIRM = 2500, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserMenuConfirm', _("Appraiser Menu Confirm")
+    APPRAISER_MAIN_MENU = 2501, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserMainMenu', _("Appraiser Main Menu")
+    APPRAISER_SUB_MENU = 2502, MenuDataType.NORMAL, 'overlay/overlay_0025.bin', 'AppraiserSubMenu', _("Appraiser Sub Menu")
+    DISCARD_MENU_CONFIRM = 2700, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsMenuConfirm', _("Discard Items Menu Confirm")
+    DISCARD_SUB_MENU_1 = 2701, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsSubMenu1', _("Discard Items Sub Menu") + " 1"
+    DISCARD_SUB_MENU_2 = 2702, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsSubMenu2', _("Discard Items Sub Menu") + " 2"
+    DISCARD_MAIN_MENU = 2703, MenuDataType.NORMAL, 'overlay/overlay_0027.bin', 'DiscardItemsMainMenu', _("Discard Items Main Menu")
+    DUNGEON_MAIN_MENU = 3100, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonMainMenu', _("Dungeon Main Menu")
+    DUNGEON_SUB_MENU_1 = 3101, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu1', _("Dungeon Sub Menu") + " 1"
+    DUNGEON_SUB_MENU_2 = 3102, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu2', _("Dungeon Sub Menu") + " 2"
+    DUNGEON_SUB_MENU_3 = 3103, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu3', _("Dungeon Sub Menu") + " 3"
+    DUNGEON_SUB_MENU_4 = 3104, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu4', _("Dungeon Sub Menu") + " 4"
+    DUNGEON_SUB_MENU_5 = 3105, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu5', _("Dungeon Sub Menu") + " 5"
+    DUNGEON_SUB_MENU_6 = 3106, MenuDataType.NORMAL, 'overlay/overlay_0031.bin', 'DungeonSubMenu6', _("Dungeon Sub Menu") + " 6"
+    UNKNOWN_MENU_CONFIRM = 3400, MenuDataType.NORMAL, 'overlay/overlay_0034.bin', 'UnknownMenuConfirm', _("Unknown Menu Confirm")
+    DUNGEON_DEBUG_MENU = 3401, MenuDataType.NORMAL, 'overlay/overlay_0034.bin', 'DungeonDebugMenu', _("Dungeon Debug Menu")
     # TODO: There are more menus
     
     def __new__(cls, *args, **kwargs):
@@ -159,7 +158,9 @@ class HardcodedMenus:
         block = config.binaries[menu.binary].blocks[menu.block]
         data = bytearray(len(menu_data)*MENU_ENTRY_LEN)
         if len(data)!=block.end-block.begin:
-            raise Exception(f"This menu must have {(block.end-block.begin)//MENU_ENTRY_LEN} entries!")
+            # noinspection PyUnusedLocal
+            num_entries = (block.end-block.begin)//MENU_ENTRY_LEN
+            raise Exception(f(_("This menu must have {num_entries} entries!")))
         for i, m in enumerate(menu_data):
             if menu.data_type==MenuDataType.NORMAL:
                 write_uintle(data, m.name_id, i*MENU_ENTRY_LEN, 2)

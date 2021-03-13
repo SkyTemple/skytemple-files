@@ -75,6 +75,7 @@ class KaoImage:
         self.compressed_img_data = new_img
         self.modified = True
         self.as_pil = None
+        self.empty = False
         return self
 
     @classmethod

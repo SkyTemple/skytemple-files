@@ -41,7 +41,7 @@ class MappaItemCategory(Enum):
     THROWN_PIERCE = 0, 1, 6, [], [9]
     THROWN_ROCK = 1, 7, 4, [9], []
     BERRIES_SEEDS_VITAMINS = 2, 69, 40, [], [116, 117, 118]
-    FOODS_GUMMIES = 3, 109, 29, [116, 117, 118], []
+    FOODS_GUMMIES = 3, 109, 30, [116, 117, 118], []
     HOLD = 4, 13, 56, [], []
     TMS = 5, 188, 105, [], []
     POKE = 6, 183, 1, [], []

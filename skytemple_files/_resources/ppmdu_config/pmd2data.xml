@@ -904,6 +904,33 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to add types to the type table -->
+        <Patch id="AddTypes" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/add_type/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0013.bin">
+	  	<Include filename ="irdkwia_asm_mods/add_type/selector_overlay13.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/add_type/selector_overlay29.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to implement Fairy-type gummies -->
+        <Patch id="ImplementFairyGummies" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/implement_fairy_gummies/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract spinda bar's item list-->
+        <Patch id="ExtractBarItemList" >
+          <OpenBin filepath="overlay/overlay_0019.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_bar_list/selector_overlay19.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to extract hardcoded item lists -->
         <Patch id="ExtractHardcodedItemLists" >
           <OpenBin filepath="arm9.bin">

@@ -18,23 +18,32 @@
 from inspect import currentframe
 try:
     import builtins
-    _ = builtins._
+    __ = builtins._
 except Exception:
-    _ = lambda a: a
+    __ = lambda a: a
+
+
+def _(s):
+    """
+    This proxy function calls the translation function (if available).
+    We use a proxy, so when imported before the localization is ready, we can ensure
+    the reload()'ed function is actually called.
+    """
+    return __(s)
 
 
 def reload_locale():
-    global _
+    global __
     import builtins
-    _ = builtins._
+    __ = builtins._
     try:
         from explorerscript import util
-        util._ = _
+        util._ = builtins._
     except ImportError:
         pass
     try:
         from desmume import i18n_util
-        i18n_util._ = _
+        i18n_util._ = builtins._
     except ImportError:
         pass
 

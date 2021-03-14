@@ -33,6 +33,7 @@ from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import DbinSir0Pkd
 from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DplaHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
+from skytemple_files.data.item_s_p.handler import ItemSPHandler
 from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.str.handler import StrHandler
@@ -153,6 +154,7 @@ class FileType:
     LEVEL_BIN_ENTRY = LevelBinEntryHandler
     WAZA_P = WazaPHandler
     ITEM_P = ItemPHandler
+    ITEM_SP = ItemSPHandler
     TBL_TALK = TblTalkHandler
 
     # These handlers assume the content to be Sir0 wrapped by default:

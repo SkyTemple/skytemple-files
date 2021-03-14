@@ -21,7 +21,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 from skytemple_files.data.item_p import *
-
+from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory
 
 
 class ItemPEntry(AutoString):
@@ -42,6 +42,9 @@ class ItemPEntry(AutoString):
         self.ai_flag_1 = (bitfield&0x20)!=0 # Flag 1 for the AI?
         self.ai_flag_2 = (bitfield&0x40)!=0 # Flag 2 for the AI?
         self.ai_flag_3 = (bitfield&0x80)!=0 # Flag 3 for the AI?
+
+    def category_enum(self) -> MappaItemCategory:
+        return MappaItemCategory(self.category)
     
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_P_ENTRY_SIZE)

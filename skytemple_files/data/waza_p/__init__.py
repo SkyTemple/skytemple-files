@@ -15,3 +15,4 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+WAZA_MOVE_ENTRY_LEN = 26

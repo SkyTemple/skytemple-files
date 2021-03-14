@@ -28,7 +28,12 @@ waza_p_bin = rom.getFileByName('BALANCE/waza_p.bin')
 waza_p = FileType.WAZA_P.deserialize(waza_p_bin)
 sir0_pointers_before = FileType.SIR0.deserialize(waza_p_bin).content_pointer_offsets
 
-print(waza_p)
+print("Moves")
+for i, move in enumerate(waza_p.moves):
+    print(i, move)
+print("Learnsets")
+for learnset in waza_p.learnsets:
+    print(learnset)
 
 sir0_pointers_after = WazaPWriter(waza_p).write()[1]
 bin_after = FileType.WAZA_P.serialize(waza_p)

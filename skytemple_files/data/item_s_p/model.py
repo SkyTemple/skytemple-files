@@ -30,6 +30,23 @@ class ItemSPExclusiveType(Enum):
     MONSTER = auto(), _("Pokémon")
     TYPE = auto(), _("Type")
 
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    def __str__(self):
+        return f'ItemSPExclusiveType.{self.name}'
+
+    def __repr__(self):
+        return str(self)
+
 
 class ItemSPType(Enum):
     NONE =              0x00, '-', None, ItemSPExclusiveType.NONE, None

@@ -58,7 +58,8 @@ class WazaPWriter:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Move data
         move_pointer = len(data)
-        data += self.model.move_data
+        for move in self.model.moves:
+            data += move.to_bytes()
         # Padding
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))

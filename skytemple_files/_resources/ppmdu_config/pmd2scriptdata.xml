@@ -1315,7 +1315,7 @@
         <Bgm>Earthquake3</Bgm>
         <Bgm>Rain1</Bgm>
         <Bgm>HeavyFeeling</Bgm>
-        <Bgm loops="true">TemporalPinnacle</Bgm>
+        <Bgm>TemporalPinnacle</Bgm>
         <Bgm>Nothing109</Bgm>
         <Bgm>BoulderCrushingNoise</Bgm>
         <Bgm>HighPitchedWhistle</Bgm>
@@ -1422,7 +1422,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x4"   name="back_SetBackScrollSpeed"                params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="unk0"/>
+          <Argument id="0" type="sint16" name="unk0"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x5"   name="back_SetBanner"                         params="2"  stringidx="1"  unk2="0"  unk3="0"   >

@@ -93,6 +93,7 @@ class SsbWriter:
             self.bytes_written += 6
 
         # Routines - The offsets used for the routine starts MUST already be correctly calculated!
+        op_codes = self.static_data.script_data.op_codes__by_id
         for i, ops in enumerate(self.model.routine_ops):
             for op in ops:
                 self.write_uintle(data, op.op_code.id, self.bytes_written, 2)
@@ -101,9 +102,15 @@ class SsbWriter:
                     # Dynamic argument handling: Write number of arguments next
                     self.write_uintle(data, len(op.params), self.bytes_written, 2)
                     self.bytes_written += 2
-                for param in op.params:
-                    # If negative, store as 14-bit signed integer.
-                    param = param if param >= 0 else 0x8000 + param
+                for argidx, param in enumerate(op.params):
+                    # If negative, store as 14-bit or 16-bit signed integer.
+                    if param < 0:
+                        # TODO: Support for repeating args
+                        args = op_codes[op.op_code.id].arguments__by_id
+                        if argidx in args and args[argidx].type == "sint16":
+                            param = 0x10000 + param
+                        else:
+                            param = 0x8000 + param
                     self.write_uintle(data, param, self.bytes_written, 2)
                     self.bytes_written += 2
 

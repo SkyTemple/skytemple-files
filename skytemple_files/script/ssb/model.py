@@ -240,8 +240,16 @@ class Ssb:
                             new_params.append(param)
                         elif argument_spec.type == 'sint':
                             # 14 bit signed int.
-                            if param & 0x4000:
+                            if param >= 0x8000:
+                                # ??? This is bigger than 14bit.
+                                pass
+                            elif param & 0x4000:
                                 param = -0x8000 + param
+                            new_params.append(param)
+                        elif argument_spec.type == 'sint16':
+                            # 16bit signed
+                            if param & 0x8000:
+                                param = -0x10000 + param
                             new_params.append(param)
                         elif argument_spec.type == 'Entity':
                             new_params.append(SsbConstant.create_for(self._scriptdata.level_entities__by_id[param]))

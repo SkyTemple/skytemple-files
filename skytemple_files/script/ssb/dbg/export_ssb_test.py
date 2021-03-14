@@ -34,7 +34,7 @@ def main():
     rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
     for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        if 'm16a0102' not in file_name:
+        if 'm03a1310' not in file_name:
             continue
         print(file_name)
 

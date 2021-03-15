@@ -1,8 +1,8 @@
-; PMD EOS - Complete Team Control Code v1.2
+; PMD EOS - Complete Team Control Code v1.2.1
 ; Made by Cipnit
 ; https://www.pokecommunity.com/showthread.php?t=437108
 ; Build this file using armips: https://github.com/Kingcom/armips
-; Amount of space needed in the custom overlay: 3E0h bytes
+; Amount of space needed in the custom overlay: 420h bytes
 
 .nds
 .include "common/regionSelect.asm"
@@ -48,6 +48,9 @@
 .org NA_022F499C	;All of the above also applies to taking items from pokemon
 	bl @EquipPenalty	;original: ldrb r0,[r5,7h]
 
+.org NA_022EBD50	;Spot where the game originally calls a function which decreases the gusting wind counter.
+	bl @RoundCounterCounter	;original: bl NA_022ECB48
+
 .close
 
 .open "overlay_0031.bin", ov_31
@@ -58,7 +61,7 @@
 
 .open "overlay_0036.bin", ov_36
 .orga 0x10
-.area 3F0h - 10h
+.area 430h -10h
 
 @ManualModeOn:
 	.byte 0h
@@ -197,6 +200,30 @@
 	subne r2,r2,r3
 	strh r2,[r1]
 	pop r1-r3,r15
+	
+@RoundCounterCounter:		;If you just moved a partner in manual mode, this makes it so the game's gusting wind counter won't go down - it'll only go down for the leader, once per round.
+	push r0,r1,r14
+	mov r0,r14
+	ldr r1,=@ManualModeOn
+	ldrb r1,[r1]
+	cmp r1,1h
+	bne @justcounttheround
+	ldr r1,=NA_02353538
+	ldr r1,[r1]
+	add r1,r1,12000h
+	ldr r1,[r1,0B28h]	;first pokemon's entity address
+	ldr r1,[r1,0B4h]
+	ldrb r1,[r1,7h]
+	cmp r1,1h
+	beq @justcounttheround
+	add r0,0Ch
+	str r0,[sp,8h]
+	pop r0,r1,r15
+@justcounttheround:
+	pop r0,r1
+	bl NA_022ECB48
+	pop r15
+.pool
 
 @leaderchanger:		;r5 is the leader pointer, r6 is the new leader's address, r7 is the old leader's address
 	push r14

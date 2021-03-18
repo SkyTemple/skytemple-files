@@ -1,4 +1,4 @@
-; PMD EOS - Complete Team Control Code v1.2.1
+; PMD EOS - Complete Team Control Code v1.2.2
 ; Made by Cipnit
 ; https://www.pokecommunity.com/showthread.php?t=437108
 ; Build this file using armips: https://github.com/Kingcom/armips
@@ -51,7 +51,13 @@
 .org NA_022EBD50	;Spot where the game originally calls a function which decreases the gusting wind counter.
 	bl @RoundCounterCounter	;original: bl NA_022ECB48
 
+.org NA_023023AC	;Spot where the game checks if you have a temporary party member - in the original game, you're not allowed to see a temporary party member's moves, but with team control, it's possible to see them while you're controling them - however, bugs would occur if you looked at their info. This fixes it so temp party members are treated like regular party members when it comes to moves.
+	nop
+	mov r0,1h
+	pop r4,r15
+
 .close
+
 
 .open "overlay_0031.bin", ov_31
 .org NA_02387530	;Jump to team submenu function

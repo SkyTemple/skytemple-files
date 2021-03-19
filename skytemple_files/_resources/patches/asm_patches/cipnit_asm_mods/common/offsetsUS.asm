@@ -21,6 +21,7 @@ ov_29 equ 022DC240h
 .definelabel NA_022FE4BC, 022FE4BCh	;Function - executes the leader's action
 .definelabel NA_022FFF4C, 022FFF4Ch	;Function - used in turn verification algorithm
 .definelabel NA_02301D10, 02301D10h	;Function - Checks a specific property of a pokemon, sometimes r12 is equal to this
+.definelabel NA_023023AC, 023023ACh ;Operation - part which checks whether or not to display a pokemon's moves
 .definelabel NA_02304FE0, 02304FE0h	;Function - executes all moves in the movement buffer simultaneously
 .definelabel NA_0230506C, 0230506Ch	;Operation - partner direction setter 2
 .definelabel NA_02305160, 02305160h	;Operation - some line at the end of the partner direction setter

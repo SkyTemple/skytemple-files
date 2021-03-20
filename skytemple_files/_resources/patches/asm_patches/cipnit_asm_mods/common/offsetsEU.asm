@@ -21,7 +21,7 @@ ov_29 equ 022DCB80h
 .definelabel NA_022FE4BC, 022FEEDCh	;Function - executes the leader's action
 .definelabel NA_022FFF4C, 02300978h	;Function - used in turn verification algorithm
 .definelabel NA_02301D10, 0230273Ch	;Function - Checks a specific property of a pokemon, sometimes r12 is equal to this
-.definelabel NA_023023AC, 02302DD8h ;Operation - part which checks whether or not to display a pokemon's moves 
+.definelabel NA_023023AC, 02302DD8h	;Operation - part which checks whether or not to display a pokemon's moves
 .definelabel NA_02304FE0, 02305A0Ch	;Function - executes all moves in the movement buffer simultaneously
 .definelabel NA_0230506C, 02305A98h	;Operation - partner direction setter 2
 .definelabel NA_02305160, 02305B8Ch	;Operation - some line at the end of the partner direction setter
@@ -32,3 +32,4 @@ ov_29 equ 022DCB80h
 .definelabel NA_0235355C, 0235415Ch	;Variable - points to the current team leader
 ov_31 equ 02383420h
 .definelabel NA_02387530, 02388154h	;Operation - jump to team submenu option recorder
+.definelabel NA_023888A4, 023894C8h	;Operation - checks which option you selected in the rest menu

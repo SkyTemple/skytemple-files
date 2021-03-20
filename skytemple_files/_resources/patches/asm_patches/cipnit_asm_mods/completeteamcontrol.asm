@@ -1,8 +1,8 @@
-; PMD EOS - Complete Team Control Code v1.2.2
+; PMD EOS - Complete Team Control Code v1.2.3
 ; Made by Cipnit
 ; https://www.pokecommunity.com/showthread.php?t=437108
 ; Build this file using armips: https://github.com/Kingcom/armips
-; Amount of space needed in the custom overlay: 420h bytes
+; Amount of space needed in the custom overlay: 470h bytes
 
 .nds
 .include "common/regionSelect.asm"
@@ -62,12 +62,14 @@
 .open "overlay_0031.bin", ov_31
 .org NA_02387530	;Jump to team submenu function
 	bl @paranoia_agent	;original: bl NA_022EB408
+.org NA_023888A4	;The part of the Rest menu function which checks what option you selected
+	bl @paranoia_agent_two	;original: ldr r0,[r1,8h]
 .close
 
 
 .open "overlay_0036.bin", ov_36
 .orga 0x10
-.area 430h -10h
+.area 480h -10h
 
 @ManualModeOn:
 	.byte 0h
@@ -190,6 +192,30 @@
 @@paranoiaagent_nvm:
 	pop r0
 	bl NA_022EB408	;this records the player's decision in the team submenu
+	pop r15
+.pool
+
+@paranoia_agent_two:	;Prevents the player from quicksaving while controling another partner in manual mode
+	push r14
+	ldr r0,[r1,8h]
+	cmp r0,1h
+	popne r15
+	ldr r0,=@ManualModeOn
+	ldrb r0,[r0]
+	cmp r0,1h
+	bne @paranoiaover
+	ldr r0,=NA_02353538
+	ldr r0,[r0]
+	add r0,r0,12000h
+	ldr r0,[r0,0B28h]
+	ldr r0,[r0,0B4h]
+	ldrb r0,[r0,7h]
+	cmp r0,1h
+	beq @paranoiaover
+	mov r0,0h
+	pop r15
+@paranoiaover:
+	ldr r0,[r1,8h]
 	pop r15
 .pool
 

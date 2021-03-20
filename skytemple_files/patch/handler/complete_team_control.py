@@ -78,7 +78,7 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
 
     @property
     def version(self) -> str:
-        return '1.2.2'
+        return '1.2.3'
 
     def depends_on(self) -> List[str]:
         return ['ExtraSpace']

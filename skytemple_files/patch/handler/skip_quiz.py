@@ -24,10 +24,10 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 from skytemple_files.common.i18n_util import _
 from skytemple_files.data.str.handler import StrHandler
 
-PATCH_CHECK_ADDR_APPLIED_US = 0xC88
-PATCH_CHECK_ADDR_APPLIED_EU = 0xC88
-PATCH_CHECK_ADDR_APPLIED_JP = 0xC88
-PATCH_CHECK_INSTR_APPLIED = 0xE3A00026
+PATCH_CHECK_ADDR_APPLIED_US = 0xB3C
+PATCH_CHECK_ADDR_APPLIED_EU = 0xB3C
+PATCH_CHECK_ADDR_APPLIED_JP = 0xB3C
+PATCH_CHECK_INSTR_APPLIED = 0xE2822001
 
 STRING_ID_US = 2613
 STRING_ID_EU = 2613
@@ -41,7 +41,7 @@ DIAG_LIST = {"MESSAGE/text_e.str": "Who would you like to be?",
              "MESSAGE/text_s.str": "---",
              "MESSAGE/text_j.str": "---"}
 
-class SkipQuizPatchHandler(AbstractPatchHandler):
+class SkipQuizPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -49,7 +49,8 @@ class SkipQuizPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("""Skips the quiz, only leaving the gender question. """)
+        return _("""Skips the quiz, only leaving the gender question.
+Needs ChooseStarter patch to be applied. """)
 
     @property
     def author(self) -> str:

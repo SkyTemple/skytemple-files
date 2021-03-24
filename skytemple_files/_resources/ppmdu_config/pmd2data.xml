@@ -962,6 +962,13 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to let the player choose its starter after the quiz -->
+        <Patch id="ChooseStarter" >
+          <OpenBin filepath="overlay/overlay_0013.bin">
+	  	<Include filename ="irdkwia_asm_mods/choose_starter/selector_overlay13.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch that fixes the unused dungeon chance -->
         <Patch id="UnusedDungeonChancePatch" >
           <OpenBin filepath="overlay/overlay_0029.bin">

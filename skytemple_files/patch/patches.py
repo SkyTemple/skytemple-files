@@ -46,6 +46,7 @@ from skytemple_files.patch.handler.fairy_gummies import ImplementFairyGummiesPat
 from skytemple_files.patch.handler.extract_bar_list import ExtractBarItemListPatchHandler
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
 from skytemple_files.patch.handler.choose_starter import ChooseStarterPatchHandler
+from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
 from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
 from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
 from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
@@ -69,6 +70,7 @@ class PatchType(Enum):
     FIX_EVOLUTION = FixEvolutionPatchHandler
     EXP_SHARE = ExpSharePatchHandler
     CHOOSE_STARTER = ChooseStarterPatchHandler
+    SKIP_QUIZ = SkipQuizPatchHandler
     COMPLETE_TEAM_CONTROL = CompleteTeamControl
     FAR_OFF_PAL_OVERDRIVE = FarOffPalOverdrive
     PARTNERS_TRIGGER_HIDDEN_TRAPS = PartnersTriggerHiddenTraps

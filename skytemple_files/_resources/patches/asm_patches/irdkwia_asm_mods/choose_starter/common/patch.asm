@@ -8,7 +8,7 @@
 
 	.org BegSwitch
 	.area 0x4
-		cmp r1,#0x47
+		cmp r1,#0x48
 	.endarea
 	.org BegSwitch+0xC
 	.area 0x4
@@ -23,6 +23,7 @@
 		b SwitchCase45
 		b SwitchCase46
 		b SwitchCase47
+		b SwitchCase48
 		.fill 11*0x4+EndSwitch-., 0xCC
 	.endarea
 
@@ -351,6 +352,25 @@
 		strb r0,[r1, #+0x3]
 		ldr r1,[r2, #+0x0]
 		mov r0,#0x42
+		str r0,[r1, #+0x20]
+		b EndCodeSwitch
+	SwitchCase48: ;Special Case to skip the quiz
+		mov  r0,#0x0
+		mov  r1,#0x3
+		mov  r2,#0x1
+		bl CreatePortraitBox
+		ldr r1,=GlobalStructPointer
+		ldr r1,[r1]
+		strb r0,[r1, #+0x5]
+		ldr r1,=GlobalStructPointer
+		ldr r0,[r1]
+		ldrb r1,[r0, #+0x5f]
+		ldr r0,=BorderColorTable
+		ldrb r0,[r0, +r1]
+		bl ChangeBorderColor
+		ldr r1,=GlobalStructPointer
+		ldr r1,[r1]
+		mov r0,#0x45
 		str r0,[r1, #+0x20]
 		b EndCodeSwitch
 		.pool

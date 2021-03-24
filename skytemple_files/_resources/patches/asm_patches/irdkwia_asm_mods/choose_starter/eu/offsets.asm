@@ -21,6 +21,8 @@
 
 .definelabel MenuCreateOptionString, 0x020225EC
 
+.definelabel ChangeBorderColor, 0x02027D74
+
 .definelabel CreateNormalMenu, 0x0202B3E0
 .definelabel FreeNormalMenu, 0x0202B7B8
 .definelabel GetNormalMenuResult, 0x0202B870
@@ -63,6 +65,7 @@
 
 .definelabel OldGetPersonalityResult, 0x0238C8E8
 
+.definelabel BorderColorTable, 0x0238CB50
 .definelabel PortraitAttrStruct, 0x0238CB54
 .definelabel QuizMenu1, 0x0238CBB4
 .definelabel PlayersListPkmnID, 0x0238CBF8

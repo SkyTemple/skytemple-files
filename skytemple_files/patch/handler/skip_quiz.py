@@ -16,12 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Callable, Dict, List, Set
 
-from ndspy.code import loadOverlayTable, saveOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import _
 from skytemple_files.data.str.handler import StrHandler
 
@@ -30,34 +29,27 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0xC88
 PATCH_CHECK_ADDR_APPLIED_JP = 0xC88
 PATCH_CHECK_INSTR_APPLIED = 0xE3A00026
 
-OVERLAY13_INITAL_SIZE_US = 0x2E80
-OVERLAY13_INITAL_SIZE_EU = 0x2E80
-OVERLAY13_INITAL_SIZE_JP = 0x2E80
-
-OVERLAY13_ADD_SIZE = 0x1000
-
 STRING_ID_US = 2613
 STRING_ID_EU = 2613
 STRING_ID_JP = 2613 #Just a guess
 
 # TODO; support other languages
-DIAG_LIST = {"MESSAGE/text_e.str": "Then, who would you like to be?",
+DIAG_LIST = {"MESSAGE/text_e.str": "Who would you like to be?",
              "MESSAGE/text_f.str": "Quel pokémon souhaitez-vous devenir?",
              "MESSAGE/text_g.str": "---",
              "MESSAGE/text_i.str": "---",
              "MESSAGE/text_s.str": "---",
              "MESSAGE/text_j.str": "---"}
 
-class ChooseStarterPatchHandler(AbstractPatchHandler):
+class SkipQuizPatchHandler(AbstractPatchHandler):
 
     @property
     def name(self) -> str:
-        return 'ChooseStarter'
+        return 'SkipQuiz'
 
     @property
     def description(self) -> str:
-        return _("""Adds an extra menu during the personality test to choose the starter.
-Uses the supposedly unused string 2613 in the strings file. """)
+        return _("""Skips the quiz, only leaving the gender question. """)
 
     @property
     def author(self) -> str:
@@ -66,6 +58,9 @@ Uses the supposedly unused string 2613 in the strings file. """)
     @property
     def version(self) -> str:
         return '0.0.1'
+
+    def depends_on(self) -> List[str]:
+        return ['ChooseStarter']
     
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
@@ -81,13 +76,10 @@ Uses the supposedly unused string 2613 in the strings file. """)
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 string_id = STRING_ID_US
-                overlay_size = OVERLAY13_INITAL_SIZE_US
             if config.game_region == GAME_REGION_EU:
                 string_id = STRING_ID_EU
-                overlay_size = OVERLAY13_INITAL_SIZE_EU
             if config.game_region == GAME_REGION_JP:
                 string_id = STRING_ID_JP
-                overlay_size = OVERLAY13_INITAL_SIZE_JP
 
         
         # Change dialogue
@@ -97,12 +89,6 @@ Uses the supposedly unused string 2613 in the strings file. """)
             strings.strings[string_id-1] = DIAG_LIST[filename]
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
-        
-        table = loadOverlayTable(rom.arm9OverlayTable, lambda x,y:bytes())
-        ov = table[13]
-        if ov.ramSize<overlay_size+OVERLAY13_ADD_SIZE:
-            ov.ramSize = overlay_size+OVERLAY13_ADD_SIZE
-        rom.arm9OverlayTable = saveOverlayTable(table)
         try:
             apply()
         except RuntimeError as ex:

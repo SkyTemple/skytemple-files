@@ -34,7 +34,8 @@ STRING_ID_EU = 2613
 STRING_ID_JP = 2613 #Just a guess
 
 MESSAGE = "Who would you like to be?"
-# For xgettext scanning: _("Who would you like to be?")
+# For xgettext scanning:
+_("Who would you like to be?")  # TRANSLATORS: Question in personality test.
 
 
 class SkipQuizPatchHandler(AbstractPatchHandler, DependantPatch):

@@ -14,13 +14,48 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import gettext
+from abc import ABC, abstractmethod
 from inspect import currentframe
-try:
-    import builtins
-    __ = builtins._
-except Exception:
-    __ = lambda a: a
+
+
+class AbstractLocaleManager(ABC):
+    @abstractmethod
+    def translate(self, message, locale_code):
+        pass
+
+    @abstractmethod
+    def gettext(self, message):
+        pass
+
+
+class LocaleManager(AbstractLocaleManager):
+    def __init__(self, domain, localedir, main_languages):
+        self.domain = domain
+        self.localedir = localedir
+        self.main_languages = main_languages
+
+        self.main_translations = gettext.translation(domain, localedir=localedir, languages=main_languages)
+
+    def translate(self, message, locale_code):
+        try:
+            return gettext.translation(self.domain, localedir=self.localedir, languages=[locale_code]).gettext(message)
+        except Exception:
+            return message
+
+    def gettext(self, message):
+        return self.main_translations.gettext(message)
+
+
+class NullLocaleManager(AbstractLocaleManager):
+    def translate(self, message, locale_code):
+        return message
+
+    def gettext(self, message):
+        return message
+
+
+_locales: AbstractLocaleManager = NullLocaleManager()
 
 
 def _(s):
@@ -29,13 +64,19 @@ def _(s):
     We use a proxy, so when imported before the localization is ready, we can ensure
     the reload()'ed function is actually called.
     """
-    return __(s)
+    return _locales.gettext(s)
 
 
-def reload_locale():
+def get_locales():
+    return _locales
+
+
+def reload_locale(domain, localedir, main_languages):
+    global _locales
+    _locales = LocaleManager(domain, localedir, main_languages)
+    _locales.main_translations.install()
     global __
     import builtins
-    __ = builtins._
     try:
         from explorerscript import util
         util._ = builtins._

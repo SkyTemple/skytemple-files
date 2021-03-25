@@ -22,7 +22,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import _
+from skytemple_files.common.i18n_util import _, get_locales
 from skytemple_files.data.str.handler import StrHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0xC88
@@ -40,13 +40,9 @@ STRING_ID_US = 2613
 STRING_ID_EU = 2613
 STRING_ID_JP = 2613 #Just a guess
 
-# TODO; support other languages
-DIAG_LIST = {"MESSAGE/text_e.str": "Then, who would you like to be?",
-             "MESSAGE/text_f.str": "Quel pokémon souhaitez-vous devenir?",
-             "MESSAGE/text_g.str": "---",
-             "MESSAGE/text_i.str": "---",
-             "MESSAGE/text_s.str": "---",
-             "MESSAGE/text_j.str": "---"}
+MESSAGE = "Then, who would you like to be?"
+# For xgettext scanning: _("Quel pokémon souhaitez-vous devenir?")
+
 
 class ChooseStarterPatchHandler(AbstractPatchHandler):
 
@@ -89,12 +85,12 @@ Uses the supposedly unused string 2613 in the strings file. """)
                 string_id = STRING_ID_JP
                 overlay_size = OVERLAY13_INITAL_SIZE_JP
 
-        
         # Change dialogue
-        for filename in get_files_from_rom_with_extension(rom, 'str'):
+        for lang in config.string_index_data.languages:
+            filename = 'MESSAGE/' + lang.filename
             bin_before = rom.getFileByName(filename)
             strings = StrHandler.deserialize(bin_before)
-            strings.strings[string_id-1] = DIAG_LIST[filename]
+            strings.strings[string_id-1] = get_locales().translate(MESSAGE, lang.locale.replace('-', '_'))
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
         

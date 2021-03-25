@@ -41,7 +41,7 @@ STRING_ID_EU = 2613
 STRING_ID_JP = 2613 #Just a guess
 
 MESSAGE = "Then, who would you like to be?"
-# For xgettext scanning: _("Quel pokémon souhaitez-vous devenir?")
+# For xgettext scanning: _("Then, who would you like to be?")
 
 
 class ChooseStarterPatchHandler(AbstractPatchHandler):

@@ -31,4 +31,4 @@ def check_newest_release(rtype: ReleaseType) -> str:
     Returns the newest release using release.skytemple.org.
     May fail if no connection can be established!
     """
-    return urllib.request.urlopen(RELEASE_WEB + rtype.value).read().decode('utf-8').trim().strip()
+    return urllib.request.urlopen(RELEASE_WEB + rtype.value).read().decode('utf-8').strip()

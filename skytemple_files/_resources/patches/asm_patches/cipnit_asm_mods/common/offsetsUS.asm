@@ -11,7 +11,7 @@ ov_29 equ 022DC240h
 .definelabel NA_022EC488, 022EC488h	;Operation - the jump to the function which executes the leader's action
 .definelabel NA_022EC4C0, 022EC4C0h	;Operation - leader's wait bit setter
 .definelabel NA_022EC5F0, 022EC5F0h	;Operation - resets the round counter when you get a speed boost
-.definelabel NA_022ECB48, 022ED4F8h	;Function - lowers the gusting wind counter
+.definelabel NA_022ECB48, 022ECB48h	;Function - lowers the gusting wind counter
 .definelabel NA_022F1178, 022F1178h	;Operation - partner direction setter 1
 .definelabel NA_022F1EE0, 022F1EE0h	;Operation - checks if you're holding Y or start on your turn
 .definelabel NA_022F488C, 022F488Ch	;Operation - skips partner's turn when it gets an item

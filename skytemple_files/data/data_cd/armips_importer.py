@@ -42,8 +42,6 @@ class ArmipsImporter:
                 file.write(patch_asm)
 
             # Run armips
-            original_cwd = os.getcwd()
-            os.chdir(tmp)
             try:
                 prefix = ""
                 # Under Windows, try to load from SkyTemple _resources dir first.
@@ -52,14 +50,12 @@ class ArmipsImporter:
                 exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')
                 result = subprocess.Popen([exec_name, ASM_ENTRYPOINT_FN],
                                           stdout=subprocess.PIPE,
-                                          stderr=subprocess.STDOUT)
+                                          stderr=subprocess.STDOUT,
+                                          cwd=tmp)
                 retcode = result.wait()
             except FileNotFoundError as ex:
                 raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
                                                 "'armips' is inside your system's PATH.")) from ex
-            finally:
-                # Restore cwd
-                os.chdir(original_cwd)
 
             if retcode != 0:
                 raise PatchError(_("ARMIPS reported an error while applying the patch."),

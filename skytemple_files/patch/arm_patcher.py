@@ -117,8 +117,6 @@ class ArmPatcher:
                     f.write(asm_entrypoint)
 
                 # Run armips
-                original_cwd = os.getcwd()
-                os.chdir(tmp)
                 try:
                     prefix = ""
                     # Under Windows, try to load from SkyTemple _resources dir first.
@@ -127,16 +125,36 @@ class ArmPatcher:
                     exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')
                     result = subprocess.Popen([exec_name, ASM_ENTRYPOINT_FN],
                                               stdout=subprocess.PIPE,
-                                              stderr=subprocess.STDOUT)
+                                              stderr=subprocess.STDOUT,
+                                              cwd=tmp
+                                              )
                     retcode = result.wait()
                 except FileNotFoundError as ex:
                     raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
                                                     "'armips' is inside your system's PATH.")) from ex
-                finally:
-                    # Restore cwd
-                    os.chdir(original_cwd)
 
                 if retcode != 0:
+
+                    logger.warning("Failed applying an armips patch. Debugging information follow.")
+                    logger.warning("Tmp dir name: " + tmp)
+                    logger.warning("Patch dir name: " + patch_file_dir)
+                    contents = "???"
+                    try:
+                        lsresult = subprocess.Popen(['ls', '-la', tmp],
+                                                    stdout=subprocess.PIPE,
+                                                    stderr=subprocess.STDOUT)
+                        lsresult.wait()
+                        contents = str(lsresult.stdout.read(), 'utf-8')
+                    except BaseException:
+                        pass
+                    logger.warning("Contents of dir:\n" + contents)
+                    stdout = "???"
+                    try:
+                        stdout = str(result.stdout.read(), 'utf-8')
+                    except BaseException:
+                        pass
+                    logger.warning("Stdout:\n" + stdout)
+
                     raise PatchError(_("ARMIPS reported an error while applying the patch."),
                                      str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
 
@@ -166,16 +184,4 @@ class ArmPatcher:
             except (PatchError, ArmipsNotInstalledError):
                 raise
             except BaseException as ex:
-                logger.warning("Failed applying an armips patch. Debugging information follow.", exc_info=ex)
-                logger.warning("Dir name: " + tmp)
-                contents = "???"
-                try:
-                    result = subprocess.Popen(['ls', '-la'],
-                                              stdout=subprocess.PIPE,
-                                              stderr=subprocess.STDOUT)
-                    result.wait()
-                    contents = str(result.stdout.read(), 'utf-8')
-                except BaseException:
-                    pass
-                logger.warning("Contents of dir:\n" + contents)
                 raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex

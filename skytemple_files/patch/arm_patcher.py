@@ -122,7 +122,8 @@ class ArmPatcher:
                     # Under Windows, try to load from SkyTemple _resources dir first.
                     if sys.platform.startswith('win') and os.path.exists(os.path.join(get_resources_dir(), 'armips.exe')):
                         prefix = os.path.join(get_resources_dir(), '')
-                    result = subprocess.Popen([f'{prefix}armips', ASM_ENTRYPOINT_FN],
+                    exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')
+                    result = subprocess.Popen([exec_name, ASM_ENTRYPOINT_FN],
                                               stdout=subprocess.PIPE,
                                               stderr=subprocess.STDOUT)
                     retcode = result.wait()

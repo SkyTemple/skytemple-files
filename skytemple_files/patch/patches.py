@@ -188,7 +188,7 @@ class Patcher:
         if handler.name not in self._config.asm_patches_constants.patches.keys():
             raise ValueError(f(_("No patch for handler '{handler.name}' found in the configuration.")))
         self._loaded_patches[handler.name] = handler
-        self._patch_dirs[handler.name] = os.path.realpath(patch_base_dir)
+        self._patch_dirs[handler.name] = patch_base_dir
 
     def list(self) -> Generator[AbstractPatchHandler, None, None]:
         for handler in self._loaded_patches.values():

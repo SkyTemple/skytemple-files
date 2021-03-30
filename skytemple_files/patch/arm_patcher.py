@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 import os
 import shutil
 import subprocess
@@ -29,6 +30,7 @@ from skytemple_files.common.i18n_util import f, _
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 Y9_BIN = 'y9.bin'
+logger = logging.getLogger(__name__)
 
 
 class PatchError(RuntimeError):
@@ -51,8 +53,8 @@ class ArmPatcher:
 
     def apply(self, patch: Union[Pmd2Patch, Pmd2SimplePatch],
               binaries: Dict[str, Pmd2Binary], patch_file_dir: str, stub_path: str, game_id: str):
-        try:
-            with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
                 shutil.copytree(patch_file_dir, tmp, dirs_exist_ok=True)
 
                 # Build ASM file to run
@@ -161,7 +163,19 @@ class ArmPatcher:
                                 continue  # We ignore if End's extra overlay is missing.
                             raise err
 
-        except (PatchError, ArmipsNotInstalledError):
-            raise
-        except BaseException as ex:
-            raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex
+            except (PatchError, ArmipsNotInstalledError):
+                raise
+            except BaseException as ex:
+                logger.warning("Failed applying an armips patch. Debugging information follow.", exc_info=ex)
+                logger.warning("Dir name: " + tmp)
+                contents = "???"
+                try:
+                    result = subprocess.Popen(['ls', '-la'],
+                                              stdout=subprocess.PIPE,
+                                              stderr=subprocess.STDOUT)
+                    result.wait()
+                    contents = str(result.stdout.read(), 'utf-8')
+                except BaseException:
+                    pass
+                logger.warning("Contents of dir:\n" + contents)
+                raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex

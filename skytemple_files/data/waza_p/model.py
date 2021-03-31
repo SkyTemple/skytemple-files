@@ -130,7 +130,7 @@ class WazaMove(AutoString):
         self.move_id = read_uintle(data, 0x16, 2)
         # 0x18	1	uint8	Unk#19	Message ID offset that is displayed for the move.
         # 0 = Is default, higher values are added as string offset from the default string.
-        self.message_id = read_uintle(data, 0x10)
+        self.message_id = read_uintle(data, 0x18)
 
     def to_bytes(self) -> bytes:
         data = bytearray(WAZA_MOVE_ENTRY_LEN)

@@ -79,6 +79,136 @@ class WazaMoveCategory(Enum):
         return str(self)
 
 
+class WazaMoveRangeTarget(Enum):
+    ENEMIES = 0, _("Enemies")
+    ALLIES = 1, _("Allies")
+    EVERYONE = 2, _("Everyone")
+    USER = 3, _("User")
+    TWO_TURN = 4, _("Two-turn move")
+    EVERYONE_EXCEPT_USER = 5, _("Everyone except user")
+    ALLIES_EXCEPT_USER = 6, _("All allies except user")
+    U7 = 7, _("Invalid ") + "7"
+    U8 = 8, _("Invalid ") + "8"
+    U9 = 9, _("Invalid ") + "9"
+    U10 = 10, _("Invalid ") + "10"
+    U11 = 11, _("Invalid ") + "11"
+    U12 = 12, _("Invalid ") + "12"
+    U13 = 13, _("Invalid ") + "13"
+    U14 = 14, _("Invalid ") + "14"
+    SPECIAL = 15, _("Special / Invalid")
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    def __str__(self):
+        return f'WazaMoveRangeTarget.{self.name}'
+
+    def __repr__(self):
+        return str(self)
+
+
+class WazaMoveRangeRange(Enum):
+    IN_FRONT = 0, _("In front")
+    TRHEE_IN_FRONT = 1, _("In front + adjacent (like Wide Slash)")
+    AROUND = 2, _("8 tiles around user")
+    ROOM = 3, _("Room")
+    TWO_TILES = 4, _("Two tiles away")  # Also cuts corners, but the AI doesn't account for that
+    STRAIGHT_LINE = 5, _("Straight line")
+    FLOOR = 6, _("Floor")
+    USER = 7, _("User")
+    IN_FRONT_CORNERS = 8, _("In front; cuts corners")
+    TWO_TILES_CORNERS = 9, _("Two tiles away; cuts corners")
+    U10 = 10, _("Invalid ") + "10"
+    U11 = 11, _("Invalid ") + "11"
+    U12 = 12, _("Invalid ") + "12"
+    U13 = 13, _("Invalid ") + "13"
+    U14 = 14, _("Invalid ") + "14"
+    SPECIAL = 15, _("Special / Invalid")
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    def __str__(self):
+        return f'WazaMoveRangeRange.{self.name}'
+
+    def __repr__(self):
+        return str(self)
+
+
+class WazaMoveRangeCondition(Enum):
+    """Only relevant for AI setting."""
+    NO_CONDITION = 0, _("No condition")
+    CHANCE_AI_WEIGHT = 1, _("Based on AI Weight")
+    CRITICAL_HP = 2, _("Current HP <= 25%")
+    NEGATIVE_STATUS = 3, _("Has at least one negative status condition")
+    ASLEEP = 4, _("Is asleep, in a nightmare or napping")
+    GHOST = 5, _("Is a ghost-type Pokémon and does not have the exposed status")
+    CRITICAL_HP_NEGATIVE_STATUS = 6, _("Current HP <= 25% or has at least one negative status condition")
+    U7 = 7, _("Invalid ") + "7"
+    U8 = 8, _("Invalid ") + "8"
+    U9 = 9, _("Invalid ") + "9"
+    U10 = 10, _("Invalid ") + "10"
+    U11 = 11, _("Invalid ") + "11"
+    U12 = 12, _("Invalid ") + "12"
+    U13 = 13, _("Invalid ") + "13"
+    U14 = 14, _("Invalid ") + "14"
+    U15 = 15, _("Invalid ") + "15"
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    def __str__(self):
+        return f'WazaMoveRangeCondition.{self.name}'
+
+    def __repr__(self):
+        return str(self)
+
+
+class WazaMoveRangeSettings(AutoString):
+    def __init__(self, data: Union[memoryview, bytes]):
+        val = read_uintle(data, 0, 2)
+        n4, n3, n2, n1 = val >> 12 & 0xf, val >> 8 & 0xf, val >> 4 & 0xf, val & 0xf
+        self.target = WazaMoveRangeTarget(int(n1))
+        self.range = WazaMoveRangeTarget(int(n2))
+        self.condition = WazaMoveRangeTarget(int(n3))
+        self.unused = int(n4)
+
+    def __int__(self):
+        return (self.unused << 12) + (self.condition.value << 8) + (self.range.value << 4) + self.target.value
+
+    def __eq__(self, other):
+        if not isinstance(other, WazaMoveRangeSettings):
+            return False
+        return self.target == other.target and \
+               self.range == other.range and \
+               self.condition == other.condition and \
+               self.unused == other.unused
+
+
 class WazaMove(AutoString):
     def __init__(self, data: Union[memoryview, bytes]):
         # 0x00	2	uint16	Base Power	The base power of the move.
@@ -87,14 +217,11 @@ class WazaMove(AutoString):
         self.type = PokeType(read_uintle(data, 0x02))
         # 0x03	1	uint8	Category	What kind of move is it.
         self.category = WazaMoveCategory(read_uintle(data, 0x03))
-        # 0x04	2	uint16	Bitfield#1
-        # A bit field not fully understood yet. It does however changes what enemies are hit at close range.
-        # See Bitfield 1 for more details.
-        self.move_range_bitfield = read_uintle(data, 0x04, 2)
-        # 0x06	2	uint16	Bitfield#2
-        # Another bit field that's not fully understood yet.
-        # This one seems to alter long-range attack. See Bitfield 2 for more details.
-        self.unk6 = read_uintle(data, 0x06, 2)
+        # 0x04	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Actual values.
+        self.settings_range = WazaMoveRangeSettings(data[0x04:0x06])
+        assert read_uintle(data, 0x04, 2) == int(self.settings_range)
+        # 0x06	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Settings for AI calculation.
+        self.settings_range_ai = WazaMoveRangeSettings(data[0x06:0x08])
         # 0x08	1	uint8	Base PPs	The base amount of PP for the move.
         self.base_pp = read_uintle(data, 0x08)
         # 0x09	1	uint8	Unk#6	Possibly move weight to specify how likely the AI will use the move.
@@ -137,8 +264,8 @@ class WazaMove(AutoString):
         write_uintle(data, self.base_power, 0, 2)
         write_uintle(data, self.type.value, 2, 1)
         write_uintle(data, self.category.value, 3, 1)
-        write_uintle(data, self.move_range_bitfield, 4, 2)
-        write_uintle(data, self.unk6, 6, 2)
+        write_uintle(data, int(self.settings_range), 4, 2)
+        write_uintle(data, int(self.settings_range_ai), 6, 2)
         write_uintle(data, self.base_pp, 8, 1)
         write_uintle(data, self.ai_weight, 9, 1)
         write_uintle(data, self.miss_accuracy, 10, 1)
@@ -163,8 +290,8 @@ class WazaMove(AutoString):
         return self.base_power == other.base_power and \
                self.type == other.type and \
                self.category == other.category and \
-               self.move_range_bitfield == other.move_range_bitfield and \
-               self.unk6 == other.unk6 and \
+               self.settings_range == other.settings_range and \
+               self.settings_range_ai == other.settings_range_ai and \
                self.base_pp == other.base_pp and \
                self.ai_weight == other.ai_weight and \
                self.miss_accuracy == other.miss_accuracy and \
@@ -191,7 +318,6 @@ class WazaP(Sir0Serializable, AutoString):
         move_data_pointer = read_uintle(data, waza_content_pointer, 4)
         move_learnset_pointer = read_uintle(data, waza_content_pointer + 4, 4)
 
-        # TODO: Implement model for actual move data
         self.moves = list(self._read_moves(data[move_data_pointer:move_data_pointer+(MOVE_COUNT*MOVE_ENTRY_BYTELEN)]))
 
         self.learnsets: List[MoveLearnset] = []

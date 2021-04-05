@@ -278,12 +278,49 @@ class IQGroup(Enum):
 
 
 class EvolutionMethod(Enum):
+    NONE = 0, _("Not an Evolved Form.")
+    LEVEL = 1, _('Level')
+    IQ = 2, _('IQ')
+    ITEMS = 3, _('Items')
+    RECRUITED = 4, _('Recruited')
+    NO_REQ = 5, _('No Main Requirement')
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(self, _: str, print_name: str = None):
+        self._print_name_ = print_name
+
+    def __str__(self):
+        return self._print_name_
+
+    def __repr__(self):
+        return f'EvolutionMethod.{self.name}'
+
+    @property
+    def print_name(self):
+        return self._print_name_
+
+class AdditionalRequirement(Enum):
     NONE = 0, _('None')
-    LEVEL = 1, _('Level')            # Params: (Level required, optional evo item ID)
-    IQ = 2, _('IQ')                  # Params: (IQ required, optional evo item ID)
-    ITEMS = 3, _('Items')            # Params: (item ID, optional evo item ID)
-    UNKNOWN4 = 4, _('Unknown') + ' 4'
-    LINK_CABLE = 5, _('Link Cable')  # Params: (null, 0x01)
+    LINK_CABLE = 1, _('Link Cable')
+    ATK_G_DEF = 2, _('Attack > Defense')
+    ATK_L_DEF = 3, _('Attack < Defense')
+    ATK_E_DEF = 4, _('Attack = Defense')
+    SUN_RIBBON = 5, _('Sun Ribbon')
+    LUNAR_RIBBON = 6, _('Lunar Ribbon')
+    BEAUTY_SCARF = 7, _('Beauty Scarf')
+    INT_VAL_1 = 8, _('Internal Value 0x1 = 1')
+    INT_VAL_0 = 9, _('Internal Value 0x1 = 0')
+    MALE = 10, _('Male (1st form)')
+    FEMALE = 11, _('Female (2nd form)')
+    ANCIENT_POWER = 12, _('Knows AncientPower')
+    ROLLOUT = 13, _('Knows Rollout')
+    DOUBLE_HIT = 14, _('Knows Double Hit')
+    MIMIC = 15, _('Knows Mimic')
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -368,7 +405,7 @@ class MdEntry(AutoString):
         self.pre_evo_index: int = -1
         self.evo_method: EvolutionMethod = EvolutionMethod.NONE
         self.evo_param1: int = -1
-        self.evo_param2: int = -1
+        self.evo_param2: AdditionalRequirement = AdditionalRequirement.NONE
         self.sprite_index: int = -1
         self.gender: Gender = Gender.INVALID
         self.body_size: int = -1
@@ -443,7 +480,7 @@ class Md:
                 'pre_evo_index': ru(0x08),
                 'evo_method': EvolutionMethod(ru(0x0A)),
                 'evo_param1': ru(0x0C),
-                'evo_param2': ru(0x0E),
+                'evo_param2': AdditionalRequirement(ru(0x0E)),
                 'sprite_index': rs(0x10),
                 'gender': Gender(ru(0x12, 1)),
                 'body_size': ru(0x13, 1),

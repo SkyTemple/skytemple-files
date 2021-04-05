@@ -278,7 +278,7 @@ class IQGroup(Enum):
 
 
 class EvolutionMethod(Enum):
-    NONE = 0, _('Never Evolves')
+    NONE = 0, _("Not an Evolved Form.")
     LEVEL = 1, _('Level')
     IQ = 2, _('IQ')
     ITEMS = 3, _('Items')

@@ -27,7 +27,7 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
 from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
-    MovementType, IQGroup
+    AdditionalRequirement, MovementType, IQGroup
 from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
 from skytemple_files.graphics.kao.model import KaoImage
 from skytemple_files.common.i18n_util import f, _
@@ -222,7 +222,7 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
         evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, value.pre_evo_index))
         evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_METHOD, value.evo_method.value))
         evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM1, value.evo_param1))
-        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2))
+        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2.value))
         xml.append(evo)
         # Base stats
         stats = Element(XML_GENENT_BASE_STATS)
@@ -276,7 +276,7 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                     elif value_xml.tag == XML_GENENT_EVOLUTION_REQ__EVO_PRAM1:
                         param1 = int(value_xml.text)
                     elif value_xml.tag == XML_GENENT_EVOLUTION_REQ__EVO_PRAM2:
-                        param2 = int(value_xml.text)
+                        param2 = AdditionalRequirement(int(value_xml.text))
                 if pre_evo_index is None:
                     raise XmlValidateError(
                         cls._missing_err(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, XML_GENENT_EVOLUTION_REQ)

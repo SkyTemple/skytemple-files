@@ -39,7 +39,7 @@ class ExternalizeWazaPatchHandler(AbstractPatchHandler, DependantPatch):
     def description(self) -> str:
         return _("""Use filestreams to access waza_p/waza_p2 data instead of loading them entirely.
 This patch is useless on its own.
-Depends on ActorAndLevelLoader patches, as it needs some space provided by this patch.""")
+Depends on the ActorAndLevelLoader patch, as it needs some space provided by this one.""")
 
     @property
     def author(self) -> str:

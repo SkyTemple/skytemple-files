@@ -145,7 +145,7 @@ TrueOpenWaza:
 	mov r4,r0
 	mov r5,r1
 	mov r6,r2
-	ldr r0,=ReadMoveBuffer
+	ldr r1,=ReadMoveBuffer
 	ldrh r0,[r1]
 	cmp r4,r0
 	beq no_read_move

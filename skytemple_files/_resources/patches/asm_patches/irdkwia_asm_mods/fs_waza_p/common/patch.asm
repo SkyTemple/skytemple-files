@@ -145,14 +145,11 @@ TrueOpenWaza:
 	mov r4,r0
 	mov r5,r1
 	mov r6,r2
-	;ldr r1,=string
-	;ldr r2,=0x020AF364
-	;ldr r2,[r2]
-	;bl 0x0200C240
 	ldr r0,=ReadMoveBuffer
-	ldrh r0,[r0]
+	ldrh r0,[r1]
 	cmp r4,r0
 	beq no_read_move
+	strh r4,[r1]
 	bl FStreamAlloc
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo
@@ -197,10 +194,6 @@ actual_data:
 	stmdb  r13!,{r4,r5,r6,r14}
 	mov r4,r0
 	mov r5,r1
-	;ldr r1,=string
-	;ldr r2,=0x020AF364
-	;ldr r2,[r2]
-	;bl 0x0200C240
 	bl FStreamAlloc
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo

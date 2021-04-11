@@ -55,6 +55,7 @@ from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatch
 from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
 from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -82,6 +83,7 @@ class PatchType(Enum):
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
+    CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler
     ADD_TYPES = AddTypePatchHandler
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler

@@ -23,6 +23,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_ITEM_LIST, XML_CATEGORY, XML_CATEGORY__NAME, \
     XML_CATEGORY__WEIGHT, XML_ITEM__ID, XML_ITEM__WEIGHT, XML_ITEM
+from skytemple_files.common.i18n_util import _
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
@@ -38,22 +39,22 @@ Probability = int
 
 # TODO: Put this information into ppmdu config?
 class MappaItemCategory(Enum):
-    THROWN_PIERCE = 0, 1, 6, [], [9]
-    THROWN_ROCK = 1, 7, 4, [9], []
-    BERRIES_SEEDS_VITAMINS = 2, 69, 40, [], [116, 117, 118]
-    FOODS_GUMMIES = 3, 109, 30, [116, 117, 118], []
-    HOLD = 4, 13, 56, [], []
-    TMS = 5, 188, 105, [], []
-    POKE = 6, 183, 1, [], []
-    UNK7 = 7, None, None, [], []
-    OTHER = 8, 139, 44, [], [186]
-    ORBS = 9, 301, 59, [], []
-    LINK_BOX = 0xA, 362, 1, [], []
-    UNKB = 0xB, None, None, [], []
-    UNKC = 0xC, None, None, [], []
-    UNKD = 0xD, None, None, [], []
-    UNKE = 0xE, None, None, [], []
-    UNKF = 0xF, None, None, [], []
+    THROWN_PIERCE = 0, 1, 6, [], [9], _('Thrown - Pierce')
+    THROWN_ROCK = 1, 7, 4, [9], [], _('Thrown - Rock')
+    BERRIES_SEEDS_VITAMINS = 2, 69, 40, [], [116, 117, 118], _('Berries, Seeds, Vitamins')
+    FOODS_GUMMIES = 3, 109, 30, [116, 117, 118], [], _('Foods, Gummies')
+    HOLD = 4, 13, 56, [], [], _('Hold')
+    TMS = 5, 188, 105, [], [], _('TMs, HMs')
+    POKE = 6, 183, 1, [], [], _('Poké (Money)')
+    UNK7 = 7, None, None, [], [], _('Unknown') + ' 7'
+    OTHER = 8, 139, 44, [], [186], _('Other')
+    ORBS = 9, 301, 59, [], [], _('Orbs')
+    LINK_BOX = 0xA, 362, 1, [], [], _('Link Box')
+    UNKB = 0xB, None, None, [], [], _('Unknown') + ' B'
+    UNKC = 0xC, None, None, [], [], _('Unknown') + ' C'
+    UNKD = 0xD, None, None, [], [], _('Unknown') + ' D'
+    UNKE = 0xE, None, None, [], [], _('Unknown') + ' E'
+    UNKF = 0xF, None, None, [], [], _('Exclusive Items')
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -63,12 +64,13 @@ class MappaItemCategory(Enum):
     # ignore the first param since it's already set by __new__
     def __init__(
             self, _: str, first_item_id: Optional[int], number_of_items: Optional[int],
-            excluded_item_ids: List[int], extra_item_ids: List[int]
+            excluded_item_ids: List[int], extra_item_ids: List[int], name_localized: str
     ):
         self.first_item_id = first_item_id
         self.number_of_items = number_of_items
         self.excluded_item_ids = excluded_item_ids
         self.extra_item_ids = extra_item_ids
+        self.name_localized = name_localized
 
     def is_item_in_cat(self, item_id: int):
         return item_id in self.extra_item_ids or (
@@ -81,6 +83,10 @@ class MappaItemCategory(Enum):
             x for x in range(self.first_item_id, self.first_item_id + self.number_of_items)
             if x not in self.excluded_item_ids
         ] + self.extra_item_ids
+
+    @property
+    def print_name(self):
+        return self.name_localized
 
 
 class MappaItemList(AutoString, XmlSerializable):

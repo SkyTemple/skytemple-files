@@ -76,6 +76,11 @@ class ItemSPType(Enum):
         self.exclusive_to = exclusive_to
         self.extra_trait_desc = extra_trait_desc
 
+    @property
+    def print_name(self):
+        return f'{self.exclusive_to.name_localized} - {self.rarity} ({_("Slot")} {"n/a" if self.slot is None else self.slot})' \
+               f'{(" - " + self.extra_trait_desc) if self.extra_trait_desc is not None else ""}'
+
     def __str__(self):
         return f'ItemSPType.{self.name}'
 

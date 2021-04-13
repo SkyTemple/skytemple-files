@@ -78,6 +78,10 @@ class WazaMoveCategory(Enum):
     def __repr__(self):
         return str(self)
 
+    @property
+    def print_name(self):
+        return self.name_localized
+
 
 class WazaMoveRangeTarget(Enum):
     ENEMIES = 0, _("Enemies")
@@ -114,6 +118,10 @@ class WazaMoveRangeTarget(Enum):
     def __repr__(self):
         return str(self)
 
+    @property
+    def print_name(self):
+        return self.name_localized
+
 
 class WazaMoveRangeRange(Enum):
     IN_FRONT = 0, _("In front")
@@ -149,6 +157,10 @@ class WazaMoveRangeRange(Enum):
 
     def __repr__(self):
         return str(self)
+
+    @property
+    def print_name(self):
+        return self.name_localized
 
 
 class WazaMoveRangeCondition(Enum):
@@ -187,14 +199,18 @@ class WazaMoveRangeCondition(Enum):
     def __repr__(self):
         return str(self)
 
+    @property
+    def print_name(self):
+        return self.name_localized
+
 
 class WazaMoveRangeSettings(AutoString):
     def __init__(self, data: Union[memoryview, bytes]):
         val = read_uintle(data, 0, 2)
         n4, n3, n2, n1 = val >> 12 & 0xf, val >> 8 & 0xf, val >> 4 & 0xf, val & 0xf
         self.target = WazaMoveRangeTarget(int(n1))
-        self.range = WazaMoveRangeTarget(int(n2))
-        self.condition = WazaMoveRangeTarget(int(n3))
+        self.range = WazaMoveRangeRange(int(n2))
+        self.condition = WazaMoveRangeCondition(int(n3))
         self.unused = int(n4)
 
     def __int__(self):

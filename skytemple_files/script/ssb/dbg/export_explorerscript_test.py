@@ -117,7 +117,8 @@ def process_single(file_name, times, static_data, output_dir, rom):
         return
     print(file_name)
 
-    out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.exps')
+    out_file_name = os.path.join(output_dir, file_name.replace('.ssb', '.exps'))
+    os.makedirs(os.path.dirname(out_file_name), exist_ok=True)
 
     try:
 
@@ -155,6 +156,7 @@ def process_single(file_name, times, static_data, output_dir, rom):
         ssb_after = SsbHandler.deserialize(bin_after, static_data)
         ssb_script_after_compiling_and_decompiling, _ = ssb_after.to_ssb_script()
 
+        """
         dir_for_scripts_sm = os.path.join(output_dir, 'exps_export_test', 'source_maps')
         dir_for_scripts_before = os.path.join(output_dir, 'exps_export_test', 'before')
         dir_for_scripts_after = os.path.join(output_dir, 'exps_export_test', 'after')
@@ -172,15 +174,20 @@ def process_single(file_name, times, static_data, output_dir, rom):
             f.write(explorer_script)
         with open(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.exps'), 'w') as f:
             f.write(explorer_script_after_compiling_and_decompiling)
+        """
 
         # Run flow check
         ssb_flow_before = SsbFlow(ssb_before, static_data)
         ssb_flow_after = SsbFlow(ssb_after, static_data)
 
+        """
         ssb_flow_before.to_dot(os.path.join(dir_for_scripts_before, file_name.replace('/', '_') + '.flow'))
         ssb_flow_after.to_dot(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.flow'))
+        """
 
         ssb_flow_before.assert_equal(ssb_flow_after)
+
+        """
         # Output source maps
         with open(os.path.join(dir_for_scripts_sm, file_name.replace('/', '_') + '_after_decompile.sm.exps'), 'w') as f:
             f.write(SourceMapVisualizer(explorer_script, source_map_before).write())
@@ -191,6 +198,7 @@ def process_single(file_name, times, static_data, output_dir, rom):
             f.write(export_ssb_as_txt(ssb_before))
         with open(os.path.join(dir_for_scripts_after, file_name.replace('/', '_') + '.ssb_txt'), 'w') as f:
             f.write(export_ssb_as_txt(ssb_after))
+        """
 
         with rom_lock:
             rom.setFileByName(file_name, bin_after)

@@ -22,7 +22,7 @@ from xml.etree.ElementTree import ParseError
 
 from skytemple_files.common.ppmdu_config.data import *
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonItem, \
-    Pmd2DungeonDungeon
+    Pmd2DungeonDungeon, Pmd2DungeonItemCategory
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.common.i18n_util import _
@@ -398,6 +398,7 @@ class Pmd2XmlReader:
         dungeon_bin_files = None
         items = []
         dungeons = []
+        item_categories = {}
         for e_game in dungeon_root:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
@@ -420,10 +421,26 @@ class Pmd2XmlReader:
                     if e.tag == 'Dungeons':
                         for i, e_dungeon in enumerate(e):
                             dungeons.append(Pmd2DungeonDungeon(i, e_dungeon.text))
+                    ###########################
+                    if e.tag == 'ItemCategories':
+                        for e_game in e:
+                            if id_matches_edition(e_game, self._game_edition):
+                                for i, e_item_cat in enumerate(e_game):
+                                    citems = []
+                                    for e_item in e_item_cat:
+                                        if e_item.tag != 'Item':
+                                            raise ValueError("Excpeted Item as subtag for ItemCategory.")
+                                        citems.append(self._xml_int(e_item.text))
+                                    item_categories[self._xml_int(e_item_cat.attrib['id'])] = Pmd2DungeonItemCategory(
+                                        self._xml_int(e_item_cat.attrib['id']),
+                                        e_item_cat.attrib['name'],
+                                        citems
+                                    )
         return Pmd2DungeonData(
             dungeon_bin_files,
             items,
-            dungeons
+            dungeons,
+            item_categories
         )
 
     @staticmethod

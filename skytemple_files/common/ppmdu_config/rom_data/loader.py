@@ -37,6 +37,7 @@ class RomDataLoader:
 
     def load_into(self, config_load_into: 'Pmd2Data'):
         self.load_actor_list_into(config_load_into, ignore_not_supported=True)
+        self.load_item_categories_into(config_load_into)
 
     def load_actor_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
         from skytemple_files.common.types.file_types import FileType
@@ -49,3 +50,17 @@ class RomDataLoader:
             config_load_into.script_data.level_entities = actor_list.list
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")
+
+    def load_item_categories_into(self, config_load_into: 'Pmd2Data'):
+        from skytemple_files.common.types.file_types import FileType
+
+        item_p_bin = self.rom.getFileByName('BALANCE/item_p.bin')
+        item_p = FileType.ITEM_P.deserialize(item_p_bin)
+
+        cats = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
+
+        for idx, entry in enumerate(item_p.item_list):
+            cats[entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)].append(idx)
+
+        for category in config_load_into.dungeon_data.item_categories.values():
+            category.items = cats[category]

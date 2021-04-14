@@ -14,11 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import logging
 from enum import Enum
 from typing import Dict, Union, Optional
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem, Pmd2DungeonItemCategory
 from skytemple_files.common.util import *
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_ITEM_LIST, XML_CATEGORY, XML_CATEGORY__NAME, \
@@ -27,6 +28,7 @@ from skytemple_files.common.i18n_util import _
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+logger = logging.getLogger(__name__)
 
 
 CMD_SKIP = 0x7530
@@ -37,24 +39,38 @@ POKE_ID = 183
 Probability = int
 
 
-# TODO: Put this information into ppmdu config?
+_WARNMSG = "MappaItemCategory is deprecated. Use Pmd2DungeonData's item_categories attribute instead. " \
+           "This deprecated class will provide dynamically generated values from the default " \
+           "EU XML configuration."
+_defconf = None
+def _gdefconf():
+    from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
+    global _defconf
+    if _defconf is None:
+        _defconf = Pmd2XmlReader.load_default().dungeon_data.item_categories
+    return _defconf
+
+
 class MappaItemCategory(Enum):
-    THROWN_PIERCE = 0, 1, 6, [], [9], _('Thrown - Pierce')
-    THROWN_ROCK = 1, 7, 4, [9], [], _('Thrown - Rock')
-    BERRIES_SEEDS_VITAMINS = 2, 69, 40, [], [116, 117, 118], _('Berries, Seeds, Vitamins')
-    FOODS_GUMMIES = 3, 109, 30, [116, 117, 118], [], _('Foods, Gummies')
-    HOLD = 4, 13, 56, [], [], _('Hold')
-    TMS = 5, 188, 105, [], [], _('TMs, HMs')
-    POKE = 6, 183, 1, [], [], _('Poké (Money)')
-    UNK7 = 7, None, None, [], [], _('Unknown') + ' 7'
-    OTHER = 8, 139, 44, [], [186], _('Other')
-    ORBS = 9, 301, 59, [], [], _('Orbs')
-    LINK_BOX = 0xA, 362, 1, [], [], _('Link Box')
-    UNKB = 0xB, None, None, [], [], _('Unknown') + ' B'
-    UNKC = 0xC, None, None, [], [], _('Unknown') + ' C'
-    UNKD = 0xD, None, None, [], [], _('Unknown') + ' D'
-    UNKE = 0xE, None, None, [], [], _('Unknown') + ' E'
-    UNKF = 0xF, None, None, [], [], _('Exclusive Items')
+    """:deprecated: Use Pmd2DungeonData's item_categories attribute instead."""
+    warnings.warn(_WARNMSG, category=DeprecationWarning, stacklevel=2)
+    logger.warning(_WARNMSG)
+    THROWN_PIERCE = 0, -1, 0, list(_gdefconf()[0].items), [], _(_gdefconf()[0].name)
+    THROWN_ROCK = 1, -1, 0, list(_gdefconf()[1].items), [], _(_gdefconf()[1].name)
+    BERRIES_SEEDS_VITAMINS = 2, -1, 0, list(_gdefconf()[2].items), [], _(_gdefconf()[2].name)
+    FOODS_GUMMIES = 3, -1, 0, list(_gdefconf()[3].items), [], _(_gdefconf()[3].name)
+    HOLD = 4, -1, 0, list(_gdefconf()[4].items), [], _(_gdefconf()[4].name)
+    TMS = 5, -1, 0, list(_gdefconf()[5].items), [], _(_gdefconf()[5].name)
+    POKE = 6, -1, 0, list(_gdefconf()[6].items), [], _(_gdefconf()[6].name)
+    UNK7 = 7, -1, 0, list(_gdefconf()[7].items), [], _(_gdefconf()[7].name)
+    OTHER = 8, -1, 0, list(_gdefconf()[8].items), [], _(_gdefconf()[8].name)
+    ORBS = 9, -1, 0, list(_gdefconf()[9].items), [], _(_gdefconf()[9].name)
+    LINK_BOX = 10, -1, 0, list(_gdefconf()[10].items), [], _(_gdefconf()[10].name)
+    UNKB = 11, -1, 0, list(_gdefconf()[11].items), [], _(_gdefconf()[11].name)
+    UNKC = 12, -1, 0, list(_gdefconf()[12].items), [], _(_gdefconf()[12].name)
+    UNKD = 13, -1, 0, list(_gdefconf()[13].items), [], _(_gdefconf()[13].name)
+    UNKE = 14, -1, 0, list(_gdefconf()[14].items), [], _(_gdefconf()[14].name)
+    UNKF = 15, -1, 0, list(_gdefconf()[15].items), [], _(_gdefconf()[15].name)
 
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
@@ -80,9 +96,9 @@ class MappaItemCategory(Enum):
 
     def item_ids(self):
         return [
-            x for x in range(self.first_item_id, self.first_item_id + self.number_of_items)
-            if x not in self.excluded_item_ids
-        ] + self.extra_item_ids
+                   x for x in range(self.first_item_id, self.first_item_id + self.number_of_items)
+                   if x not in self.excluded_item_ids
+               ] + self.extra_item_ids
 
     @property
     def print_name(self):
@@ -90,7 +106,9 @@ class MappaItemCategory(Enum):
 
 
 class MappaItemList(AutoString, XmlSerializable):
-    def __init__(self, categories: Dict[MappaItemCategory, Probability], items: Dict[Pmd2DungeonItem, Probability]):
+    def __init__(self,
+                 categories: Dict[Union[MappaItemCategory, Pmd2DungeonItemCategory], Probability],
+                 items: Dict[Pmd2DungeonItem, Probability]):
         self.categories = categories
         self.items = items
 
@@ -121,6 +139,7 @@ class MappaItemList(AutoString, XmlSerializable):
                 else:
                     weight = val
                 if processing_categories:
+                    # TODO: Switch to Pmd2DungeonItemCategory
                     categories[MappaItemCategory(item_or_cat_id)] = weight
                 else:
                     items[item_list[item_or_cat_id]] = weight
@@ -186,10 +205,12 @@ class MappaItemList(AutoString, XmlSerializable):
             if child.tag == XML_CATEGORY:
                 validate_xml_attribs(child, [XML_CATEGORY__NAME, XML_CATEGORY__WEIGHT])
                 name = child.get(XML_CATEGORY__NAME)
+                # TODO: Switch to Pmd2DungeonItemCategory
                 if not hasattr(MappaItemCategory, name):
                     raise XmlValidateError(f"Unknown item category {name}.")
                 weight_str = child.get(XML_CATEGORY__WEIGHT)
                 weight = int(weight_str) if weight_str != 'GUARANTEED' else GUARANTEED
+                # TODO: Switch to Pmd2DungeonItemCategory
                 categories[getattr(MappaItemCategory, name)] = weight
             elif child.tag == XML_ITEM:
                 validate_xml_attribs(child, [XML_ITEM__ID, XML_ITEM__WEIGHT])

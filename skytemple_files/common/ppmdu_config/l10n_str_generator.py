@@ -29,6 +29,8 @@ def dump(data: Pmd2Data):
         p(lang.name)
     for string_block in data.string_index_data.string_blocks.values():
         p(string_block.name)
+    for category in data.dungeon_data.item_categories.values():
+        p(category.name)
 
     # We don't dump item or dungeon names, since the SkyTemple UI reads them from ROM, always.
 

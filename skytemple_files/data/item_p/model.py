@@ -14,14 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional
+from typing import Optional, Dict
 
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 from skytemple_files.data.item_p import *
-from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory
 
 
 class ItemPEntry(AutoString):
@@ -43,9 +43,14 @@ class ItemPEntry(AutoString):
         self.ai_flag_2 = (bitfield&0x40)!=0 # Flag 2 for the AI?
         self.ai_flag_3 = (bitfield&0x80)!=0 # Flag 3 for the AI?
 
-    def category_enum(self) -> MappaItemCategory:
+    def category_enum(self) -> 'MappaItemCategory':
+        """:deprecated: Use category_pmd2obj"""
+        from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory
         return MappaItemCategory(self.category)
-    
+
+    def category_pmd2obj(self, item_categories: Dict[int, Pmd2DungeonItemCategory]) -> Pmd2DungeonItemCategory:
+        return item_categories[self.category]
+
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_P_ENTRY_SIZE)
         write_uintle(data, self.buy_price, 0, 2)

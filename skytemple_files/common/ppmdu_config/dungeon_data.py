@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from skytemple_files.common.util import AutoString
 
@@ -36,6 +36,43 @@ class Pmd2DungeonItem(AutoString):
         if not isinstance(other, Pmd2DungeonItem):
             return False
         return self.id == other.id  # name is not relevant here
+
+    def __hash__(self):
+        return hash(self.id)
+
+
+class Pmd2DungeonItemCategory(AutoString):
+    def __init__(self, id: int, name: str, items: List[int]):
+        self.id = id
+        self.name = name
+        self.items = items
+        # Compatibility with the old enum
+        self.value = id
+        self.first_item_id = -1
+        self.number_of_items = 0
+        self.excluded_item_ids = []
+        self.extra_item_ids = items
+
+    # Compatibility with the old enum
+    @property
+    def name_localized(self):
+        from skytemple_files.common.i18n_util import _
+        return _(self.name)
+
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2DungeonItemCategory):
+            return False
+        return self.id == other.id and self.items == other.items
+
+    # Compatibility with the old enum:
+    def is_item_in_cat(self, item_id: int):
+        return item_id in self.items
+
+    def item_ids(self, only_if_valid_in_mappa=True):
+        if only_if_valid_in_mappa:
+            from skytemple_files.dungeon_data.mappa_bin.item_list import MAX_ITEM_ID
+            return [x for x in self.items if x < MAX_ITEM_ID]
+        return self.items
 
     def __hash__(self):
         return hash(self.id)
@@ -72,8 +109,9 @@ class Pmd2DungeonBinFiles(AutoString):
 class Pmd2DungeonData(AutoString):
     def __init__(
             self, dungeon_bin_files: Pmd2DungeonBinFiles, items: List[Pmd2DungeonItem],
-            dungeons: List[Pmd2DungeonDungeon]
+            dungeons: List[Pmd2DungeonDungeon], item_categories: Dict[int, Pmd2DungeonItemCategory]
     ):
         self.dungeon_bin_files = dungeon_bin_files
         self.items = items
         self.dungeons = dungeons
+        self.item_categories = item_categories

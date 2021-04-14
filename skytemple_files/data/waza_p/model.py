@@ -166,7 +166,7 @@ class WazaMoveRangeRange(Enum):
 class WazaMoveRangeCondition(Enum):
     """Only relevant for AI setting."""
     NO_CONDITION = 0, _("No condition")
-    CHANCE_AI_WEIGHT = 1, _("Based on AI Weight")
+    CHANCE_AI_WEIGHT = 1, _("Based on AI Condition 1 Chance")
     CRITICAL_HP = 2, _("Current HP <= 25%")
     NEGATIVE_STATUS = 3, _("Has at least one negative status condition")
     ASLEEP = 4, _("Is asleep, in a nightmare or napping")
@@ -250,7 +250,7 @@ class WazaMove(AutoString):
         # 100 is perfect accuracy. Anything higher than 100 is a never-miss move.
         self.accuracy = read_uintle(data, 0x0B)
         # 0x0C	1	uint8	Unk#9	Unknown.
-        self.unkC = read_uintle(data, 0x0C)
+        self.ai_condition1_chance = read_uintle(data, 0x0C)
         # 0x0D	1	uint8	Unk#10	Possibly the number of times a move hits in a row.
         self.number_chained_hits = read_uintle(data, 0x0D)
         # 0x0E	1	uint8	Unk#11	Max number of time the move can be powered up.
@@ -286,7 +286,7 @@ class WazaMove(AutoString):
         write_uintle(data, self.ai_weight, 9, 1)
         write_uintle(data, self.miss_accuracy, 10, 1)
         write_uintle(data, self.accuracy, 11, 1)
-        write_uintle(data, self.unkC, 12, 1)
+        write_uintle(data, self.ai_condition1_chance, 12, 1)
         write_uintle(data, self.number_chained_hits, 13, 1)
         write_uintle(data, self.max_upgrade_level, 14, 1)
         write_uintle(data, self.crit_chance, 15, 1)
@@ -312,7 +312,7 @@ class WazaMove(AutoString):
                self.ai_weight == other.ai_weight and \
                self.miss_accuracy == other.miss_accuracy and \
                self.accuracy == other.accuracy and \
-               self.unkC == other.unkC and \
+               self.ai_condition1_chance == other.ai_condition1_chance and \
                self.number_chained_hits == other.number_chained_hits and \
                self.max_upgrade_level == other.max_upgrade_level and \
                self.crit_chance == other.crit_chance and \

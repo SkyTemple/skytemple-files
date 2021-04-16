@@ -122,12 +122,14 @@ no_decrement: ;///////// Floor Attributes
 	ldr  r1,[r13,#+0xa8] ; header + 0x10
 	add r1,r1,r7,lsl #0x2
 	add r2,r9,r8
+	add r2,r2,#2
 	mov r3,#0x4
 	bl ReadAt
 	add r0,r13,#0x50
-	ldr r1,[r9,r8]
+	add r1,r8,#2
+	ldr r1,[r9,r1]
 	add r2,r9,r8
-	mov r3,#0x4
+	mov r3,#0x32
 	bl ReadAt
 	cmp r4,#0x0
 	beq no_spec_process

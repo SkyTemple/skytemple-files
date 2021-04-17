@@ -95,9 +95,44 @@ class Kao:
         self.original_data = data
         self.first_toc = first_toc
         self.toc_len = toc_len
+        self.reset(toc_len)
+
+    def expand(self, new_size):
+        if new_size<self.toc_len:
+            raise ValueError(f"Can't reduce size from {self.toc_len} to {new_size}")
+        from skytemple_files.graphics.kao.writer import KaoWriter
+
+        #Write all changes
+        self.original_data = bytearray(KaoWriter(self).write())
+
+        #Prepare for expanding
+        expand_len = new_size-self.toc_len
+        expand_size = expand_len * (SUBENTRIES * SUBENTRY_LEN)
+        limit = self.first_toc + (self.toc_len * SUBENTRIES * SUBENTRY_LEN)
+        #Rewrite all pointers
+        last_pnt = 0
+        for x in range(self.toc_len * SUBENTRIES):
+            start = self.first_toc + x * SUBENTRY_LEN
+            pnt = read_sintle(self.original_data, start, SUBENTRY_LEN)
+            if pnt < 0:
+                pnt -= expand_size
+                last_pnt = pnt
+            elif pnt > 0:
+                last_pnt = -KaoImage(self.original_data, pnt).size()-expand_size
+                pnt += expand_size
+            write_sintle(self.original_data, pnt, start, SUBENTRY_LEN)
+
+        #Expand
+        expand_pnt = bytearray(4)
+        write_sintle(expand_pnt, last_pnt, 0, SUBENTRY_LEN)
+        self.original_data = self.original_data[:limit]+(expand_pnt * (expand_len * SUBENTRIES))+self.original_data[limit:]
+        self.toc_len = new_size
+        self.reset(new_size)
+    
+    def reset(self, toc_len):
         self.loaded_kaos = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
         self.loaded_kaos_flat: List[Tuple[int, int, KaoImage]] = []  # cache for performance
-
+        
     def get(self, index: int, subindex: int) -> Union[KaoImage, None]:
         """Get the KaoImage at the specified location or None if no image is specified"""
         if index >= self.toc_len or index < 0:

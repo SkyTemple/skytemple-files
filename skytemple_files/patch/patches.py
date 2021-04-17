@@ -58,6 +58,7 @@ from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHand
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
 from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
+from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -91,6 +92,7 @@ class PatchType(Enum):
     ADD_TYPES = AddTypePatchHandler
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler
+    EXPAND_POKE_LIST = ExpandPokeListPatchHandler
 
 
 class PatchPackageError(RuntimeError):

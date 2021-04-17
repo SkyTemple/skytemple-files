@@ -1020,6 +1020,21 @@
 	  </OpenBin>
         </Patch>
         
+        <Patch id="ExpandPokeList" >
+          <OpenBin filepath="arm9.bin">
+		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_arm9.asm"/>
+          </OpenBin>
+          <OpenBin filepath="overlay/overlay_0011.bin">
+		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay11.asm"/>
+          </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay29.asm"/>
+          </OpenBin>
+          <OpenBin filepath="overlay/overlay_0031.bin">
+		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay31.asm"/>
+          </OpenBin>
+        </Patch>
+        
         <!-- A patch that fixes the unused dungeon chance -->
         <Patch id="UnusedDungeonChancePatch" >
           <OpenBin filepath="overlay/overlay_0029.bin">

@@ -26,7 +26,7 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.container.bin_pack.model import BinPack
-from skytemple_files.data.md.model import NUM_ENTITIES, Md
+from skytemple_files.data.md.model import MdProperties, Md
 from skytemple_files.data.monster_xml import monster_xml_export, monster_xml_import
 from skytemple_files.data.waza_p.model import WazaP
 from skytemple_files.graphics.kao.model import Kao, SUBENTRIES
@@ -53,7 +53,7 @@ for lang in config.string_index_data.languages:
     languages[lang.name] = FileType.STR.deserialize(rom.getFileByName('MESSAGE/' + lang.filename))
 
 
-for md_base_index in range(0, NUM_ENTITIES):
+for md_base_index in range(0, MdProperties.NUM_ENTITIES):
     md_gender1 = None
     md_gender2 = None
     names = None
@@ -64,8 +64,8 @@ for md_base_index in range(0, NUM_ENTITIES):
     portraits2 = None
 
     md_gender1 = md.entries[md_base_index]
-    if NUM_ENTITIES + md_base_index < len(md.entries):
-        md_gender2 = md.entries[NUM_ENTITIES + md_base_index]
+    if MdProperties.NUM_ENTITIES + md_base_index < len(md.entries):
+        md_gender2 = md.entries[MdProperties.NUM_ENTITIES + md_base_index]
 
     string_id = config.string_index_data.string_blocks['Pokemon Names'].begin + md_base_index
     cat_string_id = config.string_index_data.string_blocks['Pokemon Categories'].begin + md_base_index
@@ -90,10 +90,10 @@ for md_base_index in range(0, NUM_ENTITIES):
         for kao_i in range(0, SUBENTRIES):
             portraits.append(kao.get(stat_id, kao_i))
 
-    if stat_id > -1 and NUM_ENTITIES + stat_id < kao.toc_len:
+    if stat_id > -1 and MdProperties.NUM_ENTITIES + stat_id < kao.toc_len:
         portraits2 = []
         for kao_i in range(0, SUBENTRIES):
-            portraits2.append(kao.get(NUM_ENTITIES + stat_id, kao_i))
+            portraits2.append(kao.get(MdProperties.NUM_ENTITIES + stat_id, kao_i))
     
     xml = monster_xml_export(
         config.game_version, md_gender1, md_gender2,

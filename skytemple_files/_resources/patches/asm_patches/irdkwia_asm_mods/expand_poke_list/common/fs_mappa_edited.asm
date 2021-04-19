@@ -457,14 +457,21 @@ copy_spawn_entry_loop:
 	bl ReadAt
 	add  r0,r13,#0x2C
 	bl ModMonster
+	ldr r2,=0x00000229
+	cmp r0,r2
+	beq no_kecleon
+	sub  r1,r2,#0xAA
+	cmp r0,r1
+	beq kecleon
+	rsb  r1,r2,#0x600
+	cmp r0,r1
+	beq kecleon
 	cmp r5,#0x0
-	ldrne r2,=0x00000229
-	cmpne r0,r2
-	subne  r1,r2,#0xAA
-	cmpne r0,r1
-	rsbne  r1,r2,#0x600
-	cmpne r0,r1
 	bne no_copy_spawn_entry
+	b no_kecleon
+kecleon:
+	bl SetKecleonEntryForFloor
+no_kecleon:
 	add  r7,r13,#0x2C
 	mov  r2,#0x4
 	add  r1,r9,r8,lsl #0x3

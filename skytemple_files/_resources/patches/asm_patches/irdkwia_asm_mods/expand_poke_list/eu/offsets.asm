@@ -28,8 +28,6 @@
 .definelabel GetSpawnLevel, 0x02054834
 .definelabel GotoGetGender, 0x02054ADC
 
-.definelabel GetSecondFormIfValid, 0x02054F20
-
 .definelabel GetNbRecruited, 0x020555F0
 
 .definelabel IsBossFight, 0x022E11A4
@@ -117,12 +115,16 @@
 ; //////////////////////////////////////////////////////
 ; patch overlay_0029.bin
 
+.definelabel SetKecleonEntryForFloor, 0x022F7D6C
+.definelabel GetKecleonEntryForFloor, 0x022F7DA4
 .definelabel HookDungeonMonsterMod1, 0x022FCB48
 .definelabel HookDungeonMonsterMod2, 0x022FCC44
 .definelabel HookDungeonMonsterMod3, 0x0231AE44
 .definelabel HookDungeonMonsterLimit1, 0x022F7CB4
 .definelabel HookDungeonMonsterLimit2, 0x022F81E8
 .definelabel HookDungeonMonsterLimit3, 0x02344C28
+.definelabel HookDungeonMonsterLimit4C1, 0x02344E10
+.definelabel HookDungeonMonsterLimit4C2, 0x02344E38
 .definelabel HookDungeonMonsterLimit4, 0x02344E88
 .definelabel HookDungeonStructSize1, 0x022DF3B8
 .definelabel HookDungeonStructSize2, 0x022DF3EC

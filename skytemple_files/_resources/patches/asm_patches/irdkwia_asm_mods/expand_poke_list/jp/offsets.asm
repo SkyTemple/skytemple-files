@@ -120,12 +120,16 @@
 ; //////////////////////////////////////////////////////
 ; patch overlay_0029.bin
 
+.definelabel SetKecleonEntryForFloor, 0x022F73B4
+.definelabel GetKecleonEntryForFloor, 0x022F73EC
 .definelabel HookDungeonMonsterMod1, 0x022FC14C
 .definelabel HookDungeonMonsterMod2, 0x022FC248
 .definelabel HookDungeonMonsterMod3, 0x0231A3E4
 .definelabel HookDungeonMonsterLimit1, 0x022F72FC
 .definelabel HookDungeonMonsterLimit2, 0x022F7830
 .definelabel HookDungeonMonsterLimit3, 0x02344044
+.definelabel HookDungeonMonsterLimit4C1, 0x0234422C
+.definelabel HookDungeonMonsterLimit4C2, 0x02344254
 .definelabel HookDungeonMonsterLimit4, 0x023442A4
 .definelabel HookDungeonStructSize1, 0x022DEA78
 .definelabel HookDungeonStructSize2, 0x022DEAAC

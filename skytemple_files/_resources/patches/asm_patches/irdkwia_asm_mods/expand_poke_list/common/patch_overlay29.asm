@@ -1,5 +1,23 @@
 ; ///////////////////////// overlay_0029.bin
 
+; Kecleon
+
+.org SetKecleonEntryForFloor
+.area 0x38
+	str r0, [kecleon_hold]
+	bx r14
+	.fill 0x30, 0xCC
+.endarea
+
+.org GetKecleonEntryForFloor
+.area 0x1C
+	ldr r0, [kecleon_hold]
+	bx r14
+kecleon_hold:
+	.word 0x0
+	.fill 0x10, 0xCC
+.endarea
+
 ; Monster Modulo
 
 .org HookDungeonMonsterMod1
@@ -34,6 +52,18 @@
 .org HookDungeonMonsterLimit3
 .area 0x4
 	.word NbIndepEntries
+.endarea
+
+; Limit 4: Change other things
+
+.org HookDungeonMonsterLimit4C1
+.area 0x8
+	ldr r2,[r15, #+0x78] ;527
+	cmp r0,r2
+.endarea
+.org HookDungeonMonsterLimit4C2
+.area 0x4
+	sub r1,r2,#0x2 ;525
 .endarea
 .org HookDungeonMonsterLimit4
 .area 0x4

@@ -18,7 +18,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Dict, Union, Pattern
+from typing import List, Dict, Union, Pattern, Optional
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
@@ -108,13 +108,19 @@ class Pmd2Binary(AutoString):
         self.functions: Dict[str, Pmd2BinaryFunction] = {x.name: x for x in functions}
         self.pointers: Dict[str, Pmd2BinaryPointer] = {x.name: x for x in pointers}
 
+class Pmd2SortLists(AutoString):
+    def __init__(self, m2n: Optional[str], n2m: Optional[str], i2n: Optional[str]):
+        self.m2n = m2n
+        self.n2m = n2m
+        self.i2n = i2n
 
 class Pmd2Language(AutoString):
-    def __init__(self, filename: str, name: str, name_localized: str, locale: str):
+    def __init__(self, filename: str, name: str, name_localized: str, locale: str, sort_lists: Pmd2SortLists):
         self.filename = filename
         self.name = name
         self.name_localized = name_localized
         self.locale = locale
+        self.sort_lists = sort_lists
 
     def __str__(self):
         return self.name_localized

@@ -116,8 +116,14 @@ below_upper_bound:
 .endarea
 .org GetFirstFormIfValid
 .area 0x44
+	ldr r2,=MonsterFilePtr
+	mov  r1,#0x44
+	ldr r2,[r2, #+0x0]
+	smlabb r0,r0,r1,r2
+	ldrsh r0,[r0, #+0x0]
 	bx r14
-	.fill 0x40, 0xCC
+	.pool
+	.fill (GetFirstFormIfValid+0x44-.), 0xCC
 .endarea
 
 

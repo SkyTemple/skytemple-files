@@ -21,6 +21,8 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.data.str.handler import StrHandler
 
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
+from skytemple_files.hardcoded.dungeons import HardcodedDungeons, DungeonDefinition
 from skytemple_files.data.level_bin_entry.model import LEVEL_BIN_ENTRY_LEVEL_LEN
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.md_evo.model import MdEvoEntry, MdEvoStats
@@ -29,18 +31,25 @@ from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.data.val_list.handler import ValListHandler
+from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.waza_p.model import MoveLearnset
 from skytemple_files.data.md.handler import MdHandler
-from skytemple_files.data.md.model import MdEntry
+from skytemple_files.data.md.model import MdEntry, Gender
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao.model import SUBENTRIES
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import _
 
 
 NUM_PREVIOUS_ENTRIES = 600
+NUM_PREVIOUS_MD_MAX = 1155
+
+DOJO_DUNGEONS_FIRST = 0xB4
+DOJO_DUNGEONS_LAST = 0xBF
+DOJO_MAPPA_ENTRY = 0x35
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x5449C
 PATCH_CHECK_ADDR_APPLIED_EU = 0x54818
@@ -59,6 +68,7 @@ EU_FILE_ASSOC = {"MESSAGE/text_e.str": ("BALANCE/st_m2n_e.bin", "BALANCE/st_n2m_
              "MESSAGE/text_s.str": ("BALANCE/st_m2n_s.bin", "BALANCE/st_n2m_s.bin")}
 NUM_NEW_ENTRIES = 2048
 
+DUMMY_PKMN = 553
 DUMMY_LS = 150 # Using Mewtwo's learnset, as it's supposed to be one of the biggest
 DUMMY_PERSONALITY = 0x20 # Using Dialga's personality
 class ExpandPokeListPatchHandler(AbstractPatchHandler):
@@ -69,7 +79,8 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return 'Expand the pokemon entries allowed to 2048, and makes all entries independent.'
+        return _("""Expand the pokemon entries allowed to 2048, and makes all entries independent.
+It is strongly recommended to fix any dungeon error before applying this patch. """)
 
     @property
     def author(self) -> str:
@@ -95,6 +106,10 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
                 new_pkmn_str_region = US_NEW_PKMN_STR_REGION
                 new_cat_str_region = US_NEW_CAT_STR_REGION
                 file_assoc = US_FILE_ASSOC
+            if config.game_region == GAME_REGION_EU:
+                new_pkmn_str_region = EU_NEW_PKMN_STR_REGION
+                new_cat_str_region = EU_NEW_CAT_STR_REGION
+                file_assoc = EU_FILE_ASSOC
         if not self.is_applied(rom, config):
             bincfg = config.binaries['arm9.bin']
             binary = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
@@ -131,7 +146,7 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
                 rom.setFileByName(filename, bin_after)
                 
                 sorted_list = list(enumerate(strings.strings[new_pkmn_str_region-1:new_pkmn_str_region-1+NUM_NEW_ENTRIES]))
-                sorted_list.sort(key=lambda x:x[1])
+                sorted_list.sort(key=lambda x:normalize_string(x[1]))
                 sorted_list = [x[0] for x in sorted_list]
                 inv_sorted_list = [sorted_list.index(i) for i in range(NUM_NEW_ENTRIES)]
                 m2n_model = ValListHandler.deserialize(rom.getFileByName(file_assoc[filename][0]))
@@ -173,6 +188,31 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
                 md_model.entries[i//2].unk17 = data[i]
                 md_model.entries[i//2].unk18 = data[i+1]
             rom.setFileByName('BALANCE/monster.md', MdHandler.serialize(md_model))
+
+            # Edit Mappa bin
+            mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
+            mappa_model = MappaBinHandler.deserialize(mappa_bin)
+            dl = HardcodedDungeons.get_dungeon_list(bytes(rom.arm9), config)
+            # Handle Dojos
+            start_floor = 0
+            for x in range(DOJO_DUNGEONS_FIRST, DOJO_DUNGEONS_LAST-2):
+                dl.append(DungeonDefinition(5,DOJO_MAPPA_ENTRY,start_floor,0))
+                start_floor += 5
+            dl.append(DungeonDefinition(1,DOJO_MAPPA_ENTRY,start_floor,0))
+            start_floor += 1
+            dl.append(DungeonDefinition(0x30,DOJO_MAPPA_ENTRY,start_floor,0))
+            start_floor += 0x30
+            for dungeon in dl:
+                for f in range(dungeon.start_after+1, dungeon.start_after+dungeon.number_floors, 2):
+                    try:
+                        for entry in mappa_model.floor_lists[dungeon.mappa_index][f].monsters:
+                            if entry.md_index!=DUMMY_PKMN and entry.md_index<NUM_PREVIOUS_ENTRIES and \
+                            entry.md_index+NUM_PREVIOUS_ENTRIES<len(md_model.entries) and \
+                            md_model.entries[entry.md_index+NUM_PREVIOUS_ENTRIES].gender!=Gender.INVALID:
+                                entry.md_index += NUM_PREVIOUS_ENTRIES
+                    except:
+                        print(f"{dungeon.mappa_index}, {f} is not valid.")
+            rom.setFileByName('BALANCE/mappa_s.bin', MappaBinHandler.serialize(mappa_model))
             
             # Add moves
             waza_p_bin = rom.getFileByName('BALANCE/waza_p.bin')
@@ -220,6 +260,15 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
                 evo_model.evo_stats.append(MdEvoStats(bytearray(MEVO_STATS_LENGTH)))
             rom.setFileByName('BALANCE/md_evo.bin', MdEvoHandler.serialize(evo_model))
 
+            # Fixed floors
+            ov29 = config.binaries['overlay/overlay_0029.bin']
+            ov29bin = bytearray(get_binary_from_rom_ppmdu(rom, ov29))
+            monster_list = HardcodedFixedFloorTables.get_monster_spawn_list(ov29bin, config)
+            for m in monster_list:
+                if m.md_idx>=NUM_PREVIOUS_MD_MAX:
+                    m.md_idx += NUM_NEW_ENTRIES-NUM_PREVIOUS_MD_MAX
+            HardcodedFixedFloorTables.set_monster_spawn_list(ov29bin, monster_list, config)
+            set_binary_in_rom_ppmdu(rom, ov29, bytes(ov29bin))
         try:
             apply()
         except RuntimeError as ex:

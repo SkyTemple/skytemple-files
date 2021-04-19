@@ -21,7 +21,15 @@ from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
 
 
-NUM_ENTITIES = 2400
+# Honestly, I don't know a better way to do that
+class MdProperties:
+    NUM_ENTITIES = 600
+    MAX_POSSIBLE = 554
+
+# This is only for compatibility issues
+# The one that should be used is in MdProperties
+NUM_ENTITIES = 600
+
 MD_ENTRY_LEN = 68
 
 
@@ -455,7 +463,7 @@ class MdEntry(AutoString):
 
     @property
     def md_index_base(self):
-        return self.md_index % NUM_ENTITIES
+        return self.md_index % MdProperties.NUM_ENTITIES
 
 
 class Md:

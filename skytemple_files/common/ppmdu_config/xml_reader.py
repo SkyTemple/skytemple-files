@@ -157,11 +157,22 @@ class Pmd2XmlReader:
                         for e_sub in e_game:
                             if e_sub.tag == 'Languages':
                                 for e_language in e_sub:
+                                    m2n = None
+                                    n2m = None
+                                    i2n = None
+                                    for e_sort in e_language:
+                                        if e_sort.tag=="m2n":
+                                            m2n=e_sort.attrib['filename']
+                                        elif e_sort.tag=="n2m":
+                                            n2m=e_sort.attrib['filename']
+                                        elif e_sort.tag=="i2n":
+                                            i2n=e_sort.attrib['filename']
                                     languages.append(Pmd2Language(
                                         e_language.attrib['filename'],
                                         e_language.attrib['name'],
                                         self._(e_language.attrib['name']),
                                         e_language.attrib['locale'],
+                                        Pmd2SortLists(m2n, n2m, i2n)
                                     ))
                             if e_sub.tag == 'StringBlocks':
                                 for e_string_block in e_sub:

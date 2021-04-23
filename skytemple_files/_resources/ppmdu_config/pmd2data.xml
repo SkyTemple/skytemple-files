@@ -1055,6 +1055,9 @@
           <OpenBin filepath="overlay/overlay_0011.bin">
 		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay11.asm"/>
           </OpenBin>
+          <OpenBin filepath="overlay/overlay_0019.bin">
+		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay19.asm"/>
+          </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
 		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay29.asm"/>
           </OpenBin>

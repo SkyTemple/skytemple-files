@@ -1,8 +1,86 @@
 ; ///////////////////////// arm9.bin
 
-; //// TODO LIST
-; 0x02050244: Adventure Log Special Pokémon
-; ////
+; Change Exclusive Items Check
+
+.org HookExclusiveItemCheck
+.area 0xC
+	mov  r5,#0x0
+	nop
+	nop
+.endarea
+
+; Change Adventure Log Check
+
+.org HookAdventureLogSpecialCheck
+.area 0x18
+	bl GetFirstFormIfValid
+	ldr r2,[r15, #+0x58]
+	mov  r3,#0x0
+	nop
+	nop
+	nop
+.endarea
+
+; Change save structure
+
+.org HookReadSave
+.area 0xC
+	mov  r0,r8
+	add  r0,r0,r5
+	bl SetPkmnFlag2
+.endarea
+.org HookWriteSave
+.area 0xC
+	mov  r0,r8
+	add  r0,r0,r4
+	bl GetPkmnFlag2
+.endarea
+
+.org GetPkmnFlag2
+.area 0x48
+	stmdb  r13!,{r3,r14}
+	b CheckSecondPartRead
+end_check_read:
+	ldr r3,=ProgressStructPtr
+	mov  r1,r0,asr #0x4
+	add  r2,r0,r1,lsr #0x1b
+	mov  r1,r0,lsr #0x1f
+	rsb  r0,r1,r0,lsl #0x1b
+	add  r0,r1,r0,ror #0x1b
+	ldr r3,[r3, #+0x0]
+	mov  r2,r2,asr #0x5
+	add  r2,r3,r2,lsl #0x2
+	ldr r2,[r2, #+0x98]
+	mov  r1,#0x1
+	tst r2,r1,lsl r0
+	moveq  r0,#0x0
+	movne  r0,#0x1
+	ldmia  r13!,{r3,r15}
+	.pool
+.endarea
+
+.org SetPkmnFlag2
+.area 0x44
+	stmdb  r13!,{r3,r14}
+	b CheckSecondPartWrite
+end_check_write:
+	ldr r2,=ProgressStructPtr
+	mov  r1,r0,asr #0x4
+	ldr r3,[r2, #+0x0]
+	add  r1,r0,r1,lsr #0x1b
+	mov  r2,r0,lsr #0x1f
+	rsb  r0,r2,r0,lsl #0x1b
+	add  r14,r3,#0x98
+	mov  r12,r1,asr #0x5
+	ldr r3,[r14,+r12, lsl #0x2]
+	add  r0,r2,r0,ror #0x1b
+	mov  r1,#0x1
+	orr  r0,r3,r1,lsl r0
+	str r0,[r14,+r12, lsl #0x2]
+	ldmia  r13!,{r3,r15}
+	.pool
+.endarea
+
 
 ; Change sort by name
 
@@ -112,16 +190,39 @@ below_upper_bound:
 .org GetSecondFormIfValid
 .area 0x3C
 	bx r14
-	.fill 0x38, 0xCC
+CheckFirstRange:
+	stmdb  r13!,{r14}
+	bl GetFirstFormIfValid
+	ldr r1,=0x00000483
+	cmp r0,r1
+	ldmia  r13!,{r15}
+CheckSecondPartWrite:
+	bl CheckFirstRange
+	blt end_check_write
+	sub r0,r0,r1
+	bl SetPkmnFlag1
+	ldmia  r13!,{r3,r15}
+	.pool
+	.fill (GetSecondFormIfValid+0x3C-.), 0xCC
 .endarea
 .org GetFirstFormIfValid
 .area 0x44
+	cmp r0,NbIndepEntries
+	movge r0,#0
+	bxge r14
 	ldr r2,=MonsterFilePtr
-	mov  r1,#0x44
+	mov r1,#0x44
 	ldr r2,[r2, #+0x0]
 	smlabb r0,r0,r1,r2
 	ldrsh r0,[r0, #+0x0]
 	bx r14
+	.pool
+CheckSecondPartRead:
+	bl CheckFirstRange
+	blt end_check_read
+	sub r0,r0,r1
+	bl GetPkmnFlag1
+	ldmia  r13!,{r3,r15}
 	.pool
 	.fill (GetFirstFormIfValid+0x44-.), 0xCC
 .endarea

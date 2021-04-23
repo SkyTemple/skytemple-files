@@ -181,6 +181,12 @@ It is strongly recommended to fix any dungeon error before applying this patch. 
             md_model = MdHandler.deserialize(md_bin)
             while len(md_model.entries)<NUM_NEW_ENTRIES:
                 md_model.entries.append(MdEntry(bitflag1=0, entid=len(md_model.entries)))
+            for i in range(NUM_PREVIOUS_ENTRIES):
+                md_model.entries[i].entid=i
+                if md_model.entries[NUM_PREVIOUS_ENTRIES+i].gender==Gender.INVALID:
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+i].entid=NUM_PREVIOUS_ENTRIES+i
+                else:
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+i].entid=i
             block = bincfg.blocks['MonsterSpriteData']
             data = binary[block.begin:block.end]+binary[block.begin:block.end]
             data += b'\x00\x00'*(NUM_NEW_ENTRIES-(len(data)//2))

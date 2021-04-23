@@ -68,6 +68,15 @@
 ; //////////////////////////////////////////////////////
 ; patch arm9.bin
 
+.definelabel HookExclusiveItemCheck, 0x02011090
+.definelabel HookAdventureLogSpecialCheck, 0x02050580
+.definelabel HookReadSave, 0x0204D900
+.definelabel HookWriteSave, 0x0204D710
+.definelabel SetPkmnFlag1, 0x0204D484
+.definelabel GetPkmnFlag1, 0x0204D4C0
+.definelabel SetPkmnFlag2, 0x0204D4FC
+.definelabel GetPkmnFlag2, 0x0204D540
+.definelabel ProgressStructPtr, 0x020B0890
 .definelabel IsValid, 0x02054AE8
 .definelabel HookN2MSearch, 0x020B5128
 .definelabel HookN2MSearchBase, 0x020B5198
@@ -113,8 +122,18 @@
 .definelabel HookTblTalk1, 0x022E04DC
 
 ; //////////////////////////////////////////////////////
+; patch overlay_0019.bin
+
+.definelabel HookSpindaRecruitGender1, 0x0238AD70
+.definelabel HookSpindaRecruitGender2, 0x0238AE14
+.definelabel HookSpindaRecruitGender3, 0x0238AECC
+.definelabel HookSpindaRecruit1, 0x0238AD08
+.definelabel HookSpindaRecruit2, 0x0238AD54
+
+; //////////////////////////////////////////////////////
 ; patch overlay_0029.bin
 
+.definelabel StoreSpriteFileIndexBothGenders, 0x022F7DC4
 .definelabel SetKecleonEntryForFloor, 0x022F7D6C
 .definelabel GetKecleonEntryForFloor, 0x022F7DA4
 .definelabel HookDungeonMonsterMod1, 0x022FCB48
@@ -129,7 +148,6 @@
 .definelabel HookDungeonStructSize1, 0x022DF3B8
 .definelabel HookDungeonStructSize2, 0x022DF3EC
 .definelabel HookDungeonSpriteFile1, 0x022F7AFC
-.definelabel HookDungeonSpriteFile2, 0x022F7DD8
 .definelabel HookDungeonSpriteFile3, 0x022F7FA4
 .definelabel HookDungeonSpriteFile4, 0x022F7D5C
 .definelabel HookDungeonSpriteFile5, 0x022F7F80

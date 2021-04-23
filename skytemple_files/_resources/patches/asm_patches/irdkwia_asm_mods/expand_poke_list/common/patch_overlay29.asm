@@ -1,5 +1,22 @@
 ; ///////////////////////// overlay_0029.bin
 
+; Change StoreSpriteFileIndexBothGenders
+
+.org StoreSpriteFileIndexBothGenders
+.area 0xC8
+	stmdb  r13!,{r3,r14}
+	ldr r2,=DungeonBaseStructurePtr
+	ldr r2,[r2, #+0x0]
+	mov  r3,r1
+	add  r1,r2,MDDSpr_L
+	add  r2,r1,MDDSpr_H
+	mov  r1,r0,lsl #0x1
+	strh r3,[r2, r1]
+	ldmia  r13!,{r3,r15}
+	.pool
+	.fill (StoreSpriteFileIndexBothGenders+0xC8-.), 0xCC
+.endarea
+
 ; Kecleon
 
 .org SetKecleonEntryForFloor
@@ -88,11 +105,7 @@ kecleon_hold:
 	add  r0,r0,MDDSpr_L
 	add  r4,r0,MDDSpr_H
 .endarea
-.org HookDungeonSpriteFile2
-.area 0x8
-	add  r1,r2,MDDSpr_L
-	add  r5,r1,MDDSpr_H
-.endarea
+; 2 is in StoreSpriteFileIndexBothGenders
 .org HookDungeonSpriteFile3
 .area 0xC
 	add  r1,r1,MDDSpr_L

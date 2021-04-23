@@ -10,3 +10,4 @@
 .definelabel Pkmn_StrID_L, 0x14
 .definelabel Cate_StrID_H, 0x5100
 .definelabel Cate_StrID_L, 0x74
+.definelabel PokedexMax, 0x4A0

@@ -40,7 +40,7 @@ from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao.model import SUBENTRIES
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import _
 
 
@@ -71,7 +71,7 @@ NUM_NEW_ENTRIES = 2048
 DUMMY_PKMN = 553
 DUMMY_LS = 150 # Using Mewtwo's learnset, as it's supposed to be one of the biggest
 DUMMY_PERSONALITY = 0x20 # Using Dialga's personality
-class ExpandPokeListPatchHandler(AbstractPatchHandler):
+class ExpandPokeListPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -79,8 +79,10 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("""Expand the pokemon entries allowed to 2048, and makes all entries independent.
-It is strongly recommended to fix any dungeon error before applying this patch. """)
+        return _("""Expand the pokemon entries allowed to 2048, and makes all the entries independent.
+Needs ChangeEvoSystem, ExternalizeWazaFile, ExternalizeMappaFile patches to work.
+It is strongly recommended to fix any dungeon error before applying this patch,
+and to save a backup of your ROM before applying this.""")
 
     @property
     def author(self) -> str:
@@ -90,6 +92,9 @@ It is strongly recommended to fix any dungeon error before applying this patch. 
     def version(self) -> str:
         return '-1.0.0'
 
+    def depends_on(self) -> List[str]:
+        return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
+    
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:

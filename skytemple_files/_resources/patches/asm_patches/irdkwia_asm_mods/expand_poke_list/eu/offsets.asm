@@ -68,6 +68,10 @@
 ; //////////////////////////////////////////////////////
 ; patch arm9.bin
 
+.definelabel HookMissionGeneratePossiblePokemonList1, 0x0205FAD8
+.definelabel HookMissionGeneratePossiblePokemonList2, 0x0205FB10
+.definelabel HookLimitSearchSpecialLog, 0x02050574
+.definelabel HookPokedexMax, 0x02050578
 .definelabel HookExclusiveItemCheck, 0x02011090
 .definelabel HookAdventureLogSpecialCheck, 0x02050580
 .definelabel HookReadSave, 0x0204D900

@@ -1,5 +1,27 @@
 ; ///////////////////////// arm9.bin
 
+; Change Mission Available Pokemons
+
+.org HookMissionGeneratePossiblePokemonList1
+.area 0x4
+	mov r0,NbIndepEntries*2
+.endarea
+.org HookMissionGeneratePossiblePokemonList2
+.area 0x4
+	cmp r6,NbIndepEntries
+.endarea
+
+; Change Max Count for Pokédex / Special Log
+
+.org HookLimitSearchSpecialLog
+.area 0x4
+	.word NbIndepEntries
+.endarea
+.org HookPokedexMax
+.area 0x4
+	.word PokedexMax
+.endarea
+
 ; Change Exclusive Items Check
 
 .org HookExclusiveItemCheck

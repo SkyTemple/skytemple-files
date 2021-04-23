@@ -122,27 +122,11 @@ main_item:
 	b main_no_req
 main_recruit:
 	ldrsh r0,[r13, #+0x4]
-	mov  r1,#0x258
 	mov  r6,r4
-	bl EuclidianDivision
-	mov  r0,r1,lsl #0x10
-	mov  r0,r0,asr #0x10
-	mov  r1,r4
+	mov  r1,#1
 	bl IsRecruited
 	cmp r0,#0x0
-	ldrsh r0,[r13, #+0x4]
-	mov  r1,#0x258
-	addne  r6,r6,#0x1
-	bl EuclidianDivision
-	mov  r0,r1,lsl #0x10
-	mov  r0,r0,asr #0x10
-	add  r0,r0,#0x258
-	mov  r0,r0,lsl #0x10
-	mov  r0,r0,asr #0x10
-	mov  r1,#0x0
-	bl IsRecruited
-	cmp r0,#0x0
-	addne  r6,r6,#0x1
+	movne  r6,#0x1
 	cmp r6,#0x0
 	moveq  r4,#0x1
 main_no_req:

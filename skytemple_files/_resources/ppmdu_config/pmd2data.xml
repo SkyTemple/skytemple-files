@@ -957,6 +957,9 @@
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_arm9.asm"/>
 	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0019.bin">
+	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay19.asm"/>
+	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
 	  </OpenBin>

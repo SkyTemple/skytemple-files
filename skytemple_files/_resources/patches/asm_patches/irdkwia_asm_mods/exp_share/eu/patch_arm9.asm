@@ -1,43 +1,12 @@
 ; For use with ARMIPS
-; 2021/02/09
+; 2021/04/25
 ; For Explorers of Sky EU Only
 ; ------------------------------------------------------------------------------
 ; Adds Exp. Share
 ; ------------------------------------------------------------------------------
 
-.definelabel GetSpecialEpisode, 0x0204CC70
-.definelabel PartyPkmnStructPtr, 0x020B138C
-.definelabel IsLevel1Dungeon, 0x02051650
-.definelabel IsExpEnabledInDungeon, 0x02051A54
-.definelabel GetLvlStats, 0x02053B18
-.definelabel HookSummary, 0x0205A904
-.definelabel EuclidianDivision, 0x0209023C
-.definelabel ExpShare, 0x020981F4
-.definelabel ReadjustExpFunc, 0x020981E4
-.definelabel SummaryFunc, 0x020981D8
-
-.definelabel ExpGainAll, 0x0230B238
-.definelabel ReadjustExp, 0x02303AE4
-.definelabel HookLvlUp, 0x02303224
-
-.definelabel DungeonDataStructPtr, 0x02354138
-
-;.definelabel BuffRead, 0x0 ; Add it if it is even implemented
-
-.definelabel PartyPkmnNb, 0x22B
-.definelabel MaxLvl, 0x64
-.definelabel PartyPkmnSize, 0x44
-.definelabel PercentageShared, 0x64
-.definelabel MaxPercent, 0x64
-
-
-.org HookSummary
-.area 0x4
-	b SummaryFunc
-.endarea
-
 .org ExpShare
-.area 0xC0 ; Haven't really checked the size
+.area 0x120 ; Haven't really checked the size
 	; Remove this area if you want ExpShare to be enabled during
 	; Special Episodes
 	bl GetSpecialEpisode
@@ -75,8 +44,8 @@
 	ldr r4,=PartyPkmnNb
 	mov r7, #0x0
 loop_start: 
-	ldrh r1,[r3,#+0x4]
-	cmp r1,#0x0
+	ldrh r1,[r3,#+0x0]
+	tst r1,#0x1
 	beq cond_loop
 	ldrb r2,[r3,#+0x1]
 	cmp r2,MaxLvl
@@ -98,35 +67,36 @@ loop_start:
 	str r0,[r3,#+0x10]
 cond_loop:
 	add r7,r7,#0x1
+	cmp r7,#2
+	addeq r7,r7,#3
+	addeq r3,r3,PartyPkmnSize*3
 	cmp r7,r4
 	add r3,r3,PartyPkmnSize
 	blt loop_start
 end_loop:
-	mov  r4,#0x1
+	mov  r3,#0x1
 	b ExpGainAll+0x4
 	.pool
+AddMissingLevels:
+	ldr r8, [r4,#0x10]
+	ldrb r7, [r4,#0x1]
+	mov r9,r7
+	b cmp_loop_add_ml
+beg_loop_add_ml:
+	ldr r0,=BuffRead
+	ldrsh r1, [r4,#0x4]
+	add r2,r9,#1
+	bl GetLvlStats
+	ldr r0,=BuffRead
+	ldr r1,[r0,#+0x0]
+	cmp r1,r8
+	bgt end_add_missing_lvls
+	add r9,r9,#1
+cmp_loop_add_ml:
+	cmp r9,MaxLvl
+	blt beg_loop_add_ml
+end_add_missing_lvls:
+	b return_add_missing_levels
+	.pool
+	.fill (ExpShare+0x120-.), 0xCC
 .endarea
-
-.org ReadjustExpFunc
-.area 0x10
-	strb r5,[r7, #+0xa]
-	; If we reach the max. level, readjust exp to match that level
-	cmp r5,MaxLvl
-	moveq r8,r0
-	b ReadjustExp+0x4
-.endarea
-
-.org SummaryFunc
-.area 0xC
-	; Set 0 to next level value for display in the summary
-	; if the current exp value is above the one for the next level
-	subs  r0,r1,r0
-	movlt r0, #0x0
-	b HookSummary+0x4
-.endarea
-
-;.org BuffRead
-;.area 0xC
-;	.fill 0x4, 0;
-;.endarea
-

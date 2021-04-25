@@ -1,17 +1,9 @@
 ; For use with ARMIPS
-; 2021/02/09
-; For Explorers of Sky EU Only
+; 2021/04/25
+; For Explorers of Sky All Versions
 ; ------------------------------------------------------------------------------
 ; Adds Exp. Share
 ; ------------------------------------------------------------------------------
-
-.definelabel HookLvlUpJump1, 0x0230323C
-.definelabel HookLvlUpJump2, 0x02059018
-.definelabel HookLvlUpJump4, 0x0234BC9C
-.definelabel HookLvlUpJump5, 0x0234BC34
-.definelabel HookLvlUpJump6, 0x02300E38
-.definelabel HookLvlUpJump7, 0x0234C098
-.definelabel HookLvlUpJump8, 0x02303A68
 
 .org ExpGainAll
 .area 0x4

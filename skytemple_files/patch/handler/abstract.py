@@ -20,6 +20,7 @@ from typing import Callable, List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.patch.category import PatchCategory
 
 
 class AbstractPatchHandler(ABC):
@@ -48,6 +49,13 @@ class AbstractPatchHandler(ABC):
         but may be used by the handler to update the patch.
         Must follow Python package version conventions.
         """
+
+    @property
+    def category(self) -> PatchCategory:
+        """
+        The category describing the purpose of this patch.
+        """
+        return PatchCategory.OTHER
 
     @abstractmethod
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:

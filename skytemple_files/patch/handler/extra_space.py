@@ -22,6 +22,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import get_resources_dir
+from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.util import _
 OV_FILE_IDX = 36
@@ -45,6 +46,10 @@ class ExtraSpacePatch(AbstractPatchHandler):
     @property
     def version(self) -> str:
         return '0.1.0'
+
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.UTILITY
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         return 36 in rom.loadArm9Overlays([36])

@@ -20,6 +20,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
+from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
@@ -52,6 +53,10 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
     @property
     def version(self) -> str:
         return '0.0.2'
+
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.UTILITY
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:

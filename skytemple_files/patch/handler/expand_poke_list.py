@@ -1,4 +1,4 @@
-#  Copyright 2020 Parakoopa
+#  Copyright 2020-2021 Parakoopa
 #
 #  This file is part of SkyTemple.
 #
@@ -56,6 +56,17 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x54818
 PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0x00000483
 
+US_TABLE_SF = 0xA3D14
+EU_TABLE_SF = 0xA4314
+JP_TABLE_SF = 0x0
+US_TABLE_MF = 0xA3DAC
+EU_TABLE_MF = 0xA43AC
+JP_TABLE_MF = 0x0
+US_TABLE_SP = 0x39B4
+EU_TABLE_SP = 0x39A8
+JP_TABLE_SP = 0x0
+TABLE_SP_SIZE = 0xD8
+
 US_NEW_PKMN_STR_REGION = 0x4814
 US_NEW_CAT_STR_REGION = 0x5014
 US_FILE_ASSOC = {"MESSAGE/text_e.str": ("BALANCE/st_m2n_j.bin", "BALANCE/st_n2m_j.bin")}
@@ -93,7 +104,7 @@ and to save a backup of your ROM before applying this.""")
         return '-1.0.0'
 
     def depends_on(self) -> List[str]:
-        return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
+        return [] #["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
     
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
@@ -111,10 +122,16 @@ and to save a backup of your ROM before applying this.""")
                 new_pkmn_str_region = US_NEW_PKMN_STR_REGION
                 new_cat_str_region = US_NEW_CAT_STR_REGION
                 file_assoc = US_FILE_ASSOC
+                table_sf = US_TABLE_SF
+                table_mf = US_TABLE_MF
+                table_sp = US_TABLE_SP
             if config.game_region == GAME_REGION_EU:
                 new_pkmn_str_region = EU_NEW_PKMN_STR_REGION
                 new_cat_str_region = EU_NEW_CAT_STR_REGION
                 file_assoc = EU_FILE_ASSOC
+                table_sf = EU_TABLE_SF
+                table_mf = EU_TABLE_MF
+                table_sp = EU_TABLE_SP
         if not self.is_applied(rom, config):
             bincfg = config.binaries['arm9.bin']
             binary = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
@@ -198,6 +215,34 @@ and to save a backup of your ROM before applying this.""")
             for i in range(0,len(data),2):
                 md_model.entries[i//2].unk17 = data[i]
                 md_model.entries[i//2].unk18 = data[i+1]
+                md_model.entries[i//2].bitfield1_0 = False
+                md_model.entries[i//2].bitfield1_1 = False
+                md_model.entries[i//2].bitfield1_2 = False
+                md_model.entries[i//2].bitfield1_3 = False
+            
+            x = table_sf
+            while read_uintle(rom.arm9, x, 2)!=0:
+                pkmn_id = read_uintle(rom.arm9, x, 2)
+                md_model.entries[pkmn_id].bitfield1_3 = True
+                if md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].gender!=Gender.INVALID:
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].bitfield1_3 = True
+                x += 2
+            x = table_mf
+            while read_uintle(rom.arm9, x, 2)!=0:
+                pkmn_id = read_uintle(rom.arm9, x, 2)
+                md_model.entries[pkmn_id].bitfield1_2 = True
+                if md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].gender!=Gender.INVALID:
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].bitfield1_2 = True
+                x += 2
+            ov19 = rom.loadArm9Overlays([19])[19].data
+            for x in range(table_sp, table_sp+TABLE_SP_SIZE, 2):
+                pkmn_id = read_uintle(ov19, x, 2)
+                md_model.entries[pkmn_id].bitfield1_1 = True
+                md_model.entries[pkmn_id].bitfield1_0 = True
+                if md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].gender!=Gender.INVALID:
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].bitfield1_1 = True
+                    md_model.entries[NUM_PREVIOUS_ENTRIES+pkmn_id].bitfield1_0 = True
+            
             rom.setFileByName('BALANCE/monster.md', MdHandler.serialize(md_model))
 
             # Edit Mappa bin

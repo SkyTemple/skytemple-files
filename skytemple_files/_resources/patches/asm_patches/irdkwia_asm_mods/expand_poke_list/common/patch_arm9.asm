@@ -1,5 +1,117 @@
 ; ///////////////////////// arm9.bin
 
+; Change Mission And Spinda Bar Lists
+
+.org HookMissionPkmnLimit1
+.area 0x4
+	.word NbIndepEntries
+.endarea
+
+.org HookMissionPkmnLimit2
+.area 0x4
+	.word NbIndepEntries
+.endarea
+
+.org IsPkmnIDNotInMFList
+.area 0x44
+	stmdb  r13!,{r14}
+	bl IsMFPkmn
+	cmp r0, #0
+	moveq  r0,#0x1
+	movne  r0,#0x0
+	ldmia  r13!,{r15}
+	.pool
+	.fill (IsPkmnIDNotInMFList+0x44-.), 0xCC
+.endarea
+
+.org IsPkmnIDNotStoryForbidden
+.area 0x80
+	stmdb  r13!,{r4,r5,r14}
+	mov  r4,r0
+	bl GetFirstFormIfValid
+	mov  r5,r0
+	mov  r0,#0x9
+	bl GetPerformanceFlagWithChecks
+	cmp r0,#0x0
+	bne out_of_story
+	mov  r0,r4
+	bl IsSFPkmn
+	cmp r0,#0
+	movne  r0,#0x0
+	ldmneia  r13!,{r4,r5,r15}
+	bl GetPlayerPkmnStr
+	ldrsh r0,[r0, #+0x4]
+	bl GetFirstFormIfValid
+	cmp r5,r0
+	moveq  r0,#0x0
+	ldmeqia  r13!,{r4,r5,r15}
+	bl GetPartnerPkmnStr
+	ldrsh r0,[r0, #+0x4]
+	bl GetFirstFormIfValid
+	cmp r5,r0
+	moveq  r0,#0x0
+	ldmeqia  r13!,{r4,r5,r15}
+out_of_story:
+	mov  r0,#0x1
+	ldmia  r13!,{r4,r5,r15}
+	.pool
+	.fill (IsPkmnIDNotStoryForbidden+0x80-.), 0xCC
+.endarea
+
+.org PkmnIDMissionForbiddenList
+.area 0xF8
+IsSFPkmn:
+	ldr r2,=MonsterFilePtr
+	mov  r1,#0x44
+	ldr r2,[r2, #+0x0]
+	smlabb r0,r0,r1,r2
+	ldrb r0,[r0, #+0x1a]
+	tst r0,#0x8
+	movne  r0,#0x1
+	moveq  r0,#0x0
+	bx r14
+	.pool
+IsMFPkmn:
+	ldr r2,=MonsterFilePtr
+	mov  r1,#0x44
+	ldr r2,[r2, #+0x0]
+	smlabb r0,r0,r1,r2
+	ldrb r0,[r0, #+0x1a]
+	tst r0,#0x4
+	movne  r0,#0x1
+	moveq  r0,#0x0
+	bx r14
+	.pool
+IsSpecialSpindaNormalRecruitPkmn:
+	ldr r2,=MonsterFilePtr
+	mov  r1,#0x44
+	ldr r2,[r2, #+0x0]
+	smlabb r0,r0,r1,r2
+	ldrb r0,[r0, #+0x1a]
+	tst r0,#0x2
+	movne  r0,#0x1
+	moveq  r0,#0x0
+	bx r14
+	.pool
+	.fill (PkmnIDMissionForbiddenList+0xF8-.), 0xCC
+.endarea
+
+.org StoryForbiddenPkmnList
+.area 0x2A
+IsSpecialSpindaEggRecruitPkmn:
+	ldr r2,=MonsterFilePtr
+	mov  r1,#0x44
+	ldr r2,[r2, #+0x0]
+	smlabb r0,r0,r1,r2
+	ldrb r0,[r0, #+0x1a]
+	tst r0,#0x1
+	movne  r0,#0x1
+	moveq  r0,#0x0
+	bx r14
+	.pool
+	.fill (StoryForbiddenPkmnList+0x2A-.), 0xCC
+.endarea
+
 ; Change Mission Available Pokemons
 
 .org HookMissionGeneratePossiblePokemonList1

@@ -68,6 +68,15 @@
 ; //////////////////////////////////////////////////////
 ; patch arm9.bin
 
+.definelabel HookMissionPkmnLimit1, 0x0205D484
+.definelabel HookMissionPkmnLimit2, 0x0205D2B0
+.definelabel IsPkmnIDNotInMFList, 0x02062D90
+.definelabel IsPkmnIDNotStoryForbidden, 0x02062E60
+.definelabel GetPerformanceFlagWithChecks, 0x0204CDCC
+.definelabel GetPlayerPkmnStr, 0x02055AEC
+.definelabel GetPartnerPkmnStr, 0x02055B14
+.definelabel PkmnIDMissionForbiddenList, 0x020A43AC
+.definelabel StoryForbiddenPkmnList, 0x020A4314
 .definelabel HookMissionGeneratePossiblePokemonList1, 0x0205FAD8
 .definelabel HookMissionGeneratePossiblePokemonList2, 0x0205FB10
 .definelabel HookLimitSearchSpecialLog, 0x02050574
@@ -128,6 +137,12 @@
 ; //////////////////////////////////////////////////////
 ; patch overlay_0019.bin
 
+.definelabel RecruitablePokemonsTable, 0x0238E628
+.definelabel HookSpindaRecruitTable1, 0x0238ADB8
+.definelabel HookSpindaRecruitTable2, 0x0238ADC4
+.definelabel HookSpindaRecruitTable3, 0x0238AE60
+.definelabel HookSpindaRecruitTable4, 0x0238AE6C
+.definelabel GotoCheckValidPkmnIDForMissions, 0x02062DE4
 .definelabel HookSpindaRecruitGender1, 0x0238AD70
 .definelabel HookSpindaRecruitGender2, 0x0238AE14
 .definelabel HookSpindaRecruitGender3, 0x0238AECC

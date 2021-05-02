@@ -194,6 +194,9 @@ class Patcher:
         for handler in self._loaded_patches.values():
             yield handler
 
+    def get(self, name) -> AbstractPatchHandler:
+        return self._loaded_patches[name]
+
 
 class PatchPackageConfigMerger:
     def __init__(self, xml_file_name: str, game_edition: str):

@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import ssl
 import urllib.request
 from enum import Enum
-
+from typing import Optional, Tuple
 
 RELEASE_WEB = "https://release.skytemple.org/"
-
+BANNER_LINK = 'banner'
+BANNER_IMG = 'banner.png'
 
 class ReleaseType(Enum):
     SKYTEMPLE = "skytemple"
@@ -31,4 +33,20 @@ def check_newest_release(rtype: ReleaseType) -> str:
     Returns the newest release using release.skytemple.org.
     May fail if no connection can be established!
     """
-    return urllib.request.urlopen(RELEASE_WEB + rtype.value).read().decode('utf-8').strip()
+    return urllib.request.urlopen(RELEASE_WEB + rtype.value, context=create_context()).read().decode('utf-8').strip()
+
+
+def get_event_banner() -> Tuple[Optional[bytes], Optional[str]]:
+    try:
+        url = urllib.request.urlopen(RELEASE_WEB + BANNER_LINK, context=create_context()).read().decode('utf-8').strip()
+        img = urllib.request.urlopen(RELEASE_WEB + BANNER_IMG, context=create_context()).read()
+        return img, url
+    except:
+        return None, None
+
+def create_context():
+    # Some weird issue on Windows with PyInstaller...:
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx

@@ -40,7 +40,7 @@ setup(
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
-        'pyobjc==6.2.1; sys_platform == "darwin"'
+        'pyobjc==7.2; sys_platform == "darwin"'
     ],
     entry_points='''
         [console_scripts]

@@ -182,7 +182,7 @@ class MappaItemList(AutoString, XmlSerializable):
         for category, probability in self.categories.items():
             weight = 'GUARANTEED' if probability == GUARANTEED else str(probability)
             xml_category = Element(XML_CATEGORY, {
-                XML_CATEGORY__NAME: category.name,
+                XML_CATEGORY__NAME: MappaItemCategory(category.value).name,
                 XML_CATEGORY__WEIGHT: str(weight)
             })
             xml_item_list.append(xml_category)

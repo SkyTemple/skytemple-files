@@ -48,7 +48,6 @@ class KaoWriter:
         # At worst all images are 848 bytes long - However assuming this would allocate over 300MB...
         # Let's just use 10MB. We will enlarge if necessary.
         self.new_data = bytearray(80000000)
-        current_null_pointer = 0  # Undefined behavior if the first pointers are a NULL pointer!
 
         # To increase overall performance, first find the index of the first modified image, we will start from
         # there and just copy the rest
@@ -86,6 +85,9 @@ class KaoWriter:
             size_toc = (self.kao.toc_len * SUBENTRIES * SUBENTRY_LEN)
             current_toc_offset = self.kao.first_toc
             current_image_offset = current_toc_offset + size_toc
+        
+        current_null_pointer = -current_image_offset  # Always start at that null pointer!
+        #Otherwise, stuff will break since a 0 pointer is considered as valid in the model!
 
         # Rebuild KAO
         for i in range(start_index, self.kao.toc_len):

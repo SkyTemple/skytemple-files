@@ -14,7 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.audio.smdl.handler import SmdlHandler
+from skytemple_files.audio.swdl.handler import SwdlHandler
 from skytemple_files.compression.bma_collision_rle.handler import BmaCollisionRleHandler
 from skytemple_files.compression.bma_layer_nrl.handler import BmaLayerNrlHandler
 from skytemple_files.compression.bpc_image.handler import BpcImageHandler
@@ -104,6 +105,9 @@ class FileType:
     GENERIC_NRL = GenericNrlHandler
     
     RLE_NIBBLE = RleNibbleHandler
+
+    SWDL = SwdlHandler
+    SMDL = SmdlHandler
 
     BGP = BgpHandler
 

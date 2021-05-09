@@ -15,18 +15,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
+class DseFilenameString(str):
+    def __init__(self, string: str):
+        super().__init__()
+        self.string = str
 
-from ndspy.rom import NintendoDSRom
+    @classmethod
+    def from_bytes(cls, data: bytes):
+        pos = 0
+        while data[pos] != 0 and pos < len(data):
+            pos += 1
+        if pos >= len(data):
+            raise ValueError("DseFilenameString: EOF")
+        string = str(data[:pos], 'ascii')
+        rest = data[pos:]
+        assert rest == bytes([0x00] + [0xAA] * (len(rest) - 1)), "Invalid DseFilenameString padding"
+        return cls(string)
 
-from skytemple_files.common.util import get_files_from_rom_with_extension
-from skytemple_files.audio.swdl.handler import SwdlHandler
-
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-
-for filename in get_files_from_rom_with_extension(rom, 'swd'):
-    print(filename)
-    model = SwdlHandler.deserialize(rom.getFileByName(filename))
-    print(model)
+    def __str__(self):
+        return self.string

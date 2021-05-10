@@ -1,5 +1,5 @@
 ; For use with ARMIPS
-; 2021/01/31
+; 2021/05/10
 ; For Explorers of Sky NA Only
 ; ------------------------------------------------------------------------------
 ; Use filestreams instead of hardcoded lists 
@@ -9,9 +9,9 @@
 
 .definelabel HookFunction, 0x02051568
 .definelabel LoadForbid, 0x0209F714
-.definelabel BufferReadF, 0x0209F780
-.definelabel ForbidFName, 0x0209F784
-.definelabel FStreamStruct, 0x0209F798
+.definelabel BufferReadF, 0x0209F77C
+.definelabel ForbidFName, 0x0209F780
+.definelabel FStreamStruct, 0x0209F794
 
 .org HookFunction
 .area 0x5C
@@ -33,6 +33,7 @@
 	
 	b LoadForbid
 end_forbid:
+	ldrb r0,[r8, #+0x0]
 	ldmia  r13!,{r3,r5,r6,r7,r8,r15}
 	
 	.pool
@@ -40,7 +41,7 @@ end_forbid:
 .endarea
 
 .org LoadForbid
-.area 0x6C
+.area 0x68
 	
 	; Get the offset in file
 	mov r0,r7
@@ -67,7 +68,6 @@ end_forbid:
 	mov r0,r7
 	bl FStreamClose
 	bl FStreamDealloc
-	ldrb r0,[r8, #+0x0]
 	
 	b end_forbid
 	

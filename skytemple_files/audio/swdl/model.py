@@ -101,7 +101,7 @@ class Swdl:
         if not self.header.pcmdlen.external and self.header.pcmdlen.ref:
             pcmd = SwdlPcmd(data[start_pcmd:start_pcmd + self.header.pcmdlen.ref + 0x10])  # (0x10 = Header size) TODO: Is this correct???
             self._dbg_pcmd_after_wavi = True
-            start_prgi += pcmd.get_initial_length()  # TODO
+            start_prgi += pcmd.get_initial_length()
 
             # Add pcmd samples to wavi
             for sample in self.wavi.sample_info_table:

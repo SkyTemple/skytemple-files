@@ -904,6 +904,13 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to extract special process code -->
+        <Patch id="ExtractSPCode" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="irdkwia_asm_mods/extract_sp_code/selector_overlay11.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to add types to the type table -->
         <Patch id="AddTypes" >
           <OpenBin filepath="arm9.bin">

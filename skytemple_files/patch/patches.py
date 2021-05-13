@@ -54,6 +54,7 @@ from skytemple_files.patch.handler.reduce_jumpcut_pause_time import ReduceJumpcu
 from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
 from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
 from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
+from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -80,6 +81,7 @@ class PatchType(Enum):
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
+    STAT_DISP = ChangeMoveStatDisplayPatchHandler
     ADD_TYPES = AddTypePatchHandler
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler

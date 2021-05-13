@@ -18,6 +18,8 @@ from typing import Callable, Dict, List, Set
 
 import os
 
+from skytemple_files.patch.category import PatchCategory
+
 try:
     from PIL import Image
 except ImportError:
@@ -76,6 +78,10 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
     @property
     def version(self) -> str:
         return '0.0.1'
+
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.UTILITY
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:

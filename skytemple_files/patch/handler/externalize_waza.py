@@ -20,6 +20,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import _, get_locales
 from skytemple_files.data.str.handler import StrHandler
@@ -48,6 +49,10 @@ Depends on the ActorAndLevelLoader patch, as it needs some space provided by thi
     @property
     def version(self) -> str:
         return '0.0.1'
+
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.UTILITY
 
     def depends_on(self) -> List[str]:
         return ['ActorAndLevelLoader']

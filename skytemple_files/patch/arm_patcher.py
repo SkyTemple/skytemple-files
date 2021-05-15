@@ -134,27 +134,6 @@ class ArmPatcher:
                                                     "'armips' is inside your system's PATH.")) from ex
 
                 if retcode != 0:
-
-                    logger.warning("Failed applying an armips patch. Debugging information follow.")
-                    logger.warning("Tmp dir name: " + tmp)
-                    logger.warning("Patch dir name: " + patch_file_dir)
-                    contents = "???"
-                    try:
-                        lsresult = subprocess.Popen(['ls', '-la', tmp],
-                                                    stdout=subprocess.PIPE,
-                                                    stderr=subprocess.STDOUT)
-                        lsresult.wait()
-                        contents = str(lsresult.stdout.read(), 'utf-8')
-                    except BaseException:
-                        pass
-                    logger.warning("Contents of dir:\n" + contents)
-                    stdout = "???"
-                    try:
-                        stdout = str(result.stdout.read(), 'utf-8')
-                    except BaseException:
-                        pass
-                    logger.warning("Stdout:\n" + stdout)
-
                     raise PatchError(_("ARMIPS reported an error while applying the patch."),
                                      str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
 

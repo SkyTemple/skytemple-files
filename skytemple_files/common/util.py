@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
 import re
+import unicodedata
 import warnings
 from itertools import groupby
 from typing import List, Tuple, TYPE_CHECKING, Iterable
@@ -39,6 +40,13 @@ MONSTER_BIN = 'MONSTER/monster.bin'
 
 DEBUG = False
 
+
+def normalize_string(x: str):
+    """Returns a normalized ASCII string for sorting purposes."""
+    # TODO, does not handle everything
+    x = x.lower()
+    x=unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
+    return x
 
 def open_utf8(file, mode='r', *args, **kwargs):
     """Like open, but always uses the utf-8 encoding, on all platforms."""

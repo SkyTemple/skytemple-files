@@ -21,7 +21,15 @@ from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
 
 
+# Honestly, I don't know a better way to do that
+class MdProperties:
+    NUM_ENTITIES = 600
+    MAX_POSSIBLE = 554
+
+# This is only for compatibility issues
+# The one that should be used is in MdProperties
 NUM_ENTITIES = 600
+
 MD_ENTRY_LEN = 68
 
 
@@ -397,18 +405,18 @@ class ShadowSize(Enum):
 
 class MdEntry(AutoString):
     def __init__(self, *, bitflag1: int, **data):
-        self.md_index: int = -1
-        self.entid: int = -1
-        self.unk31: int = -1
-        self.national_pokedex_number: int = -1
-        self.base_movement_speed: int = -1
-        self.pre_evo_index: int = -1
+        self.md_index: int = 0
+        self.entid: int = 0
+        self.unk31: int = 0
+        self.national_pokedex_number: int = 0
+        self.base_movement_speed: int = 0
+        self.pre_evo_index: int = 0
         self.evo_method: EvolutionMethod = EvolutionMethod.NONE
-        self.evo_param1: int = -1
+        self.evo_param1: int = 0
         self.evo_param2: AdditionalRequirement = AdditionalRequirement.NONE
-        self.sprite_index: int = -1
+        self.sprite_index: int = 0
         self.gender: Gender = Gender.INVALID
-        self.body_size: int = -1
+        self.body_size: int = 0
         self.type_primary: PokeType = PokeType.NONE
         self.type_secondary: PokeType = PokeType.NONE
         self.movement_type: MovementType = MovementType.STANDARD
@@ -418,35 +426,35 @@ class MdEntry(AutoString):
         self.bitfield1_0, self.bitfield1_1, self.bitfield1_2, self.bitfield1_3, \
             self.can_move, self.bitfield1_5, self.can_evolve, self.item_required_for_spawning = \
             (bool(bitflag1 >> i & 1) for i in range(8))
-        self.exp_yield: int = -1
-        self.recruit_rate1: int = -1
-        self.base_hp: int = -1
-        self.recruit_rate2: int = -1
-        self.base_atk: int = -1
-        self.base_sp_atk: int = -1
-        self.base_def: int = -1
-        self.base_sp_def: int = -1
-        self.weight: int = -1
-        self.size: int = -1
-        self.unk17: int = -1
-        self.unk18: int = -1
+        self.exp_yield: int = 0
+        self.recruit_rate1: int = 0
+        self.base_hp: int = 0
+        self.recruit_rate2: int = 0
+        self.base_atk: int = 0
+        self.base_sp_atk: int = 0
+        self.base_def: int = 0
+        self.base_sp_def: int = 0
+        self.weight: int = 0
+        self.size: int = 0
+        self.unk17: int = 0
+        self.unk18: int = 0
         self.shadow_size: ShadowSize = ShadowSize.SMALL
-        self.chance_spawn_asleep: int = -1
+        self.chance_spawn_asleep: int = 0
         # @End:
         # The % of HP that this pokémon species regenerates at the end of each turn is equal to 1/(value * 2)
         # (Before applying any modifiers)
         # The final value is capped between 1/30 and 1/500
-        self.hp_regeneration: int = -1
-        self.unk21_h: int = -1
-        self.base_form_index: int = -1
-        self.exclusive_item1: int = -1
-        self.exclusive_item2: int = -1
-        self.exclusive_item3: int = -1
-        self.exclusive_item4: int = -1
-        self.unk27: int = -1
-        self.unk28: int = -1
-        self.unk29: int = -1
-        self.unk30: int = -1
+        self.hp_regeneration: int = 0
+        self.unk21_h: int = 0
+        self.base_form_index: int = 0
+        self.exclusive_item1: int = 0
+        self.exclusive_item2: int = 0
+        self.exclusive_item3: int = 0
+        self.exclusive_item4: int = 0
+        self.unk27: int = 0
+        self.unk28: int = 0
+        self.unk29: int = 0
+        self.unk30: int = 0
 
         for key in data:
             if not hasattr(self, key):
@@ -455,7 +463,7 @@ class MdEntry(AutoString):
 
     @property
     def md_index_base(self):
-        return self.md_index % NUM_ENTITIES
+        return self.md_index % MdProperties.NUM_ENTITIES
 
 
 class Md:

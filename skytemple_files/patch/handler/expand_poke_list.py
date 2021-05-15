@@ -40,6 +40,7 @@ from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao.model import SUBENTRIES
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import _
 
@@ -103,8 +104,12 @@ and to save a backup of your ROM before applying this.""")
     def version(self) -> str:
         return '-1.0.0'
 
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.IMPROVEMENT_TWEAK
+
     def depends_on(self) -> List[str]:
-        return [] #["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
+        return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
     
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:

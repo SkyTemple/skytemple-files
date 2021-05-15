@@ -931,6 +931,13 @@
 	  </OpenBin>
         </Patch>
 
+        <!-- A patch to not load entirely the mappa files -->
+        <Patch id="ExternalizeMappaFile" >
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/fs_mappa/selector_overlay29.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to add types to the type table -->
         <Patch id="AddTypes" >
           <OpenBin filepath="arm9.bin">

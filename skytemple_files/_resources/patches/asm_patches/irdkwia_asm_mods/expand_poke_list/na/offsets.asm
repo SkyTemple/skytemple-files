@@ -132,7 +132,6 @@
 ; //////////////////////////////////////////////////////
 ; patch overlay_0011.bin
 
-.definelabel GetPlayerPkmnStr, 0x02055770
 .definelabel HookDisplay, 0x022DC284
 .definelabel HookTblTalk1, 0x022DFB9C
 

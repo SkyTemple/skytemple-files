@@ -12,6 +12,10 @@
 
 .definelabel FillWithZeros8Bytes, 0x02003228
 
+.definelabel FGetSize, 0x02008244
+
+.definelabel PrintF, 0x0200C1FC
+
 .definelabel LoadWazaP, 0x020133C4
 .definelabel LoadWazaP2, 0x020133EC
 .definelabel UnloadCurrentWazaP, 0x02013414
@@ -61,9 +65,10 @@
 .definelabel ExclusiveItemPPUp2, 0x020A18C8
 .definelabel ExclusiveItemPPUp4, 0x020A1874
 
-.definelabel TrueUnloadCurrentWazaP, 0x020A5E20
-.definelabel ReadMoveValue, TrueUnloadCurrentWazaP+0x140
-.definelabel ReadMoveBuffer, ReadMoveValue+0xA0
+.definelabel LSSize, 0x800
+.definelabel TrueUnloadCurrentWazaP, 0x020A6620 - LSSize
+.definelabel ReadMoveValue, TrueUnloadCurrentWazaP+0x120
+.definelabel ReadMoveBuffer, ReadMoveValue+0xC0
 .definelabel ReadMoveset, ReadMoveBuffer+0x1C
 .definelabel ReadMovesetBuffer, ReadMoveset+0xA0
 ; r0: result = ReadMoveValue(r0: move_id, r1: value_offset, r2: value_size)

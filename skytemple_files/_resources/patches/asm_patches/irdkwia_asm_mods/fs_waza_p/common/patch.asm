@@ -48,10 +48,13 @@
 .org OpenWaza
 .area 0x68
 	b TrueOpenWaza
-string:
-	.ascii "TransferMode: %08X"
+string_ms:
+	.ascii "MS: %d for %d"
 	dcb 0
-	.fill 0x40, 0xCC
+string_mv:
+	.ascii "MV: %d %d for %d"
+	dcb 0
+	.fill 0x45, 0xCC
 .endarea
 
 .org SelectWaza
@@ -71,7 +74,7 @@ string:
 ; ///////////////////////////////////////////////////// WazaP read functions
 
 .org TrueUnloadCurrentWazaP
-.area 0x140
+.area 0x120
 	stmdb  r13!,{r4,r14}
 	bl FStreamAlloc
 	ldr r0,=CurrentWazaInfo
@@ -137,28 +140,37 @@ TrueOpenWaza:
 	add  r13,r13,#0x4
 	ldmia  r13!,{r3,r4,r5,r15}
 	.pool
-	.fill (TrueUnloadCurrentWazaP+0x140-.), 0xCC
+	.fill (TrueUnloadCurrentWazaP+0x120-.), 0xCC
 .endarea
 .org ReadMoveValue
-.area 0xA0
-	stmdb  r13!,{r4,r5,r6,r7,r14}
+.area 0xC0
+	stmdb  r13!,{r4,r5,r6,r7,r8,r14}
 	mov r4,r0
 	mov r5,r1
 	mov r6,r2
-	ldr r1,=ReadMoveBuffer
-	ldrh r0,[r1]
-	cmp r4,r0
-	beq no_read_move
-	strh r4,[r1]
-	bl FStreamAlloc
+	ldr r0,=string_mv
+	mov r3,r4
+	bl PrintF
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo
 	ldr r2,[r3, #+0x4]
 	ldr r7,[r1,+r2, lsl #0x3]
 	ldr r3,[r3, #+0x8] ;r3 contains the start table address
 	mov  r0,#0x1A
-	mla  r1,r4,r0,r3 ;r1 contains the move offset
+	mla  r8,r4,r0,r3 ;r8 contains the move offset
 	mov r0,r7
+	bl FGetSize
+	add r0,r0,#0x1A
+	cmp r0,r8
+	blt no_read_move
+	ldr r1,=ReadMoveBuffer
+	ldrh r0,[r1]
+	cmp r4,r0
+	beq no_read_move
+	strh r4,[r1]
+	bl FStreamAlloc
+	mov r0,r7
+	mov r1,r8
 	mov r2,#0
 	bl FStreamSeek
 	mov r0,r7
@@ -176,9 +188,9 @@ no_read_move:
 	beq end_read
 	ldrsh r0,[r1,r5]
 end_read:
-	ldmia  r13!,{r4,r5,r6,r7,r15}
+	ldmia  r13!,{r4,r5,r6,r7,r8,r15}
 	.pool
-	.fill (ReadMoveValue+0xA0-.), 0xCC
+	.fill (ReadMoveValue+0xC0-.), 0xCC
 .endarea
 
 .org ReadMoveBuffer
@@ -191,9 +203,17 @@ actual_data:
 ; r0: result = ReadMoveset(r0: pkmn_id, r1: moveset_id)
 .org ReadMoveset
 .area 0xA0
-	stmdb  r13!,{r4,r5,r6,r14}
+	stmdb  r13!,{r4,r5,r6,r7,r14}
+	
 	mov r4,r0
 	mov r5,r1
+	ldr r7,=ReadMovesetBuffer
+	;mov r2,LSSize
+	;mla r7,r2,r1,r7
+	ldr r0,=string_ms
+	mov r1,r5
+	mov r2,r4
+	bl PrintF
 	bl FStreamAlloc
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo
@@ -207,27 +227,27 @@ actual_data:
 	mov r2,#0
 	bl FStreamSeek
 	mov r0,r6
-	ldr r1,=ReadMovesetBuffer
+	mov r1,r7
 	mov r2,#0x4
 	bl FStreamRead
 	mov r0,r6
-	ldr r1,[ReadMovesetBuffer]
+	ldr r1,[r7]
 	mov r2,#0
 	bl FStreamSeek
 	mov r0,r6
-	ldr r1,=ReadMovesetBuffer
-	mov r2,#0x800
+	mov r1,r7
+	mov r2,LSSize
 	bl FStreamRead
 	bl FStreamDealloc
-	ldr r0,=ReadMovesetBuffer
-	ldmia  r13!,{r4,r5,r6,r15}
+	mov r0,r7
+	ldmia  r13!,{r4,r5,r6,r7,r15}
 	.pool
 	.fill (ReadMoveset+0xA0-.), 0xCC
 .endarea
 
 .org ReadMovesetBuffer
-.area 0x800
-	.fill 0x800, 0x0
+.area LSSize
+	.fill LSSize, 0x0
 .endarea
 
 ; ///////////////////////////////////////////////////// WazaP access functions

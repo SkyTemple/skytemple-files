@@ -85,7 +85,7 @@ class PatchType(Enum):
     EXTERNALIZE_WAZA = ExternalizeWazaPatchHandler
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
-    #EXTRACT_SP_CODE = ExtractSPCodePatchHandler
+    EXTRACT_SP_CODE = ExtractSPCodePatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
     CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler
     EXTERNALIZE_MAPPA = ExternalizeMappaPatchHandler

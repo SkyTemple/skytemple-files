@@ -79,7 +79,7 @@ class PatchType(Enum):
     EXTRA_SPACE = ExtraSpacePatch
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
-    EXTRACT_SP_CODE = ExtractSPCodePatchHandler
+    #EXTRACT_SP_CODE = ExtractSPCodePatchHandler
     ADD_TYPES = AddTypePatchHandler
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler

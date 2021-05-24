@@ -34,7 +34,7 @@ from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.common.i18n_util import _
 
-PATCH_CHECK_ADDR_APPLIED_US = 0x24380
+PATCH_CHECK_ADDR_APPLIED_US = 0x243A0
 PATCH_CHECK_ADDR_APPLIED_EU = 0x24600
 PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0xEA000004

@@ -15,9 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from PIL import Image
 from ndspy.rom import NintendoDSRom
-from skytemple_files.common.util import read_uintle, read_bytes, write_uintle
+
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil
+from skytemple_files.common.util import read_uintle, read_bytes, write_uintle, iter_bytes, chunks, iter_bytes_4bit_le
 from skytemple_files.common.nds_hashing import nds_crc16
 
 
@@ -28,6 +30,46 @@ def _utf16_encode_fixed(title: str) -> bytes:
 
 
 ICON_BANNER_SIZE = 0x840
+ICON_DIM_TILE = 8
+ICON_DIM_IMG_TILES = 4
+ICON_DIM_IMG_PX = ICON_DIM_IMG_TILES * ICON_DIM_TILE
+ICON_PAL_CNT = 4
+
+
+class Icon:
+    def __init__(self, bitmap: bytes, palette: bytes):
+        self.bitmap = bitmap
+        self._palette = []
+        for i in range(0, len(palette) // 2):
+            bgr = read_uintle(palette, i * 2, 2)
+            self._palette.append((bgr & 0x001F) * 0x08)
+            self._palette.append(((bgr & 0x03E0) >> 5) * 0x08)
+            self._palette.append(((bgr & 0x7C00) >> 10) * 0x08)
+
+    @property
+    def palette(self) -> bytes:
+        data = bytearray(len(self._palette) // ICON_PAL_CNT // 2)
+        cursor = 0
+        for i, col in enumerate(self._palette):
+            write_uintle(data, col, cursor)
+            cursor += 1
+            if i % 3 == 2:
+                write_uintle(data, 0x00, cursor)
+                cursor += 1
+        return data
+
+    def to_pil(self) -> Image.Image:
+        tilemap = []
+        for i in range(ICON_DIM_IMG_TILES * ICON_DIM_IMG_TILES):
+            tilemap.append(TilemapEntry(idx=i, pal_idx=0, flip_x=False, flip_y=False))
+
+        return to_pil(
+            tilemap, list(chunks(self.bitmap, ICON_DIM_TILE * ICON_DIM_TILE // 2)),
+            [self._palette], ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, bpp=4,
+        )
+
+    def from_pil(self, img: Image.Image):
+        pass
 
 
 # http://problemkaputt.de/gbatek.htm#dscartridgeicontitle
@@ -42,8 +84,7 @@ class IconBanner:
 
         self.checksum = read_uintle(data, 0x2, 0x2)
 
-        self.icon_bitmap = read_bytes(data, 0x20, 0x200)
-        self.icon_palette = read_bytes(data, 0x220, 0x20)
+        self.icon = Icon(read_bytes(data, 0x20, 0x200), read_bytes(data, 0x220, 0x20))
 
         self.title_japanese = read_bytes(data, 0x240, 0x100).decode('UTF-16LE').rstrip('\x00')
         self.title_english = read_bytes(data, 0x340, 0x100).decode('UTF-16LE').rstrip('\x00')
@@ -57,8 +98,8 @@ class IconBanner:
 
         write_uintle(data, self.version, 0x0, 0x2)
 
-        data[0x20:0x20 + 0x200] = self.icon_bitmap
-        data[0x220:0x220 + 0x20] = self.icon_palette
+        data[0x20:0x20 + 0x200] = self.icon.bitmap
+        data[0x220:0x220 + 0x20] = self.icon.palette
 
         data[0x240:0x240 + 0x100] = _utf16_encode_fixed(self.title_japanese)
         data[0x340:0x340 + 0x100] = _utf16_encode_fixed(self.title_english)

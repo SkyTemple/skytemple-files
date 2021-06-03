@@ -15,10 +15,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import itertools
+
 from PIL import Image
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import read_uintle, read_bytes, write_uintle, iter_bytes, chunks, iter_bytes_4bit_le
 from skytemple_files.common.nds_hashing import nds_crc16
 
@@ -48,14 +50,14 @@ class Icon:
 
     @property
     def palette(self) -> bytes:
-        data = bytearray(len(self._palette) // ICON_PAL_CNT // 2)
+        data = bytearray(len(self._palette) // 3 * ICON_PAL_CNT // 2)
         cursor = 0
-        for i, col in enumerate(self._palette):
-            write_uintle(data, col, cursor)
-            cursor += 1
-            if i % 3 == 2:
-                write_uintle(data, 0x00, cursor)
-                cursor += 1
+        for (r, g, b) in chunks(self._palette, 3):
+            r //= 8
+            g = (g // 8) << 5
+            b = (b // 8) << 10
+            write_uintle(data, r + g + b, cursor, 2)
+            cursor += 2
         return data
 
     def to_pil(self) -> Image.Image:
@@ -69,7 +71,12 @@ class Icon:
         )
 
     def from_pil(self, img: Image.Image):
-        pass
+        tiles, _, pals = from_pil(
+            img, 16, 1, ICON_DIM_TILE,
+            ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False
+        )
+        self.bitmap = bytes(itertools.chain.from_iterable(tiles))
+        self._palette = pals[0]
 
 
 # http://problemkaputt.de/gbatek.htm#dscartridgeicontitle

@@ -18,15 +18,24 @@
 from typing import List
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle
 
 
 class GroundTilesetMapping(AutoString):
-    def __init__(self, ground_level: int, dungeon_tileset: int, unk2: int, unk3: int):
+    def __init__(self, ground_level: int, dungeon_tileset: int, floor_id: int, unk3: int):
         self.ground_level = ground_level
         self.dungeon_id = dungeon_tileset
-        self.unk2 = unk2  # TODO: Rename in floor_id
+        self.floor_id = floor_id
         self.unk3 = unk3
+
+    # Compat
+    @property
+    def unk2(self):
+        return self.floor_id
+
+    @unk2.setter
+    def unk2(self, value):
+        self.floor_id = value
 
     def __eq__(self, other):
         if not isinstance(other, GroundTilesetMapping):
@@ -37,7 +46,7 @@ class GroundTilesetMapping(AutoString):
                self.unk3 == other.unk3
 
     def to_bytes(self) -> bytes:
-        return self.ground_level.to_bytes(2, 'little', signed=False) + \
+        return self.ground_level.to_bytes(2, 'little', signed=True) + \
                self.dungeon_id.to_bytes(1, 'little', signed=False) + \
                self.unk2.to_bytes(1, 'little', signed=False) + \
                self.unk3.to_bytes(4, 'little', signed=False)
@@ -51,7 +60,7 @@ class HardcodedGroundDungeonTilesets:
         lst = []
         for i in range(block.begin, block.end, 8):
             lst.append(GroundTilesetMapping(
-                read_uintle(overlay11bin, i, 2),
+                read_sintle(overlay11bin, i, 2),
                 read_uintle(overlay11bin, i + 2, 1),
                 read_uintle(overlay11bin, i + 3, 1),
                 read_uintle(overlay11bin, i + 4, 4),

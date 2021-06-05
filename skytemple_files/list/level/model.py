@@ -49,7 +49,6 @@ class LevelListBin(Sir0Serializable):
                 weather=read_sintle(data, start + 6, 2),
                 name=self._read_string(data, read_uintle(data, start + 8, 4))
             ))
-        print(self.list)
 
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]

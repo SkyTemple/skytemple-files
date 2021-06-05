@@ -120,6 +120,37 @@ class Pmd2ScriptBgm(AutoString):
         self.loops = loops
 
 
+class Pmd2ScriptLevelMapType(Enum):
+    LAYER1_0 = 0, _("One Layer (#00)")
+    LAYER1_1 = 1, _("One Layer (#01)")
+    LAYER1_2 = 2, _("One Layer (#02)")
+    LAYER1_3 = 3, _("One Layer (#03)")
+    LAYER1_4 = 4, _("One Layer (#04)")
+    LAYER1_5 = 5, _("Two Layers (#05)")
+    LAYER1_6 = 6, _("Two Layers (#06)")
+    LAYER1_7 = 7, _("Two Layers (#07)")
+    LAYER1_8 = 8, _("Two Layers (#08)")
+    LAYER1_9 = 9, _("Two Layers (#09)")
+    TILESET = 10, _("Dungeon Tileset (#10)")
+    FIXED_ROOM = 11, _("Use Fixed Room (#11)")
+
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    def __str__(self):
+        return f'Pmd2ScriptLevelMapType.{self.name}'
+
+    def __repr__(self):
+        return str(self)
+
 # https://canary.discord.com/channels/710190644152369162/712343594568253512/780260748931891250
 class Pmd2ScriptLevel(AutoString):
     def __init__(self, id: int, mapid: int, name: str, mapty: int, nameid: int, weather: int):
@@ -129,6 +160,10 @@ class Pmd2ScriptLevel(AutoString):
         self.mapty = mapty
         self.nameid = nameid
         self.weather = weather
+
+    @property
+    def mapty_enum(self) -> Pmd2ScriptLevelMapType:
+        return Pmd2ScriptLevelMapType(self.mapty)
         
     # Backwards compat:
     @property

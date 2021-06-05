@@ -19,6 +19,8 @@ import re
 from collections import OrderedDict
 from typing import List, Union, Tuple, Dict
 
+from skytemple_files.list.level.model import LevelListBin
+
 try:
     from typing import TypedDict
 except ImportError:
@@ -57,7 +59,7 @@ class ScriptFiles(TypedDict):
     maps: Dict[str, MapEntry]
 
 
-def load_script_files(script_folder: Folder) -> ScriptFiles:
+def load_script_files(script_folder: Folder, level_list: LevelListBin = None) -> ScriptFiles:
     """Returns information about the files used by the script engine in an 'introspectable' way."""
     script_files = ScriptFiles(common=[], maps=OrderedDict())
     for map_or_common_name, folder in script_folder.folders:
@@ -101,5 +103,13 @@ def load_script_files(script_folder: Folder) -> ScriptFiles:
                     if ssb_stem.startswith(subscript_name[:-len(SSS_EXT)]):
                         list_of_ssbs_for_subscript.append(ssb)
                         break
+
+    if level_list:
+        # Add all empty levels
+        for level in level_list.list:
+            if level.name not in script_files['maps']:
+                script_files['maps'][level.name] = MapEntry(
+                    name=level.name, enter_sse=None, enter_ssbs=[], subscripts=OrderedDict(), lsd=None, ssas=[]
+                )
 
     return script_files

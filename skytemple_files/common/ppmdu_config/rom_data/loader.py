@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 
 
 FILENAME_ACTOR_LIST = 'BALANCE/actor_list.bin'
+FILENAME_LEVEL_LIST = 'BALANCE/level_list.bin'
 
 
 class LoadNotSupportedError(RuntimeError):
@@ -37,6 +38,7 @@ class RomDataLoader:
 
     def load_into(self, config_load_into: 'Pmd2Data'):
         self.load_actor_list_into(config_load_into, ignore_not_supported=True)
+        self.load_level_list_into(config_load_into, ignore_not_supported=True)
         self.load_item_categories_into(config_load_into)
 
     def load_actor_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
@@ -50,6 +52,18 @@ class RomDataLoader:
             config_load_into.script_data.level_entities = actor_list.list
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")
+
+    def load_level_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
+        from skytemple_files.common.types.file_types import FileType
+
+        if FILENAME_LEVEL_LIST in self.rom.filenames:
+            list_bin = self.rom.getFileByName(FILENAME_LEVEL_LIST)
+            level_list = FileType.SIR0.unwrap_obj(
+                FileType.SIR0.deserialize(list_bin), FileType.LEVEL_LIST_BIN.type()
+            )
+            config_load_into.script_data.level_list = level_list.list
+        elif not ignore_not_supported:
+            raise LoadNotSupportedError("The ROM does not contain an level list.")
 
     def load_item_categories_into(self, config_load_into: 'Pmd2Data'):
         from skytemple_files.common.types.file_types import FileType

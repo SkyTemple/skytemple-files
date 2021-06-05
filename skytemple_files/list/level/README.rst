@@ -1,7 +1,7 @@
-Actor list
+Level list
 ==========
 
-List of actors as a binary file. This file does not exist by default.
+List of levels as a binary file. This file does not exist by default.
 The patch ``ActorAndLevelLoader`` must be applied.
 
 Usage
@@ -10,14 +10,14 @@ Usage
 1. Load it via ppmdu ROM configuration (recommended)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Use ``common.util.get_ppmdu_config_for_rom`` to load the ``Pmd2Data``
-object for the ROM. It's ``script_data`` contains a field ``level_entities``.
+object for the ROM. It's ``script_data`` contains a field ``level``.
 This field contains this list (if the patch is applied!)
 
 2. Use it directly
 ~~~~~~~~~~~~~~~~~~
 This is useful when you want to modify the data.
 
-Use the class ``ActorListBinHandler`` of the ``handler`` module, to open
+Use the class ``LevelListBinHandler`` of the ``handler`` module, to open
 and save models from binary data. The model that the handler returns is in the
 module ``model``.
 

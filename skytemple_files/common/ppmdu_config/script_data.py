@@ -120,14 +120,39 @@ class Pmd2ScriptBgm(AutoString):
         self.loops = loops
 
 
+# https://canary.discord.com/channels/710190644152369162/712343594568253512/780260748931891250
 class Pmd2ScriptLevel(AutoString):
-    def __init__(self, id: int, mapid: int, name: str, mapty: int, unk2: int, unk4: int):
+    def __init__(self, id: int, mapid: int, name: str, mapty: int, nameid: int, weather: int):
         self.id = id
         self.mapid = mapid
         self.name = name
         self.mapty = mapty
-        self.unk2 = unk2
-        self.unk4 = unk4
+        self.nameid = nameid
+        self.weather = weather
+        
+    # Backwards compat:
+    @property
+    def unk2(self):
+        return self.nameid
+    
+    @unk2.setter
+    def unk2(self, value):
+        self.nameid = value
+
+    @property
+    def unk4(self):
+        return self.weather
+    
+    @unk4.setter
+    def unk4(self, value):
+        self.weather = value
+
+    def __eq__(self, other):
+        if not isinstance(other, Pmd2ScriptLevel):
+            return False
+        return self.id == other.id and self.mapid == other.mapid and \
+               self.name == other.name and self.mapty == other.mapty and \
+               self.nameid == other.nameid and self.weather == other.weather
 
 
 class Pmd2ScriptEntity(AutoString):

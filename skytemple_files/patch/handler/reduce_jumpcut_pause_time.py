@@ -39,7 +39,7 @@ class ReduceJumpcutPauseTime(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Reduces the amount of time the game pauses for before changing the PoV when far-off pals is enabled, from 60 frames to 12. This is already applied in the CTC hack.')
+        return _('Reduces the amount of time the game pauses for before changing the PoV, like when far-off pals is enabled, from 60 frames to 12. This is already applied in the CTC hack.')
 
     @property
     def author(self) -> str:

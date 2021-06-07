@@ -23,7 +23,10 @@ MAX_LEN = 8
 
 
 class Lsd:
-    def __init__(self, data: bytes):
+    def __init__(self, data: Optional[bytes]):
+        if data is None:
+            self.entries = []
+            return
         if not isinstance(data, memoryview):
             data = memoryview(data)
         number_entries = read_uintle(data, 0, 2)

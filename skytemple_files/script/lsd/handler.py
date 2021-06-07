@@ -27,3 +27,7 @@ class LsdHandler(DataHandler[Lsd]):
     @classmethod
     def serialize(cls, data: Lsd, **kwargs) -> bytes:
         return data.to_bytes()
+
+    @classmethod
+    def new(cls) -> Lsd:
+        return Lsd(None)

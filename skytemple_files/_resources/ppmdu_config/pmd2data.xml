@@ -1014,6 +1014,16 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to extract animations table data -->
+        <Patch id="ExtractAnimData" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/animations/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0010.bin">
+	  	<Include filename ="irdkwia_asm_mods/animations/selector_overlay10.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to extract dungeon data -->
         <Patch id="FixEvolutionGlitch" >
           <OpenBin filepath="overlay/overlay_0016.bin">

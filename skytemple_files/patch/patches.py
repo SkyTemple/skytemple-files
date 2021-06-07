@@ -40,6 +40,7 @@ from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonCha
 from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPatchHandler
 from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
+from skytemple_files.patch.handler.extract_anims import ExtractAnimDataPatchHandler
 from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 from skytemple_files.patch.handler.add_type import AddTypePatchHandler
 from skytemple_files.patch.handler.fairy_gummies import ImplementFairyGummiesPatchHandler
@@ -86,6 +87,7 @@ class PatchType(Enum):
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
+    EXTRACT_ANIM_DATA = ExtractAnimDataPatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
     CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler
     EXTERNALIZE_MAPPA = ExternalizeMappaPatchHandler

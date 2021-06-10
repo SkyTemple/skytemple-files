@@ -20,22 +20,21 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
 from skytemple_files.hardcoded.main_menu_music import HardcodedMainMenuMusic
+from skytemple_files.hardcoded.text_speed import HardcodedTextSpeed
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
 rom_us = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
 rom_eu = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 ppmdu_us = get_ppmdu_config_for_rom(rom_us)
 ppmdu_eu = get_ppmdu_config_for_rom(rom_eu)
-ov00_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['overlay/overlay_0000.bin'])
-ov00_eu = get_binary_from_rom_ppmdu(rom_eu, ppmdu_us.binaries['overlay/overlay_0000.bin'])
-ov09_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['overlay/overlay_0009.bin'])
-ov09_eu = get_binary_from_rom_ppmdu(rom_eu, ppmdu_us.binaries['overlay/overlay_0009.bin'])
+arm9_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['arm9.bin'])
+arm9_eu = get_binary_from_rom_ppmdu(rom_eu, ppmdu_us.binaries['arm9.bin'])
 
-print(HardcodedMainMenuMusic.get_main_menu_music(ov00_us, ppmdu_us, ov09_us))
-print(HardcodedMainMenuMusic.get_main_menu_music(ov00_eu, ppmdu_eu, ov09_eu))
+print(HardcodedTextSpeed.get_text_speed_debug(arm9_us, ppmdu_us))
+print(HardcodedTextSpeed.get_text_speed_debug(arm9_eu, ppmdu_eu))
 
-HardcodedMainMenuMusic.set_main_menu_music(123, ov00_us, ppmdu_us, ov09_us)
-HardcodedMainMenuMusic.set_main_menu_music(4, ov00_eu, ppmdu_eu, ov09_eu)
+HardcodedTextSpeed.set_text_speed_debug(True, arm9_us, ppmdu_us)
+HardcodedTextSpeed.set_text_speed_debug(True, arm9_eu, ppmdu_eu)
 
-print(HardcodedMainMenuMusic.get_main_menu_music(ov00_us, ppmdu_us, ov09_us))
-print(HardcodedMainMenuMusic.get_main_menu_music(ov00_eu, ppmdu_eu, ov09_eu))
+print(HardcodedTextSpeed.get_text_speed_debug(arm9_us, ppmdu_us))
+print(HardcodedTextSpeed.get_text_speed_debug(arm9_eu, ppmdu_eu))

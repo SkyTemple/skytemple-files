@@ -23,7 +23,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle
 
 
-class MainMenuMusic:
+class HardcodedMainMenuMusic:
     @staticmethod
     def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: bytes = None) -> Union[int, Tuple[int, int]]:
         """Set ov09 to also return the Sky Jukebox return music"""

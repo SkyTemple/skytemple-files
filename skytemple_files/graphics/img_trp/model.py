@@ -73,7 +73,7 @@ class ImgTrp(Sir0Serializable):
         )
         self.sprites[index] = tiles
         if import_palettes:
-            self.palettes = palettes
+            self.palettes = palettes[:len(self.palettes)]
 
     def _read_sprites(self, data, count, data_pointer):
         tiles = []

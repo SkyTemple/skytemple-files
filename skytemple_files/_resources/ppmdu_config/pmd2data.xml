@@ -164,7 +164,9 @@
         <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
       </Bin>
 
-      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80"/>
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80">
+        <Block name="MainMenuSongId"      beg="0x1720" end="0x1720"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329520">
         <Block name="ContinueChoice" beg="0x12048" end="0x12068"/>
         <Block name="SubMenu" beg="0x12068" end="0x120B0"/>
@@ -180,7 +182,9 @@
       <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233CA80"/>
       <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233CA80"/>
       <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233CA80"/>
-      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80">
+        <Block name="MainMenuReturnSongId" beg="0xE80" end="0xE80"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238A140"/>
       <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238A140">
         <Block name="FootprintDebugMenu" beg="0x3960" end="0x39A8"/>
@@ -373,7 +377,9 @@
       </Bin>
 
 
-      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0"/>
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0">
+        <Block name="MainMenuSongId"      beg="0x15F4" end="0x15F4"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329D40">
         <Block name="ContinueChoice" beg="0x11F74" end="0x11F94"/>
         <Block name="SubMenu" beg="0x11F94" end="0x11FDC"/>
@@ -389,7 +395,9 @@
       <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233D200"/>
       <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233D200"/>
       <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233D200"/>
-      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200">
+        <Block name="MainMenuReturnSongId" beg="0xE80" end="0xE80"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238AC80"/>
       <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238AC80">
         <Block name="FootprintDebugMenu" beg="0x39C0" end="0x3A08"/>

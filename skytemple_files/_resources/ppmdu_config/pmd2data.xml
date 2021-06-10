@@ -94,6 +94,8 @@
         <Block name="RankUpTable"        beg="0xA2B44" end="0xA2C14"/>
         <Block name="MonsterSpriteData"  beg="0xA2D08" end="0xA31B8"/>
         <Block name="TextSpeedConstant"  beg="0x20C98" end="0x20C99"/>
+        <Block name="MinIQExclusiveMoveUser" beg="0xA188C" end="0xA188D"/>
+        <Block name="MinIQItemMaster"    beg="0xA18A4" end="0xA18A5"/>
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
@@ -126,6 +128,11 @@
         <Block name="FixedFloorProperties"   beg="0xA1F0" end="0xADF0"/>
         <Block name="SpawnDelayNormal"       beg="0x7A5C" end="0x7A5D"/>
         <Block name="SpawnDelayStealing"     beg="0x7BC0" end="0x7BC1"/>
+        <Block name="IntimidatorChance"      beg="0x7B38" end="0x7B39"/>
+        <Block name="BurnDamageDelay"        beg="0x7B90" end="0x7B91"/>
+        <Block name="PoisonDamageDelay"      beg="0x7C28" end="0x7C29"/>
+        <Block name="BadPoisonDamageDelay"   beg="0x7994" end="0x7995"/>
+        <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
@@ -163,6 +170,8 @@
         <Block name="MonsterSpawnTable"   beg="0x73CD4" end="0x73EB4"/>
         <Block name="TileSpawnTable"      beg="0x73B90" end="0x73BBC"/>
         <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
+        <Block name="BellyLostWtw"        beg="0x76528" end="0x76529"/>
+        <Block name="BellyLostWtw1000"    beg="0x7652A" end="0x7652B"/>
       </Bin>
 
       <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80">
@@ -313,6 +322,8 @@
         <Block name="RankUpTable"        beg="0xA30C8" end="0xA3198"/>
         <Block name="MonsterSpriteData"  beg="0xA332C" end="0xA37DC"/>
         <Block name="TextSpeedConstant"  beg="0x20DF0" end="0x20DF1"/>
+        <Block name="MinIQExclusiveMoveUser" beg="0xA1E10" end="0xA1E11"/>
+        <Block name="MinIQItemMaster"    beg="0xA1E28" end="0xA1E29"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>
@@ -344,6 +355,11 @@
         <Block name="FixedFloorProperties"   beg="0xA208" end="0xAE08"/>
         <Block name="SpawnDelayNormal"       beg="0x7A74" end="0x7A75"/>
         <Block name="SpawnDelayStealing"     beg="0x7BD8" end="0x7BD9"/>
+        <Block name="IntimidatorChance"      beg="0x7B50" end="0x7B51"/>
+        <Block name="BurnDamageDelay"        beg="0x7BA8" end="0x7BA9"/>
+        <Block name="PoisonDamageDelay"      beg="0x7C40" end="0x7C41"/>
+        <Block name="BadPoisonDamageDelay"   beg="0x79AC" end="0x79AD"/>
+        <Block name="GinsengChance3"         beg="0x7C58" end="0x7C59"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
@@ -376,6 +392,8 @@
         <Block name="MonsterSpawnTable"   beg="0x73FA0" end="0x74180"/>
         <Block name="TileSpawnTable"      beg="0x73E5C" end="0x73E88"/>
         <Block name="FixedFloorOverrides" beg="0x73EA0" end="0x73FA0"/>
+        <Block name="BellyLostWtw"        beg="0x767F4" end="0x767F5"/>
+        <Block name="BellyLostWtw1000"    beg="0x767F6" end="0x767F7"/>
       </Bin>
 
 

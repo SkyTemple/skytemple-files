@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from math import ceil
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle
@@ -89,6 +90,16 @@ class HardcodedDungeonMisc:
     def set_ginseng_increase_by_3_chance(value: int, ov10: bytearray, config: Pmd2Data):
         block = config.binaries['overlay/overlay_0010.bin'].blocks['GinsengChance3']
         write_uintle(ov10, value, block.begin, 2)
+
+    @staticmethod
+    def get_belly_loss_turn(ov29: bytes, config: Pmd2Data) -> float:
+        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostTurn']
+        return read_uintle(ov29, block.begin, 4) / 0x10000
+
+    @staticmethod
+    def set_belly_loss_turn(value: float, ov29: bytearray, config: Pmd2Data):
+        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostTurn']
+        write_uintle(ov29, ceil(value * 0x10000), block.begin, 4)
 
     @staticmethod
     def get_belly_loss_walk_through_walls(ov29: bytes, config: Pmd2Data) -> int:

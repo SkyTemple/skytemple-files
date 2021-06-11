@@ -172,6 +172,7 @@
         <Block name="MonsterSpawnTable"   beg="0x73CD4" end="0x73EB4"/>
         <Block name="TileSpawnTable"      beg="0x73B90" end="0x73BBC"/>
         <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
+        <Block name="BellyLostTurn"       beg="0x34830" end="0x34833"/>
         <Block name="BellyLostWtw"        beg="0x76528" end="0x76529"/>
         <Block name="BellyLostWtw1000"    beg="0x7652A" end="0x7652B"/>
       </Bin>
@@ -396,6 +397,7 @@
         <Block name="MonsterSpawnTable"   beg="0x73FA0" end="0x74180"/>
         <Block name="TileSpawnTable"      beg="0x73E5C" end="0x73E88"/>
         <Block name="FixedFloorOverrides" beg="0x73EA0" end="0x73FA0"/>
+        <Block name="BellyLostTurn"       beg="0x34950" end="0x34953"/>
         <Block name="BellyLostWtw"        beg="0x767F4" end="0x767F5"/>
         <Block name="BellyLostWtw1000"    beg="0x767F6" end="0x767F7"/>
       </Bin>

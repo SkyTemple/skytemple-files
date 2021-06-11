@@ -133,7 +133,7 @@
         <Block name="PoisonDamageDelay"      beg="0x7C28" end="0x7C29"/>
         <Block name="BadPoisonDamageDelay"   beg="0x7994" end="0x7995"/>
         <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
-        <Block name="MusicList"              beg="0x8ADC" end="0x8BC6"/>
+        <Block name="MusicList"              beg="0x8ADC" end="0x8BC8"/>
         <Block name="RandomMusicList"        beg="0x877C" end="0x886C"/>
       </Bin>
       <!-- overlay_0011 -->
@@ -362,7 +362,7 @@
         <Block name="PoisonDamageDelay"      beg="0x7C40" end="0x7C41"/>
         <Block name="BadPoisonDamageDelay"   beg="0x79AC" end="0x79AD"/>
         <Block name="GinsengChance3"         beg="0x7C58" end="0x7C59"/>
-        <Block name="MusicList"              beg="0x8AF4" end="0x8BDE"/>
+        <Block name="MusicList"              beg="0x8AF4" end="0x8BE0"/>
         <Block name="RandomMusicList"        beg="0x8794" end="0x8884"/>
       </Bin>
       <!-- overlay_0011 -->

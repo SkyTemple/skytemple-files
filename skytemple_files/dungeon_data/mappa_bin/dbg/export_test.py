@@ -29,50 +29,14 @@ output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 os.makedirs(output_dir, exist_ok=True)
 
-#rom = NintendoDSRom.fromFile(os.path.join(base_dir, '/tmp/x.nds'))
-rom = NintendoDSRom.fromFile('/tmp/test.nds')
-
-with open('/home/marco/dev/skytemple/skytemple/ppmd_statsutil/sky_rom/data/BALANCE/mappa_s.bin', 'rb') as f:
-    rom.setFileByName('BALANCE/mappa_s.bin', f.read())
-    rom.saveToFile('/tmp/test2.nds')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 
 mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
 mappa = MappaBinHandler.deserialize(mappa_bin)
 
-items = []
-lens_monsters = []
-tilesets = set()
+max_music_id = 0
 
 for fl in mappa.floor_lists:
     for floor in fl:
-        for monster in floor.monsters:
-            assert monster.weight == monster.weight2
-        tilesets.add(floor.layout.water_density)
-        items.append(floor.monster_house_items)
-        items.append(floor.shop_items)
-        items.append(floor.buried_items)
-        items.append(floor.floor_items)
-        items.append(floor.unk_items1)
-        items.append(floor.unk_items2)
-
-item_list_with_guaranteed_items = []
-for item_list in items:
-    has_guaranteed = False
-    for category in item_list.categories.values():
-        if category == GUARANTEED:
-            has_guaranteed = True
-            break
-    for item in item_list.items.values():
-        if item == GUARANTEED:
-            has_guaranteed = True
-            break
-    if has_guaranteed:
-        item_list_with_guaranteed_items.append(item_list)
-
-
-
-print(".")
-
-
-for monster in mappa.floor_lists[4][2].monsters:
-    print(monster)
+        max_music_id = max(max_music_id, floor.layout.music_id)
+print(max_music_id)

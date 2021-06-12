@@ -14,17 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString
 
 
 class DungeonMusicEntry(AutoString):
-    def __init__(self, data: int):
-        self.track_or_ref = data & ~0x8000
-        self.is_random_ref = data & 0x8000 > 0
-        assert data == self.to_int()
+    def __init__(self, data: Optional[int], track_ref: int = None, is_random_ref: bool = False):
+        if track_ref is not None:
+            self.track_or_ref = track_ref
+            self.is_random_ref = is_random_ref
+        else:
+            self.track_or_ref = data & ~0x8000
+            self.is_random_ref = data & 0x8000 > 0
+            assert data == self.to_int()
 
     def to_int(self) -> int:
         if self.is_random_ref:

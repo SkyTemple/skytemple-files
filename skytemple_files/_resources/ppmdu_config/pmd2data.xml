@@ -1014,6 +1014,22 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to implement move growth -->
+        <Patch id="MoveGrowth" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0010.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay10.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay29.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0031.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to extract dungeon data -->
         <Patch id="FixEvolutionGlitch" >
           <OpenBin filepath="overlay/overlay_0016.bin">

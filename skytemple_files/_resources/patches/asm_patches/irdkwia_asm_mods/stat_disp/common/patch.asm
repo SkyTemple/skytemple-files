@@ -7,7 +7,7 @@
 
 .org SetStringAccuracy
 .area 0xC8
-	stmdb  r13!,{r3,r4,r5,r6,r7,r14}
+	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r14}
 	ldr r2,=MoveDescStartID
 	mov  r4,r0
 	cmp r1,r2
@@ -15,8 +15,8 @@
 	ldr r0,=MoveDescEndID
 	cmp r1,r0
 	bcs empty_string_accuracy
-	rsb  r0,r2,#0x0
-	add  r0,r1,r0
+	sub  r8,r1,r2
+	mov  r0,r8
 	bl GetMoveActualAccuracy ; Get Move Accuracy
 	cmp r0,#0x64
 	ble no_sureshot
@@ -50,19 +50,22 @@ end_loop_print_accuracy:
 	mov  r1,StartPowerPos
 	mov  r0,r4
 	bl PrintSpecialChar
+	nop
+	nop
+	nop
 end_string_accuracy:
 	mov  r0,r4
-	ldmia  r13!,{r3,r4,r5,r6,r7,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
 empty_string_accuracy:
 	ldr r0,=NullString
-	ldmia  r13!,{r3,r4,r5,r6,r7,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
 	.pool
 	.fill (SetStringAccuracy+0xC8-.), 0xCC
 .endarea
 
 .org SetStringPower
 .area 0xCC
-	stmdb  r13!,{r3,r4,r5,r6,r7,r14}
+	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r14}
 	ldr r2,=MoveDescStartID
 	mov  r4,r0
 	cmp r1,r2
@@ -70,8 +73,8 @@ empty_string_accuracy:
 	ldr r0,=MoveDescEndID
 	cmp r1,r0
 	bcs empty_string_power
-	rsb  r0,r2,#0x0
-	add  r0,r1,r0
+	sub  r8,r1,r2
+	mov  r0,r8
 	bl GetMoveBasePowerWithID ; Get Move Power
 	cmp r0,#0x0
 	bne no_status
@@ -100,12 +103,15 @@ print_power:
 end_loop_print_power:
 	cmp r6,r7
 	blt loop_print_power
+	nop
+	nop
+	nop
 end_string_power:
 	mov  r0,r4
-	ldmia  r13!,{r3,r4,r5,r6,r7,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
 empty_string_power:
 	ldr r0,=NullString
-	ldmia  r13!,{r3,r4,r5,r6,r7,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
 	.pool
 	.fill (SetStringPower+0xCC-.), 0xCC
 .endarea

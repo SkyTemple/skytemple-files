@@ -11,7 +11,10 @@
 .area 0x1000
 IsMGrowthActive:
 	stmdb r13!, {r14}
-	mov r0,#1
+	mov r0,#0
+	mov r1,#0x4E
+	mov r2,#1
+	bl GetGameVar2
 	ldmia r13!, {r15}
 LoadIfNot:
 	stmdb r13!, {r0,r1,r2,r3,r14}
@@ -124,7 +127,7 @@ SetMoveStringCheck:
 	mov  r1,#0x0
 	mov  r2,r5
 	mov  r3,#0x0
-	bl 0x02013780
+	bl PrintMoveStringMore
 	ldmia  r13!,{r4,r5,r15}
 GetAccuracyWithLevelBonus:
 	stmdb  r13!,{r4,r5,r6,r14}
@@ -158,7 +161,7 @@ GetMoveLevel:
 	ldmeqia  r13!,{r15}
 	mov r0,r3
 	mov r1,#3
-	bl 0x0208FEA4
+	bl EuclidianDivision
 	cmp r0,#8
 	moveq r1,#3
 	ldmia  r13!,{r15}
@@ -203,7 +206,7 @@ no_add_power:
 	add r0,r5,r0
 	ldmia  r13!,{r4,r5,r15}
 IncreasePoints:
-	stmdb  r13!,{r3,r4,r5,r6,r7,r14}
+	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r14}
 	mov r6,r0
 	mov r7,r1
 	ldrh r4, [r1, #+0x4]
@@ -228,23 +231,52 @@ IncreasePoints:
 	ldrh r4,[r1, r0]
 	ldr r3,=MoveCurrentIncrease
 	ldr r2,[r3]
+	ldr r8,=0x7530
+	cmp r4,r8
+	bge no_add_points
 	add r4,r4,r2
-	ldr r2,=0x7530
-	cmp r4,r2
+	cmp r4,r8
 	movgt r4,r2
 	strh r4,[r1, r0]
-	ldr r2,=MoveStableIncrease
-	ldr r2,[r2]
-	str r2,[r3]
 	mov r0,r7
 	bl GetMoveStats
 	cmp r5,r3
-	beq no_add_points
+	beq no_next_level
+	ldrh r1,[r7, #+0x4]
+	mov  r0,#0x0
+	bl PrepareMoveString
 	mov r0,r6
-	ldr r1,=str_pwr
-	bl 0x0234B4BC
+	mov r1,#0xBF0
+	bl SendMessageWithIDLog
+no_next_level:
+	mov r0, #1
+	beq add_points
 no_add_points:
-	ldmia  r13!,{r3,r4,r5,r6,r7,r15}
+	mov r0, #0
+add_points:
+	ldr r3,=MoveCurrentIncrease
+	ldr r2,=MoveStableIncrease
+	ldr r2,[r2]
+	str r2,[r3]
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
+	.pool
+IncrementPointsGinseng:
+	stmdb  r13!,{r4,r5,r14}
+	mov r5,r1
+	ldr r1,=MoveLevelPtr
+	ldr r1,[r1]
+	mov r0,r0,lsl #0x1
+	ldrh r4,[r1, r0]
+	ldr r2,=0x7530
+	cmp r4,r2
+	add r4,r4,r5
+	movlt r5,#0x1
+	movge r5,#0x0
+	cmp r4,r2
+	movgt r4,r2
+	strh r4,[r1, r0]
+	mov r0,r5
+	ldmia  r13!,{r4,r5,r15}
 	.pool
 ExtendAccuracy:
 	stmdb  r13!,{r4,r5,r6,r14}
@@ -252,15 +284,15 @@ ExtendAccuracy:
 	mov r4,r0
 	strh r1,[r13, #+0x4]
 	mov r0,r1
-	bl 0x02013B90
+	bl GetMoveActualAccuracy
 	mov r5,r0
 	add r0,r13,#0x8
 	ldr r1,=str_off
-	sub r2,r5,#102
-	bl 0x0200D634
+	sub r2,r5,#101
+	bl SPrintF
 	mov r0,r4
 	add r1,r13,#0x8
-	bl 0x020897AC
+	bl StrCat
 	mov r0,r13
 	bl GetMoveStats
 	add r2,r2,r5
@@ -275,7 +307,7 @@ loop_ext_acc:
 	addle r1, r0, StatExtendIconStart
 	movgt r1, StatExtendIconStart+10
 	mov  r0,r4
-	bl 0x02099CD4
+	bl PrintSpecialChar
 	add  r6,r6,#10
 end_loop_ext_acc:
 	cmp r6,r5
@@ -288,15 +320,15 @@ ExtendPower:
 	mov r4,r0
 	strh r1,[r13, #+0x4]
 	mov r0,r1
-	bl 0x02013BE8
+	bl GetMovePowerWithID
 	mov r5,r0
 	add r0,r13,#0x8
 	ldr r1,=str_off
 	mvn r2,#0
-	bl 0x0200D634
+	bl SPrintF
 	mov r0,r4
 	add r1,r13,#0x8
-	bl 0x020897AC
+	bl StrCat
 	mov r0,r13
 	bl GetMoveStats
 	add r0,r0,r5
@@ -309,7 +341,7 @@ loop_ext_pwr:
 	addle r1, r0, StatExtendIconStart
 	movgt r1, StatExtendIconStart+10
 	mov  r0,r4
-	bl 0x02099CD4
+	bl PrintSpecialChar
 	add  r6,r6,#10
 end_loop_ext_pwr:
 	cmp r6,r5
@@ -320,7 +352,7 @@ end_loop_ext_pwr:
 UnknownFunction:
 	stmdb  r13!,{r4,r14}
 	mov r4,r0
-	bl 0x0232E840
+	bl UnknownSubFunction
 	cmp r0,#0x0
 	ldrne r1,[r4, #+0xb4]
 	movne  r0,#0x0
@@ -328,9 +360,9 @@ UnknownFunction:
 	strneb r0,[r1, #+0x167]
 	ldmia  r13!,{r4,r15}
 MoveCurrentIncrease:
-	.word 15000
+	.word 3
 MoveStableIncrease:
-	.word 15000
+	.word 3
 CurrentMove:
 	.fill 0x2, 0xFF
 BufferMove:
@@ -339,8 +371,6 @@ NoMiss:
 	.fill 0x4, 0x0
 MGrowFileName: 
 	.ascii "BALANCE/mgrowth.bin",0
-str_pwr:
-	.ascii "Puissance augmentée!",0
 str_off:
 	.ascii "[S:%u]",0
 .endarea

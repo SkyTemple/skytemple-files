@@ -24,13 +24,15 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS,
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
+from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.data.waza_p.model import WazaMoveCategory
 from skytemple_files.common.i18n_util import _
 
 
 SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_asm_mods', 'move_growth', 'src')
 
-PATCH_CHECK_ADDR_APPLIED_US = 0x02014A74
-PATCH_CHECK_ADDR_APPLIED_EU = 0x02014B1C
+PATCH_CHECK_ADDR_APPLIED_US = 0x14A74
+PATCH_CHECK_ADDR_APPLIED_EU = 0x14B1C
 PATCH_CHECK_INSTR_APPLIED = 0xE2841004
 
 MGROW_PATH = "BALANCE/mgrowth.bin"
@@ -73,7 +75,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Implements move growth.')
+        return _('Implements move growth (PoC/Unfinished). \nNeeds ActorAndLevelLoader, ExtractAnimData and ChangeMoveStatsDisplay patches. \nCurrently not compatible with MoveShortcuts. \nThe last version of ChangeMoveStatsDisplay must be used with this.\nMay be incompatible if markfont.dat has been modified (except for ChangeMoveStatsDisplay)\nMakes all prior save files incompatible. ')
 
     @property
     def author(self) -> str:
@@ -81,11 +83,14 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return '0.0.0'
+
+    def depends_on(self) -> List[str]:
+        return ['ActorAndLevelLoader', 'ExtractAnimData', 'ChangeMoveStatsDisplay']
 
     @property
     def category(self) -> PatchCategory:
-        return PatchCategory.UTILITY
+        return PatchCategory.NEW_MECHANIC
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
@@ -135,7 +140,15 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
                 write_uintle(mgrow_data_dama, pwr, x*6+2, 2)
                 write_uintle(mgrow_data_dama, pp, x*6+4, 1)
                 write_uintle(mgrow_data_dama, acc, x*6+5, 1)
-            create_file_in_rom(rom, MGROW_PATH, bytes(mgrow_data_dama*1024))
+            bin_before = rom.getFileByName("BALANCE/waza_p.bin")
+            model = WazaPHandler.deserialize(bin_before)
+            total = bytearray(0)
+            for m in model.moves:
+                if m.category!=WazaMoveCategory.STATUS and m.max_upgrade_level==99:
+                    total += mgrow_data_dama
+                else:
+                    total += mgrow_data_stat
+            create_file_in_rom(rom, MGROW_PATH, bytes(total))
         try:
             apply()
         except RuntimeError as ex:

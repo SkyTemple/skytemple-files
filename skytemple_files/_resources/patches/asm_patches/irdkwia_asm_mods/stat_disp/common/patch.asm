@@ -38,7 +38,7 @@ loop_print_accuracy:
 	movlt r1, StartAccuracyPos
 	blt print_accuracy
 	cmp  r0,#10
-	addle r1, r0, StartAccuracyPos
+	add r1, r0, StartAccuracyPos+1
 	movgt r1, StartAccuracyPos+11
 print_accuracy:
 	mov  r0,r4
@@ -94,7 +94,7 @@ no_status:
 loop_print_power:
 	sub r0,r7,r6
 	cmp  r0,#10
-	addle r1, r0, StartPowerPos-1
+	add r1, r0, StartPowerPos-1
 	movgt r1, StartPowerPos+10
 print_power:
 	mov  r0,r4

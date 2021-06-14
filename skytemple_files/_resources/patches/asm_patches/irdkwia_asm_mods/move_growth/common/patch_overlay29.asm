@@ -241,49 +241,49 @@ label_hpp8_1:
 
 
 ; TODO
-.org 0x02321720
+.org HookSetMoveString1
 .area 0x10
 	add  r1,r13,#0x2C
 	mov  r2,r10
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x0232190C
+.org HookSetMoveString2
 .area 0x10
 	add  r1,r13,#0x2C
 	mov  r2,r10
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x023224F4
+.org HookSetMoveString3
 .area 0x10
 	mov  r1,r8
 	mov  r2,r6
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x0232265C
+.org HookSetMoveString4
 .area 0x10
 	mov  r1,r8
 	mov  r2,r6
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x02322E6C
+.org HookSetMoveString5
 .area 0x10
 	mov  r1,r9
 	mov  r2,r10
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x02326460
+.org HookSetMoveString6
 .area 0x10
 	add  r2,r5,r4
 	mov  r2,r9
 	bl SetMoveStringCheck
 	nop
 .endarea
-.org 0x023264E0
+.org HookSetMoveString7
 .area 0x10
 	add  r2,r13,#0x0
 	mov  r2,r9
@@ -291,7 +291,7 @@ label_hpp8_1:
 	nop
 .endarea
 
-.org 0x023326D0
+.org HookSetMovePoints1
 .area 0x14
 	ldrne r0,=NoMiss
 	strne r10,[r0]
@@ -299,16 +299,40 @@ label_hpp8_1:
 	addeq  r0,r0,#0x1
 	streq r0,[r13, #+0x74]
 .endarea
-.org 0x02332830
+.org HookSetMovePoints2
 .area 0x28
 	mov r0,r9
 	mov r1,r8
 	bl IncreasePoints
 	ldr r0,[r13, #+0x80]
 	cmp r0,#0x0
-	beq 0x02332830+0x28
+	beq HookSetMovePoints2+0x28
 	mov r0,r9
 	bl UnknownFunction
-	b 0x02332830+0x28
+	b HookSetMovePoints2+0x28
 	.pool
+.endarea
+
+.org HookProcessGinseng1
+.area 0x4
+	mov  r5,#0x12C
+.endarea
+.org HookProcessGinseng2
+.area 0x4
+	movlt  r5,#0x3E8
+.endarea
+.org HookProcessGinseng3
+.area 0x40
+	ldrh r0, [r7, #+0x4]
+	mov  r1,r5
+	bl IncrementPointsGinseng
+	cmp r0,#0
+	movne r4,#1
+	b HookProcessGinseng3+0x40
+	.pool
+	.fill (HookProcessGinseng3+0x40-.), 0xCC
+.endarea
+.org HookProcessGinseng4
+.area 0x4
+	cmp r5,#0x12C
 .endarea

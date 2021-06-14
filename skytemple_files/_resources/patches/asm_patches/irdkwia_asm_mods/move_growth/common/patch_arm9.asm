@@ -8,22 +8,66 @@
 .definelabel MoveLvlIconStart, 0x67
 .definelabel MoveSubLvlIconStart, 0x70
 
-.org 0x020243FC
+.org HookGetPPOW1
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW2
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW3
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW4
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW5
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW6
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+.org HookGetPPOW7
+.area 0x4
+	bl GetMovePPProxy
+.endarea
+
+.org HookProcessGinsengOW1
+.area 0x30
+	movlt  r7,#0x3E8
+	movge  r7,#0x12C
+.endarea
+.org HookProcessGinsengOW2
+.area 0x40
+	ldr r0,[r5,#+0x2]
+	mov r1,r7
+	bl IncrementPointsGinseng
+	cmp r0,#0
+	movne  r6,#0x1
+	b HookProcessGinsengOW2+0x40
+	.fill (HookProcessGinsengOW2+0x40-.), 0xCC
+.endarea
+
+.org HookDisplayAccuracy
 .area 0xC
 	mov  r0,r4
 	mov  r1,r8
 	bl ProxyExtendAccuracy
 .endarea
 
-.org 0x020244B0
+.org HookDisplayPower
 .area 0xC
 	mov  r0,r4
 	mov  r1,r8
 	bl ProxyExtendPower
 .endarea
 
-; TODO
-.org 0x02098DE4
+.org MoveDispStrings
 .area 0xC4
 move_str_1:
 	.ascii "[CS:M]%s%s[CR]",0
@@ -41,7 +85,7 @@ add_move_level:
 	.dcb 1
 .endarea
 
-.org 0x02013478
+.org PrintMoveString
 .area 0x2E0
 	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r14}
 	sub  r13,r13,#0x30
@@ -58,7 +102,7 @@ add_move_level:
 	moveq  r4,#0x4D
 end_choice_1:
 	cmp r5,#0x0
-	ldreq r5,=0x02098D68
+	ldreq r5,=MoveEmptyStruct
 	ldrb r0,[r5, #+0x8]
 	cmp r0,#0x0
 	movne  r4,#0x57
@@ -67,14 +111,14 @@ end_choice_1:
 	cmp r0,#0x0
 	beq end_choice_2
 	ldrh r0,[r6, #+0x4]
-	bl 0x02014C64
+	bl Is2TurnsMove
 	cmp r0,#0x0
 	movne  r4,#0x57
 end_choice_2:
 	ldrh r0,[r6, #+0x4]
-	add  r0,r0,#0xEE
-	add  r0,r0,#0x1F00
-	bl 0x020258C4
+	add  r0,r0,MoveStringIDStartL
+	add  r0,r0,MoveStringIDStartH
+	bl GetStringFromFile
 	str r0, [r13, #+0x4]
 	ldr r3,=add_move_level
 	ldrb r2,[r3]
@@ -94,7 +138,7 @@ end_choice_2:
 	add r3,r1,MoveSubLvlIconStart
 	ldr r1,=move_level
 	add  r0,r13,#0x10
-	bl 0x02013758
+	bl MoveSPrintF
 no_move_level:
 	ldr r0,[r5, #+0x0]
 	cmp r0,#0x5
@@ -111,7 +155,7 @@ case_0:
 	ldr r1,=move_str_1
 	add  r2,r13,#0x10
 	ldr  r3,[r13, #+0x4]
-	bl 0x02013758
+	bl MoveSPrintF
 	b end_switch
 case_1:
 	ldrb r1,[r6, #+0x0]
@@ -129,7 +173,7 @@ case_1:
 	str r0,[r13, #+0xc]
 	mov  r0,r7
 	mov  r3,r8
-	bl 0x02013758
+	bl MoveSPrintF
 	b end_switch
 case_2:
 	ldrb r1,[r6, #+0x0]
@@ -147,7 +191,7 @@ case_2:
 	str r0,[r13, #+0xc]
 	mov  r0,r7
 	mov  r3,r8
-	bl 0x02013758
+	bl MoveSPrintF
 	b end_switch
 case_3:
 	ldrb r1,[r6, #+0x0]
@@ -165,7 +209,7 @@ case_3:
 	str r0,[r13, #+0xc]
 	mov  r0,r7
 	mov  r3,r8
-	bl 0x02013758
+	bl MoveSPrintF
 	b end_switch
 case_4:
 	ldrb r1,[r6, #+0x0]
@@ -183,7 +227,7 @@ case_4:
 	str r0,[r13, #+0xc]
 	mov  r0,r7
 	mov  r3,r8
-	bl 0x02013758
+	bl MoveSPrintF
 	b end_switch
 case_5:
 	mov  r4,r0
@@ -194,7 +238,7 @@ case_5:
 	ldr r1,=move_str_3
 	mov  r0,r7
 	ldr  r2,[r13, #+0x4]
-	bl 0x02013758
+	bl MoveSPrintF
 end_switch:
 	add  r13,r13,#0x30
 	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r15}
@@ -321,7 +365,7 @@ beg_cpy_from:
 .org ClearData
 .area 0x20
 	stmdb  r13!,{r14}
-	bl 0x020550E0
+	bl UnknownDataFunc
 	ldr r1,=MoveLevelPtr
 	ldr r0, [r1]
 	mov  r1,#0x800
@@ -335,7 +379,7 @@ beg_cpy_from:
 	stmdb  r13!,{r4,r14}
 	mov r4,r0
 	mov r0,#2
-	bl 0x02003ED0
+	bl IsLoadedOverlay
 	cmp r0,#0
 	mvneq r0, #0
 	moveq r1, #0
@@ -350,7 +394,7 @@ beg_cpy_from:
 	stmdb  r13!,{r4,r14}
 	mov r4,r0
 	mov r0,#2
-	bl 0x02003ED0
+	bl IsLoadedOverlay
 	cmp r0,#0
 	mov r0,r4
 	bne get_actual_pp_bonus
@@ -367,7 +411,7 @@ get_actual_pp_bonus:
 	mov r4,r0
 	mov r5,r1
 	mov r0,#2
-	bl 0x02003ED0
+	bl IsLoadedOverlay
 	cmp r0,#0
 	beq no_extend_accuracy
 	mov r0,r4
@@ -383,7 +427,7 @@ no_extend_accuracy:
 	mov r4,r0
 	mov r5,r1
 	mov r0,#2
-	bl 0x02003ED0
+	bl IsLoadedOverlay
 	cmp r0,#0
 	beq no_extend_power
 	mov r0,r4

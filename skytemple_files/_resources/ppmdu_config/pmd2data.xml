@@ -1142,8 +1142,8 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>
         </SimplePatch>
-	      
-	      <SimplePatch id="CompleteTeamControl">
+
+        <SimplePatch id="CompleteTeamControl">
           <Include filename="cipnit_asm_mods/completeteamcontrol.asm"/>
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
@@ -1170,6 +1170,14 @@
         <SimplePatch id="ReduceJumpcutPauseTime">
           <Include filename="cipnit_asm_mods/reducejumpcutpausetime.asm"/>
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="AllowUnrecruitableMons">
+          <Include filename="end_asm_mods/src/AllowUnrecruitableMons.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>

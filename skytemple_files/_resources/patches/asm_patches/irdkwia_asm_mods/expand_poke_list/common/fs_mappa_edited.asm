@@ -622,8 +622,7 @@ loop_copy_normal_item_chances:
 	ldrh r5,[r7, r2]
 	cmp r5,r3
 	streqh r0,[r7, r2]
-	ldreq r5,[r4, #+0x0]
-	streqh r8,[r5, r1]
+	streqh r8,[r9, r1]
 	add  r8,r8,#0x1
 	cmp r8,#0x16C
 	blt loop_copy_normal_item_chances

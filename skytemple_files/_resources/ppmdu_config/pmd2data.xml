@@ -134,7 +134,7 @@
         <Block name="PoisonDamageDelay"      beg="0x7C28" end="0x7C29"/>
         <Block name="BadPoisonDamageDelay"   beg="0x7994" end="0x7995"/>
         <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
-        <Block name="MusicList"              beg="0x8ADC" end="0x8D1C"/>
+        <Block name="MusicList"              beg="0x8ADC" end="0x8C30"/>
         <Block name="RandomMusicList"        beg="0x877C" end="0x886C"/>
       </Bin>
       <!-- overlay_0011 -->

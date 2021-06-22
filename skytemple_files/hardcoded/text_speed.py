@@ -21,12 +21,11 @@ from skytemple_files.common.util import read_uintle, write_uintle
 
 class HardcodedTextSpeed:
     @staticmethod
-    def get_text_speed_debug(arm9: bytes, config: Pmd2Data) -> bool:
+    def get_text_speed(arm9: bytes, config: Pmd2Data) -> int:
         block = config.binaries['arm9.bin'].blocks['TextSpeedConstant']
-        val = read_uintle(arm9, block.begin)
-        return val == 4
+        return read_uintle(arm9, block.begin)
 
     @staticmethod
-    def set_text_speed_debug(value: bool, arm9: bytearray, config: Pmd2Data):
+    def set_text_speed(value: int, arm9: bytearray, config: Pmd2Data):
         block = config.binaries['arm9.bin'].blocks['TextSpeedConstant']
-        write_uintle(arm9, 4 if value else 1, block.begin)
+        write_uintle(arm9, value, block.begin)

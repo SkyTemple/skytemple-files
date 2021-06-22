@@ -81,6 +81,10 @@ move_str_3:
 	.ascii "%s %2d/%2d",0
 move_level:
 	.ascii "[M:B%d][M:B%d]",0
+shortcut_icon:
+	.ascii "[M:B?]",0
+no_shortcut:
+	.ascii "[S:11]",0
 add_move_level:
 	.dcb 1
 .endarea
@@ -145,10 +149,10 @@ no_move_level:
 	addls  r15,r15,r0,lsl #0x2
 	b end_switch
 	b case_0
-	b case_1
-	b case_2
-	b case_3
-	b case_4
+	b case_1_2
+	b case_1_2
+	b case_3_4
+	b case_3_4
 	b case_5
 case_0:
 	mov  r0,r7
@@ -157,12 +161,26 @@ case_0:
 	ldr  r3,[r13, #+0x4]
 	bl MoveSPrintF
 	b end_switch
-case_1:
+case_1_2:
 	ldrb r1,[r6, #+0x0]
 	mov  r0,r6
+	;No Shortcut
 	tst r1,#0x8
 	ldrne r8,=move_set
 	ldreq r8,=move_unset
+	;Shortcut
+	;tst r1,#0x2
+	;ldrne r8,=no_shortcut
+	;bne cancel_shortcut
+	;cmp r9,#4
+	;ldrge r8,=no_shortcut
+	;bge cancel_shortcut
+	;ldr r8,=shortcut_icon
+	;mov r1,'2'
+	;add r1,r1,r9
+	;strb r1,[r8, #+0x4]
+	;end
+cancel_shortcut:
 	bl GetMovePPProxy
 	add  r1,r13,#0x10
 	str r1,[r13]
@@ -175,43 +193,7 @@ case_1:
 	mov  r3,r8
 	bl MoveSPrintF
 	b end_switch
-case_2:
-	ldrb r1,[r6, #+0x0]
-	mov  r0,r6
-	tst r1,#0x8
-	ldrne r8,=move_set
-	ldreq r8,=move_unset
-	bl GetMovePPProxy
-	add  r1,r13,#0x10
-	str r1,[r13]
-	ldrb r3,[r6, #+0x6]
-	ldr r1,=move_str_2
-	mov  r2,r4
-	str r3,[r13, #+0x8]
-	str r0,[r13, #+0xc]
-	mov  r0,r7
-	mov  r3,r8
-	bl MoveSPrintF
-	b end_switch
-case_3:
-	ldrb r1,[r6, #+0x0]
-	mov  r0,r6
-	tst r1,#0x4
-	ldrne r8,=move_set
-	ldreq r8,=move_unset
-	bl GetMovePPProxy
-	add  r1,r13,#0x10
-	str r1,[r13]
-	ldrb r3,[r6, #+0x6]
-	ldr r1,=move_str_2
-	mov  r2,r4
-	str r3,[r13, #+0x8]
-	str r0,[r13, #+0xc]
-	mov  r0,r7
-	mov  r3,r8
-	bl MoveSPrintF
-	b end_switch
-case_4:
+case_3_4:
 	ldrb r1,[r6, #+0x0]
 	mov  r0,r6
 	tst r1,#0x4

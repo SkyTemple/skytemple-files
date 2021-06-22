@@ -123,7 +123,7 @@
 
 .definelabel UnknownSubFunction, 0x0232E840
 
-.definelabel Ov10PatchZone, 0x022DBFB0-0x1000
+.definelabel Ov10PatchZone, 0x022DBFB0-0x800
 
 .definelabel DungeonBaseStructurePtr, 0x02353538
 

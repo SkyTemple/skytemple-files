@@ -8,7 +8,7 @@
 .definelabel StatExtendIconStart, 0x5C
 
 .org Ov10PatchZone
-.area 0x1000
+.area 0x800
 IsMGrowthActive:
 	stmdb r13!, {r14}
 	mov r0,#0

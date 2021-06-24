@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -37,15 +37,18 @@ class MoveShortcutsPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y).")
+        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y). The ExtraSpace patch must be applied before this one.")
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return 'End45, irdkwia'
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return '0.2.0'
+
+    def depends_on(self) -> List[str]:
+        return ['ExtraSpace']
 
     @property
     def category(self) -> PatchCategory:

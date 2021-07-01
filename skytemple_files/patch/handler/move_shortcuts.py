@@ -21,7 +21,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
@@ -29,7 +29,7 @@ OFFSET_EU = 0x158F0
 OFFSET_US = 0x1587C
 
 
-class MoveShortcutsPatch(AbstractPatchHandler):
+class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:

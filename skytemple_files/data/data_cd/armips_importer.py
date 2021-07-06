@@ -20,7 +20,7 @@ import subprocess
 import sys
 import tempfile
 
-from skytemple_files.common.util import open_utf8, get_resources_dir
+from skytemple_files.common.util import open_utf8, get_resources_dir, set_rw_permission_folder
 from skytemple_files.common.i18n_util import f, _
 from skytemple_files.patch.arm_patcher import PatchError, ArmipsNotInstalledError
 
@@ -34,8 +34,10 @@ class ArmipsImporter:
         with tempfile.TemporaryDirectory() as tmp:
             shutil.copytree(
                 os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_move_effects'),
-                tmp, dirs_exist_ok=True
+                tmp, dirs_exist_ok=True, symlinks=True
             )
+
+            set_rw_permission_folder(tmp)
 
             # Write final asm file
             with open_utf8(os.path.join(tmp, ASM_ENTRYPOINT_FN), 'w') as file:

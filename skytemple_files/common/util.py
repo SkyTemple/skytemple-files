@@ -18,6 +18,8 @@ import bisect
 import re
 import unicodedata
 import warnings
+import stat
+import os
 from itertools import groupby
 from typing import List, Tuple, TYPE_CHECKING, Iterable, Optional
 
@@ -474,3 +476,20 @@ class AutoString:
 
     def __str__(self):
         return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v  is not None and not k[0] == '_'})}>"
+
+def set_rw_permission_folder(folder_path: str):
+    """
+    Set the folder with the given to having the r+w permission.
+    Does nothing on Windows.
+    """
+    try:
+        os.chmod(folder_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
+        for root, dirs, files in os.walk(folder_path, topdown = True):
+            for file_name in files:
+                file_path = os.path.join(root, file_name)        
+                os.chmod(file_path, stat.S_IREAD + stat.S_IWRITE)
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                os.chmod(dir_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
+    except NotImplementedError: # This isn't needed on Windows
+        pass

@@ -26,7 +26,7 @@ from typing import Dict, Union
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary, Pmd2SimplePatch
-from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir
+from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir, set_rw_permission_folder
 from skytemple_files.common.i18n_util import f, _
 
 ASM_ENTRYPOINT_FN = '__main.asm'
@@ -58,19 +58,7 @@ class ArmPatcher:
             try:
                 shutil.copytree(patch_file_dir, tmp, symlinks=True, dirs_exist_ok=True)
 
-                # change permission when copied from a read-only folder
-                try:
-                    os.chmod(tmp, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
-                    for root, dirs, files in os.walk(tmp, topdown = True):
-                        for file_name in files:
-                            file_path = os.path.join(root, file_name)        
-                            os.chmod(file_path, stat.S_IREAD + stat.S_IWRITE)
-                        for dir_name in dirs:
-                            dir_path = os.path.join(root, dir_name)
-                            os.chmod(dir_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
-                except NotImplementedError:
-                    pass
-
+                set_rw_permission_folder(tmp)
                             
                 # Build ASM file to run
                 asm_entrypoint = ''

@@ -57,6 +57,7 @@ from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatch
 from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
 from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
 from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
@@ -89,6 +90,7 @@ class PatchType(Enum):
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
     MOVE_GROWTH = MoveGrowthPatchHandler
+    CHANGE_TBBG = ChangeTextBoxColorPatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
     CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler
     EXTERNALIZE_MAPPA = ExternalizeMappaPatchHandler

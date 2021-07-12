@@ -25,6 +25,6 @@
 .definelabel SetStringPower, 0x02024428
 .definelabel StrCpyFromFile, 0x020258B8
 .definelabel StrCat, 0x020897AC
-.definelabel PrintSpecialChar, 0x02099CD4
+.definelabel PrintAttr, 0x02099CD4
 .definelabel NullString, 0x02099D50
 .definelabel SpecialCharString, 0x02099D84

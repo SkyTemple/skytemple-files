@@ -140,6 +140,9 @@
         <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
         <Block name="MusicList"              beg="0x8ADC" end="0x8C30"/>
         <Block name="RandomMusicList"        beg="0x877C" end="0x886C"/>
+        <Block name="LifeSeedHP"             beg="0x7A78" end="0x7A79"/>
+        <Block name="SitrusBerryHP"          beg="0x79F8" end="0x79F9"/>
+        <Block name="OranBerryHP"            beg="0x7B6C" end="0x7B6D"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
@@ -375,6 +378,9 @@
         <Block name="GinsengChance3"         beg="0x7C58" end="0x7C59"/>
         <Block name="MusicList"              beg="0x8AF4" end="0x8C48"/>
         <Block name="RandomMusicList"        beg="0x8794" end="0x8884"/>
+        <Block name="LifeSeedHP"             beg="0x7A90" end="0x7A91"/>
+        <Block name="SitrusBerryHP"          beg="0x7A10" end="0x7A11"/>
+        <Block name="OranBerryHP"            beg="0x7B84" end="0x7B85"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">

@@ -125,6 +125,7 @@ class GuestPokemon(AutoString):
                    self.level == other.level and \
                    self.iq == other.iq and \
                    self.atk == other.atk and \
+                   self.sp_atk == other.sp_atk and \
                    self.def_ == other.def_ and \
                    self.sp_def == other.sp_def and \
                    self.unk3 == other.unk3 and \
@@ -139,6 +140,7 @@ class GuestPokemon(AutoString):
                self.level == 0 and \
                self.iq == 0 and \
                self.atk == 0 and \
+               self.sp_atk == 0 and \
                self.def_ == 0 and \
                self.sp_def == 0 and \
                self.unk3 == 0 and \

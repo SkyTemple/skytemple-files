@@ -1214,6 +1214,14 @@
           </Replace>
         </SimplePatch>
 
+        <SimplePatch id="EditExtraPokemon">
+          <Include filename="end_asm_mods/src/EditExtraPokemon.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
       </Game>
     </Patches>
 

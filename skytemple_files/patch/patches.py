@@ -163,6 +163,10 @@ class Patcher:
                         raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be >= {param.min}.")
                     if param.max is not None and val > param.max:
                         raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be <= {param.max}.")
+                if param.type == Pmd2PatchParameterType.STRING:
+                    val = config[param.name]
+                    if not isinstance(val, str):
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be str.")
                 if param.type == Pmd2PatchParameterType.SELECT:
                     val = config[param.name]
                     found = False

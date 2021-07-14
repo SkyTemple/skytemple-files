@@ -50,6 +50,7 @@ class PatchHandler(AbstractPatchHandler):
         self._debug("int_param2")
         self._debug("int_param3")
         self._debug("select_param")
+        self._debug("string_param")
         try:
             self._debug("doesntexist")
         except PatchNotConfiguredError:

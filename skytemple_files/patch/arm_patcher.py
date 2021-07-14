@@ -120,10 +120,10 @@ class ArmPatcher:
                 with open_utf8(os.path.join(tmp, ASM_ENTRYPOINT_FN), 'w') as fi:
                     fi.write(asm_entrypoint)
 
-                # Build parameters for definelabel
+                # Build parameters for equ
                 parameters = []
                 for param_name, param_value in parameter_values.items():
-                    parameters += ['-definelabel', param_name, str(param_value)]
+                    parameters += ['-equ', param_name, f'"{param_value}"' if isinstance(param_value, str) else str(param_value)]
 
                 # Run armips
                 try:

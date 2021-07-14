@@ -168,12 +168,14 @@ class Pmd2PatchOpenBin(AutoString):
 
 
 class Pmd2PatchParameterType(Enum):
+    STRING = "str"
     INTEGER = "int"
     SELECT = "select"
 
 
 class Pmd2PatchParameterOption(AutoString):
-    def __init__(self, label: str, value: int):
+    def __init__(self, type: Pmd2PatchParameterType, label: str, value: any):
+        self.type = type
         self.label = label
         self.value = value
 

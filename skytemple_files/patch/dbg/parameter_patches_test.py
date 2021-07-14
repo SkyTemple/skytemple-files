@@ -56,7 +56,8 @@ if __name__ == '__main__':
             'int_param': -1,
             'int_param2': 100,
             'int_param3': 1234,
-            'select_param': 1
+            'select_param': 'HELLO',
+            'string_param': 'World'
         })
     except PatchNotConfiguredError as ex:
         assert ex.config_parameter == 'int_param', "Must throw PatchNotConfiguredError for int_param, since it's out of range."
@@ -67,7 +68,8 @@ if __name__ == '__main__':
             'int_param': 1,
             'int_param2': 100,
             'int_param3': 1234,
-            'select_param': 4
+            'select_param': 'INVALID',
+            'string_param': 'World'
         })
     except PatchNotConfiguredError as ex:
         assert ex.config_parameter == 'select_param', "Must throw PatchNotConfiguredError for select_param, since it's an invalid option."
@@ -79,5 +81,6 @@ if __name__ == '__main__':
         'int_param': 1,
         'int_param2': 100,
         'int_param3': 1234,
-        'select_param': 2
+        'select_param': 'HELLO',
+        'string_param': 'World'
     })

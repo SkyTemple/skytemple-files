@@ -563,8 +563,10 @@ class Pmd2AsmPatchesConstantsXmlReader:
                         options = []
                         for e_option in e_param:
                             if e_option.tag == 'Option':
+                                value_type = Pmd2PatchParameterType(e_param.attrib['type'])
                                 options.append(Pmd2PatchParameterOption(
-                                    value=Pmd2XmlReader.xml_int(e_option.text),
+                                    type=value_type,
+                                    value=Pmd2XmlReader.xml_int(e_option.text) if value_type == Pmd2PatchParameterType.INTEGER else e_option.text,
                                     label=e_option.attrib['label'] if 'label' in e_option.attrib else e_option.attrib['value'],
                                 ))
                         params.append(Pmd2PatchParameter(

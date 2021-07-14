@@ -104,7 +104,11 @@
         <Block name="DefaultPartnerId"  beg="0xAFEFE" end="0xAFF00"/>
         <Block name="HeroStartLevel"  beg="0x48880" end="0x48881"/>
         <Block name="PartnerStartLevel"  beg="0x488F0" end="0x488F1"/>
-        <Block name="AdditionalTeamMembers" beg="0xA28BC" end="0xA2B44"/>
+        <Block name="GuestPokemonData" beg="0xA28BC" end="0xA2B44"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="GuestPokemonData2" beg="0x4EE10" end="0x4EFE0"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="ExtraDungeonData" beg="0x4ECA8" end="0x4EE10"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -336,7 +340,11 @@
         <Block name="DefaultPartnerId"  beg="0xB081A" end="0xB081C"/>
         <Block name="HeroStartLevel"  beg="0x48B9C" end="0x48B9D"/>
         <Block name="PartnerStartLevel"  beg="0x48C0C" end="0x48C0D"/>
-        <Block name="AdditionalTeamMembers" beg="0xA2E40" end="0xA30C8"/>
+        <Block name="GuestPokemonData" beg="0xA2E40" end="0xA30C8"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="GuestPokemonData2" beg="0x4F148" end="0x4F318"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="ExtraDungeonData" beg="0x4EFE0" end="0x4F148"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->

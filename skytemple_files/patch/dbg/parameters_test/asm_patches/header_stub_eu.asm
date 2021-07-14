@@ -1,0 +1,3 @@
+.relativeinclude on
+.nds
+.arm

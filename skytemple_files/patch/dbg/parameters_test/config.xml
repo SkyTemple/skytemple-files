@@ -1,0 +1,24 @@
+<PMD2>
+  <ASMPatchesConstants>
+    <Patches>
+      <Game id="EoS_NA" id2="EoS_EU">
+        <!-- Also works with SimplePatch -->
+        <Patch id="ParametersTest" >
+          <OpenBin filepath="overlay/overlay_0029.bin">
+            <Include filename ="patch.asm"/>
+          </OpenBin>
+          <Parameters>
+            <Param name="int_param" label="Integer Param with 0 min, 100 max" type="int" min="0" max="100"/>
+            <Param name="int_param2" label="Integer Param with 100 max" type="int" max="100"/>
+            <Param name="int_param3" label="Integer Param no restrictions but a default" default="200" type="int"/>
+            <Param name="select_param" label="Select" type="select">
+              <Option label="HELLO" >1</Option>
+              <Option label="WORLD">2</Option>
+              <Option label="FOOBAR">3</Option>
+            </Param>
+          </Parameters>
+        </Patch>
+      </Game>
+    </Patches>
+  </ASMPatchesConstants>
+</PMD2>

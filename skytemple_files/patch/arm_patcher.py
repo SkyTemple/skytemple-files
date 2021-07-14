@@ -53,7 +53,8 @@ class ArmPatcher:
         self.rom = rom
 
     def apply(self, patch: Union[Pmd2Patch, Pmd2SimplePatch],
-              binaries: Dict[str, Pmd2Binary], patch_file_dir: str, stub_path: str, game_id: str):
+              binaries: Dict[str, Pmd2Binary], patch_file_dir: str, stub_path: str, game_id: str,
+              parameter_values: Dict[str, Union[int, str]]):
         with tempfile.TemporaryDirectory() as tmp:
             try:
                 shutil.copytree(patch_file_dir, tmp, symlinks=True, dirs_exist_ok=True)
@@ -119,6 +120,11 @@ class ArmPatcher:
                 with open_utf8(os.path.join(tmp, ASM_ENTRYPOINT_FN), 'w') as fi:
                     fi.write(asm_entrypoint)
 
+                # Build parameters for definelabel
+                parameters = []
+                for param_name, param_value in parameter_values.items():
+                    parameters += ['-definelabel', param_name, str(param_value)]
+
                 # Run armips
                 try:
                     prefix = ""
@@ -126,7 +132,11 @@ class ArmPatcher:
                     if sys.platform.startswith('win') and os.path.exists(os.path.join(get_resources_dir(), 'armips.exe')):
                         prefix = os.path.join(get_resources_dir(), '')
                     exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')
-                    result = subprocess.Popen([exec_name, ASM_ENTRYPOINT_FN],
+                    cmd_line = [exec_name, ASM_ENTRYPOINT_FN] + parameters
+                    if os.getenv('SKYTEMPLE_DEBUG_ARMIPS_OUTPUT', False):
+                        print("ARMIPS CMDLINE:")
+                        print(cmd_line)
+                    result = subprocess.Popen(cmd_line,
                                               stdout=subprocess.PIPE,
                                               stderr=subprocess.STDOUT,
                                               cwd=tmp
@@ -135,6 +145,11 @@ class ArmPatcher:
                 except FileNotFoundError as ex:
                     raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
                                                     "'armips' is inside your system's PATH.")) from ex
+
+                if os.getenv('SKYTEMPLE_DEBUG_ARMIPS_OUTPUT', False):
+                    print("ARMIPS OUTPUT:")
+                    print(str(result.stdout.read(), 'utf-8'))
+                    print(str(result.stderr.read(), 'utf-8') if result.stderr else '')
 
                 if retcode != 0:
                     raise PatchError(_("ARMIPS reported an error while applying the patch."),

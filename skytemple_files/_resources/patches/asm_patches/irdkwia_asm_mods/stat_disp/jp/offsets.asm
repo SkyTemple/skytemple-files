@@ -11,8 +11,10 @@
 .nds
 .arm
 
-.definelabel StartAccuracyPos, 0x45
-.definelabel StartPowerPos, 0x51
+;.definelabel StartAccuracyPos, 0x45
+;.definelabel StartPowerPos, 0x51
+.definelabel StartAccuracyPos, StartGraphicPos
+.definelabel StartPowerPos, StartAccuracyPos+12
 
 .definelabel MoveDescStartID, 0x00003F9F
 .definelabel MoveDescEndID, 0x000041CE

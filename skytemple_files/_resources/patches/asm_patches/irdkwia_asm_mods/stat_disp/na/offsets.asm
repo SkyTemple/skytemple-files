@@ -10,14 +10,16 @@
 .nds
 .arm
 
-.definelabel StartAccuracyPos, 0x45
-.definelabel StartPowerPos, 0x51
+;.definelabel StartAccuracyPos, 0x45
+;.definelabel StartPowerPos, 0x51
+.definelabel StartAccuracyPos, StartGraphicPos
+.definelabel StartPowerPos, StartAccuracyPos+12
 
 .definelabel MoveDescStartID, 0x000027A2
 .definelabel MoveDescEndID, 0x000029D1
 .definelabel SureShotID, 0x000027A0
 .definelabel NoDamageID, 0x000027A1
-
+Red
 .definelabel SPrintF, 0x0200D634
 .definelabel GetMoveActualAccuracy, 0x02013B90
 .definelabel GetMoveBasePowerWithID, 0x02013BE8

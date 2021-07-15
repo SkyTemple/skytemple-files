@@ -136,6 +136,9 @@
         <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
         <Block name="MusicList"              beg="0x8ADC" end="0x8C30"/>
         <Block name="RandomMusicList"        beg="0x877C" end="0x886C"/>
+        <Block name="LifeSeedHP"             beg="0x7A78" end="0x7A79"/>
+        <Block name="SitrusBerryHP"          beg="0x79F8" end="0x79F9"/>
+        <Block name="OranBerryHP"            beg="0x7B6C" end="0x7B6D"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
@@ -367,6 +370,9 @@
         <Block name="GinsengChance3"         beg="0x7C58" end="0x7C59"/>
         <Block name="MusicList"              beg="0x8AF4" end="0x8C48"/>
         <Block name="RandomMusicList"        beg="0x8794" end="0x8884"/>
+        <Block name="LifeSeedHP"             beg="0x7A90" end="0x7A91"/>
+        <Block name="SitrusBerryHP"          beg="0x7A10" end="0x7A11"/>
+        <Block name="OranBerryHP"            beg="0x7B84" end="0x7B85"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
@@ -970,6 +976,12 @@
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/change_tbbg/selector_arm9.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="Red" label="Red component" min="0" max="255" default="32" type="int"/>
+            <Param name="Green" label="Green component" min="0" max="255" default="32" type="int"/>
+            <Param name="Blue" label="Blue component" min="0" max="255" default="32" type="int"/>
+            <Param name="Alpha" label="Alpha component" min="0" max="255" default="144" type="int"/>
+          </Parameters>
         </Patch>
         
         <!-- A patch to externalize waza_p/waza_p2 files -->
@@ -1038,6 +1050,13 @@
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/stat_disp/selector_arm9.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (23 entries used)" min="0" max="255" default="69" type="int"/>
+            <Param name="DisplayVal" label="Display accuracy and power values" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+          </Parameters>
         </Patch>
 
         <!-- A patch to extract spinda bar's item list-->
@@ -1095,6 +1114,9 @@
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="PercentageShared" label="% of exp. shared" min="0" max="255" default="100" type="int"/>
+          </Parameters>
         </Patch>
         
         <!-- A patch to let the player choose its starter after the quiz -->
@@ -1202,6 +1224,14 @@
 
         <SimplePatch id="AllowUnrecruitableMons">
           <Include filename="end_asm_mods/src/AllowUnrecruitableMons.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="EditExtraPokemon">
+          <Include filename="end_asm_mods/src/EditExtraPokemon.asm"/>
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>

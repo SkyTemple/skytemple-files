@@ -18,11 +18,8 @@ import random
 from enum import Enum, auto
 from typing import List, Optional, Union
 
-# TODO TEMPORARY -- will be replaced with actual package.
-from skytemple_files.common.dungeon_floor_generator.impl.DungeonAlgorithm import Properties, StaticParam, ReturnData, \
-    DungeonData, generate_floor
-# TODO TEMPORARY -- will be replaced with actual package.
-from skytemple_files.common.dungeon_floor_generator.impl.RandomGen import RandomGenerator
+from dungeon_eos.DungeonAlgorithm import Properties, StaticParam, ReturnData, DungeonData, generate_floor
+from dungeon_eos.RandomGen import RandomGenerator
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.graphics.dma.model import DmaType
 

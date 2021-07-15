@@ -39,6 +39,7 @@ setup(
         'explorerscript >= 0.1.1',
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
+        'dungeon-eos >= 0.0.1',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==6.2.1; sys_platform == "darwin"'
     ],

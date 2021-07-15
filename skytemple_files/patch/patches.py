@@ -153,22 +153,22 @@ class Patcher:
         patch_data = self._config.asm_patches_constants.patches[name]
         if patch_data.has_parameters():
             if config is None:
-                raise PatchNotConfiguredError("No configuration was given.", "*", "No configuration was given.")
+                raise PatchNotConfiguredError(_("No configuration was given."), "*", "No configuration was given.")
             for param in patch_data.parameters.values():
                 if param.name not in config:
-                    raise PatchNotConfiguredError("Missing configuration value.", param.name, "Not given.")
+                    raise PatchNotConfiguredError(_("Missing configuration value."), param.name, "Not given.")
                 if param.type == Pmd2PatchParameterType.INTEGER:
                     val = config[param.name]
                     if not isinstance(val, int):
-                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be int.")
+                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be int.")
                     if param.min is not None and val < param.min:
-                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be >= {param.min}.")
+                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, _("Must be >= {}.").format(param.min))
                     if param.max is not None and val > param.max:
-                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be <= {param.max}.")
+                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, _("Must be <= {}.").format(param.max))
                 if param.type == Pmd2PatchParameterType.STRING:
                     val = config[param.name]
                     if not isinstance(val, str):
-                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be str.")
+                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be str.")
                 if param.type == Pmd2PatchParameterType.SELECT:
                     val = config[param.name]
                     found = False
@@ -178,7 +178,7 @@ class Patcher:
                         found = True
                         break
                     if not found:
-                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be one of the options.")
+                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be one of the options.")
             patch.supply_parameters(config)
         patch.apply(
             partial(self._apply_armips, name, patch),

@@ -28,6 +28,3 @@ class PatchNotConfiguredError(RuntimeError):
         super().__init__(message)
         self.config_parameter = config_parameter
         self.error = error
-
-    def __str__(self):
-        return f'{super().__str__()} - Param: {self.config_parameter} - Error: {self.error}'

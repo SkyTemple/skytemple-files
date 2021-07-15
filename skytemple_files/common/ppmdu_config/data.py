@@ -184,12 +184,13 @@ class Pmd2PatchParameter(AutoString):
     def __init__(
             self, name: str, type: Pmd2PatchParameterType, label: str, *,
             min: Optional[int] = None, max: Optional[int] = None,
-            options: Optional[List[Pmd2PatchParameterOption]] = None):
+            options: Optional[List[Pmd2PatchParameterOption]] = None, default = None):
         self.name = name
         self.type = type
         self.label = label
         self.min = min
         self.max = max
+        self.default = default
         self.options = options
 
 

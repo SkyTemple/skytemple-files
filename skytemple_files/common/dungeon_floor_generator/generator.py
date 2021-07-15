@@ -165,7 +165,14 @@ class DungeonFloorGenerator:
             tiles_row = []
             tiles_grid.append(tiles_row)
             for x in range(56):
-                tile = Tile(DmaType(DungeonData.list_tiles[x][y].terrain_flags & 0x3), DungeonData.list_tiles[x][y].room_index)
+                terrain_idx = DungeonData.list_tiles[x][y].terrain_flags & 0x3
+                if terrain_idx == 0:
+                    dma_type = DmaType.WALL
+                if terrain_idx == 1:
+                    dma_type = DmaType.FLOOR
+                if terrain_idx == 2:
+                    dma_type = DmaType.WATER
+                tile = Tile(dma_type, DungeonData.list_tiles[x][y].room_index)
                 tiles_row.append(tile)
                 if DungeonData.player_spawn_x == x and DungeonData.player_spawn_y == y:
                     tile.typ = TileType.PLAYER_SPAWN
@@ -181,7 +188,7 @@ class DungeonFloorGenerator:
                     else:
                         tile.typ = TileType.ITEM
 
-                if DungeonData.list_tiles[x][y].terrain_flags & 0x3 == 1:
+                if terrain_idx == 1:
                     if DungeonData.list_tiles[x][y].terrain_flags & 0x40:
                         tile.room_type = RoomType.MONSTER_HOUSE
                     elif DungeonData.list_tiles[x][y].terrain_flags & 0x20:

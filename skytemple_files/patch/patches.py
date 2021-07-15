@@ -15,10 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
+import shutil
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Type, Dict, List, Generator
+from typing import Dict, List, Generator, Optional
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
@@ -26,10 +27,11 @@ import importlib.util
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2AsmPatchesConstants
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2AsmPatchesConstants, Pmd2PatchParameterType
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2AsmPatchesConstantsXmlReader
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
+from skytemple_files.patch.errors import PatchPackageError, PatchDependencyError, PatchNotConfiguredError
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
 from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
@@ -103,14 +105,6 @@ class PatchType(Enum):
     EDIT_EXTRA_POKEMON = EditExtraPokemonPatchHandler
 
 
-class PatchPackageError(RuntimeError):
-    pass
-
-
-class PatchDependencyError(RuntimeError):
-    pass
-
-
 class Patcher:
     def __init__(self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches=False):
         self._rom = rom
@@ -136,7 +130,12 @@ class Patcher:
             raise ValueError(f(_("The patch '{name}' was not found.")))
         return self._loaded_patches[name].is_applied(self._rom, self._config)
 
-    def apply(self, name: str):
+    def apply(self, name: str, config: Optional[Dict] = None):
+        """
+        Apply a patch.
+        If the patch requires parameters, values for ALL of them must be in the dict `config` (even if default values
+        are specified in the XML config).
+        """
         if name not in self._loaded_patches:
             raise ValueError(f(_("The patch '{name}' was not found.")))
         patch = self._loaded_patches[name]
@@ -150,26 +149,63 @@ class Patcher:
                     raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
                                                    "apply '{name}'. "
                                                    "This patch could not be found."))) from err
+        # Check config
+        patch_data = self._config.asm_patches_constants.patches[name]
+        if patch_data.has_parameters():
+            if config is None:
+                raise PatchNotConfiguredError("No configuration was given.", "*", "No configuration was given.")
+            for param in patch_data.parameters.values():
+                if param.name not in config:
+                    raise PatchNotConfiguredError("Missing configuration value.", param.name, "Not given.")
+                if param.type == Pmd2PatchParameterType.INTEGER:
+                    val = config[param.name]
+                    if not isinstance(val, int):
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be int.")
+                    if param.min is not None and val < param.min:
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be >= {param.min}.")
+                    if param.max is not None and val > param.max:
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, f"Must be <= {param.max}.")
+                if param.type == Pmd2PatchParameterType.STRING:
+                    val = config[param.name]
+                    if not isinstance(val, str):
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be str.")
+                if param.type == Pmd2PatchParameterType.SELECT:
+                    val = config[param.name]
+                    found = False
+                    for option in param.options:
+                        if not isinstance(val, type(option.value)) or option.value != val:
+                            continue
+                        found = True
+                        break
+                    if not found:
+                        raise PatchNotConfiguredError("Invalid configuration value.", param.name, "Must be one of the options.")
+            patch.supply_parameters(config)
         patch.apply(
-            partial(self._apply_armips, name),
+            partial(self._apply_armips, name, patch),
             self._rom, self._config
         )
 
-    def _apply_armips(self, name: str):
+    def _apply_armips(self, name: str, calling_patch: AbstractPatchHandler):
         patch = self._config.asm_patches_constants.patches[name]
         patch_dir_for_version = self._config.asm_patches_constants.patch_dir.filepath
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
+        parameter_values = calling_patch.get_parameters()
+
         self._arm_patcher.apply(patch, self._config.binaries,
                                 os.path.join(self._patch_dirs[name], patch_dir_for_version),
-                                stub_path_for_version, self._config.game_edition)
+                                stub_path_for_version, self._config.game_edition, parameter_values)
 
-    def add_pkg(self, zip_path: str):
+    def add_pkg(self, path: str, is_zipped=True):
         """Loads a skypatch file. Raises PatchPackageError on error."""
         tmpdir = TemporaryDirectory()
         self._created_tmpdirs.append(tmpdir)
-        with ZipFile(zip_path, 'r') as zip:
-            zip.extractall(tmpdir.name)
-            zip_id = id(zip)
+        if is_zipped:
+            with ZipFile(path, 'r') as zip:
+                zip.extractall(tmpdir.name)
+                f_id = id(zip)
+        else:
+            shutil.copytree(os.path.join(path, '.'), os.path.join(tmpdir.name, '.'), dirs_exist_ok=True)
+            f_id = id(tmpdir)
 
         # Load the configuration
         try:
@@ -182,7 +218,7 @@ class Patcher:
 
         # Evalulate the module
         try:
-            module_name = f"skytemple_files.__patches.p{zip_id}"
+            module_name = f"skytemple_files.__patches.p{f_id}"
             spec = importlib.util.spec_from_file_location(module_name,
                                                           os.path.join(tmpdir.name, 'patch.py'))
             patch = importlib.util.module_from_spec(spec)

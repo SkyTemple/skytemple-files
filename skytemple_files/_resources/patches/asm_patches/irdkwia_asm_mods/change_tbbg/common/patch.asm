@@ -11,7 +11,10 @@
 	str r0,[r5, #+0x60]
 	b after
 color:
-	.word 0x90202020 ; Color
+	.dcb Red
+	.dcb Green
+	.dcb Blue
+	.dcb Alpha
 	.word 0x0
 	.word 0x0
 after:

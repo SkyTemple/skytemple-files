@@ -15,12 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import ABC, abstractmethod
-from typing import Callable, List
+from typing import Callable, List, Dict, Union
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.patch.category import PatchCategory
+from skytemple_files.patch.errors import PatchNotConfiguredError
 
 
 class AbstractPatchHandler(ABC):
@@ -88,6 +89,32 @@ class AbstractPatchHandler(ABC):
         See apply method for info on how it will work.
         May raise NotImplementedError, if not supported.
         """
+
+    def get_parameter(self, name: str) -> Union[int, str]:
+        """
+        Returns the given configuration parameter. Make sure it is defined.
+        :param name: name of the parameter
+        """
+        try:
+            if name in self.__parameters:
+                return self.__parameters[name]
+            raise PatchNotConfiguredError("No configuration provided.", name, "No configuration provided.")
+        except AttributeError:
+            raise PatchNotConfiguredError("No configuration provided.", "*", "No configuration provided.")
+
+    def get_parameters(self) -> Dict[str, Union[int, str]]:
+        """
+        Returns all given configuration parameters or an empty dict of nothing was given.
+        """
+        try:
+            return self.__parameters
+        except AttributeError:
+            return dict()
+
+    # noinspection PyAttributeOutsideInit
+    def supply_parameters(self, parameters: Dict[str, Union[int, str]]):
+        """Only to be called by the patch handler: Sets the configuration parameters."""
+        self.__parameters = parameters
 
 
 class DependantPatch(ABC):

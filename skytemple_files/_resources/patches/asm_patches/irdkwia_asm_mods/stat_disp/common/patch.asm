@@ -7,7 +7,7 @@
 
 .org SetStringAccuracy
 .area 0xC8
-	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r9,r14}
+	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r9,r10,r14}
 	bl CheckMove
 	bl GetMoveActualAccuracy ; Get Move Accuracy
 	cmp r0,#0x64
@@ -17,6 +17,9 @@
 	bl StrCpyFromFile
 	b end_string_accuracy
 no_sureshot:
+	mov r10,r0
+	.notice "Accu1: ",.
+	nop
 	bl SetValue
 	mov r7,r0
 	mov  r2,StartPowerPos
@@ -34,45 +37,47 @@ print_accuracy:
 	bl PrintAttr
 	add  r6,r6,#10
 end_loop_print_accuracy:
-	cmp r6,#100
-	;cmp r6,#80
+	.if DisplayVal == 1
+		cmp r6,#80
+	.else
+		cmp r6,#100
+	.endif
 	blt loop_print_accuracy
 	mov  r2,StartPowerPos
 	bl PrintAttr
-	nop
-	nop
+	.notice "Accu2: ",.
 	nop
 end_string_accuracy:
 	mov  r0,r4
-	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r10,r15}
 	.pool
 SetValue:
 	stmdb r13!, {r14}
 	mov r6,#0
 	strb r6,[r4, #+0x0]
-	b no_set
-	;mov r7,r0
-	mov r9,#1
-	cmp r0,#10
-	movlt r3,#14
-	blt no_ten
-	cmp r0,#100
-	movlt r3,#8
-	movge r3,#2
-no_ten:
-	mov r2,r0
-	bl PrintAttr
-	mov r0,r7,lsl 0x3
-	mov r1,#10
-	bl 0x0208FEA4
-no_set:
+	.notice "SetValue: ",.
+	.if DisplayVal == 1
+		mov r9,#1
+		cmp r0,#10
+		movlt r3,#14
+		blt no_ten
+		cmp r0,#100
+		movlt r3,#8
+		movge r3,#2
+	no_ten:
+		mov r2,r0
+		bl PrintAttr
+		mov r0,r10,lsl 0x3
+		mov r1,#10
+		bl EuclidianDivision
+	.endif
 	ldmia r13!, {r15}
 	.fill (SetStringAccuracy+0xC8-.), 0xCC
 .endarea
 
 .org SetStringPower
 .area 0xCC
-	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r9,r14}
+	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r9,r10,r14}
 	bl CheckMove
 	bl GetMoveBasePowerWithID ; Get Move Power
 	cmp r0,#0x0
@@ -82,6 +87,9 @@ no_set:
 	bl StrCpyFromFile
 	b end_string_power
 no_status:
+	mov r10,r0
+	.notice "Power1: ",.
+	nop
 	bl SetValue
 	add r7,r0,#2
 	mov  r2,StartPowerPos
@@ -99,12 +107,11 @@ print_power:
 end_loop_print_power:
 	cmp r6,r7
 	blt loop_print_power
-	nop
-	nop
+	.notice "Power2: ",.
 	nop
 end_string_power:
 	mov  r0,r4
-	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r10,r15}
 CheckMove:
 	ldr r2,=MoveDescStartID
 	mov  r4,r0
@@ -118,7 +125,7 @@ CheckMove:
 	bx r14
 empty_string:
 	ldr r0,=NullString
-	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r15}
+	ldmia  r13!,{r3,r4,r5,r6,r7,r8,r9,r10,r15}
 	.pool
 ValueString:
 	.ascii "%d[S:%d]",0

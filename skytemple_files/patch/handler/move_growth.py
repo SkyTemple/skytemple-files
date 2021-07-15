@@ -36,9 +36,6 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x14B1C
 PATCH_CHECK_INSTR_APPLIED = 0xE2841004
 
 MGROW_PATH = "BALANCE/mgrowth.bin"
-START_EXT = 0x5C
-START_LVL = 0x67
-START_SUB = 0x70
 
 
 MGROW_TABLE = [  25,0,0,0,
@@ -100,33 +97,60 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
+    def is_applied_ms(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        # Taken from patch handler
+        ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
+        OFFSET_EU = 0x158F0
+        OFFSET_US = 0x1587C
+        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        if config.game_version == GAME_VERSION_EOS:
+            if config.game_region == GAME_REGION_US:
+                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
+            if config.game_region == GAME_REGION_EU:
+                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
+        raise NotImplementedError()
+    def is_applied_dv(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        if config.game_version == GAME_VERSION_EOS:
+            if config.game_region == GAME_REGION_US:
+                return True
+            if config.game_region == GAME_REGION_EU:
+                return True
+        raise NotImplementedError()
+    
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        if not self.is_applied(rom, config):
-            bin_before = rom.getFileByName("FONT/markfont.dat")
-            model = GraphicFontHandler.deserialize(bin_before)
-            entries = []
-            for x in range(model.get_nb_entries()):
-                entries.append(model.get_entry(x))
-            while len(entries)<max(START_LVL+9, START_SUB+4, START_EXT+11):
-                entries.append(None)
-            for x in range(START_EXT, START_EXT+11):
-                img = Image.open(os.path.join(SRC_DIR, "ext%d.png"%(x-START_EXT)), 'r')
-                if entries[x]!=None:
-                    raise ValueError(_("This patch isn't compatible with this rom."))
-                entries[x] = img
-            for x in range(START_LVL, START_LVL+9):
-                img = Image.open(os.path.join(SRC_DIR, "lvl%d.png"%(x-START_LVL)), 'r')
-                if entries[x]!=None:
-                    raise ValueError(_("This patch isn't compatible with this rom."))
-                entries[x] = img
-            for x in range(START_SUB, START_SUB+4):
-                img = Image.open(os.path.join(SRC_DIR, "sub%d.png"%(x-START_SUB)), 'r')
-                if entries[x]!=None:
-                    raise ValueError(_("This patch isn't compatible with this rom."))
-                entries[x] = img
-            model.set_entries(entries)
-            bin_after = GraphicFontHandler.serialize(model)
-            rom.setFileByName("FONT/markfont.dat", bin_after)
+        param = self.get_parameters()
+        if self.is_applied_ms(rom, config):
+            param["MoveShortcuts"] = 1
+        else:
+            param["MoveShortcuts"] = 0
+        
+        if self.is_applied_dv(rom, config):
+            param["DisplayVal"] = 1
+        else:
+            param["DisplayVal"] = 0
+        
+        START_EXT = param["StartGraphicPos"]
+        START_LVL = START_EXT+11
+        START_SUB = START_LVL+9
+        bin_before = rom.getFileByName("FONT/markfont.dat")
+        model = GraphicFontHandler.deserialize(bin_before)
+        entries = []
+        for x in range(model.get_nb_entries()):
+            entries.append(model.get_entry(x))
+        while len(entries)<max(START_LVL+9, START_SUB+4, START_EXT+11):
+            entries.append(None)
+        for x in range(START_EXT, START_EXT+11):
+            img = Image.open(os.path.join(SRC_DIR, "ext%d.png"%(x-START_EXT)), 'r')
+            entries[x] = img
+        for x in range(START_LVL, START_LVL+9):
+            img = Image.open(os.path.join(SRC_DIR, "lvl%d.png"%(x-START_LVL)), 'r')
+            entries[x] = img
+        for x in range(START_SUB, START_SUB+4):
+            img = Image.open(os.path.join(SRC_DIR, "sub%d.png"%(x-START_SUB)), 'r')
+            entries[x] = img
+        model.set_entries(entries)
+        bin_after = GraphicFontHandler.serialize(model)
+        rom.setFileByName("FONT/markfont.dat", bin_after)
         
         if MGROW_PATH not in rom.filenames:
             mgrow_data_stat = bytearray(0x96)

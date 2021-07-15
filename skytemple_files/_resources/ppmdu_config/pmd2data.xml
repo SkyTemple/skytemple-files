@@ -1094,6 +1094,7 @@
           <OpenBin filepath="overlay/overlay_0031.bin">
 	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
 	  </OpenBin>
+	  <Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (24 entries used)" min="0" max="255" default="92" type="int"/>
         </Patch>
         
         <!-- A patch to extract dungeon data -->

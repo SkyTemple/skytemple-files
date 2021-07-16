@@ -39,6 +39,7 @@ if TYPE_CHECKING:
 # Useful files:
 MONSTER_MD = 'BALANCE/monster.md'
 MONSTER_BIN = 'MONSTER/monster.bin'
+DUNGEON_BIN = 'DUNGEON/dungeon.bin'
 
 DEBUG = False
 

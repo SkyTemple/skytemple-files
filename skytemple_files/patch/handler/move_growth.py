@@ -22,7 +22,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.waza_p.model import WazaMoveCategory
@@ -64,7 +64,7 @@ MGROW_TABLE = [  25,0,0,0,
                5000,1,1,1,
                   0,5,5,1]
 
-class MoveGrowthPatchHandler(AbstractPatchHandler):
+class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -72,7 +72,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Implements move growth (PoC/Unfinished). \nNeeds ActorAndLevelLoader, ExtractAnimData and ChangeMoveStatsDisplay patches. \nCurrently not compatible with MoveShortcuts. \nThe last version of ChangeMoveStatsDisplay must be used with this.\nMay be incompatible if markfont.dat has been modified (except for ChangeMoveStatsDisplay)\nMakes all prior save files incompatible. ')
+        return _('Implements move growth (PoC/Unfinished). \nNeeds ActorAndLevelLoader, ExtractAnimData and ChangeMoveStatsDisplay patches. \nIf MoveShortcuts is applied, must be re-applied after it. \nThe last version of ChangeMoveStatsDisplay must be used with this.\nMay be incompatible if markfont.dat has been modified (except for ChangeMoveStatsDisplay)\nMakes all prior save files incompatible. ')
 
     @property
     def author(self) -> str:
@@ -110,11 +110,14 @@ class MoveGrowthPatchHandler(AbstractPatchHandler):
                 return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
     def is_applied_dv(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        PATCH_DV_CHECK_ADDR_APPLIED_US = 0x243F0
+        PATCH_DV_CHECK_ADDR_APPLIED_EU = 0x24650
+        PATCH_DV_CHECK_INSTR_APPLIED = 0xE3A09001
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return True
+                return read_uintle(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_US, 4)==PATCH_DV_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return True
+                return read_uintle(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU, 4)==PATCH_DV_CHECK_INSTR_APPLIED
         raise NotImplementedError()
     
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):

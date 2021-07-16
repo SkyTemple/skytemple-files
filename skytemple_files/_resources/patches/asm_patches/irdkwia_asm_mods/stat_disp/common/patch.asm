@@ -18,7 +18,8 @@
 	b end_string_accuracy
 no_sureshot:
 	mov r10,r0
-	.notice "Accu1: ",.
+	.notice "Accu1: "
+	.notice (.)
 	nop
 	bl SetValue
 	mov r7,r0
@@ -45,7 +46,8 @@ end_loop_print_accuracy:
 	blt loop_print_accuracy
 	mov  r2,StartPowerPos
 	bl PrintAttr
-	.notice "Accu2: ",.
+	.notice "Accu2: "
+	.notice (.)
 	nop
 end_string_accuracy:
 	mov  r0,r4
@@ -55,7 +57,8 @@ SetValue:
 	stmdb r13!, {r14}
 	mov r6,#0
 	strb r6,[r4, #+0x0]
-	.notice "SetValue: ",.
+	.notice "SetValue: "
+	.notice (.)
 	.if DisplayVal == 1
 		mov r9,#1
 		cmp r0,#10
@@ -88,7 +91,8 @@ SetValue:
 	b end_string_power
 no_status:
 	mov r10,r0
-	.notice "Power1: ",.
+	.notice "Power1: "
+	.notice (.)
 	nop
 	bl SetValue
 	add r7,r0,#2
@@ -107,7 +111,8 @@ print_power:
 end_loop_print_power:
 	cmp r6,r7
 	blt loop_print_power
-	.notice "Power2: ",.
+	.notice "Power2: "
+	.notice (.)
 	nop
 end_string_power:
 	mov  r0,r4

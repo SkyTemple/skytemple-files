@@ -303,12 +303,12 @@ label_hpp8_1:
 .area 0x28
 	mov r0,r9
 	mov r1,r8
+	mov r2,r7
 	bl IncreasePoints
 	ldr r0,[r13, #+0x80]
 	cmp r0,#0x0
-	beq HookSetMovePoints2+0x28
-	mov r0,r9
-	bl UnknownFunction
+	movne r0,r9
+	blne UnknownFunction
 	b HookSetMovePoints2+0x28
 	.pool
 .endarea

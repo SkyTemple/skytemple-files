@@ -5,8 +5,8 @@
 ; Implements Move Growth
 ; ------------------------------------------------------------------------------
 
-.definelabel MoveLvlIconStart, 0x67
-.definelabel MoveSubLvlIconStart, 0x70
+.definelabel MoveLvlIconStart, StartGraphicPos+11
+.definelabel MoveSubLvlIconStart, MoveLvlIconStart+9
 
 .org HookGetPPOW1
 .area 0x4

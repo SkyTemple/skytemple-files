@@ -92,7 +92,7 @@ class PatchType(Enum):
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
-    #MOVE_GROWTH = MoveGrowthPatchHandler
+    MOVE_GROWTH = MoveGrowthPatchHandler
     CHANGE_TBBG = ChangeTextBoxColorPatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
     CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler

@@ -5,8 +5,8 @@
 ; Implements Move Growth
 ; ------------------------------------------------------------------------------
 
-.definelabel MoveLvlIconStart, 0x67
-.definelabel MoveSubLvlIconStart, 0x70
+.definelabel MoveLvlIconStart, StartGraphicPos+11
+.definelabel MoveSubLvlIconStart, MoveLvlIconStart+9
 
 .org HookGetPPOW1
 .area 0x4
@@ -53,17 +53,23 @@
 	.fill (HookProcessGinsengOW2+0x40-.), 0xCC
 .endarea
 
-.org HookDisplayAccuracy
-.area 0xC
-	mov  r0,r4
-	mov  r1,r8
+.org HookDisplayAccuracy1
+.area 0x4
+	nop
+.endarea
+
+.org HookDisplayPower1
+.area 0x4
+	nop
+.endarea
+
+.org HookDisplayAccuracy2
+.area 0x4
 	bl ProxyExtendAccuracy
 .endarea
 
-.org HookDisplayPower
-.area 0xC
-	mov  r0,r4
-	mov  r1,r8
+.org HookDisplayPower2
+.area 0x4
 	bl ProxyExtendPower
 .endarea
 
@@ -164,22 +170,22 @@ case_0:
 case_1_2:
 	ldrb r1,[r6, #+0x0]
 	mov  r0,r6
-	;No Shortcut
-	tst r1,#0x8
-	ldrne r8,=move_set
-	ldreq r8,=move_unset
-	;Shortcut
-	;tst r1,#0x2
-	;ldrne r8,=no_shortcut
-	;bne cancel_shortcut
-	;cmp r9,#4
-	;ldrge r8,=no_shortcut
-	;bge cancel_shortcut
-	;ldr r8,=shortcut_icon
-	;mov r1,'2'
-	;add r1,r1,r9
-	;strb r1,[r8, #+0x4]
-	;end
+	.if MoveShortcuts == 1
+		tst r1,#0x2
+		ldrne r8,=no_shortcut
+		bne cancel_shortcut
+		cmp r9,#4
+		ldrge r8,=no_shortcut
+		bge cancel_shortcut
+		ldr r8,=shortcut_icon
+		mov r1,'2'
+		add r1,r1,r9
+		strb r1,[r8, #+0x4]
+	.else
+		tst r1,#0x8
+		ldrne r8,=move_set
+		ldreq r8,=move_unset
+	.endif
 cancel_shortcut:
 	bl GetMovePPProxy
 	add  r1,r13,#0x10
@@ -388,35 +394,31 @@ get_actual_pp_bonus:
 .endarea
 
 .org ProxyExtendAccuracy
-.area 0x2C
-	stmdb  r13!,{r4,r5,r14}
-	mov r4,r0
-	mov r5,r1
+.area 0x24
+	stmdb  r13!,{r14}
 	mov r0,#2
 	bl IsLoadedOverlay
 	cmp r0,#0
 	beq no_extend_accuracy
 	mov r0,r4
-	mov r1,r5
+	mov r1,r8
 	bl ExtendAccuracy
 no_extend_accuracy:
-	ldmia  r13!,{r4,r5,r15}
+	ldmia  r13!,{r15}
 .endarea
 
 .org ProxyExtendPower
-.area 0x2C
-	stmdb  r13!,{r4,r5,r14}
-	mov r4,r0
-	mov r5,r1
+.area 0x24
+	stmdb  r13!,{r14}
 	mov r0,#2
 	bl IsLoadedOverlay
 	cmp r0,#0
 	beq no_extend_power
 	mov r0,r4
-	mov r1,r5
+	mov r1,r8
 	bl ExtendPower
 no_extend_power:
-	ldmia  r13!,{r4,r5,r15}
+	ldmia  r13!,{r15}
 .endarea
 
 .org MoveLevelPtr

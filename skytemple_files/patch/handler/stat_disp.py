@@ -42,23 +42,6 @@ PATCH_CHECK_INSTR_APPLIED = 0xEA000004
 SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_asm_mods', 'stat_disp', 'src')
 
 OLD_STAT = "[M:S3]"*8
-START_ACCURACY = 0x45
-START_POWER = 0x51
-MAX_POWER = f"[M:B{START_POWER}]"+(f"[M:B{START_POWER+10}]")*9+f"[M:B{START_POWER+9}]"
-MAX_ACCU = f"[M:B{START_POWER}]"+(f"[M:B{START_ACCURACY+11}]")*10+f"[M:B{START_POWER}]"
-DESC_CHANGES = {8: MAX_POWER,
-                60: MAX_POWER,
-                75: MAX_POWER,
-                100: MAX_POWER,
-                153: MAX_POWER,
-                156: MAX_POWER,
-                205: MAX_POWER,
-                206: MAX_POWER,
-                348: MAX_POWER,
-                477: MAX_POWER,
-                61: MAX_ACCU,
-                340: MAX_ACCU,
-                535: MAX_ACCU}
 
 class ChangeMoveStatDisplayPatchHandler(AbstractPatchHandler):
 
@@ -94,38 +77,50 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
-        if not self.is_applied(rom, config):
-            bin_before = rom.getFileByName("FONT/markfont.dat")
-            model = GraphicFontHandler.deserialize(bin_before)
-            entries = []
-            for x in range(model.get_nb_entries()):
-                entries.append(model.get_entry(x))
-            while len(entries)<max(START_ACCURACY+12, START_POWER+11):
-                entries.append(None)
-            
-            for x in range(START_ACCURACY, START_ACCURACY+12):
-                img = Image.open(os.path.join(SRC_DIR, "accu_%02d.png"%(x-START_ACCURACY)), 'r')
-                if entries[x]!=None:
-                    raise ValueError(_("This patch isn't compatible with this rom."))
-                entries[x] = img
-            for x in range(START_POWER, START_POWER+11):
-                img = Image.open(os.path.join(SRC_DIR, "pow_%02d.png"%(x-START_POWER)), 'r')
-                if entries[x]!=None:
-                    raise ValueError(_("This patch isn't compatible with this rom."))
-                entries[x] = img
-            model.set_entries(entries)
-            bin_after = GraphicFontHandler.serialize(model)
-            rom.setFileByName("FONT/markfont.dat", bin_after)
-            
-            # Change some move descriptions
-            for filename in get_files_from_rom_with_extension(rom, 'str'):
-                bin_before = rom.getFileByName(filename)
-                strings = StrHandler.deserialize(bin_before)
-                block = config.string_index_data.string_blocks['Move Descriptions']
-                for k, v in DESC_CHANGES.items():
-                    strings.strings[block.begin+k] = strings.strings[block.begin+k].replace(OLD_STAT, v)
-                bin_after = StrHandler.serialize(strings)
-                rom.setFileByName(filename, bin_after)
+        START_ACCURACY = self.get_parameter("StartGraphicPos")
+        START_POWER = START_ACCURACY+12
+        MAX_POWER = f"[M:B{START_POWER}]"+(f"[M:B{START_POWER+10}]")*9+f"[M:B{START_POWER+9}]"
+        MAX_ACCU = f"[M:B{START_POWER}]"+(f"[M:B{START_ACCURACY+11}]")*10+f"[M:B{START_POWER}]"
+        DESC_CHANGES = {8: MAX_POWER,
+                        60: MAX_POWER,
+                        75: MAX_POWER,
+                        100: MAX_POWER,
+                        153: MAX_POWER,
+                        156: MAX_POWER,
+                        205: MAX_POWER,
+                        206: MAX_POWER,
+                        348: MAX_POWER,
+                        477: MAX_POWER,
+                        61: MAX_ACCU,
+                        340: MAX_ACCU,
+                        535: MAX_ACCU}
+        bin_before = rom.getFileByName("FONT/markfont.dat")
+        model = GraphicFontHandler.deserialize(bin_before)
+        entries = []
+        for x in range(model.get_nb_entries()):
+            entries.append(model.get_entry(x))
+        while len(entries)<max(START_ACCURACY+12, START_POWER+11):
+            entries.append(None)
+        
+        for x in range(START_ACCURACY, START_ACCURACY+12):
+            img = Image.open(os.path.join(SRC_DIR, "accu_%02d.png"%(x-START_ACCURACY)), 'r')
+            entries[x] = img
+        for x in range(START_POWER, START_POWER+11):
+            img = Image.open(os.path.join(SRC_DIR, "pow_%02d.png"%(x-START_POWER)), 'r')
+            entries[x] = img
+        model.set_entries(entries)
+        bin_after = GraphicFontHandler.serialize(model)
+        rom.setFileByName("FONT/markfont.dat", bin_after)
+        
+        # Change some move descriptions
+        for filename in get_files_from_rom_with_extension(rom, 'str'):
+            bin_before = rom.getFileByName(filename)
+            strings = StrHandler.deserialize(bin_before)
+            block = config.string_index_data.string_blocks['Move Descriptions']
+            for k, v in DESC_CHANGES.items():
+                strings.strings[block.begin+k] = strings.strings[block.begin+k].replace(OLD_STAT, v)
+            bin_after = StrHandler.serialize(strings)
+            rom.setFileByName(filename, bin_after)
 
         try:
             apply()

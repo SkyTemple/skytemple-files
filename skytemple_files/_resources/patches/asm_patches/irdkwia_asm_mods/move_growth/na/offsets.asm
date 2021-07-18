@@ -28,8 +28,10 @@
 
 .definelabel HookProcessGinsengOW1, 0x0201162C
 .definelabel HookProcessGinsengOW2, 0x020116A4
-.definelabel HookDisplayAccuracy, 0x020243FC
-.definelabel HookDisplayPower, 0x020244B0
+.definelabel HookDisplayAccuracy1, 0x02024388
+.definelabel HookDisplayAccuracy2, 0x020243D4
+.definelabel HookDisplayPower1, 0x02024450
+.definelabel HookDisplayPower2, 0x0202448C
 
 .definelabel PrintMoveString, 0x02013478
 .definelabel MoveSPrintF, 0x02013758

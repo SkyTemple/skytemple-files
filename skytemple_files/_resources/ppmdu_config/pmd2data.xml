@@ -984,6 +984,12 @@
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/change_tbbg/selector_arm9.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="Red" label="Red component" min="0" max="255" default="32" type="int"/>
+            <Param name="Green" label="Green component" min="0" max="255" default="32" type="int"/>
+            <Param name="Blue" label="Blue component" min="0" max="255" default="32" type="int"/>
+            <Param name="Alpha" label="Alpha component" min="0" max="255" default="144" type="int"/>
+          </Parameters>
         </Patch>
 
         <!-- A patch to externalize waza_p/waza_p2 files -->
@@ -1052,6 +1058,13 @@
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="irdkwia_asm_mods/stat_disp/selector_arm9.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (23 entries used)" min="0" max="255" default="69" type="int"/>
+            <Param name="DisplayVal" label="Display accuracy and power values" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+          </Parameters>
         </Patch>
 
         <!-- A patch to extract spinda bar's item list-->
@@ -1089,6 +1102,9 @@
           <OpenBin filepath="overlay/overlay_0031.bin">
 	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
 	  </OpenBin>
+          <Parameters>
+	  	<Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (24 entries used)" min="0" max="255" default="92" type="int"/>
+          </Parameters>
         </Patch>
 
         <!-- A patch to extract animations table data -->
@@ -1119,6 +1135,9 @@
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
 	  </OpenBin>
+          <Parameters>
+            <Param name="PercentageShared" label="% of exp. shared" min="0" max="255" default="100" type="int"/>
+          </Parameters>
         </Patch>
         
         <!-- A patch to let the player choose its starter after the quiz -->

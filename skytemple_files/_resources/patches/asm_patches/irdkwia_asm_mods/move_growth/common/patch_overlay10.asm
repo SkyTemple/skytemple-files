@@ -5,7 +5,7 @@
 ; Implements Move Growth
 ; ------------------------------------------------------------------------------
 
-.definelabel StatExtendIconStart, 0x5C
+.definelabel StatExtendIconStart, StartGraphicPos
 
 .org Ov10PatchZone
 .area 0x800
@@ -207,6 +207,8 @@ no_add_power:
 	ldmia  r13!,{r4,r5,r15}
 IncreasePoints:
 	stmdb  r13!,{r3,r4,r5,r6,r7,r8,r14}
+	cmp r2,#0
+	bne no_add_points
 	mov r6,r0
 	mov r7,r1
 	ldrh r4, [r1, #+0x4]
@@ -279,33 +281,49 @@ IncrementPointsGinseng:
 	ldmia  r13!,{r4,r5,r15}
 	.pool
 ExtendAccuracy:
-	stmdb  r13!,{r4,r5,r6,r14}
+	stmdb  r13!,{r4,r5,r6,r7,r14}
 	sub r13,r13,#0x18
 	mov r4,r0
 	strh r1,[r13, #+0x4]
 	mov r0,r1
 	bl GetMoveActualAccuracy
 	mov r5,r0
+	.if DisplayVal == 1
+		mov r0,r0,lsl 0x3
+		mov r1,#10
+		bl EuclidianDivision
+		sub r2,r0,#81
+	.else
+		sub r2,r0,#101
+	.endif
+	mov r7,r0
 	add r0,r13,#0x8
 	ldr r1,=str_off
-	sub r2,r5,#101
 	bl SPrintF
 	mov r0,r4
 	add r1,r13,#0x8
 	bl StrCat
 	mov r0,r13
 	bl GetMoveStats
-	add r2,r2,r5
-	cmp r2,#100
-	movgt r2,#100
-	sub r5,r2,r5
+	add r0,r2,r5
+	.if DisplayVal == 1
+		mov r0,r0,lsl 0x3
+		mov r1,#10
+		bl EuclidianDivision
+		cmp r0,#80
+		movgt r0,#80
+	.else
+		cmp r0,#100
+		movgt r0,#100
+	.endif
+	sub r5,r0,r7
 	mov r6,#0
 	b end_loop_ext_acc
 loop_ext_acc:
 	sub r0,r5,r6
 	cmp  r0,#10
-	addle r1, r0, StatExtendIconStart
-	movgt r1, StatExtendIconStart+10
+	addle r2, r0, StatExtendIconStart
+	movgt r2, StatExtendIconStart+10
 	mov  r0,r4
 	bl PrintSpecialChar
 	add  r6,r6,#10
@@ -313,15 +331,21 @@ end_loop_ext_acc:
 	cmp r6,r5
 	ble loop_ext_acc
 	add r13,r13,#0x18
-	ldmia  r13!,{r4,r5,r6,r15}
+	ldmia  r13!,{r4,r5,r6,r7,r15}
 ExtendPower:
-	stmdb  r13!,{r4,r5,r6,r14}
+	stmdb  r13!,{r4,r5,r6,r7,r14}
 	sub r13,r13,#0x18
 	mov r4,r0
 	strh r1,[r13, #+0x4]
 	mov r0,r1
 	bl GetMovePowerWithID
 	mov r5,r0
+	.if DisplayVal == 1
+		mov r0,r0,lsl 0x3
+		mov r1,#10
+		bl EuclidianDivision
+	.endif
+	mov r7,r0
 	add r0,r13,#0x8
 	ldr r1,=str_off
 	mvn r2,#0
@@ -332,14 +356,19 @@ ExtendPower:
 	mov r0,r13
 	bl GetMoveStats
 	add r0,r0,r5
-	sub r5,r0,r5
+	.if DisplayVal == 1
+		mov r0,r0,lsl 0x3
+		mov r1,#10
+		bl EuclidianDivision
+	.endif
+	sub r5,r0,r7
 	mov r6,#0
 	b end_loop_ext_pwr
 loop_ext_pwr:
 	sub r0,r5,r6
 	cmp  r0,#10
-	addle r1, r0, StatExtendIconStart
-	movgt r1, StatExtendIconStart+10
+	addle r2, r0, StatExtendIconStart
+	movgt r2, StatExtendIconStart+10
 	mov  r0,r4
 	bl PrintSpecialChar
 	add  r6,r6,#10
@@ -347,7 +376,7 @@ end_loop_ext_pwr:
 	cmp r6,r5
 	ble loop_ext_pwr
 	add r13,r13,#0x18
-	ldmia  r13!,{r4,r5,r6,r15}
+	ldmia  r13!,{r4,r5,r6,r7,r15}
 	.pool
 UnknownFunction:
 	stmdb  r13!,{r4,r14}

@@ -28,7 +28,7 @@
 .definelabel PartyPkmnNb, 0x22B
 .definelabel MaxLvl, 0x64
 .definelabel PartyPkmnSize, 0x44
-.definelabel PercentageShared, 0x64
+; .definelabel PercentageShared, 0x64
 .definelabel MaxPercent, 0x64
 
 

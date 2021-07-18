@@ -303,18 +303,11 @@ class Ssb:
                             else:
                                 logger.warning(f"Unknown effect id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'String':
-                            try:
+                        elif argument_spec.type == 'String' or argument_spec.type == 'ConstString':
+                            if param >= len(self.constants):
                                 new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
-                            except IndexError:
-                                # Fall back to const table
+                            else:
                                 new_params.append(SsbOpParamConstString(self.constants[param]))
-                        elif argument_spec.type == 'ConstString':
-                            try:
-                                new_params.append(SsbOpParamConstString(self.constants[param]))
-                            except IndexError:
-                                # Fall back to lang string
-                                new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
                         elif argument_spec.type == 'PositionMark':
                             x_offset = y_offset = x_relative = y_relative = 0
                             try:

@@ -24,15 +24,9 @@ from skytemple_files.common.i18n_util import f, _
 
 NUM_PREVIOUS_ENTRIES = 600
 
-
-PATCH_CODE_START_US = 0xA48F8
-PATCH_CODE_END_US = 0x0A4ED8
 PATCH_CHECK_ADDR_APPLIED_US = 0x1F6B0
-PATCH_CHECK_INSTR_APPLIED_US = 0xEA0000D4
-PATCH_CODE_START_EU = 0xA4EF8
-PATCH_CODE_END_EU = 0xA54D8
 PATCH_CHECK_ADDR_APPLIED_EU = 0x1F74C
-PATCH_CHECK_INSTR_APPLIED_EU = 0xEA0000D4
+PATCH_CHECK_INSTR_APPLIED = 0xEA0000D4
 
 
 class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -51,7 +45,7 @@ class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return '0.0.2'
 
     def depends_on(self) -> List[str]:
         return ['ActorAndLevelLoader']
@@ -63,9 +57,9 @@ class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED_US
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED_EU
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):

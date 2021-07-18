@@ -93,6 +93,9 @@
         <Block name="MapMarkerPlacements" beg="0xA94D0" end="0xA9E80"/>
         <Block name="RankUpTable"        beg="0xA2B44" end="0xA2C14"/>
         <Block name="MonsterSpriteData"  beg="0xA2D08" end="0xA31B8"/>
+        <Block name="TextSpeedConstant"  beg="0x20C98" end="0x20C99"/>
+        <Block name="MinIQExclusiveMoveUser" beg="0xA188C" end="0xA188D"/>
+        <Block name="MinIQItemMaster"    beg="0xA18A4" end="0xA18A5"/>
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
@@ -101,6 +104,11 @@
         <Block name="DefaultPartnerId"  beg="0xAFEFE" end="0xAFF00"/>
         <Block name="HeroStartLevel"  beg="0x48880" end="0x48881"/>
         <Block name="PartnerStartLevel"  beg="0x488F0" end="0x488F1"/>
+        <Block name="GuestPokemonData" beg="0xA28BC" end="0xA2B44"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="GuestPokemonData2" beg="0x4EE10" end="0x4EFE0"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="ExtraDungeonData" beg="0x4ECA8" end="0x4EE10"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -123,6 +131,18 @@
       <Bin filepath="overlay/overlay_0010.bin" loadaddress="0x22BCA80">
         <Block name="MonsterSpawnStatsTable" beg="0x8EB8" end="0x935C"/>
         <Block name="FixedFloorProperties"   beg="0xA1F0" end="0xADF0"/>
+        <Block name="SpawnDelayNormal"       beg="0x7A5C" end="0x7A5D"/>
+        <Block name="SpawnDelayStealing"     beg="0x7BC0" end="0x7BC1"/>
+        <Block name="IntimidatorChance"      beg="0x7B38" end="0x7B39"/>
+        <Block name="BurnDamageDelay"        beg="0x7B90" end="0x7B91"/>
+        <Block name="PoisonDamageDelay"      beg="0x7C28" end="0x7C29"/>
+        <Block name="BadPoisonDamageDelay"   beg="0x7994" end="0x7995"/>
+        <Block name="GinsengChance3"         beg="0x7C40" end="0x7C41"/>
+        <Block name="MusicList"              beg="0x8ADC" end="0x8C30"/>
+        <Block name="RandomMusicList"        beg="0x877C" end="0x886C"/>
+        <Block name="LifeSeedHP"             beg="0x7A78" end="0x7A79"/>
+        <Block name="SitrusBerryHP"          beg="0x79F8" end="0x79F9"/>
+        <Block name="OranBerryHP"            beg="0x7B6C" end="0x7B6D"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
@@ -160,9 +180,14 @@
         <Block name="MonsterSpawnTable"   beg="0x73CD4" end="0x73EB4"/>
         <Block name="TileSpawnTable"      beg="0x73B90" end="0x73BBC"/>
         <Block name="FixedFloorOverrides" beg="0x73BD4" end="0x73CD4"/>
+        <Block name="BellyLostTurn"       beg="0x34830" end="0x34833"/>
+        <Block name="BellyLostWtw"        beg="0x76528" end="0x76529"/>
+        <Block name="BellyLostWtw1000"    beg="0x7652A" end="0x7652B"/>
       </Bin>
 
-      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80"/>
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80">
+        <Block name="MainMenuSongId"      beg="0x1720" end="0x1720"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329520">
         <Block name="ContinueChoice" beg="0x12048" end="0x12068"/>
         <Block name="SubMenu" beg="0x12068" end="0x120B0"/>
@@ -178,7 +203,9 @@
       <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233CA80"/>
       <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233CA80"/>
       <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233CA80"/>
-      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233CA80">
+        <Block name="MainMenuReturnSongId" beg="0xE80" end="0xE80"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238A140"/>
       <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238A140">
         <Block name="FootprintDebugMenu" beg="0x3960" end="0x39A8"/>
@@ -305,6 +332,9 @@
         <Block name="MapMarkerPlacements" beg="0xA9D70" end="0xAA720"/>
         <Block name="RankUpTable"        beg="0xA30C8" end="0xA3198"/>
         <Block name="MonsterSpriteData"  beg="0xA332C" end="0xA37DC"/>
+        <Block name="TextSpeedConstant"  beg="0x20DF0" end="0x20DF1"/>
+        <Block name="MinIQExclusiveMoveUser" beg="0xA1E10" end="0xA1E11"/>
+        <Block name="MinIQItemMaster"    beg="0xA1E28" end="0xA1E29"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>
@@ -313,6 +343,11 @@
         <Block name="DefaultPartnerId"  beg="0xB081A" end="0xB081C"/>
         <Block name="HeroStartLevel"  beg="0x48B9C" end="0x48B9D"/>
         <Block name="PartnerStartLevel"  beg="0x48C0C" end="0x48C0D"/>
+        <Block name="GuestPokemonData" beg="0xA2E40" end="0xA30C8"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="GuestPokemonData2" beg="0x4F148" end="0x4F318"/>
+        <!-- Requires EditExtraPokemon patch -->
+        <Block name="ExtraDungeonData" beg="0x4EFE0" end="0x4F148"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -334,6 +369,18 @@
       <Bin filepath="overlay/overlay_0010.bin" loadaddress="0x22BD3C0">
         <Block name="MonsterSpawnStatsTable" beg="0x8ED0" end="0x9374"/>
         <Block name="FixedFloorProperties"   beg="0xA208" end="0xAE08"/>
+        <Block name="SpawnDelayNormal"       beg="0x7A74" end="0x7A75"/>
+        <Block name="SpawnDelayStealing"     beg="0x7BD8" end="0x7BD9"/>
+        <Block name="IntimidatorChance"      beg="0x7B50" end="0x7B51"/>
+        <Block name="BurnDamageDelay"        beg="0x7BA8" end="0x7BA9"/>
+        <Block name="PoisonDamageDelay"      beg="0x7C40" end="0x7C41"/>
+        <Block name="BadPoisonDamageDelay"   beg="0x79AC" end="0x79AD"/>
+        <Block name="GinsengChance3"         beg="0x7C58" end="0x7C59"/>
+        <Block name="MusicList"              beg="0x8AF4" end="0x8C48"/>
+        <Block name="RandomMusicList"        beg="0x8794" end="0x8884"/>
+        <Block name="LifeSeedHP"             beg="0x7A90" end="0x7A91"/>
+        <Block name="SitrusBerryHP"          beg="0x7A10" end="0x7A11"/>
+        <Block name="OranBerryHP"            beg="0x7B84" end="0x7B85"/>
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
@@ -366,10 +413,15 @@
         <Block name="MonsterSpawnTable"   beg="0x73FA0" end="0x74180"/>
         <Block name="TileSpawnTable"      beg="0x73E5C" end="0x73E88"/>
         <Block name="FixedFloorOverrides" beg="0x73EA0" end="0x73FA0"/>
+        <Block name="BellyLostTurn"       beg="0x34950" end="0x34953"/>
+        <Block name="BellyLostWtw"        beg="0x767F4" end="0x767F5"/>
+        <Block name="BellyLostWtw1000"    beg="0x767F6" end="0x767F7"/>
       </Bin>
 
 
-      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0"/>
+      <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BD3C0">
+        <Block name="MainMenuSongId"      beg="0x15F4" end="0x15F4"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0001.bin" loadaddress="0x02329D40">
         <Block name="ContinueChoice" beg="0x11F74" end="0x11F94"/>
         <Block name="SubMenu" beg="0x11F94" end="0x11FDC"/>
@@ -385,7 +437,9 @@
       <Bin filepath="overlay/overlay_0006.bin" loadaddress="0x0233D200"/>
       <Bin filepath="overlay/overlay_0007.bin" loadaddress="0x0233D200"/>
       <Bin filepath="overlay/overlay_0008.bin" loadaddress="0x0233D200"/>
-      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200"/>
+      <Bin filepath="overlay/overlay_0009.bin" loadaddress="0x0233D200">
+        <Block name="MainMenuReturnSongId" beg="0xE80" end="0xE80"/>
+      </Bin>
       <Bin filepath="overlay/overlay_0012.bin" loadaddress="0x0238AC80"/>
       <Bin filepath="overlay/overlay_0014.bin" loadaddress="0x0238AC80">
         <Block name="FootprintDebugMenu" beg="0x39C0" end="0x3A08"/>
@@ -925,6 +979,13 @@
 	  </OpenBin>
         </Patch>
         
+        <!-- A patch to provide support for changing the textbox color -->
+        <Patch id="ChangeTextBoxBackground" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/change_tbbg/selector_arm9.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to externalize waza_p/waza_p2 files -->
         <Patch id="ExternalizeWazaFile" >
           <OpenBin filepath="arm9.bin">
@@ -1013,7 +1074,23 @@
 	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
+        <!-- A patch to implement move growth -->
+        <Patch id="MoveGrowth" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0010.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay10.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay29.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0031.bin">
+	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to extract animations table data -->
         <Patch id="ExtractAnimData" >
           <OpenBin filepath="arm9.bin">
@@ -1023,7 +1100,7 @@
 	  	<Include filename ="irdkwia_asm_mods/animations/selector_overlay10.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract dungeon data -->
         <Patch id="FixEvolutionGlitch" >
           <OpenBin filepath="overlay/overlay_0016.bin">
@@ -1114,8 +1191,8 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>
         </SimplePatch>
-	      
-	      <SimplePatch id="CompleteTeamControl">
+
+        <SimplePatch id="CompleteTeamControl">
           <Include filename="cipnit_asm_mods/completeteamcontrol.asm"/>
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
@@ -1142,6 +1219,22 @@
         <SimplePatch id="ReduceJumpcutPauseTime">
           <Include filename="cipnit_asm_mods/reducejumpcutpausetime.asm"/>
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="AllowUnrecruitableMons">
+          <Include filename="end_asm_mods/src/AllowUnrecruitableMons.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="EditExtraPokemon">
+          <Include filename="end_asm_mods/src/EditExtraPokemon.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>

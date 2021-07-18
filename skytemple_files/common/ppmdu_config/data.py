@@ -18,6 +18,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from enum import Enum
 from typing import List, Dict, Union, Pattern, Optional
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
@@ -166,11 +167,42 @@ class Pmd2PatchOpenBin(AutoString):
         self.includes = includes
 
 
+class Pmd2PatchParameterType(Enum):
+    STRING = "str"
+    INTEGER = "int"
+    SELECT = "select"
+
+
+class Pmd2PatchParameterOption(AutoString):
+    def __init__(self, type: Pmd2PatchParameterType, label: str, value: any):
+        self.type = type
+        self.label = label
+        self.value = value
+
+
+class Pmd2PatchParameter(AutoString):
+    def __init__(
+            self, name: str, type: Pmd2PatchParameterType, label: str, *,
+            min: Optional[int] = None, max: Optional[int] = None,
+            options: Optional[List[Pmd2PatchParameterOption]] = None, default = None):
+        self.name = name
+        self.type = type
+        self.label = label
+        self.min = min
+        self.max = max
+        self.default = default
+        self.options = options
+
+
 class Pmd2Patch(AutoString):
-    def __init__(self, id: str, includes: List[Pmd2PatchInclude], open_bins: List[Pmd2PatchOpenBin]):
+    def __init__(self, id: str, includes: List[Pmd2PatchInclude], open_bins: List[Pmd2PatchOpenBin], parameters: List[Pmd2PatchParameter]):
         self.id = id
         self.includes = includes
         self.open_bins = open_bins
+        self.parameters: Dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
+
+    def has_parameters(self):
+        return len(self.parameters) > 0
 
 
 class Pmd2PatchStringReplacementGame(AutoString):
@@ -187,10 +219,14 @@ class Pmd2PatchStringReplacement(AutoString):
 
 
 class Pmd2SimplePatch(AutoString):
-    def __init__(self, id: str, includes: List[Pmd2PatchInclude], string_replacements: List[Pmd2PatchStringReplacement]):
+    def __init__(self, id: str, includes: List[Pmd2PatchInclude], string_replacements: List[Pmd2PatchStringReplacement], parameters: List[Pmd2PatchParameter]):
         self.id = id
         self.includes = includes
         self.string_replacements = string_replacements
+        self.parameters: Dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
+
+    def has_parameters(self):
+        return len(self.parameters) > 0
 
 
 class Pmd2AsmPatchesConstants(AutoString):

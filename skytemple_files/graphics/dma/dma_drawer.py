@@ -16,10 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 from random import choice
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from PIL import Image
 
+from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, TileRuleType, TileRule, FloorType
 from skytemple_files.graphics.bma.model import Bma
 from skytemple_files.graphics.dma.model import Dma, DmaType
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
@@ -33,11 +34,15 @@ class DmaDrawer:
     def __init__(self, dma: Dma):
         self.dma = dma
 
-    def rules_from_bma(self, bma: Bma) -> List[List[DmaType]]:
+    def rules_from_bma(self, bma: Union[Bma, List[int]], width_in_chunks=None) -> List[List[DmaType]]:
         rules = []
         active_row = None
-        for i, chunk in enumerate(bma.layer0):
-            if i % bma.map_width_chunks == 0:
+        layer = bma
+        if isinstance(bma, Bma):
+            layer = bma.layer0
+            width_in_chunks = bma.map_width_chunks
+        for i, chunk in enumerate(layer):
+            if i % width_in_chunks == 0:
                 if active_row is not None:
                     rules.append(active_row)
                 active_row = []
@@ -49,6 +54,43 @@ class DmaDrawer:
                 rule = DmaType.FLOOR
             active_row.append(rule)
         rules.append(active_row)
+        return rules
+
+    def rules_from_fixed_room(self, fixed_floor: FixedFloor):
+        # Iterate over floor and render it
+        draw_outside_as_second_terrain = any(action.tr_type == TileRuleType.SECONDARY_HALLWAY_VOID_ALL
+                                             for action in fixed_floor.actions if isinstance(action, TileRule))
+        outside = DmaType.WATER if draw_outside_as_second_terrain else DmaType.WALL
+        rules = []
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        ridx = 0
+        for y in range(0, fixed_floor.height):
+            row = [outside, outside, outside, outside, outside]
+            rules.append(row)
+            for x in range(0, fixed_floor.width):
+                action = fixed_floor.actions[ridx]
+                if isinstance(action, TileRule):
+                    if action.tr_type.floor_type == FloorType.FLOOR:
+                        row.append(DmaType.FLOOR)
+                    elif action.tr_type.floor_type == FloorType.WALL:
+                        row.append(DmaType.WALL)
+                    elif action.tr_type.floor_type == FloorType.SECONDARY:
+                        row.append(DmaType.WATER)
+                    elif action.tr_type.floor_type == FloorType.FLOOR_OR_WALL:
+                        row.append(DmaType.WALL)
+                else:
+                    row.append(DmaType.FLOOR)
+                ridx += 1
+            row += [outside, outside, outside, outside, outside]
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
+        rules.append([outside] * (fixed_floor.width + 10))
         return rules
 
     def get_mappings_for_rules(self, rules: List[List[DmaType]], variation_index=None,

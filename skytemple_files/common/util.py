@@ -18,8 +18,10 @@ import bisect
 import re
 import unicodedata
 import warnings
+import stat
+import os
 from itertools import groupby
-from typing import List, Tuple, TYPE_CHECKING, Iterable
+from typing import List, Tuple, TYPE_CHECKING, Iterable, Optional
 
 import pkg_resources
 from PIL import Image
@@ -37,6 +39,7 @@ if TYPE_CHECKING:
 # Useful files:
 MONSTER_MD = 'BALANCE/monster.md'
 MONSTER_BIN = 'MONSTER/monster.bin'
+DUNGEON_BIN = 'DUNGEON/dungeon.bin'
 
 DEBUG = False
 
@@ -380,14 +383,47 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     index_of_new_file = bisect.bisect(folder.files, file_name)
     folder.files.insert(index_of_new_file, file_name)
 
-    def recursive_increment_folder_start_idx(rfolder: Folder, if_bigger_than):
-        if rfolder.firstID > if_bigger_than:
+    def recursive_increment_folder_start_idx(rfolder: Folder, new_idx):
+        if rfolder != folder and rfolder.firstID >= new_idx:
             rfolder.firstID += 1
         for _, sfolder in rfolder.folders:
-            recursive_increment_folder_start_idx(sfolder, if_bigger_than)
+            recursive_increment_folder_start_idx(sfolder, new_idx)
 
     recursive_increment_folder_start_idx(rom.filenames, folder_first_file_id)
     rom.files.insert(folder_first_file_id + index_of_new_file, data)
+
+
+def folder_in_rom_exists(rom: NintendoDSRom, path: str):
+    """Checks if a folder exists in the ROM."""
+    return rom.filenames.subfolder(path) is not None
+
+
+def create_folder_in_rom(rom: NintendoDSRom, path: str):
+    """Creates a folder in the ROM."""
+    folder = rom.filenames.subfolder(path)
+    if folder is not None:
+        raise FileNotFoundError(f(_("Folder {path} already exists.")))
+    path_list = path.split('/')
+    par_dir_name = '/'.join(path_list[:-1])
+    parent_dir: Optional[Folder] = rom.filenames.subfolder(par_dir_name)
+    if parent_dir is None:
+        raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
+
+    found = False
+    first_id = -1
+    last_child_count = -1
+    for s_name, s_folder in sorted(parent_dir.folders, key=lambda f: f[0]):
+        s_folder: Folder
+        first_id = s_folder.firstID
+        last_child_count = len(s_folder.files)
+        if s_name > path_list[-1]:
+            found = True
+            break
+    if not found:
+        first_id = first_id + last_child_count
+
+    new_folder = Folder(firstID=first_id)
+    parent_dir.folders.append((path_list[-1], new_folder))
 
 
 def chunks(lst, n):
@@ -441,3 +477,20 @@ class AutoString:
 
     def __str__(self):
         return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v  is not None and not k[0] == '_'})}>"
+
+def set_rw_permission_folder(folder_path: str):
+    """
+    Set the folder with the given to having the r+w permission.
+    Does nothing on Windows.
+    """
+    try:
+        os.chmod(folder_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
+        for root, dirs, files in os.walk(folder_path, topdown = True):
+            for file_name in files:
+                file_path = os.path.join(root, file_name)        
+                os.chmod(file_path, stat.S_IREAD + stat.S_IWRITE)
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                os.chmod(dir_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
+    except NotImplementedError: # This isn't needed on Windows
+        pass

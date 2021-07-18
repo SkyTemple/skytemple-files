@@ -12,7 +12,18 @@
 .org UnloadCurrentWazaP
 .area 0x40
 	b TrueUnloadCurrentWazaP
-	.fill 0x3C, 0xCC
+here:
+	ldr r2,=ReadMoveBuffer
+	ldr r1,[r2]
+	add r9,r9,r1
+	add r1,r1,#0x1C
+	cmp r1,#0x8C0
+	movge r1,#0
+	str r1,[r2]
+	strh r4,[r9]
+	b there
+	.pool
+	.fill 0x14, 0xCC
 .endarea
 
 .org LoadWazaP
@@ -48,13 +59,32 @@
 .org OpenWaza
 .area 0x68
 	b TrueOpenWaza
+MVAlloc:
+	stmdb r13!, {r4,r14}
+	ldr r4,=buffer_ptr
+	ldr r0,[r4]
+	cmp r0,#0
+	bne after_alloc
+	mov r0,#0x8C0
+	mov r1,#0
+	bl MemAlloc
+after_alloc:
+	str r0,[r4]
+	mov r1,#0xFF
+	mov r2,#0x8C0
+	bl FillWithConstant1ByteArray
+	ldr r1,=ReadMoveBuffer
+	mov r0,#0
+	str r0,[r1]
+	ldmia r13!, {r4,r15}
+	.pool
 string_ms:
 	.ascii "MS: %d for %d"
 	dcb 0
 string_mv:
-	.ascii "MV: %d %d for %d"
+	.ascii "MV: %d"
 	dcb 0
-	.fill 0x45, 0xCC
+	.fill 0x7, 0xCC
 .endarea
 
 .org SelectWaza
@@ -105,6 +135,7 @@ TrueOpenWaza:
 	mov r5,r0
 	str r5,[r1,+r4, lsl #0x3]
 	
+	bl MVAlloc
 	bl FStreamAlloc
 	mov r0,r5
 	bl FStreamCtor
@@ -143,14 +174,11 @@ TrueOpenWaza:
 	.fill (TrueUnloadCurrentWazaP+0x120-.), 0xCC
 .endarea
 .org ReadMoveValue
-.area 0xC0
-	stmdb  r13!,{r4,r5,r6,r7,r8,r14}
+.area 0xD4
+	stmdb  r13!,{r4,r5,r6,r7,r8,r9,r10,r14}
 	mov r4,r0
 	mov r5,r1
 	mov r6,r2
-	ldr r0,=string_mv
-	mov r3,r4
-	bl PrintF
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo
 	ldr r2,[r3, #+0x4]
@@ -163,41 +191,52 @@ TrueOpenWaza:
 	add r0,r0,#0x1A
 	cmp r0,r8
 	blt no_read_move
-	ldr r1,=ReadMoveBuffer
-	ldrh r0,[r1]
+	ldr r9,[buffer_ptr]
+	mov r10,#0
+loop_buffer:
+	ldrh r0,[r9]
 	cmp r4,r0
 	beq no_read_move
-	strh r4,[r1]
+	add r10,r10,#1
+	add r9,r9,#0x1C
+	cmp r10,#80
+	blt loop_buffer
+	ldr r9,[buffer_ptr]
+	b here
+there:
+	ldr r0,=string_mv
+	mov r1,r4
+	bl PrintF
 	bl FStreamAlloc
 	mov r0,r7
 	mov r1,r8
 	mov r2,#0
 	bl FStreamSeek
 	mov r0,r7
-	ldr r1,=actual_data
+	add r1,r9,#2
 	mov r2,#0x1A
 	bl FStreamRead
 	bl FStreamDealloc
 no_read_move:
-	ldr r1,=actual_data
+	add r9,r9,#2
 	cmp r6,#0
-	moveq r0,r1
+	moveq r0,r9
 	beq end_read
 	cmp r6,#1
-	ldreqb r0,[r1,r5]
+	ldreqb r0,[r9,r5]
 	beq end_read
-	ldrsh r0,[r1,r5]
+	ldrsh r0,[r9,r5]
 end_read:
-	ldmia  r13!,{r4,r5,r6,r7,r8,r15}
+	ldmia  r13!,{r4,r5,r6,r7,r8,r9,r10,r15}
 	.pool
-	.fill (ReadMoveValue+0xC0-.), 0xCC
+	.fill (ReadMoveValue+0xD4-.), 0xCC
 .endarea
 
 .org ReadMoveBuffer
-.area 0x1C
-	.fill 0x2, 0xFF
-actual_data:
-	.fill 0x1A, 0x0
+.area 0x8
+	.word 0x0
+buffer_ptr:
+	.word 0x0
 .endarea
 
 ; r0: result = ReadMoveset(r0: pkmn_id, r1: moveset_id)

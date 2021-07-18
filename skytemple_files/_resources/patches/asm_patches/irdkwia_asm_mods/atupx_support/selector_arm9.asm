@@ -9,9 +9,11 @@
 
 ; Selects the correct region to apply the patch
 .if PPMD_GameVer == GameVer_EoS_NA
-	.include "na/change_arm9.asm"
+	.include "na/offsets.asm"
+	.include "common/patch.asm"
 .elseif PPMD_GameVer == GameVer_EoS_EU
-	.include "eu/change_arm9.asm"
+	.include "eu/offsets.asm"
+	.include "common/patch.asm"
 .endif
 
 .relativeinclude off

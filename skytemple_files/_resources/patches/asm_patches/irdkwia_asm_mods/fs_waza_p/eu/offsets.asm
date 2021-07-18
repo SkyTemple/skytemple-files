@@ -11,6 +11,7 @@
 .arm
 
 .definelabel FillWithZeros8Bytes, 0x02003228
+.definelabel FillWithConstant1ByteArray, 0x020032A4
 
 .definelabel FGetSize, 0x02008244
 
@@ -68,8 +69,8 @@
 .definelabel LSSize, 0x800
 .definelabel TrueUnloadCurrentWazaP, 0x020A6EC0 - LSSize
 .definelabel ReadMoveValue, TrueUnloadCurrentWazaP+0x120
-.definelabel ReadMoveBuffer, ReadMoveValue+0xC0
-.definelabel ReadMoveset, ReadMoveBuffer+0x1C
+.definelabel ReadMoveBuffer, ReadMoveValue+0xD4
+.definelabel ReadMoveset, ReadMoveBuffer+0x8
 .definelabel ReadMovesetBuffer, ReadMoveset+0xA0
 ; r0: result = ReadMoveValue(r0: move_id, r1: value_offset, r2: value_size)
 

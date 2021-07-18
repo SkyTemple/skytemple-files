@@ -14,14 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
@@ -29,7 +29,7 @@ OFFSET_EU = 0x158F0
 OFFSET_US = 0x1587C
 
 
-class MoveShortcutsPatch(AbstractPatchHandler):
+class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:
@@ -37,15 +37,18 @@ class MoveShortcutsPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y).")
+        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y). The ExtraSpace patch must be applied before this one.")
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return 'End45, irdkwia'
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return '0.2.0'
+
+    def depends_on(self) -> List[str]:
+        return ['ExtraSpace']
 
     @property
     def category(self) -> PatchCategory:

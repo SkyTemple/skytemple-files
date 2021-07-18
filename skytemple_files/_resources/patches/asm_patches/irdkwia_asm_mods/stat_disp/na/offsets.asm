@@ -10,8 +10,10 @@
 .nds
 .arm
 
-.definelabel StartAccuracyPos, 0x45
-.definelabel StartPowerPos, 0x51
+;.definelabel StartAccuracyPos, 0x45
+;.definelabel StartPowerPos, 0x51
+.definelabel StartAccuracyPos, StartGraphicPos
+.definelabel StartPowerPos, StartAccuracyPos+12
 
 .definelabel MoveDescStartID, 0x000027A2
 .definelabel MoveDescEndID, 0x000029D1
@@ -25,6 +27,7 @@
 .definelabel SetStringPower, 0x02024428
 .definelabel StrCpyFromFile, 0x020258B8
 .definelabel StrCat, 0x020897AC
-.definelabel PrintSpecialChar, 0x02099CD4
+.definelabel EuclidianDivision, 0x0208FEA4
+.definelabel PrintAttr, 0x02099CD4
 .definelabel NullString, 0x02099D50
 .definelabel SpecialCharString, 0x02099D84

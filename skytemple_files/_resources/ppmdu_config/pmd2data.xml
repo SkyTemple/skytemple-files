@@ -985,7 +985,7 @@
 	  	<Include filename ="irdkwia_asm_mods/change_tbbg/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to externalize waza_p/waza_p2 files -->
         <Patch id="ExternalizeWazaFile" >
           <OpenBin filepath="arm9.bin">
@@ -1074,7 +1074,7 @@
 	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to implement move growth -->
         <Patch id="MoveGrowth" >
           <OpenBin filepath="arm9.bin">
@@ -1090,7 +1090,17 @@
 	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
+        <!-- A patch to extract animations table data -->
+        <Patch id="ExtractAnimData" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/animations/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0010.bin">
+	  	<Include filename ="irdkwia_asm_mods/animations/selector_overlay10.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to extract dungeon data -->
         <Patch id="FixEvolutionGlitch" >
           <OpenBin filepath="overlay/overlay_0016.bin">

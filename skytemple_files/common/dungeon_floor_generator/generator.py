@@ -36,16 +36,18 @@ class RandomGenProperties:
         self.seeds_t1 = seeds_t1
 
     @classmethod
-    def default(cls) -> 'RandomGenProperties':
+    def default(cls, rng: random.Random = None) -> 'RandomGenProperties':
+        if rng is None:
+            rng = random
         return cls(
             0,
             0x5d588b65,
             1,
-            random.randrange(1 << 32),
-            random.randrange(1 << 32),
+            rng.randrange(1 << 32),
+            rng.randrange(1 << 32),
             0x269ec3,
             4,
-            [random.randrange(1 << 32) for i in range(5)]
+            [rng.randrange(1 << 32) for i in range(5)]
         )
 
 
@@ -114,7 +116,7 @@ class DungeonFloorGenerator:
         if self.gen_properties is None:
             self.gen_properties = RandomGenProperties.default()
 
-    def generate(self, floor_layout: MappaFloorLayout, max_retries=1) -> Optional[List[List[Tile]]]:
+    def generate(self, floor_layout: MappaFloorLayout, max_retries=1, flat=False) -> Union[List[List[Tile]], List[Tile], None]:
         """
         Returns a dungeon floor matrix (Tile matrix SIZE_Y x SIZE_X).
         Returns None if no valid floor could be generated after max_retries attempts.
@@ -159,8 +161,11 @@ class DungeonFloorGenerator:
 
         tiles_grid = []
         for y in range(32):
-            tiles_row = []
-            tiles_grid.append(tiles_row)
+            if not flat:
+                tiles_row = []
+                tiles_grid.append(tiles_row)
+            else:
+                tiles_row = tiles_grid
             for x in range(56):
                 terrain_idx = DungeonData.list_tiles[x][y].terrain_flags & 0x3
                 if terrain_idx == 0:

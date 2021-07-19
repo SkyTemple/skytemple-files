@@ -194,7 +194,7 @@ class FixedFloor:
             self.actions: List[FixedFloorActionRule] = self.read_actions(data, floor_pointer + 6, self.width * self.height)
 
     @classmethod
-    def new(cls, width: int, height: int, actions: List[FixedFloorActionRule], static_data):
+    def new(cls, width: int, height: int, actions: List[FixedFloorActionRule]):
         n = cls(None, None, None)
         n.width = width
         n.height = height

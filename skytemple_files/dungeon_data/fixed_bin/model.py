@@ -19,6 +19,7 @@ from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import Optional, Union
 
+from skytemple_files.common.dungeon_floor_generator.generator import Tile
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -171,13 +172,34 @@ class EntityRule(FixedFloorActionRule):
         return self.entity_rule_id + 16
 
 
+# This is a utility implementation for easier direct tile manipulation. It can't be used
+# with actual fixed floors.
+class DirectRule(FixedFloorActionRule):
+    def __init__(self, tile: Tile, itmtpmon_id: Optional[int], direction: Optional[Pmd2ScriptDirection] = None):
+        super().__init__(direction)
+        self.tile = tile
+        self.itmtpmon_id = itmtpmon_id
+
+    def _get_action_id(self):
+        raise NotImplementedError("Not applicable for direct rules.")
+
+
 class FixedFloor:
     def __init__(self, data: bytes, floor_pointer: int, static_data: Pmd2Data):
-        self.width = read_uintle(data, floor_pointer, 2)
-        self.height = read_uintle(data, floor_pointer + 2, 2)
-        self.unk4 = read_uintle(data, floor_pointer + 4, 2)
-        self.static_data = static_data
-        self.actions = self.read_actions(data, floor_pointer + 6, self.width * self.height)
+        if data is not None:
+            self.width = read_uintle(data, floor_pointer, 2)
+            self.height = read_uintle(data, floor_pointer + 2, 2)
+            self.unk4 = read_uintle(data, floor_pointer + 4, 2)
+            self.static_data = static_data
+            self.actions: List[FixedFloorActionRule] = self.read_actions(data, floor_pointer + 6, self.width * self.height)
+
+    @classmethod
+    def new(cls, width: int, height: int, actions: List[FixedFloorActionRule], static_data):
+        n = cls(None, None, None)
+        n.width = width
+        n.height = height
+        n.actions = actions
+        return n
 
     def read_actions(self, data: bytes, action_list_start: int, max_actions: int) -> List[FixedFloorActionRule]:
         cursor = action_list_start

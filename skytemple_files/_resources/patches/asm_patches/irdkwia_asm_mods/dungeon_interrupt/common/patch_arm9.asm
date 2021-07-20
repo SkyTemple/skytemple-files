@@ -5,12 +5,12 @@
 ; Useless Thing
 ; ------------------------------------------------------------------------------
 
-.org 0x020587D8
-.area 0x4
-	nop
-.endarea
+;.org 0x020587D8
+;.area 0x4
+;	nop
+;.endarea
 
-.org 0x020587F8
-.area 0x4
-	nop
-.endarea
+;.org 0x020587F8
+;.area 0x4
+;	nop
+;.endarea

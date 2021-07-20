@@ -4,15 +4,47 @@
 ; ------------------------------------------------------------------------------
 ; Useless Thing
 ; ------------------------------------------------------------------------------
-.definelabel Ov10PatchZone, 0x022DBFB0-0x1000
-.definelabel ContinueExecution, 0x022E00C8
 
 .org Ov10PatchZone
-.area 0x800
+.area 0x400
+SetInterrupt:
+	ldr r1,=interrupted
+	strb r0,[r1]
+	bx r14
+FillIfNotInterrupted:
+	ldr r0,[r13,#+0x44]
+	cmp r0,#0
+	moveq r1,#0
+	beq no_fill
+	ldr r2,=interrupted
+	ldrb r0,[r2]
+	cmp r0,#1
+	mov r0,#0
+	strb r0,[r2]
+	movne r1,#1
+no_fill:
+	bx r14
+CheckConquest:
+	stmdb r13!,{r14}
+	ldr r3,=interrupted
+	ldrb r2,[r3]
+	cmp r2,#1
+	mov r2,#0
+	strb r2,[r3]
+	blne SetConquest
+	ldmia r13!,{r15}
+CheckEndDungeon:
+	stmdb r13!,{r14}
+	ldr r1,=interrupted
+	ldrb r0,[r1]
+	cmp r0,#1
+	blne RefillTeam
+	ldmia r13!,{r15}
+	.pool
 CheckDungeonInterrupt:
 	stmdb r13!, {r4,r5,r6,r7}
 	mov r4,r1
-	ldr r0,=0x02353538
+	ldr r0,=DungeonBaseStructurePtr
 	ldr r0,[r0]
 	ldrb r5,[r0,#+0x748]
 	
@@ -77,22 +109,66 @@ end_loop:
 	
 	ldr r7,=info
 	ldrb r0,[r7,#+0x1]
-	cmp r0,#2
+	cmp r0,#5
 	addls r15,r15,r0,lsl #0x2
 	b end_switch
 	b end_switch
 	b case_1
+	b case_2
+	b case_3
+	b case_4
+	b case_5
 case_1:
+	mov r4,#0
+	b case_common_1_2
+case_2:
+	mov r4,#1
+case_common_1_2:
 	mov r0,#0
 	ldrh r1,[r7,#+0x2]
-	ldrb r2,[r7,#+0x4]
-	bl 0x0204B678
+	ldrh r2,[r7,#+0x4]
+	bl GetGameVarPos
+	cmp r0,r4
+	movne r6,#0
+	b end_switch
+case_3:
+	mov r4,#0
+	b case_common_3_4_5
+case_4:
+	mov r4,#1
+	b case_common_3_4_5
+case_5:
+	mov r4,#2
+case_common_3_4_5:
+	mov r0,#0
+	ldrh r1,[r7,#+0x2]
+	mov r2,#0
+	bl GetGameVarPos
+	ldrb r1,[r7,#+0x4]
+	cmp r0,r1
+	bne check_case_common_3_4_5
+	mov r0,#0
+	ldrh r1,[r7,#+0x2]
+	mov r2,#1
+	bl GetGameVarPos
 	ldrb r1,[r7,#+0x5]
 	cmp r0,r1
+check_case_common_3_4_5:
+	blt check_case_4
+	bgt check_case_5
+	b end_switch
+check_case_4:
+	cmp r4,#1
+	movne r6,#0
+	b end_switch
+check_case_5:
+	cmp r4,#2
 	movne r6,#0
 end_switch:
 	cmp r6,#0
 	beq continue_exec
+	mov r0,#1
+	bl SetInterrupt
 	ldmia r13!, {r4,r5,r6,r7}
 	b EndExecution
 continue_exec:
@@ -101,6 +177,8 @@ continue_exec:
 	.pool
 info:
 	.word 0x00000000
+	.word 0x00000000
+interrupted:
 	.word 0x00000000
 filestream:
 	.fill 0x48, 0x0

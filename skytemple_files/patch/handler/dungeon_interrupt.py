@@ -25,10 +25,10 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 from skytemple_files.common.i18n_util import _, get_locales
 from skytemple_files.data.str.handler import StrHandler
 
-PATCH_CHECK_ADDR_APPLIED_US = 0x587D8
-PATCH_CHECK_ADDR_APPLIED_EU = 0x0
+PATCH_CHECK_ADDR_APPLIED_US = 0x3E68
+PATCH_CHECK_ADDR_APPLIED_EU = 0x3E68
 PATCH_CHECK_ADDR_APPLIED_JP = 0x0
-PATCH_CHECK_INSTR_APPLIED = 0xEBFFFD5E
+PATCH_CHECK_INSTR_APPLIED = 0xBA000006
 
 INTER_PATH = "BALANCE/inter_d.bin"
 
@@ -51,7 +51,7 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
         return '0.0.1'
 
     def depends_on(self) -> List[str]:
-        return [] #['ExtractAnimData']
+        return ['ExtractAnimData']
 
     @property
     def category(self) -> PatchCategory:
@@ -60,11 +60,11 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
@@ -73,10 +73,7 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
             header = bytearray(0x206)
             header[0] = 6
             header[1] = 2
-            for x in range(12,0x206,2):
-                header[x] = 1
-            data = bytes([3,1,18,0,0xff,0])
-            create_file_in_rom(rom, INTER_PATH, bytes(header+data))
+            create_file_in_rom(rom, INTER_PATH, bytes(header))
         try:
             apply()
         except RuntimeError as ex:

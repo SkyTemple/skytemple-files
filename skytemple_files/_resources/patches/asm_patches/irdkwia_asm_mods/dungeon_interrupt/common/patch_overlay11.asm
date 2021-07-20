@@ -5,19 +5,7 @@
 ; Useless Thing
 ; ------------------------------------------------------------------------------
 
-.org HookInterrupt1
+.org HookConquest
 .area 0x4
-	blt CheckDungeonInterrupt
-EndExecution:
+	bl CheckConquest
 .endarea
-
-.org HookInterrupt2
-.area 0x4
-	bl CheckEndDungeon
-.endarea
-
-.org HookInterrupt3
-.area 0x4
-	bl FillIfNotInterrupted
-.endarea
-

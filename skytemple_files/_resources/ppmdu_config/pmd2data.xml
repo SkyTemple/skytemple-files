@@ -1115,6 +1115,9 @@
           <OpenBin filepath="overlay/overlay_0010.bin">
 	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay10.asm"/>
 	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay11.asm"/>
+	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay29.asm"/>
 	  </OpenBin>

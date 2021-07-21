@@ -7,7 +7,7 @@
 
 .org HookInterrupt1
 .area 0x4
-	blt CheckDungeonInterrupt
+	b CheckDungeonInterrupt
 EndExecution:
 .endarea
 

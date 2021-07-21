@@ -7,14 +7,18 @@
 
 .org Ov10PatchZone
 .area 0x400
+interrupted_floor:
+	.word 0
 SetInterrupt:
 	ldr r1,=interrupted
 	strb r0,[r1]
 	bx r14
 FillIfNotInterrupted:
+	ldr r0,=interrupted_floor
+	mov r1,#0
+	str r1,[r0]
 	ldr r0,[r13,#+0x44]
 	cmp r0,#0
-	moveq r1,#0
 	beq no_fill
 	ldr r2,=interrupted
 	ldrb r0,[r2]
@@ -42,6 +46,9 @@ CheckEndDungeon:
 	ldmia r13!,{r15}
 	.pool
 CheckDungeonInterrupt:
+	ldr r0,=interrupted_floor
+	str r1,[r0]
+	bge EndExecution
 	stmdb r13!, {r4,r5,r6,r7}
 	mov r4,r1
 	ldr r0,=DungeonBaseStructurePtr
@@ -172,6 +179,9 @@ end_switch:
 	ldmia r13!, {r4,r5,r6,r7}
 	b EndExecution
 continue_exec:
+	ldr r0,=interrupted_floor
+	mov r1,#0
+	str r1,[r0]
 	ldmia r13!, {r4,r5,r6,r7}
 	b ContinueExecution
 	.pool

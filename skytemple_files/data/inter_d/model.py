@@ -41,14 +41,14 @@ class InterDEntryType(Enum):
         self.explanation = explanation
     
 class InterDEntry(AutoString):
-    def __init__(self, data: bytes):
+    def __init__(self, data: bytes = bytes(6)):
         self.floor = read_uintle(data, 0, 1)
-        self.ent_type = InterDEntryType(read_uintle(data, 1, 2))
+        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))
         self.game_var_id = read_uintle(data, 2, 2)
         self.param1 = read_uintle(data, 4, 1)
         self.param2 = read_uintle(data, 5, 1)
 
-    def to_bytes() -> bytes:
+    def to_bytes(self) -> bytes:
         data = bytearray(6)
         write_uintle(data, self.floor, 0, 1)
         write_uintle(data, self.ent_type.value, 1, 1)
@@ -61,7 +61,6 @@ class InterD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-
         self.list_dungeons = []
         limit = read_uintle(data, 0, 4)
         prev = read_uintle(data, 4, 2)

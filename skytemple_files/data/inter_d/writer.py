@@ -30,10 +30,10 @@ class InterDWriter:
         write_uintle(header, len(header), 0, 4)
         code_data = bytearray(0)
         current = 0
-        for i, x in self.model.list_dungeons:
-            for y in x:
+        for i, x in enumerate(self.model.list_dungeons):
+            for y in sorted(x, key=lambda v:v.floor):
                 code_data += bytearray(y.to_bytes())
                 current += 1
-            write_uintle(header, 6+2*i, current, 2)
+            write_uintle(header, current, 6+2*i, 2)
         file_data = header + code_data
         return bytes(file_data)

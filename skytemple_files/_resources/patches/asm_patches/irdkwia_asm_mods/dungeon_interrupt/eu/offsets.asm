@@ -10,6 +10,13 @@
 .nds
 .arm
 
+.definelabel ConvertOverwoldToDungeonMoveset, 0x0201478C
+.definelabel GetPPIncrease, 0x0201528C
+.definelabel GetMovePPWithBonus, 0x02013AF8
+.definelabel CommonPart, 0x02053628
+.definelabel HookAssemblyRecruit1, 0x02053684
+.definelabel HookAssemblyRecruit2, 0x02053750
+
 .definelabel HookMoveDisplay1, 0x0203FFBC
 .definelabel GetGameVarPos, 0x0204B9B0
 .definelabel SetConquest, 0x0204D270

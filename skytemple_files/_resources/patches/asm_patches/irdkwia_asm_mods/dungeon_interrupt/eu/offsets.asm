@@ -10,6 +10,7 @@
 .nds
 .arm
 
+.definelabel HookMoveDisplay1, 0x0203FFBC
 .definelabel GetGameVarPos, 0x0204B9B0
 .definelabel SetConquest, 0x0204D270
 .definelabel RefillTeam, 0x020580D4

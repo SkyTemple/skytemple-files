@@ -26,3 +26,7 @@
 	movgt r1,r0
 	nop
 .endarea
+.org HookMoveDisplay1
+.area 0x4
+	nop
+.endarea

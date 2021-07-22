@@ -12,6 +12,7 @@
 
 ; TODO
 
+.definelabel HookMoveDisplay1, 0x0203FCC0
 .definelabel GetGameVarPos, 0x0204B678
 .definelabel SetConquest, 0x0204CF38
 .definelabel RefillTeam, 0x02057D58

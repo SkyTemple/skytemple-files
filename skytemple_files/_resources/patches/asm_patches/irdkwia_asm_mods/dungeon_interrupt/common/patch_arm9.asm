@@ -14,3 +14,15 @@
 ;.area 0x4
 ;	nop
 ;.endarea
+
+.org HookHPDisplay1
+.area 0x4
+	ldrsh r0,[r8,#+0x10]
+.endarea
+.org HookHPDisplay2
+.area 0x10
+	ldr r1,[r9,#+0x28]
+	cmp r1,r0
+	movgt r1,r0
+	nop
+.endarea

@@ -18,6 +18,11 @@ EndExecution:
 
 .org HookInterrupt3
 .area 0x4
+	bl ClearInterruption
+.endarea
+
+.org HookInterrupt4
+.area 0x4
 	bl FillIfNotInterrupted
 .endarea
 

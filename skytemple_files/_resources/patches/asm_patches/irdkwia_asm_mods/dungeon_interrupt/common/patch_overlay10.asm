@@ -13,18 +13,21 @@ SetInterrupt:
 	ldr r1,=interrupted
 	strb r0,[r1]
 	bx r14
-FillIfNotInterrupted:
+ClearInterruption:
 	ldr r0,=interrupted_floor
+	mov r2,#0
+	str r2,[r0]
+	ldr r1,=interrupted
+	strb r2,[r1]
+	bx r14
+FillIfNotInterrupted:
 	mov r1,#0
-	str r1,[r0]
 	ldr r0,[r13,#+0x44]
 	cmp r0,#0
 	beq no_fill
 	ldr r2,=interrupted
 	ldrb r0,[r2]
 	cmp r0,#1
-	mov r0,#0
-	strb r0,[r2]
 	movne r1,#1
 no_fill:
 	bx r14
@@ -42,7 +45,11 @@ CheckEndDungeon:
 	ldr r1,=interrupted
 	ldrb r0,[r1]
 	cmp r0,#1
-	blne RefillTeam
+	.if InterruptOnly == 1
+		blne RefillTeam
+	.else
+		nop
+	.endif
 	ldmia r13!,{r15}
 	.pool
 CheckDungeonInterrupt:

@@ -97,11 +97,11 @@ class ExtraDungeonDataEntry(AutoString):
 
 
 class GuestPokemon(AutoString):
-    def __init__(self, unk1: int, poke_id: int, unk2: int, moves: List[int], hp: int, level: int,
+    def __init__(self, unk1: int, poke_id: int, joined_at: int, moves: List[int], hp: int, level: int,
                  iq: int, atk: int, sp_atk: int, def_: int, sp_def: int, unk3: int, exp: int):
         self.unk1 = unk1
         self.poke_id = poke_id
-        self.unk2 = unk2
+        self.joined_at = joined_at
         self.moves = moves
         self.hp = hp
         self.level = level
@@ -119,7 +119,7 @@ class GuestPokemon(AutoString):
         else:
             return self.unk1 == other.unk1 and \
                    self.poke_id == other.poke_id and \
-                   self.unk2 == other.unk2 and \
+                   self.joined_at == other.joined_at and \
                    self.moves == other.moves and \
                    self.hp == other.hp and \
                    self.level == other.level and \
@@ -134,7 +134,7 @@ class GuestPokemon(AutoString):
     def is_null(self):
         return self.unk1 == 0 and \
                self.poke_id == 0 and \
-               self.unk2 == 0 and \
+               self.joined_at == 0 and \
                self.moves == [0] * 4 and \
                self.hp == 0 and \
                self.level == 0 and \
@@ -151,7 +151,7 @@ class GuestPokemon(AutoString):
 
         write_uintle(buffer, self.unk1, 0, 4)
         write_uintle(buffer, self.poke_id, 4, 2)
-        write_uintle(buffer, self.unk2, 6, 2)
+        write_uintle(buffer, self.joined_at, 6, 2)
         write_uintle(buffer, self.moves[0], 8, 2)
         write_uintle(buffer, self.moves[1], 10, 2)
         write_uintle(buffer, self.moves[2], 12, 2)
@@ -206,7 +206,7 @@ class ExtraDungeonDataList:
 
 class GuestPokemonList:
     @staticmethod
-    def get_max_entries(arm9bin: bytes, config: Pmd2Data) -> int:
+    def get_max_entries(config: Pmd2Data) -> int:
         """Returns the maximum amount of entries that can fit in the binary"""
         block1 = config.binaries['arm9.bin'].blocks['GuestPokemonData']
         block2 = config.binaries['arm9.bin'].blocks['GuestPokemonData2']
@@ -247,7 +247,7 @@ class GuestPokemonList:
         will be written to GuestPokemonData2.
         The list can't have more entries than the max amount specified by get_max_entries()
         """
-        max_entries = GuestPokemonList.get_max_entries(arm9bin, config)
+        max_entries = GuestPokemonList.get_max_entries(config)
         if len(lst) > max_entries:
             raise ValueError(f"The guest pokémon data list can't have more than {max_entries} entries.")
         block1 = config.binaries['arm9.bin'].blocks['GuestPokemonData']

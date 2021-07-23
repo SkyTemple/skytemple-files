@@ -1106,7 +1106,29 @@
 	  	<Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (24 entries used)" min="0" max="255" default="92" type="int"/>
           </Parameters>
         </Patch>
-
+        
+        <!-- A patch to implement dungeon interruptions -->
+        <Patch id="DungeonInterrupt" >
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_arm9.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0010.bin">
+	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay10.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay11.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay29.asm"/>
+	  </OpenBin>
+	  <Parameters>
+            <Param name="InterruptOnly" label="Only interruptions don't heal HP" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+          </Parameters>
+        </Patch>
+        
         <!-- A patch to extract animations table data -->
         <Patch id="ExtractAnimData" >
           <OpenBin filepath="arm9.bin">

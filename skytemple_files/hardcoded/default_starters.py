@@ -18,7 +18,52 @@
 from typing import List
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle
+from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+
+SE_PC_LNTRY_LEN = 0x14
+
+
+class SpecialEpisodePc(AutoString):
+    def __init__(self, poke_id: int, joined_at: int, move1: int, move2: int, move3: int, move4: int,
+                 unk_e: int, level: int, iq: int, unk_12: int):
+        self.poke_id = poke_id
+        self.joined_at = joined_at
+        self.move1 = move1
+        self.move2 = move2
+        self.move3 = move3
+        self.move4 = move4
+        self.unk_e = unk_e
+        self.level = level
+        self.iq = iq
+        self.unk_12 = unk_12
+
+    def to_bytes(self) -> bytes:
+        b = bytearray(0x20)
+        write_uintle(b, self.poke_id, 0, 2)
+        write_uintle(b, self.joined_at, 2, 2)
+        write_uintle(b, self.move1, 4, 2)
+        write_uintle(b, self.move2, 6, 2)
+        write_uintle(b, self.move3, 8, 2)
+        write_uintle(b, self.move4, 10, 2)
+        write_uintle(b, self.unk_e, 12, 2)
+        write_uintle(b, self.level, 14, 2)
+        write_uintle(b, self.iq, 16, 2)
+        write_uintle(b, self.unk_12, 18, 2)
+        return b
+
+    def __eq__(self, other):
+        if not isinstance(other, SpecialEpisodePc):
+            return False
+        return self.poke_id == other.poke_id \
+               and self.joined_at == other.joined_at \
+               and self.move1 == other.move1 \
+               and self.move2 == other.move2 \
+               and self.move3 == other.move3 \
+               and self.move4 == other.move4 \
+               and self.unk_e == other.unk_e \
+               and self.level == other.level \
+               and self.iq == other.iq \
+               and self.unk_12 == other.unk_12
 
 
 class HardcodedDefaultStarters:
@@ -85,3 +130,37 @@ class HardcodedDefaultStarters:
         """
         block = config.binaries['arm9.bin'].blocks['HeroStartLevel']
         write_uintle(arm9, value, block.begin, 1)
+
+    @staticmethod
+    def get_special_episode_pcs(arm9: bytes, config: Pmd2Data) -> List[SpecialEpisodePc]:
+        """
+        Gets the special episode player characters
+        """
+        block = config.binaries['arm9.bin'].blocks['SpecialEpisodePCs']
+        lst = []
+        for i in range(block.begin, block.end, SE_PC_LNTRY_LEN):
+            lst.append(SpecialEpisodePc(
+                read_uintle(arm9, i + 0, 2),
+                read_uintle(arm9, i + 2, 2),
+                read_uintle(arm9, i + 4, 2),
+                read_uintle(arm9, i + 6, 2),
+                read_uintle(arm9, i + 8, 2),
+                read_uintle(arm9, i + 10, 2),
+                read_uintle(arm9, i + 12, 2),
+                read_uintle(arm9, i + 14, 2),
+                read_uintle(arm9, i + 16, 2),
+                read_uintle(arm9, i + 18, 2),
+            ))
+        return lst
+
+    @staticmethod
+    def set_special_episode_pcs(value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data):
+        """
+        Sets the special episode player characters
+        """
+        block = config.binaries['arm9.bin'].blocks['SpecialEpisodePCs']
+        expected_length = int((block.end - block.begin) / SE_PC_LNTRY_LEN)
+        if len(value) != expected_length:
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+        for i, entry in enumerate(value):
+            arm9[block.begin + i * SE_PC_LNTRY_LEN:block.begin + (i + 1) * SE_PC_LNTRY_LEN] = entry.to_bytes()

@@ -96,6 +96,7 @@
         <Block name="TextSpeedConstant"  beg="0x20C98" end="0x20C99"/>
         <Block name="MinIQExclusiveMoveUser" beg="0xA188C" end="0xA188D"/>
         <Block name="MinIQItemMaster"    beg="0xA18A4" end="0xA18A5"/>
+        <Block name="SpecialEpisodePCs"  beg="0xA27F4" end="0xA28BC"/>
         <Pointer name="GameStateValues"  beg="0xAF6B8"/>
         <Pointer name="LanguageInfoData" beg="0xAFCE8"/>
         <Pointer name="GameMode"         beg="0xAFF70"/>
@@ -335,6 +336,7 @@
         <Block name="TextSpeedConstant"  beg="0x20DF0" end="0x20DF1"/>
         <Block name="MinIQExclusiveMoveUser" beg="0xA1E10" end="0xA1E11"/>
         <Block name="MinIQItemMaster"    beg="0xA1E28" end="0xA1E29"/>
+        <Block name="SpecialEpisodePCs"  beg="0xA2D78" end="0xA2E40"/>
         <Pointer name="GameStateValues"  beg="0xAFF70"/>
         <Pointer name="LanguageInfoData" beg="0xB05A8"/>
         <Pointer name="GameMode"         beg="0xB088C"/>

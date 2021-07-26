@@ -403,5 +403,5 @@
 		add  r13,r13,#0x54
 		ldmia  r13!,{r3,r4,r15}
 		.pool
-		.fill OverlayStart+OrgSize+ExtendSize-., 0xCC
+		.fill OverlayStart+OrgSize+ExtendSize-., 0x0
 	.endarea

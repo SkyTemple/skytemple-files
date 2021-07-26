@@ -14,7 +14,7 @@
 .definelabel SpecialStringID, 0xA35 ;Guess
 
 .definelabel OrgSize, 0x2E80
-.definelabel ExtendSize, 0x1000
+.definelabel ExtendSize, 0x800
 .definelabel OverlayStart, 0x0238B6A0
 
 

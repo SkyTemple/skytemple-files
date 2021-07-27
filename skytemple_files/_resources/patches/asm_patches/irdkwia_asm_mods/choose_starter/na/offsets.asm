@@ -13,7 +13,7 @@
 .definelabel SpecialStringID, 0xA35
 
 .definelabel OrgSize, 0x2E80
-.definelabel ExtendSize, 0x1000
+.definelabel ExtendSize, 0x800
 .definelabel OverlayStart, 0x0238A140
 
 

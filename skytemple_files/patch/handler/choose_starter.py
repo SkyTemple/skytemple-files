@@ -35,7 +35,7 @@ OVERLAY13_INITAL_SIZE_US = 0x2E80
 OVERLAY13_INITAL_SIZE_EU = 0x2E80
 OVERLAY13_INITAL_SIZE_JP = 0x2E80
 
-OVERLAY13_ADD_SIZE = 0x1000
+OVERLAY13_ADD_SIZE = 0x800
 
 STRING_ID_US = 2613
 STRING_ID_EU = 2613
@@ -100,12 +100,14 @@ Uses the supposedly unused string 2613 in the strings file. """)
             strings.strings[string_id-1] = get_locales().translate(MESSAGE, lang.locale.replace('-', '_'))
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
-        
+
+
         table = loadOverlayTable(rom.arm9OverlayTable, lambda x,y:bytes())
         ov = table[13]
-        if ov.ramSize<overlay_size+OVERLAY13_ADD_SIZE:
-            ov.ramSize = overlay_size+OVERLAY13_ADD_SIZE
+        ov.ramSize = overlay_size+OVERLAY13_ADD_SIZE
         rom.arm9OverlayTable = saveOverlayTable(table)
+        ov13 = rom.files[ov.fileID]
+        rom.files[ov.fileID] = ov13[:overlay_size]
         try:
             apply()
         except RuntimeError as ex:

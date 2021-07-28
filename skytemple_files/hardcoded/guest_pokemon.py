@@ -201,7 +201,7 @@ class ExtraDungeonDataList:
         block = config.binaries['arm9.bin'].blocks['ExtraDungeonData']
         for i, entry in enumerate(lst):
             offset = block.begin + i * EXTRA_DUNGEON_DATA_ENTRY_SIZE
-            arm9bin[offset:offset + 1] = entry.to_bytes()[0:1]
+            arm9bin[offset:offset + 2] = entry.to_bytes()[0:2]
 
 
 class GuestPokemonList:

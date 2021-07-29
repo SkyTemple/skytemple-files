@@ -38,7 +38,7 @@ class SpecialEpisodePc(AutoString):
         self.unk_12 = unk_12
 
     def to_bytes(self) -> bytes:
-        b = bytearray(0x20)
+        b = bytearray(SE_PC_LNTRY_LEN)
         write_uintle(b, self.poke_id, 0, 2)
         write_uintle(b, self.joined_at, 2, 2)
         write_uintle(b, self.move1, 4, 2)

@@ -15,17 +15,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from abc import ABC
 from enum import Enum
-from typing import List
+from typing import List, Tuple
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle, write_sintle, \
     generate_bitfield
+from skytemple_files.data.md.model import PokeType
 
 DUNGEON_LIST_ENTRY_LEN = 4
 DUNGEON_RESTRICTIONS_ENTRY_LEN = 12
 SECONDARY_TERRAINS_ENTRY_LEN = 1
 MAP_MARKER_PLACEMENTS_ENTRY_LEN = 8
+TILESET_PROPERTIES_ENTRY_LEN = 0xC
 
 
 class DungeonDefinition(AutoString):
@@ -180,6 +184,133 @@ class MapMarkerPlacement(AutoString):
                self.y == other.y
 
 
+class TilesetBaseEnum(Enum):
+    def __new__(cls, *args, **kwargs):
+        obj = object.__new__(cls)
+        obj._value_ = args[0]
+        return obj
+
+    # ignore the first param since it's already set by __new__
+    def __init__(
+            self, _: str, name_localized: str
+    ):
+        self.name_localized = name_localized
+
+    @property
+    def print_name(self):
+        return self.name_localized
+
+
+class TilesetMapColor(TilesetBaseEnum):
+    WHITE = 0, _("White")
+    BLACK = 1, _("Black")
+    RED = 2, _("Red")
+    BLUE = 3, _("Blue")
+    GREEN = 4, _("Green")
+    YELLOW = 5, _("Yellow")
+    ORANGE = 6, _("Orange")
+    PURPLE = 7, _("Purple")
+    PINK = 8, _("Pink")
+
+
+class TilesetStirringEffect(TilesetBaseEnum):
+    LEAVES = 0, _("Leaves")
+    SNOWFLAKES = 1, _("Snowflakes")
+    FLAMES = 2, _("Flames")
+    SAND = 3, _("Sand")
+    BUBBLES = 4, _("Bubbles")
+    EARTHQUAKE = 5, _("Earthquake")
+
+
+class TilesetSecretPowerEffect(TilesetBaseEnum):
+    UNK_0 = 0, _("???") + " (0)"
+    SLEEP = 1, _("Sleep")  # TRANSLATORS: Move name
+    SPEED_DOWN = 2, _("Speed -1")  # TRANSLATORS: Effect of a tileset's secret power move
+    ATTACK_DOWN = 3, _("Attack -1")  # TRANSLATORS: Effect of a tileset's secret power move
+    UNK_4 = 4, _("???") + " (4)"
+    ACCURACY_DOWN = 5, _("Accuracy -1")  # TRANSLATORS: Effect of a tileset's secret power move
+    UNK_6 = 6, _("???") + " (6)"
+    CRINGE = 7, _("Cringe")  # TRANSLATORS: Move name
+    FREEZE = 8, _("Freeze")  # TRANSLATORS: Status
+    PARALYSIS = 9, _("Paralysis")  # TRANSLATORS: Status
+
+
+class TilesetNaturePowerMoveEntry(TilesetBaseEnum):
+    UNK_0 = 0, _("???") + " (0)"
+    UNK_1 = 1, _("???") + " (1)"
+    UNK_2 = 2, _("???") + " (2)"
+    UNK_3 = 3, _("???") + " (3)"
+    EARTHQUAKE = 4, _("Earthquake")  # TRANSLATORS: Move name
+    UNK_5 = 5, _("???") + " (5)"
+    UNK_6 = 6, _("???") + " (6)"
+    ROCK_SLIDE = 7, _("Rock Slide")  # TRANSLATORS: Move name
+    UNK_8 = 8, _("???") + " (8)"
+    TRI_ATTACK = 9, _("Tri Attack")  # TRANSLATORS: Move name
+    HYDRO_PUMP = 10, _("Hydro Pump")  # TRANSLATORS: Move name
+    BLIZZARD = 11, _("Blizzard")  # TRANSLATORS: Move name
+    ICE_BEAM = 12, _("Ice Beam")  # TRANSLATORS: Move name
+    SEED_BOMB = 13, _("Seed Bomb")  # TRANSLATORS: Move name
+    MUD_BOMB = 14, _("Mud Bomb")  # TRANSLATORS: Move name
+
+
+class TilesetWeatherEffect(TilesetBaseEnum):
+    CLEAR = 0, _("Clear")
+    FOGGY1 = 1, _("Foggy 1")
+    FOGGY2 = 2, _("Foggy 2")
+    FOGGY3 = 3, _("Foggy 3")
+    FOGGY4 = 4, _("Foggy 4")
+    FOGGY5 = 5, _("Foggy 5")
+    FOGGY6 = 6, _("Foggy 6")
+
+
+class TilesetProperties(AutoString):
+    def __init__(self, map_color: TilesetMapColor, stirring_effect: TilesetStirringEffect,
+                 secret_power_effect: TilesetSecretPowerEffect, camouflage_type: PokeType,
+                 nature_power_move_entry: TilesetNaturePowerMoveEntry, weather_effect: TilesetWeatherEffect,
+                 full_water_floor: bool):
+        self.map_color = map_color
+        self.stirring_effect = stirring_effect
+        self.secret_power_effect = secret_power_effect
+        self.camouflage_type = camouflage_type
+        self.nature_power_move_entry = nature_power_move_entry
+        self.weather_effect = weather_effect
+        self.full_water_floor = full_water_floor
+
+    @classmethod
+    def from_bytes(cls, b: bytes) -> 'TilesetProperties':
+        return TilesetProperties(
+            TilesetMapColor(read_uintle(b, 0, 4)),
+            TilesetStirringEffect(read_uintle(b, 4, 1)),
+            TilesetSecretPowerEffect(read_uintle(b, 5, 1)),
+            PokeType(read_uintle(b, 6, 2)),
+            TilesetNaturePowerMoveEntry(read_uintle(b, 8, 2)),
+            TilesetWeatherEffect(read_uintle(b, 10, 1)),
+            bool(read_uintle(b, 11, 1)),
+        )
+
+    def to_bytes(self) -> bytes:
+        buff = bytearray(TILESET_PROPERTIES_ENTRY_LEN)
+        write_uintle(buff, self.map_color.value, 0, 4)
+        write_uintle(buff, self.stirring_effect.value, 4, 1)
+        write_uintle(buff, self.secret_power_effect.value, 5, 1)
+        write_uintle(buff, self.camouflage_type.value, 6, 2)
+        write_uintle(buff, self.nature_power_move_entry.value, 8, 2)
+        write_uintle(buff, self.weather_effect.value, 10, 1)
+        write_uintle(buff, int(self.full_water_floor), 11, 1)
+        return buff
+
+    def __eq__(self, other):
+        if not isinstance(other, TilesetProperties):
+            return False
+        return self.map_color == other.map_color and \
+            self.stirring_effect == other.stirring_effect and \
+            self.secret_power_effect == other.secret_power_effect and \
+            self.camouflage_type == other.camouflage_type and \
+            self.nature_power_move_entry == other.nature_power_move_entry and \
+            self.weather_effect == other.weather_effect and \
+            self.full_water_floor == other.full_water_floor
+
+
 class HardcodedDungeons:
     @staticmethod
     def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> List[DungeonDefinition]:
@@ -282,3 +413,21 @@ class HardcodedDungeons:
         for i, entry in enumerate(value):
             start = block.begin + (i * MAP_MARKER_PLACEMENTS_ENTRY_LEN)
             arm9bin[start:start + MAP_MARKER_PLACEMENTS_ENTRY_LEN] = entry.to_bytes()
+
+    @staticmethod
+    def get_tileset_properties(ov10: bytes, config: Pmd2Data) -> List[TilesetProperties]:
+        block = config.binaries['overlay/overlay_0010.bin'].blocks['TilesetProperties']
+        lst = []
+        for i in range(block.begin, block.end, TILESET_PROPERTIES_ENTRY_LEN):
+            lst.append(TilesetProperties.from_bytes(ov10[i:i+TILESET_PROPERTIES_ENTRY_LEN]))
+        return lst
+
+    @staticmethod
+    def set_tileset_properties(value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data):
+        block = config.binaries['overlay/overlay_0010.bin'].blocks['TilesetProperties']
+        expected_length = int((block.end - block.begin) / TILESET_PROPERTIES_ENTRY_LEN)
+        if len(value) != expected_length:
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+        for i, entry in enumerate(value):
+            start = block.begin + (i * TILESET_PROPERTIES_ENTRY_LEN)
+            ov10[start:start + TILESET_PROPERTIES_ENTRY_LEN] = entry.to_bytes()

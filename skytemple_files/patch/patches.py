@@ -51,6 +51,7 @@ from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
 from skytemple_files.patch.handler.choose_starter import ChooseStarterPatchHandler
 from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
 from skytemple_files.patch.handler.dungeon_interrupt import DungeonInterruptPatchHandler
+from skytemple_files.patch.handler.change_ff_prop import ChangeFixedFloorPropertiesPatchHandler
 from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
 from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
 from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
@@ -86,6 +87,7 @@ class PatchType(Enum):
     CHOOSE_STARTER = ChooseStarterPatchHandler
     SKIP_QUIZ = SkipQuizPatchHandler
     DUNGEON_INTERRUPT = DungeonInterruptPatchHandler
+    CHANGE_FF_PROP = ChangeFixedFloorPropertiesPatchHandler
     COMPLETE_TEAM_CONTROL = CompleteTeamControl
     FAR_OFF_PAL_OVERDRIVE = FarOffPalOverdrive
     PARTNERS_TRIGGER_HIDDEN_TRAPS = PartnersTriggerHiddenTraps

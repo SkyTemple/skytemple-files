@@ -1133,6 +1133,13 @@
           </Parameters>
         </Patch>
         
+        <!-- A patch to change fixed floor properties -->
+        <Patch id="ChangeFixedFloorProperties" >
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="irdkwia_asm_mods/change_ff_prop/selector_overlay29.asm"/>
+	  </OpenBin>
+        </Patch>
+        
         <!-- A patch to extract animations table data -->
         <Patch id="ExtractAnimData" >
           <OpenBin filepath="arm9.bin">

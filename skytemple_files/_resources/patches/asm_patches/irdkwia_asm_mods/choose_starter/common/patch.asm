@@ -79,7 +79,7 @@
 		add  r0,r13,#0x14
 		bl UnknownFuncCase0
 		ldrb r1,[r13, #+0x19]
-		ldr r0,[r15, #+0xe20]
+		ldr r0,=GlobalStructPointer
 		ldr r0,[r0, #+0x0]
 		and  r1,r1,#0xF
 		b case0_alt2

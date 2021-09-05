@@ -25,17 +25,18 @@ SE_PC_LNTRY_LEN = 0x14
 
 class SpecialEpisodePc(AutoString):
     def __init__(self, poke_id: int, joined_at: int, move1: int, move2: int, move3: int, move4: int,
-                 unk_e: int, level: int, iq: int, unk_12: int):
+                 do_not_fix_entire_moveset: bool, level: int, iq: int, fixed_hp: int):
         self.poke_id = poke_id
         self.joined_at = joined_at
         self.move1 = move1
         self.move2 = move2
         self.move3 = move3
         self.move4 = move4
-        self.unk_e = unk_e
+        self.do_not_fix_entire_moveset = do_not_fix_entire_moveset
         self.level = level
         self.iq = iq
-        self.unk_12 = unk_12
+        # 0 if not fixed
+        self.fixed_hp = fixed_hp
 
     def to_bytes(self) -> bytes:
         b = bytearray(SE_PC_LNTRY_LEN)
@@ -45,10 +46,10 @@ class SpecialEpisodePc(AutoString):
         write_uintle(b, self.move2, 6, 2)
         write_uintle(b, self.move3, 8, 2)
         write_uintle(b, self.move4, 10, 2)
-        write_uintle(b, self.unk_e, 12, 2)
+        write_uintle(b, int(self.do_not_fix_entire_moveset), 12, 2)
         write_uintle(b, self.level, 14, 2)
         write_uintle(b, self.iq, 16, 2)
-        write_uintle(b, self.unk_12, 18, 2)
+        write_uintle(b, self.fixed_hp, 18, 2)
         return b
 
     def __eq__(self, other):
@@ -60,10 +61,10 @@ class SpecialEpisodePc(AutoString):
                and self.move2 == other.move2 \
                and self.move3 == other.move3 \
                and self.move4 == other.move4 \
-               and self.unk_e == other.unk_e \
+               and self.do_not_fix_entire_moveset == other.do_not_fix_entire_moveset \
                and self.level == other.level \
                and self.iq == other.iq \
-               and self.unk_12 == other.unk_12
+               and self.fixed_hp == other.fixed_hp
 
 
 class HardcodedDefaultStarters:
@@ -146,7 +147,7 @@ class HardcodedDefaultStarters:
                 read_uintle(arm9, i + 6, 2),
                 read_uintle(arm9, i + 8, 2),
                 read_uintle(arm9, i + 10, 2),
-                read_uintle(arm9, i + 12, 2),
+                bool(read_uintle(arm9, i + 12, 2)),
                 read_uintle(arm9, i + 14, 2),
                 read_uintle(arm9, i + 16, 2),
                 read_uintle(arm9, i + 18, 2),

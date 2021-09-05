@@ -18,7 +18,8 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield, EnumCompatibleInt
+from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield, EnumCompatibleInt, \
+    read_sintle, write_sintle
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
 from skytemple_files.common.i18n_util import f, _
@@ -167,7 +168,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             extra_hallway_density: int, buried_item_density: int, water_density: int,
             darkness_level: MappaFloorDarknessLevel, max_coin_amount: int, kecleon_shop_item_positions: int,
             empty_monster_house_chance: int, unk_hidden_stairs: int, hidden_stairs_spawn_chance: int, enemy_iq: int,
-            iq_booster_allowed: bool
+            iq_booster_boost: int
     ):
         self.structure = structure
         self.room_density = room_density
@@ -199,7 +200,8 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         self.unk_hidden_stairs = unk_hidden_stairs
         self.hidden_stairs_spawn_chance = hidden_stairs_spawn_chance
         self.enemy_iq = enemy_iq
-        self.iq_booster_enabled = iq_booster_allowed
+        # If <=0: Disabled
+        self.iq_booster_boost = iq_booster_boost
 
     # backwards compat.
     @property
@@ -247,7 +249,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             unk_hidden_stairs=read_uintle(read.data, pointer + 0x1A),
             hidden_stairs_spawn_chance=read_uintle(read.data, pointer + 0x1B),
             enemy_iq=read_uintle(read.data, pointer + 0x1C, 2),
-            iq_booster_allowed=bool(read_uintle(read.data, pointer + 0x1E))
+            iq_booster_boost=read_sintle(read.data, pointer + 0x1E, 2)
         )
 
     def to_mappa(self) -> bytes:
@@ -281,7 +283,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         write_uintle(data, self.unk_hidden_stairs, 0x1A, 1)
         write_uintle(data, self.hidden_stairs_spawn_chance, 0x1B, 1)
         write_uintle(data, self.enemy_iq, 0x1C, 2)
-        write_uintle(data, self.iq_booster_enabled, 0x1E, 1)
+        write_sintle(data, self.iq_booster_boost, 0x1E, 2)
 
         return data
 
@@ -331,7 +333,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS: str(self.kecleon_shop_item_positions),
             XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS: str(self.unk_hidden_stairs),
             XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ: str(self.enemy_iq),
-            XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_ENABLED: str(int(self.iq_booster_enabled))
+            XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST: str(self.iq_booster_boost)
         })
 
         xml_layout.append(xml_generator_settings)
@@ -421,7 +423,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS,
             XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS,
             XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ,
-            XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_ENABLED
+            XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST
         ])
 
         if not hasattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)):
@@ -475,7 +477,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             unk_hidden_stairs=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS)),
             hidden_stairs_spawn_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS)),
             enemy_iq=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ)),
-            iq_booster_allowed=bool(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_ENABLED))),
+            iq_booster_boost=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST)),
         )
 
     def __eq__(self, other):
@@ -510,4 +512,4 @@ class MappaFloorLayout(AutoString, XmlSerializable):
                and self.unk_hidden_stairs == other.unk_hidden_stairs \
                and self.hidden_stairs_spawn_chance == other.hidden_stairs_spawn_chance \
                and self.enemy_iq == other.enemy_iq \
-               and self.iq_booster_enabled == other.iq_booster_enabled
+               and self.iq_booster_boost == other.iq_booster_boost

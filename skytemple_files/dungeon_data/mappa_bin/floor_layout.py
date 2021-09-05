@@ -18,7 +18,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield
+from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield, EnumCompatibleInt
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
 from skytemple_files.common.i18n_util import f, _
@@ -96,31 +96,6 @@ class MappaFloorWeather(Enum):
         return f'MappaFloorWeather.{self.name}'
 
 
-class MappaFloorSecondaryTerrainType(Enum):
-    NONE = 0, _("Disabled? (0)")
-    HAS_1 = 1, _("Enabled (1)")
-    HAS_10 = 10, _("Enabled (10)")
-
-    def __new__(cls, *args, **kwargs):
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
-
-    def __str__(self):
-        return self._print_name_
-
-    def __repr__(self):
-        return f'MappaFloorSecondaryTerrainType.{self.name}'
-
-    @property
-    def print_name(self):
-        return self._print_name_
-
-
 class MappaFloorTerrainSettings:
     def __init__(
             self, has_secondary_terrain: bool, unk1: bool, generate_imperfect_rooms: bool,
@@ -187,7 +162,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             self, *, structure: MappaFloorStructureType, room_density: int, tileset_id: int, music_id: int,
             weather: MappaFloorWeather, floor_connectivity: int, initial_enemy_density: int, kecleon_shop_chance: int,
             monster_house_chance: int, unusued_chance: int, sticky_item_chance: int, dead_ends: bool,
-            secondary_terrain: MappaFloorSecondaryTerrainType, terrain_settings: MappaFloorTerrainSettings,
+            secondary_terrain: int, terrain_settings: MappaFloorTerrainSettings,
             unk_e: bool, item_density: int, trap_density: int, floor_number: int, fixed_floor_id: int,
             extra_hallway_density: int, buried_item_density: int, water_density: int,
             darkness_level: MappaFloorDarknessLevel, max_coin_amount: int, kecleon_shop_item_positions: int,
@@ -206,7 +181,8 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         self.unusued_chance = unusued_chance
         self.sticky_item_chance = sticky_item_chance
         self.dead_ends = dead_ends
-        self.secondary_terrain = secondary_terrain
+        self._secondary_terrain = EnumCompatibleInt(secondary_terrain)
+        self._secondary_terrain.former('MappaFloorSecondaryTerrainType')
         self.terrain_settings = terrain_settings
         self.unk_e = unk_e
         self.item_density = item_density
@@ -224,6 +200,16 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         self.hidden_stairs_spawn_chance = hidden_stairs_spawn_chance
         self.enemy_iq = enemy_iq
         self.iq_booster_enabled = iq_booster_allowed
+
+    # backwards compat.
+    @property
+    def secondary_terrain(self):
+        return self._secondary_terrain
+
+    @secondary_terrain.setter
+    def secondary_terrain(self, value):
+        self._secondary_terrain = EnumCompatibleInt(value)
+        self._secondary_terrain.former('MappaFloorSecondaryTerrainType')
 
     @classmethod
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int):
@@ -244,7 +230,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             unusued_chance=read_uintle(read.data, pointer + 0x09),
             sticky_item_chance=read_uintle(read.data, pointer + 0x0A),
             dead_ends=bool(read_uintle(read.data, pointer + 0x0B)),
-            secondary_terrain=MappaFloorSecondaryTerrainType(read_uintle(read.data, pointer + 0x0C)),
+            secondary_terrain=read_uintle(read.data, pointer + 0x0C),
             terrain_settings=terrain_settings,
             unk_e=bool(read_uintle(read.data, pointer + 0x0E)),
             item_density=read_uintle(read.data, pointer + 0x0F),
@@ -331,7 +317,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         })
         xml_terrain_settings = Element(XML_FLOOR_LAYOUT__TERRAINSET, {
             XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED: str(int(self.terrain_settings.has_secondary_terrain)),
-            XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE: self.secondary_terrain.name,
+            XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE: str(self.secondary_terrain),
             XML_FLOOR_LAYOUT__TERRAINSET__IMPERFECT_ROOMS: str(int(self.terrain_settings.generate_imperfect_rooms)),
             XML_FLOOR_LAYOUT__TERRAINSET__UNK1: str(int(self.terrain_settings.unk1)),
             XML_FLOOR_LAYOUT__TERRAINSET__UNK3: str(int(self.terrain_settings.unk3)),
@@ -446,10 +432,6 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             raise XmlValidateError(f(_("Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}")))
         weather = getattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER))
 
-        if not hasattr(MappaFloorSecondaryTerrainType, terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)):
-            raise XmlValidateError(f(_("Invalid terrain type {terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)}")))
-        sec_terrain_type = getattr(MappaFloorSecondaryTerrainType, terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE))
-
         if not hasattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)):
             raise XmlValidateError(f(_("Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}")))
         darkness_level = getattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL))
@@ -467,7 +449,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             unusued_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED)),
             sticky_item_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM)),
             dead_ends=bool(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__DEAD_ENDS))),
-            secondary_terrain=sec_terrain_type,
+            secondary_terrain=int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)),
             terrain_settings=MappaFloorTerrainSettings(
                 has_secondary_terrain=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED))),
                 unk1=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK1))),

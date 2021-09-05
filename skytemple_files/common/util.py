@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
+import logging
 import re
 import unicodedata
 import warnings
@@ -42,6 +43,7 @@ MONSTER_BIN = 'MONSTER/monster.bin'
 DUNGEON_BIN = 'DUNGEON/dungeon.bin'
 
 DEBUG = False
+logger = logging.getLogger(__name__)
 
 
 def normalize_string(x: str):
@@ -477,6 +479,30 @@ class AutoString:
 
     def __str__(self):
         return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v  is not None and not k[0] == '_'})}>"
+
+
+class EnumCompatibleInt(int):
+    """For backwards compatibility"""
+
+    _DEPR_WARN = "This (formerly '{}') is now an int and should no longer be used like an enum instance."
+
+    # noinspection PyAttributeOutsideInit
+    def former(self, f):
+        # I don't quite know how to pass arguments to __new__ or __init__ of builtin type subclasses.
+        self._former = f
+
+    @property
+    def value(self):
+        warnings.warn(self._DEPR_WARN.format(self._former), category=DeprecationWarning, stacklevel=2)
+        logger.warning(self._DEPR_WARN.format(self._former))
+        return self
+
+    @property
+    def name(self):
+        warnings.warn(self._DEPR_WARN.format(self._former), category=DeprecationWarning, stacklevel=2)
+        logger.warning(self._DEPR_WARN.format(self._former))
+        return str(self)
+
 
 def set_rw_permission_folder(folder_path: str):
     """

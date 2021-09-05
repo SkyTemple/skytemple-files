@@ -18,7 +18,7 @@ from random import randrange, choice
 
 from skytemple_files.common.dungeon_floor_generator.generator import DungeonFloorGenerator
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout, MappaFloorStructureType, \
-    MappaFloorWeather, MappaFloorSecondaryTerrainType, MappaFloorTerrainSettings, MappaFloorDarknessLevel
+    MappaFloorWeather, MappaFloorTerrainSettings, MappaFloorDarknessLevel
 
 layout = MappaFloorLayout(
     structure=MappaFloorStructureType.MEDIUM_LARGE,
@@ -33,7 +33,7 @@ layout = MappaFloorLayout(
     unusued_chance=randrange(0, 101),
     sticky_item_chance=15,
     dead_ends=True,
-    secondary_terrain=choice(list(MappaFloorSecondaryTerrainType)),
+    secondary_terrain=choice([1, 10, 0]),
     terrain_settings=MappaFloorTerrainSettings(
         True, False, True, False, False, False, False, False
     ),

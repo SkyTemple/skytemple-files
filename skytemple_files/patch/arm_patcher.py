@@ -76,9 +76,9 @@ class ArmPatcher:
                             if game_candidate.game_id == game_id:
                                 game = game_candidate
                         if game is not None:
-                            with open(os.path.join(tmp, fn), 'r', encoding="utf-8") as fi:
+                            with open_utf8(os.path.join(tmp, fn), 'r') as fi:
                                 new_content = replace.regexp.sub(game.replace, fi.read())
-                            with open(os.path.join(tmp, fn), 'w', encoding="utf-8") as fi:
+                            with open_utf8(os.path.join(tmp, fn), 'w') as fi:
                                 fi.write(new_content)
 
                     # If it's a simple patch just output and re-import all binaries.

@@ -2814,16 +2814,16 @@
         </OpCode>
         <OpCode id="0x163" name="WaitFadeIn"                             params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x164" name="WaitLockLives"                          params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="lock_id"/>
+          <Argument id="1" type="Entity" name="actor"/>
         </OpCode>
         <OpCode id="0x165" name="WaitLockObject"                         params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="lock_id"/>
+          <Argument id="1" type="Object" name="object"/>
         </OpCode>
         <OpCode id="0x166" name="WaitLockPerformer"                      params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="uint" name="unk1"/>
+          <Argument id="0" type="uint" name="lock_id"/>
+          <Argument id="1" type="uint" name="performer"/>
         </OpCode>
         <OpCode id="0x167" name="WaitLockSupervision"                    params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>

@@ -27,7 +27,8 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.model import MdProperties, Md
-from skytemple_files.data.monster_xml import monster_xml_export, monster_xml_import
+from skytemple_files.data.monster_xml import monster_xml_export, monster_xml_import, GenderedConvertEntry
+from skytemple_files.data.tbl_talk.model import TblTalk
 from skytemple_files.data.waza_p.model import WazaP
 from skytemple_files.graphics.kao.model import Kao, SUBENTRIES
 
@@ -48,6 +49,7 @@ waza_p: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName('BALANCE/waza_p.bi
 waza_p2: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName('BALANCE/waza_p2.bin'))
 level_bin: BinPack = FileType.BIN_PACK.deserialize(rom.getFileByName('BALANCE/m_level.bin'))
 kao: Kao = FileType.KAO.deserialize(rom.getFileByName('FONT/kaomado.kao'))
+tbl_talk: TblTalk = FileType.TBL_TALK.deserialize(rom.getFileByName('MESSAGE/tbl_talk.tlk'))
 languages = {}
 for lang in config.string_index_data.languages:
     languages[lang.name] = FileType.STR.deserialize(rom.getFileByName('MESSAGE/' + lang.filename))
@@ -99,7 +101,9 @@ for md_base_index in range(0, MdProperties.NUM_ENTITIES):
         config.game_version, md_gender1, md_gender2,
         names,
         moveset, moveset2,
-        stats, portraits, portraits2
+        stats, portraits, portraits2,
+        tbl_talk.get_monster_personality(md_gender1.md_index),
+        tbl_talk.get_monster_personality(md_gender2.md_index) if md_gender2 is not None else None
     )
     fn = f'{md_base_index:04}_{languages["English"].strings[string_id].replace("?", "_")}.xml'
     print(fn)
@@ -130,9 +134,11 @@ for kao_i in range(0, SUBENTRIES):
     portraits2.append(kao.get(600, kao_i))
 
 # IMPORT CHARMANDER
+e1 = GenderedConvertEntry(md_gender1, 0)
+e2 = GenderedConvertEntry(md_gender2, 0)
 assert monster_xml_import(
     charmander_xml,
-    md_gender1, md_gender2,
+    e1, e2,
     names,
     moveset, moveset2,
     stats, portraits, portraits2
@@ -142,7 +148,9 @@ bulbasaur_xml = monster_xml_export(
         config.game_version, md_gender1, md_gender2,
         names,
         moveset, moveset2,
-        stats, portraits, portraits2
+        stats, portraits, portraits2,
+        e1.personality,
+        e2.personality
     )
 write_xml(bulbasaur_xml, 'bulbasaur_but_actually_charmander.xml')
 

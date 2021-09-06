@@ -40,6 +40,7 @@ XML_STRINGS__NAME = "Name"
 XML_STRINGS__CATEGORY = "Category"
 XML_GENENT = "GenderedEntity"
 XML_GENENT_ENTID = "PokeID"
+XML_GENENT_PERSONALITY = "Personality"
 XML_GENENT_UNK31 = "Unk31"
 XML_GENENT_NATIONAL_POKEDEX_NUMBER = "PokedexNumber"
 XML_GENENT_BASE_MOVEMENT_SPEED = "MovementSpeed"  # todo: this is still Unk1 in StatsUtil
@@ -208,15 +209,25 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
                 value_to_update[xml_lang.tag] = (name, category)
 
 
-class GenderedEntityXml(XmlConverter[MdEntry]):
+class GenderedConvertEntry:
+    def __init__(self, md_entry: MdEntry, personality: Optional[int]):
+        self.md_entry = md_entry
+        self.personality = personality
+
+
+class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
     @classmethod
-    def to_xml(cls, value: MdEntry) -> Element:
+    def to_xml(cls, base_value: GenderedConvertEntry) -> Element:
+        value = base_value.md_entry
         xml = Element(XML_GENENT)
         for xml_name, attr_name in XML_GENENT__MAP__SIMPLE.items():
             attr_val = getattr(value, attr_name)
             if hasattr(attr_val, 'value'):
                 attr_val = attr_val.value
             xml.append(create_elem_w_text(xml_name, attr_val))
+        # Personality
+        if base_value.personality is not None:
+            xml.append(create_elem_w_text(XML_GENENT_PERSONALITY, base_value.personality))
         # Evolution requirements
         evo = Element(XML_GENENT_EVOLUTION_REQ)
         evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, value.pre_evo_index))
@@ -253,7 +264,8 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
         return xml
 
     @classmethod
-    def from_xml(cls, xml: Element, value_to_update: MdEntry):
+    def from_xml(cls, xml: Element, base_value_to_update: GenderedConvertEntry):
+        value_to_update = base_value_to_update.md_entry
         for sub_xml in xml:
             if sub_xml.tag in XML_GENENT__MAP__SIMPLE.keys():
                 attr_name = XML_GENENT__MAP__SIMPLE[sub_xml.tag]
@@ -263,6 +275,8 @@ class GenderedEntityXml(XmlConverter[MdEntry]):
                 else:
                     # Simple value
                     setattr(value_to_update, attr_name, int(sub_xml.text))
+            if sub_xml.tag == XML_GENENT_PERSONALITY:
+                base_value_to_update.personality = int(sub_xml.text)
             if sub_xml.tag == XML_GENENT_EVOLUTION_REQ:
                 pre_evo_index = None
                 method = None
@@ -611,7 +625,8 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]]
+                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]],
+                       personality1: Optional[int] = None, personality2: Optional[int] = None
                        ) -> ElementTree:
     """
     Exports properties of all given things as an XML file. If a second Md entry is given,
@@ -622,9 +637,9 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
     if names:
         xml.append(StringsXml.to_xml(names))
     if md_gender1:
-        xml.append(GenderedEntityXml.to_xml(md_gender1))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender1, personality1)))
     if md_gender2:
-        xml.append(GenderedEntityXml.to_xml(md_gender2))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender2, personality2)))
     if moveset:
         xml.append(MovesetXml.to_xml(moveset))
     if moveset2:
@@ -639,7 +654,7 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
 
 
 def monster_xml_import(xml: ElementTree,
-                       md_gender1: Optional[MdEntry], md_gender2: Optional[MdEntry],
+                       md_gender1: Optional[GenderedConvertEntry], md_gender2: Optional[GenderedConvertEntry],
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],

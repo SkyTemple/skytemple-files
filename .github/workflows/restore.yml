@@ -1,0 +1,25 @@
+# Builds on all branches & PRs
+# Deploys to PyPi on "release".
+name: Build, test and publish
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    name:  restore
+    steps:
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Upgrade pip
+        run: |
+          python -m pip install --upgrade pip
+      - name: Download
+        run: python -m pip download --no-deps dungeon-eos==0.0.3
+      - name: Upload wheels
+        uses: actions/upload-artifact@v2
+        with:
+          name: wheels
+          path: "*.whl"

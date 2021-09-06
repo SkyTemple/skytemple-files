@@ -110,6 +110,7 @@
         <Block name="GuestPokemonData2" beg="0x4EE10" end="0x4EFE0"/>
         <!-- Requires EditExtraPokemon patch -->
         <Block name="ExtraDungeonData" beg="0x4ECA8" end="0x4EE10"/>
+        <Block name="TacticsUnlockLevel" beg="0xA1940" end="0xA1958"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -351,6 +352,7 @@
         <Block name="GuestPokemonData2" beg="0x4F148" end="0x4F318"/>
         <!-- Requires EditExtraPokemon patch -->
         <Block name="ExtraDungeonData" beg="0x4EFE0" end="0x4F148"/>
+        <Block name="TacticsUnlockLevel" beg="0xA1EC4" end="0xA1EDC"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->

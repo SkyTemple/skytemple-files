@@ -1,5 +1,5 @@
 """Replaces the P** of dungeon tileset 1 with dungeon tileset 2."""
-#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
+#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

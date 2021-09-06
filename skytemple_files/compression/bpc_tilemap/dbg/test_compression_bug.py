@@ -2,7 +2,7 @@
 Testing that something that was causing a bug can correctly be compressed by the algorithm now.
 How this bug went unnoticed in 6+ months? I don't know!
 """
-#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
+#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

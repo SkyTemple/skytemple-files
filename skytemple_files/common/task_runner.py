@@ -2,7 +2,7 @@
 Utility class for multi threaded/asynchronous tasks:
 Manages asyncio event loop in a separate loop handler thread.
 """
-#  Copyright 2020-2021 Parakoopa and the SkyTemple Contributors
+#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

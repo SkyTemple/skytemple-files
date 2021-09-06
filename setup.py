@@ -1,4 +1,4 @@
-__version__ = '1.2.4'
+__version__ = '1.3.0rc1'
 import os
 
 from setuptools import setup, find_packages
@@ -39,7 +39,6 @@ setup(
         'explorerscript >= 0.1.1',
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
-        'dungeon-eos >= 0.0.2',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==7.3; sys_platform == "darwin"'
     ],

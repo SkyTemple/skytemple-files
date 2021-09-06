@@ -4,4 +4,3 @@ appdirs==1.4.4
 explorerscript==0.1.1
 skytemple-rust==0.0.1.post0
 tilequant==0.4.0.post0
-dungeon-eos==0.0.3

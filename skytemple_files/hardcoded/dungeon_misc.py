@@ -22,36 +22,6 @@ from skytemple_files.common.util import read_uintle, write_uintle
 
 class HardcodedDungeonMisc:
     @staticmethod
-    def get_min_iq_for_exclusive_move_user(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['MinIQExclusiveMoveUser']
-        return read_uintle(arm9, block.begin, 2)
-
-    @staticmethod
-    def set_min_iq_for_exclusive_move_user(value: int, arm9: bytearray, config: Pmd2Data):
-        block = config.binaries['arm9.bin'].blocks['MinIQExclusiveMoveUser']
-        write_uintle(arm9, value, block.begin, 2)
-
-    @staticmethod
-    def get_min_iq_for_item_master(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['MinIQItemMaster']
-        return read_uintle(arm9, block.begin, 2)
-
-    @staticmethod
-    def set_min_iq_for_item_master(value: int, arm9: bytearray, config: Pmd2Data):
-        block = config.binaries['arm9.bin'].blocks['MinIQItemMaster']
-        write_uintle(arm9, value, block.begin, 2)
-
-    @staticmethod
-    def get_intimidator_chance(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['IntimidatorChance']
-        return read_uintle(ov10, block.begin, 2)
-
-    @staticmethod
-    def set_intimidator_chance(value: int, ov10: bytearray, config: Pmd2Data):
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['IntimidatorChance']
-        write_uintle(ov10, value, block.begin, 2)
-
-    @staticmethod
     def get_burn_damage_delay(ov10: bytes, config: Pmd2Data) -> int:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['BurnDamageDelay']
         return read_uintle(ov10, block.begin, 2)

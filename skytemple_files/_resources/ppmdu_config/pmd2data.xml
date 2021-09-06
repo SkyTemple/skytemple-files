@@ -111,6 +111,11 @@
         <!-- Requires EditExtraPokemon patch -->
         <Block name="ExtraDungeonData" beg="0x4ECA8" end="0x4EE10"/>
         <Block name="TacticsUnlockLevel" beg="0xA1940" end="0xA1958"/>
+        <Block name="IqGummiGain" beg="0xA22B0" end="0xA2538"/>
+        <Block name="WonderGummiIqGain" beg="0xA1890" end="0xA1891"/>
+        <Block name="JuiceBarNectarIqGain" beg="0x11810" end="0x11811"/>
+        <Block name="GummiBellyHeal" beg="0xA2538" end="0xA27C0"/>
+        <Block name="IqSkills" beg="0xA1C7C" end="0xA1D90"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -186,6 +191,7 @@
         <Block name="BellyLostTurn"       beg="0x34830" end="0x34833"/>
         <Block name="BellyLostWtw"        beg="0x76528" end="0x76529"/>
         <Block name="BellyLostWtw1000"    beg="0x7652A" end="0x7652B"/>
+        <Block name="NectarIqGain"        beg="0x40144" end="0x40145"/>
       </Bin>
 
       <Bin filepath="overlay/overlay_0000.bin" loadaddress="0x022BCA80">
@@ -353,6 +359,11 @@
         <!-- Requires EditExtraPokemon patch -->
         <Block name="ExtraDungeonData" beg="0x4EFE0" end="0x4F148"/>
         <Block name="TacticsUnlockLevel" beg="0xA1EC4" end="0xA1EDC"/>
+        <Block name="IqGummiGain" beg="0xA2834" end="0xA2ABC"/>
+        <Block name="WonderGummiIqGain" beg="0xA1E14" end="0xA1E15"/>
+        <Block name="JuiceBarNectarIqGain" beg="0x118B8" end="0x118B9"/>
+        <Block name="GummiBellyHeal" beg="0xA2ABC" end="0xA2D44"/>
+        <Block name="IqSkills" beg="0xA2200" end="0xA2314"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -422,6 +433,7 @@
         <Block name="BellyLostTurn"       beg="0x34950" end="0x34953"/>
         <Block name="BellyLostWtw"        beg="0x767F4" end="0x767F5"/>
         <Block name="BellyLostWtw1000"    beg="0x767F6" end="0x767F7"/>
+        <Block name="NectarIqGain"        beg="0x40264" end="0x40265"/>
       </Bin>
 
 

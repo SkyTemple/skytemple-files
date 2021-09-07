@@ -29,24 +29,20 @@ IQ_SKILL_ENTRY_LEN = 4
 
 
 class IqSkill:
-    def __init__(self, iq_required: int, unk2: int):
-        # 0x270F (9999) = Unused skill
-        # 0xFFFF = Default IQ skill that all the groups have
+    def __init__(self, iq_required: int):
+        # 0x0000270F (9999) = Unused skill
+        # 0xFFFFFFFF = Default IQ skill that all the groups have
         self.iq_required = iq_required
-        # 0xFFFF = Default IQ skill that all the groups have
-        # 0x0000 = The rest
-        self.unk2 = unk2
 
     def to_bytes(self) -> bytearray:
         buffer = bytearray(4)
-        write_sintle(buffer, self.iq_required, 0, 2)
-        write_sintle(buffer, self.unk2, 2, 2)
+        write_sintle(buffer, self.iq_required, 0, 4)
         return buffer
 
     def __eq__(self, other):
         if not isinstance(other, IqSkill):
             return False
-        return self.iq_required == other.iq_required and self.unk2 == other.unk2
+        return self.iq_required == other.iq_required
 
 
 class HardcodedIq:
@@ -160,8 +156,7 @@ class HardcodedIq:
         lst = []
         for i in range(block.begin, block.end, IQ_SKILL_ENTRY_LEN):
             lst.append(IqSkill(
-                read_sintle(arm9bin, i, 2),
-                read_sintle(arm9bin, i + 2, 2),
+                read_sintle(arm9bin, i, 4),
             ))
         return lst
 

@@ -26,6 +26,8 @@ IQ_GAINS_TABLES = {
     True: (25, 1)
 }
 IQ_SKILL_ENTRY_LEN = 4
+IQ_GROUP_LIST_LEN = 25
+IQ_GROUP_COMPRESSED_LIST_LEN = 9
 
 
 class IqSkill:
@@ -168,3 +170,51 @@ class HardcodedIq:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
             arm9bin[block.begin + i * IQ_SKILL_ENTRY_LEN:block.begin + (i + 1) * IQ_SKILL_ENTRY_LEN] = entry.to_bytes()
+
+
+class IqGroupsSkills:
+    @staticmethod
+    def read_uncompressed(arm9: bytearray, config: Pmd2Data) -> List[List[int]]:
+        block = config.binaries['arm9.bin'].blocks['IqGroupsSkills']
+        ret = []
+        for i in range(block.begin, block.end, IQ_GROUP_LIST_LEN):
+            skill_list = []
+            for j in range(0, IQ_GROUP_LIST_LEN):
+                current_skill = arm9[i + j]
+                if current_skill == 0xFF:
+                    break
+                skill_list.append(int(current_skill))
+            ret.append(skill_list)
+        return ret
+
+    @staticmethod
+    def read_compressed(arm9: bytearray, config: Pmd2Data) -> List[List[int]]:
+        block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
+        ret = []
+        for i in range(block.begin, block.end, IQ_GROUP_COMPRESSED_LIST_LEN):
+            skill_list = []
+            for j in range(0, IQ_GROUP_COMPRESSED_LIST_LEN):
+                current_byte = arm9[i + j]
+                for k in range(0, 8):
+                    if current_byte & 1 << k != 0:
+                        skill_list.append(j * 8 + k)
+            ret.append(skill_list)
+        return ret
+
+    @staticmethod
+    def write_compressed(arm9: bytearray, data: List[List[int]], config: Pmd2Data):
+        block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
+        expected_length = int((block.end - block.begin) / IQ_GROUP_COMPRESSED_LIST_LEN)
+        if len(data) != expected_length:
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+
+        for i, group in enumerate(data):
+            group_offset = block.begin + i * IQ_GROUP_COMPRESSED_LIST_LEN
+            # Clear current group before writing anything
+            arm9[group_offset:group_offset + IQ_GROUP_COMPRESSED_LIST_LEN] = [0] * IQ_GROUP_COMPRESSED_LIST_LEN
+
+            for skill in group:
+                byte = skill >> 3
+                bit = skill & 7
+                skill_offset = group_offset + byte
+                arm9[skill_offset] = arm9[skill_offset] | 1 << bit

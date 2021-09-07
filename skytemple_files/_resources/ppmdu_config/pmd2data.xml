@@ -116,6 +116,9 @@
         <Block name="JuiceBarNectarIqGain" beg="0x11810" end="0x11811"/>
         <Block name="GummiBellyHeal" beg="0xA2538" end="0xA27C0"/>
         <Block name="IqSkills" beg="0xA1C7C" end="0xA1D90"/>
+        <Block name="IqGroupsSkills" beg="0xA1D90" end="0xA1F20"/>
+        <!-- Replaces the block above when the patch "CompressIQData" is applied -->
+        <Block name="CompressedIqGroupsSkills" beg="0xA1D90" end="0xA1E20"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2AB4AC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->
@@ -364,6 +367,9 @@
         <Block name="JuiceBarNectarIqGain" beg="0x118B8" end="0x118B9"/>
         <Block name="GummiBellyHeal" beg="0xA2ABC" end="0xA2D44"/>
         <Block name="IqSkills" beg="0xA2200" end="0xA2314"/>
+        <Block name="IqGroupsSkills" beg="0xA2314" end="0xA24A4"/>
+        <!-- Replaces the block above when the patch "CompressIQData" is applied -->
+        <Block name="CompressedIqGroupsSkills" beg="0xA2314" end="0xA23A4"/>
         <Pointer name="DebugSpecialEpisodeType" beg="0x2ABDEC"/>
         <!-- RAM values -->
         <!--#TODO: probably not really part of arm9, it's only in memory anyway. -->

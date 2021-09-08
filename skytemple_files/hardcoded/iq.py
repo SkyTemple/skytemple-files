@@ -167,9 +167,6 @@ class HardcodedIq:
                     read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
                     read_sintle(arm9bin, block_restr.begin + ((i - 1) * IQ_SKILL_RESTR_ENTRY_LEN), 2)
                 ))
-        print("...")
-        for e in lst:
-            print(e.iq_required, e.restriction_group)
         return lst
 
     @staticmethod

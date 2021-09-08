@@ -69,6 +69,7 @@ from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHa
 from skytemple_files.patch.handler.allow_unrecruitable_mons import AllowUnrecruitableMonsPatchHandler
 from skytemple_files.patch.handler.edit_extra_pokemon import EditExtraPokemonPatchHandler
 from skytemple_files.patch.handler.fix_memory_softlock import FixMemorySoftlockPatchHandler
+from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -111,6 +112,7 @@ class PatchType(Enum):
     ALLOW_UNRECRUITABLE_MONS = AllowUnrecruitableMonsPatchHandler
     EDIT_EXTRA_POKEMON = EditExtraPokemonPatchHandler
     FIX_MEMORY_SOFTLOCK = FixMemorySoftlockPatchHandler
+    COMPRESS_IQ_DATA = CompressIQDataPatchHandler
 
 
 class Patcher:

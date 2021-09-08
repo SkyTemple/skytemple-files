@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from itertools import chain
 from math import ceil
-from typing import List
+from typing import List, Optional
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_sintle, write_sintle, write_uintle, read_uintle
@@ -26,25 +26,22 @@ IQ_GAINS_TABLES = {
     True: (25, 1)
 }
 IQ_SKILL_ENTRY_LEN = 4
+IQ_SKILL_RESTR_ENTRY_LEN = 2
 IQ_GROUP_LIST_LEN = 25
 IQ_GROUP_COMPRESSED_LIST_LEN = 9
 
 
 class IqSkill:
-    def __init__(self, iq_required: int):
+    def __init__(self, iq_required: int, restriction_group: Optional[int]):
         # 0x0000270F (9999) = Unused skill
         # 0xFFFFFFFF = Default IQ skill that all the groups have
         self.iq_required = iq_required
-
-    def to_bytes(self) -> bytearray:
-        buffer = bytearray(4)
-        write_sintle(buffer, self.iq_required, 0, 4)
-        return buffer
+        self.restriction_group = restriction_group
 
     def __eq__(self, other):
         if not isinstance(other, IqSkill):
             return False
-        return self.iq_required == other.iq_required
+        return self.iq_required == other.iq_required and self.restriction_group == other.restriction_group
 
 
 class HardcodedIq:
@@ -155,21 +152,43 @@ class HardcodedIq:
     @staticmethod
     def get_iq_skills(arm9bin: bytes, config: Pmd2Data) -> List[IqSkill]:
         block = config.binaries['arm9.bin'].blocks['IqSkills']
+        block_restr = config.binaries['arm9.bin'].blocks['IqSkillRestrictions']
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1 + (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         lst = []
-        for i in range(block.begin, block.end, IQ_SKILL_ENTRY_LEN):
-            lst.append(IqSkill(
-                read_sintle(arm9bin, i, 4),
-            ))
+        for i in range(0, (block.end - block.begin) // IQ_SKILL_ENTRY_LEN):
+            # Null entry not present in restriction table
+            if i == 0:
+                lst.append(IqSkill(
+                    read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
+                    None
+                ))
+            else:
+                lst.append(IqSkill(
+                    read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
+                    read_sintle(arm9bin, block.begin + ((i - 1) * IQ_SKILL_RESTR_ENTRY_LEN), 2)
+                ))
+        print("...")
+        for e in lst:
+            print(e.iq_required, e.restriction_group)
         return lst
 
     @staticmethod
     def set_iq_skills(value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data):
         block = config.binaries['arm9.bin'].blocks['IqSkills']
+        block_restr = config.binaries['arm9.bin'].blocks['IqSkillRestrictions']
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1+ (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         expected_length = int((block.end - block.begin) / IQ_SKILL_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            arm9bin[block.begin + i * IQ_SKILL_ENTRY_LEN:block.begin + (i + 1) * IQ_SKILL_ENTRY_LEN] = entry.to_bytes()
+            arm9bin[
+                block.begin + i * IQ_SKILL_ENTRY_LEN:block.begin + (i + 1) * IQ_SKILL_ENTRY_LEN
+            ] = entry.iq_required.to_bytes(IQ_SKILL_ENTRY_LEN, byteorder='little', signed=True)
+            # Null entry not present in restriction table
+            if i > 0:
+                arm9bin[
+                    block_restr.begin + (i - 1) * IQ_SKILL_RESTR_ENTRY_LEN:block_restr.begin + i * IQ_SKILL_RESTR_ENTRY_LEN
+                ] = entry.restriction_group.to_bytes(IQ_SKILL_RESTR_ENTRY_LEN, byteorder='little', signed=True)
 
 
 class IqGroupsSkills:

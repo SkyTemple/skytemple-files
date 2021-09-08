@@ -174,7 +174,7 @@ class HardcodedIq:
 
 class IqGroupsSkills:
     @staticmethod
-    def read_uncompressed(arm9: bytearray, config: Pmd2Data) -> List[List[int]]:
+    def read_uncompressed(arm9: bytes, config: Pmd2Data) -> List[List[int]]:
         block = config.binaries['arm9.bin'].blocks['IqGroupsSkills']
         ret = []
         for i in range(block.begin, block.end, IQ_GROUP_LIST_LEN):
@@ -188,7 +188,7 @@ class IqGroupsSkills:
         return ret
 
     @staticmethod
-    def read_compressed(arm9: bytearray, config: Pmd2Data) -> List[List[int]]:
+    def read_compressed(arm9: bytes, config: Pmd2Data) -> List[List[int]]:
         block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
         ret = []
         for i in range(block.begin, block.end, IQ_GROUP_COMPRESSED_LIST_LEN):

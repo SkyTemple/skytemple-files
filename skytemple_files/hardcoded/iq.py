@@ -165,7 +165,7 @@ class HardcodedIq:
             else:
                 lst.append(IqSkill(
                     read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
-                    read_sintle(arm9bin, block.begin + ((i - 1) * IQ_SKILL_RESTR_ENTRY_LEN), 2)
+                    read_sintle(arm9bin, block_restr.begin + ((i - 1) * IQ_SKILL_RESTR_ENTRY_LEN), 2)
                 ))
         print("...")
         for e in lst:

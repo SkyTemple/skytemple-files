@@ -156,17 +156,10 @@ class HardcodedIq:
         assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1 + (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         lst = []
         for i in range(0, (block.end - block.begin) // IQ_SKILL_ENTRY_LEN):
-            # Null entry not present in restriction table
-            if i == 0:
-                lst.append(IqSkill(
-                    read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
-                    None
-                ))
-            else:
-                lst.append(IqSkill(
-                    read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
-                    read_sintle(arm9bin, block_restr.begin + ((i - 1) * IQ_SKILL_RESTR_ENTRY_LEN), 2)
-                ))
+            lst.append(IqSkill(
+                read_sintle(arm9bin, block.begin + (i * IQ_SKILL_ENTRY_LEN), 4),
+                read_sintle(arm9bin, block_restr.begin + (i * IQ_SKILL_RESTR_ENTRY_LEN), 2)
+            ))
         return lst
 
     @staticmethod
@@ -181,11 +174,9 @@ class HardcodedIq:
             arm9bin[
                 block.begin + i * IQ_SKILL_ENTRY_LEN:block.begin + (i + 1) * IQ_SKILL_ENTRY_LEN
             ] = entry.iq_required.to_bytes(IQ_SKILL_ENTRY_LEN, byteorder='little', signed=True)
-            # Null entry not present in restriction table
-            if i > 0:
-                arm9bin[
-                    block_restr.begin + (i - 1) * IQ_SKILL_RESTR_ENTRY_LEN:block_restr.begin + i * IQ_SKILL_RESTR_ENTRY_LEN
-                ] = entry.restriction_group.to_bytes(IQ_SKILL_RESTR_ENTRY_LEN, byteorder='little', signed=True)
+            arm9bin[
+                block_restr.begin + i * IQ_SKILL_RESTR_ENTRY_LEN:block_restr.begin + (i + 1) * IQ_SKILL_RESTR_ENTRY_LEN
+            ] = entry.restriction_group.to_bytes(IQ_SKILL_RESTR_ENTRY_LEN, byteorder='little', signed=True)
 
 
 class IqGroupsSkills:

@@ -14,10 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_dse.dse.swdl.model import Swdl
+from skytemple_dse.dse.swdl.writer import SwdlWriter
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.audio.swdl.model import Swdl
-from skytemple_files.audio.swdl.writer import SwdlWriter
 
 
 class SwdlHandler(DataHandler[Swdl]):

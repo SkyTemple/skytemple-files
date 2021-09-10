@@ -14,10 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_dse.dse.smdl.model import Smdl
+from skytemple_dse.dse.smdl.writer import SmdlWriter
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.audio.smdl.model import Smdl
-from skytemple_files.audio.smdl.writer import SmdlWriter
 
 
 class SmdlHandler(DataHandler[Smdl]):

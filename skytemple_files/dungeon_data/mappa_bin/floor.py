@@ -60,6 +60,10 @@ class StubMappaFloor:
         write_uintle(data, self.buried_items_idx, 0x0C, 2)
         write_uintle(data, self.unk_items1_idx, 0x0E, 2)
         write_uintle(data, self.unk_items2_idx, 0x10, 2)
+        if bytes(18) in data:
+            raise ValueError(_("Could not save floor: It contains too much empty data.\nThis probably happened "
+                               "because a lot of spawn lists are empty.\nPlease check the floors you edited and fill "
+                               "them with more data. If you are using the randomizer, check your allowed item list."))
         return data
 
 

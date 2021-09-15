@@ -13,8 +13,8 @@
 .definelabel BufferRead, FileName - 0x8
 .definelabel CachedValue, BufferRead - 0x4
 
-.definelabel InvalidateInstructionCache, 0x0207A324
-.definelabel InvalidateAndCleanDataCache, 0x0207A270
+.definelabel InvalidateInstructionCache, 0x0207A6BC
+.definelabel InvalidateAndCleanDataCache, 0x0207A608
 
 .org StartTable
 .area StartMFunc-StartTable

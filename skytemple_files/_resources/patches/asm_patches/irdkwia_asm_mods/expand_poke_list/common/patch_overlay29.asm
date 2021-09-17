@@ -17,6 +17,77 @@
 	.fill (StoreSpriteFileIndexBothGenders+0xC8-.), 0xCC
 .endarea
 
+; Change Loading Sprites
+
+.org LoadPokemonSpriteFiles
+.area 0x114
+	stmdb  r13!,{r4,r5,r14}
+	mov  r4,r0
+	cmp r1,#0x0
+	bne no_deoxys
+	ldr r0,=0xFFFFFE5E
+	add  r0,r4,r0
+	mov  r0,r0,lsl #0x10
+	mov  r0,r0,lsr #0x10
+	cmp r0,#0x3
+	bhi no_deoxys
+	ldr r0,=DungeonBaseStructurePtr
+	ldr r0,[r0, #+0x0]
+	add  r0,r0,#0x3E00
+	ldrsh r0,[r0, #+0x3a]
+	bl LoadSpriteForPkmn
+	ldmia  r13!,{r4,r5,r15}
+no_deoxys:
+	mov  r0,r4
+	bl LoadSpriteForPkmn
+	mov r5,#0x17C
+	cmp r4,r5
+	subne  r0,r5,#0x1
+	cmpne r4,r0
+	addne  r0,r5,#0x1
+	cmpne r4,r0
+	addne  r0,r5,#0x2
+	cmpne r4,r0
+	beq castform
+	ldr r0,=0xFFFFFC2D
+	add  r0,r4,r0
+	mov  r0,r0,lsl #0x10
+	mov  r0,r0,lsr #0x10
+	cmp r0,#0x3
+	bhi no_castform
+	add r5,r5,#0x258
+castform:
+	subne  r0,r5,#0x1
+	bl LoadSpriteForPkmn
+	mov r0,r5
+	bl LoadSpriteForPkmn
+	addne  r0,r5,#0x1
+	bl LoadSpriteForPkmn
+	addne  r0,r5,#0x2
+	bl LoadSpriteForPkmn
+no_castform:
+	mov r5,#0x1CC
+	cmp r4,r5
+	addne r0,r5,#0x1
+	cmpne r4,r0
+	beq cherrim
+	ldr r0,=0xFFFFFBDC
+	add  r0,r4,r0
+	mov  r0,r0,lsl #0x10
+	mov  r0,r0,lsr #0x10
+	cmp r0,#0x1
+	ldmhiia  r13!,{r4,r5,r15}
+	add r5,r5,#0x258
+cherrim:
+	mov  r0,r5
+	bl LoadSpriteForPkmn
+	add r0,r5,#0x1
+	bl LoadSpriteForPkmn
+	ldmia  r13!,{r4,r5,r15}
+	.pool
+	.fill (LoadPokemonSpriteFiles+0x114-.), 0xCC
+.endarea
+
 ; Kecleon
 
 .org SetKecleonEntryForFloor

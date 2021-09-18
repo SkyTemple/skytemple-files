@@ -159,6 +159,8 @@
 ; patch overlay_0029.bin
 
 .definelabel StoreSpriteFileIndexBothGenders, 0x022F740C
+.definelabel LoadSpriteForPkmn, 0x022F74D4
+.definelabel LoadPokemonSpriteFiles, 0x022F7654
 .definelabel SetKecleonEntryForFloor, 0x022F73B4
 .definelabel GetKecleonEntryForFloor, 0x022F73EC
 .definelabel HookDungeonMonsterMod1, 0x022FC14C

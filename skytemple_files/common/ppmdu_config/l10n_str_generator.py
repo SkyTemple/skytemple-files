@@ -19,9 +19,11 @@ from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS, GAME_REGI
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 
 
-def p(string):
+def p(string, expl=''):
     string = string.replace('"', '\\"')
-    print(f'_("{string}")')
+    if expl != '':
+        expl = '# TRANSLATORS: ' + expl
+    print(f'_("{string}")  {expl}')
 
 
 def dump(data: Pmd2Data):
@@ -31,6 +33,9 @@ def dump(data: Pmd2Data):
         p(string_block.name)
     for category in data.dungeon_data.item_categories.values():
         p(category.name)
+    for patch in data.asm_patches_constants.patches.values():
+        for param in patch.parameters.values():
+            p(param.label, 'Used in the confirguation dialog for a patch')
 
     # We don't dump item or dungeon names, since the SkyTemple UI reads them from ROM, always.
 

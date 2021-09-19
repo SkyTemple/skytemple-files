@@ -233,7 +233,7 @@ class Pmd2AsmPatchesConstants(AutoString):
     def __init__(self, loose_bin_files: List[Pmd2LooseBinFile], patch_dir: Pmd2PatchDir, patches: List[Union[Pmd2Patch, Pmd2SimplePatch]]):
         self.loose_bin_files: Dict[str, Pmd2LooseBinFile] = {var.srcdata: var for var in loose_bin_files}
         self.patch_dir = patch_dir
-        self.patches: Dict[str, Pmd2Patch] = {var.id: var for var in patches}
+        self.patches: Dict[str, Union[Pmd2Patch, Pmd2SimplePatch]] = {var.id: var for var in patches}
 
 
 class Pmd2Index(AutoString):

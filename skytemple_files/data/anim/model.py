@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
+from enum import Enum, auto
 
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
@@ -40,6 +41,7 @@ class AnimPointType(Enum):
         self.description = description
 
 class AnimType(Enum):
+    INVALID   = 0x00, _('Invalid')
     WAN_FILE0 = 0x01, _('WAN File 0')
     WAN_FILE1 = 0x02, _('WAN File 1')
     WAN_OTHER = 0x03, _('WAN')
@@ -154,11 +156,11 @@ class Anim(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        trap_table_ptr = read_uintle(self.data, 0, 4)
-        item_table_ptr = read_uintle(self.data, 4, 4)
-        move_table_ptr = read_uintle(self.data, 8, 4)
-        general_table_ptr = read_uintle(self.data, 12, 4)
-        special_move_table_ptr = read_uintle(self.data, 16, 4)
+        trap_table_ptr = read_uintle(data, 0, 4)
+        item_table_ptr = read_uintle(data, 4, 4)
+        move_table_ptr = read_uintle(data, 8, 4)
+        general_table_ptr = read_uintle(data, 12, 4)
+        special_move_table_ptr = read_uintle(data, 16, 4)
 
         self.trap_table = []
         for x in range(trap_table_ptr,item_table_ptr,TRAP_DATA_SIZE):

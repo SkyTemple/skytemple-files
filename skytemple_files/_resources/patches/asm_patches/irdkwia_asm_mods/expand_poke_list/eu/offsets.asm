@@ -130,6 +130,14 @@
 .definelabel HookMdAccess10, 0x02053B4C
 
 ; //////////////////////////////////////////////////////
+; patch overlay_0010.bin
+
+.definelabel HookAnim1, 0x022BF980
+.definelabel HookAnim2, 0x022BF9EC
+.definelabel HookAnim3, 0x022BFA58
+.definelabel HookAnim4, 0x022C03A0
+
+; //////////////////////////////////////////////////////
 ; patch overlay_0011.bin
 
 .definelabel HookDisplay, 0x022DCBC4

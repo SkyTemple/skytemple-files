@@ -251,7 +251,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     if pil.width != img_dim or pil.height != img_dim:
         raise ValueError(f(_('Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')))
     if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
-        pil = simple_quant(pil)
+        pil = simple_quant(pil, False)
     new_palette = bytearray(pil.palette.palette)
 
     # We have to cut the image back into this annoying tiling format :(

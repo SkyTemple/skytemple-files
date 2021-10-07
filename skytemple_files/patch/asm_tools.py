@@ -253,6 +253,9 @@ class AsmFunction:
                         op2 = ((-op2)&ALL)
                         res = op1+op2
                         set_flags = True
+                    elif code&OPCODE_MASK==OPCODE_MOV:
+                        res = op2
+                        reg_list[dest] = (res)&ALL
                     else:
                         raise Exception("Opcode not supported at "+hex(reg_list[15]-0x8))
                     if set_flags:

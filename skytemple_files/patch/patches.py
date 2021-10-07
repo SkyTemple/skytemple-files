@@ -62,6 +62,7 @@ from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatch
 from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.pkmn_ground_anim import PkmnGroundAnimPatchHandler
 from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
 from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
@@ -104,6 +105,7 @@ class PatchType(Enum):
     EXTRACT_ANIM_DATA = ExtractAnimDataPatchHandler
     STAT_DISP = ChangeMoveStatDisplayPatchHandler
     CHANGE_EVO_SYSTEM = ChangeEvoSystemPatchHandler
+    GROUND_ANIM = PkmnGroundAnimPatchHandler
     EXTERNALIZE_MAPPA = ExternalizeMappaPatchHandler
     ADD_TYPES = AddTypePatchHandler
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler

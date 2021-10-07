@@ -67,3 +67,23 @@ class HardcodedMonsterSpriteDataTable:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
             arm9bin[block.begin + (i * ENTRY_LEN):block.begin + ((i + 1) * ENTRY_LEN)] = entry.to_bytes()
+
+class HardcodedMonsterGroundIdleAnimTable:
+    @classmethod
+    def get(cls, ov11bin: bytes, config: Pmd2Data) -> List[int]:
+        """Returns the list."""
+        block = config.binaries['overlay/overlay_0011.bin'].blocks['MonsterGroundIdleAnim']
+        lst = list(ov11bin[block.begin:block.end])
+        return lst
+
+    @classmethod
+    def set(cls, values: List[int], ov11bin: bytearray, config: Pmd2Data):
+        """
+        Sets the list.
+        The length of the list must exactly match the original ROM's length (see get).
+        """
+        block = config.binaries['overlay/overlay_0011.bin'].blocks['MonsterGroundIdleAnim']
+        expected_length = block.end - block.begin
+        if len(values) != expected_length:
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+        ov11bin[block.begin:block.end] = bytes(values)

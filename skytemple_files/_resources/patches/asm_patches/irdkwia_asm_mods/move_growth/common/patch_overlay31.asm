@@ -30,7 +30,7 @@ label_hmpp1_1:
 	add  r9,r9,#0x1
 	cmp r9,#0x4
 	blt label_hmpp1_2
-	.word 0x773e3b3d; nop
+	nop
 	nop
 	nop
 .endarea

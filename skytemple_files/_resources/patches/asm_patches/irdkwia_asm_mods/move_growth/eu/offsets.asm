@@ -92,7 +92,7 @@
 .definelabel HookPP2, 0x022FC2E8
 .definelabel HookPP3, 0x023186C0
 .definelabel HookPP4, 0x023187F4
-.definelabel HookPP5, 0x02318918
+.definelabel HookPP5, 0x0231891C
 .definelabel HookPP6, 0x0231F45C
 .definelabel HookPP6_1, 0x022E0EAC
 .definelabel HookPP6_2, 0x022FA484

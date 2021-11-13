@@ -145,7 +145,7 @@ class MonsterSpawn(AutoString):
         self.stats_entry = stats_entry
         # 3: (?) 6 if the pokémon is an enemy, 0xA if it's an ally, 9 if the only thing that is being spawned is
         # an item. If it's 6 or 0xA, the stats of the pokémon are determined by the stats entry specified on byte 2.
-        self.enemy_settings = MonsterSpawnType(enemy_settings)
+        self.enemy_settings = MonsterSpawnType(enemy_settings)  # type: ignore
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)

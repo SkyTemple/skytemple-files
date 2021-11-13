@@ -37,7 +37,7 @@ class Sir0:
 
         # Correct pointers by subtracting the header
         for pnt_off in pointer_offsets:
-            write_uintle(data, read_uintle(data, pnt_off, 4) - HEADER_LEN, pnt_off, 4)
+            write_uintle(data, read_uintle(data, pnt_off, 4) - HEADER_LEN, pnt_off, 4)  # type: ignore
 
         # The first two are for the pointers in the header, we remove them now, they are not
         # part of the content pointers

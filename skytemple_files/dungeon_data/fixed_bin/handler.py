@@ -27,7 +27,7 @@ class FixedBinHandler(DataHandler[FixedBin]):
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> 'FixedBin':
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> 'FixedBin':  # type: ignore
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FixedBin, static_data)
 
@@ -35,10 +35,6 @@ class FixedBinHandler(DataHandler[FixedBin]):
     def serialize(cls, data: 'FixedBin', **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
-
-    @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs) -> 'FixedBin':
-        return FixedBin(data)
 
     @classmethod
     def serialize_raw(cls, data: 'FixedBin', **kwargs) -> bytes:

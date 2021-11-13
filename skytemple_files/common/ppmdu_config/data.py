@@ -62,7 +62,7 @@ class Pmd2BinaryBlock(AutoString):
         self.parent = None
 
     def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent
+        self.parent = parent  # type: ignore
 
     @property
     def begin_absolute(self):
@@ -80,7 +80,7 @@ class Pmd2BinaryFunction(AutoString):
         self.parent = None
 
     def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent
+        self.parent = parent  # type: ignore
 
     @property
     def begin_absolute(self):
@@ -94,7 +94,7 @@ class Pmd2BinaryPointer(AutoString):
         self.parent = None
 
     def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent
+        self.parent = parent  # type: ignore
 
     @property
     def begin_absolute(self):
@@ -109,11 +109,13 @@ class Pmd2Binary(AutoString):
         self.functions: Dict[str, Pmd2BinaryFunction] = {x.name: x for x in functions}
         self.pointers: Dict[str, Pmd2BinaryPointer] = {x.name: x for x in pointers}
 
+
 class Pmd2SortLists(AutoString):
     def __init__(self, m2n: Optional[str], n2m: Optional[str], i2n: Optional[str]):
         self.m2n = m2n
         self.n2m = n2m
         self.i2n = i2n
+
 
 class Pmd2Language(AutoString):
     def __init__(self, filename: str, name: str, name_localized: str, locale: str, sort_lists: Pmd2SortLists):
@@ -174,7 +176,7 @@ class Pmd2PatchParameterType(Enum):
 
 
 class Pmd2PatchParameterOption(AutoString):
-    def __init__(self, type: Pmd2PatchParameterType, label: str, value: any):
+    def __init__(self, type: Pmd2PatchParameterType, label: str, value):
         self.type = type
         self.label = label
         self.value = value
@@ -184,7 +186,7 @@ class Pmd2PatchParameter(AutoString):
     def __init__(
             self, name: str, type: Pmd2PatchParameterType, label: str, *,
             min: Optional[int] = None, max: Optional[int] = None,
-            options: Optional[List[Pmd2PatchParameterOption]] = None, default = None):
+            options: Optional[List[Pmd2PatchParameterOption]] = None, default=None):
         self.name = name
         self.type = type
         self.label = label

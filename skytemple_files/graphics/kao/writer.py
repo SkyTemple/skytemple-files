@@ -29,7 +29,7 @@ DEBUG = False
 class KaoWriter:
     def __init__(self, kao: Kao):
         self.kao = kao
-        self.new_data = None
+        self.new_data: Optional[bytearray] = None
         pass
 
     def write(self, force_rebuild_all=False, update_kao=True) -> bytes:
@@ -95,6 +95,7 @@ class KaoWriter:
                 if self.kao.has_loaded(i, si):
                     # Image is loaded, use image data for new pointer
                     kao_image = self.kao.get(i, si)
+                    assert kao_image is not None
                     if kao_image.empty is True:
                         self._update_toc_entry(current_toc_offset, current_null_pointer.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                         current_toc_offset += SUBENTRY_LEN
@@ -154,4 +155,4 @@ class KaoWriter:
         return self.new_data
 
     def _update_toc_entry(self, offs, bs: bytes):
-        self.new_data[offs:offs+SUBENTRY_LEN] = bs
+        self.new_data[offs:offs+SUBENTRY_LEN] = bs  # type: ignore

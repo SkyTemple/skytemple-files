@@ -87,7 +87,7 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
             
             header = bytearray([0xFF]*(4+2*NB_ITEMS))
             write_uintle(header, 4+2*NB_ITEMS, 0, 4)
-            list_data = []
+            list_data: List[bytes] = []
             for x in range(bar_list, bar_list+BAR_LIST_SIZE, BAR_LIST_ENTRY_SIZE):
                 item_id = read_uintle(data, x, 2)
                 cdata = bytes(data[x+2:x+BAR_LIST_ENTRY_SIZE])

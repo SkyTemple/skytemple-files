@@ -68,7 +68,7 @@ class WazaMoveCategory(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: int, name_localized: str
     ):
         self.name_localized = name_localized
 
@@ -108,7 +108,7 @@ class WazaMoveRangeTarget(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: int, name_localized: str
     ):
         self.name_localized = name_localized
 
@@ -148,7 +148,7 @@ class WazaMoveRangeRange(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: int, name_localized: str
     ):
         self.name_localized = name_localized
 
@@ -189,7 +189,7 @@ class WazaMoveRangeCondition(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: int, name_localized: str
     ):
         self.name_localized = name_localized
 
@@ -208,9 +208,9 @@ class WazaMoveRangeSettings(AutoString):
     def __init__(self, data: Union[memoryview, bytes]):
         val = read_uintle(data, 0, 2)
         n4, n3, n2, n1 = val >> 12 & 0xf, val >> 8 & 0xf, val >> 4 & 0xf, val & 0xf
-        self.target = WazaMoveRangeTarget(int(n1))
-        self.range = WazaMoveRangeRange(int(n2))
-        self.condition = WazaMoveRangeCondition(int(n3))
+        self.target = WazaMoveRangeTarget(int(n1))  # type: ignore
+        self.range = WazaMoveRangeRange(int(n2))  # type: ignore
+        self.condition = WazaMoveRangeCondition(int(n3))  # type: ignore
         self.unused = int(n4)
 
     def __int__(self):
@@ -232,7 +232,7 @@ class WazaMove(AutoString):
         # 0x02	1	uint8	Type	The type of the move.
         self.type = PokeType(read_uintle(data, 0x02))
         # 0x03	1	uint8	Category	What kind of move is it.
-        self.category = WazaMoveCategory(read_uintle(data, 0x03))
+        self.category = WazaMoveCategory(read_uintle(data, 0x03))  # type: ignore
         # 0x04	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Actual values.
         self.settings_range = WazaMoveRangeSettings(data[0x04:0x06])
         assert read_uintle(data, 0x04, 2) == int(self.settings_range)
@@ -378,7 +378,7 @@ class WazaP(Sir0Serializable, AutoString):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.data.waza_p.writer import WazaPWriter
-        return WazaPWriter(self).write()
+        return WazaPWriter(self).write()  # type: ignore
 
     def __eq__(self, other):
         if not isinstance(other, WazaP):

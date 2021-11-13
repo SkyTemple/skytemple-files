@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import math
 from enum import Enum
+from typing import Union
 
 try:
     from PIL import Image
@@ -187,7 +188,7 @@ class Dma:
         return fimg
 
     @staticmethod
-    def get_tile_neighbors(wall_matrix: List[List[int]], x, y, self_is_wall_or_water: bool, treat_outside_as_wall=False):
+    def get_tile_neighbors(wall_matrix: List[List[Union[int, bool]]], x, y, self_is_wall_or_water: bool, treat_outside_as_wall=False):
         """Return the neighbor bit map for the given 3x3 matrix.
         1 means there is a wall / water. Out of bounds is read as floor, unless treat_outside_as_wall,
         then it's water/wall."""

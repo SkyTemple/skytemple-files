@@ -30,7 +30,7 @@ except ImportError:
 
 
 class ImgItm(Sir0Serializable):
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.sprites: List[List[bytes]] = self._read_sprites(

@@ -53,7 +53,7 @@ class At4px(CommonAt):
         return read_uintle(data, byte_offset + 5, 2)
 
     @classmethod
-    def compress(cls, data: bytes) -> CommonAt:
+    def compress(cls, data: bytes) -> 'At4px':
         """Create a new AT4PX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

@@ -19,7 +19,10 @@ import logging
 import math
 import warnings
 from itertools import chain
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Sequence
+
+import typing
+
 from skytemple_files.common.i18n_util import f, _
 
 try:
@@ -75,7 +78,7 @@ class TilemapEntry:
 
 
 def to_pil(
-        tilemap: List[TilemapEntry], tiles: List[bytes], palettes: List[List[int]],
+        tilemap: List[TilemapEntry], tiles: Sequence[bytes], palettes: List[List[int]],
         tile_dim: int,
         img_width: int, img_height: int,
         tiling_width=1, tiling_height=1,
@@ -92,7 +95,7 @@ def to_pil(
     if bpp == 8:
         iter_fn = iter
     elif bpp == 4:
-        iter_fn = iter_bytes_4bit_le
+        iter_fn = iter_bytes_4bit_le  # type: ignore
     else:
         raise ValueError(_("Only 4bpp and 8bpp images are supported."))
     pil_img_data = bytearray(img_width * img_height)
@@ -169,6 +172,7 @@ def to_pil_tiled(
     return tiles
 
 
+@typing.no_type_check
 def from_pil(
         pil: Image.Image, single_palette_size: int, max_nb_palettes: int, tile_dim: int,
         img_width: int,  img_height: int,
@@ -214,7 +218,7 @@ def from_pil(
     palettes: List[List[int]] = []
     for i, col in enumerate(new_palette):
         if i % (single_palette_size * 3) == 0:
-            cur_palette = []
+            cur_palette: List[int] = []
             palettes.append(cur_palette)
         cur_palette.append(col)
 

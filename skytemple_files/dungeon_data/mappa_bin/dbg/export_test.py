@@ -23,7 +23,8 @@ from xml.etree import ElementTree
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
-from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory, GUARANTEED
+from skytemple_files.dungeon_data.mappa_bin.item_list import GUARANTEED
+from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')

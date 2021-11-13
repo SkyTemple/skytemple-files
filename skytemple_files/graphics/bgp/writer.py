@@ -26,7 +26,7 @@ from skytemple_files.graphics.bgp.model import Bgp, BGP_PAL_NUMBER_COLORS, BGP_P
 class BgpWriter:
     def __init__(self, model: Bgp):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:

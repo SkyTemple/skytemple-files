@@ -32,7 +32,7 @@ class FontDatWriter:
         write_uintle(buffer, len(self.model.entries), 0x00, 4)
 
         # Font Data
-        last = (None, None)
+        last: Tuple[Optional[int], Optional[int]] = (None, None)
         for i, e in enumerate(sorted(self.model.entries, key=lambda x:(x.table, x.char))):
             if last==(e.char, e.table):
                 raise ValueError(_("Character {e.char} in table {e.table} is defined multiple times in a font file!"))

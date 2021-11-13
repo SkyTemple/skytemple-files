@@ -50,5 +50,5 @@ class At4pn(CommonAt):
         return self.get()
 
     @classmethod
-    def compress(cls, data: bytes) -> CommonAt:
+    def compress(cls, data: bytes) -> 'At4pn':
         return At4pn(data, new=True)

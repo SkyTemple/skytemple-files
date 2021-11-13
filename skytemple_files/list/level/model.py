@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, TYPE_CHECKING
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -91,7 +91,7 @@ class LevelListBin(Sir0Serializable):
         return out_data, sir0_pointer_offsets, pointer_data_block
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'ActorListBin':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'LevelListBin':
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

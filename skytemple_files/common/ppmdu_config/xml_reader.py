@@ -141,10 +141,10 @@ class Pmd2XmlReader:
                             binaries.append(bin)
                             for x in blocks:
                                 x.add_parent(bin)
-                            for x in fns:
-                                x.add_parent(bin)
-                            for x in pointers:
-                                x.add_parent(bin)
+                            for y in fns:
+                                y.add_parent(bin)
+                            for z in pointers:
+                                z.add_parent(bin)
             ###########################
             elif e.tag == 'ASMPatchesConstants':
                 asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
@@ -203,11 +203,11 @@ class Pmd2XmlReader:
                         for e_sprite in e_game:
                             indices = {}
                             for e_index in e_sprite:
-                                names = []
+                                names: List[str] = []
                                 idx = self.xml_int(e_index.attrib['id'])
                                 indices[idx] = Pmd2Index(idx, names)
                                 for e_name in e_index:
-                                    names.append(e_name.text)
+                                    names.append(e_name.text)  # type: ignore
                             idx = self.xml_int(e_sprite.attrib['id'])
                             animation_names[idx] = Pmd2Sprite(idx, indices)
 
@@ -223,11 +223,11 @@ class Pmd2XmlReader:
             game_editions,
             game_constants,
             binaries,
-            string_index_data,
-            asm_patches_constants,
-            script_data,
-            dungeon_data,
-            string_encoding,
+            string_index_data,  # type: ignore
+            asm_patches_constants,  # type: ignore
+            script_data,  # type: ignore
+            dungeon_data,  # type: ignore
+            string_encoding,  # type: ignore
             animation_names
         )
 
@@ -448,7 +448,7 @@ class Pmd2XmlReader:
                                         citems
                                     )
         return Pmd2DungeonData(
-            dungeon_bin_files,
+            dungeon_bin_files,  # type: ignore
             items,
             dungeons,
             item_categories
@@ -482,7 +482,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
     def read(self, e) -> Pmd2AsmPatchesConstants:
         loose_bin_files = []
         patch_dir = None
-        patches = []
+        patches: List[Union[Pmd2Patch, Pmd2SimplePatch]] = []
         for sub_e in e:
             if sub_e.tag == 'LooseBinFiles':
                 for e_game in sub_e:
@@ -505,12 +505,12 @@ class Pmd2AsmPatchesConstantsXmlReader:
                                 patch.parameters = {param.name: param for param in self._read_parameter_node(e_node)}
                                 patches.append(patch)
                             if e_node.tag == 'SimplePatch':
-                                patch = self._parse_simple_patch(e_node)
-                                patch.parameters = {param.name: param for param in self._read_parameter_node(e_node)}
-                                patches.append(patch)
+                                spatch = self._parse_simple_patch(e_node)
+                                spatch.parameters = {param.name: param for param in self._read_parameter_node(e_node)}
+                                patches.append(spatch)
         return Pmd2AsmPatchesConstants(
             loose_bin_files,
-            patch_dir,
+            patch_dir,  # type: ignore
             patches,
         )
 

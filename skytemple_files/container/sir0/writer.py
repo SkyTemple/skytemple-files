@@ -25,7 +25,7 @@ from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 class Sir0Writer:
     def __init__(self, model: Sir0):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:
@@ -69,7 +69,7 @@ class Sir0Writer:
         return self.data
 
     def _append(self, data: bytes):
-        self.data[self.bytes_written:self.bytes_written+len(data)] = data
+        self.data[self.bytes_written:self.bytes_written+len(data)] = data  # type: ignore
         self.bytes_written += len(data)
 
     def _pad(self, padding_length):

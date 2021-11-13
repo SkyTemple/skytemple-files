@@ -24,7 +24,7 @@ from skytemple_files.graphics.bpl.model import BPL_PAL_SIZE
 class BplWriter:
     def __init__(self, model: Bpl):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:

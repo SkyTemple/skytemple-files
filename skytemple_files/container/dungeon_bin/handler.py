@@ -22,7 +22,7 @@ from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 
 class DungeonBinHandler(DataHandler[DungeonBinPack]):
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> DungeonBinPack:
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> DungeonBinPack:  # type: ignore
         return DungeonBinPack(data, static_data.dungeon_data.dungeon_bin_files)
 
     @classmethod

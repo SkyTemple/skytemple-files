@@ -22,7 +22,7 @@ from skytemple_files.data.md.model import Md, MD_ENTRY_LEN
 class MdWriter:
     def __init__(self, model: Md):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:

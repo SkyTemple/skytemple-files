@@ -19,6 +19,7 @@ jobs:
       with:
         mypy_flags: '--config-file mypy.ini'
         requirements: '-r requirements.txt'
+        python_version: '${{ matrix.python-version }}'
 
   test:
     runs-on: ubuntu-latest

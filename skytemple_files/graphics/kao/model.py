@@ -23,7 +23,7 @@ try:
     from PIL import Image
 except ImportError:
     from pil import Image
-from typing import Union, Tuple
+from typing import Union, Tuple, Dict
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
@@ -92,7 +92,7 @@ class Kao:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.original_data = data
+        self.original_data: bytes = data
         self.first_toc = first_toc
         self.toc_len = toc_len
         self.reset(toc_len)
@@ -282,7 +282,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # Palette reordering algorithm
     # Tries to reorder the palette to have a more favorable data
     # configuration for the PX algorithm
-    pairs = dict()
+    pairs: Dict[Tuple[int, int], int] = {}
     for x in range(len(new_img)-1):
         l = [new_img[x]%16, new_img[x]//16, new_img[x+1]%16, new_img[x+1]//16]
         if l.count(l[0])==3 or (l.count(l[0])==1 and l.count(l[1])==3):

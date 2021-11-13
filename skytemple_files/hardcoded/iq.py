@@ -32,7 +32,7 @@ IQ_GROUP_COMPRESSED_LIST_LEN = 9
 
 
 class IqSkill:
-    def __init__(self, iq_required: int, restriction_group: Optional[int]):
+    def __init__(self, iq_required: int, restriction_group: int):
         # 0x0000270F (9999) = Unused skill
         # 0xFFFFFFFF = Default IQ skill that all the groups have
         self.iq_required = iq_required
@@ -81,14 +81,14 @@ class HardcodedIq:
         block = config.binaries['arm9.bin'].blocks['IqGummiGain']
         lst = []
         for y in range(0, dim):
-            row = []
+            row: List[int] = []
             lst.append(row)
             for x in range(0, dim):
                 row.append(read_uintle(arm9, block.begin + ((y * dim) + x) * byte_size, byte_size))
         return lst
 
     @staticmethod
-    def set_gummi_iq_gains(value: List[List[int]], arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool):
+    def set_gummi_iq_gains(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool):
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.binaries['arm9.bin'].blocks['IqGummiGain']
         lst_flattened = list(chain.from_iterable(value))
@@ -103,14 +103,14 @@ class HardcodedIq:
         block = config.binaries['arm9.bin'].blocks['GummiBellyHeal']
         lst = []
         for y in range(0, dim):
-            row = []
+            row: List[int] = []
             lst.append(row)
             for x in range(0, dim):
                 row.append(read_uintle(arm9, block.begin + ((y * dim) + x) * byte_size, byte_size))
         return lst
 
     @staticmethod
-    def set_gummi_belly_heal(value: List[List[int]], arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool):
+    def set_gummi_belly_heal(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool):
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.binaries['arm9.bin'].blocks['GummiBellyHeal']
         lst_flattened = list(chain.from_iterable(value))

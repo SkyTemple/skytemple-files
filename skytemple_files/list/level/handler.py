@@ -22,7 +22,7 @@ from skytemple_files.list.level.model import LevelListBin
 
 class LevelListBinHandler(DataHandler[LevelListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> LevelListBin:
+    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> LevelListBin:  # type: ignore
         return LevelListBin(data, header_start)
 
     @classmethod

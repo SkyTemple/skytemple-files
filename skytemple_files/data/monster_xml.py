@@ -18,6 +18,7 @@ Theoretically compatible with ppmdu, but contains some new field names for some 
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 from abc import ABC, abstractmethod
 from base64 import b64encode, b64decode
 from typing import Optional, List, Tuple, Dict, Generic, TypeVar

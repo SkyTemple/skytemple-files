@@ -15,6 +15,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import List
+
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
 from skytemple_files.dungeon_data.mappa_g_bin.model import MappaGBin, MappaGFloor, MappaGFloorLayout
 
@@ -22,7 +24,7 @@ from skytemple_files.dungeon_data.mappa_g_bin.model import MappaGBin, MappaGFloo
 def convert_mappa_to_mappag(mappa: MappaBin) -> MappaGBin:
     mappag_floor_lists = []
     for floor_list in mappa.floor_lists:
-        gfloor_list = []
+        gfloor_list: List[MappaGFloor] = []
         mappag_floor_lists.append(gfloor_list)
         for floor in floor_list:
             gfloor_list.append(MappaGFloor(MappaGFloorLayout(

@@ -19,9 +19,10 @@ from typing import Type
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 
+
 class ItemListHandler(DataHandler[MappaItemList]):
     @classmethod
-    def deserialize(cls, data: bytes, items, **kwargs) -> MappaItemList:
+    def deserialize(cls, data: bytes, items, **kwargs) -> MappaItemList:  # type: ignore
         return MappaItemList.from_bytes(data, items, 0)
 
     @classmethod

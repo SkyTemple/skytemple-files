@@ -14,21 +14,25 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from abc import ABC
+from typing import TypeVar
+
 from skytemple_files.common.types.data_handler import DataHandler
 
-from skytemple_files.graphics.dpla.model import Dpla
+T = TypeVar('T')
 
 
-class DbinSir0DplaHandler(DataHandler[Dpla]):
+class CommonAtImplHandler(DataHandler[T], ABC):
+    @classmethod
+    def matches(cls, data: bytes, byte_offset=0):
+        """Check if the given data is a container of its type"""
+        pass
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dpla:
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.deserialize(data)
-        return FileType.SIR0.unwrap_obj(sir0, Dpla)  # type: ignore
+    def compress(cls, data: bytes) -> T:
+        pass
 
     @classmethod
-    def serialize(cls, data: Dpla, **kwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.wrap_obj(data)  # type: ignore
-        return FileType.SIR0.serialize(sir0)
+    def cont_size(cls, data: bytes, byte_offset=0):
+        """Get the size of a container starting at the given offset in data."""
+        pass

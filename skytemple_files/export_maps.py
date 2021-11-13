@@ -247,6 +247,7 @@ def draw_scene_for__actors(rom: NintendoDSRom, file_name, dim_w, dim_h,  layer: 
 
     return img
 
+
 def draw_scene_for__rest(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer) -> Image.Image:
     img = Image.new('RGBA', (dim_w, dim_h), (255, 0, 0, 0))
     draw = ImageDraw.Draw(img, 'RGBA')
@@ -254,7 +255,7 @@ def draw_scene_for__rest(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: Ssa
     # Performers
     for i, performer in enumerate(layer.performers):
         has_written_something = True
-        triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction.id)
+        triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction.id)  # type: ignore
 
     # Events
     for i, event in enumerate(layer.events):
@@ -275,23 +276,23 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
     """Draws the sprite for an actor"""
     if actor.actor.entid == 0:
         if draw_invisible_actors_objects:
-            return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)
+            return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)  # type: ignore
         return
 
-    actor_sprite_id = monster_md[actor.actor.entid].sprite_index
+    actor_sprite_id = monster_md[actor.actor.entid].sprite_index  # type: ignore
 
     try:
         sprite = FileType.WAN.deserialize(
-            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()
+            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()  # type: ignore
         )
         ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
     except (ValueError, TypeError) as e:
         warnings.warn(f"Failed to render a sprite, replaced with placeholder ({actor}, {actor_sprite_id}): {e}")
         if not draw_invisible_actors_objects:
             return
-        return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)
+        return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)  # type: ignore
 
-    frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0
+    frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0  # type: ignore
     mfg_id = ani_group[frame_id].frames[0].frame_id
 
     sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
@@ -323,9 +324,9 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
         warnings.warn(f"Failed to render a sprite, replaced with placeholder ({obj}): {e}")
         if not draw_invisible_actors_objects:
             return
-        return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_OBJECTS, obj.pos.direction.id)
+        return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_OBJECTS, obj.pos.direction.id)  # type: ignore
 
-    frame_id = obj.pos.direction.id - 1 if obj.pos.direction.id > 0 else 0
+    frame_id = obj.pos.direction.id - 1 if obj.pos.direction.id > 0 else 0  # type: ignore
     if frame_id > len(ani_group) - 1:
         frame_id = 0
     mfg_id = ani_group[frame_id].frames[0].frame_id

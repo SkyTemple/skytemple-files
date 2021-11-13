@@ -1,3 +1,7 @@
+"""
+pytest configuration.
+Collects all packages called "test" within skytemple_files to run tests from.
+"""
 #  Copyright 2020-2021 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -14,21 +18,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.types.data_handler import DataHandler
+from os.path import isdir
+TEST_DIR_NAME = 'test'
 
-from skytemple_files.graphics.dpla.model import Dpla
 
-
-class DbinSir0DplaHandler(DataHandler[Dpla]):
-
-    @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dpla:
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.deserialize(data)
-        return FileType.SIR0.unwrap_obj(sir0, Dpla)  # type: ignore
-
-    @classmethod
-    def serialize(cls, data: Dpla, **kwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.wrap_obj(data)  # type: ignore
-        return FileType.SIR0.serialize(sir0)
+def pytest_ignore_collect(path):
+    if isdir(path.strpath):
+        return False
+    parts = path.strpath.split(path.sep)
+    return not (len(parts) > 1 and parts[-2] == TEST_DIR_NAME and parts[-1].endswith('_test.py'))

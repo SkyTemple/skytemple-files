@@ -15,12 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
 from skytemple_files.compression_container.atupx.model import Atupx
+from skytemple_files.compression_container.common_at.base_handler import CommonAtImplHandler
 
 
-class AtupxHandler(DataHandler[Atupx]):
+class AtupxHandler(CommonAtImplHandler[Atupx]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> Atupx:
         """Load a ATUPX container into a high-level representation"""

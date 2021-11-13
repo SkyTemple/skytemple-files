@@ -37,7 +37,7 @@ class ItemSPHandler(DataHandler[ItemSP]):
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'ItemSP':
-        return ItemSP(data)
+        return ItemSP(data, 0)
 
     @classmethod
     def serialize_raw(cls, data: 'ItemSP', **kwargs) -> bytes:

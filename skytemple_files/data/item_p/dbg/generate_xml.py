@@ -17,10 +17,11 @@
 import os
 
 from ndspy.rom import NintendoDSRom
+from typing import Dict, List
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.data.item_p.writer import ItemPWriter
-from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory
+from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 
@@ -28,7 +29,7 @@ rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
 item_p_bin = rom.getFileByName('BALANCE/item_p.bin')
 item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
-cats = {x: [] for x in MappaItemCategory}
+cats: Dict[MappaItemCategory, List[int]] = {x: [] for x in MappaItemCategory}
 
 for idx, entry in enumerate(item_p.item_list):
     cats[entry.category_enum()].append(idx)

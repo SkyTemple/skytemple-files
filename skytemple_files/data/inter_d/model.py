@@ -39,11 +39,12 @@ class InterDEntryType(Enum):
             self, _: int, explanation: str
     ):
         self.explanation = explanation
-    
+
+
 class InterDEntry(AutoString):
     def __init__(self, data: bytes = bytes(6)):
         self.floor = read_uintle(data, 0, 1)
-        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))
+        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))  # type: ignore
         self.game_var_id = read_uintle(data, 2, 2)
         self.param1 = read_uintle(data, 4, 1)
         self.param2 = read_uintle(data, 5, 1)
@@ -56,12 +57,13 @@ class InterDEntry(AutoString):
         write_uintle(data, self.param1, 4, 1)
         write_uintle(data, self.param2, 5, 1)
         return bytes(data)
-    
+
+
 class InterD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list_dungeons = []
+        self.list_dungeons: List[List[InterDEntry]] = []
         limit = read_uintle(data, 0, 4)
         prev = read_uintle(data, 4, 2)
         for x in range(6, limit, 2):

@@ -68,7 +68,7 @@ class SsaWriter:
             # Actors
             for actor in layer.actors:
                 actor_bytes += self.uint16(actor.actor.id)
-                actor_bytes += self.uint16(actor.pos.direction.id)
+                actor_bytes += self.uint16(actor.pos.direction.id)  # type: ignore
                 actor_bytes += self.uint16(actor.pos.x_relative)
                 actor_bytes += self.uint16(actor.pos.y_relative)
                 actor_bytes += self.uint16(actor.pos.x_offset)
@@ -79,7 +79,7 @@ class SsaWriter:
             # Objects
             for obj in layer.objects:
                 object_bytes += self.uint16(obj.object.id)
-                object_bytes += self.uint16(obj.pos.direction.id)
+                object_bytes += self.uint16(obj.pos.direction.id)  # type: ignore
                 object_bytes += self.sint16(obj.hitbox_w)
                 object_bytes += self.sint16(obj.hitbox_h)
                 object_bytes += self.uint16(obj.pos.x_relative)
@@ -92,7 +92,7 @@ class SsaWriter:
             # Performer
             for prf in layer.performers:
                 performer_bytes += self.uint16(prf.type)
-                performer_bytes += self.uint16(prf.pos.direction.id)
+                performer_bytes += self.uint16(prf.pos.direction.id)  # type: ignore
                 performer_bytes += self.sint16(prf.hitbox_w)
                 performer_bytes += self.sint16(prf.hitbox_h)
                 performer_bytes += self.uint16(prf.pos.x_relative)

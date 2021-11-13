@@ -23,6 +23,7 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bma.model import Bma
+from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc
 from skytemple_files.graphics.bpl.model import Bpl
 
@@ -87,7 +88,7 @@ class BgListEntry:
         All BPA slots are returned, in order, even empty ones (None).
         """
         from skytemple_files.common.types.file_types import FileType
-        bpas = []
+        bpas: List[Optional[Bpa]] = []
         for bpa_name in self.bpa_names:
             if bpa_name is not None:
                 bpas.append(FileType.BPA.deserialize(self._get_file(
@@ -116,7 +117,7 @@ class BgList:
 
         self.level: List[BgListEntry] = []
         for entry in iter_bytes(data, 11*8):
-            bpas = []
+            bpas: List[Optional[str]] = []
             for potential_bpa in iter_bytes(entry, 8, 24, 88):
                 if bytes(potential_bpa)[0] != 0:
                     bpas.append(bytes(potential_bpa).rstrip(b'\0').decode('ascii'))

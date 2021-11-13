@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
-from typing import Optional
+from typing import Optional, List
 
 try:
     from PIL import Image
@@ -48,7 +48,7 @@ class Bpa:
     def __init__(self, data: Optional[bytes]):
         self.number_of_tiles = 0
         self.number_of_frames = 0
-        self.tiles = []
+        self.tiles: List[bytearray] = []
         self.frame_info = []
         if data is None:
             return

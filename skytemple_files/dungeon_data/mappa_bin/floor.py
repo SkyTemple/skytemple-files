@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from xml.etree.ElementTree import Element
 
+import typing
+
 from skytemple_files.common.util import *
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError
 from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR_LAYOUT, XML_FLOOR, XML_TRAP_LIST, XML_MONSTER, \
@@ -206,6 +208,7 @@ class MappaFloor(AutoString, XmlSerializable):
         return floor_xml
 
     @classmethod
+    @typing.no_type_check
     def from_xml(cls, ele: Element) -> 'MappaFloor':
         data = {
             'layout': None,

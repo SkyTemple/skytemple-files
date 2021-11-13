@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import typing
 from enum import Enum
 from typing import Dict
 
@@ -86,7 +87,7 @@ class PokeType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
+    def __init__(self, _: int, print_name: str = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -467,6 +468,7 @@ class MdEntry(AutoString):
 
 
 class Md:
+    @typing.no_type_check
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)

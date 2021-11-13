@@ -17,6 +17,8 @@
 
 from typing import Dict, Optional
 
+import typing
+
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_sir0 import *
@@ -30,7 +32,6 @@ try:
     from PIL import Image
 except ImportError:
     from pil import Image
-
 
 
 class FontSir0Entry(AbstractFontEntry):
@@ -101,7 +102,7 @@ class FontSir0Entry(AbstractFontEntry):
 
 
 class FontSir0(Sir0Serializable, AbstractFont):
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         number_entries = read_uintle(data, header_pnt, 4)
@@ -127,7 +128,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
-        return FontSir0Writer(self).write()
+        return FontSir0Writer(self).write()  # type: ignore
     
     def get_entry_image_size(self) -> int:
         return FONT_SIR0_SIZE
@@ -136,7 +137,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
         return FontSir0Entry.get_class_properties()
 
     def delete_entry(self, entry: AbstractFontEntry):
-        self.entries.remove(entry)
+        self.entries.remove(entry)  # type: ignore
     
     def create_entry_for_table(self, table) -> AbstractFontEntry:
         entry = FontSir0Entry(0, table, 0, FONT_DEFAULT_CAT, FONT_DEFAULT_PADDING, bytes(FONT_SIR0_DATA_LEN))
@@ -148,7 +149,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
-        return entries
+        return entries  # type: ignore
     
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
@@ -175,7 +176,8 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 validate_xml_tag(xml_char, XML_CHAR)
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
-    
+
+    @typing.no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)
@@ -195,6 +197,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                     y = (charid//16)*FONT_SIR0_SIZE
                     self.entries.append(FontSir0Entry.from_pil(tables[t].crop(box=[x, y, x+FONT_SIR0_SIZE, y+FONT_SIR0_SIZE]), charid, t, width, cat, padding))
         pass
+
     def __eq__(self, other):
         if not isinstance(other, FontSir0):
             return False

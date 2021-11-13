@@ -106,6 +106,8 @@ def resolve_mapping_for_level(
             break
     if not dungeon_id:
         return None
+    assert dungeon_id is not None
+    assert floor_id is not None
     mappa_idx = dungeons[dungeon_id].mappa_index
     start_offset = dungeons[dungeon_id].start_after
     length = dungeons[dungeon_id].number_floors

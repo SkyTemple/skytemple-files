@@ -58,11 +58,13 @@ class Ssb:
             if if_empty_supported_langs is None:
                 if_empty_supported_langs = []
             self.original_binary_data = bytes()
-            self.routine_info = []
-            self.routine_ops = []
-            self.constants = []
-            self.strings = {lang_name: [] for lang_name in if_empty_supported_langs}
+            self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []
+            self.routine_op: List[List[SkyTempleSsbOperation]] = []
+            self.constants: List[str] = []
+            self.strings: Dict[str, List[str]] = {lang_name: [] for lang_name in if_empty_supported_langs}
             return
+        assert begin_data_offset is not None
+        assert header is not None
 
         logger.debug("Deserializing SSB model (size: %d)...", len(data))
 
@@ -76,8 +78,8 @@ class Ssb:
         number_of_routines = read_uintle(data, begin_data_offset + 0x02, 2)
 
         self._header = header
-        self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []  # Offset, RoutineInfo
-        self.routine_ops: List[List[SkyTempleSsbOperation]] = []
+        self.routine_info = []  # Offset, RoutineInfo
+        self.routine_ops = []
 
         cursor = begin_data_offset + SSB_PADDING_BEFORE_ROUTINE_INFO
         cursor = self._read_routine_info(data, number_of_routines, cursor)

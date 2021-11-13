@@ -18,6 +18,7 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import *
 from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN
+from skytemple_files.graphics.kao.protocol import KaoProtocol
 from skytemple_files.graphics.kao.writer import KaoWriter
 
 

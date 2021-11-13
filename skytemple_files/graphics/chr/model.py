@@ -27,13 +27,14 @@ try:
 except ImportError:
     from pil import Image
 
+
 class Chr(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         number_entries = len(data)//(CHR_TILE_WIDTH**2)
 
-        self.palette = None
+        self.palette: Optional[Pal] = None
         self.tiles: List[Image.Image] = []
         for i in range(number_entries):
             data_raw = data[(CHR_TILE_WIDTH**2)*i:(CHR_TILE_WIDTH**2)*(i+1)]

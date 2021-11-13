@@ -37,7 +37,7 @@ class WazaPHandler(DataHandler[WazaP]):
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'WazaP':
-        return WazaP(data)
+        return WazaP(data, 0)
 
     @classmethod
     def serialize_raw(cls, data: 'WazaP', **kwargs) -> bytes:

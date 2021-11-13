@@ -15,12 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
 from skytemple_files.compression_container.at4pn.model import At4pn
+from skytemple_files.compression_container.common_at.base_handler import CommonAtImplHandler
 
 
-class At4pnHandler(DataHandler[At4pn]):
+class At4pnHandler(CommonAtImplHandler[At4pn]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> At4pn:
         """Load a AT4PX container into a high-level representation"""

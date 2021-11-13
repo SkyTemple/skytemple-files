@@ -121,7 +121,7 @@ class TileRuleType(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, explanation: str, floor_type: FloorType, room_type: RoomType,
+            self, _: int, explanation: str, floor_type: FloorType, room_type: RoomType,
             impassable: bool, absolute_mover: bool, notes: str
     ):
         self.explanation = explanation
@@ -195,7 +195,7 @@ class FixedFloor:
 
     @classmethod
     def new(cls, width: int, height: int, actions: List[FixedFloorActionRule]):
-        n = cls(None, None, None)
+        n = cls(None, None, None)  # type: ignore
         n.width = width
         n.height = height
         n.actions = actions
@@ -203,7 +203,7 @@ class FixedFloor:
 
     def read_actions(self, data: bytes, action_list_start: int, max_actions: int) -> List[FixedFloorActionRule]:
         cursor = action_list_start
-        actions = []
+        actions: List[FixedFloorActionRule] = []
         while len(actions) < max_actions:
             action, repeat_times = self._read_action(data, cursor)
             cursor += 4
@@ -222,7 +222,7 @@ class FixedFloor:
         repeat_times = read_uintle(data, action_pointer + 2, 2)
         if TileRuleType.has_value(action_id):
             return TileRule(
-                TileRuleType(action_id), direction
+                TileRuleType(action_id), direction  # type: ignore
             ), repeat_times
         return EntityRule(
             action_id - 16, direction
@@ -286,8 +286,8 @@ class FixedBin(Sir0Serializable):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.fixed_bin.writer import FixedBinWriter
-        return FixedBinWriter(self).write()
+        return FixedBinWriter(self).write()  # type: ignore
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'FixedBin':
-        return cls(content_data, data_pointer, static_data)
+        return cls(content_data, data_pointer, static_data)  # type: ignore

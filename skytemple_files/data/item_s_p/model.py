@@ -68,7 +68,7 @@ class ItemSPType(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, rarity: str, slot: Optional[int], exclusive_to: ItemSPExclusiveType,
+            self, _: int, rarity: str, slot: Optional[int], exclusive_to: ItemSPExclusiveType,
             extra_trait_desc: Optional[str]
     ):
         self.rarity = rarity
@@ -90,7 +90,7 @@ class ItemSPType(Enum):
 
 class ItemSPEntry(AutoString):
     def __init__(self, data: bytes):
-        self.type = ItemSPType(read_uintle(data, 0, 2))  # Item Type
+        self.type = ItemSPType(read_uintle(data, 0, 2))  # type: ignore  # Item Type
         self.parameter = read_uintle(data, 2, 2)  # Item Parameter
     
     def to_bytes(self) -> bytes:
@@ -121,7 +121,7 @@ class ItemSP(Sir0Serializable, AutoString):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.data.item_s_p.writer import ItemSPWriter
-        return ItemSPWriter(self).write()
+        return ItemSPWriter(self).write()  # type: ignore
 
     def __eq__(self, other):
         if not isinstance(other, ItemSP):

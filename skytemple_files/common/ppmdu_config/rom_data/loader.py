@@ -18,10 +18,9 @@ from typing import TYPE_CHECKING, Dict, List
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
-
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
+    from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
 
 
 FILENAME_ACTOR_LIST = 'BALANCE/actor_list.bin'

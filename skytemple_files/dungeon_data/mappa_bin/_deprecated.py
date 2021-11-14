@@ -15,12 +15,28 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+import logging
 import warnings
 from enum import Enum
 from typing import Optional, List
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.dungeon_data.mappa_bin.item_list import _WARNMSG, logger, _gdefconf
+
+_WARNMSG = "MappaItemCategory is deprecated. Use Pmd2DungeonData's item_categories attribute instead. " \
+           "This deprecated class will provide dynamically generated values from the default " \
+           "EU XML configuration."
+_defconf = None
+
+
+def _gdefconf():
+    from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
+    global _defconf
+    if _defconf is None:
+        _defconf = Pmd2XmlReader.load_default().dungeon_data.item_categories
+    return _defconf
+
+
+logger = logging.getLogger(__name__)
 
 
 class MappaItemCategory(Enum):

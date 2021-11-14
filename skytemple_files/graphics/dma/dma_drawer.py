@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 from random import choice
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Iterable
 
 from PIL import Image
 
@@ -34,7 +34,7 @@ class DmaDrawer:
     def __init__(self, dma: Dma):
         self.dma = dma
 
-    def rules_from_bma(self, bma: Union[Bma, List[int]], width_in_chunks=None) -> List[List[DmaType]]:
+    def rules_from_bma(self, bma: Union[Bma, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
         rules = []
         active_row = None
         layer: List[int] = bma  # type: ignore

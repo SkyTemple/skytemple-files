@@ -39,18 +39,6 @@ POKE_ID = 183
 Probability = int
 
 
-_WARNMSG = "MappaItemCategory is deprecated. Use Pmd2DungeonData's item_categories attribute instead. " \
-           "This deprecated class will provide dynamically generated values from the default " \
-           "EU XML configuration."
-_defconf = None
-def _gdefconf():
-    from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
-    global _defconf
-    if _defconf is None:
-        _defconf = Pmd2XmlReader.load_default().dungeon_data.item_categories
-    return _defconf
-
-
 class MappaItemList(AutoString, XmlSerializable):
     def __init__(self,
                  categories: Dict[Union[MappaItemCategory, Pmd2DungeonItemCategory], Probability],

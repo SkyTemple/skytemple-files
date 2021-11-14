@@ -165,6 +165,14 @@ class Kao:
         self.loaded_kaos[index][subindex] = img
         self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))
 
+    def delete(self, index: int, subindex: int):
+        try:
+            kao = self.loaded_kaos[index][subindex]
+            kao.empty = True
+            kao.modified = True
+        except IndexError:
+            pass
+
     def has_loaded(self, index: int, subindex: int) -> bool:
         """Returns whether or not a kao image at the specified index was loaded"""
         return self.loaded_kaos[index][subindex] is not None

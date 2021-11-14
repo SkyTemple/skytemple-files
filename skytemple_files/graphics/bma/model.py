@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 import math
-from typing import Tuple, List
+from typing import Tuple, List, Sequence
 
 try:
     from PIL import Image, ImageDraw, ImageFont
@@ -229,7 +229,7 @@ class Bma:
         return unk, data[1]
 
     def to_pil_single_layer(
-            self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa], layer: int
+            self, bpc: Bpc, palettes: List[List[int]], bpas: Sequence[Bpa], layer: int
     ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
@@ -275,7 +275,7 @@ class Bma:
         return fimg
 
     def to_pil(
-            self, bpc: Bpc, bpl: Bpl, bpas: List[Bpa],
+            self, bpc: Bpc, bpl: Bpl, bpas: List[Optional[Bpa]],
             include_collision=True, include_unknown_data_block=True, pal_ani=True, single_frame=False
     ) -> List[Image.Image]:
         """

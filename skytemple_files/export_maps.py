@@ -124,7 +124,7 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
             map_bg_durations[l.bpl_name] = duration
         except (NotImplementedError, SystemError) as ex:
             print(f"error for {l.bma_name}: {repr(ex)}", file=sys.stderr)
-            print(''.join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)), file=sys.stderr)
+            print(''.join(traceback.format_exception(type(ex), value=ex, tb=ex.__traceback__)), file=sys.stderr)
 
 
 def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):

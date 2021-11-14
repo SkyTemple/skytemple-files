@@ -46,6 +46,9 @@ U = TypeVar('U', bound='KaoIteratorProtocol', covariant=True)
 
 
 class KaoProtocol(Protocol[T, U]):
+    def __init__(self, data: bytes):
+        ...
+
     def expand(self, new_size: int):
         ...
 

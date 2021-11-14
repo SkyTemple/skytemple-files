@@ -67,7 +67,7 @@ class HybridDataHandler(Generic[P], DataHandler[P], ABC):
         return cls.load_python_model()
 
     @classmethod
-    def get_writer(cls) -> Type[WriterProtocol[P]]:
+    def get_writer_cls(cls) -> Type[WriterProtocol[P]]:
         if get_implementation_type() == ImplementationType.NATIVE:
             return cls.load_native_writer()
         return cls.load_python_writer()

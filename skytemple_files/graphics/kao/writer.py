@@ -151,7 +151,7 @@ class KaoWriter:
             self.new_data = self.new_data[:current_image_offset]
 
         if self.update_kao:
-            kao.original_data = self.new_data
+            kao.original_data = memoryview(self.new_data)
 
         return self.new_data
 

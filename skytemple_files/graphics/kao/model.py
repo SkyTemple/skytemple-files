@@ -90,11 +90,20 @@ class KaoImage:
 
 
 class Kao:
-    def __init__(self, data: bytes, first_toc: int, toc_len: int):
+    def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.original_data: bytes = data
+        # First 160 bytes are padding
+        first_toc = (SUBENTRIES*SUBENTRY_LEN)
+        # The following line won't work; what if the first byte of the first pointer is 0?
+        # first_toc = next(x for x, val in enumerate(data) if val != 0)
+        assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
+        # first pointer = end of TOC
+        first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
+        toc_len = int((first_pointer - first_toc) / (SUBENTRIES*SUBENTRY_LEN))
+
+        self.original_data: memoryview = data
         self.first_toc = first_toc
         self.toc_len = toc_len
         self.reset(toc_len)

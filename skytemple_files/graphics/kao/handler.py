@@ -20,7 +20,6 @@ from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN
 from skytemple_files.graphics.kao.protocol import KaoProtocol
-from skytemple_files.graphics.kao.writer import KaoWriter
 
 
 class KaoHandler(HybridDataHandler[KaoProtocol]):
@@ -34,6 +33,7 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol[Kao]]:  # type: ignore
+        from skytemple_files.graphics.kao.writer import KaoWriter
         return KaoWriter
 
     @classmethod
@@ -42,18 +42,8 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> KaoProtocol:
-        if not isinstance(data, memoryview):
-            data = memoryview(data)
-        # First 160 bytes are padding
-        first_toc = (SUBENTRIES*SUBENTRY_LEN)
-        # The following line won't work; what if the first byte of the first pointer is 0?
-        # first_toc = next(x for x, val in enumerate(data) if val != 0)
-        assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
-        # first pointer = end of TOC
-        first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
-        toc_len = int((first_pointer - first_toc) / (SUBENTRIES*SUBENTRY_LEN))
-        return Kao(data, first_toc, toc_len)
+        return cls.get_model_cls()(data)
 
     @classmethod
     def serialize(cls, data: KaoProtocol, **kwargs) -> bytes:
-        return cls.get_writer()().write(data)
+        return cls.get_writer_cls()().write(data)

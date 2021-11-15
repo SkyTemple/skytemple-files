@@ -31,9 +31,8 @@ from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
 from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
     AdditionalRequirement, MovementType, IQGroup
 from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
-from skytemple_files.graphics.kao.model import KaoImage
 from skytemple_files.common.i18n_util import f, _
-
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 XML_MONSTER = "Pokemon"
 XML_MONSTER__GAME_VERSION = "gameVersion"
 XML_STRINGS = "Strings"
@@ -579,9 +578,9 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
             )
 
 
-class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
+class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
     @classmethod
-    def to_xml(cls, values: List[Optional[KaoImage]]) -> Element:
+    def to_xml(cls, values: List[Optional[KaoImageProtocol]]) -> Element:
         xml = Element(XML_PORTRAITS)
         for kao in values:
             kao_xml = Element(XML_PORTRAITS_PORTRAIT)
@@ -595,7 +594,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
         return xml
 
     @classmethod
-    def from_xml(cls, xml: Element, value_to_update: List[Optional[KaoImage]]):
+    def from_xml(cls, xml: Element, value_to_update: List[Optional[KaoImageProtocol]]):
         if len(value_to_update) != len(xml):
             raise XmlValidateError(
                 f(_("Incompatible XML. The number of portraits don't match with the expected value of {len(value_to_update)}"))
@@ -634,7 +633,7 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]],
+                       portraits: Optional[List[KaoImageProtocol]], portraits2: Optional[List[KaoImageProtocol]],
                        personality1: Optional[int] = None, personality2: Optional[int] = None,
                        idle_anim1: Optional[int] = None, idle_anim2: Optional[int] = None
                        ) -> ElementTree:
@@ -668,7 +667,7 @@ def monster_xml_import(xml: ElementTree,
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]]) -> str:
+                       portraits: Optional[List[KaoImageProtocol]], portraits2: Optional[List[KaoImageProtocol]]) -> str:
     """
     Imports the available data from the XML into the models and lists given.
     The lists can already be filled, they will be cleared and re-filled when data is avaiable.

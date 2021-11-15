@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Type checks
     strategy:
-      max-parallel: 5
+      fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9", "3.10" ]
     steps:
@@ -25,9 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Runs tests
     strategy:
-      max-parallel: 5
+      fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9", "3.10" ]
+        native: [true, false]
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
@@ -38,10 +39,16 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install tox tox-gh-actions
+    - name: Enable native modules
+      if: matrix.native
+      run: |
+        echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
     - name: Test with tox
       run: tox
   build:
-    needs: test
+    needs:
+      - test
+      - typechecks
     runs-on: ubuntu-latest
     name: Build the Python wheel
     steps:

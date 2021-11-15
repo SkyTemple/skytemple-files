@@ -17,7 +17,9 @@
 
 import math
 
-import warnings
+from collections.abc import Iterator
+
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 
 try:
     from PIL import Image
@@ -38,7 +40,7 @@ KAO_IMG_IMG_DIM = 5  # How many meta-pixels / tiles build an image per dimension
 KAO_FILE_BYTE_ALIGNMENT = 16  # The size of the kao file has to be divisble by this number of bytes
 
 
-class KaoImage:
+class KaoImage(KaoImageProtocol):
     def __init__(self, whole_kao_data: bytes, start_pnt: int):
         if not isinstance(whole_kao_data, memoryview):
             whole_kao_data = memoryview(whole_kao_data)
@@ -54,6 +56,11 @@ class KaoImage:
         self.as_pil = None  # lazy loading
         self.modified = False
         self.empty = False
+
+    @classmethod
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> 'KaoImage':
+        """Create from raw compressed image and palette data"""
+        return cls(bytes(pal) + bytes(cimg), 0)
 
     def get(self) -> Image:
         """Returns the portrait as a PIL image with a 16-bit color palette"""
@@ -86,8 +93,13 @@ class KaoImage:
         new.modified = True
         return new
 
+    def raw(self) -> Tuple[bytes, bytes]:
+        """Returns raw image data and palettes"""
+        return bytes(self.compressed_img_data), bytes(self.pal_data)
 
-class Kao:
+
+class Kao(KaoProtocol):
+    # noinspection PyMissingConstructor
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -107,12 +119,12 @@ class Kao:
         self.reset(toc_len)
 
     def expand(self, new_size):
-        if new_size<self.toc_len:
+        if new_size < self.toc_len:
             raise ValueError(f"Can't reduce size from {self.toc_len} to {new_size}")
         from skytemple_files.graphics.kao.writer import KaoWriter
 
         #Write all changes
-        self.original_data = bytearray(KaoWriter(self).write())
+        self.original_data = bytearray(KaoWriter().write(self))
 
         #Prepare for expanding
         expand_len = new_size-self.toc_len
@@ -139,7 +151,7 @@ class Kao:
         self.reset(new_size)
     
     def reset(self, toc_len):
-        self.loaded_kaos = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
+        self.loaded_kaos: List[List[Optional[KaoImage]]] = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
         self.loaded_kaos_flat: List[Tuple[int, int, KaoImage]] = []  # cache for performance
         
     def get(self, index: int, subindex: int) -> Union[KaoImage, None]:
@@ -155,10 +167,16 @@ class Kao:
                 # NULL pointer
                 return None
             self.loaded_kaos[index][subindex] = KaoImage(self.original_data, pnt)
-            self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))
+            self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
         return self.loaded_kaos[index][subindex]
 
-    def set(self, index: int, subindex: int, img: KaoImage):
+    def set(self, index: int, subindex: int, img: KaoImageProtocol):
+        return self._set_impl(index, subindex, img)
+
+    def set_from_img(self, index: int, subindex: int, img: Image.Image):
+        return self._set_impl(index, subindex, img)
+
+    def _set_impl(self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]):
         """
         Set the KaoImage at the specified location. This fails,
         if there is already an image there. Use get instead.
@@ -167,20 +185,30 @@ class Kao:
             raise ValueError(f"The index requested must be between 0 and {self.toc_len}")
         if subindex > SUBENTRIES or subindex < 0:
             raise ValueError(f"The subindex requested must be between 0 and {SUBENTRIES}")
-        if self.get(index, subindex) is not None:
-            raise ValueError(f"A kao at this position already exists")
+        k = self.get(index, subindex)
+        if isinstance(img, KaoImage):
+            if k is not None:
+                self.loaded_kaos_flat = [(i, s, x) for i, s, x in self.loaded_kaos_flat if i != index and s != subindex]
+            img.modified = True
+            self.loaded_kaos[index][subindex] = img
+            self.loaded_kaos_flat.append((index, subindex, img))  # type: ignore
+            return
+        else:
+            if k is not None:
+                k.set(img)
+                return
 
-        img.modified = True
-        self.loaded_kaos[index][subindex] = img
-        self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))
+            self.loaded_kaos[index][subindex] = KaoImage.new(img)
+            self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
 
     def delete(self, index: int, subindex: int):
         try:
-            kao = self.loaded_kaos[index][subindex]
+            kao = self.get(index, subindex)
+        except ValueError:
+            return
+        if kao:
             kao.empty = True
             kao.modified = True
-        except IndexError:
-            pass
 
     def has_loaded(self, index: int, subindex: int) -> bool:
         """Returns whether or not a kao image at the specified index was loaded"""
@@ -193,7 +221,7 @@ class Kao:
         return KaoIterator(self, self.toc_len, SUBENTRIES)
 
 
-class KaoIterator:
+class KaoIterator(Iterator):
     def __init__(self, kao: Kao, indices: int, subindices: int):
         self.kao = kao
         self.current_index = 0

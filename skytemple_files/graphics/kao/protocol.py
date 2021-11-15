@@ -14,39 +14,38 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Protocol, Optional, Tuple, TypeVar
+from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator
 
 from PIL.Image import Image
 
 
 class KaoImageProtocol(Protocol):
+    @classmethod
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> 'KaoImageProtocol':
+        """Create from raw compressed image and palette data"""
+        ...
+
     def get(self) -> Image:
-        """Returns the portrait as a PIL image with a 16-bit color palette"""
+        """Returns the portrait as a PIL image with a 16-color color palette"""
         ...
 
     def size(self) -> int:
         ...
 
-    #def get_internal(self) -> bytes:
-    #    """Returns the portrait as 16 color palette followed by AT compressed image data"""
-    #    return bytes(self.pal_data) + bytes(self.compressed_img_data)
-
     def set(self, pil: Image) -> 'KaoImageProtocol':
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         ...
 
-    @classmethod
-    def new(cls, pil: Image) -> 'KaoImageProtocol':
-        """Creates a new KaoImage from a PIL image with 16-bit color palette as input"""
+    def raw(self) -> Tuple[bytes, bytes]:
+        """Returns raw image data and palettes"""
         ...
 
 
-T = TypeVar('T', bound=KaoImageProtocol)
-U = TypeVar('U', bound='KaoIteratorProtocol', covariant=True)
+T = TypeVar('T', bound=KaoImageProtocol, covariant=True)
 
 
-class KaoProtocol(Protocol[T, U]):
-    def __init__(self, data: bytes):
+class KaoProtocol(Protocol[T]):
+    def __new__(cls, data: bytes):
         ...
 
     def expand(self, new_size: int):
@@ -55,29 +54,21 @@ class KaoProtocol(Protocol[T, U]):
     def get(self, index: int, subindex: int) -> Optional[T]:
         ...
 
-    def set(self, index: int, subindex: int, img: T):
-        """
-        Set the KaoImage at the specified location. This fails,
-        if there is already an image there. Use get instead.
-        """
+    def set(self, index: int, subindex: int, pil: 'KaoImageProtocol'):
+        """Set the KaoImage at the specified location."""
+        ...
+
+    def set_from_img(self, index: int, subindex: int, pil: Image):
+        """Set the KaoImage at the specified location."""
         ...
 
     def delete(self, index: int, subindex: int):
         """Removes a KaoImage, if it exists."""
         ...
 
-    def has_loaded(self, index: int, subindex: int) -> bool:
-        """Returns whether or not a kao image at the specified index was loaded"""
-        ...
-
-    def __iter__(self) -> U:
+    def __iter__(self) -> Iterator[Tuple[int, int, Optional[KaoImageProtocol]]]:
         """
         Iterates over all KaoImages.
+        Tuple: index, subindex, KaoImage or None
         """
-        ...
-
-
-class KaoIteratorProtocol(Protocol):
-    def __next__(self) -> Tuple[int, int, Optional[KaoImageProtocol]]:
-        """Tuple: index, subindex, KaoImage or None"""
         ...

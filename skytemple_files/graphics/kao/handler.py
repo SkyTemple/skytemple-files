@@ -16,10 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Type
 
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
-from skytemple_files.common.util import *
-from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN
-from skytemple_files.graphics.kao.protocol import KaoProtocol
+from skytemple_files.graphics.kao.model import Kao
+from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 
 
 class KaoHandler(HybridDataHandler[KaoProtocol]):
@@ -39,6 +39,13 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol[KaoProtocol]]:
         raise NotImplementedError()  # TODO
+
+    @classmethod
+    def get_image_model_cls(cls) -> Type[KaoImageProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            raise NotImplementedError()  # TODO
+        from skytemple_files.graphics.kao.model import KaoImage
+        return KaoImage
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> KaoProtocol:

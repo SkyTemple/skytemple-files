@@ -45,7 +45,7 @@ T = TypeVar('T', bound=KaoImageProtocol, covariant=True)
 
 
 class KaoProtocol(Protocol[T]):
-    def __new__(cls, data: bytes):
+    def __init__(self, data: bytes):
         ...
 
     def expand(self, new_size: int):

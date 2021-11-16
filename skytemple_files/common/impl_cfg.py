@@ -35,7 +35,7 @@ class ImplementationType(Enum):
     NATIVE = 'RUST'
 
 
-_impltype = ImplementationType.NATIVE if bool(os.getenv(ENV_SKYTEMPLE_USE_NATIVE, False)) else ImplementationType.PYTHON
+_impltype = ImplementationType.NATIVE if bool(int(os.getenv(ENV_SKYTEMPLE_USE_NATIVE, False))) else ImplementationType.PYTHON
 
 
 def change_implementation_type(typ: ImplementationType):

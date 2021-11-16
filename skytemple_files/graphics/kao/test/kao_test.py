@@ -33,6 +33,7 @@ class ModelTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
 
     def setUp(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_kao())
+        self.assertIsNotNone(self.kao)
 
     def test_get(self):
         for idx, sidxs in FIX_IN_TEST_MAP.items():

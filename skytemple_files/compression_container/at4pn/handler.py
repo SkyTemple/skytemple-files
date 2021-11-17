@@ -15,42 +15,34 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.at4pn.model import At4pn
-from skytemple_files.compression_container.common_at.base_handler import CommonAtImplHandler
+from typing import Type
+
+from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-class At4pnHandler(CommonAtImplHandler[At4pn]):
+class At4pnHandler(CompressionContainerHandler):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> At4pn:
-        """Load a AT4PX container into a high-level representation"""
-        if not cls.matches(data):
-            raise ValueError("The provided data is not an AT4PN container.")
-        return At4pn(data)
-
-    @classmethod
-    def serialize(cls, data: At4pn, **kwargs) -> bytes:
-        """Convert the high-level AT4PN representation back into bytes."""
-        return data.to_bytes()
+    def magic_word(cls) -> bytes:
+        return b'AT4PN'
 
     @classmethod
-    def new(cls, data: bytes) -> At4pn:
+    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_files.compression_container.at4pn.model import At4pn
+        return At4pn
+
+    @classmethod
+    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+        raise NotImplementedError()
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol[CompressionContainerProtocol]]:
+        raise NotImplementedError()
+
+    @classmethod
+    def new(cls, data: bytes) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT4PN container"""
+        from skytemple_files.compression_container.at4pn.model import At4pn
+        assert isinstance(cls.get_model_cls(), At4pn), "Native not supported yet"  # TODO
         return At4pn(data, new=True)
-
-    @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of an AT4PN container starting at the given offset in data."""
-        if not cls.matches(data, byte_offset):
-            raise ValueError("The provided data is not an AT4PN container.")
-        return At4pn.cont_size(data, byte_offset)
-
-    @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data is a At4pn container"""
-        return read_bytes(data, byte_offset, 5) == b'AT4PN'
-
-    # For compatibility with other AT formats
-    @classmethod
-    def compress(cls, data: bytes) -> At4pn:
-        return At4pn.compress(data)

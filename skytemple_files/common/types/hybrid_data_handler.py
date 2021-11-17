@@ -25,6 +25,7 @@ U = TypeVar('U', contravariant=True)
 
 
 class WriterProtocol(Protocol[U]):
+    @abstractmethod
     def write(self, _model: U) -> bytes:
         pass
 

@@ -51,11 +51,11 @@ jobs:
         echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
     - name: Test with tox
       run: tox
-    - name: Upload Unit Test Results
+    - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v2
       with:
-        name: Unit Test Results (Python ${{ matrix.python-version }})
+        name: Pytest Test Results (Python ${{ matrix.python-version }})
         path: pytest.xml
 
   publish-test-results:
@@ -70,7 +70,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: artifacts
-      - name: Publish Unit Test Results
+      - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         with:
           files: artifacts/**/*.xml

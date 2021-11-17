@@ -28,7 +28,7 @@ FIX_IN_LEN = 1154
 FIX_IN_LEN_SUB = 40
 
 
-class ModelTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
+class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
     handler = KaoHandler
 
     def setUp(self) -> None:

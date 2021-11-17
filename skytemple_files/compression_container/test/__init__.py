@@ -14,25 +14,4 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from abc import ABC
-from typing import TypeVar
 
-from skytemple_files.common.types.data_handler import DataHandler
-
-T = TypeVar('T')
-
-
-class CommonAtImplHandler(DataHandler[T], ABC):
-    @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data is a container of its type"""
-        pass
-
-    @classmethod
-    def compress(cls, data: bytes) -> T:
-        pass
-
-    @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of a container starting at the given offset in data."""
-        pass

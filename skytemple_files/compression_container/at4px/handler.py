@@ -15,37 +15,27 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.at4px.model import At4px
-from skytemple_files.compression_container.common_at.base_handler import CommonAtImplHandler
+from typing import Type
+
+from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-class At4pxHandler(CommonAtImplHandler[At4px]):
+class At4pxHandler(CompressionContainerHandler):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> At4px:
-        """Load a AT4PX container into a high-level representation"""
-        if not cls.matches(data):
-            raise ValueError("The provided data is not an AT4PX container.")
-        return At4px(data)
-
-    @classmethod
-    def serialize(cls, data: At4px, **kwargs) -> bytes:
-        """Convert the high-level AT4PX representation back into a BitStream."""
-        return data.to_bytes()
+    def magic_word(cls) -> bytes:
+        return b'AT4PX'
 
     @classmethod
-    def compress(cls, data: bytes) -> At4px:
-        """Turn uncompressed data into a new AT4PX container"""
-        return At4px.compress(data)
+    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_files.compression_container.at4px.model import At4px
+        return At4px
 
     @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of an AT4PX container starting at the given offset in data."""
-        if not cls.matches(data, byte_offset):
-            raise ValueError("The provided data is not an AT4PX container.")
-        return At4px.cont_size(data, byte_offset)
+    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+        raise NotImplementedError()
 
     @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data stream is a At4px container"""
-        return read_bytes(data, byte_offset, 5) == b'AT4PX'
+    def load_native_writer(cls) -> Type[WriterProtocol[CompressionContainerProtocol]]:
+        raise NotImplementedError()

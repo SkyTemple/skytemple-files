@@ -16,17 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from enum import Enum, auto
-from typing import Optional, List, Protocol, Tuple, TypeVar
+from typing import Optional, List
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.common_at.base_handler import CommonAtImplHandler
-from skytemple_files.compression_container.common_at.model import CommonAt
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.atupx.handler import AtupxHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.at3px.handler import At3pxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class CommonAtType(Enum):
@@ -43,7 +43,7 @@ class CommonAtType(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: int, handler: CommonAtImplHandler, auto_allowed: bool
+            self, _: int, handler: CompressionContainerHandler, auto_allowed: bool
     ):
         self.handler = handler
         self.auto_allowed = auto_allowed
@@ -59,7 +59,7 @@ COMMON_AT_PKD = [CommonAtType.PKDPX]
 DEBUG = False
 
 
-class CommonAtHandler(DataHandler[CommonAt]):
+class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
     allowed_types = set()
     for t in CommonAtType:
         if t.auto_allowed:
@@ -81,7 +81,7 @@ class CommonAtHandler(DataHandler[CommonAt]):
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> CommonAt:
+    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
         """Load a Common At container into a high-level representation"""
         for t in CommonAtType:
             if t.handler is not None:
@@ -92,14 +92,16 @@ class CommonAtHandler(DataHandler[CommonAt]):
         raise ValueError(f"The provided data is not an AT container ({read_bytes(data, 0, 5)}).")  # type: ignore
 
     @classmethod
-    def serialize(cls, data: CommonAt, **kwargs) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs) -> bytes:
         """Convert the high-level AT representation back into a BitStream."""
         return data.to_bytes()
 
     @classmethod
-    def compress(cls, data: bytes, compression_type: List[CommonAtType] = COMMON_AT_BEST_4) -> CommonAt:
+    def compress(cls, data: bytes, compression_type: List[CommonAtType] = None) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT container"""
-        new_data: Optional[CommonAt] = None
+        if compression_type is None:
+            compression_type = COMMON_AT_BEST_4
+        new_data: Optional[CompressionContainerProtocol] = None
         new_size = -1
         if DEBUG:
             print("*** COMMON AT DEBUG: Compress Start")

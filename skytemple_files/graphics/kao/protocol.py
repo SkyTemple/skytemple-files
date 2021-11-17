@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from abc import abstractmethod
 from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator
 
 from PIL.Image import Image
@@ -21,52 +22,64 @@ from PIL.Image import Image
 
 class KaoImageProtocol(Protocol):
     @classmethod
+    @abstractmethod
     def create_from_raw(cls, cimg: bytes, pal: bytes) -> 'KaoImageProtocol':
         """Create from raw compressed image and palette data"""
         ...
 
+    @abstractmethod
     def get(self) -> Image:
         """Returns the portrait as a PIL image with a 16-color color palette"""
         ...
 
+    @abstractmethod
     def size(self) -> int:
         ...
 
+    @abstractmethod
     def set(self, pil: Image) -> 'KaoImageProtocol':
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         ...
 
+    @abstractmethod
     def raw(self) -> Tuple[bytes, bytes]:
         """Returns raw image data and palettes"""
         ...
 
 
-T = TypeVar('T', bound=KaoImageProtocol, covariant=True)
+T = TypeVar('T', bound=KaoImageProtocol)
 
 
 class KaoProtocol(Protocol[T]):
+    @abstractmethod
     def __init__(self, data: bytes):
         ...
 
+    @abstractmethod
     def expand(self, new_size: int):
         ...
 
+    @abstractmethod
     def get(self, index: int, subindex: int) -> Optional[T]:
         ...
 
-    def set(self, index: int, subindex: int, pil: 'KaoImageProtocol'):
+    @abstractmethod
+    def set(self, index: int, subindex: int, pil: T):
         """Set the KaoImage at the specified location."""
         ...
 
+    @abstractmethod
     def set_from_img(self, index: int, subindex: int, pil: Image):
         """Set the KaoImage at the specified location."""
         ...
 
+    @abstractmethod
     def delete(self, index: int, subindex: int):
         """Removes a KaoImage, if it exists."""
         ...
 
-    def __iter__(self) -> Iterator[Tuple[int, int, Optional[KaoImageProtocol]]]:
+    @abstractmethod
+    def __iter__(self) -> Iterator[Tuple[int, int, Optional[T]]]:
         """
         Iterates over all KaoImages.
         Tuple: index, subindex, KaoImage or None

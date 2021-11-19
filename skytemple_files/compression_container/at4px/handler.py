@@ -17,7 +17,6 @@
 
 from typing import Type
 
-from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
@@ -34,8 +33,5 @@ class At4pxHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        raise NotImplementedError()
-
-    @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol[CompressionContainerProtocol]]:
-        raise NotImplementedError()
+        from skytemple_rust.st_at4px import At4px
+        return At4px

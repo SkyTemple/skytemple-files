@@ -17,7 +17,6 @@
 
 from typing import Type
 
-from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
@@ -34,15 +33,17 @@ class At4pnHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        raise NotImplementedError()
+        from skytemple_rust.st_at4pn import At4pn
+        return At4pn
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol[CompressionContainerProtocol]]:
-        raise NotImplementedError()
+    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
+        """Load a container into a high-level representation"""
+        if not cls.matches(data):
+            raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
+        return cls.get_model_cls()(data, False)
 
     @classmethod
     def new(cls, data: bytes) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT4PN container"""
-        from skytemple_files.compression_container.at4pn.model import At4pn
-        assert isinstance(cls.get_model_cls(), At4pn), "Native not supported yet"  # TODO
-        return At4pn(data, new=True)
+        return cls.get_model_cls()(data, True)

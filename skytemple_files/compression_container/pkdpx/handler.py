@@ -16,8 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Type
 
-from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
-from skytemple_files.common.util import read_bytes
 from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
@@ -34,8 +32,5 @@ class PkdpxHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        raise NotImplementedError()
-
-    @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol[CompressionContainerProtocol]]:
-        raise NotImplementedError()
+        from skytemple_rust.st_pkdpx import Pkdpx
+        return Pkdpx

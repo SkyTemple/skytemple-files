@@ -32,9 +32,21 @@ class CompressionContainerProtocol(Protocol):
         """Converts the container back into a bit (compressed) representation"""
 
     @classmethod
+    @abstractmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         """Returns the container size"""
 
     @classmethod
+    @abstractmethod
     def compress(cls, data: bytes) -> 'CompressionContainerProtocol':
         """Create a new compressed container from originally uncompressed data."""
+
+
+class NewableCompressionContainerProtocol(CompressionContainerProtocol):
+    # noinspection PyProtocol
+    @abstractmethod
+    def __init__(self, data: bytes, new=False):
+        """
+        Initialises container for binary representation.
+        If new is true, a new container is created, with data being the content.
+        """

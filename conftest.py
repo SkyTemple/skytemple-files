@@ -18,8 +18,10 @@ Collects all packages called "test" within skytemple_files to run tests from.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import os
 from os.path import isdir
 TEST_DIR_NAME = 'test'
+os.environ['RUST_BACKTRACE'] = '1'
 
 
 def pytest_ignore_collect(path):

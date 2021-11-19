@@ -49,6 +49,10 @@ jobs:
       if: matrix.native
       run: |
         echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
     - name: Test with tox
       run: tox
     - name: Upload Test Results

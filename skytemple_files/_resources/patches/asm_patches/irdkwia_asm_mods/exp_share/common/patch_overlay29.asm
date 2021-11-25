@@ -21,14 +21,13 @@
 	; Slightly modified original code
 	ldrb r0,[r9, #+0x7]
 	cmp r0,#0x0
-	beq HookLvlUpJump1
-	ldrb r1,[r9, #+0xa]
-	add  r0,r13,#0x54
-	bl HookLvlUpJump2
+	ldrneb r1,[r9, #+0xa]
+	addne  r0,r13,#0x54
+	blne GetTacticsLearned
 	ldrsh r2,[r9, #+0x12]
 	ldrsh r0,[r9, #+0x16]
 	ldrb r7,[r9, #+0x1a]
-	ldr r1,[r15, #+0x20c] ; 0x204 before moving up
+	ldr r1,[ValueMaxHP]
 	add  r0,r2,r0
 	ldrb r3,[r9, #+0x1b]
 	ldrb r2,[r9, #+0x1c]
@@ -36,23 +35,24 @@
 	cmp r0,r1
 	strgt r1,[r13, #+0x4]
 	ldrb r1,[r9, #+0x1d]
-	ldrb r0,[r9, #+0xa]
 	str r7,[r13, #+0x24]
 	str r3,[r13, #+0x28]
 	str r2,[r13, #+0x1c]
 	str r1,[r13, #+0x20]
-	cmp r0,MaxLvl
-	beq end_hook
 	ldr r0,[r13, #+0x8]
 	bl IsExpEnabledInDungeon
 	cmp r0,#0x0
+	ldrneb r0,[r9, #+0xa]
+	cmpne r0,MaxLvl
+	ldrneb r0,[r9, #+0x6]
+	cmpne r0,#0x1
 	beq end_hook
 	ldr r0,[r9, #+0x20]
 	mov  r1,r11
 	add  r2,r0,r11
 	mov  r0,#0x0
 	str r2,[r9, #+0x20]
-	bl HookLvlUpJump4
+	bl StoreExp
 	bl HookLvlUpJump5
 	mov  r1,#0x0
 	str r1,[r13, #+0x0]
@@ -62,7 +62,7 @@
 	cmp r11,#0x0
 	beq no_display
 	mov  r0,r10
-	ldr r1,[r15, #+0x188]
+	ldr r1,[ValueText]
 	bl HookLvlUpJump7
 no_display:
 	mov  r0,r10

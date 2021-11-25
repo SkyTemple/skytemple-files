@@ -31,10 +31,10 @@
 ; .definelabel PercentageShared, 0x64
 .definelabel MaxPercent, 0x64
 
-
-.definelabel HookLvlUpJump1, 0x02302810
-.definelabel HookLvlUpJump2, 0x02058C9C
-.definelabel HookLvlUpJump4, 0x0234B09C
+.definelabel ValueMaxHP, 0x02302A30
+.definelabel ValueText, 0x02302A34
+.definelabel GetTacticsLearned, 0x02058C9C
+.definelabel StoreExp, 0x0234B09C
 .definelabel HookLvlUpJump5, 0x0234B034
 .definelabel HookLvlUpJump6, 0x0230040C
 .definelabel HookLvlUpJump7, 0x0234B498

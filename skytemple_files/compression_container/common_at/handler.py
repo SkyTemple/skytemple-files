@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import os
 from enum import Enum, auto
 from typing import Optional, List
 
@@ -63,10 +63,16 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
     allowed_types = set()
     for t in CommonAtType:
         if t.auto_allowed:
+            if t == CommonAtType.ATUPX:
+                # For native handler:
+                os.environ['SKYTEMPLE_ALLOW_ATUPX'] = '1'
             allowed_types.add(t)
 
     @classmethod
     def allow(cls, compression_type: CommonAtType):
+        if compression_type == CommonAtType.ATUPX:
+            # For native handler:
+            os.environ['SKYTEMPLE_ALLOW_ATUPX'] = '1'
         cls.allowed_types.add(compression_type)
         if DEBUG:
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
@@ -74,7 +80,9 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
     @classmethod
     def disallow(cls, compression_type: CommonAtType):
         try:
+            # For native handler:
             cls.allowed_types.remove(compression_type)
+            del os.environ['SKYTEMPLE_ALLOW_ATUPX']
         except KeyError as ke:
             pass  # TODO, add warning
         if DEBUG:

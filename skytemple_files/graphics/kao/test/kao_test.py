@@ -128,6 +128,12 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertGreater(previous_idx, -1)
         self.assertLess(previous_idx, FIX_IN_LEN)
 
+    def test_compression_support(self):
+        self.fail("")  # todo!
+
+    def test_proper_toc_layout_writes(self):
+        self.fail("")  # todo!
+
     @classmethod
     @fixpath
     def _fix_path_kao(cls):

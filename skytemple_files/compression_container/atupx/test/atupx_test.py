@@ -34,6 +34,7 @@ class AtupxTestCase(SkyTempleFilesTestCase[AtupxHandler, CompressionContainerPro
     @parameterized.expand(load_dataset(), name_func=dataset_name_func)
     def test_container(self, _, in_bytes):
         model = self.handler().compress(in_bytes)
+        self.assertEqual(len(model.to_bytes()), model.cont_size(model.to_bytes()))
         self.assertTrue(model.to_bytes().startswith(b'ATUPX'))
         self.assertEqual(model.to_bytes(), self.handler().serialize(self.handler().deserialize(model.to_bytes())))
         self.assertEqual(in_bytes, model.decompress())

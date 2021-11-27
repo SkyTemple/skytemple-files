@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.util import read_sintle
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao.protocol import KaoProtocol
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
@@ -132,7 +132,22 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.fail("")  # todo!
 
     def test_proper_toc_layout_writes(self):
-        self.fail("")  # todo!
+        kao_data = self._save_and_reload_main_fixture_raw(self.kao)
+        self.assertEqual(bytes(160), kao_data[:160])
+        first_pnt = read_sintle(kao_data, 160, 4)
+        number_entries = 0
+        toc_cur = 164
+        self.assertGreater(first_pnt, 0)
+        last_non_zero_pnt = first_pnt
+        while toc_cur < first_pnt:
+            current_pnt = read_sintle(kao_data, toc_cur, 4)
+            if current_pnt > 0:
+                self.assertGreater(current_pnt, last_non_zero_pnt)
+                last_non_zero_pnt = current_pnt
+            else:
+                self.assertGreater(-last_non_zero_pnt, current_pnt)
+            toc_cur += 4
+            number_entries += 1
 
     @classmethod
     @fixpath

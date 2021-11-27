@@ -69,12 +69,19 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
     ) -> U:
         if deser_kwargs is None:
             deser_kwargs = {}
+        raw = cls._save_and_reload_main_fixture_raw(model, ser_kwargs)
+        return cls.handler.deserialize(raw, **deser_kwargs)  # type: ignore
+
+    @classmethod
+    def _save_and_reload_main_fixture_raw(
+            cls, model: U, ser_kwargs: Mapping[str, Any] = None
+    ) -> bytes:
         if ser_kwargs is None:
             ser_kwargs = {}
         with TemporaryFile(mode='rb+') as f:
             f.write(cls.handler.serialize(model, **ser_kwargs))  # type: ignore
             f.seek(0)
-            return cls.handler.deserialize(f.read(), **deser_kwargs)  # type: ignore
+            return f.read()
 
     def assetImagesEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,

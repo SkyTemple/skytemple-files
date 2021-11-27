@@ -64,7 +64,7 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def set(self, index: int, subindex: int, pil: T):
+    def set(self, index: int, subindex: int, img: T):
         """Set the KaoImage at the specified location."""
         ...
 

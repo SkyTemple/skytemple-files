@@ -288,9 +288,11 @@ def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data):
     return im
 
 
-def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
+def pil_to_kao(pil: Image, allowed_compressions=None) -> Tuple[bytes, bytes]:
     """Converts a PIL image (with a 16 bit palette) to a kao palette and at compressed image data"""
     from skytemple_files.common.types.file_types import FileType
+    if allowed_compressions is None:
+        allowed_compressions = COMMON_AT_MUST_COMPRESS_3
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.width != img_dim or pil.height != img_dim:
@@ -388,7 +390,7 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
-    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
+    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, allowed_compressions))
     if len(new_img_compressed)>800:
         raise AttributeError(f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
                                  "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "

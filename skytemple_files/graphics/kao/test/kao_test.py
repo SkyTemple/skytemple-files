@@ -129,7 +129,19 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertLess(previous_idx, FIX_IN_LEN)
 
     def test_compression_support(self):
-        self.fail("")  # todo!
+        """Tests if the Kao model can at least read all compression formats"""
+        # ... except for AT4PN, since that one can not fit in 800 bytes.
+        self.kao = self._load_main_fixture(self._fix_path_compression_algo())
+        self.assertIsNotNone(self.kao)
+
+        # AT3PX
+        self.assetImagesEqual(self._load_image(self._fix_path_png(0, 0)), self.kao.get(0, 0).get(), rgb_diff=True)
+        # AT4PX
+        self.assetImagesEqual(self._load_image(self._fix_path_png(0, 1)), self.kao.get(0, 1).get(), rgb_diff=True)
+        # PKDPX
+        self.assetImagesEqual(self._load_image(self._fix_path_png(0, 2)), self.kao.get(0, 2).get(), rgb_diff=True)
+        # ATUPX
+        self.assetImagesEqual(self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get(), rgb_diff=True)
 
     def test_proper_toc_layout_writes(self):
         kao_data = self._save_and_reload_main_fixture_raw(self.kao)
@@ -153,6 +165,11 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
     @fixpath
     def _fix_path_kao(cls):
         return 'fixtures', 'kaomado.kao'
+
+    @classmethod
+    @fixpath
+    def _fix_path_compression_algo(cls):
+        return 'fixtures', 'compression_algo.kao'
 
     @classmethod
     @fixpath

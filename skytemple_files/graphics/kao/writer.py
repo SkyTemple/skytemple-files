@@ -28,8 +28,8 @@ DEBUG = False
 
 class KaoWriter:
     def __init__(self, force_rebuild_all=False, update_kao=True):
-        self.force_rebuild_all = False
-        self.update_kao = True
+        self.force_rebuild_all = force_rebuild_all
+        self.update_kao = update_kao
         pass
 
     def write(self, kao: Kao) -> bytes:

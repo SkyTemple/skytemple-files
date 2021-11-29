@@ -25,8 +25,7 @@ from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 from skytemple_files.compression_container.test.util import load_dataset, dataset_name_func
 
-from skytemple_files.test.case import SkyTempleFilesTestCase
-
+from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
 
 FIX = b'Hello World. I am testing compression. 123456789. 11223344. 12121213.'
 
@@ -72,3 +71,21 @@ class At4pxTestCase(SkyTempleFilesTestCase[At4pxHandler, CompressionContainerPro
         self.assertTrue(model.to_bytes().startswith(b'AT4PX'))
         self.assertEqual(model.to_bytes(), self.handler().serialize(self.handler().deserialize(model.to_bytes())))
         self.assertEqual(in_bytes, model.decompress())
+
+    def test_game_content_decompress(self):
+        with open(self._fix_path_uncompressed(), 'rb') as f:
+            in_decompressed = f.read()
+        with open(self._fix_path_compressed(), 'rb') as f:
+            in_compressed = f.read()
+        decompressed = self.handler().deserialize(in_compressed).decompress()
+        self.assertEqual(in_decompressed, decompressed)
+
+    @classmethod
+    @fixpath
+    def _fix_path_uncompressed(cls):
+        return 'fixtures', 'portrait.bin'
+
+    @classmethod
+    @fixpath
+    def _fix_path_compressed(cls):
+        return 'fixtures', 'portrait_compressed.bin'

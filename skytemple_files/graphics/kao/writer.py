@@ -96,8 +96,7 @@ class KaoWriter:
                 if kao.has_loaded(i, si):
                     # Image is loaded, use image data for new pointer
                     kao_image = kao.get(i, si)
-                    assert kao_image is not None
-                    if kao_image.empty is True:
+                    if kao_image is None:
                         self._update_toc_entry(current_toc_offset, current_null_pointer.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                         current_toc_offset += SUBENTRY_LEN
                         continue

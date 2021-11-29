@@ -285,7 +285,7 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
         sprite = FileType.WAN.deserialize(
             FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()  # type: ignore
         )
-        ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
+        ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
         warnings.warn(f"Failed to render a sprite, replaced with placeholder ({actor}, {actor_sprite_id}): {e}")
         if not draw_invisible_actors_objects:
@@ -319,7 +319,7 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
         sprite = FileType.WAN.deserialize(
             rom.getFileByName(f'GROUND/{obj.object.name}.wan')
         )
-        ani_group = sprite.get_animations_for_group(sprite.anim_groups[0])
+        ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
         warnings.warn(f"Failed to render a sprite, replaced with placeholder ({obj}): {e}")
         if not draw_invisible_actors_objects:

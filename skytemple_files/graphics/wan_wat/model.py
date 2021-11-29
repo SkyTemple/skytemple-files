@@ -20,7 +20,7 @@ try:
     from PIL import Image, ImageOps
 except ImportError:
     from pil import Image, ImageOps
-from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation
+from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation, ImageBytes
 
 
 class MetaFramePositioningSpecs:
@@ -74,31 +74,23 @@ class Wan:
     def anim_groups(self):
         return self.model.anim_store.anim_groups
 
-    @property
-    def animations(self):
-        return self.model.anim_store.animations
-
-    def get_animations_for_group(self, anim_group: Tuple[int, int]) -> List[Animation]:
-        return self.model.anim_store.animations[anim_group[0]:anim_group[0]+anim_group[1]]
-
     def render_frame_group(self, frame_group: MetaFrameGroup) -> Tuple[Image.Image, Tuple[int, int]]:
         """Returns the frame group as an image and it's center position as a tuple."""
         specs: List[MetaFramePositioningSpecs] = []
 
-        for mf_i, meta_frame_id in enumerate(frame_group.meta_frames_id):
-            meta_frame: MetaFrame = self.model.meta_frame_store.meta_frames[meta_frame_id]
-            meta_frame_img = self.model.image_store.images[meta_frame.image_index]
+        for meta_frame in frame_group.meta_frames:
+            meta_frame_image_bytes: ImageBytes = self.model.image_store.images[meta_frame.image_index]
 
             im = Image.frombuffer('RGBA',
-                                  (meta_frame_img.width, meta_frame_img.height),
-                                  bytearray(meta_frame_img.img),
+                                  (meta_frame.resolution.x, meta_frame.resolution.y),
+                                  bytearray(meta_frame_image_bytes.to_image(self.model.palette, meta_frame)),
                                   'raw', 'RGBA', 0, 1)
             if meta_frame.h_flip:
                 im = ImageOps.mirror(im)
             if meta_frame.v_flip:
                 im = ImageOps.flip(im)
 
-            specs.append(MetaFramePositioningSpecs(im, meta_frame_img.width, meta_frame_img.height,
+            specs.append(MetaFramePositioningSpecs(im, meta_frame.resolution.x, meta_frame.resolution.y,
                                                    meta_frame.offset_x, meta_frame.offset_y))
 
         w, h, cx, cy = MetaFramePositioningSpecs.process(specs)

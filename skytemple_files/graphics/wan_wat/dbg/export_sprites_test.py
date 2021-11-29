@@ -46,7 +46,7 @@ for path in get_files_from_rom_with_extension(rom, 'wan'):
     for ag_i, group in enumerate(wan_model.anim_groups):
         if group is None:
             continue
-        for ani_i, ani in enumerate(wan_model.get_animations_for_group(group)):
+        for ani_i, ani in enumerate(group):
             mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
             try:
                 img, (cx, cy) = wan_model.render_frame_group(mfg_id)
@@ -67,7 +67,7 @@ for s_i, sprite in enumerate(bin_pack):
     for ag_i, group in enumerate(wan_model.anim_groups):
         if group is None:
             continue
-        for ani_i, ani in enumerate(wan_model.get_animations_for_group(group)):
+        for ani_i, ani in enumerate(group):
             mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
             try:
                 img, (cx, cy) = wan_model.render_frame_group(mfg_id)

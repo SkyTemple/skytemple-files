@@ -26,6 +26,7 @@ FIX_IN_TEST_MAP = {
 }
 FIX_IN_LEN = 1154
 FIX_IN_LEN_SUB = 40
+FIX_COMPLEX_IDS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 34]
 
 
 class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
@@ -51,15 +52,32 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         with self.assertRaises(ValueError):
             self.kao.get(FIX_IN_LEN, 0)
 
+    def test_get_complex(self):
+        self.kao = self._load_main_fixture(self._fix_path_complex())
+        for i in FIX_COMPLEX_IDS:
+            self.assetImagesEqual(self._fix_path_complex_png(i), self.kao.get(0, i).get(), rgb_diff=True)
+
+    def test_set_complex(self):
+        self.kao = self._load_main_fixture(self._fix_path_complex())
+        for i in FIX_COMPLEX_IDS:
+            self.kao.set_from_img(0, i, self._load_image(self._fix_path_complex_png(i)))
+        new_kao = self._save_and_reload_main_fixture(self.kao)
+        for i in FIX_COMPLEX_IDS:
+            self.assetImagesEqual(self._fix_path_complex_png(i), new_kao.get(0, i).get(), rgb_diff=True)
+
     def test_set_from_img(self):
         img = self._load_image(self._fix_path_png(0, 1))
         self.kao.set_from_img(552, 8, img)
         self.kao.set_from_img(1153, 4, img)
+        self.kao.get(0, 6).set(img)
+        self.kao.set(100, 8, self.kao.get(552, 8))
         new_kao = self._save_and_reload_main_fixture(self.kao)
         self.assetImagesNotEqual(img, new_kao.get(0, 2).get(), rgb_diff=True)
         self.assetImagesEqual(img, new_kao.get(552, 8).get(), rgb_diff=True)
         self.assetImagesNotEqual(img, new_kao.get(552, 4).get(), rgb_diff=True)
         self.assetImagesEqual(img, new_kao.get(1153, 4).get(), rgb_diff=True)
+        self.assetImagesEqual(img, new_kao.get(0, 6).get(), rgb_diff=True)
+        self.assetImagesEqual(img, new_kao.get(100, 8).get(), rgb_diff=True)
         self.assertIsNone(new_kao.get(1153, 0))
 
     def test_delete(self):
@@ -173,7 +191,17 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
 
     @classmethod
     @fixpath
+    def _fix_path_complex(cls):
+        return 'fixtures', 'complex.kao'
+
+    @classmethod
+    @fixpath
     def _fix_path_png(cls, idx, sidx, rgb=False):
         if rgb:
             return 'fixtures', 'rgb', f'{idx:04}', f'{sidx:02}.png'
         return 'fixtures', f'{idx:04}', f'{sidx:02}.png'
+
+    @classmethod
+    @fixpath
+    def _fix_path_complex_png(cls, sidx):
+        return 'fixtures', f'complex', f'1_{sidx}.png'

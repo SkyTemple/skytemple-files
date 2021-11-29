@@ -31,7 +31,7 @@ for idx, sidx, img in kao:
     pil = Image.new('P', (40, 40))
     pal = bytearray()
     pil.putpalette([randrange(0, 256) for _ in range(0, 256 * 3)])
-    for i in range(0, 16):
+    for i in range(0, 15):
         pil.putpixel((i, 0), i)
     d = ImageDraw.Draw(pil)
     d.text((5, 5), str(idx), fill=1)

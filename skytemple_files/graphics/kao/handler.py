@@ -55,7 +55,7 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs) -> KaoProtocol:
-        return cls.get_model_cls()(data)
+        return cls.get_model_cls()(bytes(data))
 
     @classmethod
     def serialize(cls, data: KaoProtocol, **kwargs) -> bytes:

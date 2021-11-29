@@ -168,6 +168,8 @@ class Kao(KaoProtocol):
                 return None
             self.loaded_kaos[index][subindex] = KaoImage(self.original_data, pnt)
             self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
+        if self.loaded_kaos[index][subindex].empty:
+            return None
         return self.loaded_kaos[index][subindex]
 
     def set(self, index: int, subindex: int, img: KaoImageProtocol):

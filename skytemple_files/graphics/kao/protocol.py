@@ -33,6 +33,10 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
+    def clone(self) -> 'KaoImageProtocol':
+        ...
+
+    @abstractmethod
     def size(self) -> int:
         ...
 
@@ -53,6 +57,11 @@ T = TypeVar('T', bound=KaoImageProtocol)
 class KaoProtocol(Protocol[T]):
     @abstractmethod
     def __init__(self, data: bytes):
+        ...
+
+    @abstractmethod
+    def n_entries(self) -> int:
+        """Returns the number of entries."""
         ...
 
     @abstractmethod

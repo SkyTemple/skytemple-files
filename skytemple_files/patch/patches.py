@@ -184,7 +184,7 @@ class Patcher:
                 if param.type == Pmd2PatchParameterType.SELECT:
                     val = config[param.name]
                     found = False
-                    for option in param.options:
+                    for option in param.options:  # type: ignore
                         if not isinstance(val, type(option.value)) or option.value != val:
                             continue
                         found = True
@@ -233,15 +233,16 @@ class Patcher:
             module_name = f"skytemple_files.__patches.p{f_id}"
             spec = importlib.util.spec_from_file_location(module_name,
                                                           os.path.join(tmpdir.name, 'patch.py'))
+            assert spec is not None
             patch = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(patch)
+            spec.loader.exec_module(patch)  # type: ignore
         except FileNotFoundError as ex:
             raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
             raise PatchPackageError(_("The patch.py of the patch package contains a syntax error.")) from ex
 
         try:
-            handler = patch.PatchHandler()
+            handler = patch.PatchHandler()  # type: ignore
         except AttributeError as ex:
             raise PatchPackageError(_("The patch.py of the patch package does not contain a 'PatchHandler'.")) from ex
 

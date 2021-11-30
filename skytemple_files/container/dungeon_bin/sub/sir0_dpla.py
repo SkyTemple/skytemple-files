@@ -25,10 +25,10 @@ class DbinSir0DplaHandler(DataHandler[Dpla]):
     def deserialize(cls, data: bytes, **kwargs) -> Dpla:
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.deserialize(data)
-        return FileType.SIR0.unwrap_obj(sir0, Dpla)
+        return FileType.SIR0.unwrap_obj(sir0, Dpla)  # type: ignore
 
     @classmethod
     def serialize(cls, data: Dpla, **kwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        sir0 = FileType.SIR0.wrap_obj(data)
+        sir0 = FileType.SIR0.wrap_obj(data)  # type: ignore
         return FileType.SIR0.serialize(sir0)

@@ -50,6 +50,7 @@ class WteImageType(Enum):
         self.bpp = bpp
         self.has_image = has_image
 
+
 class Wte(Sir0Serializable, AutoString):
     def __init__(self, data: Optional[bytes], header_pnt: int):
         """Constructs a Wte model. Setting data to None will initialize an empty model."""
@@ -72,7 +73,7 @@ class Wte(Sir0Serializable, AutoString):
 
         # actual_dim and image_type both forms the image mode
         self.actual_dim = read_uintle(data, header_pnt + 0xC, 1)
-        self.image_type = WteImageType(read_uintle(data, header_pnt + 0xD, 1))
+        self.image_type = WteImageType(read_uintle(data, header_pnt + 0xD, 1))  # type: ignore
         
         self.unk10 = read_uintle(data, header_pnt + 0x10, 4)
         self.width = read_uintle(data, header_pnt + 0x14, 2)
@@ -95,7 +96,7 @@ class Wte(Sir0Serializable, AutoString):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.wte.writer import WteWriter
-        return WteWriter(self).write()
+        return WteWriter(self).write()  # type: ignore
 
     def actual_dimensions(self) -> Tuple[int, int]:
         return (8*(2**(self.actual_dim & 0x07)), 8*(2**((self.actual_dim>>3) & 0x07)))

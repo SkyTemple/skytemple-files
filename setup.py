@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 __version__ = '1.3.3'
 import os
 
@@ -26,7 +27,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={'skytemple_files':
-                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md', '.bin', '.png']) +
+                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md', '.bin', '.png', '.typed']) +
                   ['graphics/chara_wan/Shadow.png']},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',
     long_description=long_description,
@@ -51,8 +52,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Programming Language :: Python',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',

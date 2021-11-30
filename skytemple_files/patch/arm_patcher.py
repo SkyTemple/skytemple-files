@@ -85,9 +85,9 @@ class ArmPatcher:
                     for binary_name, binary in binaries.items():
                         binary_path = os.path.join(tmp, binary_name.split('/')[-1])
                         # Write binary to tmp dir
-                        with open(binary_path, 'wb') as fi:
+                        with open(binary_path, 'wb') as fib:
                             try:
-                                fi.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                                fib.write(get_binary_from_rom_ppmdu(self.rom, binary))
                             except ValueError as err:
                                 if binary_name.split('/')[-1] == 'overlay_0036.bin':
                                     continue  # We ignore if End's extra overlay is missing.
@@ -95,8 +95,8 @@ class ArmPatcher:
                     # For simple patches we also output the overlay table as y9.bin:
                     binary_path = os.path.join(tmp, Y9_BIN)
                     # Write binary to tmp dir
-                    with open(binary_path, 'wb') as fi:
-                        fi.write(self.rom.arm9OverlayTable)
+                    with open(binary_path, 'wb') as fib:
+                        fib.write(self.rom.arm9OverlayTable)
 
                 # Then include other includes
                 for include in patch.includes:
@@ -109,8 +109,8 @@ class ArmPatcher:
                         binary_path = os.path.join(tmp, open_bin.filepath.split('/')[-1])
                         os.makedirs(os.path.dirname(binary_path), exist_ok=True)
                         # Write binary to tmp dir
-                        with open(binary_path, 'wb') as fi:
-                            fi.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                        with open(binary_path, 'wb') as fib:
+                            fib.write(get_binary_from_rom_ppmdu(self.rom, binary))
                         asm_entrypoint += f'.open "{binary_path}", 0x{binary.loadaddress:0x}\n'
                         for include in open_bin.includes:
                             asm_entrypoint += f'.include "{os.path.join(tmp, include.filename)}"\n'
@@ -148,12 +148,13 @@ class ArmPatcher:
 
                 if os.getenv('SKYTEMPLE_DEBUG_ARMIPS_OUTPUT', False):
                     print("ARMIPS OUTPUT:")
-                    print(str(result.stdout.read(), 'utf-8'))
-                    print(str(result.stderr.read(), 'utf-8') if result.stderr else '')
+                    if result is not None:
+                        print(str(result.stdout.read(), 'utf-8'))  # type: ignore
+                        print(str(result.stderr.read(), 'utf-8') if result.stderr else '')  # type: ignore
 
                 if retcode != 0:
                     raise PatchError(_("ARMIPS reported an error while applying the patch."),
-                                     str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
+                                     str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')  # type: ignore
 
                 # Load the binaries back into the ROM
                 opened_binaries = {}
@@ -162,17 +163,17 @@ class ArmPatcher:
                     opened_binaries = binaries
                     # Also read in arm9OverlayTable
                     binary_path = os.path.join(tmp, Y9_BIN)
-                    with open(binary_path, 'rb') as fi:
-                        self.rom.arm9OverlayTable = fi.read()
+                    with open(binary_path, 'rb') as fib:
+                        self.rom.arm9OverlayTable = fib.read()
                 else:
                     # Read opened binaries again
                     for open_bin in patch.open_bins:
                         opened_binaries[open_bin.filepath] = binaries[open_bin.filepath]
                 for binary_name, binary in opened_binaries.items():
                     binary_path = os.path.join(tmp, binary_name.split('/')[-1])
-                    with open(binary_path, 'rb') as fi:
+                    with open(binary_path, 'rb') as fib:
                         try:
-                            set_binary_in_rom_ppmdu(self.rom, binary, fi.read())
+                            set_binary_in_rom_ppmdu(self.rom, binary, fib.read())
                         except ValueError as err:
                             if binary_name.split('/')[-1] == 'overlay_0036.bin':
                                 continue  # We ignore if End's extra overlay is missing.

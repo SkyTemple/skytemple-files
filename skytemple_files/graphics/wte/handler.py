@@ -49,7 +49,7 @@ class WteHandler(DataHandler[Wte]):
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs) -> 'Wte':
-        return Wte(data)
+        return Wte(data, 0)
 
     @classmethod
     def serialize_raw(cls, data: 'Wte', **kwargs) -> bytes:

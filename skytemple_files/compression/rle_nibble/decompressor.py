@@ -17,28 +17,29 @@
 
 from skytemple_files.common.util import *
 
+
 class RleNibbleDecompressor:
     def __init__(self, compressed_data: bytes, decompressed_size: int):
         self.compressed_data = compressed_data
         self.decompressed_size = decompressed_size
 
     def decompress(self) -> bytes:
-        out = []
+        out: List[int] = []
         copy_next = -1
         nb_keep = 0
         for b in self.compressed_data:
-            if len(out)>=self.decompressed_size:break
+            if len(out) >= self.decompressed_size: break
             for i in range(2):
-                v = (b//(16**(1-i)))%16
-                if copy_next<0 and not nb_keep:
-                    if v>=8:
-                        copy_next = v-8
+                v = (b // (16 ** (1 - i))) % 16
+                if copy_next < 0 and not nb_keep:
+                    if v >= 8:
+                        copy_next = v - 8
                     else:
                         nb_keep = v
-                elif copy_next>=0:
-                    out += [v]*copy_next
+                elif copy_next >= 0:
+                    out += [v] * copy_next
                     copy_next = -1
-                elif nb_keep>0:
+                elif nb_keep > 0:
                     out.append(v)
                     nb_keep -= 1
         return bytes(out)

@@ -23,7 +23,7 @@ from skytemple_files.graphics.bpa.model import Bpa, BPA_TILE_DIM
 class BpaWriter:
     def __init__(self, model: Bpa):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:

@@ -163,7 +163,7 @@ class Pmd2ScriptLevel(AutoString):
 
     @property
     def mapty_enum(self) -> Pmd2ScriptLevelMapType:
-        return Pmd2ScriptLevelMapType(self.mapty)
+        return Pmd2ScriptLevelMapType(self.mapty)  # type: ignore
         
     # Backwards compat:
     @property
@@ -236,7 +236,7 @@ class Pmd2ScriptOpCode(SsbOpCode):
         self.unk3 = unk3
         self.arguments: List[Pmd2ScriptOpCodeArgument] = arguments
         self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
-        self.repeating_argument_group: Pmd2ScriptOpCodeRepeatingArgumentGroup = repeating_argument_group
+        self.repeating_argument_group: Optional[Pmd2ScriptOpCodeRepeatingArgumentGroup] = repeating_argument_group
         self.description = _("This function has no description.")  # todo
 
 
@@ -536,7 +536,7 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def op_codes__by_name(self) -> Dict[str, List[Pmd2ScriptOpCode]]:
-        opcs = {}
+        opcs: Dict[str, List[Pmd2ScriptOpCode]] = {}
         for o in self._op_codes:
             if o.name not in opcs:
                 opcs[o.name] = []

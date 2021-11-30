@@ -20,6 +20,8 @@ This can also handle partial data in the XML!
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from xml.etree.ElementTree import Element
 
+import typing
+
 from skytemple_files.common.xml_util import XmlValidateError
 from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR_LAYOUT, XML_MONSTER_LIST, XML_TRAP_LIST, XML_ITEM_LIST, \
     XML_ITEM_LIST__TYPE__FLOOR, XML_ITEM_LIST__TYPE__SHOP, XML_ITEM_LIST__TYPE__MONSTER_HOUSE, \
@@ -42,6 +44,7 @@ def mappa_floor_xml_export(floor: MappaFloor, export_layout=True, export_monster
                         export_unk1_items=export_unk1_items, export_unk2_items=export_unk2_items)
 
 
+@typing.no_type_check
 def mappa_floor_xml_import(xml: Element, floor: MappaFloor):
     """Imports all data available in the mappa floor XML into the given model."""
     for child in xml:

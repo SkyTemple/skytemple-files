@@ -54,4 +54,4 @@ class Sir0Handler(DataHandler[Sir0]):
 
     @classmethod
     def unwrap_obj(cls, data: Sir0, spec: Type[T], static_data: Optional[Pmd2Data] = None) -> T:
-        return spec.sir0_unwrap(data.content, data.data_pointer, static_data)
+        return spec.sir0_unwrap(data.content, data.data_pointer, static_data)  # type: ignore

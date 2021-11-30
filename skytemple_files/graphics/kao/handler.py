@@ -14,28 +14,49 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import *
-from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN
-from skytemple_files.graphics.kao.writer import KaoWriter
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
+if TYPE_CHECKING:
+    from skytemple_files.graphics.kao.model import Kao as PyKao
+    from skytemple_rust.st_kao import Kao as NativeKao
 
 
-class KaoHandler(DataHandler[Kao]):
+class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Kao:
-        if not isinstance(data, memoryview):
-            data = memoryview(data)
-        # First 160 bytes are padding
-        first_toc = (SUBENTRIES*SUBENTRY_LEN)
-        # The following line won't work; what if the first byte of the first pointer is 0?
-        # first_toc = next(x for x, val in enumerate(data) if val != 0)
-        assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
-        # first pointer = end of TOC
-        first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
-        toc_len = int((first_pointer - first_toc) / (SUBENTRIES*SUBENTRY_LEN))
-        return Kao(data, first_toc, toc_len)
+    def load_python_model(cls) -> Type[KaoProtocol]:
+        from skytemple_files.graphics.kao.model import Kao
+        return Kao
 
     @classmethod
-    def serialize(cls, data: Kao, **kwargs) -> bytes:
-        return KaoWriter(data).write()
+    def load_native_model(cls) -> Type[KaoProtocol]:
+        from skytemple_rust.st_kao import Kao
+        return Kao
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyKao']]:  # type: ignore
+        from skytemple_files.graphics.kao.writer import KaoWriter
+        return KaoWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeKao']]:  # type: ignore
+        from skytemple_rust.st_kao import KaoWriter
+        return KaoWriter
+
+    @classmethod
+    def get_image_model_cls(cls) -> Type[KaoImageProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_kao import KaoImage as KaoImageNative
+            return KaoImageNative
+        from skytemple_files.graphics.kao.model import KaoImage
+        return KaoImage
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs) -> KaoProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: KaoProtocol, **kwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

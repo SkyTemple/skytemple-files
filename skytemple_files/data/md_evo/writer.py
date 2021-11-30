@@ -32,6 +32,6 @@ class MdEvoWriter:
         
         for x in self.model.evo_entries:
             file_data += x.to_bytes()
-        for x in self.model.evo_stats:
-            file_data += x.to_bytes()
+        for y in self.model.evo_stats:
+            file_data += y.to_bytes()
         return bytes(file_data)

@@ -102,7 +102,7 @@ class Dbg:
         # in the imported image. Generate chunk mappings.
         chunk_mappings = []
         chunk_mappings_counter = 1
-        tile_mappings = []
+        tile_mappings: List[TilemapEntry] = []
         tiles_in_chunk = DBG_TILING_DIM * DBG_TILING_DIM
         for chk_fst_tile_idx in range(0, DBG_WIDTH_AND_HEIGHT * DBG_WIDTH_AND_HEIGHT * tiles_in_chunk, tiles_in_chunk):
             chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]

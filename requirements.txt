@@ -2,7 +2,7 @@ ndspy==3.0.0
 Pillow==8.3.1
 appdirs==1.4.4
 explorerscript==0.1.1
-git+git://github.com/skytemple/skytemple-rust@skytemple-files-reimplementation#egg=skytemple_rust
+git+git://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 tilequant==0.4.0.post0
 dungeon-eos==0.0.4
 types-setuptools

@@ -68,6 +68,9 @@ class KaoImage(KaoImageProtocol):
             self.as_pil = kao_to_pil(self)
         return self.as_pil
 
+    def clone(self) -> 'KaoImage':
+        return KaoImage(self.get_internal(), 0)
+
     def size(self):
         return KAO_IMG_PAL_B_SIZE + len(self.compressed_img_data)
 
@@ -115,8 +118,11 @@ class Kao(KaoProtocol):
 
         self.original_data: memoryview = data
         self.first_toc = first_toc
-        self.toc_len = toc_len
+        self.toc_len: int = toc_len
         self.reset(toc_len)
+
+    def n_entries(self) -> int:
+        return self.toc_len
 
     def expand(self, new_size):
         if new_size < self.toc_len:
@@ -168,7 +174,7 @@ class Kao(KaoProtocol):
                 return None
             self.loaded_kaos[index][subindex] = KaoImage(self.original_data, pnt)
             self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
-        if self.loaded_kaos[index][subindex].empty:
+        elif self.loaded_kaos[index][subindex].empty:  # type: ignore
             return None
         return self.loaded_kaos[index][subindex]
 
@@ -190,7 +196,7 @@ class Kao(KaoProtocol):
         k = self.get(index, subindex)
         if isinstance(img, KaoImage):
             if k is not None:
-                self.loaded_kaos_flat = [(i, s, x) for i, s, x in self.loaded_kaos_flat if i != index and s != subindex]
+                self.loaded_kaos_flat = [(i, s, x) for i, s, x in self.loaded_kaos_flat if i != index or s != subindex]
             img.modified = True
             self.loaded_kaos[index][subindex] = img
             self.loaded_kaos_flat.append((index, subindex, img))  # type: ignore

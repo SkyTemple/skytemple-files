@@ -613,7 +613,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
                     )
                 try:
                     value_to_update[i] = FileType.KAO.get_image_model_cls().create_from_raw(
-                        b64decode(palette.encode('ascii')), b64decode(image.encode('ascii'))
+                        b64decode(image.encode('ascii')), b64decode(palette.encode('ascii'))
                     )
                 except Exception as err:
                     raise XmlValidateError(

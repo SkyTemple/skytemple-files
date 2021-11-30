@@ -26,13 +26,14 @@ try:
 except ImportError:
     from pil import Image
 
+
 class GraphicFont(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         number_entries = read_uintle(data, 0x02, 2)//GRAPHIC_FONT_ENTRY_LEN
 
-        self.palette = None
+        self.palette: Optional[Pal] = None
         self.entries: List[Optional[Image.Image]] = []
         for i in range(0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN):
             width = read_uintle(data, i + 0x00)

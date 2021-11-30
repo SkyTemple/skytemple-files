@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
-from typing import Tuple
+from typing import Tuple, Sequence
 
 try:
     from PIL import Image
@@ -216,7 +216,7 @@ class Bpc:
         )
 
     def chunks_animated_to_pil(
-            self, layer: int, palettes: List[List[int]], bpas: List[Bpa], width_in_mtiles=20
+            self, layer: int, palettes: List[List[int]], bpas: Sequence[Optional[Bpa]], width_in_mtiles=20
     ) -> List[Image.Image]:
         """
         Exports chunks. For general notes see chunks_to_pil.
@@ -272,7 +272,7 @@ class Bpc:
         return frames
 
     def single_chunk_animated_to_pil(
-            self, layer: int, chunk_idx: int, palettes: List[List[int]], bpas: List[Bpa]
+            self, layer: int, chunk_idx: int, palettes: List[List[int]], bpas: Sequence[Optional[Bpa]]
     ) -> List[Image.Image]:
         """
         Exports a single chunk. For general notes see chunks_to_pil. For notes regarding the animation see
@@ -396,7 +396,7 @@ class Bpc:
         self.layers[layer].tilemap = tile_mappings
         self.layers[layer].chunk_tilemap_len = int(len(tile_mappings) / self.tiling_width / self.tiling_height)
 
-    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: List[Bpa]) -> List[Bpa]:
+    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[Optional[Bpa]]) -> List[Bpa]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.

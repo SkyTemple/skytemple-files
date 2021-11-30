@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import typing
 from typing import Dict, Type
 
 from skytemple_files.common.util import *
@@ -130,7 +130,7 @@ class FontDat(AbstractFont):
         return FontDatEntry.get_class_properties()
     
     def delete_entry(self, entry: AbstractFontEntry):
-        self.entries.remove(entry)
+        self.entries.remove(entry)  # type: ignore
     
     def create_entry_for_table(self, table) -> AbstractFontEntry:
         entry = FontDatEntry(0, table, 0, FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN-0x4))
@@ -142,7 +142,7 @@ class FontDat(AbstractFont):
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
-        return entries
+        return entries  # type: ignore
 
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
@@ -169,7 +169,8 @@ class FontDat(AbstractFont):
                 validate_xml_tag(xml_char, XML_CHAR)
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
-    
+
+    @typing.no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)

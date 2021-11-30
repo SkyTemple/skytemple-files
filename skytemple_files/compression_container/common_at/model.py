@@ -15,25 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from abc import ABC, abstractmethod
-from skytemple_files.common.util import *
+from abc import ABC
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-
-class CommonAt(ABC):
-
-    @abstractmethod
-    def decompress(self) -> bytes:
-        """Returns the uncompressed data stored in the container"""
-
-    @abstractmethod
-    def to_bytes(self) -> bytes:
-        """Converts the container back into a bit (compressed) representation"""
-
-    @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Returns the container size"""
-
-    @classmethod
-    def compress(cls, data: bytes) -> 'CommonAt':
-        """Create a new AT container from originally uncompressed data."""
+# DEPRECATED. Use CompressionContainerProtocol.
+class CommonAt(CompressionContainerProtocol, ABC):
+    pass

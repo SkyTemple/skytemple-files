@@ -14,38 +14,23 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type
 
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.at3px.model import At3px
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-class At3pxHandler(DataHandler[At3px]):
+class At3pxHandler(CompressionContainerHandler):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> At3px:
-        """Load a AT3PX container into a high-level representation"""
-        if not cls.matches(data):
-            raise ValueError("The provided data is not an AT3PX container.")
-        return At3px(data)
+    def magic_word(cls) -> bytes:
+        return b'AT3PX'
 
     @classmethod
-    def serialize(cls, data: At3px, **kwargs) -> bytes:
-        """Convert the high-level AT3PX representation back into a BitStream."""
-        return data.to_bytes()
+    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_files.compression_container.at3px.model import At3px
+        return At3px
 
     @classmethod
-    def compress(cls, data: bytes) -> At3px:
-        """Turn uncompressed data into a new AT3PX container"""
-        return At3px.compress(data)
-
-    @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of an AT3PX container starting at the given offset in data."""
-        if not cls.matches(data, byte_offset):
-            raise ValueError("The provided data is not an AT3PX container.")
-        return At3px.cont_size(data, byte_offset)
-
-    @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data stream is a At3px container"""
-        return read_bytes(data, byte_offset, 5) == b'AT3PX'
+    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_rust.st_at3px import At3px
+        return At3px

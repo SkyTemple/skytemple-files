@@ -19,8 +19,9 @@ from typing import Generator, Tuple, Optional, Callable, List
 
 from PIL import Image
 
-from skytemple_files.graphics.kao.model import Kao, KAO_IMG_IMG_DIM, KAO_IMG_METAPIXELS_DIM, SUBENTRIES, KaoImage
+from skytemple_files.graphics.kao.model import KAO_IMG_IMG_DIM, KAO_IMG_METAPIXELS_DIM, SUBENTRIES
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 
 PORTRAIT_SIZE = KAO_IMG_IMG_DIM * KAO_IMG_METAPIXELS_DIM
 PORTRAIT_TILE_X = 5
@@ -29,7 +30,7 @@ PORTRAIT_TILE_Y = 8
 
 class SpriteBotSheet:
     @classmethod
-    def create(cls, kao: Kao, portrait_item_id: int) -> Image.Image:
+    def create(cls, kao: KaoProtocol, portrait_item_id: int) -> Image.Image:
         image = Image.new('RGBA', (PORTRAIT_SIZE * PORTRAIT_TILE_X, PORTRAIT_SIZE * PORTRAIT_TILE_Y))
         max_x = 1
         max_y = 1
@@ -54,14 +55,14 @@ class SpriteBotSheet:
 
     @classmethod
     def _iter_portraits(
-            cls, kao: Kao, portrait_item_id: int
-    ) -> Generator[Tuple[Optional[KaoImage], Optional[KaoImage]], None, None]:
+            cls, kao: KaoProtocol, portrait_item_id: int
+    ) -> Generator[Tuple[Optional[KaoImageProtocol], Optional[KaoImageProtocol]], None, None]:
         for i in range(0, SUBENTRIES, 2):
             yield kao.get(portrait_item_id, i), kao.get(portrait_item_id, i + 1)
 
     @classmethod
     def _place_portrait(
-            cls, image: Image.Image, idx: int, max_x: int, max_y: int, kao_image: Optional[KaoImage], flip: bool
+            cls, image: Image.Image, idx: int, max_x: int, max_y: int, kao_image: Optional[KaoImageProtocol], flip: bool
     ) -> Tuple[int, int]:
         """Original author: Audino (https://github.com/audinowho)"""
         if kao_image is None:
@@ -91,7 +92,7 @@ class SpriteBotSheet:
             raise ValueError(f(_("Portrait has an invalid size of {img.size}, exceeding max of {max_size}")))
 
         in_data = img.convert('RGBA').getdata()
-        occupied = [[]] * PORTRAIT_TILE_X
+        occupied: List[List[Optional[bool]]] = [[]] * PORTRAIT_TILE_X
         for ii in range(PORTRAIT_TILE_X):
             occupied[ii] = [None] * PORTRAIT_TILE_Y
 

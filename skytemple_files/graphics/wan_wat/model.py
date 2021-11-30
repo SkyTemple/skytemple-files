@@ -56,8 +56,8 @@ class MetaFramePositioningSpecs:
             biggest_y = max(biggest_y, frame.y_offset + frame.height)
 
         for frame in items:
-            frame.final_relative_x = frame.x_offset - smallest_x
-            frame.final_relative_y = frame.y_offset - smallest_y
+            frame.final_relative_x = frame.x_offset - smallest_x  # type: ignore
+            frame.final_relative_y = frame.y_offset - smallest_y  # type: ignore
 
         return (biggest_x - smallest_x), (biggest_y - smallest_y), abs(smallest_x), abs(smallest_y)
 
@@ -100,7 +100,7 @@ class Wan:
             final_img.paste(
                 frame.img,
                 (frame.final_relative_x, frame.final_relative_y,
-                 frame.final_relative_x + frame.width, frame.final_relative_y + frame.height),
+                 frame.final_relative_x + frame.width, frame.final_relative_y + frame.height),  # type: ignore
                 frame.img
             )
 

@@ -70,7 +70,7 @@ class HardcodedRecruitmentTables:
         return lst
     
     @staticmethod
-    def _set_generic(ov11: bytes, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]):
+    def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]):
         block = config.binaries['overlay/overlay_0011.bin'].blocks[block_name]
         expected_length = int((block.end - block.begin) / bytelen)
         if len(value) != expected_length:

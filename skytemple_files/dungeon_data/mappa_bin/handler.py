@@ -40,9 +40,5 @@ class MappaBinHandler(DataHandler[MappaBin]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs) -> 'MappaBin':
-        return MappaBin(data)
-
-    @classmethod
     def serialize_raw(cls, data: 'MappaBin', **kwargs) -> bytes:
         return MappaBinWriter(data).write()[0]

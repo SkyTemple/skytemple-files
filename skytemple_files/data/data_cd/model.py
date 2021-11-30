@@ -26,7 +26,7 @@ class DataCD(AutoString):
             data = memoryview(data)
         limit = read_uintle(data, 0, 4)
         self.items_effects = []
-        self.effects_code = []
+        self.effects_code: List[bytes] = []  # type: ignore
         for x in range(4, limit, 2):
             self.items_effects.append(read_uintle(data, x, 2))
 
@@ -34,7 +34,7 @@ class DataCD(AutoString):
         for x in range(limit, last_ptr, 8):
             start = read_uintle(data, x, 4)
             length = read_uintle(data, x+4, 4)
-            self.effects_code.append(data[start:start+length])
+            self.effects_code.append(data[start:start+length])  # type: ignore
 
     def nb_items(self) -> int:
         return len(self.items_effects)

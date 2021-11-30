@@ -27,12 +27,12 @@ DEBUG = False
 
 
 class KaoWriter:
-    def __init__(self, kao: Kao):
-        self.kao = kao
-        self.new_data = None
+    def __init__(self, force_rebuild_all=False, update_kao=True):
+        self.force_rebuild_all = force_rebuild_all
+        self.update_kao = update_kao
         pass
 
-    def write(self, force_rebuild_all=False, update_kao=True) -> bytes:
+    def write(self, kao: Kao) -> bytes:
         """
         Builds a new kao file as a BitStream.
         The entire Kao starting from the first modified image needs
@@ -43,6 +43,7 @@ class KaoWriter:
         This also updates the data representation of the original kao, unless
         update_kao is False.
         """
+        
         from skytemple_files.common.types.file_types import FileType
 
         # At worst all images are 848 bytes long - However assuming this would allocate over 300MB...
@@ -51,12 +52,12 @@ class KaoWriter:
 
         # To increase overall performance, first find the index of the first modified image, we will start from
         # there and just copy the rest
-        if not force_rebuild_all:
+        if not self.force_rebuild_all:
             start_index = maxsize
             start_subindex = maxsize
-            for i, si, k in self.kao.loaded_kaos_flat:
+            for i, si, k in kao.loaded_kaos_flat:
                 if k.modified:
-                    if update_kao:
+                    if self.update_kao:
                         k.modified = False
                     if i < start_index:
                         start_index = i
@@ -67,35 +68,35 @@ class KaoWriter:
                 if DEBUG:
                     print(f"KaoWriter: Nothing changed, returning original")
                 # Nothing was changed
-                return self.kao.original_data
+                return kao.original_data
             else:
                 # Copy image data from beginning to that point - this will also copy the old TOC but we will write over that
-                current_toc_offset = self.kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
-                pnt = read_sintle(self.kao.original_data, current_toc_offset, SUBENTRY_LEN)
+                current_toc_offset = kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
+                pnt = read_sintle(kao.original_data, current_toc_offset, SUBENTRY_LEN)
                 if pnt < 0:
                     current_image_offset = -pnt
                 else:
                     current_image_offset = pnt
-                self.new_data[0:current_image_offset] = self.kao.original_data[0:current_image_offset]
+                self.new_data[0:current_image_offset] = kao.original_data[0:current_image_offset]
                 if DEBUG:
                     print(f"KaoWriter: First modified image: {start_index}, {start_subindex} "
                           f"- will start at TOC {current_toc_offset} and img {current_image_offset}.")
         else:
             start_index = start_subindex = 0
-            size_toc = (self.kao.toc_len * SUBENTRIES * SUBENTRY_LEN)
-            current_toc_offset = self.kao.first_toc
+            size_toc = (kao.toc_len * SUBENTRIES * SUBENTRY_LEN)
+            current_toc_offset = kao.first_toc
             current_image_offset = current_toc_offset + size_toc
         
         current_null_pointer = -current_image_offset  # Always start at that null pointer!
         #Otherwise, stuff will break since a 0 pointer is considered as valid in the model!
 
         # Rebuild KAO
-        for i in range(start_index, self.kao.toc_len):
+        for i in range(start_index, kao.toc_len):
             for si in range(start_subindex, SUBENTRIES):
-                if self.kao.has_loaded(i, si):
+                if kao.has_loaded(i, si):
                     # Image is loaded, use image data for new pointer
-                    kao_image = self.kao.get(i, si)
-                    if kao_image.empty is True:
+                    kao_image = kao.get(i, si)
+                    if kao_image is None:
                         self._update_toc_entry(current_toc_offset, current_null_pointer.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                         current_toc_offset += SUBENTRY_LEN
                         continue
@@ -104,7 +105,7 @@ class KaoWriter:
                     image_data_end = len(image_data_bs)
                 else:
                     # Image is not loaded, get image data directly, is faster than building KaoImage first
-                    pnt = read_sintle(self.kao.original_data, current_toc_offset, SUBENTRY_LEN)
+                    pnt = read_sintle(kao.original_data, current_toc_offset, SUBENTRY_LEN)
                     if pnt < 0:
                         # Null pointer, write new null pointer
                         if DEBUG:
@@ -114,7 +115,7 @@ class KaoWriter:
                         self._update_toc_entry(current_toc_offset, current_null_pointer.to_bytes(SUBENTRY_LEN, 'little', signed=True))
                         current_toc_offset += SUBENTRY_LEN
                         continue
-                    image_data_bs = self.kao.original_data
+                    image_data_bs = kao.original_data
                     image_data_start = pnt
                     image_data_end = image_data_start + KAO_IMG_PAL_B_SIZE + FileType.COMMON_AT.cont_size(
                         image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE
@@ -148,10 +149,10 @@ class KaoWriter:
         else:
             self.new_data = self.new_data[:current_image_offset]
 
-        if update_kao:
-            self.kao.original_data = self.new_data
+        if self.update_kao:
+            kao.original_data = memoryview(self.new_data)
 
         return self.new_data
 
     def _update_toc_entry(self, offs, bs: bytes):
-        self.new_data[offs:offs+SUBENTRY_LEN] = bs
+        self.new_data[offs:offs+SUBENTRY_LEN] = bs  # type: ignore

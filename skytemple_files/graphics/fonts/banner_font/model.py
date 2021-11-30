@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import typing
 from typing import Dict, Optional
 
 from skytemple_files.common.util import *
@@ -80,7 +80,7 @@ class BannerFontEntry(AbstractFontEntry):
 
 
 class BannerFont(Sir0Serializable, AbstractFont):
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes, header_pnt: int):
         from skytemple_files.common.types.file_types import FileType
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -110,10 +110,10 @@ class BannerFont(Sir0Serializable, AbstractFont):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.fonts.banner_font.writer import BannerFontWriter
-        return BannerFontWriter(self).write()
+        return BannerFontWriter(self).write()  # type: ignore
 
     def set_palette(self, palette: Pal):
-        self.palette = palette
+        self.palette = palette  # type: ignore
         
     def get_palette_raw(self) -> List[int]:
         if self.palette:
@@ -132,7 +132,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
         return BannerFontEntry.get_class_properties()
 
     def delete_entry(self, entry: AbstractFontEntry):
-        self.entries.remove(entry)
+        self.entries.remove(entry)  # type: ignore
     
     def create_entry_for_table(self, table) -> AbstractFontEntry:
         entry = BannerFontEntry(0, table, 0, bytes(BANNER_FONT_DATA_LEN))
@@ -144,7 +144,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
-        return entries
+        return entries  # type: ignore
     
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
@@ -176,7 +176,8 @@ class BannerFont(Sir0Serializable, AbstractFont):
                 validate_xml_tag(xml_char, XML_CHAR)
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
-    
+
+    @typing.no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         self.unknown = 0

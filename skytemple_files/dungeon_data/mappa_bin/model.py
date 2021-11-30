@@ -48,7 +48,7 @@ class MappaBinReadContainer:
         #assert self.trap_spawn_list_index_start % 4 == 0
 
         self.items = items
-        self.read_cache = {}
+        self.read_cache = {}  # type: ignore
 
 
 class MappaBin(Sir0Serializable, XmlSerializable):
@@ -58,7 +58,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
-        return MappaBinWriter(self).write()
+        return MappaBinWriter(self).write()  # type: ignore
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'MappaBin':
@@ -87,7 +87,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
         pointer += FLOOR_IDX_ENTRY_LEN
         floor_data = read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN]
         while floor_data != empty:
-            floors.append(MappaFloor.from_mappa(read, floor_data))
+            floors.append(MappaFloor.from_mappa(read, floor_data))  # type: ignore
             pointer += FLOOR_IDX_ENTRY_LEN
             floor_data = read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN]
             if pointer > read.dungeon_list_index_start - FLOOR_IDX_ENTRY_LEN:
@@ -128,11 +128,11 @@ class MappaBin(Sir0Serializable, XmlSerializable):
         Returned are all lists.
         TODO: Performance could be improved here, by using more efficient lookup mechanisms.
         """
-        floor_lists = []
-        floor_layouts = []
-        monster_lists = []
-        trap_lists = []
-        item_lists = []
+        floor_lists: List[List[StubMappaFloor]] = []
+        floor_layouts: List[MappaFloorLayout] = []
+        monster_lists: List[List[MappaMonster]] = []
+        trap_lists: List[MappaTrapList] = []
+        item_lists: List[MappaItemList] = []
         for floor_list in self.floor_lists:
             stub_floor_list = []
             for floor in floor_list:

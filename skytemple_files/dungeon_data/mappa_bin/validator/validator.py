@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Tuple, Set, Dict
+from typing import List, Tuple, Set, Dict, Optional
 
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
 from skytemple_files.dungeon_data.mappa_bin.validator.exception import DungeonValidatorError, \
@@ -25,7 +25,7 @@ from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 class DungeonValidator:
     def __init__(self, floors: List[List[MappaFloor]]):
-        self.dungeons = None
+        self.dungeons: Optional[List[DungeonDefinition]] = None
         self.floors = floors
 
         self._errors: List[DungeonValidatorError] = []
@@ -50,7 +50,7 @@ class DungeonValidator:
 
     def validate(self, dungeons: List[DungeonDefinition]) -> bool:
         # Reset
-        self.__init__(self.floors)
+        self.__init__(self.floors)  # type: ignore
         self.dungeons = dungeons
         self._validated = True
 

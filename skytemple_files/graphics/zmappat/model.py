@@ -54,8 +54,8 @@ class ZMappaT(Sir0Serializable, AutoString):
     def __init__(self, data: Optional[bytes], header_pnt: int):
         """Constructs a ZMappaT model. Setting data to None will initialize an empty model."""
         if data is None:
-            self.tiles = []
-            self.masks = []
+            self.tiles: List[bytearray] = []
+            self.masks: List[bytearray] = []
             self.palette = []
             return
 
@@ -163,7 +163,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         im.putpalette([i // 3 for i in range(256 * 3)])
         return im
 
-    def from_pil(self, imgs: List[Image.Image], masks: List[Image.Image]) -> 'ZMappaT':
+    def from_pil(self, imgs: List[Image.Image], masks: List[Image.Image]):
         """ Replace the tile/mask data by the new ones passed in argument. """
         if len(imgs) != ZMAPPAT_NB_VARIATIONS or len(masks) != ZMAPPAT_NB_VARIATIONS:
             raise ValueError(_("Tile and masks list must have exactly 3 items"))
@@ -183,7 +183,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         self.masks = new_masks
         self.palette = [x for x in memoryview(imgs[0].palette.palette)]
 
-    def from_pil_minimized(self, imgs: List[Image.Image], masks: List[Image.Image]) -> 'ZMappaT':
+    def from_pil_minimized(self, imgs: List[Image.Image], masks: List[Image.Image]):
         """ Replace the tile/mask data by the new ones passed in argument.
         This is for the minimized version. """
         if len(imgs) != ZMAPPAT_NB_VARIATIONS or len(masks) != ZMAPPAT_NB_VARIATIONS:

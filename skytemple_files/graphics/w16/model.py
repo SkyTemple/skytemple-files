@@ -17,6 +17,7 @@
 import itertools
 from abc import ABC, abstractmethod
 from itertools import zip_longest
+from typing import Union
 
 try:
     from PIL import Image
@@ -98,6 +99,7 @@ class W16Image(ABC):
         tiles_concat = bytes(itertools.chain.from_iterable(tiles))
         return pal[0], tiles_concat
 
+
 class W16AtImage(W16Image):
     @classmethod
     def compress(cls, data: bytes) -> bytes:
@@ -107,6 +109,7 @@ class W16AtImage(W16Image):
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.COMMON_AT.deserialize(self.compressed_img_data).decompress()
+
 
 class W16RawImage(W16Image):
     @classmethod
@@ -131,7 +134,7 @@ class W16:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self._files = []
+        self._files: List[W16Image] = []
         len_pal_bytes = int(NUM_CHANNELS * NUM_COLORS_IN_PAL)
         i = 0
         while True:

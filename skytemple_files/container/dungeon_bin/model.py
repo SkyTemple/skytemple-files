@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonBinFiles, Pmd2BinPackFile
 from skytemple_files.common.types.data_handler import DataHandler
@@ -27,7 +27,7 @@ class DungeonBinPack(BinPack):
     def __init__(self, data: bytes, files_def: Pmd2DungeonBinFiles):
         super().__init__(data)
         self.files_def = files_def
-        self._loaded_models: Dict[int, any] = {}
+        self._loaded_models: Dict[int, Any] = {}
 
     def get(self, filename):
         """Returns a file by name."""

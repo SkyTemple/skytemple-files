@@ -14,13 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, List
 
 from ndspy.rom import NintendoDSRom
 
-
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
+    from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
 
 
 FILENAME_ACTOR_LIST = 'BALANCE/actor_list.bin'
@@ -71,7 +71,7 @@ class RomDataLoader:
         item_p_bin = self.rom.getFileByName('BALANCE/item_p.bin')
         item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
-        cats = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
+        cats: Dict[Pmd2DungeonItemCategory, List[int]] = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
 
         for idx, entry in enumerate(item_p.item_list):
             cats[entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)].append(idx)

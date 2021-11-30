@@ -26,6 +26,7 @@ class DungeonMusicEntry(AutoString):
             self.track_or_ref = track_ref
             self.is_random_ref = is_random_ref
         else:
+            assert data is not None
             self.track_or_ref = data & ~0x8000
             self.is_random_ref = data & 0x8000 > 0
             assert data == self.to_int()

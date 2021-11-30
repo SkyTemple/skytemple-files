@@ -23,6 +23,9 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 from skytemple_files.data.item_p import *
 
+if TYPE_CHECKING:
+    from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+
 
 class ItemPEntry(AutoString):
     def __init__(self, data: bytes):
@@ -45,8 +48,8 @@ class ItemPEntry(AutoString):
 
     def category_enum(self) -> 'MappaItemCategory':
         """:deprecated: Use category_pmd2obj"""
-        from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemCategory
-        return MappaItemCategory(self.category)
+        from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+        return MappaItemCategory(self.category)  # type: ignore
 
     def category_pmd2obj(self, item_categories: Dict[int, Pmd2DungeonItemCategory]) -> Pmd2DungeonItemCategory:
         return item_categories[self.category]
@@ -112,7 +115,7 @@ class ItemP(Sir0Serializable, AutoString):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.data.item_p.writer import ItemPWriter
-        return ItemPWriter(self).write()
+        return ItemPWriter(self).write()  # type: ignore
 
     def __eq__(self, other):
         if not isinstance(other, ItemP):

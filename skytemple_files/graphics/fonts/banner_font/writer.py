@@ -44,7 +44,7 @@ class BannerFontWriter:
         # Character pointers
         char_pointer = bytearray(len(self.model.entries) * BANNER_FONT_ENTRY_LEN)
         char_pointer_offset = len(buffer)
-        last = (None, None)
+        last: Tuple[Optional[int], Optional[int]] = (None, None)
         for i, e in enumerate(sorted_entries):
             if last==(e.char, e.table):
                 raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")

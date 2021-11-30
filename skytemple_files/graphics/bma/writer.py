@@ -23,7 +23,7 @@ from skytemple_files.graphics.bma.model import Bma
 class BmaWriter:
     def __init__(self, model: Bma):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:
@@ -91,6 +91,7 @@ class BmaWriter:
         from skytemple_files.common.types.file_types import FileType
 
         layer = self.model.layer0 if layeri == 0 else self.model.layer1
+        assert layer is not None
 
         # The actual values are "encoded" using XOR.
         previous_row_values = [0 for _ in range(0, self.model.map_width_chunks)]
@@ -162,6 +163,7 @@ class BmaWriter:
         from skytemple_files.common.types.file_types import FileType
 
         size = self.model.map_width_camera * self.model.map_height_camera
+        assert self.model.unknown_data_block is not None
         assert size == len(self.model.unknown_data_block)
 
         layer_bytes = bytearray(size)

@@ -17,6 +17,7 @@
 
 from skytemple_files.common.util import *
 
+
 class Custom999Compressor:
     def __init__(self, uncompressed_data: bytes):
         if not isinstance(uncompressed_data, memoryview):
@@ -27,13 +28,13 @@ class Custom999Compressor:
 
         new_data = []
         for b in self.uncompressed_data:
-            new_data.append(b%16)
-            new_data.append(b//16)
+            new_data.append(b % 16)
+            new_data.append(b // 16)
         data = bytes(new_data)
 
         # For the original algorithm:
         # data = self.uncompressed_data
-        
+
         compressed = []
         compressed.append(data[0])
         # Add another 0 byte for the original algorithm
@@ -42,9 +43,9 @@ class Custom999Compressor:
         current = data[0]
         bit_list = []
         for b in data[1:]:
-            if b==current:
+            if b == current:
                 bit_list.append(1)
-            elif b==prev:
+            elif b == prev:
                 bit_list.append(0)
                 bit_list.append(1)
                 bit_list.append(0)
@@ -53,25 +54,25 @@ class Custom999Compressor:
                 current = t
             else:
                 prev = current
-                diff = b-current
-                if diff<0:
+                diff = b - current
+                if diff < 0:
                     diff = abs(diff)
                     sign = -1
                 else:
                     sign = 1
-                
-                if diff>=0x8: # For the original algorithm: diff>=0x80
-                    diff = 0x10-diff # For the original algorithm: diff = 0x100-diff
+
+                if diff >= 0x8:  # For the original algorithm: diff>=0x80
+                    diff = 0x10 - diff  # For the original algorithm: diff = 0x100-diff
                     sign = -sign
-                if sign>0:
+                if sign > 0:
                     code = 0
                 else:
                     code = 1
-                code += diff<<1
+                code += diff << 1
 
-                len_code = len(bin(code+1))-2 - 1
-                code = (code+1)%(2**len_code)
-                
+                len_code = len(bin(code + 1)) - 2 - 1
+                code = (code + 1) % (2 ** len_code)
+
                 tmp = []
                 for i in range(len_code):
                     bit_list.append(0)
@@ -80,11 +81,10 @@ class Custom999Compressor:
                 bit_list.append(1)
                 bit_list += tmp
                 current = b
-        while len(bit_list)>0:
-                current = bit_list[:8]
-                bit_list = bit_list[8:]
-                compressed.append(0)
-                for i, b in enumerate(current):
-                    compressed[-1] += b * (2**i)
+        while len(bit_list) > 0:
+            currentl: List[int] = bit_list[:8]
+            bit_list = bit_list[8:]
+            compressed.append(0)
+            for i, b in enumerate(currentl):
+                compressed[-1] += b * (2 ** i)
         return bytes(compressed)
-    

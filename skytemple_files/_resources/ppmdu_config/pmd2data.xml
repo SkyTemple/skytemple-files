@@ -158,6 +158,7 @@
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DC240">
+        <Block name="MonsterGroundIdleAnim"     beg="0x19B14" end="0x1A314"/>
         <Block name="ScriptOpCodes"             beg="0x03C3D0" end="0x03CFC8"/>
         <Block name="Objects"                   beg="0x42C14" end="0x44618"/>
         <Block name="CRoutines"                 beg="0x405E8" end="0x41BD0"/>
@@ -409,6 +410,7 @@
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DCB80">
+        <Block name="MonsterGroundIdleAnim"     beg="0x19B74" end="0x1A374"/>
         <Block name="ScriptOpCodes"             beg="0x3C470" end="0x3D068"/>
         <Block name="GroundStatePntrs"          beg="0x48CB4" end="0x48CC8"/>
         <Block name="RecruitmentTableSpecies"   beg="0x44888" end="0x448B4"/>
@@ -588,6 +590,7 @@
       </Bin>
       <!-- overlay_0011 -->
       <Bin filepath="overlay/overlay_0011.bin" loadaddress="0x22DD8E0">
+        <Block name="MonsterGroundIdleAnim" beg="0x19AF4" end="0x1A2F4"/>
         <Block name="ScriptOpCodes" beg="0x3C294" end="0x3CE8C"/>
         <Block name="Objects"       beg="0x42AD8" end="0x444DC"/>
         <Block name="CRoutines"     beg="0x404AC" end="0x41A94"/>
@@ -1153,6 +1156,13 @@
               <Option label="No" type="int">0</Option>
             </Param>
           </Parameters>
+        </Patch>
+        
+        <!-- A patch to change pokémon animations -->
+        <Patch id="ChangePokemonGroundAnim" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="irdkwia_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
+	  </OpenBin>
         </Patch>
         
         <!-- A patch to change fixed floor properties -->

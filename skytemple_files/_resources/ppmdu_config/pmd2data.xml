@@ -1157,14 +1157,21 @@
             </Param>
           </Parameters>
         </Patch>
-        
+
+        <!-- A patch to change pokémon animations -->
+        <Patch id="ChangePokemonGroundAnim" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="irdkwia_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to change pokémon animations -->
         <Patch id="ChangePokemonGroundAnim" >
           <OpenBin filepath="overlay/overlay_0011.bin">
 	  	<Include filename ="anonymous_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to change fixed floor properties -->
         <Patch id="ChangeFixedFloorProperties" >
           <OpenBin filepath="overlay/overlay_0029.bin">

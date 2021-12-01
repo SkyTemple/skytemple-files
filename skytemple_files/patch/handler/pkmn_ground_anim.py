@@ -20,7 +20,8 @@ from ndspy.code import loadOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.asm_tools import AsmFunction
@@ -69,11 +70,14 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US,
+                                   4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU,
+                                   4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP,
+                                   4) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
@@ -92,33 +96,32 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
                     start_table = START_TABLE_JP
                     lst_func = LST_FUNC_JP
 
-            table = loadOverlayTable(rom.arm9OverlayTable, lambda x,y:bytes())
+            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: bytes())
             ov = table[11]
             ov11 = bytearray(rom.files[ov.fileID])
-            
-            switch = AsmFunction(ov11[start_table-start_ov11:lst_func[0]-start_ov11], start_table)
+
+            switch = AsmFunction(ov11[start_table - start_ov11:lst_func[0] - start_ov11], start_table)
             ext_data = switch.process()[1]
             lst_data = {}
             data_processed = set()
             for offset in ext_data:
                 code = 0
                 for x in range(4):
-                    code += ov11[offset-start_ov11+x]*(256**x)
+                    code += ov11[offset - start_ov11 + x] * (256 ** x)
                 lst_data[offset] = code
                 data_processed.add(offset)
             switch.provide_data(lst_data)
-            main_calls = switch.process_switch(0, (0,2048), {})
+            main_calls = switch.process_switch(0, (0, 2048), {})
             lst_calls = []
             for x in main_calls:
                 lst_calls.append(lst_func.index(x))
-            ov11[start_table-start_ov11+4:start_table-start_ov11+2052] = bytes(lst_calls)
+            ov11[start_table - start_ov11 + 4:start_table - start_ov11 + 2052] = bytes(lst_calls)
             rom.files[ov.fileID] = bytes(ov11)
-            
+
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

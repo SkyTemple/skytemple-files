@@ -70,6 +70,7 @@ class HardcodedMonsterSpriteDataTable:
         for i, entry in enumerate(value):
             arm9bin[block.begin + (i * ENTRY_LEN):block.begin + ((i + 1) * ENTRY_LEN)] = entry.to_bytes()
 
+
 class IdleAnimType(Enum):
     STAND_LOOP = 0x00, _('Standing Animation (loop)')
     STAND_FRZ  = 0x01, _('Standing Animation (1st frame)')
@@ -87,13 +88,14 @@ class IdleAnimType(Enum):
     ):
         self.print_name = print_name
 
+
 class HardcodedMonsterGroundIdleAnimTable:
     @classmethod
     def get(cls, ov11bin: bytes, config: Pmd2Data) -> List[IdleAnimType]:
         """Returns the list."""
         block = config.binaries['overlay/overlay_0011.bin'].blocks['MonsterGroundIdleAnim']
-        lst = list(ov11bin[block.begin:block.end])
-        lst = [IdleAnimType(x) for x in lst]
+        lst_i = list(ov11bin[block.begin:block.end])
+        lst = [IdleAnimType(x) for x in lst_i]  # type: ignore
         return lst
 
     @classmethod

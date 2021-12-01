@@ -43,6 +43,7 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x19B70
 PATCH_CHECK_ADDR_APPLIED_JP = 0x19AF4
 PATCH_CHECK_INSTR_APPLIED = 0xE59F2F9C
 
+
 class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
 
     @property
@@ -90,8 +91,6 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
                     start_ov11 = START_OV11_JP
                     start_table = START_TABLE_JP
                     lst_func = LST_FUNC_JP
-            
-            main_func = dict()
 
             table = loadOverlayTable(rom.arm9OverlayTable, lambda x,y:bytes())
             ov = table[11]

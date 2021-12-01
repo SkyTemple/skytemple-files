@@ -137,7 +137,7 @@ class AsmFunction:
             code += self.data[i * 4 + x] * (256 ** x)
         return code
 
-    def process(self) -> Set[int]:
+    def process(self) -> Tuple[Set[int], Set[int]]:
         calls = set()
         ext_data = set()
         for x in range(len(self.data) // 4):

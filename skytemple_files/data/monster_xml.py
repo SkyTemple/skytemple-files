@@ -18,12 +18,14 @@ Theoretically compatible with ppmdu, but contains some new field names for some 
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 from abc import ABC, abstractmethod
 from base64 import b64encode, b64decode
 from typing import Optional, List, Tuple, Dict, Generic, TypeVar
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
 from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
@@ -32,7 +34,6 @@ from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
 from skytemple_files.graphics.kao.model import KaoImage
 from skytemple_files.common.i18n_util import f, _
 
-
 XML_MONSTER = "Pokemon"
 XML_MONSTER__GAME_VERSION = "gameVersion"
 XML_STRINGS = "Strings"
@@ -40,6 +41,7 @@ XML_STRINGS__NAME = "Name"
 XML_STRINGS__CATEGORY = "Category"
 XML_GENENT = "GenderedEntity"
 XML_GENENT_ENTID = "PokeID"
+XML_GENENT_IDLE_ANIM = "IdleAnim"
 XML_GENENT_PERSONALITY = "Personality"
 XML_GENENT_UNK31 = "Unk31"
 XML_GENENT_NATIONAL_POKEDEX_NUMBER = "PokedexNumber"
@@ -210,9 +212,10 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
 
 
 class GenderedConvertEntry:
-    def __init__(self, md_entry: MdEntry, personality: Optional[int]):
+    def __init__(self, md_entry: MdEntry, personality: Optional[int], idle_anim: Optional[int]):
         self.md_entry = md_entry
         self.personality = personality
+        self.idle_anim = idle_anim
 
 
 class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
@@ -228,6 +231,9 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
         # Personality
         if base_value.personality is not None:
             xml.append(create_elem_w_text(XML_GENENT_PERSONALITY, base_value.personality))
+        # Idle Animation
+        if base_value.idle_anim is not None:
+            xml.append(create_elem_w_text(XML_GENENT_IDLE_ANIM, base_value.idle_anim))
         # Evolution requirements
         evo = Element(XML_GENENT_EVOLUTION_REQ)
         evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, value.pre_evo_index))
@@ -277,6 +283,8 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
                     setattr(value_to_update, attr_name, int(sub_xml.text))
             if sub_xml.tag == XML_GENENT_PERSONALITY:
                 base_value_to_update.personality = int(sub_xml.text)
+            if sub_xml.tag == XML_GENENT_IDLE_ANIM:
+                base_value_to_update.idle_anim = int(sub_xml.text)
             if sub_xml.tag == XML_GENENT_EVOLUTION_REQ:
                 pre_evo_index = None
                 method = None
@@ -578,8 +586,9 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
         for kao in values:
             kao_xml = Element(XML_PORTRAITS_PORTRAIT)
             if kao is not None:
-                image = str(b64encode(kao.compressed_img_data), 'ascii')
-                pal = str(b64encode(kao.pal_data), 'ascii')
+                data = kao.raw()
+                image = str(b64encode(data[0]), 'ascii')
+                pal = str(b64encode(data[1]), 'ascii')
                 kao_xml.append(create_elem_w_text(XML_PORTRAITS_PORTRAIT__IMAGE, image))
                 kao_xml.append(create_elem_w_text(XML_PORTRAITS_PORTRAIT__PALETTE, pal))
             xml.append(kao_xml)
@@ -610,8 +619,8 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImage]]]):
                         f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."))
                     )
                 try:
-                    value_to_update[i] = KaoImage(
-                        b64decode(palette.encode('ascii')) + b64decode(image.encode('ascii')), 0
+                    value_to_update[i] = FileType.KAO.get_image_model_cls().create_from_raw(
+                        b64decode(image.encode('ascii')), b64decode(palette.encode('ascii'))
                     )
                 except Exception as err:
                     raise XmlValidateError(
@@ -625,8 +634,9 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]],
-                       personality1: Optional[int] = None, personality2: Optional[int] = None
+                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImageProtocol]],
+                       personality1: Optional[int] = None, personality2: Optional[int] = None,
+                       idle_anim1: Optional[int] = None, idle_anim2: Optional[int] = None
                        ) -> ElementTree:
     """
     Exports properties of all given things as an XML file. If a second Md entry is given,
@@ -637,9 +647,9 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
     if names:
         xml.append(StringsXml.to_xml(names))
     if md_gender1:
-        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender1, personality1)))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender1, personality1, idle_anim1)))
     if md_gender2:
-        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender2, personality2)))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender2, personality2, idle_anim2)))
     if moveset:
         xml.append(MovesetXml.to_xml(moveset))
     if moveset2:
@@ -658,7 +668,7 @@ def monster_xml_import(xml: ElementTree,
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]]) -> str:
+                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImageProtocol]]) -> str:
     """
     Imports the available data from the XML into the models and lists given.
     The lists can already be filled, they will be cleared and re-filled when data is avaiable.

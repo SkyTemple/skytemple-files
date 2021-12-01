@@ -18,6 +18,8 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from xml.etree.ElementTree import Element
 
+import typing
+
 from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield, EnumCompatibleInt, \
     read_sintle, write_sintle
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
@@ -56,7 +58,7 @@ class MappaFloorStructureType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
+    def __init__(self, _: int, print_name: str = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -87,7 +89,7 @@ class MappaFloorWeather(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
+    def __init__(self, _: int, print_name: str = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -143,7 +145,7 @@ class MappaFloorDarknessLevel(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
+    def __init__(self, _: int, print_name: str = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -344,6 +346,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         return xml_layout
 
     @classmethod
+    @typing.no_type_check
     def from_xml(cls, ele: Element) -> 'MappaFloorLayout':
         validate_xml_tag(ele, XML_FLOOR_LAYOUT)
         generator_settings = None

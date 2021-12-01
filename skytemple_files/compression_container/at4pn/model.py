@@ -18,6 +18,7 @@
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
 
+
 class At4pn(CommonAt):
     def __init__(self, data: bytes, new=False):
         """
@@ -44,11 +45,10 @@ class At4pn(CommonAt):
     def cont_size(cls, data: bytes, byte_offset=0):
         return read_uintle(data, byte_offset + 5, 2)
 
-
     # For compatibility with other AT formats
     def decompress(self) -> bytes:
         return self.get()
 
     @classmethod
-    def compress(cls, data: bytes) -> CommonAt:
+    def compress(cls, data: bytes) -> 'At4pn':
         return At4pn(data, new=True)

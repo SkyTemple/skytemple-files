@@ -17,12 +17,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import math
-from typing import Dict
+from typing import Dict, Type
 
 from skytemple_files.common.ppmdu_config.data import GAME_REGION_US, GAME_REGION_EU, Pmd2Data, GAME_REGION_JP
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu, \
-    SSB_HEADER_JP_LENGTH, SsbHeaderJp
+    SSB_HEADER_JP_LENGTH, SsbHeaderJp, AbstractSsbHeader
 from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import f, _
 logger = logging.getLogger(__name__)
@@ -49,6 +49,7 @@ class SsbWriter:
 
         logger.debug("Serializing SSB model...")
 
+        header_cls: Type[AbstractSsbHeader]
         if self.static_data.game_region == GAME_REGION_US:
             header_cls = SsbHeaderUs
             header_len = SSB_HEADER_US_LENGTH

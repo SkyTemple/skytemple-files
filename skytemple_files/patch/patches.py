@@ -71,6 +71,7 @@ from skytemple_files.patch.handler.allow_unrecruitable_mons import AllowUnrecrui
 from skytemple_files.patch.handler.edit_extra_pokemon import EditExtraPokemonPatchHandler
 from skytemple_files.patch.handler.fix_memory_softlock import FixMemorySoftlockPatchHandler
 from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
+from skytemple_files.patch.handler.disarm_one_room_mh import DisarmOneRoomMHPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -115,6 +116,7 @@ class PatchType(Enum):
     EDIT_EXTRA_POKEMON = EditExtraPokemonPatchHandler
     FIX_MEMORY_SOFTLOCK = FixMemorySoftlockPatchHandler
     COMPRESS_IQ_DATA = CompressIQDataPatchHandler
+    DISARM_ONE_ROOM_MH = DisarmOneRoomMHPatchHandler
 
 
 class Patcher:
@@ -184,7 +186,7 @@ class Patcher:
                 if param.type == Pmd2PatchParameterType.SELECT:
                     val = config[param.name]
                     found = False
-                    for option in param.options:
+                    for option in param.options:  # type: ignore
                         if not isinstance(val, type(option.value)) or option.value != val:
                             continue
                         found = True
@@ -233,15 +235,16 @@ class Patcher:
             module_name = f"skytemple_files.__patches.p{f_id}"
             spec = importlib.util.spec_from_file_location(module_name,
                                                           os.path.join(tmpdir.name, 'patch.py'))
+            assert spec is not None
             patch = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(patch)
+            spec.loader.exec_module(patch)  # type: ignore
         except FileNotFoundError as ex:
             raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
             raise PatchPackageError(_("The patch.py of the patch package contains a syntax error.")) from ex
 
         try:
-            handler = patch.PatchHandler()
+            handler = patch.PatchHandler()  # type: ignore
         except AttributeError as ex:
             raise PatchPackageError(_("The patch.py of the patch package does not contain a 'PatchHandler'.")) from ex
 

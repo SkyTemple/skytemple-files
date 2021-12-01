@@ -14,18 +14,20 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+import os
 from enum import Enum, auto
 from typing import Optional, List
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.common_at.model import CommonAt
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.atupx.handler import AtupxHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.at3px.handler import At3pxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+
 
 class CommonAtType(Enum):
     AT4PN = auto(), At4pnHandler, True
@@ -33,7 +35,7 @@ class CommonAtType(Enum):
     AT4PX = auto(), At4pxHandler, True
     ATUPX = auto(), AtupxHandler, False
     PKDPX = auto(), PkdpxHandler, True
-    
+
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
         obj._value_ = args[0]
@@ -41,10 +43,11 @@ class CommonAtType(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: int, handler: Optional[DataHandler[CommonAt]], auto_allowed: bool
+            self, _: int, handler: CompressionContainerHandler, auto_allowed: bool
     ):
         self.handler = handler
         self.auto_allowed = auto_allowed
+
 
 # Pre-built lists for compression
 COMMON_AT_BEST_3 = [CommonAtType.AT4PN, CommonAtType.ATUPX, CommonAtType.AT3PX, CommonAtType.PKDPX]
@@ -55,45 +58,58 @@ COMMON_AT_PKD = [CommonAtType.PKDPX]
 
 DEBUG = False
 
-class CommonAtHandler(DataHandler[CommonAt]):
+
+class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
     allowed_types = set()
     for t in CommonAtType:
         if t.auto_allowed:
+            if t == CommonAtType.ATUPX:
+                # For native handler:
+                os.environ['SKYTEMPLE_ALLOW_ATUPX'] = '1'
             allowed_types.add(t)
-    
+
     @classmethod
     def allow(cls, compression_type: CommonAtType):
+        if compression_type == CommonAtType.ATUPX:
+            # For native handler:
+            os.environ['SKYTEMPLE_ALLOW_ATUPX'] = '1'
         cls.allowed_types.add(compression_type)
         if DEBUG:
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
+
     @classmethod
     def disallow(cls, compression_type: CommonAtType):
         try:
+            # For native handler:
             cls.allowed_types.remove(compression_type)
-        except KeyError as ke:pass #TODO, add warning
+            del os.environ['SKYTEMPLE_ALLOW_ATUPX']
+        except KeyError as ke:
+            pass  # TODO, add warning
         if DEBUG:
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
-    
+
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> CommonAt:
+    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
         """Load a Common At container into a high-level representation"""
         for t in CommonAtType:
-            if t.handler!=None:
+            if t.handler is not None:
                 if t.handler.matches(data):
                     if DEBUG:
                         print("*** COMMON AT DEBUG: Opened =", t)
                     return t.handler.deserialize(data, **kwargs)
-        raise ValueError(f"The provided data is not an AT container ({read_bytes(data, 0, 5)}).")
+        raise ValueError(f"The provided data is not an AT container ({read_bytes(data, 0, 5)}).")  # type: ignore
 
     @classmethod
-    def serialize(cls, data: CommonAt, **kwargs) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs) -> bytes:
         """Convert the high-level AT representation back into a BitStream."""
         return data.to_bytes()
 
     @classmethod
-    def compress(cls, data: bytes, compression_type: List[CommonAtType] = COMMON_AT_BEST_4) -> CommonAt:
+    def compress(cls, data: bytes, compression_type: List[CommonAtType] = None) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT container"""
-        new_data = None
+        if compression_type is None:
+            compression_type = COMMON_AT_BEST_4
+        new_data: Optional[CompressionContainerProtocol] = None
         new_size = -1
         if DEBUG:
             print("*** COMMON AT DEBUG: Compress Start")
@@ -104,13 +120,14 @@ class CommonAtHandler(DataHandler[CommonAt]):
                     size = len(cont.to_bytes())
                     if DEBUG:
                         print("*** COMMON AT DEBUG: Compress", t, "size", size)
-                    if new_data==None or size<new_size:
+                    if new_data is None or size < new_size:
                         new_data = cont
                         new_size = size
-                except:pass
+                except:
+                    pass
         if DEBUG:
             print("*** COMMON AT DEBUG: Compress End")
-        if new_data==None:
+        if new_data is None:
             raise ValueError("No useable compression algorithm.")
         return new_data
 

@@ -17,6 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import string
+from typing import Optional
 
 from skytemple_files.graphics.bg_list_dat.model import BgList
 
@@ -27,7 +28,7 @@ MAX_LEN = 8
 class BgListWriter:
     def __init__(self, model: BgList):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:
@@ -41,7 +42,7 @@ class BgListWriter:
             self._write_string(l.bma_name)
             for i in range(0, 8):
                 if l.bpa_names[i] is not None:
-                    self._write_string(l.bpa_names[i])
+                    self._write_string(l.bpa_names[i])  # type: ignore
                 else:
                     self._write_string("")
 
@@ -49,7 +50,7 @@ class BgListWriter:
 
     def _write_string(self, string: str):
         byts = self._read_string(string)
-        self.data[self.bytes_written:self.bytes_written + MAX_LEN] = byts
+        self.data[self.bytes_written:self.bytes_written + MAX_LEN] = byts  # type: ignore
         self.bytes_written += MAX_LEN
 
     def _read_string(self, string: str):

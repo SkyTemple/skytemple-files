@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 from typing import Callable, Dict, List, Set
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.patch.asm_tools import AsmFunction
@@ -83,7 +85,9 @@ SPECIAL_EGGS = {379: [379],
                 450: [1047],
                 451: [1048],
                 452: [1049],
-                453: [447,448,449]}
+                453: [447, 448, 449]}
+
+
 class ChangeEvoSystemPatchHandler(AbstractPatchHandler):
 
     @property
@@ -107,15 +111,15 @@ This supposedly removes most of the particular cases the game handles for evolut
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.UTILITY
-    
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
@@ -137,55 +141,60 @@ This supposedly removes most of the particular cases the game handles for evolut
             md_bin = rom.getFileByName('BALANCE/monster.md')
             md_model = MdHandler.deserialize(md_bin)
 
-
-            mevo_data = bytearray(len(md_model)*MEVO_ENTRY_LENGTH+4)
+            mevo_data = bytearray(len(md_model) * MEVO_ENTRY_LENGTH + 4)
             write_uintle(mevo_data, len(mevo_data), 0, 4)
             for i in range(len(md_model)):
                 if i in SPECIAL_EVOS:
                     next_stage = SPECIAL_EVOS[i]
                 else:
                     next_stage = []
-                    for j,x in enumerate(md_model):
-                        if (i<600 and 1<=j<555) or (i>=600 and 601<=j<1155):
-                            if x.pre_evo_index==i and x.evo_method!=EvolutionMethod.NONE and (x.evo_param2!=AdditionalRequirement.MALE or i<600) and (x.evo_param2!=AdditionalRequirement.FEMALE or i>=600):
+                    for j, x in enumerate(md_model):
+                        if (i < 600 and 1 <= j < 555) or (i >= 600 and 601 <= j < 1155):
+                            if x.pre_evo_index == i and x.evo_method != EvolutionMethod.NONE and (
+                                    x.evo_param2 != AdditionalRequirement.MALE or i < 600) and (
+                                    x.evo_param2 != AdditionalRequirement.FEMALE or i >= 600):
                                 next_stage.append(j)
-                write_uintle(mevo_data, len(next_stage), i*MEVO_ENTRY_LENGTH+4, 2)
-                for j,x in enumerate(next_stage):
-                    write_uintle(mevo_data, x, i*MEVO_ENTRY_LENGTH+j*2+6, 2)
+                write_uintle(mevo_data, len(next_stage), i * MEVO_ENTRY_LENGTH + 4, 2)
+                for j, x in enumerate(next_stage):
+                    write_uintle(mevo_data, x, i * MEVO_ENTRY_LENGTH + j * 2 + 6, 2)
                 if i in SPECIAL_EGGS:
                     next_stage = SPECIAL_EGGS[i]
                 else:
                     next_stage = []
                     pre_evo = i
                     tries = 0
-                    while md_model[pre_evo].pre_evo_index!=0:
+                    while md_model[pre_evo].pre_evo_index != 0:
                         current = md_model[pre_evo]
                         pre_evo = current.pre_evo_index
-                        if current.evo_param2==AdditionalRequirement.MALE and md_model[pre_evo%600].gender==Gender.MALE and md_model[pre_evo%600+600].gender==Gender.FEMALE:
-                            pre_evo = pre_evo%600
-                        elif current.evo_param2==AdditionalRequirement.FEMALE and md_model[pre_evo%600].gender==Gender.MALE and md_model[pre_evo%600+600].gender==Gender.FEMALE:
-                            pre_evo = pre_evo%600+600
+                        if current.evo_param2 == AdditionalRequirement.MALE and md_model[
+                            pre_evo % 600].gender == Gender.MALE and md_model[
+                            pre_evo % 600 + 600].gender == Gender.FEMALE:
+                            pre_evo = pre_evo % 600
+                        elif current.evo_param2 == AdditionalRequirement.FEMALE and md_model[
+                            pre_evo % 600].gender == Gender.MALE and md_model[
+                            pre_evo % 600 + 600].gender == Gender.FEMALE:
+                            pre_evo = pre_evo % 600 + 600
                         tries += 1
-                        if tries>=MAX_TRY:
+                        if tries >= MAX_TRY:
                             raise Exception(_("Infinite recursion detected in pre evolutions for md entry {i}. "))
                     next_stage.append(pre_evo)
-                if next_stage!=[i]:
-                    write_uintle(mevo_data, len(next_stage), i*MEVO_ENTRY_LENGTH+0x16, 2)
-                    for j,x in enumerate(next_stage):
-                        write_uintle(mevo_data, x, i*MEVO_ENTRY_LENGTH+j*2+0x18, 2)
-            
+                if next_stage != [i]:
+                    write_uintle(mevo_data, len(next_stage), i * MEVO_ENTRY_LENGTH + 0x16, 2)
+                    for j, x in enumerate(next_stage):
+                        write_uintle(mevo_data, x, i * MEVO_ENTRY_LENGTH + j * 2 + 0x18, 2)
+
             hp_bonus = read_uintle(rom.arm9, evo_hp_bonus, 4)
             atk_bonus = read_uintle(rom.arm9, evo_ph_bonus, 2)
-            def_bonus = read_uintle(rom.arm9, evo_ph_bonus+2, 2)
+            def_bonus = read_uintle(rom.arm9, evo_ph_bonus + 2, 2)
             spatk_bonus = read_uintle(rom.arm9, evo_sp_bonus, 2)
-            spdef_bonus = read_uintle(rom.arm9, evo_sp_bonus+2, 2)
+            spdef_bonus = read_uintle(rom.arm9, evo_sp_bonus + 2, 2)
             evo_add_stats = bytearray(MEVO_STATS_LENGTH)
             write_uintle(evo_add_stats, hp_bonus, 0, 2)
             write_uintle(evo_add_stats, atk_bonus, 2, 2)
             write_uintle(evo_add_stats, spatk_bonus, 4, 2)
             write_uintle(evo_add_stats, def_bonus, 6, 2)
             write_uintle(evo_add_stats, spdef_bonus, 8, 2)
-            mevo_data += evo_add_stats*len(md_model)
+            mevo_data += evo_add_stats * len(md_model)
             if MEVO_PATH not in rom.filenames:
                 create_file_in_rom(rom, MEVO_PATH, mevo_data)
             else:
@@ -195,6 +204,5 @@ This supposedly removes most of the particular cases the game handles for evolut
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

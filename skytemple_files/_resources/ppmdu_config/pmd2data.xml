@@ -1247,6 +1247,13 @@
           </OpenBin>
         </Patch>
 
+        <!-- A patch to pacify one-room monster houses -->
+        <Patch id="DisarmOneRoomMonsterHouses">
+          <OpenBin filepath="overlay/overlay_0029.bin">
+            <Include filename="disarm_one_room_mh.asm"/>
+          </OpenBin>
+        </Patch>
+
         <SimplePatch id="MoveShortcuts" >
           <Include filename="end_asm_mods/src/moveShortcuts.asm"/>
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>

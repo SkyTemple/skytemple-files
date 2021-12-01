@@ -14,38 +14,23 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type
 
-from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes
-from skytemple_files.compression_container.pkdpx.model import Pkdpx
+from skytemple_files.compression_container.base_handler import CompressionContainerHandler
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-class PkdpxHandler(DataHandler[Pkdpx]):
+class PkdpxHandler(CompressionContainerHandler):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Pkdpx:
-        """Load a PKDPX container into a high-level representation"""
-        if not cls.matches(data):
-            raise ValueError("The provided data is not an PKDPX container.")
-        return Pkdpx(data)
+    def magic_word(cls) -> bytes:
+        return b'PKDPX'
 
     @classmethod
-    def serialize(cls, data: Pkdpx, **kwargs) -> bytes:
-        """Convert the high-level PKDPX representation back into a BitStream."""
-        return data.to_bytes()
+    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_files.compression_container.pkdpx.model import Pkdpx
+        return Pkdpx
 
     @classmethod
-    def compress(cls, data: bytes) -> Pkdpx:
-        """Turn uncompressed data into a new PKDPX container"""
-        return Pkdpx.compress(data)
-
-    @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
-        """Get the size of an PKDPX container starting at the given offset in data."""
-        if not cls.matches(data, byte_offset):
-            raise ValueError("The provided data is not an PKDPX container.")
-        return Pkdpx.cont_size(data, byte_offset)
-
-    @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
-        """Check if the given data stream is a Pkdpx container"""
-        return read_bytes(data, byte_offset, 5) == b'PKDPX'
+    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+        from skytemple_rust.st_pkdpx import Pkdpx
+        return Pkdpx

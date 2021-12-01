@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional, Dict
 
+import typing
+
 from skytemple_files.common.util import *
 from skytemple_files.data.anim import *
 from skytemple_files.data.anim.model import Anim
@@ -26,6 +28,7 @@ class AnimWriter:
     def __init__(self, model: Anim):
         self.model = model
 
+    @typing.no_type_check
     def write(self) -> bytes:
         data = bytearray(HEADER_SIZE)
         write_uintle(data, len(data), 0, 4)

@@ -28,10 +28,10 @@ except ImportError:
 
 
 class Colvec(Sir0Serializable, AutoString):
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.colormaps = []
+        self.colormaps: List[List[int]] = []
         for i in range(len(data)//COLVEC_DATA_LEN):
             self.colormaps.append([])
             colormap = data[i*COLVEC_DATA_LEN:(i+1)*COLVEC_DATA_LEN]
@@ -47,7 +47,7 @@ class Colvec(Sir0Serializable, AutoString):
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.colvec.writer import ColvecWriter
-        return ColvecWriter(self).write()
+        return ColvecWriter(self).write()  # type: ignore
     
     def nb_colormaps(self):
         return len(self.colormaps)

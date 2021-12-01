@@ -19,6 +19,8 @@ from abc import ABC
 from enum import Enum
 from typing import List, Tuple
 
+import typing
+
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle, write_sintle, \
@@ -192,7 +194,7 @@ class TilesetBaseEnum(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: int, name_localized: str
     ):
         self.name_localized = name_localized
 
@@ -277,6 +279,7 @@ class TilesetProperties(AutoString):
         self.full_water_floor = full_water_floor
 
     @classmethod
+    @typing.no_type_check
     def from_bytes(cls, b: bytes) -> 'TilesetProperties':
         return TilesetProperties(
             TilesetMapColor(read_uintle(b, 0, 4)),

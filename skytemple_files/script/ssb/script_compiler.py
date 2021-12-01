@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-from typing import Tuple, Dict, Callable
+from typing import Tuple, Dict, Callable, Type
 
 from explorerscript.error import SsbCompilerError
 from explorerscript.macro import ExplorerScriptMacro
@@ -28,7 +28,7 @@ from explorerscript.ssb_converting.ssb_compiler import ExplorerScriptSsbCompiler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode
 from skytemple_files.script.ssb.constants import SsbConstant
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
+from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, AbstractSsbHeader
 from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
     SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import f, _
@@ -108,7 +108,7 @@ class ScriptCompiler:
 
         # Build routines and opcodes.
         if len(routine_ops) > 0:
-            header_class = SsbHeaderUs
+            header_class: Type[AbstractSsbHeader] = SsbHeaderUs
             if self.rom_data.game_region == GAME_REGION_EU:
                 header_class = SsbHeaderEu
 

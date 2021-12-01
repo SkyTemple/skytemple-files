@@ -23,7 +23,7 @@ from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM, BPC_TILEMAP_BY
 class BpcWriter:
     def __init__(self, model: Bpc):
         self.model = model
-        self.data = None
+        self.data: Optional[bytearray] = None
         self.bytes_written = 0
 
     def write(self) -> bytes:

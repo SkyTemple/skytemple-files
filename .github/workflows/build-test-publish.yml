@@ -5,8 +5,85 @@ name: Build, test and publish
 on: [push, pull_request]
 
 jobs:
+  typechecks:
+    runs-on: ubuntu-latest
+    name: Type checks
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10" ]
+    steps:
+    - uses: actions/checkout@v1
+    - uses: theCapypara/mypy-check@rust-support
+      name: Run type checks
+      with:
+        mypy_flags: '--config-file mypy.ini --junit-xml mypy.xml'
+        requirements: '-r requirements.txt'
+        python_version: '${{ matrix.python-version }}'
+    - name: Upload Unit Test Results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: MyPy Test Results (Python ${{ matrix.python-version }})
+        path: mypy.xml
+
+  test:
+    runs-on: ubuntu-latest
+    name: Runs tests
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10" ]
+        native: [true, false]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+    - name: Enable native modules
+      if: matrix.native
+      run: |
+        echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+    - name: Test with tox
+      run: tox
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: Pytest Test Results (Python ${{ matrix.python-version }})
+        path: pytest.xml
+
+  publish-test-results:
+    name: "Publish Unit Tests Results"
+    needs:
+      - test
+      - typechecks
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: artifacts/**/*.xml
+
   build:
-    runs-on: ubuntu-18.04
+    needs:
+      - test
+      - typechecks
+    runs-on: ubuntu-latest
     name: Build the Python wheel
     steps:
       # For tags we assume the version in setup.py is correct!
@@ -29,18 +106,19 @@ jobs:
         run: |
           python -m pip install --upgrade pip
       - name: Build Python wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.3.3-manylinux2010_x86_64
+        uses: RalfG/python-wheels-manylinux-build@v0.3.4-manylinux2010_x86_64
         with:
-          python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38 cp39-cp39'
+          python-versions: 'cp38-cp38 cp39-cp39 cp310-cp310'
       - name: Upload wheels
         uses: actions/upload-artifact@v2
         with:
           name: wheels
           path: dist/*.whl
+
   deploy:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     name: Deploy wheels to PyPI
     steps:
       - name: Download wheels

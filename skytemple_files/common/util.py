@@ -46,12 +46,12 @@ DEBUG = False
 logger = logging.getLogger(__name__)
 
 
-def normalize_string(x: str):
+def normalize_string(x: str) -> bytes:
     """Returns a normalized ASCII string for sorting purposes."""
     # TODO, does not handle everything
     x = x.lower()
-    x=unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
-    return x
+    return unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
+
 
 def open_utf8(file, mode='r', *args, **kwargs):
     """Like open, but always uses the utf-8 encoding, on all platforms."""
@@ -64,7 +64,7 @@ def read_bytes(data: bytes, start=0, length=1) -> bytes:
     Recommended usage with memoryview for performance!
     """
     _check_memoryview(data)
-    return data[start:(start+length)]
+    return data[start:(start + length)]
 
 
 def read_uintle(data: bytes, start=0, length=1) -> int:
@@ -73,7 +73,7 @@ def read_uintle(data: bytes, start=0, length=1) -> int:
     Recommended usage with memoryview for performance!
     """
     _check_memoryview(data)
-    return int.from_bytes(data[start:(start+length)], byteorder='little', signed=False)
+    return int.from_bytes(data[start:(start + length)], byteorder='little', signed=False)
 
 
 def read_sintle(data: bytes, start=0, length=1) -> int:
@@ -82,7 +82,7 @@ def read_sintle(data: bytes, start=0, length=1) -> int:
     Recommended usage with memoryview for performance!
     """
     _check_memoryview(data)
-    return int.from_bytes(data[start:(start+length)], byteorder='little', signed=True)
+    return int.from_bytes(data[start:(start + length)], byteorder='little', signed=True)
 
 
 def read_uintbe(data: bytes, start=0, length=1) -> int:
@@ -91,7 +91,7 @@ def read_uintbe(data: bytes, start=0, length=1) -> int:
     Recommended usage with memoryview for performance!
     """
     _check_memoryview(data)
-    return int.from_bytes(data[start:(start+length)], byteorder='big', signed=False)
+    return int.from_bytes(data[start:(start + length)], byteorder='big', signed=False)
 
 
 def read_sintbe(data: bytes, start=0, length=1) -> int:
@@ -100,7 +100,7 @@ def read_sintbe(data: bytes, start=0, length=1) -> int:
     Recommended usage with memoryview for performance!
     """
     _check_memoryview(data)
-    return int.from_bytes(data[start:(start+length)], byteorder='big', signed=True)
+    return int.from_bytes(data[start:(start + length)], byteorder='big', signed=True)
 
 
 def read_var_length_string(data: bytes, start=0, codec=string_codec.PMD2_STR_ENCODER) -> Tuple[int, str]:
@@ -119,32 +119,32 @@ def read_var_length_string(data: bytes, start=0, codec=string_codec.PMD2_STR_ENC
     return cursor - start, str(bytes_of_string, codec)
 
 
-def write_uintle(data: bytes, to_write: int, start=0, length=1):
+def write_uintle(data: bytearray, to_write: int, start=0, length=1):
     """
     Write an unsiged integer in little endian to the bytes-like mutable object at the given position.
     """
-    data[start:start+length] = to_write.to_bytes(length, byteorder='little', signed=False)
+    data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=False)
 
 
-def write_sintle(data: bytes, to_write: int, start=0, length=1):
+def write_sintle(data: bytearray, to_write: int, start=0, length=1):
     """
     Write an signed integer in little endian to the bytes-like mutable object at the given position.
     """
-    data[start:start+length] = to_write.to_bytes(length, byteorder='little', signed=True)
+    data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=True)
 
 
-def write_uintbe(data: bytes, to_write: int, start=0, length=1):
+def write_uintbe(data: bytearray, to_write: int, start=0, length=1):
     """
     Write an unsiged integer in big endian to the bytes-like mutable object at the given position.
     """
-    data[start:start+length] = to_write.to_bytes(length, byteorder='big', signed=False)
+    data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=False)
 
 
-def write_sintbe(data: bytes, to_write: int, start=0, length=1):
+def write_sintbe(data: bytearray, to_write: int, start=0, length=1):
     """
     Write an signed integer in big endian to the bytes-like mutable object at the given position.
     """
-    data[start:start+length] = to_write.to_bytes(length, byteorder='big', signed=True)
+    data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=True)
 
 
 def iter_bits(number: int):
@@ -235,13 +235,13 @@ def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
     the color values of duplicate colors.
     """
     # List of single RGB colors
-    already_collected_colors = []
+    already_collected_colors: List[List[int]] = []
     out = []
     for palette in inp:
-        out_p = []
+        out_p: List[int] = []
         out.append(out_p)
         for color_idx in range(0, len(palette), 3):
-            color = palette[color_idx:color_idx+3]
+            color = palette[color_idx:color_idx + 3]
             new_color = _mpcu__check(color, already_collected_colors)
             already_collected_colors.append(new_color)
             out_p += new_color
@@ -257,31 +257,31 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         # Yes I didn't really think all that much when writing this and it doesn't even cover all possibilities.
         if change_next == 0:
             # r + 1
-            new_color = [color[0] + change_amount, color[1]                , color[2]                ]
+            new_color = [color[0] + change_amount, color[1], color[2]]
         elif change_next == 1:
             # g + 1
-            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]                ]
+            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]]
         elif change_next == 2:
             # b + 1
-            new_color = [color[0]                , color[1] - change_amount, color[2] + change_amount]
+            new_color = [color[0], color[1] - change_amount, color[2] + change_amount]
         elif change_next == 3:
             # gb + 1
-            new_color = [color[0]                , color[1] + change_amount, color[2]]
+            new_color = [color[0], color[1] + change_amount, color[2]]
         elif change_next == 4:
             # rgb + 1
-            new_color = [color[0] + change_amount, color[1]                , color[2]]
+            new_color = [color[0] + change_amount, color[1], color[2]]
         elif change_next == 5:
             # rg + 1
-            new_color = [color[0]                , color[1]                , color[2] - change_amount]
+            new_color = [color[0], color[1], color[2] - change_amount]
         elif change_next == 6:
             # b - 1
             new_color = [color[0] - change_amount, color[1] - change_amount, color[2] - change_amount]
         elif change_next == 7:
             # g - 1
-            new_color = [color[0]                , color[1] - change_amount, color[2] + change_amount]
+            new_color = [color[0], color[1] - change_amount, color[2] + change_amount]
         else:
             # r - 1
-            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]                ]
+            new_color = [color[0] - change_amount, color[1] + change_amount, color[2]]
         for i in [0, 1, 2]:
             if new_color[i] < 0:
                 new_color[i] = 0
@@ -415,7 +415,6 @@ def create_folder_in_rom(rom: NintendoDSRom, path: str):
     first_id = -1
     last_child_count = -1
     for s_name, s_folder in sorted(parent_dir.folders, key=lambda f: f[0]):
-        s_folder: Folder
         first_id = s_folder.firstID
         last_child_count = len(s_folder.files)
         if s_name > path_list[-1]:
@@ -446,15 +445,20 @@ def list_insert_enlarge(lst, index, value, filler_fn):
     lst.append(value)
 
 
-def simple_quant(img: Image.Image) -> Image.Image:
+def simple_quant(img: Image.Image, can_have_transparency=True) -> Image.Image:
     """
     Simple single-palette image quantization. Reduces to 15 colors and adds one transparent color at index 0.
-    The transparent (alpha=0) pixels in the input image are converted to that color.
+    The transparent (alpha=0) pixels in the input image are converted to that color (if can_have_transparency=True).
     If you need to do tiled multi-palette quantization, use Tilequant instead!
     """
-    if img.mode != 'RGBA':
-        img = img.convert('RGBA')
-    transparency_map = [px[3] == 0 for px in img.getdata()]
+    if can_have_transparency:
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+        transparency_map = [px[3] == 0 for px in img.getdata()]
+    else:
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+        transparency_map = [False for px in img.getdata()]
     qimg = img.quantize(15, dither=NONE)
     # Get the original palette and add the transparent color
     qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])
@@ -478,7 +482,7 @@ class AutoString:
         return str(self)
 
     def __str__(self):
-        return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v  is not None and not k[0] == '_'})}>"
+        return f"{self.__class__.__name__}<{str({k: v for k, v in self.__dict__.items() if v is not None and not k[0] == '_'})}>"
 
 
 class EnumCompatibleInt(int):
@@ -511,12 +515,12 @@ def set_rw_permission_folder(folder_path: str):
     """
     try:
         os.chmod(folder_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
-        for root, dirs, files in os.walk(folder_path, topdown = True):
+        for root, dirs, files in os.walk(folder_path, topdown=True):
             for file_name in files:
-                file_path = os.path.join(root, file_name)        
+                file_path = os.path.join(root, file_name)
                 os.chmod(file_path, stat.S_IREAD + stat.S_IWRITE)
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
                 os.chmod(dir_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
-    except NotImplementedError: # This isn't needed on Windows
+    except NotImplementedError:  # This isn't needed on Windows
         pass

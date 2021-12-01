@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 from random import choice
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Iterable
 
 from PIL import Image
 
@@ -34,10 +34,10 @@ class DmaDrawer:
     def __init__(self, dma: Dma):
         self.dma = dma
 
-    def rules_from_bma(self, bma: Union[Bma, List[int]], width_in_chunks=None) -> List[List[DmaType]]:
+    def rules_from_bma(self, bma: Union[Bma, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
         rules = []
         active_row = None
-        layer = bma
+        layer: List[int] = bma  # type: ignore
         if isinstance(bma, Bma):
             layer = bma.layer0
             width_in_chunks = bma.map_width_chunks
@@ -103,8 +103,8 @@ class DmaDrawer:
         wall_matrix: List[List[bool]] = []
         water_matrix: List[List[bool]] = []
         for ry, rule_row in enumerate(rules):
-            active_wall = []
-            active_water = []
+            active_wall: List[bool] = []
+            active_water: List[bool] = []
             wall_matrix.append(active_wall)
             water_matrix.append(active_water)
             for rx, rule_cell in enumerate(rule_row):
@@ -119,11 +119,11 @@ class DmaDrawer:
                     active_water.append(False)
 
         for ry, rule_row in enumerate(rules):
-            active_row = []
+            active_row: List[int] = []
             mappings.append(active_row)
             for rx, rule_cell in enumerate(rule_row):
                 solid_neighbors = self.dma.get_tile_neighbors(
-                    water_matrix if rule_cell == DmaType.WATER else wall_matrix, rx, ry,
+                    water_matrix if rule_cell == DmaType.WATER else wall_matrix, rx, ry,  # type: ignore
                     rule_cell != DmaType.FLOOR, treat_outside_as_wall
                 )
                 variations = self.dma.get(rule_cell, solid_neighbors)

@@ -116,10 +116,10 @@ label_hpp2_0:
 
 .org HookPP6_2
 .area 0x64
-	ldr r0,[r5, #+0xb4]
+	mov r5,r0
+	ldr r0,[r0, #+0xb4]
 	mov  r7,#0x0
 	add  r6,r0,#0x124
-	nop
 	nop
 	ldrb r0,[r6,+r7, lsl #0x3]
 	add  r8,r6,r7,lsl #0x3

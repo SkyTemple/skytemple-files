@@ -50,7 +50,7 @@ class Pmd2DungeonItemCategory(AutoString):
         self.value = id
         self.first_item_id = -1
         self.number_of_items = 0
-        self.excluded_item_ids = []
+        self.excluded_item_ids: List[int] = []
         self.extra_item_ids = items
 
     # Compatibility with the old enum

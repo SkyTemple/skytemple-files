@@ -17,6 +17,8 @@
 from typing import TYPE_CHECKING, List
 from xml.etree.ElementTree import Element
 
+import typing
+
 from skytemple_files.common.util import read_uintle, AutoString, write_uintle
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
@@ -28,7 +30,7 @@ LEVEL_MULTIPLIER = 512
 
 
 class MappaMonster(AutoString, XmlSerializable):
-    def __init__(self, level: int, weight: int, weight2: int, md_index: id):
+    def __init__(self, level: int, weight: int, weight2: int, md_index: int):
         self.level = level
         self.weight = weight
         self.weight2 = weight2
@@ -56,7 +58,7 @@ class MappaMonster(AutoString, XmlSerializable):
         return data
 
     @classmethod
-    def _is_end_of_entries(cls, data: memoryview, pointer):
+    def _is_end_of_entries(cls, data: bytes, pointer):
         return read_uintle(data, pointer + 6, 2) == 0
 
     def to_xml(self) -> Element:
@@ -68,6 +70,7 @@ class MappaMonster(AutoString, XmlSerializable):
         })
 
     @classmethod
+    @typing.no_type_check
     def from_xml(cls, ele: Element) -> 'MappaMonster':
         validate_xml_tag(ele, XML_MONSTER)
         validate_xml_attribs(ele, [

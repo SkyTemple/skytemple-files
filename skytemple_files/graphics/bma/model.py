@@ -16,14 +16,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 import math
-from typing import Tuple, List
+from typing import Tuple, List, Sequence
 
 try:
     from PIL import Image, ImageDraw, ImageFont
 except ImportError:
     from pil import Image, ImageDraw, ImageFont
 
-from skytemple_files.common.tiled_image import from_pil, search_for_chunk
+from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
@@ -115,7 +115,7 @@ class Bma:
             data[0xC:],
             stop_when_size=number_of_bytes_per_layer
         ))
-        self.layer1 = None
+        self.layer1: Optional[List[int]] = None
         compressed_layer1_size = 0
         if self.number_of_layers > 1:
             # Read second layer
@@ -126,7 +126,7 @@ class Bma:
             ))
 
         offset_begin_next = 0xC + compressed_layer0_size + compressed_layer1_size
-        self.unknown_data_block = None
+        self.unknown_data_block: Optional[List[int]] = None
         if self.unk6:
             # Unknown data block in generic NRL for "chat places"?
             # Seems to have something to do with counters? Like shop counters / NPC interactions.
@@ -184,10 +184,10 @@ class Bma:
                f"Col: {self.number_of_collision_layers} - " \
                f"unk6: 0x{self.unk6:04x}"
 
-    def _read_layer(self, data: Tuple[bytes, int]):
+    def _read_layer(self, data: Tuple[bytes, int]) -> Tuple[List[int], int]:
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [0 for _ in range(0, self.map_width_chunks)]
-        layer = []
+        layer: List[int] = []
         max_tiles = self.map_width_chunks * self.map_height_chunks
         i = 0
         skipped_on_prev = True
@@ -209,7 +209,7 @@ class Bma:
             i += 1
         return layer, data[1]
 
-    def _read_collision(self, data: Tuple[bytes, int]):
+    def _read_collision(self, data: Tuple[bytes, int]) -> Tuple[List[bool], int]:
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [False for _ in range(0, self.map_width_camera)]
         col = []
@@ -220,7 +220,8 @@ class Bma:
             col.append(cv)
         return col, data[1]
 
-    def _read_unknown_data_block(self, data: Tuple[bytes, int]):
+    @staticmethod
+    def _read_unknown_data_block(data: Tuple[bytes, int]) -> Tuple[List[int], int]:
         # TODO: There doesn't seem to be this XOR thing here?
         unk = []
         for i, chunk in enumerate(data[0]):
@@ -228,7 +229,7 @@ class Bma:
         return unk, data[1]
 
     def to_pil_single_layer(
-            self, bpc: Bpc, palettes: List[List[int]], bpas: List[Bpa], layer: int
+            self, bpc: Bpc, palettes: List[List[int]], bpas: Sequence[Bpa], layer: int
     ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
@@ -255,6 +256,7 @@ class Bma:
             bma_layer = self.layer0
             bpc_layer_id = 0 if bpc.number_of_layers == 1 else 1
         else:
+            assert self.layer1 is not None
             bma_layer = self.layer1
             bpc_layer_id = 0
 
@@ -273,7 +275,7 @@ class Bma:
         return fimg
 
     def to_pil(
-            self, bpc: Bpc, bpl: Bpl, bpas: List[Bpa],
+            self, bpc: Bpc, bpl: Bpl, bpas: List[Optional[Bpa]],
             include_collision=True, include_unknown_data_block=True, pal_ani=True, single_frame=False
     ) -> List[Image.Image]:
         """
@@ -334,6 +336,7 @@ class Bma:
 
             for j, img in enumerate(chunks_higher):
                 fimg = final_images[j]
+                assert self.layer1 is not None
                 for i, mt_idx in enumerate(self.layer1):
                     x = i % self.map_width_chunks
                     y = math.floor(i / self.map_width_chunks)
@@ -357,6 +360,7 @@ class Bma:
                 final_images[i] = img.convert('RGB')
                 img = final_images[i]
                 draw = ImageDraw.Draw(img, 'RGBA')
+                assert self.collision is not None
                 for j, col in enumerate(self.collision):
                     x = j % self.map_width_camera
                     y = math.floor(j / self.map_width_camera)
@@ -367,6 +371,7 @@ class Bma:
                         ), fill=(0xff, 0x00, 0x00, 0x40))
                 # Second collision layer
                 if self.number_of_collision_layers > 1:
+                    assert self.collision2 is not None
                     for j, col in enumerate(self.collision2):
                         x = j % self.map_width_camera
                         y = math.floor(j / self.map_width_camera)
@@ -383,6 +388,7 @@ class Bma:
                     final_images[i] = img.convert('RGB')
                     img = final_images[i]
                 draw = ImageDraw.Draw(img, 'RGBA')
+                assert self.unknown_data_block is not None
                 for j, unk in enumerate(self.unknown_data_block):
                     x = j % self.map_width_camera
                     y = math.floor(j / self.map_width_camera)
@@ -481,7 +487,7 @@ class Bma:
 
             tiles, all_possible_tile_mappings, palettes = from_pil(
                 img, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
-                img.width, img.height, 3, 3, force_import, palette_offset=palette_offset
+                img.width, img.height, 3, 3, force_import, palette_offset=palette_offset  # type: ignore
             )
             bpc.import_tiles(bpc_layer_id, tiles)
 
@@ -489,7 +495,7 @@ class Bma:
             # in the imported image. Generate chunk mappings.
             chunk_mappings = []
             chunk_mappings_counter = 1
-            tile_mappings = []
+            tile_mappings: List[TilemapEntry] = []
             tiles_in_chunk = self.tiling_width * self.tiling_height
             for chk_fst_tile_idx in range(0, self.map_width_chunks * self.map_height_chunks * tiles_in_chunk, tiles_in_chunk):
                 chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]
@@ -571,6 +577,7 @@ class Bma:
         if layer_id == 0:
             self.layer0[bma_index] = chunk_index
         else:
+            assert self.layer1 is not None
             self.layer1[bma_index] = chunk_index
 
     @staticmethod

@@ -23,6 +23,8 @@ import asyncio
 import logging
 import traceback
 from threading import Thread
+from time import sleep
+
 logger = logging.getLogger(__name__)
 
 
@@ -45,22 +47,25 @@ class AsyncTaskRunner(Thread):
 
     def __init__(self):
         Thread.__init__(self)
-        self.loop = None
+        self._loop = None
 
     def run(self):
-        self.loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(self.loop)
+        self._loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self._loop)
         try:
-            self.loop.run_forever()
+            self._loop.run_forever()
         except (KeyboardInterrupt, SystemExit):
             pass
 
     def stop(self):
-        self.loop.call_soon_threadsafe(self.loop.stop)
+        self._loop.call_soon_threadsafe(self._loop.stop)
 
     def run_task(self, coro):
         """Runs an asynchronous task"""
-        return asyncio.run_coroutine_threadsafe(self.coro_runner(coro), self.loop)
+        while self._loop is None:
+            # TODO XXX: Weird fun timing issue here when calling run_task immediately.
+            sleep(0.02)
+        return asyncio.run_coroutine_threadsafe(self.coro_runner(coro), self._loop)
 
     @staticmethod
     async def coro_runner(coro):

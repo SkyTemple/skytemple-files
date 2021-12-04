@@ -19,7 +19,7 @@ from enum import Enum, auto
 from typing import Optional, List
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import read_bytes, OptionalKwargs
 from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.atupx.handler import AtupxHandler
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
@@ -36,7 +36,7 @@ class CommonAtType(Enum):
     ATUPX = auto(), AtupxHandler, False
     PKDPX = auto(), PkdpxHandler, True
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -89,7 +89,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         """Load a Common At container into a high-level representation"""
         for t in CommonAtType:
             if t.handler is not None:
@@ -100,7 +100,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
         raise ValueError(f"The provided data is not an AT container ({read_bytes(data, 0, 5)}).")  # type: ignore
 
     @classmethod
-    def serialize(cls, data: CompressionContainerProtocol, **kwargs) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs) -> bytes:
         """Convert the high-level AT representation back into a BitStream."""
         return data.to_bytes()
 

@@ -156,7 +156,7 @@ class MappaItemList(AutoString, XmlSerializable):
                 raise XmlValidateError(f"Unexpected sub-node for {XML_ITEM_LIST}: {child.tag}")
         return cls(categories, items)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaItemList):
             return False
         return self.categories == other.categories and self.items == other.items

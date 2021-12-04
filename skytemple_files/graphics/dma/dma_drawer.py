@@ -140,7 +140,7 @@ class DmaDrawer:
         chunk_dim = DPCI_TILE_DIM * DPC_TILING_DIM
 
         fimg = Image.new('P', (len(mappings[0]) * chunk_dim, len(mappings) * chunk_dim))
-        fimg.putpalette(chunks.getpalette())
+        fimg.putpalette(chunks.getpalette())  # type: ignore
 
         def paste(chunk_index, x, y):
             fimg.paste(

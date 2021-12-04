@@ -27,25 +27,25 @@ class DungeonValidatorError(BaseException):
         self.makes_fully_invalid = True
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.__class__.__name__
 
 
 class InvalidFloorListReferencedError(DungeonValidatorError):
     @property
-    def name(self):
+    def name(self) -> str:
         return _('Invalid Floor List')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _("References a dungeon floor list that doesn't exist.")
 
 
 class InvalidFloorReferencedError(DungeonValidatorError):
     @property
-    def name(self):
+    def name(self) -> str:
         return _('Invalid Floor')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return _("References floor that is out of bounds in the floor list for this group.")
 
 
@@ -56,10 +56,10 @@ class FloorReusedError(DungeonValidatorError):
         self.reused_of_dungeon_name = None
 
     @property
-    def name(self):
+    def name(self) -> str:
         return _('Re-uses Floor')
 
-    def __str__(self):
+    def __str__(self) -> str:
         name = self.reused_of_dungeon_name if self.reused_of_dungeon_name is not None else f'{_("dungeon")} {self.reused_of_dungeon_with_id}'
         return f(_("Re-uses floors that are already used by {name}."))
 
@@ -77,13 +77,13 @@ class DungeonMissingFloorError(DungeonValidatorError):
         self.floors_in_mappa_not_referenced = floors_in_mappa_not_referenced
         self.makes_fully_invalid = False
 
-    def add(self, f_id):
+    def add(self, f_id: int) -> None:
         self.floors_in_mappa_not_referenced.append(f_id)
 
     @property
-    def name(self):
+    def name(self) -> str:
         return _('Unused Floors')
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f(_("Has {len(self.floors_in_mappa_not_referenced)} extra floors in it's floor list, "
                    "which are not assigned to any dungeon."))

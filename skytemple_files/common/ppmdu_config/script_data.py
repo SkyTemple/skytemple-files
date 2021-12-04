@@ -114,7 +114,7 @@ class Pmd2ScriptSpriteEffect(AutoString):
 
 
 class Pmd2ScriptBgm(AutoString):
-    def __init__(self, id: int, name: str, loops=False):
+    def __init__(self, id: int, name: str, loops: bool = False):
         self.id = id
         self.name = name
         self.loops = loops
@@ -134,24 +134,24 @@ class Pmd2ScriptLevelMapType(Enum):
     TILESET = 10, _("Dungeon Tileset (#10)")
     FIXED_ROOM = 11, _("Use Fixed Room (#11)")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: str, name_localized: str
+            self, _: str, name_localized: Optional[str]
     ):
-        self.name_localized = name_localized
+        self.name_localized: str = name_localized  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Pmd2ScriptLevelMapType.{self.name}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-# https://canary.discord.com/channels/710190644152369162/712343594568253512/780260748931891250
+
 class Pmd2ScriptLevel(AutoString):
     def __init__(self, id: int, mapid: int, name: str, mapty: int, nameid: int, weather: int):
         self.id = id
@@ -167,22 +167,22 @@ class Pmd2ScriptLevel(AutoString):
         
     # Backwards compat:
     @property
-    def unk2(self):
+    def unk2(self) -> int:
         return self.nameid
     
     @unk2.setter
-    def unk2(self, value):
+    def unk2(self, value: int) -> None:
         self.nameid = value
 
     @property
-    def unk4(self):
+    def unk4(self) -> int:
         return self.weather
     
     @unk4.setter
-    def unk4(self, value):
+    def unk4(self, value: int) -> None:
         self.weather = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2ScriptLevel):
             return False
         return self.id == other.id and self.mapid == other.mapid and \
@@ -199,7 +199,7 @@ class Pmd2ScriptEntity(AutoString):
         self.unk3 = unk3
         self.unk4 = unk4
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2ScriptEntity):
             return False
         return self.id == other.id and self.entid == other.entid and \
@@ -219,7 +219,7 @@ class Pmd2ScriptOpCodeRepeatingArgumentGroup(AutoString):
         self.id = id
         self.arguments = arguments
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> Pmd2ScriptOpCodeArgument:
         return self.arguments[item]
 
 
@@ -260,13 +260,13 @@ class Pmd2ScriptFacePositionMode(AutoString):
 
 
 class Pmd2ScriptDirection(AutoString):
-    def __init__(self, ssa_id: int, name: str, ssb_id: int = None):
+    def __init__(self, ssa_id: int, name: str, ssb_id: Optional[int] = None):
         self.ssa_id = ssa_id
         self.ssb_id = ssb_id if ssb_id is not None else ssa_id - 1
         self.name = name
 
     @property
-    def id(self):
+    def id(self) -> int:
         """
         For backwards compatibility.
         """
@@ -274,7 +274,7 @@ class Pmd2ScriptDirection(AutoString):
         return self.ssa_id
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         if self.ssa_id == 1:
             return _('Down')  # TRANSLATORS: Direction
         elif self.ssa_id == 2:
@@ -327,11 +327,11 @@ class Pmd2ScriptData(AutoString):
         self._ground_state_structs = ground_state_structs
 
     @property
-    def game_variables(self):
+    def game_variables(self) -> List[Pmd2ScriptGameVar]:
         return self._game_variables
 
     @game_variables.setter
-    def game_variables(self, value):
+    def game_variables(self, value: List[Pmd2ScriptGameVar]) -> None:
         self._game_variables = value
 
     @property
@@ -343,11 +343,11 @@ class Pmd2ScriptData(AutoString):
         return {var.name: var for var in self.game_variables}
 
     @property
-    def objects(self):
+    def objects(self) -> List[Pmd2ScriptObject]:
         return self._objects
 
     @objects.setter
-    def objects(self, value):
+    def objects(self, value: List[Pmd2ScriptObject]) -> None:
         self._objects = value
 
     @property
@@ -355,39 +355,39 @@ class Pmd2ScriptData(AutoString):
         return {o.id: o for o in self.objects}
 
     @property
-    def objects__by_unique_name(self):
+    def objects__by_unique_name(self) -> Dict[str, Pmd2ScriptObject]:
         return {o.unique_name: o for o in self.objects}
 
     @property
-    def face_names(self):
+    def face_names(self) -> List[Pmd2ScriptFaceName]:
         return self._face_names
 
     @face_names.setter
-    def face_names(self, value):
+    def face_names(self, value: List[Pmd2ScriptFaceName]) -> None:
         self._face_names = value
 
     @property
-    def face_names__by_id(self):
+    def face_names__by_id(self) -> Dict[int, Pmd2ScriptFaceName]:
         return {n.id: n for n in self.face_names}
 
     @property
-    def face_names__by_name(self):
+    def face_names__by_name(self) -> Dict[str, Pmd2ScriptFaceName]:
         return {n.name: n for n in self.face_names}
 
     @property
-    def face_position_modes(self):
+    def face_position_modes(self) -> List[Pmd2ScriptFacePositionMode]:
         return self._face_position_modes
 
     @face_position_modes.setter
-    def face_position_modes(self, value):
+    def face_position_modes(self, value: List[Pmd2ScriptFacePositionMode]) -> None:
         self._face_position_modes = value
 
     @property
-    def face_position_modes__by_id(self):
+    def face_position_modes__by_id(self) -> List[Pmd2ScriptFacePositionMode]:
         return self.face_position_modes
 
     @property
-    def face_position_modes__by_name(self):
+    def face_position_modes__by_name(self) -> Dict[str, Pmd2ScriptFacePositionMode]:
         return {n.name: n for n in self.face_position_modes}
 
     @property
@@ -395,7 +395,7 @@ class Pmd2ScriptData(AutoString):
         return self._directions
 
     @directions.setter
-    def directions(self, value):
+    def directions(self, value: Dict[int, Pmd2ScriptDirection]) -> None:
         self._directions = value
 
     @property
@@ -407,95 +407,95 @@ class Pmd2ScriptData(AutoString):
         return {d.ssb_id: d for d in self._directions.values()}
 
     @property
-    def directions__by_name(self):
+    def directions__by_name(self) -> Dict[str, Pmd2ScriptDirection]:
         return {b.name: b for b in self.directions.values()}
 
     @property
-    def common_routine_info(self):
+    def common_routine_info(self) -> List[Pmd2ScriptRoutine]:
         return self._common_routine_info
 
     @common_routine_info.setter
-    def common_routine_info(self, value):
+    def common_routine_info(self, value: List[Pmd2ScriptRoutine]) -> None:
         self._common_routine_info = value
 
     @property
-    def common_routine_info__by_id(self):
+    def common_routine_info__by_id(self) -> List[Pmd2ScriptRoutine]:
         return self.common_routine_info
 
     @property
-    def common_routine_info__by_name(self):
+    def common_routine_info__by_name(self) -> Dict[str, Pmd2ScriptRoutine]:
         return {o.name: o for o in self.common_routine_info}
 
     @property
-    def menus(self):
+    def menus(self) -> List[Pmd2ScriptMenu]:
         return self._menus
 
     @menus.setter
-    def menus(self, value):
+    def menus(self, value: List[Pmd2ScriptMenu]) -> None:
         self._menus = value
 
     @property
-    def menus__by_id(self):
+    def menus__by_id(self) -> Dict[int, Pmd2ScriptMenu]:
         return {o.id: o for o in self.menus}
 
     @property
-    def menus__by_name(self):
+    def menus__by_name(self) -> Dict[str, Pmd2ScriptMenu]:
         return {o.name: o for o in self.menus}
 
     @property
-    def process_specials(self):
+    def process_specials(self) -> List[Pmd2ScriptSpecial]:
         return self._process_specials
 
     @process_specials.setter
-    def process_specials(self, value):
+    def process_specials(self, value: List[Pmd2ScriptSpecial]) -> None:
         self._process_specials = value
 
     @property
-    def process_specials__by_id(self):
+    def process_specials__by_id(self) -> Dict[int, Pmd2ScriptSpecial]:
         return {o.id: o for o in self.process_specials}
 
     @property
-    def process_specials__by_name(self):
+    def process_specials__by_name(self) -> Dict[str, Pmd2ScriptSpecial]:
         return {o.name: o for o in self.process_specials}
 
     @property
-    def sprite_effects(self):
+    def sprite_effects(self) -> List[Pmd2ScriptSpriteEffect]:
         return self._sprite_effects
 
     @sprite_effects.setter
-    def sprite_effects(self, value):
+    def sprite_effects(self, value: List[Pmd2ScriptSpriteEffect]) -> None:
         self._sprite_effects = value
 
     @property
-    def sprite_effects__by_id(self):
+    def sprite_effects__by_id(self) -> Dict[int, Pmd2ScriptSpriteEffect]:
         return {o.id: o for o in self.sprite_effects}
 
     @property
-    def sprite_effects__by_name(self):
+    def sprite_effects__by_name(self) -> Dict[str, Pmd2ScriptSpriteEffect]:
         return {o.name: o for o in self.sprite_effects}
 
     @property
-    def bgms(self):
+    def bgms(self) -> List[Pmd2ScriptBgm]:
         return self._bgms
 
     @bgms.setter
-    def bgms(self, value):
+    def bgms(self, value: List[Pmd2ScriptBgm]) -> None:
         self._bgms = value
 
     @property
-    def bgms__by_id(self):
+    def bgms__by_id(self) -> Dict[int, Pmd2ScriptBgm]:
         return {o.id: o for o in self.bgms}
 
     @property
-    def bgms__by_name(self):
+    def bgms__by_name(self) -> Dict[str, Pmd2ScriptBgm]:
         return {o.name: o for o in self.bgms}
 
     @property
-    def level_list(self):
+    def level_list(self) -> List[Pmd2ScriptLevel]:
         return self._level_list
 
     @level_list.setter
-    def level_list(self, value):
+    def level_list(self, value: List[Pmd2ScriptLevel]) -> None:
         self._level_list = value
 
     @property
@@ -507,11 +507,11 @@ class Pmd2ScriptData(AutoString):
         return {o.name: o for o in self.level_list}
 
     @property
-    def level_entities(self):
+    def level_entities(self) -> List[Pmd2ScriptEntity]:
         return self._level_entities
 
     @level_entities.setter
-    def level_entities(self, value):
+    def level_entities(self, value: List[Pmd2ScriptEntity]) -> None:
         self._level_entities = value
 
     @property
@@ -519,15 +519,15 @@ class Pmd2ScriptData(AutoString):
         return {o.id: o for o in self.level_entities}
 
     @property
-    def level_entities__by_name(self):
+    def level_entities__by_name(self) -> Dict[str, Pmd2ScriptEntity]:
         return {o.name: o for o in self.level_entities}
 
     @property
-    def op_codes(self):
+    def op_codes(self) -> List[Pmd2ScriptOpCode]:
         return self._op_codes
 
     @op_codes.setter
-    def op_codes(self, value):
+    def op_codes(self, value: List[Pmd2ScriptOpCode]) -> None:
         self._op_codes = value
 
     @property
@@ -544,5 +544,5 @@ class Pmd2ScriptData(AutoString):
         return opcs
 
     @property
-    def ground_state_structs(self):
+    def ground_state_structs(self) -> Dict[str, Pmd2ScriptGroundStateStruct]:
         return self._ground_state_structs

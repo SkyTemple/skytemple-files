@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class SsaActor(AutoString):
-    def __init__(self, scriptdata: Pmd2ScriptData, actor_id, pos: SsaPosition, script_id, unkE):
+    def __init__(self, scriptdata: Pmd2ScriptData, actor_id: int, pos: SsaPosition, script_id: int, unkE: int):
         try:
             self.actor = scriptdata.level_entities__by_id[actor_id]
         except KeyError:

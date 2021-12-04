@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.img_itm.model import ImgItm
 
 
 class ImgItmHandler(DataHandler[ImgItm]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'ImgItm':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ImgItm':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ImgItm)
 
     @classmethod
-    def serialize(cls, data: 'ImgItm', **kwargs) -> bytes:
+    def serialize(cls, data: 'ImgItm', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

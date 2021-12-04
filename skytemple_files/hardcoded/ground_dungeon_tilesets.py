@@ -40,14 +40,14 @@ class GroundTilesetMapping(AutoString):
 
     # Compat
     @property
-    def unk2(self):
+    def unk2(self) -> int:
         return self.floor_id
 
     @unk2.setter
-    def unk2(self, value):
+    def unk2(self, value: int) -> None:
         self.floor_id = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, GroundTilesetMapping):
             return False
         return self.ground_level == other.ground_level and \
@@ -78,7 +78,7 @@ class HardcodedGroundDungeonTilesets:
         return lst
 
     @staticmethod
-    def set_ground_dungeon_tilesets(value: List[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data):
+    def set_ground_dungeon_tilesets(value: List[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the  list.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).

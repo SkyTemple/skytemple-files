@@ -27,7 +27,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_burn_damage_delay(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_burn_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['BurnDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -37,7 +37,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['PoisonDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -47,7 +47,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_bad_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_bad_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['BadPoisonDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -57,7 +57,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_ginseng_increase_by_3_chance(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_ginseng_increase_by_3_chance(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['GinsengChance3']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -67,7 +67,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov29, block.begin, 4) / 0x10000
 
     @staticmethod
-    def set_belly_loss_turn(value: float, ov29: bytearray, config: Pmd2Data):
+    def set_belly_loss_turn(value: float, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostTurn']
         write_uintle(ov29, ceil(value * 0x10000), block.begin, 4)
 
@@ -77,7 +77,7 @@ class HardcodedDungeonMisc:
         return read_uintle(ov29, block.begin, 2)
 
     @staticmethod
-    def set_belly_loss_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data):
+    def set_belly_loss_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw']
         write_uintle(ov29, value, block.begin, 2)
 
@@ -87,6 +87,6 @@ class HardcodedDungeonMisc:
         return read_uintle(ov29, block.begin, 2)
 
     @staticmethod
-    def set_belly_loss_1000ile_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data):
+    def set_belly_loss_1000ile_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw1000']
         write_uintle(ov29, value, block.begin, 2)

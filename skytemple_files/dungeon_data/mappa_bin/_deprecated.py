@@ -60,7 +60,7 @@ class MappaItemCategory(Enum):
     UNKE = 14, -1, 0, list(_gdefconf()[14].items), [], _(_gdefconf()[14].name)
     UNKF = 15, -1, 0, list(_gdefconf()[15].items), [], _(_gdefconf()[15].name)
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj

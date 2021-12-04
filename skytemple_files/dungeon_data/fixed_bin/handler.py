@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin
 
 from skytemple_files.dungeon_data.fixed_bin.writer import FixedBinWriter
@@ -27,15 +28,15 @@ class FixedBinHandler(DataHandler[FixedBin]):
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> 'FixedBin':  # type: ignore
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs) -> 'FixedBin':  # type: ignore
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FixedBin, static_data)
 
     @classmethod
-    def serialize(cls, data: 'FixedBin', **kwargs) -> bytes:
+    def serialize(cls, data: 'FixedBin', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: 'FixedBin', **kwargs) -> bytes:
+    def serialize_raw(cls, data: 'FixedBin', **kwargs: OptionalKwargs) -> bytes:
         return FixedBinWriter(data).write()[0]

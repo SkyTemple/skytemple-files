@@ -68,7 +68,7 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                 return rom.arm9[PATCH_STRING_ADDR_ARM9_EU:PATCH_STRING_ADDR_ARM9_EU + len(PATCH_STRING)] != b'PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY'
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # First make absolute sure, that we aren't doing it again by accident, this isn't supported.
         if self.is_applied(rom, config):
             raise RuntimeError(_("This patch can not be re-applied."))
@@ -101,5 +101,5 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                                                "used in game, until you successfully apply the patch.")) from ex
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

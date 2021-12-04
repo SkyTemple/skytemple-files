@@ -60,7 +60,7 @@ class MappaTrapType(Enum):
     def print_name(self):
         return self._print_name_
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -130,7 +130,7 @@ class MappaTrapList(AutoString, XmlSerializable):
         except ValueError as ex:
             raise XmlValidateError(_("Trap lists need an entry for all of the 25 traps")) from ex
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaTrapList):
             return False
         return self.weights == other.weights

@@ -18,10 +18,7 @@ import logging
 from enum import Enum
 from typing import Optional
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.zmappat import *
@@ -37,7 +34,7 @@ class ZMappaTVariation(Enum):
     TRANSPARENT = 0x01, _('Transparent'), "trans"
     OPAQUE = 0x02, _('Opaque'), "opaque"
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -175,8 +172,8 @@ class ZMappaT(Sir0Serializable, AutoString):
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION):
                 x_tile = i % ZMAPPAT_NB_TILES_PER_LINE
                 y_tile = i // ZMAPPAT_NB_TILES_PER_LINE
-                tile_img = imgs[v].crop(box=[x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8])
-                mask_img = masks[v].crop(box=[x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8])
+                tile_img = imgs[v].crop(box=[x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8])  # type: ignore
+                mask_img = masks[v].crop(box=[x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8])  # type: ignore
                 new_tiles.append(bytearray(tile_img.tobytes("raw", "P")))
                 new_masks.append(bytearray(mask_img.tobytes("raw", "P")))
         self.tiles = new_tiles
@@ -196,8 +193,8 @@ class ZMappaT(Sir0Serializable, AutoString):
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION // 4):
                 x_tile = i % (ZMAPPAT_NB_TILES_PER_LINE // 2)
                 y_tile = i // (ZMAPPAT_NB_TILES_PER_LINE // 2)
-                mini_tile_img = imgs[v].crop(box=[x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4])
-                mini_mask_img = masks[v].crop(box=[x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4])
+                mini_tile_img = imgs[v].crop(box=[x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4])  # type: ignore
+                mini_mask_img = masks[v].crop(box=[x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4])  # type: ignore
                 for y in range(2):
                     for x in range(2):
                         tile_img = Image.new(mode='P', size=(8, 8), color=0)
@@ -210,7 +207,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         self.masks = new_masks
         self.palette = [x for x in memoryview(imgs[0].palette.palette)]
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ZMappaT):
             return False
         return self.tiles == other.tiles and \

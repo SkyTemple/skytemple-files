@@ -17,10 +17,7 @@
 import itertools
 import math
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
@@ -34,7 +31,7 @@ class Dpci:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.tiles = list(iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2)))  # / 2 because 4bpp
+        self.tiles: List[bytes] = list(iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2)))  # / 2 because 4bpp
 
     def tiles_to_pil(self, palettes: List[List[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
         """
@@ -78,5 +75,5 @@ class Dpci:
         If contains_null_tile is False, the null tile is added to the list, at the beginning.
         """
         if not contains_null_tile:
-            tiles = [bytearray(int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))] + tiles
-        self.tiles = tiles
+            tiles = [bytearray(int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))] + tiles  # type: ignore
+        self.tiles = tiles  # type: ignore

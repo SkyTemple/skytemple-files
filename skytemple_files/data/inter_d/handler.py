@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.inter_d.model import InterD
 from skytemple_files.data.inter_d.writer import InterDWriter
 
 
 class InterDHandler(DataHandler[InterD]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'InterD':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'InterD':
         return InterD(data)
 
     @classmethod
-    def serialize(cls, data: 'InterD', **kwargs) -> bytes:
+    def serialize(cls, data: 'InterD', **kwargs: OptionalKwargs) -> bytes:
         return InterDWriter(data).write()
 

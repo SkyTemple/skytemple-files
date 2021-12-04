@@ -29,7 +29,7 @@ class InterDEntryType(Enum):
     SCNBE  = 0x04, _('Scenario Below or Equal')
     SCNGE  = 0x05, _('Scenario Greater or Equal')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -75,7 +75,7 @@ class InterD(AutoString):
                 self.list_dungeons[-1].append(InterDEntry(data[y:y+6]))
             prev = cur
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, InterD):
             return False
         return self.list_dungeons == other.list_dungeons

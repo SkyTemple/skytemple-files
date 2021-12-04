@@ -33,7 +33,7 @@ class CompressionContainerProtocol(Protocol):
 
     @classmethod
     @abstractmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
+    def cont_size(cls, data: bytes, byte_offset: int = 0) -> bool:
         """Returns the container size"""
 
     @classmethod

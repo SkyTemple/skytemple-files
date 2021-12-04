@@ -17,7 +17,7 @@
 
 # Normal spawn delay (0x24): [EU]overlay_0010:0x7A74 / [US]overlay_0010:0x7A5C
 # Spawn delay after stealing from a shop (3): [EU]overlay_0010:0x7BD8 / [US]overlay_0010:0x7BC0
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_uintle, write_uintle
@@ -25,7 +25,7 @@ from skytemple_files.common.util import read_uintle, write_uintle
 
 class HardcodedMainMenuMusic:
     @staticmethod
-    def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: bytes = None) -> Union[int, Tuple[int, int]]:
+    def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: Optional[bytes] = None) -> Union[int, Tuple[int, int]]:
         """Set ov09 to also return the Sky Jukebox return music"""
         main_block = config.binaries['overlay/overlay_0000.bin'].blocks['MainMenuSongId']
         skyj_block = config.binaries['overlay/overlay_0009.bin'].blocks['MainMenuReturnSongId']
@@ -35,7 +35,7 @@ class HardcodedMainMenuMusic:
         return ov00_value
 
     @staticmethod
-    def set_main_menu_music(value: int, ov00: bytearray, config: Pmd2Data, ov09: bytearray = None):
+    def set_main_menu_music(value: int, ov00: bytearray, config: Pmd2Data, ov09: Optional[bytearray] = None) -> None:
         """Set ov09 to also update the Sky Jukebox return music"""
         main_block = config.binaries['overlay/overlay_0000.bin'].blocks['MainMenuSongId']
         skyj_block = config.binaries['overlay/overlay_0009.bin'].blocks['MainMenuReturnSongId']

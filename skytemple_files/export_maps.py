@@ -34,6 +34,7 @@ This is also an example on how to use the following file handlers:
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 import argparse
 import json
 import os

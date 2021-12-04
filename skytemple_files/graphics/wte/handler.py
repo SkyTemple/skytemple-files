@@ -15,12 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.wte.model import Wte, WteImageType
 from skytemple_files.graphics.wte.writer import WteWriter
 
@@ -32,12 +30,12 @@ class WteHandler(DataHandler[Wte]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'Wte':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'Wte':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), Wte)
 
     @classmethod
-    def serialize(cls, data: 'Wte', **kwargs) -> bytes:
+    def serialize(cls, data: 'Wte', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
@@ -52,5 +50,5 @@ class WteHandler(DataHandler[Wte]):
         return Wte(data, 0)
 
     @classmethod
-    def serialize_raw(cls, data: 'Wte', **kwargs) -> bytes:
+    def serialize_raw(cls, data: 'Wte', **kwargs: OptionalKwargs) -> bytes:
         return WteWriter(data).write()[0]

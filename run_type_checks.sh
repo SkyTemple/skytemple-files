@@ -12,6 +12,11 @@ echo "skytemple-files"
 echo "==============="
 mypy --config-file mypy.ini
 
+cd ../explorerscript
+echo "explorerscript"
+echo "=============="
+mypy --config-file mypy.ini
+
 cd ../skytemple_rust
 echo "skytemple-rust"
 echo "=============="

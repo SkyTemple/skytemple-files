@@ -29,7 +29,7 @@ class TalkType(Enum):
     WAIT = 0x4, _('Wait')
     GROUND_WAIT = 0x5, _('Ground Wait')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj

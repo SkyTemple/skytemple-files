@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.container.bin_pack.writer import BinPackWriter
 
 
 class BinPackHandler(DataHandler[BinPack]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> BinPack:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BinPack:
         return BinPack(data)
 
     @classmethod
-    def serialize(cls, data: BinPack, fixed_header_len=0, **kwargs) -> bytes:
+    def serialize(cls, data: BinPack, fixed_header_len=0, **kwargs: OptionalKwargs) -> bytes:
         """
         Serialize the bin pack.
 

@@ -35,7 +35,7 @@ class ValList(AutoString):
         for i, x in enumerate(lst):
             write_uintle(self.data, x, i*value_size, value_size)
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ValList):
             return False
         return self.data == other.data

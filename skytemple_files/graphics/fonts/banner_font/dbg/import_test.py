@@ -25,10 +25,7 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_files_from_rom_with_extension, get_ppmdu_config_for_rom
 from skytemple_files.graphics.fonts.banner_font.handler import BannerFontHandler
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 #base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

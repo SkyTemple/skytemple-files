@@ -19,6 +19,7 @@ See: https://canary.discord.com/channels/710190644152369162/712343169399914518/8
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.file_types import FileType
 

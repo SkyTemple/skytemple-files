@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
+from typing import List, Any
 from enum import Enum
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary, Pmd2BinaryBlock
@@ -26,15 +26,9 @@ class EntitySpawnEntry(AutoString):
     def __init__(self, overlay29bin: Pmd2Binary, item_spawn_pointer: int,
                  monster_spawn_pointer: int, tile_spawn_pointer: int):
         self._overlay29bin = overlay29bin
-        self.item_id = (item_spawn_pointer - self._overlay29bin.blocks['ItemSpawnTable'].begin_absolute) / 8
-        assert self.item_id % 1 == 0
-        self.item_id = int(self.item_id)
-        self.monster_id = (monster_spawn_pointer - self._overlay29bin.blocks['MonsterSpawnTable'].begin_absolute) / 4
-        assert self.monster_id % 1 == 0
-        self.monster_id = int(self.monster_id)
-        self.tile_id = (tile_spawn_pointer - self._overlay29bin.blocks['TileSpawnTable'].begin_absolute) / 4
-        assert self.tile_id % 1 == 0
-        self.tile_id = int(self.tile_id)
+        self.item_id = (item_spawn_pointer - self._overlay29bin.blocks['ItemSpawnTable'].begin_absolute) // 8
+        self.monster_id = (monster_spawn_pointer - self._overlay29bin.blocks['MonsterSpawnTable'].begin_absolute) // 4
+        self.tile_id = (tile_spawn_pointer - self._overlay29bin.blocks['TileSpawnTable'].begin_absolute) // 4
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(12)
@@ -43,7 +37,7 @@ class EntitySpawnEntry(AutoString):
         write_uintle(buffer, self.tile_id * 4 + self._overlay29bin.blocks['TileSpawnTable'].begin_absolute, 8, 4)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, EntitySpawnEntry):
             return False
         return self.item_id == other.item_id and self.monster_id == other.monster_id and self.tile_id == other.tile_id
@@ -64,7 +58,7 @@ class ItemSpawn(AutoString):
         write_uintle(buffer, self.null3, 6, 2)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemSpawn):
             return False
         return self.item_id == other.item_id and \
@@ -127,7 +121,7 @@ class MonsterSpawnType(Enum):
     # The shop that lets you escape the dungeon
     BAZAAR_ESCAPE = 0x14, _('Bazaar Escape')  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -154,7 +148,7 @@ class MonsterSpawn(AutoString):
         write_uintle(buffer, self.enemy_settings.value, 3, 1)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MonsterSpawn):
             return False
         return self.md_idx == other.md_idx and \
@@ -177,16 +171,16 @@ class TileSpawn(AutoString):
         write_uintle(buffer, self.flags, 3, 1)
         return buffer
 
-    def can_be_broken(self):
+    def can_be_broken(self) -> bool:
         return not (self.trap_data & 1)
 
-    def trap_is_visible(self):
-        return self.flags & 1
+    def trap_is_visible(self) -> bool:
+        return self.flags & 1 > 0
 
-    def is_secondary_terrain(self):
-        return self.flags & 0b1000
+    def is_secondary_terrain(self) -> bool:
+        return self.flags & 0b1000 > 0
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, TileSpawn):
             return False
         return self.trap_id == other.trap_id and \
@@ -219,7 +213,7 @@ class MonsterSpawnStats(AutoString):
         write_uintle(buffer, self.unkA, 10, 2)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MonsterSpawnStats):
             return False
         return self.level == other.level and \
@@ -258,7 +252,7 @@ class FixedFloorProperties(AutoString):
         write_uintle(buffer, self.null, 11, 1)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FixedFloorProperties):
             return False
         return self.music_track == other.music_track and \
@@ -292,7 +286,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_entity_spawn_table(cls, overlay29: bytearray, values: List[EntitySpawnEntry], config: Pmd2Data):
+    def set_entity_spawn_table(cls, overlay29: bytearray, values: List[EntitySpawnEntry], config: Pmd2Data) -> None:
         """
         Sets the list of entity spawns.
         The length of the list must exactly match the original ROM's length (see get_entity_spawn_table).
@@ -317,7 +311,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_item_spawn_list(cls, overlay29: bytearray, values: List[ItemSpawn], config: Pmd2Data):
+    def set_item_spawn_list(cls, overlay29: bytearray, values: List[ItemSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of items that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_item_spawn_list).
@@ -341,7 +335,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_monster_spawn_list(cls, overlay29: bytearray, values: List[MonsterSpawn], config: Pmd2Data):
+    def set_monster_spawn_list(cls, overlay29: bytearray, values: List[MonsterSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_monster_spawn_list).
@@ -366,7 +360,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_tile_spawn_list(cls, overlay29: bytearray, values: List[TileSpawn], config: Pmd2Data):
+    def set_tile_spawn_list(cls, overlay29: bytearray, values: List[TileSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of tiles that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_tile_spawn_list).
@@ -395,7 +389,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_monster_spawn_stats_table(cls, overlay10: bytearray, values: List[MonsterSpawnStats], config: Pmd2Data):
+    def set_monster_spawn_stats_table(cls, overlay10: bytearray, values: List[MonsterSpawnStats], config: Pmd2Data) -> None:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_monster_spawn_stats_table).
@@ -425,7 +419,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_fixed_floor_properties(cls, overlay10: bytearray, values: List[FixedFloorProperties], config: Pmd2Data):
+    def set_fixed_floor_properties(cls, overlay10: bytearray, values: List[FixedFloorProperties], config: Pmd2Data) -> None:
         """
         Sets the list of properties for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_properties).
@@ -445,7 +439,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: List[int], config: Pmd2Data):
+    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: List[int], config: Pmd2Data) -> None:
         """
         Sets the list of overrides for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_overrides).
@@ -458,7 +452,7 @@ class HardcodedFixedFloorTables:
             overlay29[i] = entry
 
     @classmethod
-    def _set(cls, binary: bytearray, values: List, config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int):
+    def _set(cls, binary: bytearray, values: List[Any], config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int) -> None:  # type: ignore
         expected_length = int((block.end - block.begin) / entry_len)
         if len(values) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

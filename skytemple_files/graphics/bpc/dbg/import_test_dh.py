@@ -14,13 +14,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 
 import os
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_files_from_rom_with_extension

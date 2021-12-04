@@ -21,10 +21,8 @@ from abc import ABC, abstractmethod
 from xml.etree.ElementTree import Element
 
 from skytemple_files.common.util import *
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
+
 
 class AbstractFontEntry(ABC, AutoString):
     @classmethod
@@ -34,8 +32,9 @@ class AbstractFontEntry(ABC, AutoString):
     def get_properties(self) -> Dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
     @abstractmethod
-    def set_properties(self, properties: Dict[str, int]):
+    def set_properties(self, properties: Dict[str, int]) -> None:
         """Sets a list of the properties of the entry"""
+
 
 class AbstractFont(ABC, AutoString):
     
@@ -48,15 +47,15 @@ class AbstractFont(ABC, AutoString):
         """Gets the properties of entries of this table"""
     
     @abstractmethod
-    def get_entries_from_table(self, table) -> List[AbstractFontEntry]:
+    def get_entries_from_table(self, table: int) -> List[AbstractFontEntry]:
         """Gets all entries of a specific table"""
         
     @abstractmethod
-    def delete_entry(self, entry: AbstractFontEntry):
+    def delete_entry(self, entry: AbstractFontEntry) -> None:
         """Deletes the specified entry"""
         
     @abstractmethod
-    def create_entry_for_table(self, table) -> AbstractFontEntry:
+    def create_entry_for_table(self, table: int) -> AbstractFontEntry:
         """Create an entry for a table"""
     
     @abstractmethod
@@ -68,5 +67,5 @@ class AbstractFont(ABC, AutoString):
         """Exports all entries as xml with tables as a dictionnary of images"""
     
     @abstractmethod
-    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
+    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]) -> None:
         """Imports all entries font xml with tables as a dictionnary of images"""

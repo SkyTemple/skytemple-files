@@ -17,16 +17,17 @@
 from typing import Type
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 
 
 class ItemListHandler(DataHandler[MappaItemList]):
     @classmethod
-    def deserialize(cls, data: bytes, items, **kwargs) -> MappaItemList:  # type: ignore
+    def deserialize(cls, data: bytes, items, **kwargs: OptionalKwargs) -> MappaItemList:  # type: ignore
         return MappaItemList.from_bytes(data, items, 0)
 
     @classmethod
-    def serialize(cls, data: MappaItemList, **kwargs) -> bytes:
+    def serialize(cls, data: MappaItemList, **kwargs: OptionalKwargs) -> bytes:
         return data.to_mappa()
 
     @classmethod

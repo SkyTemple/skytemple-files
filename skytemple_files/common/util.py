@@ -24,7 +24,7 @@ import os
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
-from typing import List, Tuple, TYPE_CHECKING, Iterable, Optional, Protocol, Union, Dict, Type, Any
+from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, Type, Any, Sequence
 
 import pkg_resources
 from PIL import Image
@@ -38,6 +38,10 @@ from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
+
+# Useful type consts
+OptionalKwargs = Optional[Dict[str, Any]]
+ByteReadable = Union[bytes, Sequence[int]]
 
 # Useful files:
 MONSTER_MD = 'BALANCE/monster.md'
@@ -116,9 +120,9 @@ def normalize_string(x: str) -> bytes:
     return unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
 
 
-def open_utf8(file, mode='r', *args, **kwargs):
+def open_utf8(file: str, mode='r', *args, **kwargs):  # type: ignore
     """Like open, but always uses the utf-8 encoding, on all platforms."""
-    return open(file, mode, *args, encoding='utf-8', **kwargs)
+    return open(file, mode, *args, encoding='utf-8', **kwargs)  # type: ignore
 
 
 def add_extension_if_missing(fn: str, ext: str) -> str:
@@ -127,52 +131,47 @@ def add_extension_if_missing(fn: str, ext: str) -> str:
         return fn + '.' + ext
     return fn
 
-def read_bytes(data: bytes, start=0, length=1) -> bytes:
+def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     """
     Read a number of bytes (default 1) from a bytes-like object
     Recommended usage with memoryview for performance!
     """
-    _check_memoryview(data)
     return data[start:(start + length)]
 
 
-def read_uintle(data: bytes, start=0, length=1) -> int:
+def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an unsiged integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
     """
-    _check_memoryview(data)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=False)
 
 
-def read_sintle(data: bytes, start=0, length=1) -> int:
+def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an signed integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
     """
-    _check_memoryview(data)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=True)
 
 
-def read_uintbe(data: bytes, start=0, length=1) -> int:
+def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an unsiged integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
     """
-    _check_memoryview(data)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=False)
 
 
-def read_sintbe(data: bytes, start=0, length=1) -> int:
+def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an signed integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
     """
-    _check_memoryview(data)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=True)
 
 
-def read_var_length_string(data: bytes, start=0, codec=string_codec.PMD2_STR_ENCODER) -> Tuple[int, str]:
+def read_var_length_string(data: bytes, start: int = 0, codec: str = string_codec.PMD2_STR_ENCODER) -> Tuple[int, str]:
     """Reads a zero terminated string of characters. """
     if codec == string_codec.PMD2_STR_ENCODER:
         string_codec.init()
@@ -188,35 +187,35 @@ def read_var_length_string(data: bytes, start=0, codec=string_codec.PMD2_STR_ENC
     return cursor - start, str(bytes_of_string, codec)
 
 
-def write_uintle(data: bytearray, to_write: int, start=0, length=1):
+def write_uintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsiged integer in little endian to the bytes-like mutable object at the given position.
     """
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=False)
 
 
-def write_sintle(data: bytearray, to_write: int, start=0, length=1):
+def write_sintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an signed integer in little endian to the bytes-like mutable object at the given position.
     """
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=True)
 
 
-def write_uintbe(data: bytearray, to_write: int, start=0, length=1):
+def write_uintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsiged integer in big endian to the bytes-like mutable object at the given position.
     """
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=False)
 
 
-def write_sintbe(data: bytearray, to_write: int, start=0, length=1):
+def write_sintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an signed integer in big endian to the bytes-like mutable object at the given position.
     """
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=True)
 
 
-def iter_bits(number: int):
+def iter_bits(number: int) -> Iterable[int]:
     """Iterate over the bits of a byte, starting with the high bit"""
     bit = 0x80
     while bit > 0:
@@ -227,7 +226,7 @@ def iter_bits(number: int):
         bit >>= 1
 
 
-def iter_bytes(data: bytes, slice_size, start=0, end=None):
+def iter_bytes(data: bytes, slice_size: int, start: int = 0, end: Optional[int] = None) -> Iterable[bytes]:
     if end is None:
         end = len(data)
     _check_memoryview(data)
@@ -235,7 +234,7 @@ def iter_bytes(data: bytes, slice_size, start=0, end=None):
         yield data[i: i + slice_size]
 
 
-def iter_bytes_4bit_le(data: bytes, start=0, end=None):
+def iter_bytes_4bit_le(data: bytes, start: int = 0, end: Optional[int] = None) -> Iterable[int]:
     """
     Generator that generates two 4 bit integers for each byte in the bytes-like object data.
     The 4 bit integers are expected to be stored little endian in the bytes.
@@ -247,7 +246,7 @@ def iter_bytes_4bit_le(data: bytes, start=0, end=None):
         yield upper
 
 
-def generate_bitfield(vs: Iterable[bool]):
+def generate_bitfield(vs: Iterable[bool]) -> int:
     """Generates a bitfield from the values in `vs`. Highest bit to lowest!"""
     val = 0
     for v in vs:
@@ -280,18 +279,18 @@ def _get_files_from_rom_with_extension__recursion(path: str, folder: Folder, ext
     return files
 
 
-def get_rom_folder(rom: NintendoDSRom, path: str) -> Folder:
+def get_rom_folder(rom: NintendoDSRom, path: str) -> Optional[Folder]:
     """Returns the folder in the ROM."""
     return rom.filenames.subfolder(path)
 
 
-def _check_memoryview(data):
+def _check_memoryview(data: bytes) -> None:
     """Check if data is actually a memory view object and if not warn. Only used for testing, otherwise does nothing."""
     if DEBUG and not isinstance(data, memoryview):
         warnings.warn('Byte operation without memoryview.')
 
 
-def lcm(x, y):
+def lcm(x: int, y: int) -> int:
     from math import gcd
     return x * y // gcd(x, y)
 
@@ -318,7 +317,7 @@ def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
     return out
 
 
-def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], change_next=0, change_amount=1) -> List[int]:
+def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], change_next: int = 0, change_amount: int = 1) -> List[int]:
     if color not in already_collected_colors:
         return color
     else:
@@ -362,7 +361,7 @@ def _mpcu__check(color: List[int], already_collected_colors: List[List[int]], ch
         return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)
 
 
-def get_resources_dir():
+def get_resources_dir() -> str:
     return pkg_resources.resource_filename('skytemple_files', '_resources')
 
 
@@ -399,13 +398,13 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
     return config
 
 
-def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):
+def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary') -> bytearray:
     """Returns the correct binary from the rom, using the binary block specifications."""
     parts = binary.filepath.split('/')
     if parts[0] == 'arm9.bin':
-        return rom.arm9 + rom.arm9PostData
+        return bytearray(rom.arm9 + rom.arm9PostData)
     if parts[0] == 'arm7.bin':
-        return rom.arm7
+        return bytearray(rom.arm7)
     if parts[0] == 'overlay':
         if len(parts) > 1:
             r = re.compile(r'overlay_(\d+).bin', re.IGNORECASE)
@@ -414,11 +413,11 @@ def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary'):
                 ov_id = int(match.group(1))
                 overlays = rom.loadArm9Overlays([ov_id])
                 if len(overlays) > 0:
-                    return overlays[ov_id].data
+                    return bytearray(overlays[ov_id].data)
     raise ValueError(f(_("Binary {binary.filepath} not found.")))
 
 
-def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: bytes):
+def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: bytes) -> None:
     """Sets the correct binary in the rom, using the binary block specifications."""
     parts = binary.filepath.split('/')
     if parts[0] == 'arm9.bin':
@@ -440,12 +439,12 @@ def set_binary_in_rom_ppmdu(rom: NintendoDSRom, binary: 'Pmd2Binary', data: byte
     raise ValueError(f(_("Binary {binary.filepath} not found.")))
 
 
-def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
+def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:
     """Create a file in the ROM using the requested filename"""
     path_list = path.split('/')
     dir_name = '/'.join(path_list[:-1])
     file_name = path_list[-1]
-    folder: Folder = rom.filenames.subfolder(dir_name)
+    folder: Optional[Folder] = rom.filenames.subfolder(dir_name)
     if folder is None:
         raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
     folder_first_file_id = folder.firstID
@@ -454,7 +453,7 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     index_of_new_file = bisect.bisect(folder.files, file_name)
     folder.files.insert(index_of_new_file, file_name)
 
-    def recursive_increment_folder_start_idx(rfolder: Folder, new_idx):
+    def recursive_increment_folder_start_idx(rfolder: Folder, new_idx: int) -> None:
         if rfolder != folder and rfolder.firstID >= new_idx:
             rfolder.firstID += 1
         for _, sfolder in rfolder.folders:
@@ -464,12 +463,12 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes):
     rom.files.insert(folder_first_file_id + index_of_new_file, data)
 
 
-def folder_in_rom_exists(rom: NintendoDSRom, path: str):
+def folder_in_rom_exists(rom: NintendoDSRom, path: str) -> bool:
     """Checks if a folder exists in the ROM."""
     return rom.filenames.subfolder(path) is not None
 
 
-def create_folder_in_rom(rom: NintendoDSRom, path: str):
+def create_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
     """Creates a folder in the ROM."""
     folder = rom.filenames.subfolder(path)
     if folder is not None:
@@ -496,17 +495,20 @@ def create_folder_in_rom(rom: NintendoDSRom, path: str):
     parent_dir.folders.append((path_list[-1], new_folder))
 
 
-def chunks(lst, n):
+T = TypeVar('T')
+
+
+def chunks(lst: Sequence[T], n: int) -> Iterable[Sequence[T]]:
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 
-def shrink_list(lst):
+def shrink_list(lst: List[T]) -> List[Tuple[T, int]]:
     return [(element, len(list(i))) for element, i in groupby(lst)]
 
 
-def list_insert_enlarge(lst, index, value, filler_fn):
+def list_insert_enlarge(lst: List[T], index: int, value: T, filler_fn: Callable[[], T]) -> None:
     """Inserts an element value at index index in lst. If the list is not big enough,
     it is enlarged and empty slots are filled with the return value of filler_fn."""
     if len(lst) <= index:
@@ -514,7 +516,7 @@ def list_insert_enlarge(lst, index, value, filler_fn):
     lst.append(value)
 
 
-def simple_quant(img: Image.Image, can_have_transparency=True) -> Image.Image:
+def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.Image:
     """
     Simple single-palette image quantization. Reduces to 15 colors and adds one transparent color at index 0.
     The transparent (alpha=0) pixels in the input image are converted to that color (if can_have_transparency=True).
@@ -530,9 +532,9 @@ def simple_quant(img: Image.Image, can_have_transparency=True) -> Image.Image:
         transparency_map = [False for px in img.getdata()]
     qimg = img.quantize(15, dither=NONE)
     # Get the original palette and add the transparent color
-    qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])
+    qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])  # type: ignore
     # Shift up all pixel values by 1 and add the transparent pixels
-    pixels = qimg.load()
+    pixels = qimg.load()  # type: ignore
     k = 0
     for j in range(img.size[1]):
         for i in range(img.size[0]):
@@ -547,10 +549,10 @@ def simple_quant(img: Image.Image, can_have_transparency=True) -> Image.Image:
 class AutoString:
     """Utility base class, that implements convenient __str__ and __repr__ based on object attributes."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.__class__.__name__}<{str({k: v for k, v in self.__dict__.items() if v is not None and not k[0] == '_'})}>"
 
 
@@ -560,24 +562,24 @@ class EnumCompatibleInt(int):
     _DEPR_WARN = "This (formerly '{}') is now an int and should no longer be used like an enum instance."
 
     # noinspection PyAttributeOutsideInit
-    def former(self, f):
+    def former(self, f: str) -> None:
         # I don't quite know how to pass arguments to __new__ or __init__ of builtin type subclasses.
         self._former = f
 
     @property
-    def value(self):
+    def value(self) -> int:
         warnings.warn(self._DEPR_WARN.format(self._former), category=DeprecationWarning, stacklevel=2)
         logger.warning(self._DEPR_WARN.format(self._former))
         return self
 
     @property
-    def name(self):
+    def name(self) -> str:
         warnings.warn(self._DEPR_WARN.format(self._former), category=DeprecationWarning, stacklevel=2)
         logger.warning(self._DEPR_WARN.format(self._former))
         return str(self)
 
 
-def set_rw_permission_folder(folder_path: str):
+def set_rw_permission_folder(folder_path: str) -> None:
     """
     Set the folder with the given to having the r+w permission.
     Does nothing on Windows.

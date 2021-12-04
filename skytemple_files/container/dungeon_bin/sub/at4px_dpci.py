@@ -15,19 +15,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpci.model import Dpci
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 
 class DbinAt4pxDpciHandler(DataHandler[Dpci]):
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dpci:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpci:
         from skytemple_files.common.types.file_types import FileType
         at = FileType.COMMON_AT.deserialize(data)
         return FileType.DPCI.deserialize(at.decompress())
 
     @classmethod
-    def serialize(cls, data: Dpci, **kwargs) -> bytes:
+    def serialize(cls, data: Dpci, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         serialized = FileType.DPCI.serialize(data)
         return FileType.COMMON_AT.serialize(

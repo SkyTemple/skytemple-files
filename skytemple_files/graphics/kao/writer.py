@@ -27,7 +27,7 @@ DEBUG = False
 
 
 class KaoWriter:
-    def __init__(self, force_rebuild_all=False, update_kao=True):
+    def __init__(self, force_rebuild_all: bool = False, update_kao: bool = True):
         self.force_rebuild_all = force_rebuild_all
         self.update_kao = update_kao
         pass
@@ -150,7 +150,7 @@ class KaoWriter:
             self.new_data = self.new_data[:current_image_offset]
 
         if self.update_kao:
-            kao.original_data = memoryview(self.new_data)
+            kao.original_data = memoryview(self.new_data)  # type: ignore
 
         return self.new_data
 

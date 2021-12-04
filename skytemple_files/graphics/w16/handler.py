@@ -16,18 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_uintle
+from skytemple_files.common.util import read_uintle, OptionalKwargs
 from skytemple_files.graphics.w16.model import W16, TOC_ENTRY_LEN
 from skytemple_files.graphics.w16.writer import W16Writer
 
 
 class W16Handler(DataHandler[W16]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> W16:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> W16:
         if not isinstance(data, memoryview):
             data = memoryview(data)
         return W16(data)
 
     @classmethod
-    def serialize(cls, data: W16, **kwargs) -> bytes:
+    def serialize(cls, data: W16, **kwargs: OptionalKwargs) -> bytes:
         return W16Writer(data).write()

@@ -18,10 +18,7 @@ import itertools
 import math
 from skytemple_files.common.i18n_util import f, _
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
@@ -121,7 +118,7 @@ class Dpc:
                         entry.idx += 1
         if not contains_null_chunk:
             tile_mappings = [[TilemapEntry.from_int(0) for _ in range(0, 9)]] + tile_mappings
-        self.chunks = tile_mappings
+        self.chunks = tile_mappings  # type: ignore
         self.re_fill_chunks()
 
     def re_fill_chunks(self):

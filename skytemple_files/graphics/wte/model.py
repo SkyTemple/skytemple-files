@@ -18,10 +18,7 @@ import logging
 from enum import Enum, auto
 from typing import Optional
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -37,7 +34,7 @@ class WteImageType(Enum):
     COLOR_4BPP = 0x03, _('4 bits per pixel (16 colors)'), 4, True
     COLOR_8BPP = 0x04, _('8 bits per pixel (256 colors)'), 8, True
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -162,7 +159,7 @@ class Wte(Sir0Serializable, AutoString):
         if not self.has_image():
             return im
         else:
-            return im.crop(box=[0,0,self.width,self.height])
+            return im.crop(box=(0,0,self.width,self.height))
         
     def to_pil(self, variation: int = 0) -> Image.Image:
         """ Returns the image with its actual size (the one specified by the image mode).
@@ -237,7 +234,7 @@ class Wte(Sir0Serializable, AutoString):
             assert x == 0x80
         return pal
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Wte):
             return False
         return self.actual_dim == other.actual_dim and \

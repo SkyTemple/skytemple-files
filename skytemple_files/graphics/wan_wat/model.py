@@ -16,15 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Tuple
 
-try:
-    from PIL import Image, ImageOps
-except ImportError:
-    from pil import Image, ImageOps
+from PIL import Image, ImageOps
 from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation, ImageBytes
 
 
 class MetaFramePositioningSpecs:
-    def __init__(self, img: Image, width: int, height: int, x_offset: int, y_offset: int):
+    def __init__(self, img: Image.Image, width: int, height: int, x_offset: int, y_offset: int):
         self.img = img
         self.width = width
         self.height = height

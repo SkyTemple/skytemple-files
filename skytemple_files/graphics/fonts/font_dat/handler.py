@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.font_dat.model import FontDat
 from skytemple_files.graphics.fonts.font_dat.writer import FontDatWriter
 
 
 class FontDatHandler(DataHandler[FontDat]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> FontDat:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> FontDat:
         return FontDat(data)
 
     @classmethod
-    def serialize(cls, data: FontDat, **kwargs) -> bytes:
+    def serialize(cls, data: FontDat, **kwargs: OptionalKwargs) -> bytes:
         return FontDatWriter(data).write()

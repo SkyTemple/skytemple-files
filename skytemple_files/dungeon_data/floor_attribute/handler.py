@@ -16,16 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import read_bytes, OptionalKwargs
 from skytemple_files.dungeon_data.floor_attribute.model import FloorAttribute
 from skytemple_files.dungeon_data.floor_attribute.writer import FloorAttributeWriter
 
 
 class FloorAttributeHandler(DataHandler[FloorAttribute]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> FloorAttribute:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> FloorAttribute:
         return FloorAttribute(data)
 
     @classmethod
-    def serialize(cls, data: FloorAttribute, **kwargs) -> bytes:
+    def serialize(cls, data: FloorAttribute, **kwargs: OptionalKwargs) -> bytes:
         return FloorAttributeWriter(data).write()

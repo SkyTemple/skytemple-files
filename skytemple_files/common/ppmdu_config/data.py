@@ -19,7 +19,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from enum import Enum
-from typing import List, Dict, Union, Pattern, Optional
+from typing import List, Dict, Union, Pattern, Optional, Any
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
@@ -59,46 +59,46 @@ class Pmd2BinaryBlock(AutoString):
         self.name = name
         self.begin = begin
         self.end = end
-        self.parent = None
+        self.parent: Optional['Pmd2Binary'] = None
 
-    def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent  # type: ignore
-
-    @property
-    def begin_absolute(self):
-        return self.parent.loadaddress + self.begin
+    def add_parent(self, parent: 'Pmd2Binary') -> None:
+        self.parent = parent
 
     @property
-    def end_absolute(self):
-        return self.parent.loadaddress + self.end
+    def begin_absolute(self) -> int:
+        return self.parent.loadaddress + self.begin  # type: ignore
+
+    @property
+    def end_absolute(self) -> int:
+        return self.parent.loadaddress + self.end  # type: ignore
 
 
 class Pmd2BinaryFunction(AutoString):
     def __init__(self, name: str, begin: int):
         self.name = name
         self.begin = begin
-        self.parent = None
+        self.parent: Optional['Pmd2Binary'] = None
 
-    def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent  # type: ignore
+    def add_parent(self, parent: 'Pmd2Binary') -> None:
+        self.parent = parent
 
     @property
-    def begin_absolute(self):
-        return self.parent.loadaddress + self.begin
+    def begin_absolute(self) -> int:
+        return self.parent.loadaddress + self.begin  # type: ignore
 
 
 class Pmd2BinaryPointer(AutoString):
     def __init__(self, name: str, begin: int):
         self.name = name
         self.begin = begin
-        self.parent = None
+        self.parent: Optional['Pmd2Binary'] = None
 
-    def add_parent(self, parent: 'Pmd2Binary'):
-        self.parent = parent  # type: ignore
+    def add_parent(self, parent: 'Pmd2Binary') -> None:
+        self.parent = parent
 
     @property
-    def begin_absolute(self):
-        return self.parent.loadaddress + self.begin
+    def begin_absolute(self) -> int:
+        return self.parent.loadaddress + self.begin  # type: ignore
 
 
 class Pmd2Binary(AutoString):
@@ -125,7 +125,7 @@ class Pmd2Language(AutoString):
         self.locale = locale
         self.sort_lists = sort_lists
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name_localized
 
 
@@ -136,7 +136,7 @@ class Pmd2StringBlock(AutoString):
         self.begin = begin
         self.end = end
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name_localized
 
 
@@ -176,7 +176,7 @@ class Pmd2PatchParameterType(Enum):
 
 
 class Pmd2PatchParameterOption(AutoString):
-    def __init__(self, type: Pmd2PatchParameterType, label: str, value):
+    def __init__(self, type: Pmd2PatchParameterType, label: str, value: Union[int, str]):
         self.type = type
         self.label = label
         self.value = value
@@ -186,7 +186,7 @@ class Pmd2PatchParameter(AutoString):
     def __init__(
             self, name: str, type: Pmd2PatchParameterType, label: str, *,
             min: Optional[int] = None, max: Optional[int] = None,
-            options: Optional[List[Pmd2PatchParameterOption]] = None, default=None):
+            options: Optional[List[Pmd2PatchParameterOption]] = None, default: Union[int, str, None] = None):
         self.name = name
         self.type = type
         self.label = label
@@ -203,7 +203,7 @@ class Pmd2Patch(AutoString):
         self.open_bins = open_bins
         self.parameters: Dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
 
-    def has_parameters(self):
+    def has_parameters(self) -> bool:
         return len(self.parameters) > 0
 
 
@@ -214,7 +214,7 @@ class Pmd2PatchStringReplacementGame(AutoString):
 
 
 class Pmd2PatchStringReplacement(AutoString):
-    def __init__(self, filename: str, regexp: Pattern, games: List[Pmd2PatchStringReplacementGame]):
+    def __init__(self, filename: str, regexp: Pattern[Any], games: List[Pmd2PatchStringReplacementGame]):
         self.filename = filename
         self.regexp = regexp
         self.games = games
@@ -227,7 +227,7 @@ class Pmd2SimplePatch(AutoString):
         self.string_replacements = string_replacements
         self.parameters: Dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
 
-    def has_parameters(self):
+    def has_parameters(self) -> bool:
         return len(self.parameters) > 0
 
 
@@ -276,7 +276,7 @@ class Pmd2Data(AutoString):
         self.animation_names: Dict[int, Pmd2Sprite] = {k: animation_names[k] for k in sorted(animation_names)}
 
     @staticmethod
-    def get_region_constant_for_region_name(region):
+    def get_region_constant_for_region_name(region: str) -> str:
         if region == 'NorthAmerica':
             return GAME_REGION_US
         if region == 'Europe':

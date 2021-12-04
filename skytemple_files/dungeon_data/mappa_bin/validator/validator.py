@@ -42,7 +42,7 @@ class DungeonValidator:
         return self._errors
 
     @property
-    def invalid_dungeons(self):
+    def invalid_dungeons(self) -> Set[int]:
         """IDs of invalid dungeons. Dungeons which have non-critical errors are not listed."""
         if not self._validated:
             raise ValueError("Call validate first.")
@@ -85,7 +85,7 @@ class DungeonValidator:
                 for f_id in open_floors:
                     dungeon_id = self._mappa_get_dungeon_id(visited_floor_list_id, f_id)
                     if dungeon_id in already_invalidated.keys():
-                        already_invalidated[dungeon_id].add(f_id)
+                        already_invalidated[dungeon_id].add(f_id)  # type: ignore
                     else:
                         err = DungeonMissingFloorError(self.dungeons[dungeon_id], dungeon_id, [f_id])
                         self._errors.append(err)
@@ -97,29 +97,29 @@ class DungeonValidator:
 
         return len(self._errors) < 1
 
-    def _mappa_floor_list_doesnt_exist(self, mappa_index):
+    def _mappa_floor_list_doesnt_exist(self, mappa_index: int) -> bool:
         return len(self.floors) <= mappa_index
 
-    def _mappa_floor_doesnt_exist(self, mappa_index, start_after, number_floors):
+    def _mappa_floor_doesnt_exist(self, mappa_index: int, start_after: int, number_floors: int) -> bool:
         return len(self.floors[mappa_index]) < start_after + number_floors
 
-    def _mappa_floor_already_visited(self, mappa_index, start_after, number_floors):
+    def _mappa_floor_already_visited(self, mappa_index: int, start_after: int, number_floors: int) -> bool:
         for i in range(start_after, start_after + number_floors):
             if i in self._visited_floor_lists[mappa_index]:
                 return True
         return False
 
-    def _init_mappa_visited(self, mappa_index):
+    def _init_mappa_visited(self, mappa_index: int) -> List[int]:
         s = []
         for i in range(0, len(self.floors[mappa_index])):
             s.append(i)
         return s
 
-    def _add_mappa_visited(self, mappa_index, start_after, number_floors):
+    def _add_mappa_visited(self, mappa_index: int, start_after: int, number_floors: int) -> None:
         for i in range(start_after, start_after + number_floors):
             self._visited_floor_lists[mappa_index].append(i)
 
-    def _mappa_group_count_invalid(self, dungeons, mappa_index) -> Tuple[int, List[int]]:
+    def _mappa_group_count_invalid(self, dungeons: List[DungeonDefinition], mappa_index: int) -> Tuple[int, List[int]]:
         count_floor_expected = 0
         dungeons_to_check = []
         invalid = []
@@ -132,17 +132,17 @@ class DungeonValidator:
                 invalid.append(i)
         return count_floor_expected, invalid
 
-    def _mappa_which_dungeon_uses(self, mappa_index, start_after, number_floors):
-        for i, dungeon in enumerate(self.dungeons):
+    def _mappa_which_dungeon_uses(self, mappa_index: int, start_after: int, number_floors: int) -> int:
+        for i, dungeon in enumerate(self.dungeons):  # type: ignore
             if dungeon.mappa_index == mappa_index:
                 if dungeon.start_after >= start_after and dungeon.start_after + dungeon.number_floors > start_after + number_floors:
                     return i
         raise ValueError("Invalid reference in dungeon validation")
 
-    def _mappa_get_dungeon_id(self, mappa_index, floor_id):
+    def _mappa_get_dungeon_id(self, mappa_index: int, floor_id: int) -> int:
         start_index_prev = -1
         current_i = None
-        for i, dungeon in enumerate(self.dungeons):
+        for i, dungeon in enumerate(self.dungeons):  # type: ignore
             if dungeon.mappa_index == mappa_index:
                 if start_index_prev < dungeon.start_after <= floor_id:
                     current_i = i

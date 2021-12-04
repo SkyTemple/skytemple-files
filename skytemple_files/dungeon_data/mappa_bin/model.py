@@ -87,7 +87,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
         pointer += FLOOR_IDX_ENTRY_LEN
         floor_data = read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN]
         while floor_data != empty:
-            floors.append(MappaFloor.from_mappa(read, floor_data))  # type: ignore
+            floors.append(MappaFloor.from_mappa(read, floor_data))
             pointer += FLOOR_IDX_ENTRY_LEN
             floor_data = read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN]
             if pointer > read.dungeon_list_index_start - FLOOR_IDX_ENTRY_LEN:
@@ -173,7 +173,7 @@ class MappaBin(Sir0Serializable, XmlSerializable):
             lst.append(elem)
         return index
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaBin):
             return False
         return self.floor_lists == other.floor_lists

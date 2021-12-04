@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import typing
 from enum import Enum
-from typing import Dict
+from typing import Dict, Iterator
 
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
@@ -40,23 +40,23 @@ class Gender(Enum):
     FEMALE = 2, _('Female')
     GENDERLESS = 3, _('Genderless')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Gender.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -81,23 +81,23 @@ class PokeType(Enum):
     STEEL = 17, _("Steel")
     NEUTRAL = 18, _("Neutral")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: int, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'PokeType.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -228,23 +228,23 @@ class Ability(Enum):
     NONE = 0xFF, _('NONE')
     NULL = 0x00, _('NULL')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: int, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Ability.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -266,23 +266,23 @@ class IQGroup(Enum):
     UNUSEDE = 0xE, _('Unused') + ' E'
     INVALID = 0xF, _('Invalid')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'IQGroup.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -294,24 +294,25 @@ class EvolutionMethod(Enum):
     RECRUITED = 4, _('Recruited')
     NO_REQ = 5, _('No Main Requirement')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'EvolutionMethod.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
+
 
 class AdditionalRequirement(Enum):
     NONE = 0, _('None')
@@ -331,23 +332,23 @@ class AdditionalRequirement(Enum):
     DOUBLE_HIT = 14, _('Knows Double Hit')
     MIMIC = 15, _('Knows Mimic')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'EvolutionMethod.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -359,23 +360,23 @@ class MovementType(Enum):
     LAVA = 4, _("Lava")
     WATER = 5, _("Water")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'MovementType.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
@@ -384,28 +385,28 @@ class ShadowSize(Enum):
     MEDIUM = 1, _('Medium')
     LARGE = 2, _('Large')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: str, print_name: Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._print_name_
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'ShadowSize.{self.name}'
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self._print_name_
 
 
 class MdEntry(AutoString):
-    def __init__(self, *, bitflag1: int, **data):
+    def __init__(self, *, bitflag1: int, **data: List[int]):
         self.md_index: int = 0
         self.entid: int = 0
         self.unk31: int = 0
@@ -463,7 +464,7 @@ class MdEntry(AutoString):
             setattr(self, key, data[key])
 
     @property
-    def md_index_base(self):
+    def md_index_base(self) -> int:
         return self.md_index % MdProperties.NUM_ENTITIES
 
 
@@ -533,23 +534,23 @@ class Md:
                 self._entries_by_entid[entry.entid] = []
             self._entries_by_entid[entry.entid].append((i, entry))
 
-    def get_by_index(self, index) -> MdEntry:
+    def get_by_index(self, index: int) -> MdEntry:
         return self.entries[index]
 
-    def get_by_entity_id(self, index) -> List[Tuple[int, MdEntry]]:
+    def get_by_entity_id(self, index: int) -> List[Tuple[int, MdEntry]]:
         return self._entries_by_entid[index]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.entries)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: int) -> MdEntry:
         return self.get_by_index(key)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: int, value: MdEntry) -> None:
         self.entries[key] = value
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: int) -> None:
         del self.entries[key]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[MdEntry]:
         return iter(self.entries)

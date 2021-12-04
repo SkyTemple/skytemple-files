@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.colvec.model import Colvec
 from skytemple_files.graphics.colvec.writer import ColvecWriter
 
 
 class ColvecHandler(DataHandler[Colvec]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'Colvec':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'Colvec':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), Colvec)
 
     @classmethod
-    def serialize(cls, data: 'Colvec', **kwargs) -> bytes:
+    def serialize(cls, data: 'Colvec', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

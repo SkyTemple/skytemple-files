@@ -18,10 +18,7 @@ import itertools
 import math
 from typing import Tuple, List, Sequence
 
-try:
-    from PIL import Image, ImageDraw, ImageFont
-except ImportError:
-    from pil import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
 from skytemple_files.common.util import *
@@ -192,7 +189,7 @@ class Bma:
         i = 0
         skipped_on_prev = True
         for chunk in iter_bytes(data[0], 2):
-            chunk = int.from_bytes(chunk, 'little')
+            chunk_i = int.from_bytes(chunk, 'little')
             if i >= max_tiles:
                 # this happens if there is a leftover 12bit word.
                 break
@@ -203,7 +200,7 @@ class Bma:
                 skipped_on_prev = True
                 continue
             skipped_on_prev = False
-            cv = chunk ^ previous_row_values[index_in_row]
+            cv = chunk_i ^ previous_row_values[index_in_row]
             previous_row_values[index_in_row] = cv
             layer.append(cv)
             i += 1
@@ -262,7 +259,7 @@ class Bma:
 
         chunks = bpc.chunks_animated_to_pil(bpc_layer_id, palettes, bpas, 1)[0]
         fimg = Image.new('P', (width_map, height_map))
-        fimg.putpalette(chunks.getpalette())
+        fimg.putpalette(chunks.getpalette())  # type: ignore
 
         for i, mt_idx in enumerate(bma_layer):
             x = i % self.map_width_chunks
@@ -306,7 +303,7 @@ class Bma:
         chunks_lower = bpc.chunks_animated_to_pil(lower_layer_bpc, bpl.palettes, bpas, 1)
         for img in chunks_lower:
             fimg = Image.new('P', (width_map, height_map))
-            fimg.putpalette(img.getpalette())
+            fimg.putpalette(img.getpalette())  # type: ignore
 
             # yes. self.layer0 is always the LOWER layer! It's the opposite from BPC
             for i, mt_idx in enumerate(self.layer0):
@@ -459,8 +456,8 @@ class Bma:
         upper_palette_palette_color_offset = 0
         if upper_img is not None and lower_img is not None and how_many_palettes_lower_layer < BPL_MAX_PAL:
             # Combine palettes
-            lower_palette = lower_img.getpalette()[:how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]
-            upper_palette = upper_img.getpalette()[:(BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]
+            lower_palette = lower_img.getpalette()[:how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]  # type: ignore
+            upper_palette = upper_img.getpalette()[:(BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]  # type: ignore
             new_palette = lower_palette + upper_palette
             lower_img.putpalette(new_palette)
             upper_img.putpalette(new_palette)

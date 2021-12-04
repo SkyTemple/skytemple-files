@@ -252,7 +252,7 @@ class MappaFloor(AutoString, XmlSerializable):
 
         return cls(**data)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaFloor):
             return False
         return self.floor_items == other.floor_items \

@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry
 from skytemple_files.data.level_bin_entry.writer import LevelBinEntryWriter
 
 
 class LevelBinEntryHandler(DataHandler[LevelBinEntry]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> LevelBinEntry:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> LevelBinEntry:
         return LevelBinEntry(data)
 
     @classmethod
-    def serialize(cls, data: LevelBinEntry, **kwargs) -> bytes:
+    def serialize(cls, data: LevelBinEntry, **kwargs: OptionalKwargs) -> bytes:
         return LevelBinEntryWriter(data).write()

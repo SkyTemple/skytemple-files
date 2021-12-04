@@ -23,10 +23,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.graphics.img_trp import TILE_DIM, CHUNK_DIM, PAL_ENTRY_LEN, PAL_LEN
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 
 class ImgTrp(Sir0Serializable):
@@ -98,7 +95,7 @@ class ImgTrp(Sir0Serializable):
             palettes.append(pal)
         return palettes
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ImgTrp):
             return False
         return self.sprites == other.sprites and self.palettes == other.palettes

@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.mappa_g_bin.model import MappaGBin
 
 from skytemple_files.dungeon_data.mappa_g_bin.writer import MappaGBinWriter
@@ -27,15 +28,15 @@ class MappaGBinHandler(DataHandler[MappaGBin]):
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'MappaGBin':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'MappaGBin':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), MappaGBin)
 
     @classmethod
-    def serialize(cls, data: 'MappaGBin', **kwargs) -> bytes:
+    def serialize(cls, data: 'MappaGBin', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: 'MappaGBin', **kwargs) -> bytes:
+    def serialize_raw(cls, data: 'MappaGBin', **kwargs: OptionalKwargs) -> bytes:
         return MappaGBinWriter(data).write()[0]

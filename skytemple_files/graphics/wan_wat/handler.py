@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.chara_wan.handler import CharaWanHandler
 from skytemple_files.graphics.wan_wat.model import Wan
 
@@ -27,9 +28,9 @@ class WanHandler(DataHandler[Wan]):
     CHARA = CharaWanHandler
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Wan:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Wan:
         return Wan(data)
 
     @classmethod
-    def serialize(cls, data: Wan, **kwargs) -> bytes:
+    def serialize(cls, data: Wan, **kwargs: OptionalKwargs) -> bytes:
         raise NotImplementedError()

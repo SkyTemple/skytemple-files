@@ -18,7 +18,7 @@ from typing import List, Type, TypeVar, Optional
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import read_bytes, OptionalKwargs
 from skytemple_files.container.sir0.model import Sir0
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.writer import Sir0Writer
@@ -29,13 +29,13 @@ T = TypeVar('T', bound=Sir0Serializable)
 
 class Sir0Handler(DataHandler[Sir0]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Sir0:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Sir0:
         if not cls.matches(data):
             raise ValueError("This is not valid Sir0.")
         return Sir0.from_bin(data)
 
     @classmethod
-    def serialize(cls, data: Sir0, **kwargs) -> bytes:
+    def serialize(cls, data: Sir0, **kwargs: OptionalKwargs) -> bytes:
         return Sir0Writer(data).write()
 
     @classmethod

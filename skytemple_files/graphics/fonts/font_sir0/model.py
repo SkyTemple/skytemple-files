@@ -28,10 +28,7 @@ from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.common.i18n_util import f, _
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 
 class FontSir0Entry(AbstractFontEntry):
@@ -90,7 +87,7 @@ class FontSir0Entry(AbstractFontEntry):
             data.append(v)
         return FontSir0Entry(char, table, width, cat, padding, bytes(data))
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontSir0Entry):
             return False
         return self.char == other.char and \
@@ -198,7 +195,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                     self.entries.append(FontSir0Entry.from_pil(tables[t].crop(box=[x, y, x+FONT_SIR0_SIZE, y+FONT_SIR0_SIZE]), charid, t, width, cat, padding))
         pass
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontSir0):
             return False
         return self.entries == other.entries

@@ -124,7 +124,7 @@ and to save a backup of your ROM before applying this.""")
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 new_pkmn_str_region = US_NEW_PKMN_STR_REGION
@@ -339,5 +339,5 @@ and to save a backup of your ROM before applying this.""")
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

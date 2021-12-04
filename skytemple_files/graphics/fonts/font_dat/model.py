@@ -24,10 +24,7 @@ from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEn
 from xml.etree.ElementTree import Element
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.common.i18n_util import f, _
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 class FontDatEntry(AbstractFontEntry):
     def __init__(self, char: int, table: int, width: int, bprow: int, data: bytes):
@@ -97,7 +94,7 @@ class FontDatEntry(AbstractFontEntry):
                     data[pos] = data[pos]|(2**(j%8))
         return FontDatEntry(char, table, width, bprow_field, bytes(data))
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDatEntry):
             return False
         return self.char == other.char and \
@@ -189,7 +186,7 @@ class FontDat(AbstractFont):
                     y = (charid//16)*FONT_DAT_SIZE
                     self.entries.append(FontDatEntry.from_pil(tables[t].crop(box=[x, y, x+FONT_DAT_SIZE, y+FONT_DAT_SIZE]), charid, t, width, bprow))
         pass
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDat):
             return False
         return self.entries == other.entries

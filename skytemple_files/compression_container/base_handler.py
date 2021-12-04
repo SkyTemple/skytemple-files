@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 from typing import Type, TypeVar
 
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol, U
-from skytemple_files.common.util import read_bytes
+from skytemple_files.common.util import read_bytes, OptionalKwargs
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 T = TypeVar('T', bound=CompressionContainerProtocol)
@@ -41,19 +41,19 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
         return CompressionContainerWriter
 
     @classmethod
-    def serialize(cls, data: T, **kwargs) -> bytes:
+    def serialize(cls, data: T, **kwargs: OptionalKwargs) -> bytes:
         """Convert the high-level container representation back into bytes."""
         return cls.get_writer_cls()().write(data)
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> T:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> T:
         """Load a container into a high-level representation"""
         if not cls.matches(data):
             raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
         return cls.get_model_cls()(data)
 
     @classmethod
-    def matches(cls, data: bytes, byte_offset=0):
+    def matches(cls, data: bytes, byte_offset: int = 0) -> bool:
         """Check if the given data is a container of its type"""
         return read_bytes(data, byte_offset, 5) == cls.magic_word()
 
@@ -63,7 +63,7 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
         return cls.get_model_cls().compress(bytes(data))
 
     @classmethod
-    def cont_size(cls, data: bytes, byte_offset=0):
+    def cont_size(cls, data: bytes, byte_offset: int = 0) -> bool:
         """Get the size of a container starting at the given offset in data."""
         if not cls.matches(data, byte_offset):
             raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")

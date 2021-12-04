@@ -32,7 +32,7 @@ class HardcodedTactics:
         return lst
 
     @staticmethod
-    def set_unlock_levels(value: List[int], arm9: bytearray, config: Pmd2Data):
+    def set_unlock_levels(value: List[int], arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['TacticsUnlockLevel']
         expected_length = int((block.end - block.begin) / ENTRY_LEN)
         if len(value) != expected_length:

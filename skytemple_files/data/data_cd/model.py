@@ -26,7 +26,7 @@ class DataCD(AutoString):
             data = memoryview(data)
         limit = read_uintle(data, 0, 4)
         self.items_effects = []
-        self.effects_code: List[bytes] = []  # type: ignore
+        self.effects_code: List[bytes] = []
         for x in range(4, limit, 2):
             self.items_effects.append(read_uintle(data, x, 2))
 
@@ -34,7 +34,7 @@ class DataCD(AutoString):
         for x in range(limit, last_ptr, 8):
             start = read_uintle(data, x, 4)
             length = read_uintle(data, x+4, 4)
-            self.effects_code.append(data[start:start+length])  # type: ignore
+            self.effects_code.append(data[start:start+length])
 
     def nb_items(self) -> int:
         return len(self.items_effects)
@@ -42,10 +42,10 @@ class DataCD(AutoString):
     def get_item_effect_id(self, item_id: int) -> int:
         return self.items_effects[item_id]
 
-    def set_item_effect_id(self, item_id: int, effect_id: int):
+    def set_item_effect_id(self, item_id: int, effect_id: int) -> None:
         self.items_effects[item_id] = effect_id
         
-    def add_item_effect_id(self, effect_id: int):
+    def add_item_effect_id(self, effect_id: int) -> None:
         self.items_effects.append(effect_id)
         
     def get_all_of(self, effect_id: int) -> List[int]:
@@ -61,7 +61,7 @@ class DataCD(AutoString):
     def get_effect_code(self, effect_id: int) -> bytes:
         return self.effects_code[effect_id]
     
-    def del_effect_code(self, effect_id: int):
+    def del_effect_code(self, effect_id: int) -> None:
         if len(self.get_all_of(effect_id))!=0:
             raise ValueError(_("To delete this effect, no items must use it."))
         for i in range(len(self.items_effects)):
@@ -70,16 +70,16 @@ class DataCD(AutoString):
         
         del self.effects_code[effect_id]
     
-    def add_effect_code(self, data: bytes):
+    def add_effect_code(self, data: bytes) -> None:
         self.effects_code.append(data)
 
-    def import_armips_effect_code(self, effect_id: int, armips_asm: str):
+    def import_armips_effect_code(self, effect_id: int, armips_asm: str) -> None:
         self.set_effect_code(effect_id, ArmipsImporter().assemble(armips_asm))
         
-    def set_effect_code(self, effect_id: int, data: bytes):
+    def set_effect_code(self, effect_id: int, data: bytes) -> None:
         self.effects_code[effect_id] = data
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataCD):
             return False
         return self.items_effects == other.items_effects and \

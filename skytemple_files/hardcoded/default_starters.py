@@ -52,7 +52,7 @@ class SpecialEpisodePc(AutoString):
         write_uintle(b, self.fixed_hp, 18, 2)
         return b
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, SpecialEpisodePc):
             return False
         return self.poke_id == other.poke_id \
@@ -77,7 +77,7 @@ class HardcodedDefaultStarters:
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
-    def set_partner_md_id(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_partner_md_id(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default partner starter
         """
@@ -93,7 +93,7 @@ class HardcodedDefaultStarters:
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
-    def set_player_md_id(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_player_md_id(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default player starter
         """
@@ -109,7 +109,7 @@ class HardcodedDefaultStarters:
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
-    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the partner starter
         """
@@ -125,7 +125,7 @@ class HardcodedDefaultStarters:
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
-    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the player starter
         """
@@ -155,7 +155,7 @@ class HardcodedDefaultStarters:
         return lst
 
     @staticmethod
-    def set_special_episode_pcs(value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data):
+    def set_special_episode_pcs(value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the special episode player characters
         """

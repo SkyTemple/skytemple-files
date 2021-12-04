@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.img_trp.model import ImgTrp
 
 
 class ImgTrpHandler(DataHandler[ImgTrp]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'ImgTrp':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ImgTrp':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ImgTrp)
 
     @classmethod
-    def serialize(cls, data: 'ImgTrp', **kwargs) -> bytes:
+    def serialize(cls, data: 'ImgTrp', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpla.model import Dpla
 
 
@@ -26,9 +27,9 @@ class DplaHandler(DataHandler[Dpla]):
     If used directly, we assume the file starts with the pointers to the palette.
     """
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dpla:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpla:
         return Dpla(data, 0)
 
     @classmethod
-    def serialize(cls, data: Dpla, **kwargs) -> bytes:
+    def serialize(cls, data: Dpla, **kwargs: OptionalKwargs) -> bytes:
         return data.sir0_serialize_parts()[0]

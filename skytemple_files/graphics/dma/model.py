@@ -18,10 +18,7 @@ import math
 from enum import Enum
 from typing import Union
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
@@ -158,7 +155,7 @@ class Dma:
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)
 
         fimg = Image.new('P', (width, height))
-        fimg.putpalette(chunks.getpalette())
+        fimg.putpalette(chunks.getpalette())  # type: ignore
 
         def paste(chunk_index, x, y):
             fimg.paste(

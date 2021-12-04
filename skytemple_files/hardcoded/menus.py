@@ -20,10 +20,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.i18n_util import _
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 MENU_ENTRY_LEN = 8
 class MenuDataType(Enum):
@@ -108,7 +105,7 @@ class MenuType(Enum):
     DUNGEON_DEBUG_MENU = 3401, MenuDataType.NORMAL, 'overlay/overlay_0034.bin', 'DungeonDebugMenu', _("Dungeon Debug Menu")
     # TODO: There are more menus
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -151,7 +148,7 @@ class HardcodedMenus:
         return menu_list
 
     @staticmethod
-    def set_menu(menu: MenuType, menu_data: List[MenuEntry], binary: bytearray, config: Pmd2Data):
+    def set_menu(menu: MenuType, menu_data: List[MenuEntry], binary: bytearray, config: Pmd2Data) -> None:
         """
         Sets one menu
         """

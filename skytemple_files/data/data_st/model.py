@@ -50,7 +50,7 @@ class DataST(AutoString):
         return ids
     
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataST):
             return False
         return self.struct_ids == other.struct_ids and \

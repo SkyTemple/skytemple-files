@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.container.bin_pack.writer import BinPackWriter
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 
 
 class DungeonBinHandler(DataHandler[DungeonBinPack]):
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs) -> DungeonBinPack:  # type: ignore
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs) -> DungeonBinPack:  # type: ignore
         return DungeonBinPack(data, static_data.dungeon_data.dungeon_bin_files)
 
     @classmethod
-    def serialize(cls, data: DungeonBinPack, **kwargs) -> bytes:
+    def serialize(cls, data: DungeonBinPack, **kwargs: OptionalKwargs) -> bytes:
         """
         Serialize the bin pack.
         """

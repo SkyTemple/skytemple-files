@@ -70,7 +70,7 @@ class Icon:
             [self._palette], ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, bpp=4,
         )
 
-    def from_pil(self, img: Image.Image):
+    def from_pil(self, img: Image.Image) -> None:
         tiles, _, pals = from_pil(
             img, 16, 1, ICON_DIM_TILE,
             ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False
@@ -100,7 +100,7 @@ class IconBanner:
         self.title_italian = read_bytes(data, 0x640, 0x100).decode('UTF-16LE').rstrip('\x00')
         self.title_spanish = read_bytes(data, 0x740, 0x100).decode('UTF-16LE').rstrip('\x00')
 
-    def save_to_rom(self):
+    def save_to_rom(self) -> None:
         data = bytearray(ICON_BANNER_SIZE)
 
         write_uintle(data, self.version, 0x0, 0x2)

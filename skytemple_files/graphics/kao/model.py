@@ -98,18 +98,18 @@ class Kao:
         self.reset(toc_len)
 
     def expand(self, new_size):
-        if new_size<self.toc_len:
+        if new_size < self.toc_len:
             raise ValueError(f"Can't reduce size from {self.toc_len} to {new_size}")
         from skytemple_files.graphics.kao.writer import KaoWriter
 
-        #Write all changes
+        # Write all changes
         self.original_data = bytearray(KaoWriter(self).write())
 
-        #Prepare for expanding
-        expand_len = new_size-self.toc_len
+        # Prepare for expanding
+        expand_len = new_size - self.toc_len
         expand_size = expand_len * (SUBENTRIES * SUBENTRY_LEN)
         limit = self.first_toc + (self.toc_len * SUBENTRIES * SUBENTRY_LEN)
-        #Rewrite all pointers
+        # Rewrite all pointers
         last_pnt = 0
         for x in range(self.toc_len * SUBENTRIES):
             start = self.first_toc + x * SUBENTRY_LEN
@@ -118,21 +118,22 @@ class Kao:
                 pnt -= expand_size
                 last_pnt = pnt
             elif pnt > 0:
-                last_pnt = -KaoImage(self.original_data, pnt).size()-expand_size
+                last_pnt = -KaoImage(self.original_data, pnt).size() - expand_size
                 pnt += expand_size
             write_sintle(self.original_data, pnt, start, SUBENTRY_LEN)
 
-        #Expand
+        # Expand
         expand_pnt = bytearray(4)
         write_sintle(expand_pnt, last_pnt, 0, SUBENTRY_LEN)
-        self.original_data = self.original_data[:limit]+(expand_pnt * (expand_len * SUBENTRIES))+self.original_data[limit:]
+        self.original_data = self.original_data[:limit] + (expand_pnt * (expand_len * SUBENTRIES)) + self.original_data[
+                                                                                                     limit:]
         self.toc_len = new_size
         self.reset(new_size)
-    
+
     def reset(self, toc_len):
         self.loaded_kaos = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
         self.loaded_kaos_flat: List[Tuple[int, int, KaoImage]] = []  # cache for performance
-        
+
     def get(self, index: int, subindex: int) -> Union[KaoImage, None]:
         """Get the KaoImage at the specified location or None if no image is specified"""
         if index >= self.toc_len or index < 0:
@@ -176,7 +177,7 @@ class Kao:
         return KaoIterator(self, self.toc_len, SUBENTRIES)
 
 
-class KaoIterator:
+class KaoIterator(Iterator):  # type: ignore
     def __init__(self, kao: Kao, indices: int, subindices: int):
         self.kao = kao
         self.current_index = 0
@@ -264,8 +265,8 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
         the_two_px_to_write[idx % 2] = pix
         if idx % 2 == 1:
             # -1 because we are always processing 2 px at the same time
-            x =( idx-1) % img_dim
-            y = int((idx-1) / img_dim)
+            x = (idx - 1) % img_dim
+            y = int((idx - 1) / img_dim)
 
             tile_x = math.floor(x / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
             tile_y = math.floor(y / KAO_IMG_METAPIXELS_DIM) % KAO_IMG_METAPIXELS_DIM
@@ -276,28 +277,28 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
             idx_in_tile = in_tile_y * KAO_IMG_METAPIXELS_DIM + in_tile_x
 
             nidx = int((tile_id * KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM + idx_in_tile) / 2)
-            #print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
+            # print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
             # Little endian:
             new_img[nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
     # Palette reordering algorithm
     # Tries to reorder the palette to have a more favorable data
     # configuration for the PX algorithm
     pairs = dict()
-    for x in range(len(new_img)-1):
-        l = [new_img[x]%16, new_img[x]//16, new_img[x+1]%16, new_img[x+1]//16]
-        if l.count(l[0])==3 or (l.count(l[0])==1 and l.count(l[1])==3):
+    for x in range(len(new_img) - 1):
+        l = [new_img[x] % 16, new_img[x] // 16, new_img[x + 1] % 16, new_img[x + 1] // 16]
+        if l.count(l[0]) == 3 or (l.count(l[0]) == 1 and l.count(l[1]) == 3):
             a = l[0]
             for b in l:
-                if b!=a:
+                if b != a:
                     break
-            if a>=b:
-                c=b
-                b=a
-                a=c
-            if (a,b) in pairs:
-                pairs[(a,b)]+=1
+            if a >= b:
+                c = b
+                b = a
+                a = c
+            if (a, b) in pairs:
+                pairs[(a, b)] += 1
             else:
-                pairs[(a,b)]=1
+                pairs[(a, b)] = 1
     new_order = [0]
     for k, v in sorted(pairs.items(), key=lambda x: -x[1]):
         k0_in_no = k[0] in new_order
@@ -312,11 +313,11 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
                 to_check = k[1]
                 to_add = k[0]
             i = new_order.index(to_check)
-            if i>0:
-                if new_order[i-1]==-1:
+            if i > 0:
+                if new_order[i - 1] == -1:
                     new_order.insert(i, to_add)
-                if len(new_order)==i+1 or new_order[i+1]==-1:
-                    new_order.insert(i+1, to_add)
+                if len(new_order) == i + 1 or new_order[i + 1] == -1:
+                    new_order.insert(i + 1, to_add)
         else:
             new_order.append(-1)
             new_order.append(k[0])
@@ -328,26 +329,27 @@ def pil_to_kao(pil: Image) -> Tuple[bytes, bytes]:
             new_order.append(x)
     new_img_new = bytearray(800)
     for i, v in enumerate(new_img):
-        new_v = (new_order.index(v%16)) + (new_order.index(v//16)) * 16
-        new_img_new[i]=new_v
+        new_v = (new_order.index(v % 16)) + (new_order.index(v // 16)) * 16
+        new_img_new[i] = new_v
     new_palette_new = bytearray(KAO_IMG_PAL_B_SIZE)
     for i, v in enumerate(new_order):
-        new_palette_new[i*3] = new_palette[v*3]
-        new_palette_new[i*3+1] = new_palette[v*3+1]
-        new_palette_new[i*3+2] = new_palette[v*3+2]
+        new_palette_new[i * 3] = new_palette[v * 3]
+        new_palette_new[i * 3 + 1] = new_palette[v * 3 + 1]
+        new_palette_new[i * 3 + 2] = new_palette[v * 3 + 2]
     new_img = new_img_new
     new_palette = new_palette_new
     # End of palette reordering
-    
+
     # You can check if this works correctly, by checking if the reverse action returns the
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
     new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, COMMON_AT_MUST_COMPRESS_3))
-    if len(new_img_compressed)>800:
-        raise AttributeError(f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
-                                 "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
-                                 "which might be able to better compress this image.")))
+    if len(new_img_compressed) > 800:
+        raise AttributeError(
+            f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                "which might be able to better compress this image.")))
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

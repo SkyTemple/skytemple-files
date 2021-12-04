@@ -43,7 +43,9 @@ class InterDEntryType(Enum):
 
 class InterDEntry(AutoString):
     def __init__(self, data: bytes = bytes(6)):
-        self.floor = read_uintle(data, 0, 1)
+        floor_attrib = read_uintle(data, 0, 1)
+        self.floor = floor_attrib & 0x7F
+        self.continue_music = bool(floor_attrib & 0x80)
         self.ent_type = InterDEntryType(read_uintle(data, 1, 1))  # type: ignore
         self.game_var_id = read_uintle(data, 2, 2)
         self.param1 = read_uintle(data, 4, 1)
@@ -51,7 +53,7 @@ class InterDEntry(AutoString):
 
     def to_bytes(self) -> bytes:
         data = bytearray(6)
-        write_uintle(data, self.floor, 0, 1)
+        write_uintle(data, (self.floor & 0x7F) + (int(self.continue_music)<<7), 0, 1)
         write_uintle(data, self.ent_type.value, 1, 1)
         write_uintle(data, self.game_var_id, 2, 2)
         write_uintle(data, self.param1, 4, 1)

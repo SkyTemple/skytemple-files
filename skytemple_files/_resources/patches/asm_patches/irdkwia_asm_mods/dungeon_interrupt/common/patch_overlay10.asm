@@ -19,6 +19,8 @@ ClearInterruption:
 	str r2,[r0]
 	ldr r1,=interrupted
 	strb r2,[r1]
+	ldr r3,=music_no_interrupt
+	str r2,[r3]
 	bx r14
 FillIfNotInterrupted:
 	mov r1,#0
@@ -52,15 +54,34 @@ CheckEndDungeon:
 	.endif
 	ldmia r13!,{r15}
 	.pool
+music_no_interrupt:
+	.word 0
+MusicFadeOut:
+	ldr r0,[music_no_interrupt]
+	cmp r0,#0
+	bne EndMusicFadeOut
+	mov  r0,#0x14
+	bl FuncFadeOut1
+	mov  r0,#0x14
+	bl FuncFadeOut2
+	b EndMusicFadeOut
+MusicInterrupt:
+	ldr r0,[music_no_interrupt]
+	cmp r0,#0
+	bne EndMusicInterrupt
+	bl FuncStop1
+	bl FuncStop2
+	b EndMusicInterrupt
 CheckDungeonInterrupt:
 	ldr r0,=interrupted_floor
 	str r1,[r0]
-	bge EndExecution
-	stmdb r13!, {r4,r5,r6,r7}
+	stmdb r13!, {r4,r5,r6,r7,r8}
+	mov r8,#0
 	mov r4,r1
 	ldr r0,=DungeonBaseStructurePtr
 	ldr r0,[r0]
 	ldrb r5,[r0,#+0x748]
+	movge r8,#1
 	
 	; Open
 	bl FStreamAlloc
@@ -104,6 +125,7 @@ loop:
 	
 	ldr r0,=info
 	ldrb r1,[r0]
+	and r1,r1,#0x7F
 	cmp r4,r1
 	moveq r6,#1
 	beq end_loop
@@ -181,15 +203,22 @@ check_case_5:
 end_switch:
 	cmp r6,#0
 	beq continue_exec
+	ldrb r0,[r7,#+0x0]
+	tst r0,#0x80
+	movne r1,#1
+	ldrne r0,=music_no_interrupt
+	strne r1,[r0]
 	mov r0,#1
 	bl SetInterrupt
-	ldmia r13!, {r4,r5,r6,r7}
+	ldmia r13!, {r4,r5,r6,r7,r8}
 	b EndExecution
 continue_exec:
+	cmp r8,#0
 	ldr r0,=interrupted_floor
 	mov r1,#0
 	str r1,[r0]
-	ldmia r13!, {r4,r5,r6,r7}
+	ldmia r13!, {r4,r5,r6,r7,r8}
+	bne EndExecution
 	b ContinueExecution
 	.pool
 info:

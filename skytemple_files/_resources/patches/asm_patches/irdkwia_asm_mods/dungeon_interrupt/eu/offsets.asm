@@ -36,4 +36,12 @@
 .definelabel HookInterrupt2, 0x022E0C0C
 .definelabel HookInterrupt3, 0x022FD2D0
 .definelabel HookInterrupt4, 0x022FE064
+.definelabel HookInterrupt5, 0x022E0BB0
+.definelabel HookInterrupt6, 0x0234CD60
+
+.definelabel FuncFadeOut1, 0x022EB85C
+.definelabel FuncFadeOut2, 0x022DE740
+.definelabel FuncStop1, 0x02017C0C
+.definelabel FuncStop2, 0x02017C88
+
 .definelabel DungeonBaseStructurePtr, 0x02354138

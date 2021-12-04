@@ -60,8 +60,8 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
                 return overlay29[offset:offset+len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

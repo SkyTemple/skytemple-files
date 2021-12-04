@@ -24,10 +24,7 @@ from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
 from skytemple_files.graphics.dpl.model import Dpl, DPL_PAL_LEN, DPL_MAX_PAL
 from skytemple_files.common.i18n_util import f, _
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 DBG_TILING_DIM = 3
 DBG_CHUNK_WIDTH = 24
@@ -49,7 +46,7 @@ class Dbg:
 
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)
         fimg = Image.new('P', (width_and_height_map, width_and_height_map))
-        fimg.putpalette(chunks.getpalette())
+        fimg.putpalette(chunks.getpalette())  # type: ignore
 
         for i, mt_idx in enumerate(self.mappings):
             x = i % DBG_WIDTH_AND_HEIGHT
@@ -62,8 +59,8 @@ class Dbg:
         return fimg
 
     def from_pil(
-            self, dpc: Dpc, dpci: Dpci, dpl: Dpl, img: Image.Image, force_import=False
-    ):
+            self, dpc: Dpc, dpci: Dpci, dpl: Dpl, img: Image.Image, force_import: bool = False
+    ) -> None:
         """
         Import an entire background from an image.
         Changes all tiles, tile mappings and chunks in the DPC/DPCI and re-writes the mappings of the DBG.
@@ -114,19 +111,19 @@ class Dbg:
                 chunk_mappings.append(chunk_mappings_counter)
                 chunk_mappings_counter += 1
 
-        dpc.import_tile_mappings(list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM)))
+        dpc.import_tile_mappings(list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM)))  # type: ignore
         self.mappings = chunk_mappings
 
         # Import palettes
         dpl.palettes = palettes
 
-    def to_bytes(self):
+    def to_bytes(self) -> bytes:
         buffer = bytearray(2 * len(self.mappings))
         for i, m in enumerate(self.mappings):
             write_uintle(buffer, m, i * 2, 2)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Dbg):
             return False
         return self.mappings == other.mappings

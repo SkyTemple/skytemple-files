@@ -19,10 +19,7 @@ from abc import ABC, abstractmethod
 from itertools import zip_longest
 from typing import Union
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
@@ -78,7 +75,7 @@ class W16Image(ABC):
         return self
 
     @classmethod
-    def new(cls, entry_data: 'W16TocEntry', pil: Image) -> 'W16Image':
+    def new(cls, entry_data: 'W16TocEntry', pil: Image.Image) -> 'W16Image':
         """Creates a new W16Image from a PIL image with 16-bit color palette as input"""
         entry_data.width = int(pil.width / TILE_DIM)
         entry_data.height = int(pil.height / TILE_DIM)
@@ -86,7 +83,7 @@ class W16Image(ABC):
         return cls(entry_data, cls.compress(new_img), new_pal)
 
     @classmethod
-    def _read_in(cls, pil: Image, w_in_tiles, h_in_tiles) -> Tuple[List[int], bytes]:
+    def _read_in(cls, pil: Image.Image, w_in_tiles, h_in_tiles) -> Tuple[List[int], bytes]:
         w = TILE_DIM * w_in_tiles
         h = TILE_DIM * h_in_tiles
         tiles, tile_mappings, pal = from_pil(

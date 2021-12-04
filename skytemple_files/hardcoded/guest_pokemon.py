@@ -48,7 +48,7 @@ class ExtraDungeonDataEntry(AutoString):
         # True if Hidden Land-like restrictions should be enabled in this dungeon after it's cleared
         self.hlr_cleared = hlr_cleared
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ExtraDungeonDataEntry):
             return False
         else:
@@ -88,7 +88,7 @@ class ExtraDungeonDataEntry(AutoString):
                    bool(data_int & 0x4000))
 
     @classmethod
-    def _valid_index(cls, index: int):
+    def _valid_index(cls, index: int) -> bool:
         """
         Returns true if a given guest pokémon index is valid.
         Valid values are indexes 0 to 62 and -1, which is used as an empty value
@@ -113,7 +113,7 @@ class GuestPokemon(AutoString):
         self.unk3 = unk3
         self.exp = exp
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, GuestPokemon):
             return False
         else:
@@ -131,7 +131,7 @@ class GuestPokemon(AutoString):
                    self.unk3 == other.unk3 and \
                    self.exp == other.exp
 
-    def is_null(self):
+    def is_null(self) -> bool:
         return self.unk1 == 0 and \
                self.poke_id == 0 and \
                self.joined_at == 0 and \
@@ -190,7 +190,7 @@ class ExtraDungeonDataList:
         return lst
 
     @staticmethod
-    def write(lst: List[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data):
+    def write(lst: List[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Writes the list of dungeon extra data to the arm9 binary provided.
         The list must have exactly 0xB4 entries.
@@ -240,7 +240,7 @@ class GuestPokemonList:
         return lst
 
     @staticmethod
-    def write(lst: List[GuestPokemon], arm9bin: bytearray, config: Pmd2Data):
+    def write(lst: List[GuestPokemon], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Writes the list of guest pokémon data to the arm9 binary.
         The first 18 entries will be written to the GuestPokemonData block, the rest

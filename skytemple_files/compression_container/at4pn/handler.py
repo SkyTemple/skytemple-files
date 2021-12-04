@@ -17,6 +17,7 @@
 
 from typing import Type
 
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.compression_container.base_handler import CompressionContainerHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
@@ -37,7 +38,7 @@ class At4pnHandler(CompressionContainerHandler):
         return At4pn
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         """Load a container into a high-level representation"""
         if not cls.matches(data):
             raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")

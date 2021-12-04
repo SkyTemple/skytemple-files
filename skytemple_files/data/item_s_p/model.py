@@ -30,7 +30,7 @@ class ItemSPExclusiveType(Enum):
     MONSTER = auto(), _("Pokémon")
     TYPE = auto(), _("Type")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -61,7 +61,7 @@ class ItemSPType(Enum):
     POKE_HATCH =        0x09, '***', None, ItemSPExclusiveType.MONSTER, _('The Pokemon may hatch holding the item.')
     POKE_SPECIAL =      0x0A, '***', None, ItemSPExclusiveType.MONSTER, _('? (Only all the Eeveelutions, and the Tyrogue line have items with this type!)')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -99,7 +99,7 @@ class ItemSPEntry(AutoString):
         write_uintle(data, self.parameter, 2, 2)
         return bytes(data)
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemSPEntry):
             return False
         return self.type == other.type and \
@@ -123,7 +123,7 @@ class ItemSP(Sir0Serializable, AutoString):
         from skytemple_files.data.item_s_p.writer import ItemSPWriter
         return ItemSPWriter(self).write()  # type: ignore
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemSP):
             return False
         return self.item_list == other.item_list

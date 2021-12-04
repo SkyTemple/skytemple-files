@@ -70,7 +70,7 @@ class Pal(AutoString):
             if i%3==2:
                 self.palette.append(padding)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pal):
             return False
         return self.palette == other.palette

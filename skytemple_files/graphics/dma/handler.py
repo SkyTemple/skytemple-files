@@ -16,14 +16,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dma.model import Dma
 
 
 class DmaHandler(DataHandler[Dma]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dma:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dma:
         return Dma(data)
 
     @classmethod
-    def serialize(cls, data: Dma, **kwargs) -> bytes:
+    def serialize(cls, data: Dma, **kwargs: OptionalKwargs) -> bytes:
         return data.to_bytes()

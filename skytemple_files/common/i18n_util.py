@@ -17,48 +17,49 @@
 import gettext
 from abc import ABC, abstractmethod
 from inspect import currentframe
+from typing import Any, List
 
 
 class AbstractLocaleManager(ABC):
     @abstractmethod
-    def translate(self, message, locale_code):
+    def translate(self, message: str, locale_code: str) -> str:
         pass
 
     @abstractmethod
-    def gettext(self, message):
+    def gettext(self, message: str) -> str:
         pass
 
 
 class LocaleManager(AbstractLocaleManager):
-    def __init__(self, domain, localedir, main_languages):
+    def __init__(self, domain: str, localedir: str, main_languages: List[str]):
         self.domain = domain
         self.localedir = localedir
         self.main_languages = main_languages
 
         self.main_translations = gettext.translation(domain, localedir=localedir, languages=main_languages)
 
-    def translate(self, message, locale_code):
+    def translate(self, message: str, locale_code: str) -> str:
         try:
             return gettext.translation(self.domain, localedir=self.localedir, languages=[locale_code]).gettext(message)
         except Exception:
             return message
 
-    def gettext(self, message):
+    def gettext(self, message: str) -> str:
         return self.main_translations.gettext(message)
 
 
 class NullLocaleManager(AbstractLocaleManager):
-    def translate(self, message, locale_code):
+    def translate(self, message: str, locale_code: str) -> str:
         return message
 
-    def gettext(self, message):
+    def gettext(self, message: str) -> str:
         return message
 
 
 _locales: AbstractLocaleManager = NullLocaleManager()
 
 
-def _(s):
+def _(s: str) -> str:
     """
     This proxy function calls the translation function (if available).
     We use a proxy, so when imported before the localization is ready, we can ensure
@@ -67,11 +68,11 @@ def _(s):
     return _locales.gettext(s)
 
 
-def get_locales():
+def get_locales() -> AbstractLocaleManager:
     return _locales
 
 
-def reload_locale(domain, localedir, main_languages):
+def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> None:
     global _locales
     _locales = LocaleManager(domain, localedir, main_languages)
     _locales.main_translations.install()
@@ -79,26 +80,27 @@ def reload_locale(domain, localedir, main_languages):
     import builtins
     try:
         from explorerscript import util
-        util._ = builtins._
+        util._ = builtins._  # type: ignore
     except ImportError:
         pass
     try:
         from desmume import i18n_util
-        i18n_util._ = builtins._
+        i18n_util._ = builtins._  # type: ignore
     except ImportError:
         pass
 
 
-def f(s, additional_locals=None):
+def f(s: str, additional_locals: Any = None) -> str:
     """f-strings as a function, for use with translatable strings: f'{techticks}' == f('{techticks}')"""
     if additional_locals is None:
         additional_locals = {}
-    frame = currentframe().f_back
+    frame = currentframe().f_back  # type: ignore
     s1 = s.replace("'", "\\'").replace('\n', '\\n')
-    additional_locals.update(frame.f_locals)
+    additional_locals.update(frame.f_locals)  # type: ignore
     try:
-        return eval(f"f'{s1}'", additional_locals, frame.f_globals)
+        return eval(f"f'{s1}'", additional_locals, frame.f_globals)  # type: ignore
     except SyntaxError as e:
         if "f-string expression part cannot include a backslash" in str(e):
             s1 = s.replace('"', '\\"').replace('\n', '\\n')
-            return eval(f'f"{s1}"', additional_locals, frame.f_globals)
+            return eval(f'f"{s1}"', additional_locals, frame.f_globals)  # type: ignore
+        raise

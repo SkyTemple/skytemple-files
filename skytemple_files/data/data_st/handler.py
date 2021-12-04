@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.data_st.model import DataST
 from skytemple_files.data.data_st.writer import DataSTWriter
 
 
 class DataSTHandler(DataHandler[DataST]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'DataST':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'DataST':
         return DataST(data)
 
     @classmethod
-    def serialize(cls, data: 'DataST', **kwargs) -> bytes:
+    def serialize(cls, data: 'DataST', **kwargs: OptionalKwargs) -> bytes:
         return DataSTWriter(data).write()
 

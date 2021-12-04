@@ -14,15 +14,23 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import typing
+from typing import Tuple, Optional, Union
+
+from PIL import Image
+
+Point = Tuple[int, int]
+Bounds = Tuple[int, int, int, int]
+PointLike = Union[Point, Bounds]
 
 
 class MultipleOffsetError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         self.message = message
         super().__init__(self.message)
 
 
-def centerBounds(bounds, center):
+def centerBounds(bounds: Bounds, center: Bounds) -> Bounds:
     minX = min(bounds[0] - center[0], center[0] - bounds[2])
     minY = min(bounds[1] - center[1], center[1] - bounds[3])
 
@@ -31,7 +39,7 @@ def centerBounds(bounds, center):
     return addToBounds((minX, minY, maxX, maxY), center, False)
 
 
-def roundUpBox(minBox):
+def roundUpBox(minBox: Bounds) -> Bounds:
     width = minBox[2] - minBox[0]
     height = minBox[3] - minBox[1]
     newWidth = roundUpToMult(width, 8)
@@ -41,21 +49,21 @@ def roundUpBox(minBox):
     return startX, startY, startX + newWidth, startY + newHeight
 
 
-def addToBounds(bounds, add, sub=False):
+def addToBounds(bounds: Bounds, add: PointLike, sub: bool = False) -> Bounds:
     mult = 1
     if sub:
         mult = -1
     return (bounds[0] + add[0] * mult, bounds[1] + add[1] * mult, bounds[2] + add[0] * mult, bounds[3] + add[1] * mult)
 
 
-def addLoc(loc1, loc2, sub=False):
+def addLoc(loc1: Bounds, loc2: Bounds, sub: bool = False) -> Point:
     mult = 1
     if sub:
         mult = -1
     return (loc1[0] + loc2[0] * mult, loc1[1] + loc2[1] * mult)
 
 
-def getCoveredBounds(inImg, max_box=None):
+def getCoveredBounds(inImg: Image.Image, max_box: Optional[Bounds] = None) -> Bounds:
     if max_box is None:
         max_box = (0, 0, inImg.size[0], inImg.size[1])
     minX, minY = inImg.size
@@ -77,13 +85,15 @@ def getCoveredBounds(inImg, max_box=None):
     return addToBounds(abs_bounds, (max_box[0], max_box[1]), True)
 
 
-def addToPalette(palette, img):
+@typing.no_type_check
+def addToPalette(palette, img) -> None:
     data = img.getdata()
     for color in data:
         if color[3] == 255:
             palette[color] = True
 
 
+@typing.no_type_check
 def getOffsetFromRGB(img, bounds, black, r, g, b, white):
     datas = img.getdata()
     results = [None] * 5
@@ -119,17 +129,17 @@ def getOffsetFromRGB(img, bounds, black, r, g, b, white):
     return results
 
 
-def combineExtents(extent1, extent2):
+def combineExtents(extent1: Bounds, extent2: Bounds) -> Bounds:
     return min(extent1[0], extent2[0]), min(extent1[1], extent2[1]), \
            max(extent1[2], extent2[2]), max(extent1[3], extent2[3])
 
 
-def roundUpToMult(inInt, inMult):
+def roundUpToMult(inInt: int, inMult: int) -> int:
     subInt = inInt - 1
     div = subInt // inMult
     return (div + 1) * inMult
 
-def imgsEqual(img1, img2, flip=False):
+def imgsEqual(img1: Image.Image, img2: Image.Image, flip: bool = False) -> bool:
     if img1.size[0] != img2.size[0] or img1.size[1] != img2.size[1]:
         return False
     data_1 = img1.getdata()
@@ -147,6 +157,7 @@ def imgsEqual(img1, img2, flip=False):
     return True
 
 
+@typing.no_type_check
 def offsetsEqual(offset1, offset2, imgWidth, flip=False):
     if flip:
         center = (imgWidth - offset2.center[0] - 1, offset2.center[1])

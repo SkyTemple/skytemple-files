@@ -54,7 +54,7 @@ class ExtraSpacePatch(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         return 36 in rom.loadArm9Overlays([36])
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
 
         # Put the overlay file into the ROM
         folder: Folder = rom.filenames
@@ -73,5 +73,5 @@ class ExtraSpacePatch(AbstractPatchHandler):
 
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

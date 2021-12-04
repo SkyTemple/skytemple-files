@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.pal.model import Pal
 from skytemple_files.graphics.pal.writer import PalWriter
 
 
 class PalHandler(DataHandler[Pal]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Pal:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Pal:
         return Pal(data)
 
     @classmethod
-    def serialize(cls, data: Pal, **kwargs) -> bytes:
+    def serialize(cls, data: Pal, **kwargs: OptionalKwargs) -> bytes:
         return PalWriter(data).write()

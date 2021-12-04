@@ -28,7 +28,7 @@ class HardcodedRecruitmentTables:
         return cls._get_generic(overlay11bin, config, 'RecruitmentTableSpecies', 2)
 
     @classmethod
-    def set_monster_species_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data):
+    def set_monster_species_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment species list.
         The length of the list must exactly match the original ROM's length (see get_monster_species_list).
@@ -41,7 +41,7 @@ class HardcodedRecruitmentTables:
         return cls._get_generic(overlay11bin, config, 'RecruitmentTableLevels', 2)
 
     @classmethod
-    def set_monster_levels_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data):
+    def set_monster_levels_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment levels list.
         The length of the list must exactly match the original ROM's length (see get_monster_levels_list).
@@ -54,7 +54,7 @@ class HardcodedRecruitmentTables:
         return cls._get_generic(overlay11bin, config, 'RecruitmentTableLocations', 1)
 
     @classmethod
-    def set_monster_locations_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data):
+    def set_monster_locations_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment locations list.
         The length of the list must exactly match the original ROM's length (see get_monster_locations_list).
@@ -62,7 +62,7 @@ class HardcodedRecruitmentTables:
         cls._set_generic(overlay11bin, config, 'RecruitmentTableLocations', 1, value)
 
     @staticmethod
-    def _get_generic(ov11: bytes, config: Pmd2Data, block_name: str, bytelen: int):
+    def _get_generic(ov11: bytes, config: Pmd2Data, block_name: str, bytelen: int) -> List[int]:
         block = config.binaries['overlay/overlay_0011.bin'].blocks[block_name]
         lst = []
         for i in range(block.begin, block.end, bytelen):
@@ -70,7 +70,7 @@ class HardcodedRecruitmentTables:
         return lst
     
     @staticmethod
-    def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]):
+    def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]) -> None:
         block = config.binaries['overlay/overlay_0011.bin'].blocks[block_name]
         expected_length = int((block.end - block.begin) / bytelen)
         if len(value) != expected_length:

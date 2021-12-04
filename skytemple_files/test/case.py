@@ -21,51 +21,46 @@ import unittest
 from abc import ABC, abstractmethod
 from tempfile import TemporaryFile, mkstemp
 from typing import Generic, TypeVar, Callable, Iterable, Protocol, overload, Optional, Tuple, Mapping, Any, Type, Union, \
-    Sequence
+    Sequence, Dict, List
 
+import typing
 from PIL import Image, ImageChops, ImageDraw
+
+from skytemple_files.common.util import OptionalKwargs
 
 U = TypeVar('U')
 
 
 class BoundDataHandler(Protocol[U]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> U: ...
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> U: ...
 
     @classmethod
-    def serialize(cls, data: U, **kwargs) -> bytes: ...
+    def serialize(cls, data: U, **kwargs: OptionalKwargs) -> bytes: ...
 
 
-T = TypeVar('T', bound=BoundDataHandler)
-
-
-# noinspection PyPep8Naming
-def fixpath(func):
-    @functools.wraps(func)
-    def ffunc(cls, *args, **kwargs) -> str:
-        return os.path.join(os.path.dirname(sys.modules[cls.__module__].__file__), *func(cls, *args, **kwargs))
-    return ffunc
+T = TypeVar('T', bound=BoundDataHandler)  # type: ignore
 
 
 class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
     @classmethod
     @property
     @abstractmethod
-    def handler(cls) -> Type[T]: pass
+    def handler(cls) -> Type[T]: pass  # type: ignore
 
     @staticmethod
     def _load_image(path: str) -> Image.Image:
         return Image.open(path)
 
     @classmethod
-    def _load_main_fixture(cls, path: str, **kwargs) -> U:
+    def _load_main_fixture(cls, path: str, **kwargs: OptionalKwargs) -> U:  # type: ignore
         with open(path, 'rb') as f:
             return cls.handler.deserialize(f.read(), **kwargs)  # type: ignore
 
     @classmethod
-    def _save_and_reload_main_fixture(
-            cls, model: U, ser_kwargs: Mapping[str, Any] = None,
-            deser_kwargs: Mapping[str, Any] = None
+    def _save_and_reload_main_fixture(  # type: ignore
+            cls, model: U, ser_kwargs: Optional[Mapping[str, Any]] = None,
+            deser_kwargs: Optional[Mapping[str, Any]] = None
     ) -> U:
         if deser_kwargs is None:
             deser_kwargs = {}
@@ -73,42 +68,42 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
         return cls.handler.deserialize(raw, **deser_kwargs)  # type: ignore
 
     @classmethod
-    def _save_and_reload_main_fixture_raw(
-            cls, model: U, ser_kwargs: Mapping[str, Any] = None
+    def _save_and_reload_main_fixture_raw(  # type: ignore
+            cls, model: U, ser_kwargs: Optional[Mapping[str, Any]] = None
     ) -> bytes:
         if ser_kwargs is None:
             ser_kwargs = {}
         with TemporaryFile(mode='rb+') as f:
             f.write(cls.handler.serialize(model, **ser_kwargs))  # type: ignore
             f.seek(0)
-            return f.read()
+            return f.read()  # type: ignore
 
     def assertImagesEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff=False
-    ):
+            rgb_diff: bool = False
+    ) -> None:
         self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, equal=True)
 
     def assertImagesNotEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff=False
-    ):
+            rgb_diff: bool = False
+    ) -> None:
         self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, equal=False)
 
     def _assertImageEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff=False, *, equal
-    ):
+            rgb_diff: bool = False, *, equal: bool
+    ) -> None:
         self.assertIsInstance(input_img, Image.Image)
         if isinstance(expected, str):
             expected = self._load_image(expected)
         if palette_filter is not None:
             assert expected.mode == 'P'
             self.assertEqual('P', input_img.mode)
-            expected.putpalette(palette_filter(expected.getpalette(), input_img.getpalette()))
+            expected.putpalette(palette_filter(expected.getpalette(), input_img.getpalette()))  # type: ignore
         if rgb_diff:
             try:
                 if equal:
@@ -127,7 +122,7 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
                 raise AssertionError(f"Assertion failed: Comparison image output to {tempfile_path}") from e
 
 
-def are_images_equal(img1, img2):
+def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
     equal_size = img1.height == img2.height and img1.width == img2.width
 
     if img1.mode == img2.mode == "RGBA":
@@ -142,3 +137,23 @@ def are_images_equal(img1, img2):
     ).getbbox()
 
     return equal_size and equal_alphas and equal_content
+
+
+X = TypeVar('X', bound=SkyTempleFilesTestCase)  # type: ignore
+G = TypeVar('G', bound=Sequence[str], covariant=True)
+
+
+class SomeMethod(Protocol[G]):
+    def __call__(self, c: Type[X], *args: List[Any], **kwargs: Dict[str, Any]) -> G: ...
+
+
+class SomeMethodDecorated(Protocol):
+    def __call__(self, c: Type[X], *args: List[Any], **kwargs: Dict[str, Any]) -> str: ...
+
+
+@typing.no_type_check
+def fixpath(func):
+    @functools.wraps(func)
+    def ffunc(cls, *args, **kwargs):
+        return os.path.join(os.path.dirname(sys.modules[cls.__module__].__file__), *func(cls, *args, **kwargs))
+    return ffunc

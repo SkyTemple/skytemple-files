@@ -114,7 +114,7 @@ class TileRuleType(Enum):
                                  FloorType.FLOOR, RoomType.ROOM, False, False, \
                                  ''
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj

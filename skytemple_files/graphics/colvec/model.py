@@ -21,10 +21,7 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.colvec import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 
 class Colvec(Sir0Serializable, AutoString):
@@ -70,7 +67,7 @@ class Colvec(Sir0Serializable, AutoString):
         self.colormaps[index] = [x for x in memoryview(img.tobytes()[:768])]
         self.colormaps[index] += [0]*(768-len(self.colormaps[index]))
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Colvec):
             return False
         return self.colormaps == other.colormaps

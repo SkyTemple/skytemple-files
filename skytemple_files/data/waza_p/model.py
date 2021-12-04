@@ -36,7 +36,7 @@ class LevelUpMove(AutoString):
         self.move_id = move_id
         self.level_id = level_id
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, LevelUpMove):
             return False
         return self.move_id == other.move_id and self.level_id == other.level_id
@@ -48,7 +48,7 @@ class MoveLearnset(AutoString):
         self.tm_hm_moves = tm_hm_moves
         self.egg_moves = egg_moves
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MoveLearnset):
             return False
         return self.level_up_moves == other.level_up_moves \
@@ -61,7 +61,7 @@ class WazaMoveCategory(Enum):
     SPECIAL = 1, _("Special Move")
     STATUS = 2, _("Status Move")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -101,7 +101,7 @@ class WazaMoveRangeTarget(Enum):
     U14 = 14, _("Invalid ") + "14"
     SPECIAL = 15, _("Special / Invalid")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -141,7 +141,7 @@ class WazaMoveRangeRange(Enum):
     U14 = 14, _("Invalid ") + "14"
     SPECIAL = 15, _("Special / Invalid")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -182,7 +182,7 @@ class WazaMoveRangeCondition(Enum):
     U14 = 14, _("Invalid ") + "14"
     U15 = 15, _("Invalid ") + "15"
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -216,7 +216,7 @@ class WazaMoveRangeSettings(AutoString):
     def __int__(self):
         return (self.unused << 12) + (self.condition.value << 8) + (self.range.value << 4) + self.target.value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WazaMoveRangeSettings):
             return False
         return self.target == other.target and \
@@ -300,7 +300,7 @@ class WazaMove(AutoString):
         write_uintle(data, self.message_id, 24, 1)
         return bytes(data)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WazaMove):
             return False
         return self.base_power == other.base_power and \
@@ -380,7 +380,7 @@ class WazaP(Sir0Serializable, AutoString):
         from skytemple_files.data.waza_p.writer import WazaPWriter
         return WazaPWriter(self).write()  # type: ignore
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WazaP):
             return False
         return self.learnsets == other.learnsets and self.moves == other.moves
@@ -391,4 +391,4 @@ class WazaP(Sir0Serializable, AutoString):
 
     def _read_moves(self, moves: Union[bytes, memoryview]) -> Iterable[WazaMove]:
         for data in chunks(moves, WAZA_MOVE_ENTRY_LEN):
-            yield WazaMove(data)
+            yield WazaMove(data)  # type: ignore

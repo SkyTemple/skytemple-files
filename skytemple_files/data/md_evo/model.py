@@ -69,7 +69,7 @@ class MdEvo(AutoString):
         for x in range(limit, len(data), MEVO_STATS_LENGTH):
             self.evo_stats.append(MdEvoStats(data[x:x+MEVO_STATS_LENGTH]))
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MdEvo):
             return False
         return self.evo_entries == other.evo_entries and \

@@ -78,7 +78,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
                 return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED_EU
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 start_ov29 = START_OV29_US
@@ -151,5 +151,5 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             raise ex
 
     
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

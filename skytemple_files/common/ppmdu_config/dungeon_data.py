@@ -32,7 +32,7 @@ class Pmd2DungeonItem(AutoString):
         self.id = id
         self.name = name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2DungeonItem):
             return False
         return self.id == other.id  # name is not relevant here
@@ -59,7 +59,7 @@ class Pmd2DungeonItemCategory(AutoString):
         from skytemple_files.common.i18n_util import _
         return _(self.name)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2DungeonItemCategory):
             return False
         return self.id == other.id and self.items == other.items
@@ -83,7 +83,7 @@ class Pmd2DungeonDungeon(AutoString):
         self.id = id
         self.name = name
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2DungeonDungeon):
             return False
         return self.id == other.id  # name is not relevant here

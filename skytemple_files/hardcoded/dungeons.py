@@ -41,7 +41,7 @@ class DungeonDefinition(AutoString):
         self.start_after = start_after
         self.number_floors_in_group = number_floors_in_group
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DungeonDefinition):
             return False
         return self.number_floors == other.number_floors and \
@@ -124,7 +124,7 @@ class DungeonRestriction(AutoString):
         write_sintle(buff, self.nullB, 11, 1)
         return buff
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DungeonRestriction):
             return False
         return self.direction == other.direction and \
@@ -177,7 +177,7 @@ class MapMarkerPlacement(AutoString):
         write_sintle(buff, self.y, 6, 2)
         return buff
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MapMarkerPlacement):
             return False
         return self.level_id == other.level_id and \
@@ -187,7 +187,7 @@ class MapMarkerPlacement(AutoString):
 
 
 class TilesetBaseEnum(Enum):
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -199,7 +199,7 @@ class TilesetBaseEnum(Enum):
         self.name_localized = name_localized
 
     @property
-    def print_name(self):
+    def print_name(self) -> str:
         return self.name_localized
 
 
@@ -302,7 +302,7 @@ class TilesetProperties(AutoString):
         write_uintle(buff, int(self.full_water_floor), 11, 1)
         return buff
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, TilesetProperties):
             return False
         return self.map_color == other.map_color and \
@@ -330,7 +330,7 @@ class HardcodedDungeons:
         return lst
 
     @staticmethod
-    def set_dungeon_list(value: List[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data):
+    def set_dungeon_list(value: List[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the dungeon definitions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
@@ -354,7 +354,7 @@ class HardcodedDungeons:
         return lst
 
     @staticmethod
-    def set_dungeon_restrictions(value: List[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data):
+    def set_dungeon_restrictions(value: List[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the dungeon restrictions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_restrictions).
@@ -380,7 +380,7 @@ class HardcodedDungeons:
         return lst
 
     @staticmethod
-    def set_secondary_terrains(value: List[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data):
+    def set_secondary_terrains(value: List[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
@@ -404,7 +404,7 @@ class HardcodedDungeons:
         return lst
 
     @staticmethod
-    def set_marker_placements(value: List[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data):
+    def set_marker_placements(value: List[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
@@ -426,7 +426,7 @@ class HardcodedDungeons:
         return lst
 
     @staticmethod
-    def set_tileset_properties(value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data):
+    def set_tileset_properties(value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['TilesetProperties']
         expected_length = int((block.end - block.begin) / TILESET_PROPERTIES_ENTRY_LEN)
         if len(value) != expected_length:

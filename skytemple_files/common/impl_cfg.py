@@ -35,17 +35,17 @@ class ImplementationType(Enum):
     NATIVE = 'RUST'
 
 
-def env_use_native():
+def env_use_native() -> bool:
     return bool(int(os.getenv(ENV_SKYTEMPLE_USE_NATIVE, False)))
 
 
 _impltype = ImplementationType.NATIVE if env_use_native() else ImplementationType.PYTHON
 
 
-def change_implementation_type(typ: ImplementationType):
+def change_implementation_type(typ: ImplementationType) -> None:
     global _impltype
     _impltype = typ
 
 
-def get_implementation_type():
+def get_implementation_type() -> ImplementationType:
     return _impltype

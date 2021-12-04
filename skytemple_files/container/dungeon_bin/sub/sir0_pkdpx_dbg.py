@@ -17,6 +17,7 @@
 
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dbg.model import Dbg
 
 
@@ -24,13 +25,13 @@ class DbinSir0PkdpxDbgHandler(DataHandler[Dbg]):
     """A proxy data handler for Dbg compressed as At container wrapped in Sir0."""
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dbg:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dbg:
         from skytemple_files.common.types.file_types import FileType
         pkdpx = FileType.DBIN_SIR0_PKDPX.deserialize(data)
         return FileType.DBG.deserialize(pkdpx.decompress())
 
     @classmethod
-    def serialize(cls, data: Dbg, **kwargs) -> bytes:
+    def serialize(cls, data: Dbg, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         serialized = FileType.DBG.serialize(data)
         return FileType.DBIN_SIR0_PKDPX.serialize(FileType.DBIN_SIR0_PKDPX.compress(serialized))

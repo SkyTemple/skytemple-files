@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 
 import os
 
@@ -24,10 +25,7 @@ from skytemple_files.common.util import get_files_from_rom_with_extension, get_p
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.graphics.pal.handler import PalHandler
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

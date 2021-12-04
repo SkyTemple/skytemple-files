@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 import os
 from typing import TYPE_CHECKING, List
 
@@ -141,7 +142,7 @@ class SsbFlow:
         assert self_op_params == other_op_params, f"Parameters of opcode ({self_op.op_code.name}) [{self_v.index}," \
                                                   f"{other_v.index}] are not the same ({self._r_info(i)})."
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         try:
             self.assert_equal(other, False)
         except AssertionError:

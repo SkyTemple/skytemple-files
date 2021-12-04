@@ -19,7 +19,7 @@ import shutil
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Dict, List, Generator, Optional
+from typing import Dict, List, Generator, Optional, Any
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
@@ -120,7 +120,7 @@ class PatchType(Enum):
 
 
 class Patcher:
-    def __init__(self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches=False):
+    def __init__(self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches: bool = False):
         self._rom = rom
         self._config = config
         self._loaded_patches: Dict[str, AbstractPatchHandler] = {}
@@ -128,23 +128,23 @@ class Patcher:
         self._patch_dirs: Dict[str, str] = {}
 
         self._arm_patcher = ArmPatcher(self._rom)
-        self._created_tmpdirs: List[TemporaryDirectory] = []
+        self._created_tmpdirs: List[TemporaryDirectory[Any]] = []
 
         if not skip_core_patches:
             # Load core patches
             for handler_type in PatchType:
                 self.add_manually(handler_type.value(), CORE_PATCHES_BASE_DIR)
 
-    def __del__(self):
+    def __del__(self) -> None:
         for tmpdir in self._created_tmpdirs:
             tmpdir.cleanup()
 
-    def is_applied(self, name: str):
+    def is_applied(self, name: str) -> bool:
         if name not in self._loaded_patches:
             raise ValueError(f(_("The patch '{name}' was not found.")))
         return self._loaded_patches[name].is_applied(self._rom, self._config)
 
-    def apply(self, name: str, config: Optional[Dict] = None):
+    def apply(self, name: str, config: Optional[Dict[str, Any]] = None) -> None:
         """
         Apply a patch.
         If the patch requires parameters, values for ALL of them must be in the dict `config` (even if default values
@@ -199,7 +199,7 @@ class Patcher:
             self._rom, self._config
         )
 
-    def _apply_armips(self, name: str, calling_patch: AbstractPatchHandler):
+    def _apply_armips(self, name: str, calling_patch: AbstractPatchHandler) -> None:
         patch = self._config.asm_patches_constants.patches[name]
         patch_dir_for_version = self._config.asm_patches_constants.patch_dir.filepath
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
@@ -209,7 +209,7 @@ class Patcher:
                                 os.path.join(self._patch_dirs[name], patch_dir_for_version),
                                 stub_path_for_version, self._config.game_edition, parameter_values)
 
-    def add_pkg(self, path: str, is_zipped=True):
+    def add_pkg(self, path: str, is_zipped: bool = True) -> None:
         """Loads a skypatch file. Raises PatchPackageError on error."""
         tmpdir = TemporaryDirectory()
         self._created_tmpdirs.append(tmpdir)
@@ -254,7 +254,7 @@ class Patcher:
             raise PatchPackageError(_("The patch package does not contain an entry for the handler's patch name "
                                       "in the config.xml.")) from ex
 
-    def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str):
+    def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str) -> None:
         # Try to find the patch in the config
         if handler.name not in self._config.asm_patches_constants.patches.keys():
             raise ValueError(f(_("No patch for handler '{handler.name}' found in the configuration.")))
@@ -265,7 +265,7 @@ class Patcher:
         for handler in self._loaded_patches.values():
             yield handler
 
-    def get(self, name) -> AbstractPatchHandler:
+    def get(self, name: str) -> AbstractPatchHandler:
         return self._loaded_patches[name]
 
 
@@ -274,10 +274,10 @@ class PatchPackageConfigMerger:
         self._root = ElementTree.parse(xml_file_name).getroot()
         self._game_edition = game_edition
 
-    def merge(self, into: Pmd2AsmPatchesConstants):
+    def merge(self, into: Pmd2AsmPatchesConstants) -> None:
         for e in self._root:
             if e.tag == 'ASMPatchesConstants':
-                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
+                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)  # type: ignore
                 into.patches.update(content_of_xml.patches)
                 into.loose_bin_files.update(content_of_xml.loose_bin_files)
                 return

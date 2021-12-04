@@ -26,6 +26,6 @@ class HardcodedTextSpeed:
         return read_uintle(arm9, block.begin)
 
     @staticmethod
-    def set_text_speed(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_text_speed(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['TextSpeedConstant']
         write_uintle(arm9, value, block.begin)

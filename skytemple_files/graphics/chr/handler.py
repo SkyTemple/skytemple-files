@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.chr.model import Chr
 from skytemple_files.graphics.chr.writer import ChrWriter
 
 
 class ChrHandler(DataHandler[Chr]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Chr:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Chr:
         return Chr(data)
 
     @classmethod
-    def serialize(cls, data: Chr, **kwargs) -> bytes:
+    def serialize(cls, data: Chr, **kwargs: OptionalKwargs) -> bytes:
         return ChrWriter(data).write()

@@ -21,7 +21,7 @@ from skytemple_files.common.util import read_uintle, write_uintle, AutoString
 
 
 class DungeonMusicEntry(AutoString):
-    def __init__(self, data: Optional[int], track_ref: int = None, is_random_ref: bool = False):
+    def __init__(self, data: Optional[int], track_ref: Optional[int] = None, is_random_ref: bool = False):
         if track_ref is not None:
             self.track_or_ref = track_ref
             self.is_random_ref = is_random_ref
@@ -49,7 +49,7 @@ class HardcodedDungeonMusic:
         return lst
 
     @staticmethod
-    def set_music_list(value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data):
+    def set_music_list(value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['MusicList']
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
@@ -71,7 +71,7 @@ class HardcodedDungeonMusic:
         return lst
 
     @staticmethod
-    def set_random_music_list(value: List[Tuple[int, int, int, int]], ov10: bytearray, config: Pmd2Data):
+    def set_random_music_list(value: List[Tuple[int, int, int, int]], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['RandomMusicList']
         expected_length = int((block.end - block.begin) / 8)
         if len(value) != expected_length:

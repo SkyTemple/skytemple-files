@@ -26,7 +26,7 @@ class WtuEntry(AutoString):
         self.width = width
         self.height = height
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WtuEntry):
             return False
         return self.x == other.x and \
@@ -58,7 +58,7 @@ class Wtu(AutoString):
     def matches(data, header_pnt):
         return data[header_pnt:header_pnt+len(MAGIC_NUMBER)] == MAGIC_NUMBER
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Wtu):
             return False
         return self.image_mode == other.image_mode and \

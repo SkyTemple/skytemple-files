@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.anim.model import Anim
 from skytemple_files.data.anim.writer import AnimWriter
 
 
 class AnimHandler(DataHandler[Anim]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'Anim':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'Anim':
         return Anim(data)
 
     @classmethod
-    def serialize(cls, data: 'Anim', **kwargs) -> bytes:
+    def serialize(cls, data: 'Anim', **kwargs: OptionalKwargs) -> bytes:
         return AnimWriter(data).write()
 

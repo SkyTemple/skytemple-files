@@ -16,29 +16,28 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
+from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.zmappat import *
 from skytemple_files.graphics.zmappat.model import ZMappaT
 from skytemple_files.graphics.zmappat.writer import ZMappaTWriter
 
 
-class ZMappaTHandler():
+class ZMappaTHandler(DataHandler[ZMappaT]):
     """
     Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'ZMappaT':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ZMappaT':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ZMappaT)
 
     @classmethod
-    def serialize(cls, data: 'ZMappaT', **kwargs) -> bytes:
+    def serialize(cls, data: 'ZMappaT', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
@@ -56,5 +55,5 @@ class ZMappaTHandler():
         return ZMappaT(data, 0)
 
     @classmethod
-    def serialize_raw(cls, data: 'ZMappaT', **kwargs) -> bytes:
+    def serialize_raw(cls, data: 'ZMappaT', **kwargs: OptionalKwargs) -> bytes:
         return ZMappaTWriter(data).write()[0]

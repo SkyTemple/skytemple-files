@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.script.ssa_sse_sss.model import Ssa
 from skytemple_files.script.ssa_sse_sss.writer import SsaWriter
 
 
 class SsaHandler(DataHandler[Ssa]):
     @classmethod
-    def deserialize(cls, data: bytes, scriptdata=None, **kwargs) -> Ssa:
+    def deserialize(cls, data: bytes, scriptdata=None, **kwargs: OptionalKwargs) -> Ssa:
         if scriptdata is None:
             scriptdata = Pmd2XmlReader.load_default().script_data
         return Ssa(scriptdata, data)
 
     @classmethod
-    def serialize(cls, data: Ssa, **kwargs) -> bytes:
+    def serialize(cls, data: Ssa, **kwargs: OptionalKwargs) -> bytes:
         return SsaWriter(data).write()

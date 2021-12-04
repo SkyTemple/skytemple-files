@@ -37,7 +37,7 @@ class Rank(AutoString):
         write_uintle(buffer, self.item_awarded, 0x0C, 4)
         return buffer
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Rank):
             return False
         return self.rank_name_str == other.rank_name_str and self.points_needed_next == other.points_needed_next \
@@ -60,7 +60,7 @@ class HardcodedRankUpTable:
         return lst
 
     @classmethod
-    def set_rank_up_table(cls, value: List[Rank], arm9bin: bytearray, config: Pmd2Data):
+    def set_rank_up_table(cls, value: List[Rank], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the list of ranks in the game.
         The length of the list must exactly match the original ROM's length (see get_rank_up_table).

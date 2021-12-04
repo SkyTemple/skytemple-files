@@ -21,10 +21,7 @@ from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts.graphic_font import *
 from skytemple_files.graphics.pal.model import Pal
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 
 class GraphicFont(AutoString):
@@ -74,7 +71,7 @@ class GraphicFont(AutoString):
                 self.set_palette_raw(list(e.palette.palette))
                 break
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, GraphicFont):
             return False
         return self.entries == other.entries and \

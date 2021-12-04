@@ -80,7 +80,7 @@ Uses the supposedly unused string 2613 in the strings file. """)
                 return read_uintle(rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 string_id = STRING_ID_US
@@ -114,5 +114,5 @@ Uses the supposedly unused string 2613 in the strings file. """)
             raise ex
 
     
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.script.lsd.model import Lsd
 
 
 class LsdHandler(DataHandler[Lsd]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Lsd:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Lsd:
         return Lsd(data)
 
     @classmethod
-    def serialize(cls, data: Lsd, **kwargs) -> bytes:
+    def serialize(cls, data: Lsd, **kwargs: OptionalKwargs) -> bytes:
         return data.to_bytes()
 
     @classmethod

@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
 from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
 
 
 class FontSir0Handler(DataHandler[FontSir0]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'FontSir0':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'FontSir0':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FontSir0)
 
     @classmethod
-    def serialize(cls, data: 'FontSir0', **kwargs) -> bytes:
+    def serialize(cls, data: 'FontSir0', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

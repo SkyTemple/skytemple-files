@@ -22,10 +22,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.compression_container.common_at.handler import CommonAtHandler, CommonAtType
 from skytemple_files.common.i18n_util import f, _
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 IMG_WIDTH = 256
 IMG_HEIGHT = 96
@@ -48,7 +45,7 @@ class HardcodedCartRemoved:
         return Image.frombytes(mode="RGB", size=(IMG_WIDTH, IMG_HEIGHT), data=bytes(raw_data))
 
     @staticmethod
-    def set_cart_removed_data(img: Image.Image, arm9: bytearray, config: Pmd2Data):
+    def set_cart_removed_data(img: Image.Image, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the cartridge removed data
         """

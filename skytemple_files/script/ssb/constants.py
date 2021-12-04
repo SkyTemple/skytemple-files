@@ -227,32 +227,32 @@ class SsbConstant(SsbOpParamConstant):
     @classmethod
     def collect_all(cls, rom_data: Pmd2ScriptData) -> Iterable['SsbConstant']:
         """Collects all possible constants from the given ROM data"""
-        for x in rom_data.level_entities:
-            yield cls.create_for(x)
-        for x in rom_data.objects:
-            yield cls.create_for(x)
-        for x in rom_data.common_routine_info:
-            yield cls.create_for(x)
-        for x in rom_data.face_names:
-            yield cls.create_for(x)
-        for x in rom_data.face_position_modes:
-            yield cls.create_for(x)
-        for x in rom_data.game_variables:
-            yield cls.create_for(x)
-        for x in rom_data.level_list:
-            yield cls.create_for(x)
-        for x in rom_data.menus:
-            yield cls.create_for(x)
-        for x in rom_data.process_specials:
-            yield cls.create_for(x)
-        for x in rom_data.bgms:
-            yield cls.create_for(x)
-        for x in rom_data.sprite_effects:
-            yield cls.create_for(x)
-        for x in rom_data.directions.values():
-            yield cls.create_for(x)
-        for x in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST, DungeonMode.OPEN_AND_REQUEST]:
-            yield cls.create_for(x)
+        for a in rom_data.level_entities:
+            yield cls.create_for(a)
+        for b in rom_data.objects:
+            yield cls.create_for(b)
+        for c in rom_data.common_routine_info:
+            yield cls.create_for(c)
+        for d in rom_data.face_names:
+            yield cls.create_for(d)
+        for e in rom_data.face_position_modes:
+            yield cls.create_for(e)
+        for f in rom_data.game_variables:
+            yield cls.create_for(f)
+        for g in rom_data.level_list:
+            yield cls.create_for(g)
+        for h in rom_data.menus:
+            yield cls.create_for(h)
+        for i in rom_data.process_specials:
+            yield cls.create_for(i)
+        for j in rom_data.bgms:
+            yield cls.create_for(j)
+        for k in rom_data.sprite_effects:
+            yield cls.create_for(k)
+        for l in rom_data.directions.values():
+            yield cls.create_for(l)
+        for m in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST, DungeonMode.OPEN_AND_REQUEST]:
+            yield cls.create_for(m)
 
     @classmethod
     def get_dungeon_mode_constants(cls):

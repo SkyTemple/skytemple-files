@@ -38,7 +38,7 @@ class IqSkill:
         self.iq_required = iq_required
         self.restriction_group = restriction_group
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, IqSkill):
             return False
         return self.iq_required == other.iq_required and self.restriction_group == other.restriction_group
@@ -51,7 +51,7 @@ class HardcodedIq:
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
-    def set_min_iq_for_exclusive_move_user(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_min_iq_for_exclusive_move_user(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['MinIQExclusiveMoveUser']
         write_uintle(arm9, value, block.begin, 2)
 
@@ -61,7 +61,7 @@ class HardcodedIq:
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
-    def set_min_iq_for_item_master(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_min_iq_for_item_master(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['MinIQItemMaster']
         write_uintle(arm9, value, block.begin, 2)
 
@@ -71,7 +71,7 @@ class HardcodedIq:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_intimidator_chance(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_intimidator_chance(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['IntimidatorChance']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -88,7 +88,7 @@ class HardcodedIq:
         return lst
 
     @staticmethod
-    def set_gummi_iq_gains(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool):
+    def set_gummi_iq_gains(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool) -> None:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.binaries['arm9.bin'].blocks['IqGummiGain']
         lst_flattened = list(chain.from_iterable(value))
@@ -110,7 +110,7 @@ class HardcodedIq:
         return lst
 
     @staticmethod
-    def set_gummi_belly_heal(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool):
+    def set_gummi_belly_heal(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool) -> None:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.binaries['arm9.bin'].blocks['GummiBellyHeal']
         lst_flattened = list(chain.from_iterable(value))
@@ -125,7 +125,7 @@ class HardcodedIq:
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
-    def set_wonder_gummi_gain(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_wonder_gummi_gain(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['WonderGummiIqGain']
         write_uintle(arm9, value, block.begin, 1)
 
@@ -135,7 +135,7 @@ class HardcodedIq:
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
-    def set_juice_bar_nectar_gain(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_juice_bar_nectar_gain(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['JuiceBarNectarIqGain']
         write_uintle(arm9, value, block.begin, 1)
 
@@ -145,7 +145,7 @@ class HardcodedIq:
         return read_uintle(ov29, block.begin, 1)
 
     @staticmethod
-    def set_nectar_gain(value: int, ov29: bytearray, config: Pmd2Data):
+    def set_nectar_gain(value: int, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0029.bin'].blocks['NectarIqGain']
         write_uintle(ov29, value, block.begin, 1)
 
@@ -163,7 +163,7 @@ class HardcodedIq:
         return lst
 
     @staticmethod
-    def set_iq_skills(value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data):
+    def set_iq_skills(value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['IqSkills']
         block_restr = config.binaries['arm9.bin'].blocks['IqSkillRestrictions']
         assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1+ (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
@@ -209,7 +209,7 @@ class IqGroupsSkills:
         return ret
 
     @staticmethod
-    def write_compressed(arm9: bytearray, data: List[List[int]], config: Pmd2Data):
+    def write_compressed(arm9: bytearray, data: List[List[int]], config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
         expected_length = int((block.end - block.begin) / IQ_GROUP_COMPRESSED_LIST_LEN)
         if len(data) != expected_length:

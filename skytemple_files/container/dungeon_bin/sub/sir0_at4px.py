@@ -17,6 +17,7 @@
 
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
@@ -25,7 +26,7 @@ class DbinSir0At4pxHandler(DataHandler[CompressionContainerProtocol]):
     """A proxy data handler for At wrapped in Sir0."""
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.deserialize(data)
         # We don't support more than the two default pointers, since we will also on serialize with those!
@@ -37,7 +38,7 @@ class DbinSir0At4pxHandler(DataHandler[CompressionContainerProtocol]):
         return FileType.COMMON_AT.deserialize(sir0.content)
 
     @classmethod
-    def serialize(cls, data: CompressionContainerProtocol, **kwargs) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         sir0 = FileType.SIR0.wrap(FileType.COMMON_AT.serialize(data), [], None)
         return FileType.SIR0.serialize(sir0)

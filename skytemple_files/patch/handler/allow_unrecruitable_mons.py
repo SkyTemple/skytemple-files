@@ -59,9 +59,9 @@ class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
                 return read_uintle(rom.loadArm9Overlays([29])[29].data, OFFSET_EU, 4) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

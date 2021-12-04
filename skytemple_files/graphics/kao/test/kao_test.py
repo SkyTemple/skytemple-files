@@ -14,12 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
+import typing
+from typing import List, Dict
+
 from skytemple_files.common.util import read_sintle
 from skytemple_files.graphics.kao.handler import KaoHandler
-from skytemple_files.graphics.kao.protocol import KaoProtocol
+from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
 
-FIX_IN_TEST_MAP = {
+FIX_IN_TEST_MAP: Dict[int, List[int]] = {
     0: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 32, 34],
     552: [0, 2, 4, 6, 8, 10],
     1153: []
@@ -29,14 +33,14 @@ FIX_IN_LEN_SUB = 40
 FIX_COMPLEX_IDS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 32, 34]
 
 
-class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
+class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtocol]]):
     handler = KaoHandler
 
     def setUp(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_kao())
         self.assertIsNotNone(self.kao)
 
-    def test_get(self):
+    def test_get(self) -> None:
         for idx, sidxs in FIX_IN_TEST_MAP.items():
             for sidx in sidxs:
                 kaoimg = self.kao.get(idx, sidx)
@@ -45,19 +49,19 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
                 self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get(), rgb_diff=True)
                 self.assertImagesEqual(self._fix_path_png(idx, sidx, rgb=True), kaoimg.get(), rgb_diff=True)
 
-    def test_get_missing(self):
+    def test_get_missing(self) -> None:
         self.assertIsNone(self.kao.get(552, 1))
         with self.assertRaises(ValueError):
             self.kao.get(0, FIX_IN_LEN_SUB)
         with self.assertRaises(ValueError):
             self.kao.get(FIX_IN_LEN, 0)
 
-    def test_get_complex(self):
+    def test_get_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
         for i in FIX_COMPLEX_IDS:
             self.assertImagesEqual(self._fix_path_complex_png(i), self.kao.get(0, i).get(), rgb_diff=True)
 
-    def test_set_complex(self):
+    def test_set_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
         for i in FIX_COMPLEX_IDS:
             self.kao.set_from_img(0, i, self._load_image(self._fix_path_complex_png(i)))
@@ -65,7 +69,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         for i in FIX_COMPLEX_IDS:
             self.assertImagesEqual(self._fix_path_complex_png(i), new_kao.get(0, i).get(), rgb_diff=True)
 
-    def test_set_from_img(self):
+    def test_set_from_img(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
         self.kao.set_from_img(552, 8, img)
         self.kao.set_from_img(1153, 4, img)
@@ -80,7 +84,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertImagesEqual(img, new_kao.get(100, 8).get(), rgb_diff=True)
         self.assertIsNone(new_kao.get(1153, 0))
 
-    def test_set_reference_behaviour(self):
+    def test_set_reference_behaviour(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
         img_zero = self.kao.get(0, 0)
         # This must NOT copy the image
@@ -92,14 +96,14 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertImagesEqual(img, new_kao.get(0, 0).get(), rgb_diff=True)
         self.assertImagesEqual(img, new_kao.get(0, 2).get(), rgb_diff=True)
 
-    def test_clone(self):
+    def test_clone(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
         one = self.kao.get(0, 0)
         two = one.clone()
         two.set(img)
         self.assertImagesNotEqual(one.get(), two.get(), rgb_diff=True)
 
-    def test_set_from_img_rgb(self):
+    def test_set_from_img_rgb(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1, rgb=True))
         self.kao.set_from_img(552, 8, img)
         self.kao.set_from_img(1153, 4, img)
@@ -114,7 +118,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertImagesEqual(img, new_kao.get(100, 8).get(), rgb_diff=True)
         self.assertIsNone(new_kao.get(1153, 0))
 
-    def test_delete(self):
+    def test_delete(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
         self.kao.delete(552, 4)
         self.kao.delete(1232132, 432131)
@@ -129,14 +133,14 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertIsNone(new_kao.get(552, 4))
         self.assertIsNotNone(new_kao.get(552, 6))
 
-    def test_n_entries(self):
+    def test_n_entries(self) -> None:
         kao2 = self._load_main_fixture(self._fix_path_compression_algo())
         kao3 = self._load_main_fixture(self._fix_path_complex())
         self.assertEqual(1154, self.kao.n_entries())
         self.assertEqual(1, kao2.n_entries())
         self.assertEqual(1, kao3.n_entries())
 
-    def test_expand(self):
+    def test_expand(self) -> None:
         with self.assertRaises(ValueError):
             self.kao.get(2000, 0)
         self.kao.expand(2001)
@@ -145,7 +149,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
             new_kao.get(2001, 0)
         self.assertIsNone(new_kao.get(2000, 0))
 
-    def test_raw(self):
+    def test_raw(self) -> None:
         kaoimg = self.kao.get(0, 2)
         raw = kaoimg.raw()
         kaoimg = self.handler.get_image_model_cls().create_from_raw(*raw)
@@ -162,7 +166,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertImagesEqual(kaoimg.get(), new_kao.get(1153, 4).get(), rgb_diff=True)
         self.assertIsNone(new_kao.get(1153, 0))
 
-    def test_iterate(self):
+    def test_iterate(self) -> None:
         previous_idx = -1
         previous_sidx = -1
         for idx, sidx, kaoimg in self.kao:
@@ -187,7 +191,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         self.assertGreater(previous_idx, -1)
         self.assertLess(previous_idx, FIX_IN_LEN)
 
-    def test_compression_support(self):
+    def test_compression_support(self) -> None:
         """Tests if the Kao model can at least read all compression formats"""
         # ... except for AT4PN, since that one can not fit in 800 bytes.
         self.kao = self._load_main_fixture(self._fix_path_compression_algo())
@@ -202,7 +206,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
         # ATUPX
         self.assertImagesEqual(self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get(), rgb_diff=True)
 
-    def test_proper_toc_layout_writes(self):
+    def test_proper_toc_layout_writes(self) -> None:
         kao_data = self._save_and_reload_main_fixture_raw(self.kao)
         self.assertEqual(bytes(160), kao_data[:160])
         first_pnt = read_sintle(kao_data, 160, 4)
@@ -220,29 +224,34 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol]):
             toc_cur += 4
             number_entries += 1
 
+    @typing.no_type_check
     @classmethod
     @fixpath
-    def _fix_path_kao(cls):
+    def _fix_path_kao(cls) -> str:
         return 'fixtures', 'kaomado.kao'
 
+    @typing.no_type_check
     @classmethod
     @fixpath
-    def _fix_path_compression_algo(cls):
+    def _fix_path_compression_algo(cls) -> str:
         return 'fixtures', 'compression_algo.kao'
 
+    @typing.no_type_check
     @classmethod
     @fixpath
-    def _fix_path_complex(cls):
+    def _fix_path_complex(cls) -> str:
         return 'fixtures', 'complex.kao'
 
+    @typing.no_type_check
     @classmethod
     @fixpath
-    def _fix_path_png(cls, idx, sidx, rgb=False):
+    def _fix_path_png(cls, idx: int, sidx: int, rgb: bool = False) -> str:
         if rgb:
             return 'fixtures', 'rgb', f'{idx:04}', f'{sidx:02}.png'
         return 'fixtures', f'{idx:04}', f'{sidx:02}.png'
 
+    @typing.no_type_check
     @classmethod
     @fixpath
-    def _fix_path_complex_png(cls, sidx):
+    def _fix_path_complex_png(cls, sidx: int) -> str:
         return 'fixtures', f'complex', f'1_{sidx}.png'

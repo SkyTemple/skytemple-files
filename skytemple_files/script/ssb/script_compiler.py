@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-from typing import Tuple, Dict, Callable, Type
+from typing import Tuple, Dict, Callable, Type, Optional
 
 from explorerscript.error import SsbCompilerError
 from explorerscript.macro import ExplorerScriptMacro
@@ -33,6 +33,7 @@ from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, S
     SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import f, _
 logger = logging.getLogger(__name__)
+Callback = Optional[Callable[[], None]]
 
 
 class ScriptCompiler:
@@ -40,7 +41,7 @@ class ScriptCompiler:
     def __init__(self, rom_data: Pmd2Data):
         self.rom_data = rom_data
 
-    def compile_ssbscript(self, ssb_script_src: str, callback_after_parsing: Callable = None) -> Tuple[Ssb, SourceMap]:
+    def compile_ssbscript(self, ssb_script_src: str, callback_after_parsing: Callback = None) -> Tuple[Ssb, SourceMap]:
         """
         Compile SSBScript into a SSB model
 
@@ -63,8 +64,8 @@ class ScriptCompiler:
         )
 
     def compile_explorerscript(self, es_src: str, exps_absolue_path: str,
-                               callback_after_parsing: Callable = None,
-                               lookup_paths: List[str] = None) -> Tuple[Ssb, SourceMap]:
+                               callback_after_parsing: Callback = None,
+                               lookup_paths: Optional[List[str]] = None) -> Tuple[Ssb, SourceMap]:
         """
         Compile ExplorerScript into a SSB model. Returns the Ssb model, the source map, and a list of macros
         that were used in the ExplorerScript file.
@@ -281,7 +282,7 @@ class ScriptCompiler:
         raise SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}")))
 
     @staticmethod
-    def _correct_param_list_len(params: List[SsbOpParam]):
+    def _correct_param_list_len(params: List[SsbOpParam]) -> int:
         """Returns the correct length of a parameter list (positon markers count as 4"""
         len = 0
         for p in params:

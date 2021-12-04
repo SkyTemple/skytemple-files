@@ -38,7 +38,7 @@ class MonsterSpriteDataTableEntry(AutoString):
     def to_bytes(self) -> bytes:
         return bytes([self.sprite_tile_slots, self.unk1])
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MonsterSpriteDataTableEntry):
             return False
         return self.sprite_tile_slots == other.sprite_tile_slots and self.unk1 == other.unk1
@@ -58,7 +58,7 @@ class HardcodedMonsterSpriteDataTable:
         return lst
 
     @classmethod
-    def set(cls, value: List[MonsterSpriteDataTableEntry], arm9bin: bytearray, config: Pmd2Data):
+    def set(cls, value: List[MonsterSpriteDataTableEntry], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
@@ -77,7 +77,7 @@ class IdleAnimType(Enum):
     SPECIAL    = 0x02, _('Special')
     WALK_FRZ   = 0x03, _('Walking Animation (1st frame)')
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -99,7 +99,7 @@ class HardcodedMonsterGroundIdleAnimTable:
         return lst
 
     @classmethod
-    def set(cls, values: List[IdleAnimType], ov11bin: bytearray, config: Pmd2Data):
+    def set(cls, values: List[IdleAnimType], ov11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).

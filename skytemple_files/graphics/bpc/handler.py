@@ -16,13 +16,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpc.model import Bpc
 from skytemple_files.graphics.bpc.writer import BpcWriter
 
 
 class BpcHandler(DataHandler[Bpc]):
     @classmethod
-    def deserialize(cls, data: bytes, tiling_width=3, tiling_height=3, **kwargs) -> Bpc:
+    def deserialize(cls, data: bytes, tiling_width=3, tiling_height=3, **kwargs: OptionalKwargs) -> Bpc:
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
@@ -37,5 +38,5 @@ class BpcHandler(DataHandler[Bpc]):
         return Bpc(data, tiling_width, tiling_height)
 
     @classmethod
-    def serialize(cls, data: Bpc, **kwargs) -> bytes:
+    def serialize(cls, data: Bpc, **kwargs: OptionalKwargs) -> bytes:
         return BpcWriter(data).write()

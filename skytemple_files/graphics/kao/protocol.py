@@ -65,7 +65,7 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def expand(self, new_size: int):
+    def expand(self, new_size: int) -> None:
         ...
 
     @abstractmethod
@@ -73,17 +73,17 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def set(self, index: int, subindex: int, img: T):
+    def set(self, index: int, subindex: int, img: T) -> None:
         """Set the KaoImage at the specified location."""
         ...
 
     @abstractmethod
-    def set_from_img(self, index: int, subindex: int, pil: Image):
+    def set_from_img(self, index: int, subindex: int, pil: Image) -> None:
         """Set the KaoImage at the specified location."""
         ...
 
     @abstractmethod
-    def delete(self, index: int, subindex: int):
+    def delete(self, index: int, subindex: int) -> None:
         """Removes a KaoImage, if it exists."""
         ...
 

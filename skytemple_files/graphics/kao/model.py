@@ -21,14 +21,11 @@ from collections.abc import Iterator
 
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 from typing import Union, Tuple, Dict
 
 from skytemple_files.common.util import *
-from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3, CommonAtType
 from skytemple_files.common.i18n_util import f, _
 
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
@@ -53,7 +50,7 @@ class KaoImage(KaoImageProtocol):
         self.original_size = KAO_IMG_PAL_B_SIZE + cont_len
         self.pal_data = read_bytes(whole_kao_data, start_pnt, KAO_IMG_PAL_B_SIZE)
         self.compressed_img_data = read_bytes(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len)
-        self.as_pil = None  # lazy loading
+        self.as_pil: Optional[Image.Image] = None  # lazy loading
         self.modified = False
         self.empty = False
 
@@ -62,7 +59,7 @@ class KaoImage(KaoImageProtocol):
         """Create from raw compressed image and palette data"""
         return cls(bytes(pal) + bytes(cimg), 0)
 
-    def get(self) -> Image:
+    def get(self) -> Image.Image:
         """Returns the portrait as a PIL image with a 16-bit color palette"""
         if not self.as_pil:
             self.as_pil = kao_to_pil(self)
@@ -71,14 +68,14 @@ class KaoImage(KaoImageProtocol):
     def clone(self) -> 'KaoImage':
         return KaoImage(self.get_internal(), 0)
 
-    def size(self):
+    def size(self) -> int:
         return KAO_IMG_PAL_B_SIZE + len(self.compressed_img_data)
 
     def get_internal(self) -> bytes:
         """Returns the portrait as 16 color palette followed by AT compressed image data"""
         return bytes(self.pal_data) + bytes(self.compressed_img_data)
 
-    def set(self, pil: Image) -> 'KaoImage':
+    def set(self, pil: Image.Image) -> 'KaoImage':
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         self.pal_data = new_pal
@@ -89,7 +86,7 @@ class KaoImage(KaoImageProtocol):
         return self
 
     @classmethod
-    def new(cls, pil: Image) -> 'KaoImage':
+    def new(cls, pil: Image.Image) -> 'KaoImage':
         """Creates a new KaoImage from a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         new = cls(new_pal + new_img, 0)
@@ -101,7 +98,7 @@ class KaoImage(KaoImageProtocol):
         return bytes(self.compressed_img_data), bytes(self.pal_data)
 
 
-class Kao(KaoProtocol):
+class Kao(KaoProtocol[KaoImage]):
     # noinspection PyMissingConstructor
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
@@ -116,7 +113,7 @@ class Kao(KaoProtocol):
         first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
         toc_len = int((first_pointer - first_toc) / (SUBENTRIES*SUBENTRY_LEN))
 
-        self.original_data: memoryview = data
+        self.original_data: bytearray = data   # type: ignore
         self.first_toc = first_toc
         self.toc_len: int = toc_len
         self.reset(toc_len)
@@ -124,7 +121,7 @@ class Kao(KaoProtocol):
     def n_entries(self) -> int:
         return self.toc_len
 
-    def expand(self, new_size):
+    def expand(self, new_size: int) -> None:
         if new_size < self.toc_len:
             raise ValueError(f"Can't reduce size from {self.toc_len} to {new_size}")
         from skytemple_files.graphics.kao.writer import KaoWriter
@@ -156,7 +153,7 @@ class Kao(KaoProtocol):
         self.toc_len = new_size
         self.reset(new_size)
     
-    def reset(self, toc_len):
+    def reset(self, toc_len: int) -> None:
         self.loaded_kaos: List[List[Optional[KaoImage]]] = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
         self.loaded_kaos_flat: List[Tuple[int, int, KaoImage]] = []  # cache for performance
         
@@ -178,13 +175,13 @@ class Kao(KaoProtocol):
             return None
         return self.loaded_kaos[index][subindex]
 
-    def set(self, index: int, subindex: int, img: KaoImageProtocol):
+    def set(self, index: int, subindex: int, img: KaoImageProtocol) -> None:
         return self._set_impl(index, subindex, img)
 
-    def set_from_img(self, index: int, subindex: int, img: Image.Image):
+    def set_from_img(self, index: int, subindex: int, img: Image.Image) -> None:
         return self._set_impl(index, subindex, img)
 
-    def _set_impl(self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]):
+    def _set_impl(self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]) -> None:
         """
         Set the KaoImage at the specified location. This fails,
         if there is already an image there. Use get instead.
@@ -199,17 +196,17 @@ class Kao(KaoProtocol):
                 self.loaded_kaos_flat = [(i, s, x) for i, s, x in self.loaded_kaos_flat if i != index or s != subindex]
             img.modified = True
             self.loaded_kaos[index][subindex] = img
-            self.loaded_kaos_flat.append((index, subindex, img))  # type: ignore
+            self.loaded_kaos_flat.append((index, subindex, img))
             return
         else:
             if k is not None:
-                k.set(img)
+                k.set(img)  # type: ignore
                 return
 
-            self.loaded_kaos[index][subindex] = KaoImage.new(img)
+            self.loaded_kaos[index][subindex] = KaoImage.new(img)  # type: ignore
             self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
 
-    def delete(self, index: int, subindex: int):
+    def delete(self, index: int, subindex: int) -> None:
         try:
             kao = self.get(index, subindex)
         except ValueError:
@@ -229,7 +226,7 @@ class Kao(KaoProtocol):
         return KaoIterator(self, self.toc_len, SUBENTRIES)
 
 
-class KaoIterator(Iterator):
+class KaoIterator(Iterator[Tuple[int, int, Union[KaoImage, None]]]):
     def __init__(self, kao: Kao, indices: int, subindices: int):
         self.kao = kao
         self.current_index = 0
@@ -256,7 +253,7 @@ class KaoIterator(Iterator):
             raise StopIteration
 
 
-def kao_to_pil(kao: KaoImage) -> Image:
+def kao_to_pil(kao: KaoImage) -> Image.Image:
     """Converts the data in Kao image to a PIL image"""
     from skytemple_files.common.types.file_types import FileType
 
@@ -266,7 +263,7 @@ def kao_to_pil(kao: KaoImage) -> Image:
     return uncompressed_kao_to_pil(kao.pal_data, uncompressed_image_data)
 
 
-def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data):
+def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data: bytes) -> Image.Image:
     # The images are made up of 25 8x8 tiles stored linearly in the data, but to be arranged
     # as 5x5 "meta-pixels".
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
@@ -296,7 +293,7 @@ def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data):
     return im
 
 
-def pil_to_kao(pil: Image, allowed_compressions=None) -> Tuple[bytes, bytes]:
+def pil_to_kao(pil: Image.Image, allowed_compressions: Optional[List[CommonAtType]] = None) -> Tuple[bytes, bytes]:
     """Converts a PIL image (with a 16 bit palette) to a kao palette and at compressed image data"""
     from skytemple_files.common.types.file_types import FileType
     if allowed_compressions is None:

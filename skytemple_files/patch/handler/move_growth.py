@@ -121,7 +121,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_uintle(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU, 4)==PATCH_DV_CHECK_INSTR_APPLIED
         raise NotImplementedError()
     
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         param = self.get_parameters()
         if self.is_applied_ms(rom, config):
             param["MoveShortcuts"] = 1
@@ -183,5 +183,5 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
             raise ex
 
     
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

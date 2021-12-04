@@ -25,7 +25,7 @@ class PatchCategory(Enum):
     UTILITY = auto(), _("Utility")  # TRANSLATORS: Name for the category of ASM patch
     OTHER = auto(), _("Others")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj

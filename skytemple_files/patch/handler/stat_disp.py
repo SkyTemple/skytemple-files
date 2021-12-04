@@ -21,10 +21,7 @@ import os
 
 from skytemple_files.patch.category import PatchCategory
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
 from ndspy.rom import NintendoDSRom
 
@@ -77,7 +74,7 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         START_ACCURACY = self.get_parameter("StartGraphicPos")
         START_POWER = START_ACCURACY+12
         MAX_POWER = f"[M:B{START_POWER}]"+(f"[M:B{START_POWER+10}]")*9+f"[M:B{START_POWER+9}]"
@@ -129,5 +126,5 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
             raise ex
 
     
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

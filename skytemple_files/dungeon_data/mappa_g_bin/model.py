@@ -53,7 +53,7 @@ class MappaGFloor(AutoString):
     def _read_pointer(data: bytes, start, index):
         return read_uintle(data, start + (4 * index), 4)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGFloor):
             return False
         return self.layout == other.layout
@@ -77,7 +77,7 @@ class MappaGFloorLayout(AutoString):
         write_uintle(data, self.fixed_floor_id, 0x01, 1)
         return data
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGFloorLayout):
             return False
         return self.tileset_id == other.tileset_id and self.fixed_floor_id == other.fixed_floor_id
@@ -160,7 +160,7 @@ class MappaGBin(Sir0Serializable):
             lst.append(elem)
         return index
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGBin):
             return False
         return self.floor_lists == other.floor_lists

@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.wtu.model import Wtu
 from skytemple_files.graphics.wtu.writer import WtuWriter
 
 
 class WtuHandler(DataHandler[Wtu]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Wtu:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Wtu:
         return Wtu(data)
 
     @classmethod
-    def serialize(cls, data: Wtu, **kwargs) -> bytes:
+    def serialize(cls, data: Wtu, **kwargs: OptionalKwargs) -> bytes:
         return WtuWriter(data).write()

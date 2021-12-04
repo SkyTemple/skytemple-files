@@ -52,14 +52,14 @@ class MappaFloorStructureType(Enum):
     def print_name(self):
         return self._print_name_
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: str = None):
-        self._print_name_ = print_name
+    def __init__(self, _: int, print_name: typing.Optional[str] = None):
+        self._print_name_: str = print_name  # type: ignore
 
     def __str__(self):
         return self._print_name_
@@ -83,7 +83,7 @@ class MappaFloorWeather(Enum):
     def print_name(self):
         return self._print_name_
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -115,7 +115,7 @@ class MappaFloorTerrainSettings:
         self.unk6 = unk6
         self.unk7 = unk7
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaFloorTerrainSettings):
             return False
         return self.has_secondary_terrain == other.has_secondary_terrain \
@@ -139,7 +139,7 @@ class MappaFloorDarknessLevel(Enum):
     THREE_TILE = 3, _("3-tile vision")
     FOUR_TILE = 4, _("4-tile vision")
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -483,7 +483,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
             iq_booster_boost=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST)),
         )
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaFloorLayout):
             return False
         return self.structure == other.structure \

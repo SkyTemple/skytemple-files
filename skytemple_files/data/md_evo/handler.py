@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.md_evo.model import MdEvo
 from skytemple_files.data.md_evo.writer import MdEvoWriter
 
 
 class MdEvoHandler(DataHandler[MdEvo]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'MdEvo':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'MdEvo':
         return MdEvo(data)
 
     @classmethod
-    def serialize(cls, data: 'MdEvo', **kwargs) -> bytes:
+    def serialize(cls, data: 'MdEvo', **kwargs: OptionalKwargs) -> bytes:
         return MdEvoWriter(data).write()
 

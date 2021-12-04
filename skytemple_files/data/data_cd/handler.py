@@ -16,16 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.data_cd.model import DataCD
 from skytemple_files.data.data_cd.writer import DataCDWriter
 
 
 class DataCDHandler(DataHandler[DataCD]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'DataCD':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'DataCD':
         return DataCD(data)
 
     @classmethod
-    def serialize(cls, data: 'DataCD', **kwargs) -> bytes:
+    def serialize(cls, data: 'DataCD', **kwargs: OptionalKwargs) -> bytes:
         return DataCDWriter(data).write()
 

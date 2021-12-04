@@ -16,17 +16,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.banner_font.model import BannerFont
 from skytemple_files.graphics.fonts.banner_font.writer import BannerFontWriter
 
 
 class BannerFontHandler(DataHandler[BannerFont]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'BannerFont':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'BannerFont':
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), BannerFont)
 
     @classmethod
-    def serialize(cls, data: 'BannerFont', **kwargs) -> bytes:
+    def serialize(cls, data: 'BannerFont', **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))

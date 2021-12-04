@@ -19,6 +19,7 @@ from typing import Type
 from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data, GAME_REGION_JP
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp, AbstractSsbHeader
 from skytemple_files.script.ssb.model import Ssb
 from skytemple_files.script.ssb.writer import SsbWriter
@@ -26,7 +27,7 @@ from skytemple_files.script.ssb.writer import SsbWriter
 
 class SsbHandler(DataHandler[Ssb]):
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data = None, **kwargs) -> Ssb:
+    def deserialize(cls, data: bytes, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> Ssb:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
         ssb_header: AbstractSsbHeader
@@ -42,7 +43,7 @@ class SsbHandler(DataHandler[Ssb]):
         return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data, string_codec=static_data.string_encoding)
 
     @classmethod
-    def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs) -> bytes:
+    def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 

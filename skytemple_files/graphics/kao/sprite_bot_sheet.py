@@ -30,7 +30,7 @@ PORTRAIT_TILE_Y = 8
 
 class SpriteBotSheet:
     @classmethod
-    def create(cls, kao: KaoProtocol, portrait_item_id: int) -> Image.Image:
+    def create(cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int) -> Image.Image:
         image = Image.new('RGBA', (PORTRAIT_SIZE * PORTRAIT_TILE_X, PORTRAIT_SIZE * PORTRAIT_TILE_Y))
         max_x = 1
         max_y = 1
@@ -41,7 +41,7 @@ class SpriteBotSheet:
         return image.crop((0, 0, max_x, max_y))
 
     @classmethod
-    def load(cls, fn, portrait_name_fn: Callable[[int], str]) -> Generator[Tuple[int, Image.Image], None, None]:
+    def load(cls, fn: str, portrait_name_fn: Callable[[int], str]) -> Generator[Tuple[int, Image.Image], None, None]:
         img = Image.open(fn)
         occupied = cls._verify_portraits(img, portrait_name_fn)
         for xx, column in enumerate(occupied):
@@ -55,7 +55,7 @@ class SpriteBotSheet:
 
     @classmethod
     def _iter_portraits(
-            cls, kao: KaoProtocol, portrait_item_id: int
+            cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int
     ) -> Generator[Tuple[Optional[KaoImageProtocol], Optional[KaoImageProtocol]], None, None]:
         for i in range(0, SUBENTRIES, 2):
             yield kao.get(portrait_item_id, i), kao.get(portrait_item_id, i + 1)
@@ -150,7 +150,7 @@ class SpriteBotSheet:
         return occupied
 
     @classmethod
-    def _convert_index(cls, i):
+    def _convert_index(cls, i: int) -> int:
         if i >= PORTRAIT_TILE_X * PORTRAIT_TILE_Y / 2:
             return i * 2 - (PORTRAIT_TILE_X * PORTRAIT_TILE_Y - 1)
         return i * 2

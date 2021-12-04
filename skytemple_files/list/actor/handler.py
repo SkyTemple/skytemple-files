@@ -17,16 +17,17 @@
 from typing import Type
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.list.actor.model import ActorListBin
 
 
 class ActorListBinHandler(DataHandler[ActorListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> ActorListBin:  # type: ignore
+    def deserialize(cls, data: bytes, *, header_start, **kwargs: OptionalKwargs) -> ActorListBin:  # type: ignore
         return ActorListBin(data, header_start)
 
     @classmethod
-    def serialize(cls, data: ActorListBin, **kwargs) -> bytes:
+    def serialize(cls, data: ActorListBin, **kwargs: OptionalKwargs) -> bytes:
         return data.serialize()
 
     @classmethod

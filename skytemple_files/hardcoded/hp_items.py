@@ -27,7 +27,7 @@ class HardcodedHpItems:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_life_seed_hp(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_life_seed_hp(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['LifeSeedHP']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -37,7 +37,7 @@ class HardcodedHpItems:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_sitrus_berry_hp(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_sitrus_berry_hp(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['SitrusBerryHP']
         write_uintle(ov10, value, block.begin, 2)
 
@@ -47,6 +47,6 @@ class HardcodedHpItems:
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
-    def set_oran_berry_hp(value: int, ov10: bytearray, config: Pmd2Data):
+    def set_oran_berry_hp(value: int, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].blocks['OranBerryHP']
         write_uintle(ov10, value, block.begin, 2)

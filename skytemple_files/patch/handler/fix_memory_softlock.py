@@ -65,9 +65,9 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_uintle(rom.arm9, OFFSET_EU, 4) != ORIGINAL_INSTRUCTION_EU
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

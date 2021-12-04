@@ -75,7 +75,7 @@ class HardcodedPersonalityTestStarters:
         return HardcodedDefaultStarters.get_partner_level(arm9, config)
 
     @staticmethod
-    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the partner starter
         """
@@ -89,7 +89,7 @@ class HardcodedPersonalityTestStarters:
         return HardcodedDefaultStarters.get_player_level(arm9, config)
 
     @staticmethod
-    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data):
+    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the player starter
         """

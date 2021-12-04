@@ -67,7 +67,7 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         
         if INTER_PATH not in rom.filenames:
             header = bytearray(0x206)
@@ -80,5 +80,5 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
             raise ex
 
     
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

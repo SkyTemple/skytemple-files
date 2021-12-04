@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpl.model import Bpl
 from skytemple_files.graphics.bpl.writer import BplWriter
 
 
 class BplHandler(DataHandler[Bpl]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Bpl:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Bpl:
         return Bpl(data)
 
     @classmethod
-    def serialize(cls, data: Bpl, **kwargs) -> bytes:
+    def serialize(cls, data: Bpl, **kwargs: OptionalKwargs) -> bytes:
         return BplWriter(data).write()

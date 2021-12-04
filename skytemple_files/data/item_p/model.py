@@ -80,7 +80,7 @@ class ItemPEntry(AutoString):
         write_uintle(data, bitfield, 14, 1)
         return bytes(data)
     
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemPEntry):
             return False
         return self.buy_price == other.buy_price and \
@@ -117,7 +117,7 @@ class ItemP(Sir0Serializable, AutoString):
         from skytemple_files.data.item_p.writer import ItemPWriter
         return ItemPWriter(self).write()  # type: ignore
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemP):
             return False
         return self.item_list == other.item_list

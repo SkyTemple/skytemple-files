@@ -18,6 +18,8 @@
 import abc
 from typing import TypeVar, Generic
 
+from skytemple_files.common.util import OptionalKwargs
+
 T = TypeVar('T')
 
 
@@ -29,12 +31,12 @@ class DataHandler(Generic[T], abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def deserialize(cls, data: bytes, **kwargs) -> T:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> T:
         """Loads the internal high-level representation for this data type"""
         pass
 
     @classmethod
     @abc.abstractmethod
-    def serialize(cls, data: T, **kwargs) -> bytes:
+    def serialize(cls, data: T, **kwargs: OptionalKwargs) -> bytes:
         """Converts the internal high-level representation back into bytes."""
         pass

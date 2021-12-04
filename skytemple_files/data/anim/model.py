@@ -32,7 +32,7 @@ class AnimPointType(Enum):
     CENTER = 0x03, _('Center')
     NONE = 0xFF, _('None')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -53,7 +53,7 @@ class AnimType(Enum):
     SCREEN = 0x05, _('Screen')
     WBA = 0x06, _('WBA')
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
         obj._value_ = args[0]
         return obj
@@ -194,7 +194,7 @@ class Anim(AutoString):
         for x in range(special_move_table_ptr, len(data), SPECIAL_MOVE_DATA_SIZE):
             self.special_move_table.append(SpecMoveAnim(data[x:x + SPECIAL_MOVE_DATA_SIZE]))
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Anim):
             return False
         return self.trap_table == other.trap_table and \

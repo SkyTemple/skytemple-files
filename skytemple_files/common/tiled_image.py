@@ -19,24 +19,21 @@ import logging
 import math
 import warnings
 from itertools import chain
-from typing import List, Tuple, Union, Sequence
+from typing import List, Tuple, Union, Sequence, Optional
 
 import typing
 
 from skytemple_files.common.i18n_util import f, _
 
-try:
-    from PIL import Image
-except ImportError:
-    from pil import Image
+from PIL import Image
 
-from skytemple_files.common.util import iter_bytes_4bit_le, iter_bytes
+from skytemple_files.common.util import iter_bytes_4bit_le, iter_bytes, ByteReadable
 
 logger = logging.getLogger(__name__)
 
 
 class TilemapEntry:
-    def __init__(self, idx, flip_x, flip_y, pal_idx, ignore_too_large=False):
+    def __init__(self, idx: int, flip_x: bool, flip_y: bool, pal_idx: int, ignore_too_large: bool = False):
         self.idx = idx
         if idx > 0x3FF and not ignore_too_large:
             raise ValueError(f(_("Tile Mapping can not be processed. The tile number referenced ({idx}) is bigger "
@@ -46,16 +43,16 @@ class TilemapEntry:
         self.flip_y = flip_y
         self.pal_idx = pal_idx
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.idx} - {self.pal_idx} - {self.to_int():>016b} - " \
                f"{'x' if self.flip_x else ''}{'y' if self.flip_y else ''}"
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, TilemapEntry):
             return self.to_int() == other.to_int()
         return False
 
-    def to_int(self):
+    def to_int(self) -> int:
         """Converts tile map entry back into the byte format used by game"""
         xf = 1 if self.flip_x else 0
         yf = 1 if self.flip_y else 0
@@ -63,7 +60,7 @@ class TilemapEntry:
         return (self.idx & 0x3FF) + (xf << 10) + (yf << 11) + ((self.pal_idx & 0x3F) << 12)
 
     @classmethod
-    def from_int(cls, entry):
+    def from_int(cls, entry: int) -> 'TilemapEntry':
         """Create a tile map entry from the common two byte format used by the game"""
         return cls(
             # 0000 0011 1111 1111, tile index
@@ -78,11 +75,11 @@ class TilemapEntry:
 
 
 def to_pil(
-        tilemap: List[TilemapEntry], tiles: Sequence[bytes], palettes: List[List[int]],
+        tilemap: List[TilemapEntry], tiles: Sequence[ByteReadable], palettes: List[List[int]],
         tile_dim: int,
         img_width: int, img_height: int,
-        tiling_width=1, tiling_height=1,
-        ignore_flip_bits=False, bpp=4
+        tiling_width: int = 1, tiling_height: int = 1,
+        ignore_flip_bits: bool = False, bpp: int = 4
 ) -> Image.Image:
     """
     Convert all tiles referenced in tile_mapping to one big PIL image.
@@ -143,7 +140,7 @@ def to_pil(
 def to_pil_tiled(
         tilemap: List[TilemapEntry], in_tiles: List[bytes], palettes: List[List[int]],
         tile_dim: int,
-        ignore_flip_bits=False
+        ignore_flip_bits: bool = False
 ) -> List[Image.Image]:
     """
     Convert all tiles of the image into separate PIL images.
@@ -328,7 +325,7 @@ def from_pil(
     return final_tiles, tilemap, palettes
 
 
-def search_for_chunk(chunk, tile_mappings):
+def search_for_chunk(chunk: List[TilemapEntry], tile_mappings: List[TilemapEntry]) -> Optional[int]:
     """
     In the provided list of tile mappings, find an existing chunk.
     Returns the position of the first tile of the chunk or None if not found.
@@ -341,7 +338,7 @@ def search_for_chunk(chunk, tile_mappings):
     return None
 
 
-def search_for_tile_with_sum(tiles_with_sum: List[Tuple[int, bytearray]], tile_with_sum: Tuple[int, bytearray], tile_dim) -> Tuple[Union[int, None], bool, bool]:
+def search_for_tile_with_sum(tiles_with_sum: List[Tuple[int, bytearray]], tile_with_sum: Tuple[int, bytearray], tile_dim: int) -> Tuple[Union[int, None], bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     Increases performance by comparing the bytes sum of each tile before actually compare them
@@ -363,7 +360,8 @@ def search_for_tile_with_sum(tiles_with_sum: List[Tuple[int, bytearray]], tile_w
                 return i, True, True
     return None, False, False
 
-def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool]:
+
+def search_for_tile(tiles: List[bytes], tile: bytes, tile_dim: int) -> Tuple[Union[int, None], bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     """
@@ -380,7 +378,7 @@ def search_for_tile(tiles, tile, tile_dim) -> Tuple[Union[int, None], bool, bool
     return None, False, False
 
 
-def _flip_tile_x(tile: bytes, tile_dim):
+def _flip_tile_x(tile: bytes, tile_dim: int) -> bytes:
     """Flip all pixels in tile on the x-axis"""
     tile_flipped = bytearray(len(tile))
     for i, b in enumerate(tile):
@@ -390,7 +388,7 @@ def _flip_tile_x(tile: bytes, tile_dim):
     return tile_flipped
 
 
-def _flip_tile_y(tile: bytes, tile_dim):
+def _flip_tile_y(tile: bytes, tile_dim: int) -> bytes:
     """Flip all pixels in tile on the y-axis"""
     tile_flipped = bytearray(len(tile))
     for i, b in enumerate(tile):
@@ -400,7 +398,7 @@ def _flip_tile_y(tile: bytes, tile_dim):
     return tile_flipped
 
 
-def _px_pos_flipped(x, y, w, h, flip_x, flip_y) -> Tuple[int, int]:
+def _px_pos_flipped(x: int, y: int, w: int, h: int, flip_x: bool, flip_y: bool) -> Tuple[int, int]:
     """
     Returns the flipped x and y position for a pixel in a fixed size image.
     If x and/or y actually get flipped is controled by the flip_ params.

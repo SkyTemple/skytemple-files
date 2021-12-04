@@ -17,16 +17,17 @@
 from typing import Type
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.list.level.model import LevelListBin
 
 
 class LevelListBinHandler(DataHandler[LevelListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, *, header_start, **kwargs) -> LevelListBin:  # type: ignore
+    def deserialize(cls, data: bytes, *, header_start, **kwargs: OptionalKwargs) -> LevelListBin:  # type: ignore
         return LevelListBin(data, header_start)
 
     @classmethod
-    def serialize(cls, data: LevelListBin, **kwargs) -> bytes:
+    def serialize(cls, data: LevelListBin, **kwargs: OptionalKwargs) -> bytes:
         return data.serialize()
 
     @classmethod

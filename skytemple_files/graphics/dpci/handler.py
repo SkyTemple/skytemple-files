@@ -16,14 +16,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpci.model import Dpci
 
 
 class DpciHandler(DataHandler[Dpci]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Dpci:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpci:
         return Dpci(data)
 
     @classmethod
-    def serialize(cls, data: Dpci, **kwargs) -> bytes:
+    def serialize(cls, data: Dpci, **kwargs: OptionalKwargs) -> bytes:
         return data.to_bytes()

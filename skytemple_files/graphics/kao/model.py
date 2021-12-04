@@ -227,7 +227,7 @@ class Kao(KaoProtocol[KaoImage]):
         return KaoIterator(self, self.toc_len, SUBENTRIES)
 
 
-class KaoIterator(Iterator[Tuple[int, int, Union[KaoImage, None]]]):  # type: ignore
+class KaoIterator(Iterator):  # type: ignore
     def __init__(self, kao: Kao, indices: int, subindices: int):
         self.kao = kao
         self.current_index = 0

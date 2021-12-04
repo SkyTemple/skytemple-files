@@ -59,7 +59,7 @@ class Ssb:
                 if_empty_supported_langs = []
             self.original_binary_data = bytes()
             self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []
-            self.routine_op: List[List[SkyTempleSsbOperation]] = []
+            self.routine_ops: List[List[SkyTempleSsbOperation]] = []
             self.constants: List[str] = []
             self.strings: Dict[str, List[str]] = {lang_name: [] for lang_name in if_empty_supported_langs}
             return

@@ -26,3 +26,18 @@ EndExecution:
 	bl FillIfNotInterrupted
 .endarea
 
+.org HookInterrupt5
+.area 0x10
+	b MusicFadeOut
+	nop
+	nop
+	nop
+EndMusicFadeOut:
+.endarea
+
+.org HookInterrupt6
+.area 0x8
+	b MusicInterrupt
+	nop
+EndMusicInterrupt:
+.endarea

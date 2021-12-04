@@ -28,7 +28,7 @@ class InterDEntryType(Enum):
     SCNEQ  = 0x03, _('Scenario Equals')
     SCNBE  = 0x04, _('Scenario Below or Equal')
     SCNGE  = 0x05, _('Scenario Greater or Equal')
-    
+
     def __new__(cls, *args, **kwargs):
         obj = object.__new__(cls)
         obj._value_ = args[0]
@@ -39,29 +39,33 @@ class InterDEntryType(Enum):
             self, _: int, explanation: str
     ):
         self.explanation = explanation
-    
+
+
 class InterDEntry(AutoString):
     def __init__(self, data: bytes = bytes(6)):
-        self.floor = read_uintle(data, 0, 1)
-        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))
+        floor_attrib = read_uintle(data, 0, 1)
+        self.floor = floor_attrib & 0x7F
+        self.continue_music = bool(floor_attrib & 0x80)
+        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))  # type: ignore
         self.game_var_id = read_uintle(data, 2, 2)
         self.param1 = read_uintle(data, 4, 1)
         self.param2 = read_uintle(data, 5, 1)
 
     def to_bytes(self) -> bytes:
         data = bytearray(6)
-        write_uintle(data, self.floor, 0, 1)
+        write_uintle(data, (self.floor & 0x7F) + (int(self.continue_music)<<7), 0, 1)
         write_uintle(data, self.ent_type.value, 1, 1)
         write_uintle(data, self.game_var_id, 2, 2)
         write_uintle(data, self.param1, 4, 1)
         write_uintle(data, self.param2, 5, 1)
         return bytes(data)
-    
+
+
 class InterD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list_dungeons = []
+        self.list_dungeons: List[List[InterDEntry]] = []
         limit = read_uintle(data, 0, 4)
         prev = read_uintle(data, 4, 2)
         for x in range(6, limit, 2):

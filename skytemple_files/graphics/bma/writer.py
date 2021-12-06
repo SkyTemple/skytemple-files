@@ -21,14 +21,15 @@ from skytemple_files.graphics.bma.model import Bma
 
 
 class BmaWriter:
-    def __init__(self, model: Bma):
-        self.model = model
-        self.data: Optional[bytearray] = None
+    def __init__(self) -> None:
+        self.model: Bma = None  # type: ignore
+        self.data: bytearray = bytearray()
         self.bytes_written = 0
 
-    def write(self) -> bytes:
+    def write(self, model: Bma) -> bytes:
         # First collect the layers, collision layers and unknown data layer,
         # so we know the sizes
+        self.model = model
         layers = []
         collisions = []
         unknown_data = None
@@ -82,7 +83,7 @@ class BmaWriter:
 
         return self.data
 
-    def _convert_layer(self, layeri) -> bytes:
+    def _convert_layer(self, layeri: int) -> bytes:
         """
         Converts chunk mappings for a layer back into bytes.
         If map size is odd, adds one extra tiles per row.
@@ -121,7 +122,7 @@ class BmaWriter:
 
         return layer_bytes[:layer_bytes_cursor]
 
-    def _convert_collision(self, layeri):
+    def _convert_collision(self, layeri: int) -> bytes:
         """
         Converts collision mappings back into bytes.
         If map size is odd, adds one extra tiles per row
@@ -134,7 +135,7 @@ class BmaWriter:
         # The actual values are "encoded" using XOR.
         previous_row_values = [0 for _ in range(0, self.model.map_width_camera)]
         size = self.model.map_width_camera * self.model.map_height_camera
-        assert size == len(collision_layer)
+        assert size == len(collision_layer)  # type: ignore
 
         layer_bytes = bytearray(size)
         layer_bytes_cursor = 0
@@ -144,9 +145,9 @@ class BmaWriter:
             row_bytes = bytearray(int(size / self.model.map_height_camera))
             for col in range(0, self.model.map_width_camera):
                 i = row * self.model.map_width_camera + col
-                actual_value = collision_layer[i] ^ previous_row_values[col]
+                actual_value = collision_layer[i] ^ previous_row_values[col]  # type: ignore
                 write_uintle(row_bytes, actual_value, col)
-                previous_row_values[col] = collision_layer[i]
+                previous_row_values[col] = collision_layer[i]  # type: ignore
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.BMA_COLLISION_RLE.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
@@ -183,12 +184,12 @@ class BmaWriter:
 
         return layer_bytes[:layer_bytes_cursor]
 
-    def _write_16uintle(self, val):
+    def _write_16uintle(self, val: int) -> None:
         assert val <= 0xffff
         write_uintle(self.data, val, self.bytes_written, 2)
         self.bytes_written += 2
 
-    def _write_byte(self, val):
+    def _write_byte(self, val: int) -> None:
         assert val <= 0xff
         write_uintle(self.data, val, self.bytes_written)
         self.bytes_written += 1

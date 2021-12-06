@@ -17,9 +17,11 @@
 
 from typing import List
 
+from skytemple_files.graphics.bpl.protocol import BplAnimationSpecProtocol, BplProtocol
 from skytemple_files.common.util import *
 
 # Length of a palette in colors. Color 0 is auto-generated (transparent)
+
 BPL_PAL_LEN = 15
 # Actual colors in an image, (including the color 0)
 BPL_IMG_PAL_LEN = BPL_PAL_LEN + 1
@@ -37,18 +39,17 @@ BPL_COL_INDEX_ENTRY_LEN = 4
 BPL_FOURTH_COLOR = 0x00
 
 
-class BplAnimationSpec:
-
-    def __init__(self, duration_per_frame, number_of_frames):
+class BplAnimationSpec(BplAnimationSpecProtocol):
+    def __init__(self, duration_per_frame: int, number_of_frames: int) -> None:
         self.duration_per_frame = duration_per_frame
         self.number_of_frames = number_of_frames
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.duration_per_frame},{self.number_of_frames}>"
 
 
-class Bpl:
-    def __init__(self, data: bytes):
+class Bpl(BplProtocol[BplAnimationSpec]):
+    def __init__(self, data: bytes) -> None:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
@@ -56,7 +57,7 @@ class Bpl:
 
         # The second 2 byte value should just be a boolean
         #assert 0 <= read_bytes(data, 2, 2).uintle <= 1
-        self.has_palette_animation = read_uintle(data, 2, 2)
+        self.has_palette_animation = read_uintle(data, 2, 2) > 0
 
         # Read palettes:
         pal_end = 4 + (self.number_palettes * BPL_PAL_SIZE)
@@ -107,7 +108,7 @@ class Bpl:
                     self.animation_palette.append(current_ani_pal)
                     current_ani_pal = []
 
-    def import_palettes(self, palettes: List[List[int]]):
+    def import_palettes(self, palettes: List[List[int]]) -> None:
         """
         Replace all palettes with the ones passed in
         Animated palette is not changed, but the number of spec entries is adjusted.
@@ -150,18 +151,18 @@ class Bpl:
                 f_palettes.append(self.palettes[i])
         return f_palettes
 
-    def is_palette_affected_by_animation(self, pal_idx):
+    def is_palette_affected_by_animation(self, pal_idx: int) -> bool:
         """Returns whether or not the palette with that index is affected by animation. """
         if not self.has_palette_animation:
             return False
         spec = self.animation_specs[pal_idx]
         return spec.number_of_frames > 0
 
-    def get_real_palettes(self):
+    def get_real_palettes(self) -> List[List[int]]:
         """Gets the actual palettes defined (without dummy grayscale entries). """
         return self.palettes[:self.number_palettes]
         
-    def set_palettes(self, palettes):
+    def set_palettes(self, palettes: List[List[int]]) -> None:
         """Sets the palette properly, adding dummy grayscale entries if needed. """
         self.palettes = palettes
         self.number_palettes = len(palettes)

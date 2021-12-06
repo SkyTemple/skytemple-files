@@ -15,13 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
 from pathlib import PurePosixPath
-from typing import List, Union, Optional
 
-from ndspy.rom import NintendoDSRom
+from skytemple_files.common.protocol import RomFileProviderProtocol
 
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
 from skytemple_files.graphics.bma.model import Bma
 from skytemple_files.graphics.bpa.model import Bpa
 from skytemple_files.graphics.bpc.model import Bpc
@@ -34,7 +33,7 @@ BMA_EXT = '.bma'
 BPA_EXT = '.bpa'
 
 
-class BgListEntry:
+class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
     def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[Optional[str]]):
         # ALL names can only be 1-8 character ASCII strings with only uppercase
         # letters. This is checked during serialization in the writer.
@@ -45,43 +44,43 @@ class BgListEntry:
         # There can only be 8 BPAs. There isn't more space!
         assert len(bpa_names) == 8
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"BPL: {self.bpl_name}, BPC: {self.bpc_name}, BMA: {self.bma_name}, BPAs: {self.bpa_names}"
 
-    def get_bpl(self, rom_or_directory_root: Union[str, NintendoDSRom]) -> Bpl:
+    def get_bpl(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> Bpl:
         """
         Returns the BPL model that is referenced in this entry.
         Can be serialized with the BPL DataHandler. Original filename in self.bpl_name.
         """
         from skytemple_files.common.types.file_types import FileType
-        return FileType.BPL.deserialize(self._get_file(
+        return FileType.BPL.deserialize(self._get_file(  # type: ignore
             str(PurePosixPath(DIR).joinpath(self.bpl_name.lower() + BPL_EXT)),
             rom_or_directory_root
         ))
 
-    def get_bpc(self, rom_or_directory_root: Union[str, NintendoDSRom], bpc_tiling_width=3, bpc_tiling_height=3) -> Bpc:
+    def get_bpc(self, rom_or_directory_root: Union[str, RomFileProviderProtocol], bpc_tiling_width: int = 3, bpc_tiling_height: int = 3) -> Bpc:
         """
         Returns the BPC model that is referenced in this entry.
         Can be serialized with the BPC DataHandler. Original filename in self.bpc_name.
         """
         from skytemple_files.common.types.file_types import FileType
-        return FileType.BPC.deserialize(self._get_file(
+        return FileType.BPC.deserialize(self._get_file(  # type: ignore
             str(PurePosixPath(DIR).joinpath(self.bpc_name.lower() + BPC_EXT)),
             rom_or_directory_root
         ), tiling_width=bpc_tiling_width, tiling_height=bpc_tiling_height)
 
-    def get_bma(self, rom_or_directory_root: Union[str, NintendoDSRom]) -> Bma:
+    def get_bma(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> Bma:
         """
         Returns the BMA model that is referenced in this entry.
         Can be serialized with the BMA DataHandler. Original filename in self.bma_name.
         """
         from skytemple_files.common.types.file_types import FileType
-        return FileType.BMA.deserialize(self._get_file(
+        return FileType.BMA.deserialize(self._get_file(  # type: ignore
             str(PurePosixPath(DIR).joinpath(self.bma_name.lower() + BMA_EXT)),
             rom_or_directory_root
         ))
 
-    def get_bpas(self, rom_or_directory_root: Union[str, NintendoDSRom]):
+    def get_bpas(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> List[Optional[Bpa]]:
         """
         Returns a list of BPA models that are referenced in this entry.
         Can be serialized with the BPA DataHandler. Original filenames in self.bpa_names.
@@ -91,7 +90,7 @@ class BgListEntry:
         bpas: List[Optional[Bpa]] = []
         for bpa_name in self.bpa_names:
             if bpa_name is not None:
-                bpas.append(FileType.BPA.deserialize(self._get_file(
+                bpas.append(FileType.BPA.deserialize(self._get_file(  # type: ignore
                     str(PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)),
                     rom_or_directory_root
                 )))
@@ -99,7 +98,8 @@ class BgListEntry:
                 bpas.append(None)
         return bpas
 
-    def _get_file(self, filename, rom_or_directory_root) -> bytes:
+    @staticmethod
+    def _get_file(filename: str, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> bytes:
         if isinstance(rom_or_directory_root, NintendoDSRom):
             return rom_or_directory_root.getFileByName(filename)
         elif isinstance(rom_or_directory_root, str):
@@ -109,7 +109,7 @@ class BgListEntry:
         raise ValueError("Provided rom_or_directory is neither a string nor a NintendoDSRom.")
 
 
-class BgList:
+class BgList(BgListProtocol[BgListEntry]):
     """BgList model. To edit entries, manipulate the levels list."""
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
@@ -131,7 +131,7 @@ class BgList:
                 bpas
             ))
 
-    def find_bma(self, name) -> int:
+    def find_bma(self, name: str) -> int:
         """Count all occurrences of this BMA in the list."""
         count = 0
         for l in self.level:
@@ -139,7 +139,7 @@ class BgList:
                 count += 1
         return count
 
-    def find_bpl(self, name) -> int:
+    def find_bpl(self, name: str) -> int:
         """Count all occurrences of this BPL in the list."""
         count = 0
         for l in self.level:
@@ -147,7 +147,7 @@ class BgList:
                 count += 1
         return count
 
-    def find_bpc(self, name) -> int:
+    def find_bpc(self, name: str) -> int:
         """Count all occurrences of this BPL in the list."""
         count = 0
         for l in self.level:
@@ -155,7 +155,7 @@ class BgList:
                 count += 1
         return count
 
-    def find_bpa(self, name) -> int:
+    def find_bpa(self, name: str) -> int:
         """Count all occurrences of this BPA in the list."""
         count = 0
         for l in self.level:

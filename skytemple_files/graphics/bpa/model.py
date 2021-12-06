@@ -22,6 +22,7 @@ from PIL import Image
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
 from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 from skytemple_files.common.i18n_util import f, _
 
@@ -29,19 +30,19 @@ BPA_PIXEL_BITLEN = 4
 BPA_TILE_DIM = 8
 
 
-class BpaFrameInfo:
-    def __init__(self, duration_per_frame, unk2):
+class BpaFrameInfo(BpaFrameInfoProtocol):
+    def __init__(self, duration_per_frame: int, unk2: int):
         # speed?
         self.duration_per_frame = duration_per_frame
         # always 0?
         self.unk2 = unk2
         assert self.unk2 == 0
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"BpaFrameInfo({self.duration_per_frame}, {self.unk2})"
 
 
-class Bpa:
+class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
     def __init__(self, data: Optional[bytes]):
         self.number_of_tiles = 0
         self.number_of_frames = 0
@@ -68,11 +69,11 @@ class Bpa:
         for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_tiles))):
             self.tiles.append(bytearray(tile))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Idx: {self.number_of_tiles}, " \
                f"#c: {self.number_of_frames}"
 
-    def get_tile(self, tile_idx, frame_idx) -> bytes:
+    def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
         return self.tiles[frame_idx * self.number_of_tiles + tile_idx]
 
@@ -104,7 +105,7 @@ class Bpa:
             dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
         )
 
-    def tiles_to_pil_separate(self, palette, width_in_tiles=20) -> List[Image.Image]:
+    def tiles_to_pil_separate(self, palette: List[int], width_in_tiles: int = 20) -> List[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -130,7 +131,7 @@ class Bpa:
             ))
         return images
 
-    def pil_to_tiles(self, image: Image.Image):
+    def pil_to_tiles(self, image: Image.Image) -> None:
         """
         Converts a PIL image back to the BPA.
         The format is expected to be the same as tiles_to_pil. This means, that
@@ -151,7 +152,7 @@ class Bpa:
 
         self._correct_frame_info()
 
-    def pil_to_tiles_separate(self, images: List[Image.Image]):
+    def pil_to_tiles_separate(self, images: List[Image.Image]) -> None:
         frames = []
         first_image_dims = None
         for image in images:
@@ -172,7 +173,7 @@ class Bpa:
 
         self._correct_frame_info()
 
-    def _correct_frame_info(self):
+    def _correct_frame_info(self) -> None:
         # Correct frame info size
         len_finfo = len(self.frame_info)
         if len_finfo > self.number_of_frames:
@@ -186,6 +187,6 @@ class Bpa:
                     # ... or we default to 10.
                     self.frame_info.append(BpaFrameInfo(10, 0))
 
-    def tiles_for_frame(self, frame):
+    def tiles_for_frame(self, frame: int) -> Sequence[bytearray]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
         return self.tiles[frame * self.number_of_tiles:]

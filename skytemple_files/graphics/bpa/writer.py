@@ -21,33 +21,31 @@ from skytemple_files.graphics.bpa.model import Bpa, BPA_TILE_DIM
 
 
 class BpaWriter:
-    def __init__(self, model: Bpa):
-        self.model = model
-        self.data: Optional[bytearray] = None
+    def __init__(self) -> None:
         self.bytes_written = 0
 
-    def write(self) -> bytes:
+    def write(self, model: Bpa) -> bytes:
         # 4 byte header + animation info for each + images
-        self.data = bytearray(
-            4 + (self.model.number_of_frames * 4) + int(self.model.number_of_tiles * self.model.number_of_frames / 2)
+        data = bytearray(
+            4 + (model.number_of_frames * 4) + int(model.number_of_tiles * model.number_of_frames / 2)
         )
 
-        self._write_16uintle(self.model.number_of_tiles)
-        self._write_16uintle(self.model.number_of_frames)
+        self._write_16uintle(data, model.number_of_tiles)
+        self._write_16uintle(data, model.number_of_frames)
 
-        assert self.model.number_of_frames == len(self.model.frame_info)
-        for finfo in self.model.frame_info:
-            self._write_16uintle(finfo.duration_per_frame)
-            self._write_16uintle(finfo.unk2)
+        assert model.number_of_frames == len(model.frame_info)
+        for finfo in model.frame_info:
+            self._write_16uintle(data, finfo.duration_per_frame)
+            self._write_16uintle(data, finfo.unk2)
 
         # Tiles
         bytelen_single_tile = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
-        for tile in self.model.tiles:
-            self.data[self.bytes_written:self.bytes_written+bytelen_single_tile] = tile
+        for tile in model.tiles:
+            data[self.bytes_written:self.bytes_written+bytelen_single_tile] = tile
             self.bytes_written += bytelen_single_tile
 
-        return self.data
+        return data
 
-    def _write_16uintle(self, val):
-        write_uintle(self.data, val, self.bytes_written, 2)
+    def _write_16uintle(self, data: bytearray, val: int) -> None:
+        write_uintle(data, val, self.bytes_written, 2)
         self.bytes_written += 2

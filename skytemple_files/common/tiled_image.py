@@ -27,12 +27,13 @@ from skytemple_files.common.i18n_util import f, _
 
 from PIL import Image
 
+from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.util import iter_bytes_4bit_le, iter_bytes, ByteReadable
 
 logger = logging.getLogger(__name__)
 
 
-class TilemapEntry:
+class TilemapEntry(TilemapEntryProtocol):
     def __init__(self, idx: int, flip_x: bool, flip_y: bool, pal_idx: int, ignore_too_large: bool = False):
         self.idx = idx
         if idx > 0x3FF and not ignore_too_large:
@@ -75,7 +76,7 @@ class TilemapEntry:
 
 
 def to_pil(
-        tilemap: List[TilemapEntry], tiles: Sequence[ByteReadable], palettes: List[List[int]],
+        tilemap: Sequence[TilemapEntryProtocol], tiles: Sequence[ByteReadable], palettes: Sequence[Sequence[int]],
         tile_dim: int,
         img_width: int, img_height: int,
         tiling_width: int = 1, tiling_height: int = 1,
@@ -138,7 +139,7 @@ def to_pil(
 
 
 def to_pil_tiled(
-        tilemap: List[TilemapEntry], in_tiles: List[bytes], palettes: List[List[int]],
+        tilemap: Sequence[TilemapEntryProtocol], in_tiles: Sequence[bytes], palettes: Sequence[Sequence[int]],
         tile_dim: int,
         ignore_flip_bits: bool = False
 ) -> List[Image.Image]:
@@ -174,7 +175,7 @@ def from_pil(
         pil: Image.Image, single_palette_size: int, max_nb_palettes: int, tile_dim: int,
         img_width: int,  img_height: int,
         tiling_width=1, tiling_height=1, force_import=False, optimize=True, palette_offset=0
-) -> Tuple[List[bytearray], List[TilemapEntry], List[List[int]]]:
+) -> Tuple[List[bytearray], List[TilemapEntryProtocol], List[List[int]]]:
     """
     Modify the image data in the tiled image by importing the passed PIL.
 
@@ -223,7 +224,7 @@ def from_pil(
     number_of_tiles = int(len(raw_pil_image) / tile_dim / tile_dim)
 
     tiles_with_sum: List[Tuple[int, bytearray]] = [None for __ in range(0, number_of_tiles)]
-    tilemap: List[TilemapEntry] = [None for __ in range(0, number_of_tiles)]
+    tilemap: List[TilemapEntryProtocol] = [None for __ in range(0, number_of_tiles)]
     the_two_px_to_write = [0, 0]
 
     # Set inside the loop:
@@ -325,7 +326,7 @@ def from_pil(
     return final_tiles, tilemap, palettes
 
 
-def search_for_chunk(chunk: List[TilemapEntry], tile_mappings: List[TilemapEntry]) -> Optional[int]:
+def search_for_chunk(chunk: List[TilemapEntryProtocol], tile_mappings: List[TilemapEntryProtocol]) -> Optional[int]:
     """
     In the provided list of tile mappings, find an existing chunk.
     Returns the position of the first tile of the chunk or None if not found.

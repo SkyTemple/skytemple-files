@@ -14,18 +14,42 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpl.model import Bpl
-from skytemple_files.graphics.bpl.writer import BplWriter
+from skytemple_files.graphics.bpl.protocol import BplProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.bpl.model import Bpl as PyBpl
+    from skytemple_rust.st_bpl import Bpl as NativeBpl
 
 
-class BplHandler(DataHandler[Bpl]):
+class BplHandler(HybridDataHandler[BplProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Bpl:
-        return Bpl(data)
+    def load_python_model(cls) -> Type[BplProtocol]:
+        from skytemple_files.graphics.bpl.model import Bpl
+        return Bpl
 
     @classmethod
-    def serialize(cls, data: Bpl, **kwargs: OptionalKwargs) -> bytes:
-        return BplWriter(data).write()
+    def load_native_model(cls) -> Type[BplProtocol]:
+        from skytemple_rust.st_bpl import Bpl
+        return Bpl
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyBpl']]:  # type: ignore
+        from skytemple_files.graphics.bpl.writer import BplWriter
+        return BplWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeBpl']]:  # type: ignore
+        from skytemple_rust.st_bpl import BplWriter
+        return BplWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BplProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: BplProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

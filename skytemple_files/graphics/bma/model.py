@@ -20,14 +20,18 @@ from typing import Tuple, List, Sequence
 
 from PIL import Image, ImageDraw, ImageFont
 
+from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.bpa.model import Bpa
-from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM
-from skytemple_files.graphics.bpl.model import Bpl, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
+from skytemple_files.graphics.bpc.model import BPC_TILE_DIM, Bpc
+from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN, Bpl
 from skytemple_files.common.i18n_util import f, _
 
 # Mask palette used for image composition
+from skytemple_files.graphics.bpl.protocol import BplProtocol
+
 MASK_PAL = [
     0x00, 0x00, 0x00,
     0xff, 0xff, 0xff,
@@ -49,7 +53,7 @@ MASK_PAL = [
 MASK_PAL *= 16
 
 
-class Bma:
+class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
     def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
         if not isinstance(data, memoryview):
@@ -173,7 +177,7 @@ class Bma:
                 stop_when_size=number_of_bytes_for_col
             ))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"M: {self.map_width_camera}x{self.map_height_camera}, " \
                f"T: {self.tiling_width}x{self.tiling_height} - " \
                f"MM: {self.map_width_chunks}x{self.map_height_chunks} - " \
@@ -272,8 +276,8 @@ class Bma:
         return fimg
 
     def to_pil(
-            self, bpc: Bpc, bpl: Bpl, bpas: List[Optional[Bpa]],
-            include_collision=True, include_unknown_data_block=True, pal_ani=True, single_frame=False
+            self, bpc: Bpc, bpl: BplProtocol, bpas: List[Optional[Bpa]],
+            include_collision: bool = True, include_unknown_data_block: bool = True, pal_ani: bool = True, single_frame: bool = False
     ) -> List[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
@@ -403,10 +407,10 @@ class Bma:
             old_images_i = 0
             final_images = []
 
-            for pal_ani in range(0, len(bpl.animation_palette)):
+            for ppal_ani in range(0, len(bpl.animation_palette)):
                 current_img = old_images[old_images_i].copy()
                 # Switch out the palette with that from the palette animation
-                pal_for_frame = itertools.chain.from_iterable(bpl.apply_palette_animations(pal_ani))
+                pal_for_frame = itertools.chain.from_iterable(bpl.apply_palette_animations(ppal_ani))
                 current_img.putpalette(pal_for_frame)
                 final_images.append(current_img)
                 old_images_i += 1
@@ -416,9 +420,10 @@ class Bma:
         return final_images
 
     def from_pil(
-            self, bpc: Bpc, bpl: Bpl, lower_img: Image.Image = None, upper_img: Image.Image = None,
-            force_import=False, how_many_palettes_lower_layer=16
-    ):
+            self, bpc: Bpc, bpl: BplProtocol, lower_img: Optional[Image.Image] = None,
+            upper_img: Optional[Image.Image] = None,
+            force_import: bool = False, how_many_palettes_lower_layer: int = 16
+    ) -> None:
         """
         Import an entire map from one or two images (for each layer).
         Changes all tiles, tilemappings and chunks in the BPC and re-writes the two layer mappings of the BMA.
@@ -492,7 +497,7 @@ class Bma:
             # in the imported image. Generate chunk mappings.
             chunk_mappings = []
             chunk_mappings_counter = 1
-            tile_mappings: List[TilemapEntry] = []
+            tile_mappings: List[TilemapEntryProtocol] = []
             tiles_in_chunk = self.tiling_width * self.tiling_height
             for chk_fst_tile_idx in range(0, self.map_width_chunks * self.map_height_chunks * tiles_in_chunk, tiles_in_chunk):
                 chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]

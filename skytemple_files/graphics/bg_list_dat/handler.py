@@ -14,18 +14,51 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bg_list_dat.model import BgList
-from skytemple_files.graphics.bg_list_dat.writer import BgListWriter
+from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.bg_list_dat.model import BgList as PyBgList
+    from skytemple_rust.st_bg_list_dat import BgList as NativeBgList
 
 
-class BgListDatHandler(DataHandler[BgList]):
+class BgListDatHandler(HybridDataHandler[BgListProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BgList:
-        return BgList(data)
+    def load_python_model(cls) -> Type[BgListProtocol]:
+        from skytemple_files.graphics.bg_list_dat.model import BgList
+        return BgList
 
     @classmethod
-    def serialize(cls, data: BgList, **kwargs: OptionalKwargs) -> bytes:
-        return BgListWriter(data).write()
+    def load_native_model(cls) -> Type[BgListProtocol]:
+        from skytemple_rust.st_bg_list_dat import BgList
+        return BgList
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyBgList']]:  # type: ignore
+        from skytemple_files.graphics.bg_list_dat.writer import BgListWriter
+        return BgListWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeBgList']]:  # type: ignore
+        from skytemple_rust.st_bg_list_dat import BgListWriter
+        return BgListWriter
+
+    @classmethod
+    def get_entry_model_cls(cls) -> Type[BgListEntryProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_bg_list_dat import BgListEntry as BgListEntryNative
+            return BgListEntryNative
+        from skytemple_files.graphics.bg_list_dat.model import BgListEntry
+        return BgListEntry
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BgListProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: BgListProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

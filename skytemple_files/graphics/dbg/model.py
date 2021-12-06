@@ -17,6 +17,7 @@
 import math
 from typing import List
 
+from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
 from skytemple_files.common.util import read_uintle, write_uintle, chunks
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
@@ -99,7 +100,7 @@ class Dbg:
         # in the imported image. Generate chunk mappings.
         chunk_mappings = []
         chunk_mappings_counter = 1
-        tile_mappings: List[TilemapEntry] = []
+        tile_mappings: List[TilemapEntryProtocol] = []
         tiles_in_chunk = DBG_TILING_DIM * DBG_TILING_DIM
         for chk_fst_tile_idx in range(0, DBG_WIDTH_AND_HEIGHT * DBG_WIDTH_AND_HEIGHT * tiles_in_chunk, tiles_in_chunk):
             chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]

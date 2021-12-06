@@ -14,23 +14,42 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpa.model import Bpa
-from skytemple_files.graphics.bpa.writer import BpaWriter
+from skytemple_files.graphics.bpa.protocol import BpaProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.bpa.model import Bpa as PyBpa
+    from skytemple_rust.st_bpa import Bpa as NativeBpa
 
 
-class BpaHandler(DataHandler[Bpa]):
+class BpaHandler(HybridDataHandler[BpaProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Bpa:
-        return Bpa(data)
+    def load_python_model(cls) -> Type[BpaProtocol]:
+        from skytemple_files.graphics.bpa.model import Bpa
+        return Bpa
 
     @classmethod
-    def serialize(cls, data: Bpa, **kwargs: OptionalKwargs) -> bytes:
-        return BpaWriter(data).write()
+    def load_native_model(cls) -> Type[BpaProtocol]:
+        from skytemple_rust.st_bpa import Bpa
+        return Bpa
 
     @classmethod
-    def new(cls):
-        """Creates a new and empty BPA model"""
-        return Bpa(None)
+    def load_python_writer(cls) -> Type[WriterProtocol['PyBpa']]:  # type: ignore
+        from skytemple_files.graphics.bpa.writer import BpaWriter
+        return BpaWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeBpa']]:  # type: ignore
+        from skytemple_rust.st_bpa import BpaWriter
+        return BpaWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BpaProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: BpaProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

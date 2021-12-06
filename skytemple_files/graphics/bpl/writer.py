@@ -22,56 +22,53 @@ from skytemple_files.graphics.bpl.model import BPL_PAL_SIZE
 
 
 class BplWriter:
-    def __init__(self, model: Bpl):
-        self.model = model
-        self.data: Optional[bytearray] = None
+    def __init__(self) -> None:
         self.bytes_written = 0
 
-    def write(self) -> bytes:
-
+    def write(self, model: Bpl) -> bytes:
         # Calculate the size of the palette animation bit
         animation_size = 0
-        if self.model.has_palette_animation:
-            animation_palette_size = len(self.model.animation_palette) * BPL_PAL_ENTRY_LEN
-            animation_size = self.model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
+        if model.has_palette_animation:
+            animation_palette_size = len(model.animation_palette) * BPL_PAL_ENTRY_LEN
+            animation_size = model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
 
         # 4 byte header + palettes + animation
-        self.data = bytearray(
-            4 + (self.model.number_palettes * BPL_PAL_SIZE) + animation_size
+        data = bytearray(
+            4 + (model.number_palettes * BPL_PAL_SIZE) + animation_size
         )
 
         # Header
-        self._write_16uintle(self.model.number_palettes)
-        self._write_16uintle(self.model.has_palette_animation)
+        self._write_16uintle(data, model.number_palettes)
+        self._write_16uintle(data, model.has_palette_animation)
 
-        for palette in self.model.get_real_palettes():
+        for palette in model.get_real_palettes():
             # Palettes [Starts with transparent color! This is removed!]
             for i, color in enumerate(palette[3:]):
-                self._write_byte(color)
+                self._write_byte(data, color)
                 if i % 3 == 2:
                     # Insert the fourth color
-                    self._write_byte(BPL_FOURTH_COLOR)
+                    self._write_byte(data, BPL_FOURTH_COLOR)
 
-        if self.model.has_palette_animation:
+        if model.has_palette_animation:
             # Palette Animation Spec
-            for spec in self.model.animation_specs:
-                self._write_16uintle(spec.duration_per_frame)
-                self._write_16uintle(spec.number_of_frames)
+            for spec in model.animation_specs:
+                self._write_16uintle(data, spec.duration_per_frame)
+                self._write_16uintle(data, spec.number_of_frames)
 
             # Palette Animation Palette
-            for frame in self.model.animation_palette:
+            for frame in model.animation_palette:
                 for i, color in enumerate(frame):
-                    self._write_byte(color)
+                    self._write_byte(data, color)
                     if i % 3 == 2:
                         # Insert the fourth color
-                        self._write_byte(BPL_FOURTH_COLOR)
+                        self._write_byte(data, BPL_FOURTH_COLOR)
 
-        return self.data
+        return data
 
-    def _write_16uintle(self, val):
-        write_uintle(self.data, val, self.bytes_written, 2)
+    def _write_16uintle(self, data: bytearray, val: int) -> None:
+        write_uintle(data, val, self.bytes_written, 2)
         self.bytes_written += 2
 
-    def _write_byte(self, val):
-        write_uintle(self.data, val, self.bytes_written)
+    def _write_byte(self, data: bytearray, val: int) -> None:
+        write_uintle(data, val, self.bytes_written)
         self.bytes_written += 1

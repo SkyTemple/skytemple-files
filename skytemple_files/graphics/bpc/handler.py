@@ -14,29 +14,53 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpc.model import Bpc
-from skytemple_files.graphics.bpc.writer import BpcWriter
+from skytemple_files.graphics.bpc.protocol import BpcProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.bpc.model import Bpc as PyBpc
+    from skytemple_rust.st_bpc import Bpc as NativeBpc
 
 
-class BpcHandler(DataHandler[Bpc]):
+class BpcHandler(HybridDataHandler[BpcProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, tiling_width=3, tiling_height=3, **kwargs: OptionalKwargs) -> Bpc:
+    def load_python_model(cls) -> Type[BpcProtocol]:
+        from skytemple_files.graphics.bpc.model import Bpc
+        return Bpc
+
+    @classmethod
+    def load_native_model(cls) -> Type[BpcProtocol]:
+        from skytemple_rust.st_bpc import Bpc
+        return Bpc
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyBpc']]:  # type: ignore
+        from skytemple_files.graphics.bpc.writer import BpcWriter
+        return BpcWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeBpc']]:  # type: ignore
+        from skytemple_rust.st_bpc import BpcWriter
+        return BpcWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, tiling_width: int = 3, tiling_height: int = 3, **kwargs: OptionalKwargs) -> BpcProtocol:  # type: ignore
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}
         chunks using a tile mapping.
         These chunks are referenced in the BMA tile to build the actual image.
         The tiling sizes are also stored in the BMA file.
-        Each tile mapping is aso asigned a palette number. The palettes are stored in the BPL
+        Each tile mapping is aso assigned a palette number. The palettes are stored in the BPL
         file for the map background and always contain 16 colors.
 
         The default for tiling_width and height are 3x3, because the game seems to be hardcoded this way.
         """
-        return Bpc(data, tiling_width, tiling_height)
+        return cls.get_model_cls()(bytes(data), tiling_width, tiling_height)
 
     @classmethod
-    def serialize(cls, data: Bpc, **kwargs: OptionalKwargs) -> bytes:
-        return BpcWriter(data).write()
+    def serialize(cls, data: BpcProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

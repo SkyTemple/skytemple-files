@@ -14,20 +14,25 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
+from abc import abstractmethod
+from asyncio import Protocol
 
-import os
 
-from ndspy.rom import NintendoDSRom
+class RomFileProviderProtocol(Protocol):
+    @abstractmethod
+    def getFileByName(self, filename: str) -> bytes: ...
 
-from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+class TilemapEntryProtocol(Protocol):
+    idx: int
+    flip_x: bool
+    flip_y: bool
+    pal_idx: int
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-
-bin = rom.getFileByName('MAP_BG/bg_list.dat')
-bg_list = BgListDatHandler.deserialize(bin)
-
-for i, l in enumerate(bg_list.level):
-    print(f"{i}: {l}")
+    @abstractmethod
+    def __init__(self, idx: int, flip_x: bool, flip_y: bool, pal_idx: int, ignore_too_large: bool = False): ...
+    @abstractmethod
+    def to_int(self) -> int: ...
+    @classmethod
+    @abstractmethod
+    def from_int(cls, entry: int) -> 'TilemapEntryProtocol': ...

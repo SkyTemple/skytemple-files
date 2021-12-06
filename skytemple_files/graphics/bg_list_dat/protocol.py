@@ -1,0 +1,81 @@
+#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
+#
+#  This file is part of SkyTemple.
+#
+#  SkyTemple is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SkyTemple is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from abc import abstractmethod
+from typing import Protocol, Optional, TypeVar, Union, List
+
+from skytemple_files.common.protocol import RomFileProviderProtocol
+from skytemple_files.graphics.bma.protocol import BmaProtocol
+from skytemple_files.graphics.bpa.protocol import BpaProtocol
+from skytemple_files.graphics.bpc.protocol import BpcProtocol
+from skytemple_files.graphics.bpl.protocol import BplProtocol
+
+
+M = TypeVar('M', bound=BmaProtocol, covariant=True)
+P = TypeVar('P', bound=BpaProtocol)
+C = TypeVar('C', bound=BpcProtocol, covariant=True)
+L = TypeVar('L', bound=BplProtocol, covariant=True)
+
+
+class BgListEntryProtocol(Protocol[M, P, C, L]):
+    bpl_name: str
+    bpc_name: str
+    bma_name: str
+    bpa_names: List[Optional[str]]
+    @abstractmethod
+    def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[Optional[str]]): ...
+
+    @abstractmethod
+    def get_bpl(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> L: ...
+
+    @abstractmethod
+    def get_bpc(self, rom_or_directory_root: Union[str, RomFileProviderProtocol], bpc_tiling_width: int = 3, bpc_tiling_height: int = 3) -> C: ...
+
+    @abstractmethod
+    def get_bma(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> M: ...
+
+    @abstractmethod
+    def get_bpas(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> List[Optional[P]]: ...
+
+
+T = TypeVar('T', bound=BgListEntryProtocol)
+
+
+class BgListProtocol(Protocol[T]):
+    level: List[T]
+
+    @abstractmethod
+    def __init__(self, data: bytes): ...
+
+    @abstractmethod
+    def find_bma(self, name: str) -> int:
+        """Count all occurrences of this BMA in the list."""
+        ...
+
+    @abstractmethod
+    def find_bpl(self, name: str) -> int:
+        """Count all occurrences of this BPL in the list."""
+        ...
+
+    @abstractmethod
+    def find_bpc(self, name: str) -> int:
+        """Count all occurrences of this BPL in the list."""
+        ...
+
+    @abstractmethod
+    def find_bpa(self, name: str) -> int:
+        """Count all occurrences of this BPA in the list."""
+        ...

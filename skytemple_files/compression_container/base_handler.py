@@ -50,7 +50,7 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
         """Load a container into a high-level representation"""
         if not cls.matches(data):
             raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
-        return cls.get_model_cls()(data)
+        return cls.get_model_cls()(bytes(data))
 
     @classmethod
     def matches(cls, data: bytes, byte_offset: int = 0) -> bool:
@@ -67,7 +67,7 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
         """Get the size of a container starting at the given offset in data."""
         if not cls.matches(data, byte_offset):
             raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
-        return cls.get_model_cls().cont_size(data, byte_offset)
+        return cls.get_model_cls().cont_size(bytes(data), byte_offset)
 
 
 class CompressionContainerWriter(WriterProtocol[CompressionContainerProtocol]):

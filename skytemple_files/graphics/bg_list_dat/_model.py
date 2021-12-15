@@ -20,17 +20,16 @@ from pathlib import PurePosixPath
 from skytemple_files.common.protocol import RomFileProviderProtocol
 
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bg_list_dat import DIR, BPC_EXT, BPL_EXT, BMA_EXT, BPA_EXT
 from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
-from skytemple_files.graphics.bma.model import Bma
-from skytemple_files.graphics.bpa.model import Bpa
-from skytemple_files.graphics.bpc.model import Bpc
-from skytemple_files.graphics.bpl.model import Bpl
-
-DIR = 'MAP_BG'
-BPC_EXT = '.bpc'
-BPL_EXT = '.bpl'
-BMA_EXT = '.bma'
-BPA_EXT = '.bpa'
+# noinspection PyProtectedMember
+from skytemple_files.graphics.bma._model import Bma
+# noinspection PyProtectedMember
+from skytemple_files.graphics.bpa._model import Bpa
+# noinspection PyProtectedMember
+from skytemple_files.graphics.bpc._model import Bpc
+# noinspection PyProtectedMember
+from skytemple_files.graphics.bpl._model import Bpl
 
 
 class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):

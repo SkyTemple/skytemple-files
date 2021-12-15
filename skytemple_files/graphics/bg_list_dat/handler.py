@@ -22,14 +22,14 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bg_list_dat.model import BgList as PyBgList
+    from skytemple_files.graphics.bg_list_dat._model import BgList as PyBgList
     from skytemple_rust.st_bg_list_dat import BgList as NativeBgList
 
 
 class BgListDatHandler(HybridDataHandler[BgListProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BgListProtocol]:
-        from skytemple_files.graphics.bg_list_dat.model import BgList
+        from skytemple_files.graphics.bg_list_dat._model import BgList
         return BgList
 
     @classmethod
@@ -39,7 +39,7 @@ class BgListDatHandler(HybridDataHandler[BgListProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol['PyBgList']]:  # type: ignore
-        from skytemple_files.graphics.bg_list_dat.writer import BgListWriter
+        from skytemple_files.graphics.bg_list_dat._writer import BgListWriter
         return BgListWriter
 
     @classmethod
@@ -52,7 +52,7 @@ class BgListDatHandler(HybridDataHandler[BgListProtocol]):
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_bg_list_dat import BgListEntry as BgListEntryNative
             return BgListEntryNative
-        from skytemple_files.graphics.bg_list_dat.model import BgListEntry
+        from skytemple_files.graphics.bg_list_dat._model import BgListEntry
         return BgListEntry
 
     @classmethod

@@ -21,14 +21,14 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bpa.model import Bpa as PyBpa
+    from skytemple_files.graphics.bpa._model import Bpa as PyBpa
     from skytemple_rust.st_bpa import Bpa as NativeBpa
 
 
 class BpaHandler(HybridDataHandler[BpaProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BpaProtocol]:
-        from skytemple_files.graphics.bpa.model import Bpa
+        from skytemple_files.graphics.bpa._model import Bpa
         return Bpa
 
     @classmethod
@@ -38,7 +38,7 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol['PyBpa']]:  # type: ignore
-        from skytemple_files.graphics.bpa.writer import BpaWriter
+        from skytemple_files.graphics.bpa._writer import BpaWriter
         return BpaWriter
 
     @classmethod

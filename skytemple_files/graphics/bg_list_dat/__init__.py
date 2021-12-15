@@ -15,3 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+DIR = 'MAP_BG'
+BPC_EXT = '.bpc'
+BPL_EXT = '.bpl'
+BMA_EXT = '.bma'
+BPA_EXT = '.bpa'

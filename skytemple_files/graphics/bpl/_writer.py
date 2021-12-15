@@ -17,8 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpl.model import Bpl, BPL_PAL_ENTRY_LEN, BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
-from skytemple_files.graphics.bpl.model import BPL_PAL_SIZE
+from skytemple_files.graphics.bpl._model import Bpl
+from skytemple_files.graphics.bpl import BPL_PAL_ENTRY_LEN, BPL_PAL_SIZE, BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
 
 
 class BplWriter:

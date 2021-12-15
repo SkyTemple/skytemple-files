@@ -16,20 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
-from typing import Tuple, Sequence
-
-from PIL import Image
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpa.model import Bpa
-from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
-from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
+# noinspection PyProtectedMember
+from skytemple_files.graphics.bpa._model import Bpa
 
-BPC_PIXEL_BITLEN = 4
-BPC_TILE_DIM = 8
-BPC_TILEMAP_BYTELEN = 2
+from skytemple_files.graphics.bpc import BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
+from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
+from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
 class BpcLayer(BpcLayerProtocol):

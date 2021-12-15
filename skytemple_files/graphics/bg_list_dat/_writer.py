@@ -19,7 +19,7 @@
 import string
 from typing import Optional
 
-from skytemple_files.graphics.bg_list_dat.model import BgList
+from skytemple_files.graphics.bg_list_dat._model import BgList
 
 ALLOWED_CHARS = set(string.digits + string.ascii_uppercase)
 MAX_LEN = 8

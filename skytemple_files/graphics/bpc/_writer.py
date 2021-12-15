@@ -17,7 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpc.model import Bpc, BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
+from skytemple_files.graphics.bpc._model import Bpc
+from skytemple_files.graphics.bpc import BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
 
 
 class BpcWriter:

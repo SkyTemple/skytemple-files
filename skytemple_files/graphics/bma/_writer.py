@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bma.model import Bma
+from skytemple_files.graphics.bma._model import Bma
 
 
 class BmaWriter:

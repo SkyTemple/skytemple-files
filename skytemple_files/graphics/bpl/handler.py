@@ -21,14 +21,14 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bpl.model import Bpl as PyBpl
+    from skytemple_files.graphics.bpl._model import Bpl as PyBpl
     from skytemple_rust.st_bpl import Bpl as NativeBpl
 
 
 class BplHandler(HybridDataHandler[BplProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BplProtocol]:
-        from skytemple_files.graphics.bpl.model import Bpl
+        from skytemple_files.graphics.bpl._model import Bpl
         return Bpl
 
     @classmethod
@@ -38,7 +38,7 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol['PyBpl']]:  # type: ignore
-        from skytemple_files.graphics.bpl.writer import BplWriter
+        from skytemple_files.graphics.bpl._writer import BplWriter
         return BplWriter
 
     @classmethod

@@ -15,28 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List
-
+from skytemple_files.graphics.bpl import BPL_PAL_LEN, BPL_MAX_PAL, BPL_PAL_ENTRY_LEN, BPL_PAL_SIZE, \
+    BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
 from skytemple_files.graphics.bpl.protocol import BplAnimationSpecProtocol, BplProtocol
 from skytemple_files.common.util import *
-
-# Length of a palette in colors. Color 0 is auto-generated (transparent)
-
-BPL_PAL_LEN = 15
-# Actual colors in an image, (including the color 0)
-BPL_IMG_PAL_LEN = BPL_PAL_LEN + 1
-# Maximum number of palettes
-BPL_MAX_PAL = 16
-# Maximum number of normal palettes
-BPL_NORMAL_MAX_PAL = 14
-
-# Number of color bytes per palette entry. Fourth is always 0x00.
-BPL_PAL_ENTRY_LEN = 4
-# Size of a single palette in bytes
-BPL_PAL_SIZE = BPL_PAL_LEN * BPL_PAL_ENTRY_LEN
-BPL_COL_INDEX_ENTRY_LEN = 4
-# The value of the fourth color
-BPL_FOURTH_COLOR = 0x00
 
 
 class BplAnimationSpec(BplAnimationSpecProtocol):
@@ -166,5 +148,5 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         """Sets the palette properly, adding dummy grayscale entries if needed. """
         self.palettes = palettes
         self.number_palettes = len(palettes)
-        while len(self.palettes)<BPL_MAX_PAL:
-            self.palettes.append([(i//3)*BPL_MAX_PAL for i in range(BPL_MAX_PAL*3)])
+        while len(self.palettes)< BPL_MAX_PAL:
+            self.palettes.append([(i//3) * BPL_MAX_PAL for i in range(BPL_MAX_PAL * 3)])

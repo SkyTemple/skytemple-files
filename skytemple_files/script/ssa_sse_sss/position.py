@@ -20,7 +20,7 @@ from typing import Union, Tuple
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptDirection
 from skytemple_files.common.util import AutoString
-from skytemple_files.graphics.bpc.model import BPC_TILE_DIM
+from skytemple_files.graphics.bpc import BPC_TILE_DIM
 
 logger = logging.getLogger(__name__)
 

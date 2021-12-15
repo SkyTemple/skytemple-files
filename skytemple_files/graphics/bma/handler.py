@@ -22,14 +22,14 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bma.model import Bma as PyBma
+    from skytemple_files.graphics.bma._model import Bma as PyBma
     from skytemple_rust.st_bma import Bma as NativeBma
 
 
 class BmaHandler(HybridDataHandler[BmaProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BmaProtocol]:
-        from skytemple_files.graphics.bma.model import Bma
+        from skytemple_files.graphics.bma._model import Bma
         return Bma
 
     @classmethod
@@ -39,7 +39,7 @@ class BmaHandler(HybridDataHandler[BmaProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol['PyBma']]:  # type: ignore
-        from skytemple_files.graphics.bma.writer import BmaWriter
+        from skytemple_files.graphics.bma._writer import BmaWriter
         return BmaWriter
 
     @classmethod

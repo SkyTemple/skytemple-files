@@ -21,7 +21,7 @@ from typing import List, Optional, Union, Iterable
 from PIL import Image
 
 from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, TileRuleType, TileRule, FloorType
-from skytemple_files.graphics.bma.model import Bma
+from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.dma.model import Dma, DmaType
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
 from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
@@ -34,11 +34,11 @@ class DmaDrawer:
     def __init__(self, dma: Dma):
         self.dma = dma
 
-    def rules_from_bma(self, bma: Union[Bma, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
+    def rules_from_bma(self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
         rules = []
         active_row = None
         layer: List[int] = bma  # type: ignore
-        if isinstance(bma, Bma):
+        if isinstance(bma, BmaProtocol):
             layer = bma.layer0
             width_in_chunks = bma.map_width_chunks
         for i, chunk in enumerate(layer):

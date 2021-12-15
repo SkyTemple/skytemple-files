@@ -16,18 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import math
-from typing import Optional, List
-
-from PIL import Image
 
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bpa import BPA_TILE_DIM
 from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
-from skytemple_files.graphics.bpl.model import BPL_IMG_PAL_LEN, BPL_MAX_PAL
-from skytemple_files.common.i18n_util import f, _
-
-BPA_PIXEL_BITLEN = 4
-BPA_TILE_DIM = 8
+from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
+from skytemple_files.common.i18n_util import _
 
 
 class BpaFrameInfo(BpaFrameInfoProtocol):

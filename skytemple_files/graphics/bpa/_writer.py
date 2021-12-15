@@ -17,7 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpa.model import Bpa, BPA_TILE_DIM
+from skytemple_files.graphics.bpa._model import Bpa
+from skytemple_files.graphics.bpa import BPA_TILE_DIM
 
 
 class BpaWriter:

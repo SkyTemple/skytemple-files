@@ -20,8 +20,8 @@
 from sys import maxsize
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.kao.model import Kao, SUBENTRIES, SUBENTRY_LEN, KAO_FILE_BYTE_ALIGNMENT, \
-    KAO_IMG_PAL_B_SIZE
+from skytemple_files.graphics.kao._model import Kao
+from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_FILE_BYTE_ALIGNMENT
 
 DEBUG = False
 

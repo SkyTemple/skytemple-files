@@ -19,7 +19,7 @@ from typing import Generator, Tuple, Optional, Callable, List
 
 from PIL import Image
 
-from skytemple_files.graphics.kao.model import KAO_IMG_IMG_DIM, KAO_IMG_METAPIXELS_DIM, SUBENTRIES
+from skytemple_files.graphics.kao import SUBENTRIES, KAO_IMG_METAPIXELS_DIM, KAO_IMG_IMG_DIM
 from skytemple_files.common.i18n_util import f, _
 from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 

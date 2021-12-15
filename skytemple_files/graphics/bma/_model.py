@@ -23,6 +23,7 @@ from PIL import Image, ImageDraw, ImageFont
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bma import MASK_PAL
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpa._model import Bpa
@@ -33,29 +34,7 @@ from skytemple_files.graphics.bpl._model import Bpl
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
 from skytemple_files.common.i18n_util import f, _
-
-# Mask palette used for image composition
 from skytemple_files.graphics.bpl.protocol import BplProtocol
-
-MASK_PAL = [
-    0x00, 0x00, 0x00,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-    0xff, 0xff, 0xff,
-]
-MASK_PAL *= 16
 
 
 class Bma(BmaProtocol[Bpa, Bpc, Bpl]):

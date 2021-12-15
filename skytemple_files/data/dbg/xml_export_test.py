@@ -31,7 +31,8 @@ from skytemple_files.data.md.model import MdProperties, Md
 from skytemple_files.data.monster_xml import monster_xml_export, monster_xml_import, GenderedConvertEntry
 from skytemple_files.data.tbl_talk.model import TblTalk
 from skytemple_files.data.waza_p.model import WazaP
-from skytemple_files.graphics.kao.model import Kao, SUBENTRIES
+from skytemple_files.graphics.kao._model import Kao
+from skytemple_files.graphics.kao import SUBENTRIES
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')

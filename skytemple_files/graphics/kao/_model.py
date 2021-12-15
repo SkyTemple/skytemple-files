@@ -19,22 +19,13 @@ import math
 
 from collections.abc import Iterator
 
+from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_IMG_METAPIXELS_DIM, \
+    KAO_IMG_IMG_DIM
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
-
-from PIL import Image
-from typing import Union, Tuple, Dict
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3, CommonAtType
 from skytemple_files.common.i18n_util import f, _
-
-SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
-SUBENTRY_LEN = 4  # Length of the subentry pointers
-KAO_IMG_PAL_B_SIZE = 48  # Size of KaoImage palette block in bytes (16*3)
-KAO_IMG_PIXEL_DEPTH = 4  # one byte in a kao image are two pixels
-KAO_IMG_METAPIXELS_DIM = 8  # How many pixels build a meta-pixel / tile per dim. (8x8)=48
-KAO_IMG_IMG_DIM = 5  # How many meta-pixels / tiles build an image per dimension (5x5)=25
-KAO_FILE_BYTE_ALIGNMENT = 16  # The size of the kao file has to be divisble by this number of bytes
 
 
 class KaoImage(KaoImageProtocol):
@@ -105,13 +96,13 @@ class Kao(KaoProtocol[KaoImage]):
             data = memoryview(data)
 
         # First 160 bytes are padding
-        first_toc = (SUBENTRIES*SUBENTRY_LEN)
+        first_toc = (SUBENTRIES * SUBENTRY_LEN)
         # The following line won't work; what if the first byte of the first pointer is 0?
         # first_toc = next(x for x, val in enumerate(data) if val != 0)
-        assert first_toc % SUBENTRIES*SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
+        assert first_toc % SUBENTRIES * SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
         # first pointer = end of TOC
         first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
-        toc_len = int((first_pointer - first_toc) / (SUBENTRIES*SUBENTRY_LEN))
+        toc_len = int((first_pointer - first_toc) / (SUBENTRIES * SUBENTRY_LEN))
 
         self.original_data: bytearray = data   # type: ignore
         self.first_toc = first_toc
@@ -124,7 +115,7 @@ class Kao(KaoProtocol[KaoImage]):
     def expand(self, new_size: int) -> None:
         if new_size < self.toc_len:
             raise ValueError(f"Can't reduce size from {self.toc_len} to {new_size}")
-        from skytemple_files.graphics.kao.writer import KaoWriter
+        from skytemple_files.graphics.kao._writer import KaoWriter
 
         #Write all changes
         self.original_data = bytearray(KaoWriter().write(self))
@@ -149,7 +140,7 @@ class Kao(KaoProtocol[KaoImage]):
         #Expand
         expand_pnt = bytearray(4)
         write_sintle(expand_pnt, last_pnt, 0, SUBENTRY_LEN)
-        self.original_data = self.original_data[:limit]+(expand_pnt * (expand_len * SUBENTRIES))+self.original_data[limit:]
+        self.original_data = self.original_data[:limit] + (expand_pnt * (expand_len * SUBENTRIES)) + self.original_data[limit:]
         self.toc_len = new_size
         self.reset(new_size)
     

@@ -21,14 +21,14 @@ from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, 
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 if TYPE_CHECKING:
-    from skytemple_files.graphics.kao.model import Kao as PyKao
+    from skytemple_files.graphics.kao._model import Kao as PyKao
     from skytemple_rust.st_kao import Kao as NativeKao
 
 
 class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[KaoProtocol]:
-        from skytemple_files.graphics.kao.model import Kao
+        from skytemple_files.graphics.kao._model import Kao
         return Kao
 
     @classmethod
@@ -38,7 +38,7 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol['PyKao']]:  # type: ignore
-        from skytemple_files.graphics.kao.writer import KaoWriter
+        from skytemple_files.graphics.kao._writer import KaoWriter
         return KaoWriter
 
     @classmethod
@@ -51,7 +51,7 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_kao import KaoImage as KaoImageNative
             return KaoImageNative
-        from skytemple_files.graphics.kao.model import KaoImage
+        from skytemple_files.graphics.kao._model import KaoImage
         return KaoImage
 
     @classmethod

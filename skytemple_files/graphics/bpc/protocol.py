@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, Optional, TypeVar, List, Sequence
+from typing import Protocol, Optional, TypeVar, List, Sequence, runtime_checkable
 
 from PIL import Image
 
@@ -23,6 +23,7 @@ from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
 
 
+@runtime_checkable
 class BpcLayerProtocol(Protocol):
     # The actual number of tiles is one lower
     number_tiles: int

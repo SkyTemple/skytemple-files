@@ -23,7 +23,7 @@
 	; Bonjour, est-ce que vous connaissez le C-A-C-H-E ?
 	bl InvalidateInstructionCache
 	bl InvalidateAndCleanDataCache
-	mov  r0,#0x0
+	;mov  r0,#0x0
 	mcr p15,0,r0,c7,c5,4
 	mcr p15,0,r0,c7,c5,6
 	mcr p15,0,r0,c7,c0,4
@@ -112,7 +112,7 @@ end_read_code:
 
 .org FileName
 .area 0x14
-	.ascii "SCRIPT/sprocess.bin"
+	.ascii "BALANCE/process.bin"
 	dcb 0
 .endarea
 

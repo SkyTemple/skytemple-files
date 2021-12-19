@@ -16,9 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Type, TYPE_CHECKING
 
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpl.protocol import BplProtocol
+from skytemple_files.graphics.bpl.protocol import BplProtocol, BplAnimationSpecProtocol
 
 if TYPE_CHECKING:
     from skytemple_files.graphics.bpl._model import Bpl as PyBpl
@@ -45,6 +46,14 @@ class BplHandler(HybridDataHandler[BplProtocol]):
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpl']]:  # type: ignore
         from skytemple_rust.st_bpl import BplWriter
         return BplWriter
+
+    @classmethod
+    def get_animation_spec_model_cls(cls) -> Type[BplAnimationSpecProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_bpl import BplAnimationSpec as BplAnimationSpecNative
+            return BplAnimationSpecNative
+        from skytemple_files.graphics.bpl._model import BplAnimationSpec
+        return BplAnimationSpec
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BplProtocol:

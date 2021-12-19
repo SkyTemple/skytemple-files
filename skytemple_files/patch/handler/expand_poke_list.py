@@ -38,7 +38,7 @@ from skytemple_files.data.waza_p.model import MoveLearnset
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md.model import MdEntry, Gender
 from skytemple_files.graphics.kao.handler import KaoHandler
-from skytemple_files.graphics.kao.model import SUBENTRIES
+from skytemple_files.graphics.kao import SUBENTRIES
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
     GAME_REGION_JP

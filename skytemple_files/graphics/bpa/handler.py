@@ -16,9 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Type, TYPE_CHECKING
 
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpa.protocol import BpaProtocol
+from skytemple_files.graphics.bpa.protocol import BpaProtocol, BpaFrameInfoProtocol
 
 if TYPE_CHECKING:
     from skytemple_files.graphics.bpa._model import Bpa as PyBpa
@@ -45,6 +46,14 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpa']]:  # type: ignore
         from skytemple_rust.st_bpa import BpaWriter
         return BpaWriter
+
+    @classmethod
+    def get_frame_info_model_cls(cls) -> Type[BpaFrameInfoProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_bpa import BpaFrameInfo as BpaFrameInfoNative
+            return BpaFrameInfoNative
+        from skytemple_files.graphics.bpa._model import BpaFrameInfo
+        return BpaFrameInfo
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BpaProtocol:

@@ -15,11 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, Sequence
+from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, Sequence, runtime_checkable
 
 from PIL import Image
 
 
+@runtime_checkable
 class BpaFrameInfoProtocol(Protocol):
     duration_per_frame: int
     unk2: int

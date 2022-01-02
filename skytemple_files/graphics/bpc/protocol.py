@@ -43,6 +43,7 @@ T = TypeVar('T', bound=BpcLayerProtocol)
 P = TypeVar('P', bound=BpaProtocol)
 
 
+@runtime_checkable
 class BpcProtocol(Protocol[T, P]):
     tiling_width: int
     tiling_height: int

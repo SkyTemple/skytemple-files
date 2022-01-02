@@ -52,8 +52,8 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_rom_folder, get_binary_from_rom_ppmdu
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.model import Md
-from skytemple_files.graphics.bma.model import Bma
-from skytemple_files.graphics.bpc.model import BPC_TILE_DIM
+from skytemple_files.graphics.bma.protocol import BmaProtocol
+from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
 from skytemple_files.graphics.dma.model import Dma
 from skytemple_files.graphics.dpc.model import Dpc
@@ -174,7 +174,7 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
         dpci: Dpci = dungeon_bin.get(f'dungeon{tileset_id}.dpci')
         dpc: Dpc = dungeon_bin.get(f'dungeon{tileset_id}.dpc')
 
-        bma: Bma = bg_list.level[level.mapid].get_bma(rom)
+        bma: BmaProtocol = bg_list.level[level.mapid].get_bma(rom)
 
         duration = round(1000 / 60 * max(16, min(dpla.durations_per_frame_for_colors)))
 

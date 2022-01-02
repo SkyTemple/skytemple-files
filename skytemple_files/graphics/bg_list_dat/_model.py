@@ -99,7 +99,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
 
     @staticmethod
     def _get_file(filename: str, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> bytes:
-        if isinstance(rom_or_directory_root, NintendoDSRom):
+        if isinstance(rom_or_directory_root, RomFileProviderProtocol):
             return rom_or_directory_root.getFileByName(filename)
         elif isinstance(rom_or_directory_root, str):
             with open(os.path.join(rom_or_directory_root, filename), 'rb') as f:

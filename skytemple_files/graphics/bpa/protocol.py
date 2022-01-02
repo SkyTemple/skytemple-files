@@ -32,6 +32,7 @@ class BpaFrameInfoProtocol(Protocol):
 T = TypeVar('T', bound=BpaFrameInfoProtocol)
 
 
+@runtime_checkable
 class BpaProtocol(Protocol[T]):
     number_of_tiles: int
     number_of_frames: int

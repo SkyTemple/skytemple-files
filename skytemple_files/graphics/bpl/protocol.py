@@ -30,6 +30,7 @@ class BplAnimationSpecProtocol(Protocol):
 T = TypeVar('T', bound=BplAnimationSpecProtocol)
 
 
+@runtime_checkable
 class BplProtocol(Protocol[T]):
     number_palettes: int
     has_palette_animation: bool

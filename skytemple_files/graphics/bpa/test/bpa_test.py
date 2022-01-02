@@ -52,10 +52,10 @@ class BpaTestCase(SkyTempleFilesTestCase[BpaHandler, BpaProtocol[BpaFrameInfoPro
     @classmethod
     @fixpath
     def _fix_path1(cls):
-        return 'fixtures', 'one.bpa'
+        return '..', '..', 'test', 'fixtures', 'coco1.bpa'
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path2(cls):
-        return 'fixtures', 'two.bpa'
+        return '..', '..', 'test', 'fixtures', 'coco2.bpa'

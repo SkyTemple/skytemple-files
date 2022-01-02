@@ -126,6 +126,8 @@ class BmaProtocol(Protocol[P, C, L]):
         If a pixel in a tile uses a color outside of it's 16 color range, an error is thrown or
         the color is replaced with 0 of the palette (transparent). This is controlled by
         the force_import flag.
+        The force_import option may be ignored by implementations, in that case the color is always just
+        replaced with 0.
 
         Does not import animations. BPA tiles must be manually mapped to the tilemappings of the BPC after the import.
         BPL palette animations are not modified.

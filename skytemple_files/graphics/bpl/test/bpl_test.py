@@ -52,7 +52,7 @@ class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpe
     @classmethod
     @fixpath
     def _fix_path1(cls):
-        return 'fixtures', 'one.bpl'
+        return '..', '..', 'test', 'fixtures', 'coco.bpl'
 
     @typing.no_type_check
     @classmethod

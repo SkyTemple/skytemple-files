@@ -18,11 +18,11 @@ import typing
 
 from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol
-from skytemple_files.graphics.test.stubs.bpa_stub import BpaStub
+from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
 
 
-class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtocol, BpaStub]]):
+class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtocol, BpaMock]]):  # type: ignore
     handler = BpcHandler
 
     def setUp(self) -> None:
@@ -105,7 +105,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
     @classmethod
     @fixpath
     def _fix_path_two_layers1(cls):
-        return 'fixtures', 'two_layers1.bpc'
+        return '..', '..', 'test', 'fixtures', 'coco.bpc'
 
     @typing.no_type_check
     @classmethod

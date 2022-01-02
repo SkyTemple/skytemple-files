@@ -15,9 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from asyncio import Protocol
+from typing import Protocol
+from typing import runtime_checkable
 
 
+@runtime_checkable
 class RomFileProviderProtocol(Protocol):
     @abstractmethod
     def getFileByName(self, filename: str) -> bytes: ...

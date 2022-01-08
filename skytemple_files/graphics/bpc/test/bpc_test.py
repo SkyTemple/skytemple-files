@@ -93,7 +93,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.two_layers1.layers[0].bpas = [1, 2, 10, 20]
         self.two_layers1.layers[0].number_tiles = 1  # without null tile
         self.two_layers1.layers[0].chunk_tilemap_len = 2  # with null chunk
-        self.two_layers1.layers[0].tiles = [bytes(NULL_TILE), bytes(NULL_TILE)]
+        self.two_layers1.layers[0].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.two_layers1.layers[0].tilemap = [TilemapEntry(0, False, False, 0)] * 2 * 9
         saved = self._save_and_reload_main_fixture(self.two_layers1)
         self.assertEqual(1, saved.number_of_layers)
@@ -110,12 +110,12 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.single_layer1.layers[0].bpas = [1, 2, 10, 20]
         self.single_layer1.layers[0].number_tiles = 1  # without null tile
         self.single_layer1.layers[0].chunk_tilemap_len = 2  # with null chunk
-        self.single_layer1.layers[0].tiles = [bytes(NULL_TILE), bytes(NULL_TILE)]
+        self.single_layer1.layers[0].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.single_layer1.layers[0].tilemap = [TilemapEntry(0, False, False, 0)] * 2 * 9
         self.single_layer1.layers[1].bpas = [0, 1, 0, 123]
         self.single_layer1.layers[1].number_tiles = 2  # without null tile
         self.single_layer1.layers[1].chunk_tilemap_len = 1  # with null chunk
-        self.single_layer1.layers[1].tiles = [bytes(NULL_TILE), bytes(NULL_TILE), bytes(NULL_TILE)]
+        self.single_layer1.layers[1].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.single_layer1.layers[1].tilemap = [TilemapEntry(0, False, False, 0)] * 1 * 9
         saved = self._save_and_reload_main_fixture(self.single_layer1)
         self.assertEqual(2, saved.number_of_layers)
@@ -304,7 +304,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
 
     def test_pil_to_tiles(self) -> None:
         pil = self._load_image(self._fix_path_pil_to_tiles())
-        palettes = list(chunks(pil.getpalette(), 16 * 3))
+        palettes = list(chunks(pil.getpalette(), 16 * 3))  # type: ignore
 
         self.two_layers1.pil_to_tiles(0, pil)
         self.two_layers1.pil_to_tiles(1, pil)
@@ -316,7 +316,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
 
     def test_pil_to_chunks(self) -> None:
         pil = self._load_image(self._fix_path_pil_to_chunks())
-        palettes = list(chunks(pil.getpalette(), 16 * 3))
+        palettes = list(chunks(pil.getpalette(), 16 * 3))  # type: ignore
 
         self.two_layers1.pil_to_chunks(0, pil)
         self.two_layers1.pil_to_chunks(1, pil)
@@ -602,8 +602,8 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
     def test_process_bpa_change(self) -> None:
         self.two_layers1.layers[0].bpas = [50, 60, 0, 100]
         self.two_layers1.layers[1].bpas = [10, 20, 30, 40]
-        self.two_layers1.layers[0].tiles = [None] * 10
-        self.two_layers1.layers[1].tiles = [None] * 20
+        self.two_layers1.layers[0].tiles = [bytearray()] * 10
+        self.two_layers1.layers[1].tiles = [bytearray()] * 20
         self.two_layers1.layers[0].number_tiles = 10
         self.two_layers1.layers[1].number_tiles = 20
         self.two_layers1.layers[0].tilemap = [

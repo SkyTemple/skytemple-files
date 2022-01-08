@@ -33,7 +33,7 @@ class BpcLayerProtocol(Protocol):
     chunk_tilemap_len: int
     # May also be set from outside after creation:
     tiles:  List[bytearray]
-    tilemap: List[TilemapEntryProtocol]
+    tilemap: Sequence[TilemapEntryProtocol]
 
     @abstractmethod
     def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytearray], tilemap: List[TilemapEntryProtocol]) -> None: ...

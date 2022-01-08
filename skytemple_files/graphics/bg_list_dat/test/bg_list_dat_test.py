@@ -164,11 +164,11 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
         return os.path.join(os.path.dirname(__file__), '..', '..', 'test', 'fixtures')
 
     @classmethod
-    def format_list(cls, ldat: BgListProtocol) -> List[Dict[str, str]]:
+    def format_list(cls, ldat: BgListProtocol) -> List[Dict[str, Union[str,List[Optional[str]]]]]:
         return [cls.format_entry(x) for x in ldat.level]
 
     @staticmethod
-    def format_entry(entry: BgListEntryProtocol) -> Dict[str, Union[str, Optional[List[str]]]]:
+    def format_entry(entry: BgListEntryProtocol) -> Dict[str, Union[str, List[Optional[str]]]]:
         return {
             'bpl_name': entry.bpl_name,
             'bpc_name': entry.bpc_name,

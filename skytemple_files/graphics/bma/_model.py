@@ -214,7 +214,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         return unk, data[1]
 
     def to_pil_single_layer(
-            self, bpc: Bpc, palettes: List[List[int]], bpas: Sequence[Bpa], layer: int
+            self, bpc: Bpc, palettes: List[List[int]], bpas: Sequence[Optional[Bpa]], layer: int
     ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.

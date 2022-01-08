@@ -9,7 +9,7 @@ otherwise the behaviour could be unexpected.
 This defaults to use the Python implementations if SKYTEMPLE_USE_NATIVE is not set.
 If it is set, it defaults to the native implementations.
 """
-#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

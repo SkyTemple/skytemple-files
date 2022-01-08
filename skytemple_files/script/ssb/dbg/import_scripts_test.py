@@ -1,5 +1,5 @@
 """Import ssb files from a rom directory back into the game."""
-#  Copyright 2020-2021 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

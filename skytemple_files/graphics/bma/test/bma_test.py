@@ -46,8 +46,8 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.one_layer_two_col = self._load_main_fixture(self._fix_path_one_layer_two_col())
         self.assertIsNotNone(self.one_layer_two_col)
 
-        self._bpc_mock = BpcMock(bytes(), 8, 8, mock__number_of_layers=2)
-        self._bpc_single_layer_mock = BpcMock(bytes(), 8, 8, mock__number_of_layers=1)
+        self._bpc_mock: BpcMock = BpcMock(bytes(), 8, 8, mock__number_of_layers=2)
+        self._bpc_single_layer_mock: BpcMock = BpcMock(bytes(), 8, 8, mock__number_of_layers=1)
         self._bpl_mock = BplMock(bytes())
         self._bpas = [None, BpaMock(bytes()), None, None, None, None, None, None]
 
@@ -318,6 +318,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         y = 3
         index = y * 16 + x
         self.assertEqual(30, self.two_layers.layer0[index])
+        assert self.two_layers.layer1 is not None
         self.assertEqual(9, self.two_layers.layer1[index])
         self.two_layers.place_chunk(0, x, y, 13)
         self.assertEqual(13, self.two_layers.layer0[index])
@@ -325,6 +326,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertEqual(15, self.two_layers.layer1[index])
         saved = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(13, saved.layer0[index])
+        assert saved.layer1 is not None
         self.assertEqual(15, saved.layer1[index])
         img = self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0)
         self.assertImagesEqual(

@@ -381,9 +381,8 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
         """
         nb_tiles_in_chunk = self.tiling_width * self.tiling_height
         if correct_tile_ids:
-            for entry in tile_mappings:
-                if not contains_null_chunk:
-                    entry.idx += 1
+            for ientry, entry in enumerate(tile_mappings):
+                entry.idx += 1
         if not contains_null_chunk:
             tile_mappings = [TilemapEntry.from_int(0) for _ in range(0, nb_tiles_in_chunk)] + tile_mappings  # type: ignore
         self.layers[layer].tilemap = tile_mappings

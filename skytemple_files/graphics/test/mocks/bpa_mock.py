@@ -64,6 +64,9 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
     def number_of_tiles(self) -> int:  # type: ignore
         return self._number_of_tiles
 
+    def mock__set_number_of_tiles(self, val: int):
+        self._number_of_tiles = val
+
     @property
     def number_of_frames(self) -> int:  # type: ignore
         return self._number_of_frames

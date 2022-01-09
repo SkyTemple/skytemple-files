@@ -30,6 +30,9 @@ class BpaTestCase(SkyTempleFilesTestCase[BpaHandler, BpaProtocol[BpaFrameInfoPro
         self.two = self._load_main_fixture(self._fix_path2())
         self.assertIsNotNone(self.two)
 
+    def test_metadata(self) -> None:
+        self.fail("Not implemented")
+
     def test_frame_info(self) -> None:
         self.fail("Not implemented")
 

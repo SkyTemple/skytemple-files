@@ -43,7 +43,6 @@ class BpaFrameInfoMock(BpaFrameInfoProtocol):
 
 
 # Testing mock class
-@dataclass
 class BpaMock(BpaProtocol[BpaFrameInfoMock]):
     def __init__(self, data: bytes):
         self.stub_init_data = data
@@ -80,6 +79,9 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
         return self._frame_info
 
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
+        raise NotImplementedError("Not implemented on mock.")
+
+    def tiles_to_pil(self, palette: List[int]) -> Image.Image:
         raise NotImplementedError("Not implemented on mock.")
 
     def tiles_to_pil_separate(self, palette: List[int], width_in_tiles: int = 20) -> List[Image.Image]:

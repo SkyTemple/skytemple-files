@@ -46,7 +46,7 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
             ["C2_BPA1", "C2_BPA2", "C2_BPA3", "C2_BPA4", None, "C2_BPA6", "C2_BPA7", "C2_BPA8"]
         )
         self.bg_list.level.append(mdl)
-        expected.append(self.format_entry(mdl))
+        expected.append(self.format_entry(mdl))  # type: ignore
         # Remove first entry
         self.bg_list.level.pop(0)
         expected.pop(0)

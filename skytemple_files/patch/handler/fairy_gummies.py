@@ -99,7 +99,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

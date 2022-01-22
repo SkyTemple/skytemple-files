@@ -994,24 +994,24 @@
         <!-- A patch to provide support for ATUPX containers -->
         <Patch id="ProvideATUPXSupport" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/atupx_support/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/atupx_support/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract move code -->
         <Patch id="ExtractMoveCode" >
           <OpenBin filepath="overlay/overlay_0010.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_move_code/selector_overlay10.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_move_code/selector_overlay10.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_move_code/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_move_code/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to provide support for changing the textbox color -->
         <Patch id="ChangeTextBoxBackground" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/change_tbbg/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/change_tbbg/selector_arm9.asm"/>
 	  </OpenBin>
           <Parameters>
             <Param name="Red" label="Red component" min="0" max="255" default="32" type="int"/>
@@ -1024,68 +1024,68 @@
         <!-- A patch to externalize waza_p/waza_p2 files -->
         <Patch id="ExternalizeWazaFile" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/fs_waza_p/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/fs_waza_p/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract item code -->
         <Patch id="ExtractItemCode" >
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_item_code/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_item_code/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract special process code -->
         <Patch id="ExtractSPCode" >
           <OpenBin filepath="overlay/overlay_0011.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_sp_code/selector_overlay11.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_sp_code/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
 
         <!-- A patch to reconfigure evolutions -->
         <Patch id="ChangeEvoSystem" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/change_evo/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/change_evo/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0016.bin">
-	  	<Include filename ="irdkwia_asm_mods/change_evo/selector_overlay16.asm"/>
+	  	<Include filename ="anonymous_asm_mods/change_evo/selector_overlay16.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/change_evo/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/change_evo/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
 
         <!-- A patch to not load entirely the mappa files -->
         <Patch id="ExternalizeMappaFile" >
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/fs_mappa/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/fs_mappa/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
 
         <!-- A patch to add types to the type table -->
         <Patch id="AddTypes" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/add_type/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/add_type/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0013.bin">
-	  	<Include filename ="irdkwia_asm_mods/add_type/selector_overlay13.asm"/>
+	  	<Include filename ="anonymous_asm_mods/add_type/selector_overlay13.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/add_type/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/add_type/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to implement Fairy-type gummies -->
         <Patch id="ImplementFairyGummies" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/implement_fairy_gummies/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/implement_fairy_gummies/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to change move stats display -->
         <Patch id="ChangeMoveStatsDisplay" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/stat_disp/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/stat_disp/selector_arm9.asm"/>
 	  </OpenBin>
           <Parameters>
             <Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (23 entries used)" min="0" max="255" default="69" type="int"/>
@@ -1099,37 +1099,37 @@
         <!-- A patch to extract spinda bar's item list-->
         <Patch id="ExtractBarItemList" >
           <OpenBin filepath="overlay/overlay_0019.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_bar_list/selector_overlay19.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_bar_list/selector_overlay19.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract hardcoded item lists -->
         <Patch id="ExtractHardcodedItemLists" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_item_lists/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_item_lists/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract dungeon data -->
         <Patch id="ExtractDungeonData" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/extract_dungeon_data/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
 
         <!-- A patch to implement move growth -->
         <Patch id="MoveGrowth" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/move_growth/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0010.bin">
-	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay10.asm"/>
+	  	<Include filename ="anonymous_asm_mods/move_growth/selector_overlay10.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/move_growth/selector_overlay29.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0031.bin">
-	  	<Include filename ="irdkwia_asm_mods/move_growth/selector_overlay31.asm"/>
+	  	<Include filename ="anonymous_asm_mods/move_growth/selector_overlay31.asm"/>
 	  </OpenBin>
           <Parameters>
 	  	<Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (24 entries used)" min="0" max="255" default="92" type="int"/>
@@ -1139,16 +1139,16 @@
         <!-- A patch to implement dungeon interruptions -->
         <Patch id="DungeonInterrupt" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/dungeon_interrupt/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0010.bin">
-	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay10.asm"/>
+	  	<Include filename ="anonymous_asm_mods/dungeon_interrupt/selector_overlay10.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay11.asm"/>
+	  	<Include filename ="anonymous_asm_mods/dungeon_interrupt/selector_overlay11.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/dungeon_interrupt/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/dungeon_interrupt/selector_overlay29.asm"/>
 	  </OpenBin>
 	  <Parameters>
             <Param name="InterruptOnly" label="Only interruptions don't heal HP" type="select">
@@ -1161,44 +1161,44 @@
         <!-- A patch to change pokémon animations -->
         <Patch id="ChangePokemonGroundAnim" >
           <OpenBin filepath="overlay/overlay_0011.bin">
-	  	<Include filename ="irdkwia_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
+	  	<Include filename ="anonymous_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to change fixed floor properties -->
         <Patch id="ChangeFixedFloorProperties" >
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/change_ff_prop/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/change_ff_prop/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to extract animations table data -->
         <Patch id="ExtractAnimData" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/animations/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/animations/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0010.bin">
-	  	<Include filename ="irdkwia_asm_mods/animations/selector_overlay10.asm"/>
+	  	<Include filename ="anonymous_asm_mods/animations/selector_overlay10.asm"/>
 	  </OpenBin>
         </Patch>
 
         <!-- A patch to extract dungeon data -->
         <Patch id="FixEvolutionGlitch" >
           <OpenBin filepath="overlay/overlay_0016.bin">
-	  	<Include filename ="irdkwia_asm_mods/fix_evolution/patch.asm"/>
+	  	<Include filename ="anonymous_asm_mods/fix_evolution/patch.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to enable exp. share -->
         <Patch id="AddExperienceShare" >
           <OpenBin filepath="arm9.bin">
-	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_arm9.asm"/>
+	  	<Include filename ="anonymous_asm_mods/exp_share/selector_arm9.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0019.bin">
-	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay19.asm"/>
+	  	<Include filename ="anonymous_asm_mods/exp_share/selector_overlay19.asm"/>
 	  </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-	  	<Include filename ="irdkwia_asm_mods/exp_share/selector_overlay29.asm"/>
+	  	<Include filename ="anonymous_asm_mods/exp_share/selector_overlay29.asm"/>
 	  </OpenBin>
           <Parameters>
             <Param name="PercentageShared" label="% of exp. shared" min="0" max="255" default="100" type="int"/>
@@ -1208,35 +1208,35 @@
         <!-- A patch to let the player choose its starter after the quiz -->
         <Patch id="ChooseStarter" >
           <OpenBin filepath="overlay/overlay_0013.bin">
-	  	<Include filename ="irdkwia_asm_mods/choose_starter/selector_overlay13.asm"/>
+	  	<Include filename ="anonymous_asm_mods/choose_starter/selector_overlay13.asm"/>
 	  </OpenBin>
         </Patch>
         
         <!-- A patch to let the player choose its starter after the quiz -->
         <Patch id="SkipQuiz" >
           <OpenBin filepath="overlay/overlay_0013.bin">
-	  	<Include filename ="irdkwia_asm_mods/skip_quiz/selector_overlay13.asm"/>
+	  	<Include filename ="anonymous_asm_mods/skip_quiz/selector_overlay13.asm"/>
 	  </OpenBin>
         </Patch>
         
         <Patch id="ExpandPokeList" >
           <OpenBin filepath="arm9.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_arm9.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_arm9.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0010.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay10.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay10.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay11.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay11.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0019.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay19.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay19.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay29.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay29.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0031.bin">
-		  <Include filename ="irdkwia_asm_mods/expand_poke_list/selector_overlay31.asm"/>
+		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay31.asm"/>
           </OpenBin>
         </Patch>
         

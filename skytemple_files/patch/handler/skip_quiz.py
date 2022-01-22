@@ -52,7 +52,7 @@ Needs ChooseStarter patch to be applied. """)
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

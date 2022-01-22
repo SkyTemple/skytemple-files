@@ -98,7 +98,7 @@ and to save a backup of your ROM before applying this.""")
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

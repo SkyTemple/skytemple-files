@@ -60,7 +60,7 @@ Uses the supposedly unused string 2613 in the strings file. """)
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

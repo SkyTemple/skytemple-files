@@ -33,7 +33,7 @@ class ArmipsImporter:
     def assemble(self, patch_asm: str):
         with tempfile.TemporaryDirectory() as tmp:
             shutil.copytree(
-                os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_move_effects'),
+                os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'eos_move_effects'),
                 tmp, dirs_exist_ok=True, symlinks=True
             )
 

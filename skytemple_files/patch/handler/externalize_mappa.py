@@ -44,7 +44,7 @@ This patch is useless on its own, unless you have a too big mappa file.""")
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

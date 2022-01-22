@@ -77,7 +77,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

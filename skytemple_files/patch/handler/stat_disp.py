@@ -54,7 +54,7 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

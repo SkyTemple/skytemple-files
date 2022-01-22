@@ -44,7 +44,7 @@ Depends on the ActorAndLevelLoader patch, as it needs some space provided by thi
 
     @property
     def author(self) -> str:
-        return 'irdkwia'
+        return 'Anonymous'
 
     @property
     def version(self) -> str:

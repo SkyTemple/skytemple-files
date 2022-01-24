@@ -41,7 +41,7 @@ setup(
         'skytemple-rust >= 0.0.1',
         'tilequant >= 0.4.0',
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
-        'pyobjc==7.3; sys_platform == "darwin"',
+        'pyobjc==8.2; sys_platform == "darwin"',
         'dungeon-eos==0.0.4'
     ],
     entry_points='''

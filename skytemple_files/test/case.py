@@ -26,7 +26,7 @@ from typing import Generic, TypeVar, Callable, Iterable, Protocol, overload, Opt
 import typing
 from PIL import Image, ImageChops, ImageDraw
 
-from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.common.util import OptionalKwargs, get_files_from_rom_with_extension
 
 U = TypeVar('U')
 
@@ -81,22 +81,24 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
     def assertImagesEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False
+            rgb_diff: bool = False, msg: Optional[str] = None
     ) -> None:
-        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, equal=True)
+        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, msg, equal=True)
 
     def assertImagesNotEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False
+            rgb_diff: bool = False, msg: Optional[str] = None
     ) -> None:
-        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, equal=False)
+        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, msg, equal=False)
 
     def _assertImageEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False, *, equal: bool
+            rgb_diff: bool = False, msg: Optional[str] = None, *, equal: bool
     ) -> None:
+        if msg is None:
+            msg = ""
         self.assertIsInstance(input_img, Image.Image)
         if isinstance(expected, str):
             expected = self._load_image(expected)
@@ -107,9 +109,9 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
         if rgb_diff:
             try:
                 if equal:
-                    self.assertTrue(are_images_equal(expected, input_img), "Images must be identical.")
+                    self.assertTrue(are_images_equal(expected, input_img), f"Images must be identical. {msg}")
                 else:
-                    self.assertFalse(are_images_equal(expected, input_img), "Images must not be identical.")
+                    self.assertFalse(are_images_equal(expected, input_img), f"Images must not be identical. {msg}")
             except AssertionError as e:
                 tempfile, tempfile_path = mkstemp(suffix=".png")
                 comparision_image = Image.new('RGB', (expected.width + 5 + input_img.width, max(expected.height, input_img.height) + 20), (255, 255, 255))
@@ -139,21 +141,55 @@ def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
     return equal_size and equal_alphas and equal_content
 
 
-X = TypeVar('X', bound=SkyTempleFilesTestCase)  # type: ignore
-G = TypeVar('G', bound=Sequence[str], covariant=True)
-
-
-class SomeMethod(Protocol[G]):
-    def __call__(self, c: Type[X], *args: List[Any], **kwargs: Dict[str, Any]) -> G: ...
-
-
-class SomeMethodDecorated(Protocol):
-    def __call__(self, c: Type[X], *args: List[Any], **kwargs: Dict[str, Any]) -> str: ...
-
-
 @typing.no_type_check
 def fixpath(func):
     @functools.wraps(func)
     def ffunc(cls, *args, **kwargs):
         return os.path.join(os.path.dirname(sys.modules[cls.__module__].__file__), *func(cls, *args, **kwargs))
     return ffunc
+
+
+def romtest(*, file_ext, path):
+    """
+    Runs tests against a real ROM.
+    file_ext is the file extensions checked and path the path prefix.
+    The env var SKYTEMPLE_TEST_ROM must contain the path to the ROM otherwise the test is skipped.
+    Tests are marked with the pytest mark "romtest".
+    """
+    def _outer_wrapper(wrapped_function):
+        import inspect
+        import pytest
+        from ndspy.rom import NintendoDSRom
+        from unittest import SkipTest
+        from parameterized import parameterized
+        rom = None
+        if 'SKYTEMPLE_TEST_ROM' in os.environ:
+            rom = NintendoDSRom.fromFile(os.environ['SKYTEMPLE_TEST_ROM'])
+
+        if rom:
+            def dataset_name_func(testcase_func, _, param):
+                return f'{testcase_func.__name__}/{param.args[0]}'
+            files = [(x, rom.getFileByName(x)) for x in get_files_from_rom_with_extension(rom, file_ext) if x.startswith(path)]
+
+            if len(files) < 1:
+                def no_files(*args, **kwargs):
+                    raise SkipTest("No matching files were found in the ROM.")
+
+                return pytest.mark.romtest(no_files)
+            else:
+                parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
+                # since expands now adds the tests to our locals, we need to pass them back...
+                # this isn't hacky at all wdym??????ßßß
+                frame_locals = inspect.currentframe().f_back.f_locals
+                for local_name, local in inspect.currentframe().f_locals.items():
+                    if local_name.startswith('test_'):
+                        frame_locals[local_name] = local
+
+        else:
+            def no_tests(*args, **kwargs):
+                raise SkipTest("No ROM file provided or ROM not found.")
+
+            return pytest.mark.romtest(no_tests)
+    return _outer_wrapper
+
+

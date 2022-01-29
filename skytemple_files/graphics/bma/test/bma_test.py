@@ -21,7 +21,7 @@ from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
 from skytemple_files.graphics.test.mocks.bpc_mock import BpcMock
 from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
+from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
 class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMock, BplMock]]):
@@ -416,6 +416,26 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
     def _test_metadata_with_reload(self, model: BmaProtocol, cb: typing.Callable[[BmaProtocol], None]):
         cb(model)
         cb(self._save_and_reload_main_fixture(model))
+
+    @romtest(file_ext='bma', path='MAP_BG/')
+    def test_using_rom(self, _, file):
+        bma_before = self.handler.deserialize(file)
+        bma_after = self._save_and_reload_main_fixture(bma_before)
+
+        self.assertEqual(bma_before.map_width_camera, bma_after.map_width_camera)
+        self.assertEqual(bma_before.map_height_camera, bma_after.map_height_camera)
+        self.assertEqual(bma_before.tiling_width, bma_after.tiling_width)
+        self.assertEqual(bma_before.tiling_height, bma_after.tiling_height)
+        self.assertEqual(bma_before.map_width_chunks, bma_after.map_width_chunks)
+        self.assertEqual(bma_before.map_height_chunks, bma_after.map_height_chunks)
+        self.assertEqual(bma_before.number_of_layers, bma_after.number_of_layers)
+        self.assertEqual(bma_before.unk6, bma_after.unk6)
+        self.assertEqual(bma_before.number_of_collision_layers, bma_after.number_of_collision_layers)
+        self.assertEqual(bma_before.layer0, bma_after.layer0)
+        self.assertEqual(bma_before.layer1, bma_after.layer1)
+        self.assertEqual(bma_before.unknown_data_block, bma_after.unknown_data_block)
+        self.assertEqual(bma_before.collision, bma_after.collision)
+        self.assertEqual(bma_before.collision2, bma_after.collision2)
 
     @typing.no_type_check
     @classmethod

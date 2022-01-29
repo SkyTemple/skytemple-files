@@ -32,11 +32,11 @@ class BpcLayerProtocol(Protocol):
     # NOTE: Incosistent with number_tiles. We are including the null chunk in this count.
     chunk_tilemap_len: int
     # May also be set from outside after creation:
-    tiles:  List[bytearray]
+    tiles:  List[bytes]
     tilemap: Sequence[TilemapEntryProtocol]
 
     @abstractmethod
-    def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytearray], tilemap: List[TilemapEntryProtocol]) -> None: ...
+    def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytes], tilemap: List[TilemapEntryProtocol]) -> None: ...
 
 
 T = TypeVar('T', bound=BpcLayerProtocol)
@@ -178,7 +178,7 @@ class BpcProtocol(Protocol[T, P]):
     def get_chunk(self, layer: int, index: int) -> Sequence[TilemapEntryProtocol]: ...
 
     @abstractmethod
-    def import_tiles(self, layer: int, tiles: List[bytearray], contains_null_tile: bool = False) -> None:
+    def import_tiles(self, layer: int, tiles: List[bytes], contains_null_tile: bool = False) -> None:
         """
         Replace the tiles of the specified layer.
         If contains_null_tile is False, the null tile is added to the list, at the beginning.

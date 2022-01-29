@@ -8,3 +8,5 @@ dungeon-eos==0.0.5
 skytemple-3rdparty-typestubs
 types-Pillow==8.3.8
 types-setuptools
+pytest
+parameterized

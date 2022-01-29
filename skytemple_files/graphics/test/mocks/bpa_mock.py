@@ -106,7 +106,7 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
         raise NotImplementedError("Not implemented on mock.")
 
     def tiles_for_frame(self, frame: int) -> Sequence[bytearray]:
-        return self.tiles[frame * self.number_of_tiles:]
+        return self.tiles[frame * self.number_of_tiles:(frame + 1) * self.number_of_tiles]
 
 
 def _generate_mock_data():

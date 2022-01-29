@@ -108,6 +108,9 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
     def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         return self.tiles[frame * self.number_of_tiles:(frame + 1) * self.number_of_tiles]
 
+    def __eq__(self, other):
+        return isinstance(other, BpaMock)
+
 
 def _generate_mock_data():
     """Generate mock data using the assumed working implementation."""

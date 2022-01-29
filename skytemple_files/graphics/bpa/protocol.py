@@ -36,7 +36,7 @@ T = TypeVar('T', bound=BpaFrameInfoProtocol)
 class BpaProtocol(Protocol[T]):
     number_of_tiles: int
     number_of_frames: int
-    tiles: List[bytearray]
+    tiles: List[bytes]
     frame_info: List[T]
 
     @abstractmethod
@@ -76,6 +76,6 @@ class BpaProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def tiles_for_frame(self, frame: int) -> Sequence[bytearray]:
+    def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
         ...

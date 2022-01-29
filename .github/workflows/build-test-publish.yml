@@ -59,7 +59,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v2
       with:
-        name: Pytest Test Results (Python ${{ matrix.python-version }})
+        name: "Pytest Test Results (Python ${{ matrix.python-version }} - Native: ${{ matrix.native }})"
         path: pytest.xml
 
   test_with_rom:
@@ -97,7 +97,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v2
       with:
-        name: Pytest ROM Test Results (Python ${{ matrix.python-version }})
+        name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native: ${{ matrix.native }})"
         path: pytest.xml
 
   publish-test-results:

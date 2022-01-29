@@ -125,9 +125,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         """Handles the decompressed tile data returned by the BPC_IMAGE decompressor."""
         n_bytes = int(BPC_TILE_DIM * BPC_TILE_DIM / 2)
         # The first tile is not stored, but is always empty
-        tiles = [bytearray(n_bytes)]
+        tiles = [bytes(n_bytes)]
         for tile in iter_bytes(data[0], n_bytes):
-            tiles.append(bytearray(tile))
+            tiles.append(bytes(tile))
         return tiles, data[1]
 
     def _read_tilemap_data(self, data: bytes) -> List[TilemapEntryProtocol]:
@@ -363,7 +363,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         If contains_null_tile is False, the null tile is added to the list, at the beginning.
         """
         if not contains_null_tile:
-            tiles = [bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))] + tiles
+            tiles = [bytes(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))] + tiles
         self.layers[layer].tiles = tiles
         self.layers[layer].number_tiles = len(tiles) - 1
 

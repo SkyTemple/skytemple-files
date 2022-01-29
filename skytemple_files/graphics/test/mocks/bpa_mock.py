@@ -105,7 +105,7 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
     def pil_to_tiles_separate(self, images: List[Image.Image]) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
-    def tiles_for_frame(self, frame: int) -> Sequence[bytearray]:
+    def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         return self.tiles[frame * self.number_of_tiles:(frame + 1) * self.number_of_tiles]
 
 

@@ -32,5 +32,5 @@ class BpcTilemapHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bpc_tilemap_compression import BpcTilemapCompressionContainer
+        from skytemple_rust._st_bpc_tilemap_compression import BpcTilemapCompressionContainer  # type: ignore
         return BpcTilemapCompressionContainer

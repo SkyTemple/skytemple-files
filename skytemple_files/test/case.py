@@ -163,7 +163,7 @@ def romtest(*, file_ext, path):
         from unittest import SkipTest
         from parameterized import parameterized
         rom = None
-        if 'SKYTEMPLE_TEST_ROM' in os.environ:
+        if 'SKYTEMPLE_TEST_ROM' in os.environ and os.environ['SKYTEMPLE_TEST_ROM'] != '':
             rom = NintendoDSRom.fromFile(os.environ['SKYTEMPLE_TEST_ROM'])
 
         if rom:

@@ -85,13 +85,14 @@ jobs:
       if: matrix.native
       run: |
         echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
-        echo "SKYTEMPLE_TEST_ROM=/rom.nds" >> $GITHUB_ENV
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
         override: true
     - name: Test with tox
       run: tox -- -m "romtest"
+      env:
+        SKYTEMPLE_TEST_ROM: /rom.nds
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v2

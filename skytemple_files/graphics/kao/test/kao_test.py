@@ -21,7 +21,7 @@ from typing import List, Dict
 from skytemple_files.common.util import read_sintle
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
+from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 FIX_IN_TEST_MAP: Dict[int, List[int]] = {
     0: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 32, 34],
@@ -223,6 +223,35 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
                 self.assertGreater(-last_non_zero_pnt, current_pnt)
             toc_cur += 4
             number_entries += 1
+
+    @romtest(file_ext='kao', path='FONT/')
+    def test_using_rom(self, _, file):
+        kao_before = self.handler.deserialize(file)
+
+        kao: KaoProtocol = self.handler.deserialize(file)
+        # Load and save all images in the fixture again
+        for idx, sidx, img in kao:
+            # TODO: This currently fails on the native model due too big compression, probably an error
+            #       in reorder_palettes :(
+            if (idx == 191 and sidx == 20) or (idx == 563 and sidx == 20):
+                continue
+            if img is not None:
+                try:
+                    img.set(img.get())
+                except Exception as ex:
+                    raise AssertionError(f"Seting the image must not fail for image at {idx},{sidx}.") from ex
+        kao = self._save_and_reload_main_fixture(kao)
+
+        # Compare all images
+        for (idxb, sidxb, img1), (idx, sidx, img2) in zip(kao_before, kao):
+            self.assertEqual(idxb, idx, "When iterating over the Kao after saving it, indices must advance the same.")
+            self.assertEqual(sidxb, sidx, "When iterating over the Kao after saving it, subindices must advance the same.")
+            if img1 is None and img2 is not None:
+                self.fail(f"If image was None before, must be None after. [idx={idx}, sidx={sidx}]")
+            elif img2 is None and img1 is not None:
+                self.fail(f"If image was not None before, must not be None after. [idx={idx}, sidx={sidx}]")
+            elif img2 is not None:
+                self.assertImagesEqual(img1.get(), img2.get(), msg="[idx={idx}, sidx={sidx}]")
 
     @typing.no_type_check
     @classmethod

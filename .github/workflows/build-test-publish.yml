@@ -54,7 +54,7 @@ jobs:
         toolchain: nightly
         override: true
     - name: Test with tox
-      run: tox
+      run: tox -- -m "not romtest"
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v2
@@ -62,10 +62,48 @@ jobs:
         name: Pytest Test Results (Python ${{ matrix.python-version }})
         path: pytest.xml
 
+  test_with_rom:
+    # This uses a self-hosted runner with access to the ROM at /rom.nds.
+    runs-on: self-hosted
+    name: Runs tests with real ROM
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10" ]
+        native: [true, false]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+    - name: Enable native modules
+      if: matrix.native
+      run: |
+        echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
+        echo "SKYTEMPLE_TEST_ROM=/rom.nds" >> $GITHUB_ENV
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        override: true
+    - name: Test with tox
+      run: tox -- -m "romtest"
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: Pytest ROM Test Results (Python ${{ matrix.python-version }})
+        path: pytest.xml
+
   publish-test-results:
     name: "Publish Unit Tests Results"
     needs:
       - test
+      - test_with_rom
       - typechecks
     runs-on: ubuntu-latest
     if: always()
@@ -82,6 +120,7 @@ jobs:
   build:
     needs:
       - test
+      - test_with_rom
       - typechecks
     runs-on: ubuntu-latest
     name: Build the Python wheel

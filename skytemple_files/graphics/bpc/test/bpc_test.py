@@ -23,7 +23,8 @@ from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol
 from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
+from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+
 NULL_TILE = bytes([0] * 32)
 
 
@@ -549,7 +550,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.assertEqual(len(dummy_mappings_corrected) // 9 + 1, saved3.layers[0].chunk_tilemap_len)
 
     def test_get_bpas_for_layer(self) -> None:
-        self.assertEqual([BpaMock(bytes())], self.two_layers1.get_bpas_for_layer(0, self._bpas))
+        self.assertEqual([self._bpas[1]], self.two_layers1.get_bpas_for_layer(0, self._bpas))
         self.assertEqual([], self.two_layers1.get_bpas_for_layer(1, self._bpas))
         with self.assertRaises(AssertionError):
             self.assertEqual(None, self.two_layers2.get_bpas_for_layer(0, self._bpas))
@@ -559,7 +560,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         bpas = [None, None, None, None, bpa, None, None, None]
         bpa.mock__set_number_of_tiles(72)
         self.assertEqual([], self.two_layers2.get_bpas_for_layer(0, bpas))
-        self.assertEqual([BpaMock(bytes())], self.two_layers2.get_bpas_for_layer(1, bpas))
+        self.assertEqual([bpa], self.two_layers2.get_bpas_for_layer(1, bpas))
 
     def test_remove_upper_layer(self) -> None:
         self.assertEqual(2, len(self.two_layers1.layers))
@@ -783,6 +784,22 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.assertEqual(2, self.two_layers2.number_of_layers)
         self.assertEqual(3, self.two_layers2.tiling_width)
         self.assertEqual(3, self.two_layers2.tiling_height)
+
+    @romtest(file_ext='bpc', path='MAP_BG/')
+    def test_using_rom(self, _, file):
+        bpc_before = self.handler.deserialize(file)
+        bpc_after = self._save_and_reload_main_fixture(bpc_before)
+
+        self.assertEqual(bpc_before.tiling_width, bpc_after.tiling_width)
+        self.assertEqual(bpc_before.tiling_height, bpc_after.tiling_height)
+        self.assertEqual(bpc_before.number_of_layers, bpc_after.number_of_layers)
+        self.assertEqual(len(bpc_before.layers), len(bpc_after.layers))
+        for layer_before, layer_after in zip(bpc_after.layers, bpc_after.layers):
+            self.assertEqual(layer_before.number_tiles, layer_after.number_tiles)
+            self.assertEqual(layer_before.bpas, layer_after.bpas)
+            self.assertEqual(layer_before.chunk_tilemap_len, layer_after.chunk_tilemap_len)
+            self.assertEqual(layer_before.tiles, layer_after.tiles)
+            self.assertEqual(layer_before.tilemap, layer_after.tilemap)
 
     @typing.no_type_check
     @classmethod

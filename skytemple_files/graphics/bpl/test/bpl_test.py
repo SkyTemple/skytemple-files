@@ -19,7 +19,7 @@ import typing
 from skytemple_files.graphics.bpl.handler import BplHandler
 from skytemple_files.graphics.bpl.protocol import BplProtocol, BplAnimationSpecProtocol
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
+from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
 class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpecProtocol]]):
@@ -179,6 +179,20 @@ class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpe
         self.assertEqual(4, saved.number_palettes)
         self.assertEqual(new_pal + [greyscale] * 12, saved.palettes)
         self.assertEqual(4, len(saved.animation_specs))
+
+    @romtest(file_ext='bpl', path='MAP_BG/')
+    def test_using_rom(self, _, file):
+        bpl_before = self.handler.deserialize(file)
+        bpl_after = self._save_and_reload_main_fixture(bpl_before)
+
+        self.assertEqual(bpl_before.number_palettes, bpl_after.number_palettes)
+        self.assertEqual(bpl_before.has_palette_animation, bpl_after.has_palette_animation)
+        self.assertEqual(bpl_before.palettes, bpl_after.palettes)
+        self.assertEqual(bpl_before.animation_palette, bpl_after.animation_palette)
+        self.assertEqual(len(bpl_before.animation_specs), len(bpl_after.animation_specs))
+        for spec_before, spec_after in zip(bpl_before.animation_specs, bpl_after.animation_specs):
+            self.assertEqual(spec_before.duration_per_frame, spec_after.duration_per_frame)
+            self.assertEqual(spec_before.number_of_frames, spec_after.number_of_frames)
 
     @typing.no_type_check
     @classmethod

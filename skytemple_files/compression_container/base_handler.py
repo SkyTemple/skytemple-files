@@ -55,7 +55,7 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
     @classmethod
     def matches(cls, data: bytes, byte_offset: int = 0) -> bool:
         """Check if the given data is a container of its type"""
-        return read_bytes(data, byte_offset, 5) == cls.magic_word()
+        return read_bytes(data, byte_offset, len(cls.magic_word())) == cls.magic_word()
 
     @classmethod
     def compress(cls, data: bytes) -> CompressionContainerProtocol:

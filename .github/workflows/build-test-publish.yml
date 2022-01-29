@@ -64,7 +64,7 @@ jobs:
 
   test_with_rom:
     # This uses a self-hosted runner with access to the ROM at /rom.nds.
-    runs-on: self-hosted
+    runs-on: ["self-hosted", "romtests"]
     name: Runs tests with real ROM
     strategy:
       fail-fast: false

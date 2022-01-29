@@ -20,8 +20,7 @@ import math
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
-# noinspection PyProtectedMember
-from skytemple_files.graphics.bpa._model import Bpa
+from skytemple_files.graphics.bpa.protocol import BpaProtocol
 
 from skytemple_files.graphics.bpc import BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
 from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
@@ -29,7 +28,7 @@ from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
 class BpcLayer(BpcLayerProtocol):
-    def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytearray], tilemap: List[TilemapEntryProtocol]) -> None:
+    def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytes], tilemap: List[TilemapEntryProtocol]) -> None:
         # The actual number of tiles is one lower
         self.number_tiles = number_tiles - 1
         # There must be 4 BPAs. (0 for not used)
@@ -45,7 +44,7 @@ class BpcLayer(BpcLayerProtocol):
         return f"<#T{self.number_tiles} #TM{self.chunk_tilemap_len} - BPA: [{self.bpas}]>"
 
 
-class Bpc(BpcProtocol[BpcLayer, Bpa]):
+class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
     def __init__(self, data: bytes, tiling_width: int, tiling_height: int):
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
@@ -122,7 +121,7 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
                 stop_when_size=(self.layers[1].chunk_tilemap_len - 1) * (self.tiling_width * self.tiling_height) * BPC_TILEMAP_BYTELEN
             ))
 
-    def _read_tile_data(self, data: Tuple[bytes, int]) -> Tuple[List[bytearray], int]:
+    def _read_tile_data(self, data: Tuple[bytes, int]) -> Tuple[List[bytes], int]:
         """Handles the decompressed tile data returned by the BPC_IMAGE decompressor."""
         n_bytes = int(BPC_TILE_DIM * BPC_TILE_DIM / 2)
         # The first tile is not stored, but is always empty
@@ -209,7 +208,7 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
         )
 
     def chunks_animated_to_pil(
-            self, layer: int, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[Bpa]], width_in_mtiles: int = 20
+            self, layer: int, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[BpaProtocol]], width_in_mtiles: int = 20
     ) -> List[Image.Image]:
         """
         Exports chunks. For general notes see chunks_to_pil.
@@ -265,7 +264,7 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
         return frames
 
     def single_chunk_animated_to_pil(
-            self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[Bpa]]
+            self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[BpaProtocol]]
     ) -> List[Image.Image]:
         """
         Exports a single chunk. For general notes see chunks_to_pil. For notes regarding the animation see
@@ -358,7 +357,7 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx:mtidx+9]
 
-    def import_tiles(self, layer: int, tiles: List[bytearray], contains_null_tile: bool = False) -> None:
+    def import_tiles(self, layer: int, tiles: List[bytes], contains_null_tile: bool = False) -> None:
         """
         Replace the tiles of the specified layer.
         If contains_null_tile is False, the null tile is added to the list, at the beginning.
@@ -388,7 +387,7 @@ class Bpc(BpcProtocol[BpcLayer, Bpa]):
         self.layers[layer].tilemap = tile_mappings
         self.layers[layer].chunk_tilemap_len = int(len(tile_mappings) / self.tiling_width / self.tiling_height)
 
-    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[Optional[Bpa]]) -> List[Bpa]:
+    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[Optional[BpaProtocol]]) -> List[BpaProtocol]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.

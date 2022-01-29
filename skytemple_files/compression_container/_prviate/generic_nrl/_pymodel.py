@@ -1,0 +1,53 @@
+#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#
+#  This file is part of SkyTemple.
+#
+#  SkyTemple is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  SkyTemple is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.util import read_uintle
+from skytemple_files.compression_container.common_at.model import CommonAt
+
+
+class GenericNrlCompressionContainer(CommonAt):
+    def __init__(self, data: bytes = None):
+        if data:
+            self.length_decompressed = read_uintle(data, 6, 2)
+            self.length_decompressed = read_uintle(data, 6, 2)
+            self.compressed_data = data[8:]
+
+    def decompress(self) -> bytes:
+        from skytemple_files.common.types.file_types import FileType
+
+        data, len_read = FileType.GENERIC_NRL.decompress(self.compressed_data, self.length_decompressed)
+        assert len_read == len(self.compressed_data)
+        return data
+
+    def to_bytes(self) -> bytes:
+        return b'GENNRL'\
+               + self.length_decompressed.to_bytes(2, 'little') \
+               + self.compressed_data
+
+    @classmethod
+    def cont_size(cls, data: bytes, byte_offset=0):
+        return len(data)
+
+    @classmethod
+    def compress(cls, data: bytes) -> 'GenericNrlCompressionContainer':
+        from skytemple_files.common.types.file_types import FileType
+
+        new_container = cls()
+        compressed_data = FileType.GENERIC_NRL.compress(data)
+
+        new_container.length_decompressed = len(data)
+        new_container.compressed_data = compressed_data
+        return new_container

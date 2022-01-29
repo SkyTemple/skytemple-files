@@ -184,4 +184,4 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
 
     def tiles_for_frame(self, frame: int) -> Sequence[bytearray]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
-        return self.tiles[frame * self.number_of_tiles:]
+        return self.tiles[frame * self.number_of_tiles:(frame + 1) * self.number_of_tiles]

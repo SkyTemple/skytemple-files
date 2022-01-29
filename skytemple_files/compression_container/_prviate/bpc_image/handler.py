@@ -32,5 +32,5 @@ class BpcImgHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bpc_image_compression import BpcImageCompressionContainer
+        from skytemple_rust._st_bpc_image_compression import BpcImageCompressionContainer  # type: ignore
         return BpcImageCompressionContainer

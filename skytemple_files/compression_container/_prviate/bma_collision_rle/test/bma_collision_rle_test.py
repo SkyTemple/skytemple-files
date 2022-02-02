@@ -28,24 +28,24 @@ from skytemple_files.compression_container.test.util import load_dataset, datase
 from skytemple_files.test.case import SkyTempleFilesTestCase
 
 
-class BmaCollisionRleTestCase(SkyTempleFilesTestCase[BmaCollisionRleHandler, CompressionContainerProtocol]):
-    @staticmethod
-    def rle_dataset():
-        return [
-            ('00', bytes()),
-            ('01', bytes((0,))),
-            ('02', bytes((1,))),
-            ('03', bytes((0, 0,))),
-            ('04', bytes((1, 1,))),
-            ('05', bytes((0, 0, 1, 1))),
-            ('06', bytes((0, 1, 1, 1))),
-            ('07', bytes((1, 1))),
-            ('08', bytes((0,) * 10)),
-            ('09', bytes((1,) * 20)),
-            ('10', bytes((0, 1) * 20 + (0,) * 40 + (1,) * 30 + (0, 1, 1, 0, 0) + (0,) * 31)),
-            ('11', bytes((0, 1, 0, 1) * 13 + (0, 1, 1, 0, 0) * 20 + (1,) * 200 + (0, 1, 0, 0, 0) + (0, 1, 1, 1, 1) * 30))
-        ]
+def rle_dataset():
+    return [
+        ('00', bytes()),
+        ('01', bytes((0,))),
+        ('02', bytes((1,))),
+        ('03', bytes((0, 0,))),
+        ('04', bytes((1, 1,))),
+        ('05', bytes((0, 0, 1, 1))),
+        ('06', bytes((0, 1, 1, 1))),
+        ('07', bytes((1, 1))),
+        ('08', bytes((0,) * 10)),
+        ('09', bytes((1,) * 20)),
+        ('10', bytes((0, 1) * 20 + (0,) * 40 + (1,) * 30 + (0, 1, 1, 0, 0) + (0,) * 31)),
+        ('11', bytes((0, 1, 0, 1) * 13 + (0, 1, 1, 0, 0) * 20 + (1,) * 200 + (0, 1, 0, 0, 0) + (0, 1, 1, 1, 1) * 30))
+    ]
 
+
+class BmaCollisionRleTestCase(SkyTempleFilesTestCase[BmaCollisionRleHandler, CompressionContainerProtocol]):
     @classmethod
     def handler(cls) -> Type[BmaCollisionRleHandler]:
         return BmaCollisionRleHandler

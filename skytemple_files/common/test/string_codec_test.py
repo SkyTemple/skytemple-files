@@ -77,15 +77,15 @@ class _TstPyWriter(WriterProtocol[_TstPy]):
         return bytes(model.str, PMD2_STR_ENCODER)
 
 
-class BmaTestCase(SkyTempleFilesTestCase[_TstStringHandler, _TstStringProtocol]):
-    handler = _TstStringHandler
+def string_dataset():
+    # TODO
+    return [
+        ('0', 'Hello World', b'Hello World')
+    ]
 
-    @staticmethod
-    def string_dataset():
-        # TODO
-        return [
-            ('0', 'Hello World', b'Hello World')
-        ]
+
+class StringCodecTestCase(SkyTempleFilesTestCase[_TstStringHandler, _TstStringProtocol]):
+    handler = _TstStringHandler
 
     @parameterized.expand(string_dataset(), name_func=dataset_name_func)
     def test_strings(self, expected, input_bytes):

@@ -70,3 +70,36 @@ class Str:
             cursor += length
 
         return result
+
+    @classmethod
+    def internal__get_all_raw_strings_from(cls, data: bytes) -> List[bytes]:
+        """Returns all strings in this file, undecoded."""
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+        after_end = len(data)
+
+        # File starts with pointers. Last pointer points to after end of file
+        pointers = []
+        current_pointer = 0
+        cursor = 0
+        while current_pointer < after_end:
+            current_pointer = read_uintle(data, cursor, 4)
+            if current_pointer < after_end:
+                pointers.append(current_pointer)
+                cursor += 4
+
+        # Then follow the strings
+        strings = []
+        for pnt in pointers:
+            bytes_of_string = bytearray()
+            current_byte = -1
+            cursor = pnt
+            while current_byte != 0:
+                current_byte = data[cursor]
+                cursor += 1
+                if current_byte != 0:
+                    bytes_of_string.append(current_byte)
+
+            strings.append(bytes(bytes_of_string))
+
+        return strings

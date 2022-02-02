@@ -354,3 +354,87 @@ class Ssb:
         elif i in op_code.arguments__by_id:
             return op_code.arguments__by_id[i]
         return None
+
+    @classmethod
+    def internal__get_all_raw_strings_from(cls, data: bytes, region: str) -> List[bytes]:
+        """Returns all strings in this file, undecoded."""
+        def _read_var_length_string_raw(stdata: bytes, start: int = 0):
+            bytes_of_string = bytearray()
+            current_byte = -1
+            stcursor = start
+            while current_byte != 0:
+                current_byte = stdata[stcursor]
+                stcursor += 1
+                if current_byte != 0:
+                    bytes_of_string.append(current_byte)
+
+            return stcursor - start, bytes_of_string
+
+        from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, GAME_REGION_JP
+        from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp
+        if not isinstance(data, memoryview):
+            data = memoryview(data)
+
+        header: AbstractSsbHeader
+        if region == GAME_REGION_EU:
+            header = SsbHeaderEu(data)
+        elif region == GAME_REGION_US:
+            header = SsbHeaderUs(data)
+        elif region == GAME_REGION_JP:
+            header = SsbHeaderJp(data)
+        else:
+            raise ValueError(f"Unsupported game edition: {region}")
+
+        start_of_const_table = header.data_offset + (read_uintle(data, header.data_offset + 0x00, 2) * 2)
+
+        # ### CONSTANT OFFSETS AND CONSTANT STRINGS
+        # Read const offset table
+        start_of_constants = header.data_offset + header.constant_strings_start
+        const_offset_table = []
+        for i in range(start_of_const_table, start_of_constants, 2):
+            const_offset_table.append(
+                # Actual offset is start_of_constble + X - header.number_of_strings_ta
+                start_of_const_table + read_uintle(data, i, 2) - (header.number_of_strings * 2)
+            )
+        constants = []
+        cursor = start_of_constants
+        # Read constants
+        for const_string_offset in const_offset_table:
+            assert cursor == const_string_offset
+            bytes_read, string = _read_var_length_string_raw(data, const_string_offset)
+            constants.append(string)
+            cursor += bytes_read
+        # Padding if not even
+        if cursor % 2 != 0:
+            cursor += 1
+        # The end of the script block must also match the data from the header
+        assert start_of_const_table + header.number_of_constants * 2 == start_of_constants
+
+        # ### STRING OFFSETS AND STRING STRINGS
+        # Read strings
+        strings = []
+        # The offsets of other languages DON'T count the size of the previuos langs, so we have to add them
+        previous_languages_block_sizes = 0
+        for language, len_of_lang in header.string_table_lengths.items():
+            cursor_before_strings = cursor
+            string_offset_table_lang = []
+            strings_lang = []
+            # Read string offset table
+            for i in range(cursor, cursor + header.number_of_strings * 2, 2):
+                string_offset_table_lang.append(
+                    start_of_const_table + read_uintle(data, i, 2) + previous_languages_block_sizes
+                )
+            cursor += header.number_of_strings * 2
+            # Read strings
+            for string_offset in string_offset_table_lang:
+                assert cursor == string_offset
+                bytes_read, string = _read_var_length_string_raw(data, string_offset)
+                strings_lang.append(string)
+                cursor += bytes_read
+            strings += strings_lang
+            # Padding if not even
+            if cursor % 2 != 0:
+                cursor += 1
+            previous_languages_block_sizes += len_of_lang
+            assert cursor_before_strings + len_of_lang == cursor
+        return constants + strings

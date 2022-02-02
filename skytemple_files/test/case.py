@@ -26,7 +26,7 @@ from typing import Generic, TypeVar, Callable, Iterable, Protocol, overload, Opt
 import typing
 from PIL import Image, ImageChops, ImageDraw
 
-from skytemple_files.common.util import OptionalKwargs, get_files_from_rom_with_extension
+from skytemple_files.common.util import OptionalKwargs, get_files_from_rom_with_extension, get_ppmdu_config_for_rom
 
 U = TypeVar('U')
 
@@ -177,7 +177,17 @@ def romtest(*, file_ext, path):
 
                 return pytest.mark.romtest(no_files)
             else:
-                parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
+                spec = inspect.getfullargspec(wrapped_function)
+                if "pmd2_data" in spec.args or "pmd2_data" in spec.kwonlyargs:
+                    pmd2_data = get_ppmdu_config_for_rom(rom)
+
+                    def pmd2datawrapper(*args, **kwargs):
+                        return wrapped_function(*args, **kwargs, pmd2_data=pmd2_data)
+                    pmd2datawrapper.__name__ = wrapped_function.__name__
+
+                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(pmd2datawrapper))
+                else:
+                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
                 # since expands now adds the tests to our locals, we need to pass them back...
                 # this isn't hacky at all wdym??????ßßß
                 frame_locals = inspect.currentframe().f_back.f_locals

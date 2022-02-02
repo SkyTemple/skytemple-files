@@ -59,7 +59,7 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
 
     @classmethod
     def compress(cls, data: bytes) -> CompressionContainerProtocol:
-        """Turn uncompressed data into a new AT3PX container"""
+        """Turn uncompressed data into a new compressed container"""
         return cls.get_model_cls().compress(bytes(data))
 
     @classmethod

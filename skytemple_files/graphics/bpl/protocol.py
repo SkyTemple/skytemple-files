@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, runtime_checkable
+from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, runtime_checkable, Sequence
 
 
 @runtime_checkable
@@ -34,9 +34,9 @@ T = TypeVar('T', bound=BplAnimationSpecProtocol)
 class BplProtocol(Protocol[T]):
     number_palettes: int
     has_palette_animation: bool
-    palettes: List[List[int]]
-    animation_specs: List[T]
-    animation_palette: List[List[int]]
+    palettes: Sequence[Sequence[int]]
+    animation_specs: Sequence[T]
+    animation_palette: Sequence[Sequence[int]]
 
     @abstractmethod
     def __init__(self, data: bytes) -> None: ...

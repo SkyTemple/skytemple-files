@@ -15,8 +15,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os.path
-from typing import Dict, List, no_type_check, Any, Optional, Union
+from typing import Dict, List, no_type_check, Any, Optional, Union, Sequence
 
+from skytemple_files.common.util import mutate_sequence
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
@@ -46,14 +47,17 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
             "C2_BPL", "C2_BPC", "C2_BMA",
             ["C2_BPA1", "C2_BPA2", "C2_BPA3", "C2_BPA4", None, "C2_BPA6", "C2_BPA7", "C2_BPA8"]
         )
-        self.bg_list.level.append(mdl)
+        with mutate_sequence(self.bg_list, 'level') as l:
+            l.append(mdl)
         expected.append(self.format_entry(mdl))  # type: ignore
         # Remove first entry
-        self.bg_list.level.pop(0)
+        with mutate_sequence(self.bg_list, 'level') as l:
+            l.pop(0)
         expected.pop(0)
         # Change third entry
         self.bg_list.level[2].bma_name = "THRD_BMA"
-        self.bg_list.level[2].bpa_names[1] = "12345678"
+        with mutate_sequence(self.bg_list.level[2], 'bpa_names') as l:
+            l[1] = "12345678"
         expected[2]["bma_name"] = "THRD_BMA"  # type: ignore
         expected[2]["bpa_names"][1] = "12345678"  # type: ignore
         self.assertEqual(expected, self.format_list(self.bg_list))
@@ -76,7 +80,8 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
             self._save_and_reload_main_fixture(self.bg_list)
 
     def test_write_too_long_bpa(self) -> None:
-        self.bg_list.level[0].bpa_names[0] = "Way too long"
+        with mutate_sequence(self.bg_list.level[0], 'bpa_names') as l:
+            l[0] = "Way too long"
         with self.assertRaises(ValueError):
             self._save_and_reload_main_fixture(self.bg_list)
 
@@ -129,7 +134,8 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
             "C2_BPL", "C2_BPC", "COCO",
             ["C2_BPA1", "C2_BPA2", "C2_BPA3", "C2_BPA4", None, "C2_BPA6", "C2_BPA7", "C2_BPA8"]
         )
-        self.bg_list.level.append(mdl)
+        with mutate_sequence(self.bg_list, 'level') as l:
+            l.append(mdl)
         self.assertEqual(1, self.bg_list.find_bma("G01P01A"))
         self.assertEqual(0, self.bg_list.find_bma("nope"))
         self.assertEqual(2, self.bg_list.find_bma("COCO"))
@@ -139,7 +145,8 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
             "COCO", "C2_BPC", "C2_BMA",
             ["C2_BPA1", "C2_BPA2", "C2_BPA3", "C2_BPA4", None, "C2_BPA6", "C2_BPA7", "C2_BPA8"]
         )
-        self.bg_list.level.append(mdl)
+        with mutate_sequence(self.bg_list, 'level') as l:
+            l.append(mdl)
         self.assertEqual(1, self.bg_list.find_bpl("G01P01A"))
         self.assertEqual(0, self.bg_list.find_bpl("nope"))
         self.assertEqual(2, self.bg_list.find_bpl("COCO"))
@@ -176,11 +183,11 @@ class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[
         return os.path.join(os.path.dirname(__file__), '..', '..', 'test', 'fixtures')
 
     @classmethod
-    def format_list(cls, ldat: BgListProtocol) -> List[Dict[str, Union[str,List[Optional[str]]]]]:
+    def format_list(cls, ldat: BgListProtocol) -> List[Dict[str, Union[str, Sequence[Optional[str]]]]]:
         return [cls.format_entry(x) for x in ldat.level]
 
     @staticmethod
-    def format_entry(entry: BgListEntryProtocol) -> Dict[str, Union[str, List[Optional[str]]]]:
+    def format_entry(entry: BgListEntryProtocol) -> Dict[str, Union[str, Sequence[Optional[str]]]]:
         return {
             'bpl_name': entry.bpl_name,
             'bpc_name': entry.bpc_name,

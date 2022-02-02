@@ -37,7 +37,7 @@ class DmaDrawer:
     def rules_from_bma(self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
         rules = []
         active_row = None
-        layer: List[int] = bma  # type: ignore
+        layer: Sequence[int] = bma  # type: ignore
         if isinstance(bma, BmaProtocol):
             layer = bma.layer0
             width_in_chunks = bma.map_width_chunks

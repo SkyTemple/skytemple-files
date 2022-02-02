@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import bisect
+import contextlib
 import logging
 import re
 import unicodedata
@@ -24,7 +25,8 @@ import os
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
-from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, Type, Any, Sequence
+from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, Type, \
+    Any, Sequence, Generator
 
 import pkg_resources
 from PIL import Image
@@ -544,6 +546,20 @@ def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.
                 pixels[i, j] += 1
             k += 1
     return qimg
+
+
+@contextlib.contextmanager
+def mutate_sequence(obj: object, attr: str) -> Generator[List[Any], None, None]:
+    """
+    This context manager provides the attribute sequence value behind the attribute as a list (copy),
+    and then assigns the attribute to that list. So while you can "mutate" the "original" sequence this way,
+    it's slow. If performance matters at all consider doing it differently.
+    TODO: Better typing (probably impossible?)
+    """
+    seq: Sequence[Any] = getattr(obj, attr)
+    l = list(seq)
+    yield l
+    setattr(obj, attr, l)
 
 
 class AutoString:

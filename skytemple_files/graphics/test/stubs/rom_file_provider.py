@@ -37,4 +37,4 @@ class RomFileProviderStub(RomFileProviderProtocol):
         if filename == "MAP_BG/coco2.bpa":
             with open(os.path.join(dirn, '..', 'fixtures', 'MAP_BG', 'coco2.bpa'), 'rb') as f:
                 return f.read()
-        raise NotImplementedError()
+        raise NotImplementedError(f"Invalid filename for stub: {filename}")

@@ -28,11 +28,11 @@ class BpcLayerProtocol(Protocol):
     # The actual number of tiles is one lower
     number_tiles: int
     # There must be 4 BPAs. (0 for not used)
-    bpas: List[int]
+    bpas: Sequence[int]
     # NOTE: Incosistent with number_tiles. We are including the null chunk in this count.
     chunk_tilemap_len: int
     # May also be set from outside after creation:
-    tiles:  List[bytes]
+    tiles:  Sequence[bytes]
     tilemap: Sequence[TilemapEntryProtocol]
 
     @abstractmethod
@@ -48,7 +48,7 @@ class BpcProtocol(Protocol[T, P]):
     tiling_width: int
     tiling_height: int
     number_of_layers: int
-    layers: List[T]
+    layers: Sequence[T]
 
     @abstractmethod
     def __init__(self, data: bytes, tiling_width: int, tiling_height: int):

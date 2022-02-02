@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, Optional, TypeVar, Union, List
+from typing import Protocol, Optional, TypeVar, Union, List, Sequence
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
@@ -34,7 +34,7 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
     bpl_name: str
     bpc_name: str
     bma_name: str
-    bpa_names: List[Optional[str]]
+    bpa_names: Sequence[Optional[str]]
     @abstractmethod
     def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[Optional[str]]): ...
 
@@ -55,7 +55,7 @@ T = TypeVar('T', bound=BgListEntryProtocol)
 
 
 class BgListProtocol(Protocol[T]):
-    level: List[T]
+    level: Sequence[T]
 
     @abstractmethod
     def __init__(self, data: bytes): ...

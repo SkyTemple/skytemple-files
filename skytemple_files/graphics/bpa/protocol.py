@@ -36,8 +36,8 @@ T = TypeVar('T', bound=BpaFrameInfoProtocol)
 class BpaProtocol(Protocol[T]):
     number_of_tiles: int
     number_of_frames: int
-    tiles: List[bytes]
-    frame_info: List[T]
+    tiles: Sequence[bytes]
+    frame_info: Sequence[T]
 
     @abstractmethod
     def __init__(self, data: bytes): ...

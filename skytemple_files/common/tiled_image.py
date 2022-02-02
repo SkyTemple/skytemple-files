@@ -52,8 +52,8 @@ class TilemapEntry(TilemapEntryProtocol):
         return f"TilemapEntry({self.idx}, {self.flip_x}, {self.flip_y}, {self.pal_idx})"
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, TilemapEntry):
-            return self.to_int() == other.to_int()
+        if hasattr(other, 'to_int'):
+            return self.to_int() == other.to_int()  # type: ignore
         return False
 
     def to_int(self) -> int:

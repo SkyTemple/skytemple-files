@@ -78,9 +78,22 @@ class _TstPyWriter(WriterProtocol[_TstPy]):
 
 
 def string_dataset():
-    # TODO
     return [
-        ('0', 'Hello World', b'Hello World')
+        ('0', 'Hello World', b'Hello World'),
+        ('1', 'Checking some ANSI!! äöüß', b'Checking some ANSI!! \xe4\xf6\xfc\xdf'),
+        ('2', '●★ Checking some SHIFT-JIS!! ★●', b'\x81\x9c\x81\x9a Checking some SHIFT-JIS!! \x81\x9a\x81\x9c'),
+        ('3',
+
+         ".  º  .  °  ¸ º   • .   .  ° • .  ¸ .    • , º   ¨   •  ."
+         "[HR][CS:B][CLUM_SET:105]œ[CN]Ð[HR][CR][HR]"
+         " •  º .  °[CLUM_SET:54]Red was not an impostor.  "
+         "•  ¸  º   •   ° [CLUM_SET:170]  ° • . ¨ .",
+
+         b'.  \xba  .  \xb0  \xb8 \xba   \x95 .   .  \xb0 \x95 .  \xb8 .    \x95 , \xba   \xa8   \x95  .'
+         b'[HR][CS:B][CLUM_SET:105]\x9c[CN]\xd0[HR][CR][HR]'
+         b' \x95  \xba .  \xb0[CLUM_SET:54]Red was not an impostor.  '
+         b'\x95  \xb8  \xba   \x95   \xb0 [CLUM_SET:170]  \xb0 \x95 . \xa8 .'
+         ),
     ]
 
 
@@ -88,10 +101,10 @@ class StringCodecTestCase(SkyTempleFilesTestCase[_TstStringHandler, _TstStringPr
     handler = _TstStringHandler
 
     @parameterized.expand(string_dataset(), name_func=dataset_name_func)
-    def test_strings(self, expected, input_bytes):
+    def test_strings(self, _, expected, input_bytes):
         string = self.handler.deserialize(input_bytes)
-        self.assertEqual(expected, str(string))
         self.assertEqual(input_bytes, self.handler.serialize(string))
+        self.assertEqual(expected, str(string))
 
     @romtest(file_ext='str', path='MESSAGE/')
     def test_using_rom_str(self, _, file):

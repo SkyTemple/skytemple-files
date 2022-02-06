@@ -15,8 +15,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
+import typing
 from dataclasses import dataclass
-from typing import Sequence, List
+from typing import Sequence, List, Optional
 
 from PIL import Image
 
@@ -81,10 +82,10 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
         raise NotImplementedError("Not implemented on mock.")
 
-    def tiles_to_pil(self, palette: List[int]) -> Image.Image:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image:
         raise NotImplementedError("Not implemented on mock.")
 
-    def tiles_to_pil_separate(self, palette: List[int], width_in_tiles: int = 20) -> List[Image.Image]:
+    def tiles_to_pil_separate(self, palette: Sequence[int], width_in_tiles: int = 20) -> List[Image.Image]:
         from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
         bpl_palettes = BplMock(bytes()).palettes
         for pal_id, bpl_palette in bpl_palettes:
@@ -110,6 +111,33 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
 
     def __eq__(self, other):
         return isinstance(other, BpaMock)
+
+
+@typing.no_type_check
+def bpa_lists_eq(input: Sequence[Optional[BpaProtocol]], expected: Sequence[Optional[BpaProtocol]]):
+    if len(input) != len(expected):
+        return False
+    for b1, b2 in zip(input, expected):
+        if b1 is None and b2 is not None:
+            return False
+        if b1 is not None and b2 is None:
+            return False
+        if b1 is None and b2 is None:
+            continue
+        if b1.number_of_tiles != b2.number_of_tiles:
+            return False
+        if b1.number_of_frames != b2.number_of_frames:
+            return False
+        if b1.tiles != b2.tiles:
+            return False
+        if len(b1.frame_info) != len(b2.frame_info):
+            return False
+        for f1, f2 in zip(b1.frame_info, b2.frame_info):
+            if f1.duration_per_frame != f2.duration_per_frame:
+                return False
+            if f1.unk2 != f2.unk2:
+                return False
+    return True
 
 
 def _generate_mock_data():

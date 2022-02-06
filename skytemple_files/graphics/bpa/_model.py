@@ -100,7 +100,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
             dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
         )
 
-    def tiles_to_pil_separate(self, palette: List[int], width_in_tiles: int = 20) -> List[Image.Image]:
+    def tiles_to_pil_separate(self, palette: Sequence[int], width_in_tiles: int = 20) -> List[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.

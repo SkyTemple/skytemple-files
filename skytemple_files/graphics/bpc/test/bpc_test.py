@@ -21,7 +21,7 @@ from skytemple_files.common.util import chunks
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol
-from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
+from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock, bpa_lists_eq
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 
@@ -558,7 +558,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.assertEqual(len(dummy_mappings_corrected) // 9 + 1, saved3.layers[0].chunk_tilemap_len)
 
     def test_get_bpas_for_layer(self) -> None:
-        self.assertEqual([self._bpas[1]], self.two_layers1.get_bpas_for_layer(0, self._bpas))
+        self.assertTrue(bpa_lists_eq([self._bpas[1]], self.two_layers1.get_bpas_for_layer(0, self._bpas)))
         self.assertEqual([], self.two_layers1.get_bpas_for_layer(1, self._bpas))
         with self.assertRaises(AssertionError):
             self.assertEqual(None, self.two_layers2.get_bpas_for_layer(0, self._bpas))
@@ -568,7 +568,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         bpas = [None, None, None, None, bpa, None, None, None]
         bpa.mock__set_number_of_tiles(72)
         self.assertEqual([], self.two_layers2.get_bpas_for_layer(0, bpas))
-        self.assertEqual([bpa], self.two_layers2.get_bpas_for_layer(1, bpas))
+        self.assertTrue(bpa_lists_eq([bpa], self.two_layers2.get_bpas_for_layer(1, bpas)))
 
     def test_remove_upper_layer(self) -> None:
         self.assertEqual(2, len(self.two_layers1.layers))

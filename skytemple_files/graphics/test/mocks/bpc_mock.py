@@ -21,6 +21,7 @@ from PIL import Image
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry
+from skytemple_files.graphics.test.mocks.bpa_mock import bpa_lists_eq
 from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol, P
 
 
@@ -128,7 +129,7 @@ class BpcMock(BpcProtocol[BpcLayerMock, P]):
         from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
         from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
         if self.number_of_layers == 2:
-            if layer == 0 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpas == [None, BpaMock(bytes()), None, None, None, None, None, None]:
+            if layer == 0 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpa_lists_eq(bpas, [None, BpaMock(bytes()), None, None, None, None, None, None]):
                 return [
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_0_wim_1_0.png')),
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_0_wim_1_1.png')),
@@ -137,12 +138,12 @@ class BpcMock(BpcProtocol[BpcLayerMock, P]):
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_0_wim_1_4.png')),
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_0_wim_1_5.png')),
                 ]
-            if layer == 1 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpas == [None, BpaMock(bytes()), None, None, None, None, None, None]:
+            if layer == 1 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpa_lists_eq(bpas, [None, BpaMock(bytes()), None, None, None, None, None, None]):
                 return [
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_1_wim_1_0.png')),
                 ]
         elif self.number_of_layers == 1:
-            if layer == 0 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpas == [None, BpaMock(bytes()), None, None, None, None, None, None]:
+            if layer == 0 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpa_lists_eq(bpas, [None, BpaMock(bytes()), None, None, None, None, None, None]):
                 return [
                     Image.open(os.path.join(thisdir, 'data', 'bpc', 'chunks_animated_to_pil_layer_1_wim_1_0.png')),
                 ]

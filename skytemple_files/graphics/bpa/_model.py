@@ -72,7 +72,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
         return self.tiles[frame_idx * self.number_of_tiles + tile_idx]
 
-    def tiles_to_pil(self, palette: List[int]) -> Image.Image:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.

@@ -52,6 +52,7 @@ jobs:
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
+        default: true
         override: true
     - name: Test with tox
       run: tox -- -m "not romtest"
@@ -88,6 +89,7 @@ jobs:
     - uses: actions-rs/toolchain@v1
       with:
         toolchain: nightly
+        default: true
         override: true
     - name: Test with tox
       run: tox -- -m "romtest"

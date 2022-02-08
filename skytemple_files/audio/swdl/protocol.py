@@ -181,7 +181,7 @@ class SwdlKgrpProtocol(Protocol[KG]):
 
 
 class SwdlPcmdLenProtocol(Protocol):
-    ref: Optional[int]
+    reference: Optional[int]
     external: bool
 
 

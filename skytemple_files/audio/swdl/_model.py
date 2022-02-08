@@ -28,8 +28,8 @@ LEN_HEADER = 80
 
 
 class SwdlPcmdLen(SwdlPcmdLenProtocol, AutoString):
-    def __init__(self, ref: Optional[int], external: bool):
-        self.ref = ref
+    def __init__(self, reference: Optional[int], external: bool):
+        self.reference = reference
         self.external = external
 
     @classmethod
@@ -50,9 +50,9 @@ class SwdlPcmdLen(SwdlPcmdLenProtocol, AutoString):
     def to_bytes(self):
         data = bytearray(4)
         if self.external:
-            write_uintle(data, self.ref + (0xAAAA << 0x10), 0, 4)
+            write_uintle(data, self.reference + (0xAAAA << 0x10), 0, 4)
         else:
-            write_uintle(data, self.ref, 0, 4)
+            write_uintle(data, self.reference, 0, 4)
 
         assert self == self.from_bytes(data)
         return data

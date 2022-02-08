@@ -34,7 +34,7 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
         self.assertEqual(before.header.modified_date, after.header.modified_date)
         self.assertEqual(before.header.file_name, after.header.file_name)
         self.assertEqual(before.header.unk13, after.header.unk13)
-        self.assertEqual(before.header.pcmdlen.ref, after.header.pcmdlen.ref)
+        self.assertEqual(before.header.pcmdlen.reference, after.header.pcmdlen.reference)
         self.assertEqual(before.header.pcmdlen.external, after.header.pcmdlen.external)
         self.assertEqual(before.header.unk17, after.header.unk17)
 

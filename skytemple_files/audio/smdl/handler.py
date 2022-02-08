@@ -14,16 +14,42 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_dse.dse.smdl.model import Smdl
-from skytemple_dse.dse.smdl.writer import SmdlWriter
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.audio.smdl.protocol import SmdlProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.audio.smdl._model import Smdl as PySmdl
+    from skytemple_rust.st_smdl import Smdl as NativeSmdl
 
 
-class SmdlHandler(DataHandler[Smdl]):
+class SmdlHandler(HybridDataHandler[SmdlProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> Smdl:
-        return Smdl(data)
+    def load_python_model(cls) -> Type[SmdlProtocol]:
+        from skytemple_files.audio.smdl._model import Smdl
+        return Smdl
 
     @classmethod
-    def serialize(cls, data: Smdl, **kwargs) -> bytes:
-        return SmdlWriter(data).write()
+    def load_native_model(cls) -> Type[SmdlProtocol]:
+        from skytemple_rust.st_smdl import Smdl
+        return Smdl
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PySmdl']]:  # type: ignore
+        from skytemple_files.audio.smdl._writer import SmdlWriter
+        return SmdlWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeSmdl']]:  # type: ignore
+        from skytemple_rust.st_smdl import SmdlWriter
+        return SmdlWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> SmdlProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: SmdlProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

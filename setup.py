@@ -43,7 +43,6 @@ setup(
         'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==8.2; sys_platform == "darwin"',
         'dungeon-eos==0.0.4',
-        'skytemple-dse >= 1.4.0',
     ],
     entry_points='''
         [console_scripts]

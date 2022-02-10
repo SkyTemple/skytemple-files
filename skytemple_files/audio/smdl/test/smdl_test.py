@@ -78,6 +78,6 @@ class SmdlTestCase(SkyTempleFilesTestCase[SmdlHandler, SmdlProtocol]):
                     self.assertEqual(b_event.velocity, a_event.velocity)
                     self.assertEqual(b_event.octave_mod, a_event.octave_mod)
                     self.assertEqual(b_event.note, a_event.note)
-                    self.assertEqual(b_event.key_down_duration, a_event.key_down_duration, f"{b_event._number_params} vs {a_event._number_params}")
+                    self.assertEqual(b_event.key_down_duration, a_event.key_down_duration)
                 else:
                     self.fail(f"Unknown event type for {b_event!r} & {a_event!r}")

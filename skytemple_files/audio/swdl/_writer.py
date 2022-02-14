@@ -24,7 +24,7 @@ class SwdlWriter:
         prgi = model.prgi.to_bytes() if model.prgi is not None else bytes()
         kgrp = model.kgrp.to_bytes() if model.kgrp is not None else bytes()
         pcmd = model.pcmd.to_bytes() if model.pcmd is not None else bytes()
-        if len(pcmd) > 0:
+        if model.pcmd is not None:
             pcmdlen = SwdlPcmdLen(len(model.pcmd.chunk_data), False)
         else:
             pcmdlen = SwdlPcmdLen(model.header.pcmdlen.reference, True)

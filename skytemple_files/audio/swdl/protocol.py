@@ -29,7 +29,7 @@ class SampleFormatConsts:
     PSG = 0x0300  # possibly
 
 
-PCMD = TypeVar('PCMD', bound=SwdlPcmdProtocol)
+PCMD = TypeVar('PCMD', bound=SwdlPcmdProtocol, covariant=True)
 
 
 class SwdlPcmdReferenceProtocol(Protocol[PCMD]):

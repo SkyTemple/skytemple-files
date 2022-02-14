@@ -33,7 +33,6 @@ PCMD = TypeVar('PCMD', bound=SwdlPcmdProtocol)
 
 
 class SwdlPcmdReferenceProtocol(Protocol[PCMD]):
-    pcmd: PCMD
     offset: int
     length: int
 
@@ -53,7 +52,7 @@ class SwdlSampleInfoTblEntryProtocol(Protocol[PCMDR]):
     unk58: int
     sample_format: int  # compare against SampleFormatConsts
     unk9: int
-    loop: bool
+    loops: bool
     unk10: int
     unk11: int
     unk12: int

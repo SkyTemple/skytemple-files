@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.audio.smdl.handler import SmdlHandler
 from skytemple_files.audio.smdl.protocol import SmdlProtocol
+from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.test.case import SkyTempleFilesTestCase, romtest
 
 
@@ -24,40 +25,50 @@ class SmdlTestCase(SkyTempleFilesTestCase[SmdlHandler, SmdlProtocol]):
     handler = SmdlHandler
 
     @romtest(file_ext='smd', path='SOUND/BGM')
+    def test_against_pyimpl(self, _, file):
+        if not env_use_native():
+            self.skipTest("This test is only enabled when the native implementations are tested.")
+        py = self.handler.load_python_model()(file)
+        rst = self.handler.load_native_model()(file)
+        self.do_tests(py, rst, skip_filename=True)
+
+    @romtest(file_ext='smd', path='SOUND/BGM')
     def test_using_rom(self, _, file):
         before = self.handler.deserialize(file)
         after = self.handler.deserialize(self.handler.serialize(before))
 
-        self.assertEqual(before.header.version, after.header.version)
-        self.assertEqual(before.header.unk1, after.header.unk1)
-        self.assertEqual(before.header.unk2, after.header.unk2)
-        self.assertEqual(before.header.modified_date, after.header.modified_date)
-        self.assertEqual(before.header.file_name, after.header.file_name)
-        self.assertEqual(before.header.unk5, after.header.unk5)
-        self.assertEqual(before.header.unk6, after.header.unk6)
-        self.assertEqual(before.header.unk8, after.header.unk8)
-        self.assertEqual(before.header.unk9, after.header.unk9)
+    def do_tests(self, expected, to_test, skip_filename=False):
+        self.assertEqual(expected.header.version, to_test.header.version)
+        self.assertEqual(expected.header.unk1, to_test.header.unk1)
+        self.assertEqual(expected.header.unk2, to_test.header.unk2)
+        self.assertEqual(expected.header.modified_date, to_test.header.modified_date)
+        if not skip_filename:
+            self.assertEqual(expected.header.file_name, to_test.header.file_name)
+        self.assertEqual(expected.header.unk5, to_test.header.unk5)
+        self.assertEqual(expected.header.unk6, to_test.header.unk6)
+        self.assertEqual(expected.header.unk8, to_test.header.unk8)
+        self.assertEqual(expected.header.unk9, to_test.header.unk9)
 
-        self.assertEqual(before.song.unk1, after.song.unk1)
-        self.assertEqual(before.song.unk2, after.song.unk2)
-        self.assertEqual(before.song.unk3, after.song.unk3)
-        self.assertEqual(before.song.unk4, after.song.unk4)
-        self.assertEqual(before.song.tpqn, after.song.tpqn)
-        self.assertEqual(before.song.unk5, after.song.unk5)
-        self.assertEqual(before.song.nbchans, after.song.nbchans)
-        self.assertEqual(before.song.unk6, after.song.unk6)
-        self.assertEqual(before.song.unk7, after.song.unk7)
-        self.assertEqual(before.song.unk8, after.song.unk8)
-        self.assertEqual(before.song.unk9, after.song.unk9)
-        self.assertEqual(before.song.unk10, after.song.unk10)
-        self.assertEqual(before.song.unk11, after.song.unk11)
-        self.assertEqual(before.song.unk12, after.song.unk12)
+        self.assertEqual(expected.song.unk1, to_test.song.unk1)
+        self.assertEqual(expected.song.unk2, to_test.song.unk2)
+        self.assertEqual(expected.song.unk3, to_test.song.unk3)
+        self.assertEqual(expected.song.unk4, to_test.song.unk4)
+        self.assertEqual(expected.song.tpqn, to_test.song.tpqn)
+        self.assertEqual(expected.song.unk5, to_test.song.unk5)
+        self.assertEqual(expected.song.nbchans, to_test.song.nbchans)
+        self.assertEqual(expected.song.unk6, to_test.song.unk6)
+        self.assertEqual(expected.song.unk7, to_test.song.unk7)
+        self.assertEqual(expected.song.unk8, to_test.song.unk8)
+        self.assertEqual(expected.song.unk9, to_test.song.unk9)
+        self.assertEqual(expected.song.unk10, to_test.song.unk10)
+        self.assertEqual(expected.song.unk11, to_test.song.unk11)
+        self.assertEqual(expected.song.unk12, to_test.song.unk12)
 
-        self.assertEqual(before.eoc.param1, after.eoc.param1)
-        self.assertEqual(before.eoc.param2, after.eoc.param2)
+        self.assertEqual(expected.eoc.param1, to_test.eoc.param1)
+        self.assertEqual(expected.eoc.param2, to_test.eoc.param2)
 
-        self.assertEqual(len(before.tracks), len(after.tracks))
-        for b_track, a_track in zip(before.tracks, after.tracks):
+        self.assertEqual(len(expected.tracks), len(to_test.tracks))
+        for b_track, a_track in zip(expected.tracks, to_test.tracks):
             self.assertEqual(b_track.header.param1, a_track.header.param1)
             self.assertEqual(b_track.header.param2, a_track.header.param2)
 
@@ -68,7 +79,9 @@ class SmdlTestCase(SkyTempleFilesTestCase[SmdlHandler, SmdlProtocol]):
 
             self.assertEqual(len(b_track.events), len(a_track.events))
             for b_event, a_event in zip(b_track.events, a_track.events):
-                self.assertEqual(type(b_event), type(a_event))
+                # we do it like this to allow easy cross-check of py/rst types, not ideal,
+                # but i don't think runtime checkable protocols would help here
+                self.assertEqual(type(b_event).__name__, type(a_event).__name__)
                 if hasattr(b_event, "op"):  # SmdlEventSpecialProtocol
                     self.assertEqual(b_event.op, a_event.op)
                     self.assertEqual(b_event.params, a_event.params)

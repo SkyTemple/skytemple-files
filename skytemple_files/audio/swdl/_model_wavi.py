@@ -57,7 +57,7 @@ class SwdlSampleInfoTblEntry(SwdlSampleInfoTblEntryProtocol[SwdlPcmdReference], 
         assert data[0x10:0x12] == bytes([0x15, 0x04]), "Data is not valid WDL WAVI Sample Info"
         self.sample_format = read_uintle(data, 0x12, 2)  # compare against SampleFormatConsts
         self.unk9 = read_uintle(data, 0x14)
-        self.loop = bool(read_uintle(data, 0x15))
+        self.loops = bool(read_uintle(data, 0x15))
         self.unk10 = read_uintle(data, 0x16, 2)
         self.unk11 = read_uintle(data, 0x18, 2)
         self.unk12 = read_uintle(data, 0x1A, 2)
@@ -120,7 +120,7 @@ class SwdlSampleInfoTblEntry(SwdlSampleInfoTblEntryProtocol[SwdlPcmdReference], 
         data[0x10:0x12] = bytes([0x15, 0x04])
         write_uintle(data, self.sample_format, 0x12, 2)
         write_uintle(data, self.unk9, 0x14, 1)
-        write_uintle(data, self.loop, 0x15, 1)
+        write_uintle(data, self.loops, 0x15, 1)
         write_uintle(data, self.unk10, 0x16, 2)
         write_uintle(data, self.unk11, 0x18, 2)
         write_uintle(data, self.unk12, 0x1A, 2)
@@ -158,7 +158,7 @@ class SwdlSampleInfoTblEntry(SwdlSampleInfoTblEntryProtocol[SwdlPcmdReference], 
                self.unk58 == other.unk58 and \
                self.sample_format == other.sample_format and \
                self.unk9 == other.unk9 and \
-               self.loop == other.loop and \
+               self.loops == other.loop and \
                self.unk10 == other.unk10 and \
                self.unk11 == other.unk11 and \
                self.unk12 == other.unk12 and \

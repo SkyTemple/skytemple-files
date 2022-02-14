@@ -103,7 +103,7 @@ class SwdlHeader(SwdlHeaderProtocol[SwdlPcmdLen], AutoString):
         data[0x20:0x30] = self.file_name
         data[0x30:0x34] = b'\x00\xaa\xaa\xaa'
         write_uintle(data, self.unk13, 0x3C, 4)
-        data[0x40:0x44] = self.pcmdlen.to_bytes()
+        data[0x40:0x44] = pcmdlen.to_bytes()
         write_uintle(data, wavi_slots, 0x46, 2)
         write_uintle(data, prgi_slots, 0x48, 2)
         write_uintle(data, self.unk17, 0x4A, 2)
@@ -141,8 +141,8 @@ class Swdl(SwdlProtocol[SwdlHeader, SwdlWavi, SwdlPcmd, SwdlPrgi, SwdlKgrp]):
 
             start_pcmd += self.prgi.get_initial_length() + self.kgrp.get_initial_length()
 
-        if not self.header.pcmdlen.external and self.header.pcmdlen.ref:
-            self.pcmd = SwdlPcmd(data[start_pcmd:start_pcmd + self.header.pcmdlen.ref + 0x10])  # (0x10 = Header size) TODO: Is this correct???
+        if not self.header.pcmdlen.external and self.header.pcmdlen.reference:
+            self.pcmd = SwdlPcmd(data[start_pcmd:start_pcmd + self.header.pcmdlen.reference + 0x10])  # (0x10 = Header size) TODO: Is this correct???
             self._dbg_pcmd_after_wavi = True
             start_prgi += self.pcmd.get_initial_length()
 

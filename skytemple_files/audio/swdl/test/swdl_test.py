@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.audio.swdl.handler import SwdlHandler
 from skytemple_files.audio.swdl.protocol import SwdlProtocol
+from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.test.case import SkyTempleFilesTestCase, romtest
 
 
@@ -24,22 +25,34 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
     handler = SwdlHandler
 
     @romtest(file_ext='swd', path='SOUND/BGM')
+    def test_against_pyimpl(self, _, file):
+        if not env_use_native():
+            self.skipTest("This test is only enabled when the native implementations are tested.")
+        py = self.handler.load_python_model()(file)
+        rst = self.handler.load_native_model()(file)
+        self.do_tests(py, rst, skip_filename=True)
+
+    @romtest(file_ext='swd', path='SOUND/BGM')
     def test_using_rom(self, _, file):
         before = self.handler.deserialize(file)
         after = self.handler.deserialize(self.handler.serialize(before))
+        # the sample offset isn't correct preserved between py/rst
+        self.do_tests(before, after)
 
-        self.assertEqual(before.header.version, after.header.version)
-        self.assertEqual(before.header.unk1, after.header.unk1)
-        self.assertEqual(before.header.unk2, after.header.unk2)
-        self.assertEqual(before.header.modified_date, after.header.modified_date)
-        self.assertEqual(before.header.file_name, after.header.file_name)
-        self.assertEqual(before.header.unk13, after.header.unk13)
-        self.assertEqual(before.header.pcmdlen.reference, after.header.pcmdlen.reference)
-        self.assertEqual(before.header.pcmdlen.external, after.header.pcmdlen.external)
-        self.assertEqual(before.header.unk17, after.header.unk17)
+    def do_tests(self, expected, to_test, skip_filename=False, skip_sample_offset=False):
+        self.assertEqual(expected.header.version, to_test.header.version)
+        self.assertEqual(expected.header.unk1, to_test.header.unk1)
+        self.assertEqual(expected.header.unk2, to_test.header.unk2)
+        self.assertEqual(bytes(expected.header.modified_date), to_test.header.modified_date)
+        if not skip_filename:
+            self.assertEqual(bytes(expected.header.file_name), to_test.header.file_name)
+        self.assertEqual(expected.header.unk13, to_test.header.unk13)
+        self.assertEqual(expected.header.pcmdlen.reference, to_test.header.pcmdlen.reference)
+        self.assertEqual(expected.header.pcmdlen.external, to_test.header.pcmdlen.external)
+        self.assertEqual(expected.header.unk17, to_test.header.unk17)
 
-        self.assertEqual(len(before.wavi.sample_info_table), len(after.wavi.sample_info_table))
-        for b_site, a_site in zip(before.wavi.sample_info_table, after.wavi.sample_info_table):
+        self.assertEqual(len(expected.wavi.sample_info_table), len(to_test.wavi.sample_info_table))
+        for b_site, a_site in zip(expected.wavi.sample_info_table, to_test.wavi.sample_info_table):
             if b_site is None:
                 self.assertIsNone(a_site)
             else:
@@ -55,7 +68,7 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
                 self.assertEqual(b_site.unk58, a_site.unk58)
                 self.assertEqual(b_site.sample_format, a_site.sample_format)
                 self.assertEqual(b_site.unk9, a_site.unk9)
-                self.assertEqual(b_site.loop, a_site.loop)
+                self.assertEqual(b_site.loops, a_site.loops)
                 self.assertEqual(b_site.unk10, a_site.unk10)
                 self.assertEqual(b_site.unk11, a_site.unk11)
                 self.assertEqual(b_site.unk12, a_site.unk12)
@@ -65,13 +78,9 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
                     self.assertIsNone(a_site.sample)
                 else:
                     self.assertIsNotNone(a_site.sample)
-                    self.assertEqual(b_site.sample.offset, a_site.sample.offset)
+                    if not skip_sample_offset:
+                        self.assertEqual(b_site.sample.offset, a_site.sample.offset)
                     self.assertEqual(b_site.sample.length, a_site.sample.length)
-                    if b_site.sample.pcmd is None:
-                        self.assertIsNone(a_site.sample.pcmd)
-                    else:
-                        self.assertIsNotNone(a_site.sample.pcmd)
-                        self.assertEqual(b_site.sample.pcmd.chunk_data, a_site.sample.pcmd.chunk_data)
                 self.assertEqual(b_site.loop_begin_pos, a_site.loop_begin_pos)
                 self.assertEqual(b_site.loop_length, a_site.loop_length)
                 self.assertEqual(b_site.envelope, a_site.envelope)
@@ -89,19 +98,19 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
                 self.assertEqual(b_site.release, a_site.release)
                 self.assertEqual(b_site.unk57, a_site.unk57)
 
-        if before.pcmd is None:
-            self.assertIsNone(after.pcmd)
+        if expected.pcmd is None:
+            self.assertIsNone(to_test.pcmd)
         else:
-            self.assertIsNotNone(after.pcmd)
-            self.assertEqual(before.pcmd.chunk_data, after.pcmd.chunk_data)
+            self.assertIsNotNone(to_test.pcmd)
+            self.assertEqual(expected.pcmd.chunk_data, to_test.pcmd.chunk_data)
 
 
-        if before.prgi is None:
-            self.assertIsNone(after.prgi)
+        if expected.prgi is None:
+            self.assertIsNone(to_test.prgi)
         else:
-            self.assertIsNotNone(after.prgi)
-            self.assertEqual(len(before.prgi.program_table), len(after.prgi.program_table))
-            for b_program, a_program in zip(before.prgi.program_table, after.prgi.program_table):
+            self.assertIsNotNone(to_test.prgi)
+            self.assertEqual(len(expected.prgi.program_table), len(to_test.prgi.program_table))
+            for b_program, a_program in zip(expected.prgi.program_table, to_test.prgi.program_table):
                 if b_program is None:
                     self.assertIsNone(a_program)
                 else:
@@ -165,12 +174,12 @@ class SwdlTestCase(SkyTempleFilesTestCase[SwdlHandler, SwdlProtocol]):
                         self.assertEqual(b_split.release, a_split.release)
                         self.assertEqual(b_split.unk53, a_split.unk53)
 
-        if before.kgrp is None:
-            self.assertIsNone(after.kgrp)
+        if expected.kgrp is None:
+            self.assertIsNone(to_test.kgrp)
         else:
-            self.assertIsNotNone(after.kgrp)
-            self.assertEqual(len(before.kgrp.keygroups), len(after.kgrp.keygroups))
-            for b_kgrp, a_kgrp in zip(before.kgrp.keygroups, after.kgrp.keygroups):
+            self.assertIsNotNone(to_test.kgrp)
+            self.assertEqual(len(expected.kgrp.keygroups), len(to_test.kgrp.keygroups))
+            for b_kgrp, a_kgrp in zip(expected.kgrp.keygroups, to_test.kgrp.keygroups):
                 self.assertEqual(b_kgrp.id, a_kgrp.id)
                 self.assertEqual(b_kgrp.poly, a_kgrp.poly)
                 self.assertEqual(b_kgrp.priority, a_kgrp.priority)

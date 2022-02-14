@@ -25,9 +25,9 @@ class SwdlWriter:
         kgrp = model.kgrp.to_bytes() if model.kgrp is not None else bytes()
         pcmd = model.pcmd.to_bytes() if model.pcmd is not None else bytes()
         if len(pcmd) > 0:
-            pcmdlen = SwdlPcmdLen(len(pcmd), False)
+            pcmdlen = SwdlPcmdLen(len(model.pcmd.chunk_data), False)
         else:
-            pcmdlen = SwdlPcmdLen(model.header.pcmdlen.ref, True)
+            pcmdlen = SwdlPcmdLen(model.header.pcmdlen.reference, True)
 
         # The file might have PRGI slots set, even if none are defined
         prgi_slots = model.header.get_initial_number_prgi_slots()

@@ -218,7 +218,7 @@ and to save a backup of your ROM before applying this.""")
                     md_model.entries[NUM_PREVIOUS_ENTRIES + i].entid = NUM_PREVIOUS_ENTRIES + i
                 else:
                     md_model.entries[NUM_PREVIOUS_ENTRIES + i].entid = i
-            block = bincfg.blocks['MonsterSpriteData']
+            block = bincfg.symbols['MonsterSpriteData']
             data = binary[block.begin:block.end] + binary[block.begin:block.end]
             data += b'\x00\x00' * (NUM_NEW_ENTRIES - (len(data) // 2))
             for i in range(0, len(data), 2):

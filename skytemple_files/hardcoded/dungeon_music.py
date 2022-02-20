@@ -40,7 +40,7 @@ class DungeonMusicEntry(AutoString):
 class HardcodedDungeonMusic:
     @staticmethod
     def get_music_list(ov10: bytes, config: Pmd2Data) -> List[DungeonMusicEntry]:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['MusicList']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['MusicList']
         lst = []
         for i in range(block.begin, block.end, 2):
             lst.append(DungeonMusicEntry(
@@ -50,7 +50,7 @@ class HardcodedDungeonMusic:
 
     @staticmethod
     def set_music_list(value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['MusicList']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['MusicList']
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -59,7 +59,7 @@ class HardcodedDungeonMusic:
 
     @staticmethod
     def get_random_music_list(ov10: bytes, config: Pmd2Data) -> List[Tuple[int, int, int, int]]:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['RandomMusicList']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
         lst = []
         for i in range(block.begin, block.end, 8):
             lst.append((
@@ -72,7 +72,7 @@ class HardcodedDungeonMusic:
 
     @staticmethod
     def set_random_music_list(value: List[Tuple[int, int, int, int]], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['RandomMusicList']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
         expected_length = int((block.end - block.begin) / 8)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

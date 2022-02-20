@@ -318,7 +318,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> List[DungeonDefinition]:
         """Returns the list of dungeon definitions."""
-        block = config.binaries['arm9.bin'].blocks['DungeonList']
+        block = config.binaries['arm9.bin'].symbols['DungeonList']
         lst = []
         for i in range(block.begin, block.end, DUNGEON_LIST_ENTRY_LEN):
             lst.append(DungeonDefinition(
@@ -335,7 +335,7 @@ class HardcodedDungeons:
         Sets the dungeon definitions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
         """
-        block = config.binaries['arm9.bin'].blocks['DungeonList']
+        block = config.binaries['arm9.bin'].symbols['DungeonList']
         expected_length = int((block.end - block.begin) / DUNGEON_LIST_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -347,7 +347,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_dungeon_restrictions(arm9bin: bytes, config: Pmd2Data) -> List[DungeonRestriction]:
         """Returns the list of dungeon restrictions."""
-        block = config.binaries['arm9.bin'].blocks['DungeonRestrictions']
+        block = config.binaries['arm9.bin'].symbols['DungeonRestrictions']
         lst = []
         for i in range(block.begin, block.end, DUNGEON_RESTRICTIONS_ENTRY_LEN):
             lst.append(DungeonRestriction.from_bytes(arm9bin[i:i+DUNGEON_RESTRICTIONS_ENTRY_LEN]))
@@ -359,7 +359,7 @@ class HardcodedDungeons:
         Sets the dungeon restrictions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_restrictions).
         """
-        block = config.binaries['arm9.bin'].blocks['DungeonRestrictions']
+        block = config.binaries['arm9.bin'].symbols['DungeonRestrictions']
         expected_length = int((block.end - block.begin) / DUNGEON_RESTRICTIONS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -370,7 +370,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_secondary_terrains(arm9bin: bytes, config: Pmd2Data) -> List[SecondaryTerrainTableEntry]:
         """Returns the list of secondary terrains."""
-        block = config.binaries['arm9.bin'].blocks['SecondaryTerrains']
+        block = config.binaries['arm9.bin'].symbols['SecondaryTerrains']
         lst = []
         for i in range(block.begin, block.end, SECONDARY_TERRAINS_ENTRY_LEN):
             lst.append(SecondaryTerrainTableEntry(
@@ -385,7 +385,7 @@ class HardcodedDungeons:
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries['arm9.bin'].blocks['SecondaryTerrains']
+        block = config.binaries['arm9.bin'].symbols['SecondaryTerrains']
         expected_length = int((block.end - block.begin) / SECONDARY_TERRAINS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -397,7 +397,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_marker_placements(arm9bin: bytes, config: Pmd2Data) -> List[MapMarkerPlacement]:
         """Returns the list of secondary terrains."""
-        block = config.binaries['arm9.bin'].blocks['MapMarkerPlacements']
+        block = config.binaries['arm9.bin'].symbols['MapMarkerPlacements']
         lst = []
         for i in range(block.begin, block.end, MAP_MARKER_PLACEMENTS_ENTRY_LEN):
             lst.append(MapMarkerPlacement.from_bytes(arm9bin[i:i+MAP_MARKER_PLACEMENTS_ENTRY_LEN]))
@@ -409,7 +409,7 @@ class HardcodedDungeons:
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries['arm9.bin'].blocks['MapMarkerPlacements']
+        block = config.binaries['arm9.bin'].symbols['MapMarkerPlacements']
         expected_length = int((block.end - block.begin) / MAP_MARKER_PLACEMENTS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -419,7 +419,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def get_tileset_properties(ov10: bytes, config: Pmd2Data) -> List[TilesetProperties]:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['TilesetProperties']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['TilesetProperties']
         lst = []
         for i in range(block.begin, block.end, TILESET_PROPERTIES_ENTRY_LEN):
             lst.append(TilesetProperties.from_bytes(ov10[i:i+TILESET_PROPERTIES_ENTRY_LEN]))
@@ -427,7 +427,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_tileset_properties(value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['TilesetProperties']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['TilesetProperties']
         expected_length = int((block.end - block.begin) / TILESET_PROPERTIES_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

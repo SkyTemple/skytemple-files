@@ -223,7 +223,6 @@ class MigrationTestCase(unittest.TestCase):
     """
     @parameterized.expand((GAME_REGION_EU, GAME_REGION_US))
     def test_backwards_compatibility(self, region):
-        region = GAME_REGION_EU
         to_check = {x.filepath: x for x in load_binaries(f"{GAME_VERSION_EOS}_{region}")}
 
         for bin_path, symbol_specs in OLD_ENTRIES.items():

@@ -16,6 +16,6 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Install resymgen
-        uses: ./skytemple_files/_resources/pmdsky-debug/.github/actions/build-resymgen
+        run: cargo install resymgen
       - name: Test
-        run: resymgen check --complete-version-list --explicit-versions --in-bounds-symbols --no-function-overlap --nonempty-maps --unique-symbols --data-names SCREAMING_SNAKE_CASE --function-names PascalCase symbols/*.yml
+        run: ~/.cargo/bin/resymgen check --complete-version-list --explicit-versions --in-bounds-symbols --no-function-overlap --nonempty-maps --unique-symbols --data-names SCREAMING_SNAKE_CASE --function-names PascalCase symbols/*.yml

@@ -24,6 +24,7 @@ from xml.etree.ElementTree import ParseError
 from skytemple_files.common.ppmdu_config.data import *
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonItem, \
     Pmd2DungeonDungeon, Pmd2DungeonItemCategory
+from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import load_binaries
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.common.i18n_util import _
@@ -108,45 +109,6 @@ class Pmd2XmlReader:
                         for e_value in e_game:
                             game_constants[e_value.attrib['id']] = self.xml_int(e_value.attrib['value'])
             ###########################
-            elif e.tag == 'Binaries':
-                for e_game in e:
-                    if id_matches_edition(e_game, self._game_edition):
-                        for e_binary in e_game:
-                            blocks = []
-                            fns = []
-                            pointers = []
-                            for e_node in e_binary:
-                                if e_node.tag == 'Block':
-                                    blocks.append(Pmd2BinaryBlock(
-                                        e_node.attrib['name'],
-                                        self.xml_int(e_node.attrib['beg']),
-                                        self.xml_int(e_node.attrib['end'])
-                                    ))
-                                elif e_node.tag == 'Fn':
-                                    fns.append(Pmd2BinaryFunction(
-                                        e_node.attrib['name'],
-                                        self.xml_int(e_node.attrib['beg'])
-                                    ))
-                                elif e_node.tag == 'Pointer':
-                                    pointers.append(Pmd2BinaryPointer(
-                                        e_node.attrib['name'],
-                                        self.xml_int(e_node.attrib['beg'])
-                                    ))
-                            bin = Pmd2Binary(
-                                e_binary.attrib['filepath'],
-                                self.xml_int(e_binary.attrib['loadaddress']),
-                                blocks,
-                                fns,
-                                pointers
-                            )
-                            binaries.append(bin)
-                            for x in blocks:
-                                x.add_parent(bin)
-                            for y in fns:
-                                y.add_parent(bin)
-                            for z in pointers:
-                                z.add_parent(bin)
-            ###########################
             elif e.tag == 'ASMPatchesConstants':
                 asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
             ###########################
@@ -223,7 +185,7 @@ class Pmd2XmlReader:
             game_edition_for_this_rom,
             game_editions,
             game_constants,
-            binaries,
+            load_binaries(game_edition_for_this_rom.id),
             string_index_data,  # type: ignore
             asm_patches_constants,  # type: ignore
             script_data,  # type: ignore

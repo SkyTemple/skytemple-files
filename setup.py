@@ -27,7 +27,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={'skytemple_files':
-                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md', '.bin', '.png']) +
+                  get_resources(['.xml', '.asm', '.rst', 'LICENSE', '.txt', 'md', '.bin', '.png', '.yml', '.yaml']) +
                   ['graphics/chara_wan/Shadow.png', 'py.typed']},
     description='Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky (EU/US)',
     long_description=long_description,
@@ -35,6 +35,7 @@ setup(
     url='https://github.com/SkyTemple/skytemple-files/',
     install_requires=[
         'ndspy >= 3.0.0',
+        'pyyaml >= 6.0.0'
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
         'explorerscript >= 0.1.1',

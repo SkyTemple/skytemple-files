@@ -54,7 +54,7 @@ def main():
     ]
 
     # Write NPC types
-    npc_table_start = data.binaries['arm9.bin'].blocks['Entities'].begin
+    npc_table_start = data.binaries['arm9.bin'].symbols['Entities'].begin
     NPC_TABLE_ENTRY_LEN = 0x0c
     # uint16: type, uint16: entid, uint32: pointer to name, unk3, unk4
 

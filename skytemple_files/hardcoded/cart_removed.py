@@ -33,7 +33,7 @@ class HardcodedCartRemoved:
         """
         Gets the cartridge removed data
         """
-        block = config.binaries['arm9.bin'].blocks['CartRemovedImgData']
+        block = config.binaries['arm9.bin'].symbols['CartRemovedImgData']
         data = arm9[block.begin:block.end]
         img_data = CommonAtHandler.deserialize(data).decompress()
         raw_data = []
@@ -51,7 +51,7 @@ class HardcodedCartRemoved:
         """
         if img.width!=IMG_WIDTH and img.height!=IMG_HEIGHT:
             raise AttributeError(f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}.")))
-        block = config.binaries['arm9.bin'].blocks['CartRemovedImgData']
+        block = config.binaries['arm9.bin'].symbols['CartRemovedImgData']
         img = img.convert("RGB")
         raw_data = img.tobytes()
         img_data = []

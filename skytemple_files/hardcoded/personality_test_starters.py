@@ -26,7 +26,7 @@ class HardcodedPersonalityTestStarters:
     @staticmethod
     def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> List[int]:
         """Returns the monster.md indices of the partner starter choices (total index, with gender form!)"""
-        block = config.binaries['overlay/overlay_0013.bin'].blocks['StartersPartnerIds']
+        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersPartnerIds']
         ids = []
         for i in range(block.begin, block.end, 2):
             ids.append(read_uintle(overlay13, i, 2))
@@ -38,7 +38,7 @@ class HardcodedPersonalityTestStarters:
         Sets the monster.md indices of the partner starter choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_partner_md_ids).
         """
-        block = config.binaries['overlay/overlay_0013.bin'].blocks['StartersPartnerIds']
+        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersPartnerIds']
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
             raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
@@ -48,7 +48,7 @@ class HardcodedPersonalityTestStarters:
     @staticmethod
     def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> List[int]:
         """Returns the monster.md indices of the player starter choices (total index, with gender form!)"""
-        block = config.binaries['overlay/overlay_0013.bin'].blocks['StartersHeroIds']
+        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersHeroIds']
         ids = []
         for i in range(block.begin, block.end, 2):
             ids.append(read_uintle(overlay13, i, 2))
@@ -60,7 +60,7 @@ class HardcodedPersonalityTestStarters:
         Sets the monster.md indices of the player partner choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_player_md_ids).
         """
-        block = config.binaries['overlay/overlay_0013.bin'].blocks['StartersHeroIds']
+        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersHeroIds']
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
             raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")

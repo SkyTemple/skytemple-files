@@ -19,4 +19,4 @@ jobs:
         run: cargo install resymgen
       - name: Test
         run: ~/.cargo/bin/resymgen check --complete-version-list --explicit-versions --in-bounds-symbols --no-function-overlap --nonempty-maps --unique-symbols --data-names SCREAMING_SNAKE_CASE --function-names PascalCase symbols/*.yml
-        working-directory: ./skytemple-files/_resources/pmdsky-debug/
+        working-directory: ./skytemple_files/_resources/pmdsky-debug/

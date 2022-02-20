@@ -74,7 +74,7 @@ OLD_ENTRIES = {
                  'TacticsUnlockLevel': (True, False),
                  'TextSpeedConstant': (True, False),
                  'WonderGummiIqGain': (True, False)},
-    'overlay/overlay_0000.bin': {'MainMenuSongId': (True, False)},
+    'overlay/overlay_0000.bin': {'MainMenuSongId': (False, False)},
     'overlay/overlay_0001.bin': {'ContinueChoice': (True, False),
                                  'MainDebugMenu1': (True, False),
                                  'MainDebugMenu2': (True, False),

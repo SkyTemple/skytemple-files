@@ -29,7 +29,7 @@ class MultiCasingDict(Dict[str, V], Generic[V]):
     As an implementation detail, camel case is also accepted and converted. For all other
     types of casings used for getting items the behaviour is undefined.
 
-    NOTE: This behaviour is only implemented for this class itself NOT for it's key set.
+    NOTE: This behaviour is only implemented for this class itself NOT for its key set.
     """
 
     def __getitem__(self, k: str) -> V:

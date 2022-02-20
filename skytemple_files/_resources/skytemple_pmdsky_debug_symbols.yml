@@ -10,15 +10,6 @@ arm9:
       description: Would log a printf format string in the debug binary. A no-op in the final binary.
 
   data:
-    - name: JUICE_BAR_NECTAR_IQ_GAIN
-      address:
-        NA: 0x2011810
-        EU: 0x20118B8
-      length:
-        NA: 0x1
-        EU: 0x1
-      description: "IQ gain when ingesting nectar at the Juice Bar. Note: This is a value in the middle of a function."
-
     - name: COMPRESSED_IQ_GROUP_SKILLS
       address:
         NA: 0x20A1D90
@@ -46,28 +37,6 @@ arm9:
         EU: 0x168
       description: Requires EditExtraPokemon patch.
 
-overlay0:
-  data:
-    - name: MAIN_MENU_SONG_ID
-      address:
-        NA: 0x22BE1A0
-        EU: 0x22BE9B4
-      length:
-        NA: 0x1
-        EU: 0x1
-      description: "Song playing in the main menu. Note: Probably in the middle of a function."
-
-overlay9:
-  data:
-    - name: MAIN_MENU_RETURN_SONG_ID
-      address:
-        NA: 0x233D900
-        EU: 0x233E080
-      length:
-        NA: 0x1
-        EU: 0x1
-      description: "Song playing in the main menu when returning from the Sky Jukebox. Note: Probably in the middle of a function."
-
 overlay11:
   data:
     - name: MONSTER_GROUND_IDLE_ANIM
@@ -77,6 +46,7 @@ overlay11:
       length:
         NA: 0x800
         EU: 0x800
+      description: This table is added by the "ChangePokemonGroundAnim" patch. See the patch description for details.
 
 overlay36:
   versions:

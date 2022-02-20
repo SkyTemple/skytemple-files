@@ -132,6 +132,8 @@ ALIAS_MAP = {
     "FIXED_ROOM_MONSTER_SPAWN_TABLE": ["MONSTER_SPAWN_TABLE"],
     "NECTAR_IQ_BOOST": ["NECTAR_IQ_GAIN"],
     "FIXED_ROOM_TILE_SPAWN_TABLE": ["TILE_SPAWN_TABLE"],
+    "TOP_MENU_MUSIC_ID": ["MAIN_MENU_SONG_ID"],
+    "TOP_MENU_RETURN_MUSIC_ID": ["MAIN_MENU_RETURN_SONG_ID"]
 }
 
 
@@ -180,7 +182,7 @@ def _read_symbol(loadaddr: int, symbol_def: dict, typ: Pmd2BinarySymbolType, reg
     if 'name' in symbol_def:
         name = symbol_def['name']
     else:
-        raise ValueError("Symbol is missing it's name.")
+        raise ValueError("Symbol is missing its name.")
     
     if 'address' in symbol_def:
         if region in symbol_def['address']:
@@ -192,37 +194,24 @@ def _read_symbol(loadaddr: int, symbol_def: dict, typ: Pmd2BinarySymbolType, reg
             return None
     else:
         raise ValueError(f"Symbol {name} is missing an address.")
-    
-    if 'description' in symbol_def:
-        description = symbol_def['description']
-    else:
-        description = ""
-    
-    if typ == Pmd2BinarySymbolType.FUNCTION:
-        return Pmd2BinarySymbol(
-            name=name,
-            typ=Pmd2BinarySymbolType.FUNCTION,
-            begin=begin,
-            end=None,
-            description=description
-        )
-    else:
-        if 'length' in symbol_def:
-            if region in symbol_def['length']:
-                end = begin + symbol_def['length'][region]
-            else:
-                return None
-        else:
-            # We assume it has length 4 (pointer length) if not defined.
-            end = begin + 4
-        
-        return Pmd2BinarySymbol(
-            name=name,
-            typ=typ,
-            begin=begin,
-            end=end,
-            description=description
-        )
+
+    end = None
+    if 'length' in symbol_def:
+        if region in symbol_def['length']:
+            end = begin + symbol_def['length'][region]
+    elif typ == Pmd2BinarySymbolType.DATA:
+        # We assume it has length 4 (pointer length) if not defined.
+        end = begin + 4
+
+    description = symbol_def.get('description', "")
+
+    return Pmd2BinarySymbol(
+        name=name,
+        typ=typ,
+        begin=begin,
+        end=end,
+        description=description
+    )
 
 
 def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
@@ -232,10 +221,12 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
         binary = _IncompleteBinary.get(binaries, bin_name)
         if 'address' in definition:
             if region in definition['address']:
-                binary.loadaddress = int(definition['address'][region])
+                if binary.loadaddress is None:
+                    binary.loadaddress = int(definition['address'][region])
         if 'length' in definition:
             if region in definition['length']:
-                binary.length = int(definition['length'][region])
+                if binary.length is None:
+                    binary.length = int(definition['length'][region])
         if 'functions' in definition:
             assert binary.loadaddress is not None
             for symbol_def in definition['functions']:
@@ -249,9 +240,8 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
                 if sym is not None:
                     binary.symbols.append(sym)
         if 'description' in definition:
-            if region in definition['description']:
-                if binary.description == "":
-                    binary.description = definition['description']
+            if binary.description == "":
+                binary.description = definition['description']
 
 
 def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
@@ -270,8 +260,9 @@ def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
             # Provide aliases for some symbols for backwards compatibility.
             if symbol.name in ALIAS_MAP:
                 for entry in ALIAS_MAP[symbol.name]:
+                    # noinspection PyProtectedMember
                     alias_symbols.append(DeprecatedPmd2BinarySymbol(
-                        name=entry, begin=symbol.begin, end=symbol.end, description=symbol.description, typ=symbol.type,
+                        name=entry, begin=symbol.begin, end=symbol._end, description=symbol.description, typ=symbol.type,
                         new_name=symbol.name
                     ))
         binary = Pmd2Binary(
@@ -296,7 +287,10 @@ def load_binaries(edition: str) -> List[Pmd2Binary]:
     binaries: Dict[str, _IncompleteBinary] = {}
 
     files = glob(os.path.join(SYMBOLS_DIR, '*.yml'))
-    files.sort(key=lambda key: 1 if key.startswith('arm') or key.startswith('overlay') else -1)
+
+    # Make sure the arm and overlay files are read this: These are the main files.
+    # They will contain the address, length and description.
+    files.sort(key=lambda key: -1 if key.startswith('arm') or key.startswith('overlay') else 1)
 
     for yml_path in files:
         with open_utf8(yml_path, 'r') as f:

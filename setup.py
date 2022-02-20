@@ -35,7 +35,7 @@ setup(
     url='https://github.com/SkyTemple/skytemple-files/',
     install_requires=[
         'ndspy >= 3.0.0',
-        'pyyaml >= 6.0.0'
+        'pyyaml >= 6.0.0',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
         'explorerscript >= 0.1.1',

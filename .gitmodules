@@ -10,4 +10,4 @@
 	url = https://github.com/SkyTemple/eos-move-effects.git
 [submodule "skytemple_files/_resources/pmdsky-debug"]
 	path = skytemple_files/_resources/pmdsky-debug
-	url = https://github.com/SkyTemple/pmdsky-debug.git
+	url = https://github.com/UsernameFodder/pmdsky-debug.git

@@ -25,6 +25,11 @@ from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString
 
+# noinspection PyUnresolvedReferences
+# Re-exported for backwards compatibility
+from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary, Pmd2BinaryBlock, \
+    Pmd2BinaryFunction, Pmd2BinaryPointer
+
 
 GAME_VERSION_EOT = 'EoT'
 GAME_VERSION_EOD = 'EoD'
@@ -52,62 +57,6 @@ class Pmd2GameEdition(AutoString):
         self.arm9off14 = arm9off14
         self.defaultlang = defaultlang
         self.issupported = issupported
-
-
-class Pmd2BinaryBlock(AutoString):
-    def __init__(self, name: str, begin: int, end: int):
-        self.name = name
-        self.begin = begin
-        self.end = end
-        self.parent: Optional['Pmd2Binary'] = None
-
-    def add_parent(self, parent: 'Pmd2Binary') -> None:
-        self.parent = parent
-
-    @property
-    def begin_absolute(self) -> int:
-        return self.parent.loadaddress + self.begin  # type: ignore
-
-    @property
-    def end_absolute(self) -> int:
-        return self.parent.loadaddress + self.end  # type: ignore
-
-
-class Pmd2BinaryFunction(AutoString):
-    def __init__(self, name: str, begin: int):
-        self.name = name
-        self.begin = begin
-        self.parent: Optional['Pmd2Binary'] = None
-
-    def add_parent(self, parent: 'Pmd2Binary') -> None:
-        self.parent = parent
-
-    @property
-    def begin_absolute(self) -> int:
-        return self.parent.loadaddress + self.begin  # type: ignore
-
-
-class Pmd2BinaryPointer(AutoString):
-    def __init__(self, name: str, begin: int):
-        self.name = name
-        self.begin = begin
-        self.parent: Optional['Pmd2Binary'] = None
-
-    def add_parent(self, parent: 'Pmd2Binary') -> None:
-        self.parent = parent
-
-    @property
-    def begin_absolute(self) -> int:
-        return self.parent.loadaddress + self.begin  # type: ignore
-
-
-class Pmd2Binary(AutoString):
-    def __init__(self, filepath: str, loadaddress: int, blocks: List[Pmd2BinaryBlock], functions: List[Pmd2BinaryFunction], pointers: List[Pmd2BinaryPointer]):
-        self.filepath = filepath
-        self.loadaddress = loadaddress
-        self.blocks: Dict[str, Pmd2BinaryBlock] = {x.name: x for x in blocks}
-        self.functions: Dict[str, Pmd2BinaryFunction] = {x.name: x for x in functions}
-        self.pointers: Dict[str, Pmd2BinaryPointer] = {x.name: x for x in pointers}
 
 
 class Pmd2SortLists(AutoString):

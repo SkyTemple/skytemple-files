@@ -21,8 +21,8 @@ arm9:
 
     - name: GUEST_MONSTER_DATA2
       address:
-        NA: 0x204F148
-        EU: 0x204EE10
+        NA: 0x204EE10
+        EU: 0x204F148
       length:
         NA: 0x1D0
         EU: 0x1D0
@@ -30,8 +30,8 @@ arm9:
 
     - name: EXTRA_DUNGEON_DATA
       address:
-        NA: 0x204EFE0
-        EU: 0x204ECA8
+        NA: 0x204ECA8
+        EU: 0x204EFE0
       length:
         NA: 0x168
         EU: 0x168

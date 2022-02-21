@@ -199,9 +199,6 @@ def _read_symbol(loadaddr: int, symbol_def: dict, typ: Pmd2BinarySymbolType, reg
     if 'length' in symbol_def:
         if region in symbol_def['length']:
             end = begin + symbol_def['length'][region]
-    elif typ == Pmd2BinarySymbolType.DATA:
-        # We assume it has length 4 (pointer length) if not defined.
-        end = begin + 4
 
     description = symbol_def.get('description', "")
 

@@ -153,7 +153,7 @@ class HardcodedIq:
     def get_iq_skills(arm9bin: bytes, config: Pmd2Data) -> List[IqSkill]:
         block = config.binaries['arm9.bin'].symbols['IqSkills']
         block_restr = config.binaries['arm9.bin'].symbols['IqSkillRestrictions']
-        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1 + (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         lst = []
         for i in range(0, (block.end - block.begin) // IQ_SKILL_ENTRY_LEN):
             lst.append(IqSkill(
@@ -166,7 +166,7 @@ class HardcodedIq:
     def set_iq_skills(value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['arm9.bin'].symbols['IqSkills']
         block_restr = config.binaries['arm9.bin'].symbols['IqSkillRestrictions']
-        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1+ (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         expected_length = int((block.end - block.begin) / IQ_SKILL_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

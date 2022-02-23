@@ -132,7 +132,7 @@ class HardcodedMenus:
         """
         Gets one menu
         """
-        block = config.binaries[menu.binary].blocks[menu.block]
+        block = config.binaries[menu.binary].symbols[menu.block]
         data = binary[block.begin:block.end]
         menu_list: List[MenuEntry] = []
         for i in range(len(data)//MENU_ENTRY_LEN):
@@ -152,7 +152,7 @@ class HardcodedMenus:
         """
         Sets one menu
         """
-        block = config.binaries[menu.binary].blocks[menu.block]
+        block = config.binaries[menu.binary].symbols[menu.block]
         data = bytearray(len(menu_data)*MENU_ENTRY_LEN)
         if len(data)!=block.end-block.begin:
             # noinspection PyUnusedLocal

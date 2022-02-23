@@ -25,7 +25,8 @@ from typing import Dict, Union
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary, Pmd2SimplePatch
+from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2SimplePatch
+from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir, set_rw_permission_folder
 from skytemple_files.common.i18n_util import f, _
 

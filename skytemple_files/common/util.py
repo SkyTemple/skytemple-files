@@ -39,7 +39,8 @@ from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
-    from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
+    from skytemple_files.common.ppmdu_config.data import Pmd2Data
+    from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 
 # Useful type consts
 OptionalKwargs = Optional[Dict[str, Any]]

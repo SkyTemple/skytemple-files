@@ -27,8 +27,8 @@ class HardcodedMainMenuMusic:
     @staticmethod
     def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: Optional[bytes] = None) -> Union[int, Tuple[int, int]]:
         """Set ov09 to also return the Sky Jukebox return music"""
-        main_block = config.binaries['overlay/overlay_0000.bin'].blocks['MainMenuSongId']
-        skyj_block = config.binaries['overlay/overlay_0009.bin'].blocks['MainMenuReturnSongId']
+        main_block = config.binaries['overlay/overlay_0000.bin'].symbols['TOP_MENU_MUSIC_ID']
+        skyj_block = config.binaries['overlay/overlay_0009.bin'].symbols['TOP_MENU_RETURN_MUSIC_ID']
         ov00_value = read_uintle(ov00, main_block.begin, 1)
         if ov09:
             return ov00_value, read_uintle(ov09, skyj_block.begin, 1)
@@ -37,8 +37,8 @@ class HardcodedMainMenuMusic:
     @staticmethod
     def set_main_menu_music(value: int, ov00: bytearray, config: Pmd2Data, ov09: Optional[bytearray] = None) -> None:
         """Set ov09 to also update the Sky Jukebox return music"""
-        main_block = config.binaries['overlay/overlay_0000.bin'].blocks['MainMenuSongId']
-        skyj_block = config.binaries['overlay/overlay_0009.bin'].blocks['MainMenuReturnSongId']
+        main_block = config.binaries['overlay/overlay_0000.bin'].symbols['TOP_MENU_MUSIC_ID']
+        skyj_block = config.binaries['overlay/overlay_0009.bin'].symbols['TOP_MENU_RETURN_MUSIC_ID']
         write_uintle(ov00, value, main_block.begin, 1)
         if ov09:
             write_uintle(ov09, value, skyj_block.begin, 1)

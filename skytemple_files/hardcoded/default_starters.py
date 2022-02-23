@@ -73,7 +73,7 @@ class HardcodedDefaultStarters:
         """
         Gets the monster.md index of the default partner starter
         """
-        block = config.binaries['arm9.bin'].blocks['DefaultPartnerId']
+        block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
@@ -81,7 +81,7 @@ class HardcodedDefaultStarters:
         """
         Sets the monster.md index of the default partner starter
         """
-        block = config.binaries['arm9.bin'].blocks['DefaultPartnerId']
+        block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
         write_uintle(arm9, value, block.begin, 2)
 
     @staticmethod
@@ -89,7 +89,7 @@ class HardcodedDefaultStarters:
         """
         Gets the monster.md index of the default player starter
         """
-        block = config.binaries['arm9.bin'].blocks['DefaultHeroId']
+        block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
@@ -97,7 +97,7 @@ class HardcodedDefaultStarters:
         """
         Sets the monster.md index of the default player starter
         """
-        block = config.binaries['arm9.bin'].blocks['DefaultHeroId']
+        block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
         write_uintle(arm9, value, block.begin, 2)
 
     @staticmethod
@@ -105,7 +105,7 @@ class HardcodedDefaultStarters:
         """
         Gets the level of the partner starter
         """
-        block = config.binaries['arm9.bin'].blocks['PartnerStartLevel']
+        block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
@@ -113,7 +113,7 @@ class HardcodedDefaultStarters:
         """
         Sets the level of the partner starter
         """
-        block = config.binaries['arm9.bin'].blocks['PartnerStartLevel']
+        block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
         write_uintle(arm9, value, block.begin, 1)
 
     @staticmethod
@@ -121,7 +121,7 @@ class HardcodedDefaultStarters:
         """
         Gets the level of the player starter
         """
-        block = config.binaries['arm9.bin'].blocks['HeroStartLevel']
+        block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
@@ -129,7 +129,7 @@ class HardcodedDefaultStarters:
         """
         Sets the level of the player starter
         """
-        block = config.binaries['arm9.bin'].blocks['HeroStartLevel']
+        block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
         write_uintle(arm9, value, block.begin, 1)
 
     @staticmethod
@@ -137,7 +137,7 @@ class HardcodedDefaultStarters:
         """
         Gets the special episode player characters
         """
-        block = config.binaries['arm9.bin'].blocks['SpecialEpisodePCs']
+        block = config.binaries['arm9.bin'].symbols['SPECIAL_EPISODE_MAIN_CHARACTERS']
         lst = []
         for i in range(block.begin, block.end, SE_PC_LNTRY_LEN):
             lst.append(SpecialEpisodePc(
@@ -159,7 +159,7 @@ class HardcodedDefaultStarters:
         """
         Sets the special episode player characters
         """
-        block = config.binaries['arm9.bin'].blocks['SpecialEpisodePCs']
+        block = config.binaries['arm9.bin'].symbols['SPECIAL_EPISODE_MAIN_CHARACTERS']
         expected_length = int((block.end - block.begin) / SE_PC_LNTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

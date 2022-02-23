@@ -146,12 +146,13 @@ class Swdl(SwdlProtocol[SwdlHeader, SwdlWavi, SwdlPcmd, SwdlPrgi, SwdlKgrp]):
             self._dbg_pcmd_after_wavi = True
             start_prgi += self.pcmd.get_initial_length()
 
-            # Add pcmd samples to wavi
-            for sample in self.wavi.sample_info_table:
-                if sample:
-                    offs, length = sample.get_initial_sample_pos(), sample.sample_length
+        # Add pcmd samples to wavi
+        for sample in self.wavi.sample_info_table:
+            if sample:
+                offs, length = sample.get_initial_sample_pos(), sample.sample_length
+                if self.pcmd is not None:
                     assert offs+length <= len(self.pcmd.chunk_data), "Invalid Swdl sample data"
-                    sample.sample = SwdlPcmdReference(self.pcmd, offs, length)
+                sample.sample = SwdlPcmdReference(self.pcmd, offs, length)
 
     def __str__(self):
         return f"""SWDL <<{self.header}>>:

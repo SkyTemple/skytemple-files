@@ -24,13 +24,18 @@ from skytemple_files.common.util import *
 
 
 class SwdlPcmdReference(SwdlPcmdReferenceProtocol[SwdlPcmd]):
-    def __init__(self, pcmd: SwdlPcmd, offset: int, length: int):
+    def __init__(self, pcmd: Optional[SwdlPcmd], offset: int, length: int):
         self.pcmd = pcmd
         self.offset = offset
         self.length = length
 
+    def to_bytes_for_pcmd(self, pcmd: SwdlPcmd):
+        return bytes(pcmd.chunk_data[self.offset:self.offset + self.length])
+
     def __bytes__(self):
-        return bytes(self.pcmd.chunk_data[self.offset:self.offset + self.length])
+        if self.pcmd:
+            return self.to_bytes_for_pcmd(self.pcmd)
+        raise ValueError("No pcmd defined. Use to_bytes_for_pcmd instead.")
 
 
 LEN_SAMPLE_INFO_ENTRY = 0x40

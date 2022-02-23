@@ -31,7 +31,7 @@ from skytemple_files.graphics.dpci._model import Dpci
 from skytemple_files.graphics.dpci import DPCI_TILE_DIM
 
 
-class Dma(DmaProtocol[Dpc, Dpci]):
+class Dma(DmaProtocol):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)

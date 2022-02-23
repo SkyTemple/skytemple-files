@@ -47,7 +47,7 @@ class DpcProtocol(Protocol[CI]):
         ...
 
     @abstractmethod
-    def single_chunk_to_pil(self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]):
+    def single_chunk_to_pil(self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]) -> Image.Image:
         """
         Convert a single chunk of the DPC into a PIL image. For general notes, see chunks_to_pil.
         """

@@ -18,8 +18,6 @@ from abc import abstractmethod
 from typing import Protocol
 from PIL import Image
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dpc.protocol import DpcProtocol
-from skytemple_files.graphics.dpci.protocol import DpciProtocol
 
 _DmaType = int
 _DmaExtraType = int
@@ -48,11 +46,7 @@ class DmaNeighbor:
     SOUTH_WEST = 0x80
 
 
-C = TypeVar('C', bound=DpcProtocol, contravariant=True)
-CI = TypeVar('CI', bound=DpciProtocol, contravariant=True)
-
-
-class DmaProtocol(Protocol[C, CI]):
+class DmaProtocol(Protocol):
     chunk_mappings: Sequence[int]
 
     @abstractmethod
@@ -88,19 +82,5 @@ class DmaProtocol(Protocol[C, CI]):
     def set_extra(self, extra_type: _DmaExtraType, index: int, value: int):
         """
         Sets and extra tile entry.
-        """
-        ...
-
-    @abstractmethod
-    def to_pil(
-            self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
-        """
-        For debugging only, the output image contains some labels, etc. Use get(...) instead to
-        get a chunk mapping and then render that chunk by extracting it from the image returned by
-        bpc.chunks_to_pil(...)
-
-        Converts the chunks of the DMA into an image. Works like bpc.chunks_to_pil,
-        but uses the chunk mappings stored in this file to place them instead.
         """
         ...

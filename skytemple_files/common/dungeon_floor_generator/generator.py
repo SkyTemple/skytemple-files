@@ -31,7 +31,7 @@ from dungeon_eos.DungeonAlgorithm import (
 from dungeon_eos.RandomGen import RandomGenerator
 
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
-from skytemple_files.graphics.dma._model import DmaType
+from skytemple_files.graphics.dma.protocol import DmaType
 
 
 class RandomGenProperties:
@@ -82,7 +82,7 @@ class RoomType(Enum):
 class Tile:
     def __init__(
         self,
-        terrain: DmaType,
+        terrain: int,
         room_index: int,
         typ=TileType.GENERIC,
         room=RoomType.NORMAL,

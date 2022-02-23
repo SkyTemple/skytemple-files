@@ -17,28 +17,43 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.compression_container.common_at.handler import (
-    COMMON_AT_MUST_COMPRESS_4,
-)
-from skytemple_files.graphics.bgp.model import Bgp
-from skytemple_files.graphics.bgp.writer import BgpWriter
+from skytemple_files.graphics.bgp.protocol import BgpProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.bgp._model import Bgp as PyBgp
+    from skytemple_rust.st_bgp import Bgp as NativeBgp
 
 
-class BgpHandler(DataHandler[Bgp]):
+class BgpHandler(HybridDataHandler[BgpProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Bgp:
-        from skytemple_files.common.types.file_types import FileType
-
-        return Bgp(FileType.COMMON_AT.deserialize(data).decompress())
+    def load_python_model(cls) -> Type[BgpProtocol]:
+        from skytemple_files.graphics.bgp._model import Bgp
+        return Bgp
 
     @classmethod
-    def serialize(cls, data: Bgp, **kwargs: OptionalKwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
+    def load_native_model(cls) -> Type[BgpProtocol]:
+        from skytemple_rust.st_bgp import Bgp
+        # Tilemap protocol issue:
+        return Bgp  # type: ignore
 
-        return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(
-                BgpWriter(data).write(), COMMON_AT_MUST_COMPRESS_4
-            )
-        )
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyBgp']]:  # type: ignore
+        from skytemple_files.graphics.bgp._writer import BgpWriter
+        return BgpWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeBgp']]:  # type: ignore
+        from skytemple_rust.st_bgp import BgpWriter
+        return BgpWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BgpProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: BgpProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

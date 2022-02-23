@@ -17,3 +17,7 @@
 
 
 from __future__ import annotations
+
+DBG_TILING_DIM = 3
+DBG_CHUNK_WIDTH = 24
+DBG_WIDTH_AND_HEIGHT = 32

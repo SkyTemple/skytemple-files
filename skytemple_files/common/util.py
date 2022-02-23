@@ -77,7 +77,7 @@ if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 # Useful type consts
-OptionalKwargs = Optional[Dict[str, Any]]
+OptionalKwargs = Optional[Any]
 ByteReadable = Union[bytes, Sequence[int]]
 
 # Useful files:

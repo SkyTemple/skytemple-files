@@ -33,7 +33,7 @@ from range_typed_integers import u8
 from skytemple_files.common.util import generate_bitfield
 
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorLayoutProtocol
-from skytemple_files.graphics.dma.model import DmaType
+from skytemple_files.graphics.dma._model import DmaType
 
 
 class RandomGenProperties:

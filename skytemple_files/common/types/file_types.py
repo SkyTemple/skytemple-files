@@ -21,75 +21,67 @@ from skytemple_files.compression.bma_collision_rle.handler import BmaCollisionRl
 from skytemple_files.compression.bma_layer_nrl.handler import BmaLayerNrlHandler
 from skytemple_files.compression.bpc_image.handler import BpcImageHandler
 from skytemple_files.compression.bpc_tilemap.handler import BpcTilemapHandler
-from skytemple_files.compression.custom_999.handler import Custom999Handler
 from skytemple_files.compression.generic_nrl.handler import GenericNrlHandler
-from skytemple_files.compression.px.handler import PxHandler
-from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
-from skytemple_files.compression_container.at3px.handler import At3pxHandler
-from skytemple_files.compression_container.at4pn.handler import At4pnHandler
-from skytemple_files.compression_container.at4px.handler import At4pxHandler
-from skytemple_files.compression_container.atupx.handler import AtupxHandler
-from skytemple_files.compression_container.common_at.handler import CommonAtHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.container.dungeon_bin.sub.at4px_dpc import DbinAt4pxDpcHandler
 from skytemple_files.container.dungeon_bin.sub.at4px_dpci import DbinAt4pxDpciHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import (
-    DbinSir0At4pxDmaHandler,
-)
-from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DplaHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import (
-    DbinSir0Image1033Handler,
-)
+from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import DbinSir0At4pxDmaHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx import DbinSir0PkdpxHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import (
-    DbinSir0PkdpxDbgHandler,
-)
-from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import (
-    DbinSir0WeirdDataFileHandler,
-)
+from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
+from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import DbinSir0PkdpxDbgHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
-from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.item_s_p.handler import ItemSPHandler
 from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler
 from skytemple_files.data.md.handler import MdHandler
+from skytemple_files.data.str.handler import StrHandler
+from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.sprconf.handler import SprconfHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
-from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
-from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
 from skytemple_files.graphics.bma.handler import BmaHandler
 from skytemple_files.graphics.bpa.handler import BpaHandler
 from skytemple_files.graphics.bpc.handler import BpcHandler
 from skytemple_files.graphics.bpl.handler import BplHandler
-from skytemple_files.graphics.chr.handler import ChrHandler
-from skytemple_files.graphics.colvec.handler import ColvecHandler
 from skytemple_files.graphics.dbg.handler import DbgHandler
 from skytemple_files.graphics.dma.handler import DmaHandler
 from skytemple_files.graphics.dpc.handler import DpcHandler
 from skytemple_files.graphics.dpci.handler import DpciHandler
 from skytemple_files.graphics.dpl.handler import DplHandler
 from skytemple_files.graphics.dpla.handler import DplaHandler
-from skytemple_files.graphics.fonts.banner_font.handler import BannerFontHandler
-from skytemple_files.graphics.fonts.font_dat.handler import FontDatHandler
-from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
-from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.graphics.img_itm.handler import ImgItmHandler
 from skytemple_files.graphics.img_trp.handler import ImgTrpHandler
 from skytemple_files.graphics.kao.handler import KaoHandler
-from skytemple_files.graphics.pal.handler import PalHandler
+from skytemple_files.compression_container.common_at.handler import CommonAtHandler
+from skytemple_files.compression_container.at3px.handler import At3pxHandler
+from skytemple_files.compression_container.at4px.handler import At4pxHandler
+from skytemple_files.compression_container.atupx.handler import AtupxHandler
+from skytemple_files.compression_container.at4pn.handler import At4pnHandler
+from skytemple_files.compression.px.handler import PxHandler
+from skytemple_files.compression.custom_999.handler import Custom999Handler
+from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
+from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.graphics.wte.handler import WteHandler
 from skytemple_files.graphics.wtu.handler import WtuHandler
+from skytemple_files.graphics.chr.handler import ChrHandler
+from skytemple_files.graphics.colvec.handler import ColvecHandler
 from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
+from skytemple_files.graphics.fonts.font_dat.handler import FontDatHandler
+from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
+from skytemple_files.graphics.fonts.banner_font.handler import BannerFontHandler
+from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
+from skytemple_files.graphics.pal.handler import PalHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.list.level.handler import LevelListBinHandler
 from skytemple_files.list.object.handler import ObjectListBinHandler
@@ -179,7 +171,7 @@ class FileType:
     FIXED_BIN = FixedBinHandler
 
     # dungeon.bin sub file handlers
-    DBIN_SIR0_DPLA = DbinSir0DplaHandler
+    DBIN_SIR0_DPLA = DplaHandler
     DBIN_SIR0_AT4PX_DMA = DbinSir0At4pxDmaHandler
     DBIN_AT4PX_DPC = DbinAt4pxDpcHandler
     DBIN_AT4PX_DPCI = DbinAt4pxDpciHandler

@@ -17,3 +17,5 @@
 
 
 from __future__ import annotations
+
+DPLA_COLORS_PER_PALETTE = 16

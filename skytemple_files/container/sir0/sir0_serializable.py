@@ -21,6 +21,7 @@ from typing import List, Optional, Tuple, runtime_checkable, Protocol
 
 from range_typed_integers import u32
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 @runtime_checkable
 class Sir0Serializable(Protocol):
@@ -37,11 +38,7 @@ class Sir0Serializable(Protocol):
 
     @classmethod
     @abstractmethod
-    def sir0_unwrap(
-        cls,
-        content_data: bytes,
-        data_pointer: u32,
-    ) -> "Sir0Serializable":
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32, static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
         """
         Builds the model from the unwrapped Sir0.
         """

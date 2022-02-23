@@ -17,16 +17,44 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dpc.model import Dpc
+from skytemple_files.graphics.dpc.protocol import DpcProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.dpc._model import Dpc as PyDpc
+    from skytemple_rust.st_dpc import Dpc as NativeDpc
 
 
-class DpcHandler(DataHandler[Dpc]):
+class DpcHandler(HybridDataHandler[DpcProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpc:
-        return Dpc(data)
+    def load_python_model(cls) -> Type[DpcProtocol]:
+        from skytemple_files.graphics.dpc._model import Dpc
+        return Dpc
 
     @classmethod
-    def serialize(cls, data: Dpc, **kwargs: OptionalKwargs) -> bytes:
-        return data.to_bytes()
+    def load_native_model(cls) -> Type[DpcProtocol]:
+        from skytemple_rust.st_dpc import Dpc
+        # Tilemap protocol issue:
+        return Dpc  # type: ignore
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyDpc']]:  # type: ignore
+        from skytemple_files.graphics.dpc._writer import DpcWriter
+        return DpcWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeDpc']]:  # type: ignore
+        from skytemple_rust.st_dpc import DpcWriter
+        return DpcWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DpcProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: DpcProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

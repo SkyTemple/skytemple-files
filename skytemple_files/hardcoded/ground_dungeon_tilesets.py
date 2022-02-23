@@ -30,11 +30,11 @@ from skytemple_files.common.util import AutoString, read_u8, read_i16, read_u32
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
-from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma._model import Dma
+from skytemple_files.graphics.dpc._model import Dpc
+from skytemple_files.graphics.dpci._model import Dpci
+from skytemple_files.graphics.dpl._model import Dpl
+from skytemple_files.graphics.dpla._model import Dpla
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 

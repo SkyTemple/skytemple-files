@@ -19,7 +19,8 @@ from typing import List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common import string_codec
-from skytemple_files.common.ppmdu_config.data import Pmd2Binary, Pmd2LooseBinFile
+from skytemple_files.common.ppmdu_config.data import Pmd2LooseBinFile
+from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import create_file_in_rom, get_binary_from_rom_ppmdu, read_var_length_string, \
     read_uintle, write_uintle
@@ -32,9 +33,9 @@ class ListExtractor:
         self._out_path = spec.filepath
         self._key = spec.srcdata
         self._binary = binary
-        if self._key not in self._binary.blocks:
+        if self._key not in self._binary.symbols:
             raise ValueError("The source data block for the patch was not found in the configuration.")
-        self._block = binary.blocks[self._key]
+        self._block = binary.symbols[self._key]
 
     def extract(self, entry_len: int, string_offs_per_entry: List[int], write_subheader=True):
         """Performs the extraction. Raises a RuntimeError on error."""

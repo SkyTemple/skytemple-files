@@ -48,7 +48,7 @@ class HardcodedMonsterSpriteDataTable:
     @classmethod
     def get(cls, arm9bin: bytes, config: Pmd2Data) -> List[MonsterSpriteDataTableEntry]:
         """Returns the list."""
-        block = config.binaries['arm9.bin'].blocks['MonsterSpriteData']
+        block = config.binaries['arm9.bin'].symbols['MonsterSpriteData']
         lst = []
         for i in range(block.begin, block.end, ENTRY_LEN):
             lst.append(MonsterSpriteDataTableEntry(
@@ -63,7 +63,7 @@ class HardcodedMonsterSpriteDataTable:
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
         """
-        block = config.binaries['arm9.bin'].blocks['MonsterSpriteData']
+        block = config.binaries['arm9.bin'].symbols['MonsterSpriteData']
         expected_length = int((block.end - block.begin) / ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -93,7 +93,7 @@ class HardcodedMonsterGroundIdleAnimTable:
     @classmethod
     def get(cls, ov11bin: bytes, config: Pmd2Data) -> List[IdleAnimType]:
         """Returns the list."""
-        block = config.binaries['overlay/overlay_0011.bin'].blocks['MonsterGroundIdleAnim']
+        block = config.binaries['overlay/overlay_0011.bin'].symbols['MonsterGroundIdleAnim']
         lst_i = list(ov11bin[block.begin:block.end])
         lst = [IdleAnimType(x) for x in lst_i]  # type: ignore
         return lst
@@ -104,7 +104,7 @@ class HardcodedMonsterGroundIdleAnimTable:
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
         """
-        block = config.binaries['overlay/overlay_0011.bin'].blocks['MonsterGroundIdleAnim']
+        block = config.binaries['overlay/overlay_0011.bin'].symbols['MonsterGroundIdleAnim']
         expected_length = block.end - block.begin
         if len(values) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

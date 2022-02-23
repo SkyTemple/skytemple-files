@@ -44,7 +44,7 @@ def main():
     rom_path = sys.argv[1]
     rom = NintendoDSRom.fromFile(rom_path)
     config = get_ppmdu_config_for_rom(rom)
-    block_compressed = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
+    block_compressed = config.binaries['arm9.bin'].symbols['CompressedIqGroupsSkills']
     arm9 = rom.arm9
 
     groups = IqGroupsSkills.read_uncompressed(arm9, config)

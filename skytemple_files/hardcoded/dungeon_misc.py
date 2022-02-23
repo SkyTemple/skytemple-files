@@ -23,70 +23,70 @@ from skytemple_files.common.util import read_uintle, write_uintle
 class HardcodedDungeonMisc:
     @staticmethod
     def get_burn_damage_delay(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['BurnDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['BurnDamageDelay']
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
     def set_burn_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['BurnDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['BurnDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
     @staticmethod
     def get_poison_damage_delay(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['PoisonDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['PoisonDamageDelay']
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
     def set_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['PoisonDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['PoisonDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
     @staticmethod
     def get_bad_poison_damage_delay(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['BadPoisonDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['BadPoisonDamageDelay']
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
     def set_bad_poison_damage_delay(value: int, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['BadPoisonDamageDelay']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['BadPoisonDamageDelay']
         write_uintle(ov10, value, block.begin, 2)
 
     @staticmethod
     def get_ginseng_increase_by_3_chance(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['GinsengChance3']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['GinsengChance3']
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
     def set_ginseng_increase_by_3_chance(value: int, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['GinsengChance3']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['GinsengChance3']
         write_uintle(ov10, value, block.begin, 2)
 
     @staticmethod
     def get_belly_loss_turn(ov29: bytes, config: Pmd2Data) -> float:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostTurn']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostTurn']
         return read_uintle(ov29, block.begin, 4) / 0x10000
 
     @staticmethod
     def set_belly_loss_turn(value: float, ov29: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostTurn']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostTurn']
         write_uintle(ov29, ceil(value * 0x10000), block.begin, 4)
 
     @staticmethod
     def get_belly_loss_walk_through_walls(ov29: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostWtw']
         return read_uintle(ov29, block.begin, 2)
 
     @staticmethod
     def set_belly_loss_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostWtw']
         write_uintle(ov29, value, block.begin, 2)
 
     @staticmethod
     def get_belly_loss_1000ile_walk_through_walls(ov29: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw1000']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostWtw1000']
         return read_uintle(ov29, block.begin, 2)
 
     @staticmethod
     def set_belly_loss_1000ile_walk_through_walls(value: int, ov29: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['BellyLostWtw1000']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['BellyLostWtw1000']
         write_uintle(ov29, value, block.begin, 2)

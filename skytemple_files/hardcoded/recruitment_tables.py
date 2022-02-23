@@ -63,7 +63,7 @@ class HardcodedRecruitmentTables:
 
     @staticmethod
     def _get_generic(ov11: bytes, config: Pmd2Data, block_name: str, bytelen: int) -> List[int]:
-        block = config.binaries['overlay/overlay_0011.bin'].blocks[block_name]
+        block = config.binaries['overlay/overlay_0011.bin'].symbols[block_name]
         lst = []
         for i in range(block.begin, block.end, bytelen):
             lst.append(read_uintle(ov11, i, bytelen))
@@ -71,7 +71,7 @@ class HardcodedRecruitmentTables:
     
     @staticmethod
     def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]) -> None:
-        block = config.binaries['overlay/overlay_0011.bin'].blocks[block_name]
+        block = config.binaries['overlay/overlay_0011.bin'].symbols[block_name]
         expected_length = int((block.end - block.begin) / bytelen)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

@@ -14,18 +14,3 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle
-
-
-class HardcodedTextSpeed:
-    @staticmethod
-    def get_text_speed(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].symbols['TextSpeedConstant']
-        return read_uintle(arm9, block.begin)
-
-    @staticmethod
-    def set_text_speed(value: int, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].symbols['TextSpeedConstant']
-        write_uintle(arm9, value, block.begin)

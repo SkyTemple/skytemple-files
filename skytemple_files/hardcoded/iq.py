@@ -47,38 +47,38 @@ class IqSkill:
 class HardcodedIq:
     @staticmethod
     def get_min_iq_for_exclusive_move_user(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['MinIQExclusiveMoveUser']
+        block = config.binaries['arm9.bin'].symbols['MinIqExclusiveMoveUser']
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
     def set_min_iq_for_exclusive_move_user(value: int, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['MinIQExclusiveMoveUser']
+        block = config.binaries['arm9.bin'].symbols['MinIqExclusiveMoveUser']
         write_uintle(arm9, value, block.begin, 2)
 
     @staticmethod
     def get_min_iq_for_item_master(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['MinIQItemMaster']
+        block = config.binaries['arm9.bin'].symbols['MinIqItemMaster']
         return read_uintle(arm9, block.begin, 2)
 
     @staticmethod
     def set_min_iq_for_item_master(value: int, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['MinIQItemMaster']
+        block = config.binaries['arm9.bin'].symbols['MinIqItemMaster']
         write_uintle(arm9, value, block.begin, 2)
 
     @staticmethod
     def get_intimidator_chance(ov10: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['IntimidatorChance']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['IntimidatorChance']
         return read_uintle(ov10, block.begin, 2)
 
     @staticmethod
     def set_intimidator_chance(value: int, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].blocks['IntimidatorChance']
+        block = config.binaries['overlay/overlay_0010.bin'].symbols['IntimidatorChance']
         write_uintle(ov10, value, block.begin, 2)
 
     @staticmethod
     def get_gummi_iq_gains(arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool) -> List[List[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
-        block = config.binaries['arm9.bin'].blocks['IqGummiGain']
+        block = config.binaries['arm9.bin'].symbols['IqGummiGain']
         lst = []
         for y in range(0, dim):
             row: List[int] = []
@@ -90,7 +90,7 @@ class HardcodedIq:
     @staticmethod
     def set_gummi_iq_gains(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool) -> None:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
-        block = config.binaries['arm9.bin'].blocks['IqGummiGain']
+        block = config.binaries['arm9.bin'].symbols['IqGummiGain']
         lst_flattened = list(chain.from_iterable(value))
         if len(lst_flattened) != dim * dim:
             raise ValueError("IQ gain table does not match ROM size")
@@ -100,7 +100,7 @@ class HardcodedIq:
     @staticmethod
     def get_gummi_belly_heal(arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool) -> List[List[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
-        block = config.binaries['arm9.bin'].blocks['GummiBellyHeal']
+        block = config.binaries['arm9.bin'].symbols['GummiBellyHeal']
         lst = []
         for y in range(0, dim):
             row: List[int] = []
@@ -112,7 +112,7 @@ class HardcodedIq:
     @staticmethod
     def set_gummi_belly_heal(value: List[List[int]], arm9: bytearray, config: Pmd2Data, add_types_patch_applied: bool) -> None:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
-        block = config.binaries['arm9.bin'].blocks['GummiBellyHeal']
+        block = config.binaries['arm9.bin'].symbols['GummiBellyHeal']
         lst_flattened = list(chain.from_iterable(value))
         if len(lst_flattened) != dim * dim:
             raise ValueError("IQ gain table does not match ROM size")
@@ -121,39 +121,39 @@ class HardcodedIq:
 
     @staticmethod
     def get_wonder_gummi_gain(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['WonderGummiIqGain']
+        block = config.binaries['arm9.bin'].symbols['WonderGummiIqGain']
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
     def set_wonder_gummi_gain(value: int, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['WonderGummiIqGain']
+        block = config.binaries['arm9.bin'].symbols['WonderGummiIqGain']
         write_uintle(arm9, value, block.begin, 1)
 
     @staticmethod
     def get_juice_bar_nectar_gain(arm9: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['arm9.bin'].blocks['JuiceBarNectarIqGain']
+        block = config.binaries['arm9.bin'].symbols['JuiceBarNectarIqGain']
         return read_uintle(arm9, block.begin, 1)
 
     @staticmethod
     def set_juice_bar_nectar_gain(value: int, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['JuiceBarNectarIqGain']
+        block = config.binaries['arm9.bin'].symbols['JuiceBarNectarIqGain']
         write_uintle(arm9, value, block.begin, 1)
 
     @staticmethod
     def get_nectar_gain(ov29: bytes, config: Pmd2Data) -> int:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['NectarIqGain']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['NectarIqGain']
         return read_uintle(ov29, block.begin, 1)
 
     @staticmethod
     def set_nectar_gain(value: int, ov29: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0029.bin'].blocks['NectarIqGain']
+        block = config.binaries['overlay/overlay_0029.bin'].symbols['NectarIqGain']
         write_uintle(ov29, value, block.begin, 1)
 
     @staticmethod
     def get_iq_skills(arm9bin: bytes, config: Pmd2Data) -> List[IqSkill]:
-        block = config.binaries['arm9.bin'].blocks['IqSkills']
-        block_restr = config.binaries['arm9.bin'].blocks['IqSkillRestrictions']
-        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1 + (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
+        block = config.binaries['arm9.bin'].symbols['IqSkills']
+        block_restr = config.binaries['arm9.bin'].symbols['IqSkillRestrictions']
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         lst = []
         for i in range(0, (block.end - block.begin) // IQ_SKILL_ENTRY_LEN):
             lst.append(IqSkill(
@@ -164,9 +164,9 @@ class HardcodedIq:
 
     @staticmethod
     def set_iq_skills(value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['IqSkills']
-        block_restr = config.binaries['arm9.bin'].blocks['IqSkillRestrictions']
-        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == 1+ (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
+        block = config.binaries['arm9.bin'].symbols['IqSkills']
+        block_restr = config.binaries['arm9.bin'].symbols['IqSkillRestrictions']
+        assert (block.end - block.begin) // IQ_SKILL_ENTRY_LEN == (block_restr.end - block_restr.begin) // IQ_SKILL_RESTR_ENTRY_LEN
         expected_length = int((block.end - block.begin) / IQ_SKILL_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
@@ -182,7 +182,7 @@ class HardcodedIq:
 class IqGroupsSkills:
     @staticmethod
     def read_uncompressed(arm9: bytes, config: Pmd2Data) -> List[List[int]]:
-        block = config.binaries['arm9.bin'].blocks['IqGroupsSkills']
+        block = config.binaries['arm9.bin'].symbols['IqGroupsSkills']
         ret = []
         for i in range(block.begin, block.end, IQ_GROUP_LIST_LEN):
             skill_list = []
@@ -196,7 +196,7 @@ class IqGroupsSkills:
 
     @staticmethod
     def read_compressed(arm9: bytes, config: Pmd2Data) -> List[List[int]]:
-        block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
+        block = config.binaries['arm9.bin'].symbols['CompressedIqGroupsSkills']
         ret = []
         for i in range(block.begin, block.end, IQ_GROUP_COMPRESSED_LIST_LEN):
             skill_list = []
@@ -210,7 +210,7 @@ class IqGroupsSkills:
 
     @staticmethod
     def write_compressed(arm9: bytearray, data: List[List[int]], config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].blocks['CompressedIqGroupsSkills']
+        block = config.binaries['arm9.bin'].symbols['CompressedIqGroupsSkills']
         expected_length = int((block.end - block.begin) / IQ_GROUP_COMPRESSED_LIST_LEN)
         if len(data) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")

@@ -61,11 +61,11 @@ from skytemple_files.data.md.model import Md
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
-from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma._model import Dma
+from skytemple_files.graphics.dpc._model import Dpc
+from skytemple_files.graphics.dpci._model import Dpci
+from skytemple_files.graphics.dpl._model import Dpl
+from skytemple_files.graphics.dpla._model import Dpla
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 from skytemple_files.hardcoded.ground_dungeon_tilesets import (
     HardcodedGroundDungeonTilesets,

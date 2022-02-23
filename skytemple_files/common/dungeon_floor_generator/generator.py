@@ -31,7 +31,7 @@ from dungeon_eos.DungeonAlgorithm import (
 from dungeon_eos.RandomGen import RandomGenerator
 
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
-from skytemple_files.graphics.dma.model import DmaType
+from skytemple_files.graphics.dma._model import DmaType
 
 
 class RandomGenProperties:

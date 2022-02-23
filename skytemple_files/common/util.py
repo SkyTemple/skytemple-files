@@ -75,7 +75,7 @@ if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 
 # Useful type consts
-OptionalKwargs = Optional[Dict[str, Any]]
+OptionalKwargs = Optional[Any]
 ByteReadable = Union[bytes, Sequence[int]]
 
 # Useful files:

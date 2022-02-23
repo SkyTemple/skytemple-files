@@ -17,16 +17,43 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dpci.model import Dpci
+from skytemple_files.graphics.dpci.protocol import DpciProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.dpci._model import Dpci as PyDpci
+    from skytemple_rust.st_dpci import Dpci as NativeDpci
 
 
-class DpciHandler(DataHandler[Dpci]):
+class DpciHandler(HybridDataHandler[DpciProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpci:
-        return Dpci(data)
+    def load_python_model(cls) -> Type[DpciProtocol]:
+        from skytemple_files.graphics.dpci._model import Dpci
+        return Dpci
 
     @classmethod
-    def serialize(cls, data: Dpci, **kwargs: OptionalKwargs) -> bytes:
-        return data.to_bytes()
+    def load_native_model(cls) -> Type[DpciProtocol]:
+        from skytemple_rust.st_dpci import Dpci
+        return Dpci
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyDpci']]:  # type: ignore
+        from skytemple_files.graphics.dpci._writer import DpciWriter
+        return DpciWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeDpci']]:  # type: ignore
+        from skytemple_rust.st_dpci import DpciWriter
+        return DpciWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DpciProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: DpciProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

@@ -17,16 +17,43 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dbg.model import Dbg
+from skytemple_files.graphics.dbg.protocol import DbgProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.graphics.dbg._model import Dbg as PyDbg
+    from skytemple_rust.st_dbg import Dbg as NativeDbg
 
 
-class DbgHandler(DataHandler[Dbg]):
+class DbgHandler(HybridDataHandler[DbgProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dbg:
-        return Dbg(data)
+    def load_python_model(cls) -> Type[DbgProtocol]:
+        from skytemple_files.graphics.dbg._model import Dbg
+        return Dbg
 
     @classmethod
-    def serialize(cls, data: Dbg, **kwargs: OptionalKwargs) -> bytes:
-        return data.to_bytes()
+    def load_native_model(cls) -> Type[DbgProtocol]:
+        from skytemple_rust.st_dbg import Dbg  # pylint: disable=no-name-in-module,no-member,import-error
+        return Dbg
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol['PyDbg']]:  # type: ignore
+        from skytemple_files.graphics.dbg._writer import DbgWriter
+        return DbgWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol['NativeDbg']]:  # type: ignore
+        from skytemple_rust.st_dbg import DbgWriter  # pylint: disable=no-name-in-module,no-member,import-error
+        return DbgWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DbgProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: DbgProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

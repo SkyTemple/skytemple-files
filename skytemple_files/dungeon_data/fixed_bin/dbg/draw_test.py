@@ -35,11 +35,11 @@ from skytemple_files.dungeon_data.fixed_bin.model import (
     TileRuleType,
 )
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
-from skytemple_files.graphics.dma.model import Dma, DmaType
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma._model import Dma, DmaType
+from skytemple_files.graphics.dpc._model import Dpc
+from skytemple_files.graphics.dpci._model import Dpci
+from skytemple_files.graphics.dpl._model import Dpl
+from skytemple_files.graphics.dpla._model import Dpla
 from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 
 output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")

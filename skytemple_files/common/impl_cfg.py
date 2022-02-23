@@ -51,4 +51,4 @@ def change_implementation_type(typ: ImplementationType) -> None:
 
 
 def get_implementation_type() -> ImplementationType:
-    return _impltype
+    return ImplementationType.PYTHON  # _impltype

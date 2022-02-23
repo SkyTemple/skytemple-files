@@ -38,7 +38,6 @@ class BgpProtocol(Protocol):
         If ignore_flip_bits is set, tiles are not flipped.
 
         The image returned will have the size 256x192.
-        For dimension calculating, see the constants of this module.
         """
         ...
 
@@ -49,7 +48,7 @@ class BgpProtocol(Protocol):
         Each image has one palette with 16 colors.
         If ignore_flip_bits is set, tiles are not flipped.
 
-        768 tiles are returned, for dimension calculating, see the constants of this module.
+        768 tiles are returned.
         """
         ...
 
@@ -65,6 +64,6 @@ class BgpProtocol(Protocol):
         the color is replaced with 0 of the palette (transparent). This is controlled by
         the force_import flag.
 
-        The image must have the size 256x192. For dimension calculating, see the constants of this module.
+        The image must have the size 256x192.
         """
         ...

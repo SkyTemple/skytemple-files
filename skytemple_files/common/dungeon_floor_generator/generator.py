@@ -33,7 +33,7 @@ from range_typed_integers import u8
 from skytemple_files.common.util import generate_bitfield
 
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorLayoutProtocol
-from skytemple_files.graphics.dma._model import DmaType
+from skytemple_files.graphics.dma.protocol import DmaType
 
 
 class RandomGenProperties:
@@ -84,7 +84,7 @@ class RoomType(Enum):
 class Tile:
     def __init__(
         self,
-        terrain: DmaType,
+        terrain: int,
         room_index: int,
         typ=TileType.GENERIC,
         room=RoomType.NORMAL,

@@ -157,12 +157,12 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"), self.two_layers.to_pil_single_layer(
                 self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ), rgb_diff=True
+            )
         )
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "1.png"), self.two_layers.to_pil_single_layer(
                 self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1
-            ), rgb_diff=True
+            )
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -190,12 +190,12 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"), self.single_layer.to_pil_single_layer(
                 self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 0
-            ), rgb_diff=True
+            )
         )
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "1.png"), self.single_layer.to_pil_single_layer(
                 self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 1
-            ), rgb_diff=True
+            )
         )
         reloaded = self._save_and_reload_main_fixture(self.single_layer)
         self.assertEqual(self.single_layer.layer0, reloaded.layer0)
@@ -222,7 +222,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"), self.two_layers.to_pil_single_layer(
                 self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ), rgb_diff=True
+            )
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -304,12 +304,12 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertImagesEqual(
             self._fix_path_expected("resize", "0.png"), self.two_layers.to_pil_single_layer(
                 self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ), rgb_diff=True
+            )
         )
         self.assertImagesEqual(
             self._fix_path_expected("resize", "1.png"), self.two_layers.to_pil_single_layer(
                 self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1
-            ), rgb_diff=True
+            )
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -336,11 +336,11 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         self.assertEqual(15, saved.layer1[index])
         img = self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0)
         self.assertImagesEqual(
-            self._fix_path_expected("place_chunk", "0.png"), img, rgb_diff=True
+            self._fix_path_expected("place_chunk", "0.png"), img
         )
         img = self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1)
         self.assertImagesEqual(
-            self._fix_path_expected("place_chunk", "1.png"), img, rgb_diff=True
+            self._fix_path_expected("place_chunk", "1.png"), img
         )
 
     def test_metadata(self) -> None:

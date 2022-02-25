@@ -318,11 +318,11 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
 
         self.two_layers1.pil_to_tiles(0, pil)
         self.two_layers1.pil_to_tiles(1, pil)
-        self.assertImagesEqual(pil, self.two_layers1.tiles_to_pil(0, palettes, 1))
-        self.assertImagesEqual(pil, self.two_layers1.tiles_to_pil(1, palettes, 1))
+        self.assertImagesEqual(pil, self.two_layers1.tiles_to_pil(0, palettes, 1, 0))
+        self.assertImagesEqual(pil, self.two_layers1.tiles_to_pil(1, palettes, 1, 0))
         saved = self._save_and_reload_main_fixture(self.two_layers1)
-        self.assertImagesEqual(pil, saved.tiles_to_pil(0, palettes, 1))
-        self.assertImagesEqual(pil, saved.tiles_to_pil(1, palettes, 1))
+        self.assertImagesEqual(pil, saved.tiles_to_pil(0, palettes, 1, 0))
+        self.assertImagesEqual(pil, saved.tiles_to_pil(1, palettes, 1, 0))
 
     def test_pil_to_chunks(self) -> None:
         pil = self._load_image(self._fix_path_pil_to_chunks())

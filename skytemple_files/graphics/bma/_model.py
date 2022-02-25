@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import copy
 import itertools
 import math
 from typing import Tuple, List, Sequence
@@ -565,6 +566,23 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         else:
             assert self.layer1 is not None
             self.layer1[bma_index] = chunk_index
+
+    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
+        """Set the collision at the X and Y position. No error checking is done."""
+        bma_index = y * self.map_width_camera + x
+        if collision_layer_id == 0:
+            self.collision[bma_index] = is_solid
+        else:
+            assert self.layer1 is not None
+            self.collision2[bma_index] = is_solid
+
+    def place_data(self, x: int, y: int, data: int) -> None:
+        """Set data at the X and Y position. No error checking is done."""
+        bma_index = y * self.map_width_camera + x
+        self.unknown_data_block[bma_index] = data
+
+    def deepcopy(self) -> BmaProtocol:
+        return copy.deepcopy(self)
 
     @staticmethod
     def _if_not_none_resize(target, old_w, empty_elem, new_w, new_h):

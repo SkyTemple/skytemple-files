@@ -343,6 +343,26 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
             self._fix_path_expected("place_chunk", "1.png"), img
         )
 
+    def test_place_collision(self) -> None:
+        x = 12
+        y = 3
+        index = y * 48 + x
+        self.assertEqual(False, self.two_layers_two_col.collision[index])
+        assert self.two_layers.layer1 is not None
+        self.assertEqual(False, self.two_layers_two_col.collision2[index])
+        self.two_layers_two_col.place_collision(0, x, y, True)
+        self.assertEqual(True, self.two_layers_two_col.collision[index])
+        self.two_layers_two_col.place_collision(1, x, y, True)
+        self.assertEqual(True, self.two_layers_two_col.collision2[index])
+
+    def tet_place_data(self) -> None:
+        x = 12
+        y = 3
+        index = y * 48 + x
+        self.assertEqual(0, self.two_layers_two_col_data.unknown_data_block[index])
+        self.two_layers_two_col_data.place_data(x, y, 123)
+        self.assertEqual(123, self.two_layers_two_col_data.unknown_data_block[index])
+
     def test_metadata(self) -> None:
         layer0 = [1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 1, 1, 1, 1, 1, 1, 1, 10, 11, 12, 13, 14, 15, 16, 17, 1, 1, 1, 1, 1, 1, 1, 1, 18, 19, 20, 21, 22, 23, 24, 25, 1, 1, 1, 1, 1, 1, 1, 1, 26, 27, 28, 29, 30, 31, 32, 33, 1, 1, 1, 1, 1, 1, 1, 1, 34, 35, 36, 37, 38, 39, 40, 41, 1, 1, 1, 1, 1, 1, 1, 1, 42, 43, 44, 45, 46, 47, 48, 49, 1, 1, 1, 1, 1, 1, 1, 1, 50, 51, 52, 53, 54, 55, 56, 57, 1, 1, 1, 1, 1, 1, 1, 1, 58, 59, 60, 61, 62, 63, 64, 65, 1, 1, 1, 1, 1, 1, 1, 1, 66, 67, 68, 69, 70, 71, 72, 73, 1, 1, 1, 1, 1, 1, 1, 1, 74, 75, 76, 77, 78, 79, 80, 81, 1, 1, 1, 1, 1, 1, 1, 1, 82, 83, 84, 85, 86, 87, 88, 89]
         layer1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 10, 11, 12, 13, 14, 15, 16, 17, 9, 9, 9, 9, 9, 9, 9, 9, 18, 19, 20, 21, 22, 23, 24, 25, 9, 9, 9, 9, 9, 9, 9, 9, 26, 27, 28, 29, 30, 31, 32, 33, 9, 9, 9, 9, 9, 9, 9, 9, 34, 35, 36, 37, 38, 39, 40, 41, 9, 9, 9, 9, 9, 9, 9, 9, 42, 43, 44, 45, 46, 47, 48, 49, 9, 9, 9, 9, 9, 9, 9, 9, 50, 51, 52, 53, 54, 55, 56, 57, 9, 9, 9, 9, 9, 9, 9, 9, 58, 59, 60, 61, 62, 63, 64, 65, 9, 9, 9, 9, 9, 9, 9, 9, 66, 67, 68, 69, 70, 71, 72, 73, 9, 9, 9, 9, 9, 9, 9, 9, 74, 75, 76, 77, 78, 79, 80, 81, 9, 9, 9, 9, 9, 9, 9, 9, 82, 83, 84, 85, 86, 87, 88, 89, 9, 9, 9, 9, 9, 9, 9, 9]

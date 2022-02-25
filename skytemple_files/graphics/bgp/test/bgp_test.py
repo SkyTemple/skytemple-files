@@ -25,4 +25,46 @@ class BgpTestCase(SkyTempleFilesTestCase[BgpHandler, BgpProtocol]):
     handler = BgpHandler
 
     def setUp(self) -> None:
-        pass
+        self.bgp1 = self._load_main_fixture(self._fix_path("1.bgp"))
+        self.bgp2 = self._load_main_fixture(self._fix_path("2.bgp"))
+
+    def test_get(self):
+        self.assertImagesEqual(
+            self._fix_path("1.png"),
+            self.bgp1.to_pil()
+        )
+        self.assertImagesEqual(
+            self._fix_path("2.png"),
+            self.bgp2.to_pil()
+        )
+        self.assertImagesNotEqual(
+            self._fix_path("2.png"),
+            self.bgp1.to_pil()
+        )
+        self.assertImagesNotEqual(
+            self._fix_path("1.png"),
+            self.bgp2.to_pil()
+        )
+
+    def test_set(self):
+        self.bgp1.from_pil(self._load_image(self._fix_path("2.png")))
+        bgp = self._save_and_reload_main_fixture(self.bgp1)
+        self.assertImagesEqual(
+            self._fix_path("2.png"),
+            bgp.to_pil()
+        )
+
+    @romtest(file_ext='bgp', path='')
+    def test_using_rom(self, _, file):
+        bgp_before = self.handler.deserialize(file)
+        bgp_after = self._save_and_reload_main_fixture(bgp_before)
+        self.assertImagesEqual(
+            bgp_before.to_pil(),
+            bgp_after.to_pil()
+        )
+
+    @typing.no_type_check
+    @classmethod
+    @fixpath
+    def _fix_path(cls, file: str) -> str:
+        return 'fixtures', file

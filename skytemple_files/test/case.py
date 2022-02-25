@@ -81,21 +81,21 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
     def assertImagesEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False, msg: Optional[str] = None
+            msg: Optional[str] = None
     ) -> None:
-        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, msg, equal=True)
+        self._assertImageEqual(expected, input_img, palette_filter, msg, equal=True)
 
     def assertImagesNotEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False, msg: Optional[str] = None
+            msg: Optional[str] = None
     ) -> None:
-        self._assertImageEqual(expected, input_img, palette_filter, rgb_diff, msg, equal=False)
+        self._assertImageEqual(expected, input_img, palette_filter, msg, equal=False)
 
     def _assertImageEqual(
             self, expected: Union[str, Image.Image], input_img: Image.Image,
             palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
-            rgb_diff: bool = False, msg: Optional[str] = None, *, equal: bool
+            msg: Optional[str] = None, *, equal: bool
     ) -> None:
         if msg is None:
             msg = ""
@@ -106,22 +106,21 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
             assert expected.mode == 'P'
             self.assertEqual('P', input_img.mode)
             expected.putpalette(palette_filter(expected.getpalette(), input_img.getpalette()))  # type: ignore
-        if rgb_diff:
-            try:
-                if equal:
-                    self.assertTrue(are_images_equal(expected, input_img), f"Images must be identical. {msg}")
-                else:
-                    self.assertFalse(are_images_equal(expected, input_img), f"Images must not be identical. {msg}")
-            except AssertionError as e:
-                tempfile, tempfile_path = mkstemp(suffix=".png")
-                comparision_image = Image.new('RGB', (expected.width + 5 + input_img.width, max(expected.height, input_img.height) + 20), (255, 255, 255))
-                draw = ImageDraw.Draw(comparision_image)
-                draw.text((2, 1), "Expected", (0, 0, 0))
-                draw.text((expected.width + 7, 1), "Actual", (0, 0, 0))
-                comparision_image.paste(expected, (0, 15))
-                comparision_image.paste(input_img, (expected.width + 5, 15))
-                comparision_image.save(os.fdopen(tempfile, mode='wb'), format="PNG")
-                raise AssertionError(f"Assertion failed: Comparison image output to {tempfile_path}") from e
+        try:
+            if equal:
+                self.assertTrue(are_images_equal(expected, input_img), f"Images must be identical. {msg}")
+            else:
+                self.assertFalse(are_images_equal(expected, input_img), f"Images must not be identical. {msg}")
+        except AssertionError as e:
+            tempfile, tempfile_path = mkstemp(suffix=".png")
+            comparision_image = Image.new('RGB', (expected.width + 5 + input_img.width, max(expected.height, input_img.height) + 20), (255, 255, 255))
+            draw = ImageDraw.Draw(comparision_image)
+            draw.text((2, 1), "Expected", (0, 0, 0))
+            draw.text((expected.width + 7, 1), "Actual", (0, 0, 0))
+            comparision_image.paste(expected, (0, 15))
+            comparision_image.paste(input_img, (expected.width + 5, 15))
+            comparision_image.save(os.fdopen(tempfile, mode='wb'), format="PNG")
+            raise AssertionError(f"Assertion failed: Comparison image output to {tempfile_path}") from e
 
 
 def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:

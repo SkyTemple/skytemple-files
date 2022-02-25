@@ -66,7 +66,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         for layer in range(0, layers):
             img = model.to_pil_single_layer(bpc_mock, self._bpl_mock.palettes, self._bpas, layer)
             self.assertImagesEqual(
-                self._fix_path_expected("to_pil_single_layer", f"{typ}/{layer}.png"), img, rgb_diff=True
+                self._fix_path_expected("to_pil_single_layer", f"{typ}/{layer}.png"), img
             )
 
     def test_to_pil(self) -> None:
@@ -130,7 +130,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
                             include_collision, include_unknown_data_block, pal_ani, single_frame)
         for i, img in enumerate(imgs):
             self.assertImagesEqual(
-                self._fix_path_expected(test_typ, f"{typ}/{i}.png"), img, rgb_diff=True
+                self._fix_path_expected(test_typ, f"{typ}/{i}.png"), img
             )
 
     def test_from_pil(self) -> None:

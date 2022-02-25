@@ -347,8 +347,9 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         x = 12
         y = 3
         index = y * 48 + x
+        assert self.two_layers_two_col.collision is not None
         self.assertEqual(False, self.two_layers_two_col.collision[index])
-        assert self.two_layers.layer1 is not None
+        assert self.two_layers_two_col.collision2 is not None
         self.assertEqual(False, self.two_layers_two_col.collision2[index])
         self.two_layers_two_col.place_collision(0, x, y, True)
         self.assertEqual(True, self.two_layers_two_col.collision[index])
@@ -359,6 +360,7 @@ class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMoc
         x = 12
         y = 3
         index = y * 48 + x
+        assert self.two_layers_two_col_data.unknown_data_block is not None
         self.assertEqual(0, self.two_layers_two_col_data.unknown_data_block[index])
         self.two_layers_two_col_data.place_data(x, y, 123)
         self.assertEqual(123, self.two_layers_two_col_data.unknown_data_block[index])

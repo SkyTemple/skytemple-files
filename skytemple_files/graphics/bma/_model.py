@@ -562,6 +562,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         """Place the chunk with the given ID at the X and Y position. No error checking is done."""
         bma_index = y * self.map_width_chunks + x
         if layer_id == 0:
+            assert self.layer0 is not None
             self.layer0[bma_index] = chunk_index
         else:
             assert self.layer1 is not None
@@ -571,14 +572,16 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         """Set the collision at the X and Y position. No error checking is done."""
         bma_index = y * self.map_width_camera + x
         if collision_layer_id == 0:
+            assert self.collision is not None
             self.collision[bma_index] = is_solid
         else:
-            assert self.layer1 is not None
+            assert self.collision2 is not None
             self.collision2[bma_index] = is_solid
 
     def place_data(self, x: int, y: int, data: int) -> None:
         """Set data at the X and Y position. No error checking is done."""
         bma_index = y * self.map_width_camera + x
+        assert self.unknown_data_block is not None
         self.unknown_data_block[bma_index] = data
 
     def deepcopy(self) -> BmaProtocol:

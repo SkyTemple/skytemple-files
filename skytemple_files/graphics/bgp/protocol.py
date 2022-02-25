@@ -42,17 +42,6 @@ class BgpProtocol(Protocol):
         ...
 
     @abstractmethod
-    def to_pil_tiled(self, ignore_flip_bits=False) -> List[Image.Image]:
-        """
-        Convert all tiles of the BGP into separate PIL images.
-        Each image has one palette with 16 colors.
-        If ignore_flip_bits is set, tiles are not flipped.
-
-        768 tiles are returned.
-        """
-        ...
-
-    @abstractmethod
     def from_pil(self, pil: Image.Image, force_import=False) -> None:
         """
         Modify the image data in the BGP by importing the passed PIL.

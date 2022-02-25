@@ -46,8 +46,8 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
                 kaoimg = self.kao.get(idx, sidx)
                 self.assertGreater(kaoimg.size(), 0)
                 # Kaos are not guaranteed to use the same exact palette after storing.
-                self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get(), rgb_diff=True)
-                self.assertImagesEqual(self._fix_path_png(idx, sidx, rgb=True), kaoimg.get(), rgb_diff=True)
+                self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get())
+                self.assertImagesEqual(self._fix_path_png(idx, sidx, rgb=True), kaoimg.get())
 
     def test_get_missing(self) -> None:
         self.assertIsNone(self.kao.get(552, 1))
@@ -59,7 +59,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
     def test_get_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
         for i in FIX_COMPLEX_IDS:
-            self.assertImagesEqual(self._fix_path_complex_png(i), self.kao.get(0, i).get(), rgb_diff=True)
+            self.assertImagesEqual(self._fix_path_complex_png(i), self.kao.get(0, i).get())
 
     def test_set_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
@@ -67,7 +67,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
             self.kao.set_from_img(0, i, self._load_image(self._fix_path_complex_png(i)))
         new_kao = self._save_and_reload_main_fixture(self.kao)
         for i in FIX_COMPLEX_IDS:
-            self.assertImagesEqual(self._fix_path_complex_png(i), new_kao.get(0, i).get(), rgb_diff=True)
+            self.assertImagesEqual(self._fix_path_complex_png(i), new_kao.get(0, i).get())
 
     def test_set_from_img(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
@@ -76,12 +76,12 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.kao.get(0, 6).set(img)
         self.kao.set(100, 8, self.kao.get(552, 8))
         new_kao = self._save_and_reload_main_fixture(self.kao)
-        self.assertImagesNotEqual(img, new_kao.get(0, 2).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(552, 8).get(), rgb_diff=True)
-        self.assertImagesNotEqual(img, new_kao.get(552, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(1153, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(0, 6).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(100, 8).get(), rgb_diff=True)
+        self.assertImagesNotEqual(img, new_kao.get(0, 2).get())
+        self.assertImagesEqual(img, new_kao.get(552, 8).get())
+        self.assertImagesNotEqual(img, new_kao.get(552, 4).get())
+        self.assertImagesEqual(img, new_kao.get(1153, 4).get())
+        self.assertImagesEqual(img, new_kao.get(0, 6).get())
+        self.assertImagesEqual(img, new_kao.get(100, 8).get())
         self.assertIsNone(new_kao.get(1153, 0))
 
     def test_set_reference_behaviour(self) -> None:
@@ -90,18 +90,18 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         # This must NOT copy the image
         self.kao.set(0, 2, img_zero)
         img_zero.set(img)
-        self.assertImagesEqual(img, self.kao.get(0, 0).get(), rgb_diff=True)
-        self.assertImagesEqual(img, self.kao.get(0, 2).get(), rgb_diff=True)
+        self.assertImagesEqual(img, self.kao.get(0, 0).get())
+        self.assertImagesEqual(img, self.kao.get(0, 2).get())
         new_kao = self._save_and_reload_main_fixture(self.kao)
-        self.assertImagesEqual(img, new_kao.get(0, 0).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(0, 2).get(), rgb_diff=True)
+        self.assertImagesEqual(img, new_kao.get(0, 0).get())
+        self.assertImagesEqual(img, new_kao.get(0, 2).get())
 
     def test_clone(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
         one = self.kao.get(0, 0)
         two = one.clone()
         two.set(img)
-        self.assertImagesNotEqual(one.get(), two.get(), rgb_diff=True)
+        self.assertImagesNotEqual(one.get(), two.get())
 
     def test_set_from_img_rgb(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1, rgb=True))
@@ -110,12 +110,12 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.kao.get(0, 6).set(img)
         self.kao.set(100, 8, self.kao.get(552, 8))
         new_kao = self._save_and_reload_main_fixture(self.kao)
-        self.assertImagesNotEqual(img, new_kao.get(0, 2).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(552, 8).get(), rgb_diff=True)
-        self.assertImagesNotEqual(img, new_kao.get(552, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(1153, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(0, 6).get(), rgb_diff=True)
-        self.assertImagesEqual(img, new_kao.get(100, 8).get(), rgb_diff=True)
+        self.assertImagesNotEqual(img, new_kao.get(0, 2).get())
+        self.assertImagesEqual(img, new_kao.get(552, 8).get())
+        self.assertImagesNotEqual(img, new_kao.get(552, 4).get())
+        self.assertImagesEqual(img, new_kao.get(1153, 4).get())
+        self.assertImagesEqual(img, new_kao.get(0, 6).get())
+        self.assertImagesEqual(img, new_kao.get(100, 8).get())
         self.assertIsNone(new_kao.get(1153, 0))
 
     def test_delete(self) -> None:
@@ -159,11 +159,11 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.kao.set(552, 8, kaoimg)
         self.kao.set(1153, 4, kaoimg)
         new_kao = self._save_and_reload_main_fixture(self.kao)
-        self.assertImagesEqual(kaoimg.get(), new_kao.get(0, 2).get(), rgb_diff=True)
-        self.assertImagesNotEqual(kaoimg.get(), new_kao.get(0, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(kaoimg.get(), new_kao.get(552, 8).get(), rgb_diff=True)
-        self.assertImagesNotEqual(kaoimg.get(), new_kao.get(552, 4).get(), rgb_diff=True)
-        self.assertImagesEqual(kaoimg.get(), new_kao.get(1153, 4).get(), rgb_diff=True)
+        self.assertImagesEqual(kaoimg.get(), new_kao.get(0, 2).get())
+        self.assertImagesNotEqual(kaoimg.get(), new_kao.get(0, 4).get())
+        self.assertImagesEqual(kaoimg.get(), new_kao.get(552, 8).get())
+        self.assertImagesNotEqual(kaoimg.get(), new_kao.get(552, 4).get())
+        self.assertImagesEqual(kaoimg.get(), new_kao.get(1153, 4).get())
         self.assertIsNone(new_kao.get(1153, 0))
 
     def test_iterate(self) -> None:
@@ -182,7 +182,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
                 previous_sidx += 1
             if idx in FIX_IN_TEST_MAP:
                 if sidx in FIX_IN_TEST_MAP[idx]:
-                    self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get(), rgb_diff=True)
+                    self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get())
                 else:
                     self.assertIsNone(kaoimg)
 
@@ -198,13 +198,13 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.assertIsNotNone(self.kao)
 
         # AT3PX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 0)), self.kao.get(0, 0).get(), rgb_diff=True)
+        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 0)), self.kao.get(0, 0).get())
         # AT4PX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 1)), self.kao.get(0, 1).get(), rgb_diff=True)
+        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 1)), self.kao.get(0, 1).get())
         # PKDPX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 2)), self.kao.get(0, 2).get(), rgb_diff=True)
+        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 2)), self.kao.get(0, 2).get())
         # ATUPX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get(), rgb_diff=True)
+        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get())
 
     def test_proper_toc_layout_writes(self) -> None:
         kao_data = self._save_and_reload_main_fixture_raw(self.kao)

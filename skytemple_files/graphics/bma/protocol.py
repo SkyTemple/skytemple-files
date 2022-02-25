@@ -161,3 +161,18 @@ class BmaProtocol(Protocol[P, C, L]):
     def place_chunk(self, layer_id: int, x: int, y: int, chunk_index: int) -> None:
         """Place the chunk with the given ID at the X and Y position. No error checking is done."""
         ...
+
+    @abstractmethod
+    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
+        """Set the collision at the X and Y position. No error checking is done."""
+        ...
+
+    @abstractmethod
+    def place_data(self, x: int, y: int, data: int) -> None:
+        """Set data at the X and Y position. No error checking is done."""
+        ...
+
+    @abstractmethod
+    def deepcopy(self) -> 'BmaProtocol':
+        """Perform a deep copy of self."""
+        ...

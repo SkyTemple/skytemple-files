@@ -284,13 +284,13 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
                     img
                 )
 
-        for i in range(0, 810):
+        for i in range(0, 90):
             for iimg, img in enumerate(self.two_layers1.single_chunk_animated_to_pil(0, i, SIMPLE_DUMMY_PALETTE, self._bpas)):
                 self.assertImagesEqual(
                     self._fix_path_expected(["single_chunk_animated_to_pil", "two_layers1", "0", str(i), f"{iimg}.png"]),
                     img
                 )
-        for i in range(0, 810):
+        for i in range(0, 90):
             for iimg, img in enumerate(self.two_layers1.single_chunk_animated_to_pil(1, i, SIMPLE_DUMMY_PALETTE, self._bpas)):
                 self.assertImagesEqual(
                     self._fix_path_expected(["single_chunk_animated_to_pil", "two_layers1", "1", str(i), f"{iimg}.png"]),

@@ -14,24 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import logging
-from typing import Dict, Optional
+from typing import Type
 
 from explorerscript.source_map import SourceMap
-from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbRoutineInfo, \
     SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam, SsbOpParamPositionMarker
+from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
+from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode, Pmd2ScriptData
 from skytemple_files.common.util import *
+from skytemple_files.script.ssb import SSB_LEN_ROUTINE_INFO_ENTRY, SSB_PADDING_BEFORE_ROUTINE_INFO
+from skytemple_files.script.ssb._header import AbstractSsbHeader, SsbHeaderEu, SsbHeaderUs, SsbHeaderJp
 from skytemple_files.script.ssb.constants import SsbConstant
-from skytemple_files.script.ssb.header import AbstractSsbHeader
+from skytemple_files.script.ssb.protocol import SsbProtocol, SourceMapV2Protocol
 
 logger = logging.getLogger(__name__)
-
-
-SSB_LEN_ROUTINE_INFO_ENTRY = 6
-SSB_PADDING_BEFORE_ROUTINE_INFO = 4
 
 
 class SkyTempleSsbOperation(SsbOperation):
@@ -39,30 +37,47 @@ class SkyTempleSsbOperation(SsbOperation):
         super().__init__(offset, op_code, params)
 
 
-class Ssb:
+class Ssb(SsbProtocol[Pmd2ScriptData, SsbRoutineInfo, SkyTempleSsbOperation]):
     @classmethod
-    def create_empty(cls, scriptdata: Pmd2ScriptData, supported_langs=None):
-        return cls(None, None, None, scriptdata, if_empty_supported_langs=supported_langs)
+    def create_empty(cls, scriptdata: Pmd2ScriptData, game_region: str) -> 'Ssb':
+        return cls(None, scriptdata, game_region)
 
     def __init__(
-            self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
-            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData, if_empty_supported_langs=None,
-            string_codec=string_codec.PMD2_STR_ENCODER
+            self, data: Optional[bytes], scriptdata: Pmd2ScriptData,
+            game_region: str, string_codec: str = string_codec.PMD2_STR_ENCODER
     ):
-
         self._scriptdata = scriptdata
         self._string_codec = string_codec
 
         if data is None:
             # Empty model mode, for the ScriptCompiler.
-            if if_empty_supported_langs is None:
-                if_empty_supported_langs = []
+            header_cls: Type[AbstractSsbHeader]
+            if game_region == GAME_REGION_EU:
+                header_cls = SsbHeaderEu
+            elif game_region == GAME_REGION_US:
+                header_cls = SsbHeaderUs
+            elif game_region == GAME_REGION_JP:
+                header_cls = SsbHeaderJp
+            else:
+                raise ValueError(f"Unsupported game region: {game_region}")
             self.original_binary_data = bytes()
             self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []
             self.routine_ops: List[List[SkyTempleSsbOperation]] = []
             self.constants: List[str] = []
-            self.strings: Dict[str, List[str]] = {lang_name: [] for lang_name in if_empty_supported_langs}
+            self.strings: Dict[str, List[str]] = {lang_name: [] for lang_name in header_cls.supported_langs()}
             return
+
+        header: AbstractSsbHeader
+        if game_region == GAME_REGION_EU:
+            header = SsbHeaderEu(data)
+        elif game_region == GAME_REGION_US:
+            header = SsbHeaderUs(data)
+        elif game_region == GAME_REGION_JP:
+            header = SsbHeaderJp(data)
+        else:
+            raise ValueError(f"Unsupported game region: {game_region}")
+        begin_data_offset = header.data_offset
+
         assert begin_data_offset is not None
         assert header is not None
 
@@ -202,6 +217,9 @@ class Ssb:
             SsbConstant.create_for(self._scriptdata.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
             SsbConstant.get_dungeon_mode_constants()
         ).convert()
+
+    def to_explorerscript_v2(self) -> Tuple[str, SourceMapV2Protocol]:
+        raise NotImplementedError("TODO!")  # TODO
 
     def to_ssb_script(self) -> Tuple[str, SourceMap]:
         self.add_linked_to_names_to_routine_ops()
@@ -371,7 +389,6 @@ class Ssb:
             return stcursor - start, bytes_of_string
 
         from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, GAME_REGION_JP
-        from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp
         if not isinstance(data, memoryview):
             data = memoryview(data)
 

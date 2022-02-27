@@ -18,8 +18,7 @@ import logging
 from typing import Tuple, Dict, Callable, Type, Optional
 
 from explorerscript.error import SsbCompilerError
-from explorerscript.macro import ExplorerScriptMacro
-from explorerscript.source_map import SourceMap, SourceMapBuilder
+from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
     SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
@@ -28,9 +27,9 @@ from explorerscript.ssb_converting.ssb_compiler import ExplorerScriptSsbCompiler
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode
 from skytemple_files.script.ssb.constants import SsbConstant
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, AbstractSsbHeader
-from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
-    SSB_PADDING_BEFORE_ROUTINE_INFO
+from skytemple_files.script.ssb._header import SsbHeaderEu, SsbHeaderUs, AbstractSsbHeader
+from skytemple_files.script.ssb._model import Ssb, List, SkyTempleSsbOperation
+from skytemple_files.script.ssb import SSB_LEN_ROUTINE_INFO_ENTRY, SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import f, _
 logger = logging.getLogger(__name__)
 Callback = Optional[Callable[[], None]]
@@ -103,7 +102,7 @@ class ScriptCompiler:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
         logger.debug("Assembling SSB model...")
 
-        model = Ssb.create_empty(self.rom_data.script_data)
+        model = Ssb.create_empty(self.rom_data.script_data, self.rom_data.game_region)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
             raise SsbCompilerError(_("The routine data lists for the decompiler must have the same lengths."))
 

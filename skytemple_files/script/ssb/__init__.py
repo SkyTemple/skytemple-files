@@ -15,3 +15,5 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+SSB_LEN_ROUTINE_INFO_ENTRY = 6
+SSB_PADDING_BEFORE_ROUTINE_INFO = 4

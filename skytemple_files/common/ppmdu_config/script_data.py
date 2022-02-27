@@ -20,11 +20,17 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import warnings
 from enum import Enum, IntEnum
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, TYPE_CHECKING
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
 from skytemple_files.common.i18n_util import f, _
+
+if TYPE_CHECKING:
+    from skytemple_files.script.ssb.protocol import ScriptDataProtocol
+else:
+    class ScriptDataProtocol:
+        pass  # dummy
 
 
 class GameVariableType(IntEnum):
@@ -294,7 +300,7 @@ class Pmd2ScriptDirection(AutoString):
         return self.name
 
 
-class Pmd2ScriptData(AutoString):
+class Pmd2ScriptData(ScriptDataProtocol, AutoString):
     """TODO: Cache the __by_xyz properties."""
     def __init__(self,
                  game_variables_table: List[Pmd2ScriptGameVar],
@@ -335,11 +341,11 @@ class Pmd2ScriptData(AutoString):
         self._game_variables = value
 
     @property
-    def game_variables__by_id(self) -> Dict[int, Pmd2ScriptGameVar]:
+    def game_variables__by_id(self) -> Dict[int, Pmd2ScriptGameVar]:  # type: ignore
         return {var.id: var for var in self.game_variables}
 
     @property
-    def game_variables__by_name(self) -> Dict[str, Pmd2ScriptGameVar]:
+    def game_variables__by_name(self) -> Dict[str, Pmd2ScriptGameVar]:  # type: ignore
         return {var.name: var for var in self.game_variables}
 
     @property
@@ -351,7 +357,7 @@ class Pmd2ScriptData(AutoString):
         self._objects = value
 
     @property
-    def objects__by_id(self) -> Dict[int, Pmd2ScriptObject]:
+    def objects__by_id(self) -> Dict[int, Pmd2ScriptObject]:  # type: ignore
         return {o.id: o for o in self.objects}
 
     @property
@@ -367,7 +373,7 @@ class Pmd2ScriptData(AutoString):
         self._face_names = value
 
     @property
-    def face_names__by_id(self) -> Dict[int, Pmd2ScriptFaceName]:
+    def face_names__by_id(self) -> Dict[int, Pmd2ScriptFaceName]:  # type: ignore
         return {n.id: n for n in self.face_names}
 
     @property
@@ -383,7 +389,7 @@ class Pmd2ScriptData(AutoString):
         self._face_position_modes = value
 
     @property
-    def face_position_modes__by_id(self) -> List[Pmd2ScriptFacePositionMode]:
+    def face_position_modes__by_id(self) -> List[Pmd2ScriptFacePositionMode]:  # type: ignore
         return self.face_position_modes
 
     @property
@@ -403,7 +409,7 @@ class Pmd2ScriptData(AutoString):
         return self.directions
 
     @property
-    def directions__by_ssb_id(self) -> Dict[int, Pmd2ScriptDirection]:
+    def directions__by_ssb_id(self) -> Dict[int, Pmd2ScriptDirection]:  # type: ignore
         return {d.ssb_id: d for d in self._directions.values()}
 
     @property
@@ -419,7 +425,7 @@ class Pmd2ScriptData(AutoString):
         self._common_routine_info = value
 
     @property
-    def common_routine_info__by_id(self) -> List[Pmd2ScriptRoutine]:
+    def common_routine_info__by_id(self) -> List[Pmd2ScriptRoutine]:  # type: ignore
         return self.common_routine_info
 
     @property
@@ -435,7 +441,7 @@ class Pmd2ScriptData(AutoString):
         self._menus = value
 
     @property
-    def menus__by_id(self) -> Dict[int, Pmd2ScriptMenu]:
+    def menus__by_id(self) -> Dict[int, Pmd2ScriptMenu]:  # type: ignore
         return {o.id: o for o in self.menus}
 
     @property
@@ -451,7 +457,7 @@ class Pmd2ScriptData(AutoString):
         self._process_specials = value
 
     @property
-    def process_specials__by_id(self) -> Dict[int, Pmd2ScriptSpecial]:
+    def process_specials__by_id(self) -> Dict[int, Pmd2ScriptSpecial]:  # type: ignore
         return {o.id: o for o in self.process_specials}
 
     @property
@@ -467,7 +473,7 @@ class Pmd2ScriptData(AutoString):
         self._sprite_effects = value
 
     @property
-    def sprite_effects__by_id(self) -> Dict[int, Pmd2ScriptSpriteEffect]:
+    def sprite_effects__by_id(self) -> Dict[int, Pmd2ScriptSpriteEffect]:  # type: ignore
         return {o.id: o for o in self.sprite_effects}
 
     @property
@@ -483,7 +489,7 @@ class Pmd2ScriptData(AutoString):
         self._bgms = value
 
     @property
-    def bgms__by_id(self) -> Dict[int, Pmd2ScriptBgm]:
+    def bgms__by_id(self) -> Dict[int, Pmd2ScriptBgm]:  # type: ignore
         return {o.id: o for o in self.bgms}
 
     @property
@@ -499,7 +505,7 @@ class Pmd2ScriptData(AutoString):
         self._level_list = value
 
     @property
-    def level_list__by_id(self) -> Dict[int, Pmd2ScriptLevel]:
+    def level_list__by_id(self) -> Dict[int, Pmd2ScriptLevel]:  # type: ignore
         return {o.id: o for o in self.level_list}
 
     @property
@@ -515,7 +521,7 @@ class Pmd2ScriptData(AutoString):
         self._level_entities = value
 
     @property
-    def level_entities__by_id(self) -> Dict[int, Pmd2ScriptEntity]:
+    def level_entities__by_id(self) -> Dict[int, Pmd2ScriptEntity]:  # type: ignore
         return {o.id: o for o in self.level_entities}
 
     @property
@@ -531,7 +537,7 @@ class Pmd2ScriptData(AutoString):
         self._op_codes = value
 
     @property
-    def op_codes__by_id(self) -> Dict[int, Pmd2ScriptOpCode]:
+    def op_codes__by_id(self) -> Dict[int, Pmd2ScriptOpCode]:  # type: ignore
         return {o.id: o for o in self.op_codes}
 
     @property

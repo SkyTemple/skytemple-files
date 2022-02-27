@@ -118,6 +118,6 @@ class StringCodecTestCase(SkyTempleFilesTestCase[_TstStringHandler, _TstStringPr
     def test_using_rom_ssb(self, _, file, *, pmd2_data: Pmd2Data):
         # This test assumes the Python SSB model works!
         # This can only test basic consistency.
-        from skytemple_files.script.ssb.model import Ssb
+        from skytemple_files.script.ssb._model import Ssb
         for by in Ssb.internal__get_all_raw_strings_from(file, pmd2_data.game_region):
             self.assertEqual(by, self.handler.serialize(self.handler.deserialize(by)))

@@ -14,53 +14,68 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type
+from abc import abstractmethod
+from typing import Type, TYPE_CHECKING, TypeVar
 
-from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp, AbstractSsbHeader
-from skytemple_files.script.ssb.model import Ssb
-from skytemple_files.script.ssb.writer import SsbWriter
+from skytemple_files.script.ssb.protocol import SsbProtocol, ScriptDataProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.script.ssb._model import Ssb as PySsb
+    from skytemple_rust.st_ssb import Ssb as NativeSsb
 
 
-class SsbHandler(DataHandler[Ssb]):
+U = TypeVar('U', contravariant=True)
+
+
+class SsbWriterProtocol(WriterProtocol[U]):
+    @abstractmethod
+    def __init__(self, script_data: ScriptDataProtocol, game_region: str, string_codec: str):
+        ...
+
+
+class SsbHandler(HybridDataHandler[SsbProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> Ssb:  # type: ignore
+    def load_python_model(cls) -> Type[SsbProtocol]:
+        from skytemple_files.script.ssb._model import Ssb
+        return Ssb
+
+    @classmethod
+    def load_native_model(cls) -> Type[SsbProtocol]:
+        from skytemple_rust.st_ssb import Ssb
+        return Ssb
+
+    @classmethod
+    def load_python_writer(cls) -> Type[SsbWriterProtocol['PySsb']]:  # type: ignore
+        from skytemple_files.script.ssb._writer import SsbWriter
+        return SsbWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[SsbWriterProtocol['NativeSsb']]:  # type: ignore
+        from skytemple_rust.st_ssb import SsbWriter
+        return SsbWriter  # type: ignore
+
+    @classmethod
+    def deserialize(cls, data: bytes, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> SsbProtocol:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
-        ssb_header: AbstractSsbHeader
-        if static_data.game_region == GAME_REGION_EU:
-            ssb_header = SsbHeaderEu(data)
-        elif static_data.game_region == GAME_REGION_US:
-            ssb_header = SsbHeaderUs(data)
-        elif static_data.game_region == GAME_REGION_JP:
-            ssb_header = SsbHeaderJp(data)
-        else:
-            raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
 
-        return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data, string_codec=static_data.string_encoding)
+        return cls.get_model_cls()(data, static_data.script_data, static_data.game_region, static_data.string_encoding)
 
     @classmethod
-    def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
+    def serialize(cls, data: SsbProtocol, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 
-        return SsbWriter(data, static_data).write()
+        return cls.get_writer_cls()(static_data.script_data, static_data.game_region, static_data.string_encoding).write(data)  # type: ignore
 
     @classmethod
-    def create(cls, static_data: Pmd2Data = None) -> Ssb:
+    def create(cls, static_data: Pmd2Data = None) -> SsbProtocol:
         """Create a new empty script"""
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 
-        header_cls: Type[AbstractSsbHeader]
-        if static_data.game_region == GAME_REGION_US:
-            header_cls = SsbHeaderUs
-        elif static_data.game_region == GAME_REGION_EU:
-            header_cls = SsbHeaderEu
-        else:
-            raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
-
-        return Ssb.create_empty(static_data.script_data, header_cls.supported_langs())
+        return cls.get_model_cls().create_empty(static_data.script_data, static_data.game_region)

@@ -634,7 +634,7 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImageProtocol]],
+                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]],
                        personality1: Optional[int] = None, personality2: Optional[int] = None,
                        idle_anim1: Optional[int] = None, idle_anim2: Optional[int] = None
                        ) -> ElementTree:
@@ -668,7 +668,7 @@ def monster_xml_import(xml: ElementTree,
                        names: Optional[Dict[str, Tuple[str, str]]],
                        moveset: Optional[MoveLearnset], moveset2: Optional[MoveLearnset],
                        stats: Optional[LevelBinEntry],
-                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImageProtocol]]) -> str:
+                       portraits: Optional[List[KaoImage]], portraits2: Optional[List[KaoImage]]) -> str:
     """
     Imports the available data from the XML into the models and lists given.
     The lists can already be filled, they will be cleared and re-filled when data is avaiable.

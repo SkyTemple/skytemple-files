@@ -17,6 +17,8 @@
 
 import math
 
+from collections.abc import Iterator
+
 import warnings
 
 try:

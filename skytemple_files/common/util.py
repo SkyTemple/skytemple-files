@@ -21,8 +21,9 @@ import unicodedata
 import warnings
 import stat
 import os
+from abc import abstractmethod
 from itertools import groupby
-from typing import List, Tuple, TYPE_CHECKING, Iterable, Optional
+from typing import List, Tuple, TYPE_CHECKING, Iterable, Optional, Protocol, Union, Dict, Type
 
 import pkg_resources
 from PIL import Image
@@ -46,17 +47,49 @@ DEBUG = False
 logger = logging.getLogger(__name__)
 
 
+class CapturableProtocol(Protocol):
+    @abstractmethod
+    def _capture_(self) -> str:
+        pass
+
+
+# A type that can be captured and serialized in structured events, such as for error reports
+Capturable = Union[int, str, bool, Iterable['Capturable'], Dict[str, 'Capturable'], Type[None], CapturableProtocol]
+Captured = Union[int, str, bool, List['Captured'], Dict[str, 'Captured'], Type[None]]
+
+
+# noinspection PyProtectedMember
+def capture_capturable(c: Capturable) -> Captured:
+    from collections.abc import Iterable
+    if c is None:
+        return None
+    if isinstance(c, str) or isinstance(c, int) or isinstance(c, bool):
+        return c
+    if isinstance(c, dict):
+        return {k: capture_capturable(v) for k, v in c}
+    if isinstance(c, Iterable):
+        return [capture_capturable(v) for v in c]
+    return c._capture_()
+
+
 def normalize_string(x: str):
     """Returns a normalized ASCII string for sorting purposes."""
     # TODO, does not handle everything
     x = x.lower()
-    x=unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
+    x = unicodedata.normalize('NFKD', x).encode('ascii', 'ignore')
     return x
+
 
 def open_utf8(file, mode='r', *args, **kwargs):
     """Like open, but always uses the utf-8 encoding, on all platforms."""
     return open(file, mode, *args, encoding='utf-8', **kwargs)
 
+
+def add_extension_if_missing(fn: str, ext: str) -> str:
+    """Adds a default file extension if it is missing."""
+    if '.' not in os.path.basename(fn):
+        return fn + '.' + ext
+    return fn
 
 def read_bytes(data: bytes, start=0, length=1) -> bytes:
     """

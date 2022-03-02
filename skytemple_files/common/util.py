@@ -67,7 +67,7 @@ def capture_capturable(c: Capturable) -> Captured:
     if isinstance(c, str) or isinstance(c, int) or isinstance(c, bool):
         return c
     if isinstance(c, dict):
-        return {k: capture_capturable(v) for k, v in c}
+        return {k: capture_capturable(v) for k, v in c.items()}
     if isinstance(c, Iterable):
         return [capture_capturable(v) for v in c]
     return c._capture_()
@@ -81,7 +81,7 @@ def capture_any(c: Any) -> Captured:
     if isinstance(c, str) or isinstance(c, int) or isinstance(c, bool):
         return c
     if isinstance(c, dict):
-        return {k: capture_any(v) for k, v in c}
+        return {k: capture_any(v) for k, v in c.items()}
     if isinstance(c, Iterable):
         return [capture_any(v) for v in c]
     if hasattr(c, "_capture_"):
@@ -96,12 +96,12 @@ def _capture_generic_object(obj: Any, recursion_check=None):
         return "?? Cyclic structure."
     if isinstance(obj, Enum):
         return str(obj)
-    elif hasattr(obj, '__slots__'):
+    if hasattr(obj, '__slots__'):
         return _capture_generic_object(
             dict((name, getattr(obj, name)) for name in getattr(obj, '__slots__')),
             recursion_check + [obj]
         )
-    elif hasattr(obj, '__dict__'):
+    if hasattr(obj, '__dict__'):
         return _capture_generic_object(
             vars(obj),
             recursion_check + [obj]

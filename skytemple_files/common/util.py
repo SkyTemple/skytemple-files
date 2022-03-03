@@ -62,8 +62,9 @@ class CapturableProtocol(Protocol):
 
 
 # A type that can be captured and serialized in structured events, such as for error reports
-Capturable = Union[int, str, bool, Iterable['Capturable'], Dict[str, 'Capturable'], Type[None], CapturableProtocol]
-Captured = Union[int, str, bool, List['Captured'], Dict[str, 'Captured'], Type[None]]
+# Mypy can't handle cyclic dependencies yet :(
+Capturable = Union[int, str, bool, Iterable['Capturable'], Dict[str, 'Capturable'], None, CapturableProtocol]  # type: ignore
+Captured = Union[int, str, bool, List['Captured'], Dict[str, 'Captured'], None]  # type: ignore
 
 
 # noinspection PyProtectedMember
@@ -77,7 +78,7 @@ def capture_capturable(c: Capturable) -> Captured:
         return {k: capture_capturable(v) for k, v in c.items()}
     if isinstance(c, Iterable):
         return [capture_capturable(v) for v in c]
-    return c._capture_()
+    return c._capture_()  # type: ignore
 
 
 # noinspection PyProtectedMember

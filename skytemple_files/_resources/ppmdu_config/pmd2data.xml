@@ -1041,6 +1041,13 @@
 	  	<Include filename ="anonymous_asm_mods/extract_sp_code/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
+        
+        <!-- A patch to extract special process code -->
+        <Patch id="ExtractObjectTable" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="anonymous_asm_mods/obj_table/selector_overlay11.asm"/>
+	  </OpenBin>
+        </Patch>
 
         <!-- A patch to reconfigure evolutions -->
         <Patch id="ChangeEvoSystem" >

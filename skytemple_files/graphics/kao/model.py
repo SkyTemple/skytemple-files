@@ -88,6 +88,10 @@ class KaoImage:
         new.modified = True
         return new
 
+    def raw(self) -> Tuple[bytes, bytes]:
+        """Returns raw image data and palettes"""
+        return bytes(self.compressed_img_data), bytes(self.pal_data)
+
 
 class Kao:
     def __init__(self, data: bytes, first_toc: int, toc_len: int):

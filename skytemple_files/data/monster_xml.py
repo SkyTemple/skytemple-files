@@ -618,8 +618,8 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
                         f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."))
                     )
                 try:
-                    value_to_update[i] = FileType.KAO.get_image_model_cls().create_from_raw(
-                        b64decode(image.encode('ascii')), b64decode(palette.encode('ascii'))
+                    value_to_update[i] = KaoImage(
+                        b64decode(palette.encode('ascii')) + b64decode(image.encode('ascii')), 0
                     )
                 except Exception as err:
                     raise XmlValidateError(

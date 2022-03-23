@@ -37,7 +37,7 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x24600
 PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0xEA000004
 
-SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_asm_mods', 'stat_disp', 'src')
+SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'anonymous_asm_mods', 'stat_disp', 'src')
 
 OLD_STAT = "[M:S3]"*8
 

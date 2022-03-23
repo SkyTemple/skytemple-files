@@ -29,7 +29,7 @@ from skytemple_files.data.waza_p.model import WazaMoveCategory
 from skytemple_files.common.i18n_util import _
 
 
-SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'irdkwia_asm_mods', 'move_growth', 'src')
+SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'anonymous_asm_mods', 'move_growth', 'src')
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x14A74
 PATCH_CHECK_ADDR_APPLIED_EU = 0x14B1C

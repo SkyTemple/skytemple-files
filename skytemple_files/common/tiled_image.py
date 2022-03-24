@@ -21,6 +21,7 @@ import warnings
 from itertools import chain
 from typing import List, Tuple, Union
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.user_error import UserValueError
 
 try:
     from PIL import Image
@@ -198,16 +199,16 @@ def from_pil(
 
     max_len_pal = single_palette_size * max_nb_palettes
     if pil.mode != 'P':
-        raise ValueError(_('Can not convert PIL image to PMD tiled image: Must be indexed image (=using a palette)'))
+        raise UserValueError(_('Can not convert PIL image to PMD tiled image: Must be indexed image (=using a palette)'))
     if pil.palette.mode != 'RGB' \
             or len(pil.palette.palette) > max_len_pal * 3 \
             or len(pil.palette.palette) % single_palette_size * 3 != 0:
-        raise ValueError(f(_('Can not convert PIL image to PMD tiled image: '
-                             'Palette must contain max {max_len_pal} RGB colors '
-                             'and be divisible by {single_palette_size}.')))
+        raise UserValueError(f(_('Can not convert PIL image to PMD tiled image: '
+                                 'Palette must contain max {max_len_pal} RGB colors '
+                                 'and be divisible by {single_palette_size}.')))
     if pil.width != img_width or pil.height != img_height:
-        raise ValueError(f(_('Can not convert PIL image to PMD tiled image: '
-                             'Image dimensions must be {img_width}x{img_height}px.')))
+        raise UserValueError(f(_('Can not convert PIL image to PMD tiled image: '
+                                 'Image dimensions must be {img_width}x{img_height}px.')))
 
     # Build new palette
     new_palette = memoryview(pil.palette.palette)
@@ -266,12 +267,12 @@ def from_pil(
         if real_pix > (single_palette_size - 1) or real_pix < 0:
             # The color is out of range!
             if not force_import:
-                raise ValueError(f(_("Can not convert PIL image to PMD tiled image: "
-                                     "The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
-                                     "pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
-                                     "Expected are colors from palette {tile_palette_indices[tile_id]} ("
-                                     "{tile_palette_indices[tile_id] * single_palette_size} - "
-                                     "{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")))
+                raise UserValueError(f(_("Can not convert PIL image to PMD tiled image: "
+                                         "The color {pix} (from palette {math.floor(pix / single_palette_size)}) used by "
+                                         "pixel {x+(idx % 2)}x{y} in tile {tile_id} ({tile_x}x{tile_y} is out of range. "
+                                         "Expected are colors from palette {tile_palette_indices[tile_id]} ("
+                                         "{tile_palette_indices[tile_id] * single_palette_size} - "
+                                         "{(tile_palette_indices[tile_id]+1) * single_palette_size - 1}).")))
             # Just set the color to 0 instead if invalid...
             else:
                 logger.warning(f(_("Can not convert PIL image to PMD tiled image: "
@@ -314,10 +315,10 @@ def from_pil(
             ignore_too_large=True
         )
     if len_final_tiles > 1024:
-        raise ValueError(f(_("An image selected to import is too complex. It has too many unique tiles "
-                             "({len_final_tiles}, max allowed are 1024).\nTry to have less unique tiles. Unique tiles "
-                             "are 8x8 sections of the images that can't be found anywhere else in the image (including "
-                             "flipped or with a different sub-palette).")))
+        raise UserValueError(f(_("An image selected to import is too complex. It has too many unique tiles "
+                                 "({len_final_tiles}, max allowed are 1024).\nTry to have less unique tiles. Unique tiles "
+                                 "are 8x8 sections of the images that can't be found anywhere else in the image (including "
+                                 "flipped or with a different sub-palette).")))
     final_tiles: List[bytearray] = []
     for s, tile in final_tiles_with_sum:
         final_tiles.append(tile)

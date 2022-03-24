@@ -17,7 +17,7 @@
 import logging
 from typing import Tuple, Dict, Callable
 
-from explorerscript.error import SsbCompilerError
+from explorerscript.error import SsbCompilerError, ParseError
 from explorerscript.macro import ExplorerScriptMacro
 from explorerscript.source_map import SourceMap, SourceMapBuilder
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
@@ -32,6 +32,8 @@ from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs
 from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
     SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.user_error import USER_ERROR_MARK
+
 logger = logging.getLogger(__name__)
 
 
@@ -81,7 +83,11 @@ class ScriptCompiler:
             SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
             lookup_paths
         )
-        base_compiler.compile(es_src, exps_absolue_path)
+        try:
+            base_compiler.compile(es_src, exps_absolue_path)
+        except (SsbCompilerError, ParseError) as e:
+            setattr(e, USER_ERROR_MARK, True)
+            raise e
 
         # Profiling callback
         if callback_after_parsing:

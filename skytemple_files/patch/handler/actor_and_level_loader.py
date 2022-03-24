@@ -24,6 +24,7 @@ from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.user_error import make_user_err
 
 EXTRACT_LOOSE_BIN_SRCDATA__ACTORS = 'Entities'
 EXTRACT_LOOSE_BIN_SRCDATA__LEVELS = 'Events'
@@ -96,9 +97,9 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
             apply()
         except RuntimeError as ex:
             if extracted_a_list:
-                raise RuntimeError(str(ex) + _("\n\nThe list was extracted anyway.\n"
-                                               "You can already edit it through SkyTemple, but it won't be "
-                                               "used in game, until you successfully apply the patch.")) from ex
+                raise make_user_err(RuntimeError, str(ex) + _("\n\nThe list was extracted anyway.\n"
+                                                              "You can already edit it through SkyTemple, but it won't be "
+                                                              "used in game, until you successfully apply the patch.")) from ex
             raise ex
 
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):

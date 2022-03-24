@@ -35,6 +35,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.user_error import UserValueError
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2Binary
@@ -390,7 +391,7 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
             break
 
     if not matched_edition:
-        raise ValueError(_("This ROM is not supported by SkyTemple."))
+        raise UserValueError(_("This ROM is not supported by SkyTemple."))
 
     # TODO: This is a bit silly. There should be a better check than to parse the XML twice.
     config = Pmd2XmlReader.load_default(matched_edition)

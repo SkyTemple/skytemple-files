@@ -18,6 +18,7 @@
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
 from skytemple_files.data.data_cd.armips_importer import ArmipsImporter
+from skytemple_files.user_error import UserValueError
 
 
 class DataCD(AutoString):
@@ -63,7 +64,7 @@ class DataCD(AutoString):
     
     def del_effect_code(self, effect_id: int):
         if len(self.get_all_of(effect_id))!=0:
-            raise ValueError(_("To delete this effect, no items must use it."))
+            raise UserValueError(_("To delete this effect, no items must use it."))
         for i in range(len(self.items_effects)):
             if self.items_effects[i]>effect_id:
                 self.items_effects[i] -= 1

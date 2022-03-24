@@ -28,6 +28,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2Binary, Pmd2SimplePatch
 from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir, set_rw_permission_folder
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 Y9_BIN = 'y9.bin'
@@ -143,8 +144,8 @@ class ArmPatcher:
                                               )
                     retcode = result.wait()
                 except FileNotFoundError as ex:
-                    raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
-                                                    "'armips' is inside your system's PATH.")) from ex
+                    raise make_user_err(ArmipsNotInstalledError, _("ARMIPS could not be found. Make sure, that "
+                                                                   "'armips' is inside your system's PATH.")) from ex
 
                 if os.getenv('SKYTEMPLE_DEBUG_ARMIPS_OUTPUT', False):
                     print("ARMIPS OUTPUT:")
@@ -152,8 +153,9 @@ class ArmPatcher:
                     print(str(result.stderr.read(), 'utf-8') if result.stderr else '')
 
                 if retcode != 0:
-                    raise PatchError(_("ARMIPS reported an error while applying the patch."),
-                                     str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8') if result.stderr else '')
+                    raise make_user_err(PatchError, _("ARMIPS reported an error while applying the patch."),
+                                        str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8')
+                                        if result.stderr else '')
 
                 # Load the binaries back into the ROM
                 opened_binaries = {}

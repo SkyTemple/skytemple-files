@@ -56,11 +56,12 @@ class DynamicBossesEverywherePatchHandler(AbstractPatchHandler, DependantPatch):
         return PatchCategory.UTILITY
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
+        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, OFFSET_US, 4) != ORIGINAL_INSTRUCTION
+                return read_uintle(overlay29, OFFSET_US, 4) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, OFFSET_EU, 4) != ORIGINAL_INSTRUCTION
+                return read_uintle(overlay29, OFFSET_EU, 4) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

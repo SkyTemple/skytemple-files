@@ -100,6 +100,9 @@ class Ssb:
                         # This is a set of aliases!
                         alias_counter += 1
                         alias_i += 1
+                        if alias_i == len(self.routine_info):
+                            end_offset = start_of_const_table
+                            break
                         end_offset = begin_data_offset + self.routine_info[alias_i][0]
                 read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn_start_offset, end_offset, begin_data_offset)
             self.routine_ops.append(read_ops)

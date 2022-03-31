@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.user_error import USER_ERROR_MARK
+
 
 class PatchPackageError(RuntimeError):
     pass
@@ -28,3 +30,4 @@ class PatchNotConfiguredError(RuntimeError):
         super().__init__(message)
         self.config_parameter = config_parameter
         self.error = error
+        setattr(self, USER_ERROR_MARK, True)

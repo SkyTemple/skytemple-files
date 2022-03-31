@@ -32,7 +32,7 @@ from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, Fra
     MetaFramePiece, MINUS_FRAME, DEBUG_PRINT, DIM_TABLE, TEX_SIZE
 import skytemple_files.graphics.chara_wan.utils as exUtils
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
-
+from skytemple_files.user_error import UserValueError
 
 DRAW_CENTER_X = 0
 DRAW_CENTER_Y = -4
@@ -100,11 +100,11 @@ def ImportSheets(inDir, strict=False):
 
             anim_names[name.lower()] = index
             if index == -1 and strict:
-                raise ValueError("{0} has its own sheet and does not have an index!".format(name))
+                raise UserValueError("{0} has its own sheet and does not have an index!".format(name))
 
         if index > -1:
             if index in anim_stats:
-                raise ValueError("{0} and {1} both have the an index of {2}!".format(anim_stats[index].name, name, index))
+                raise UserValueError("{0} and {1} both have the an index of {2}!".format(anim_stats[index].name, name, index))
             anim_stats[index] = anim_stat
 
     copy_indices = {}
@@ -140,9 +140,9 @@ def ImportSheets(inDir, strict=False):
         orphans = []
         for k in anim_names:
             orphans.append(k)
-        raise ValueError("Xml found with no sheet: {0}".format(', '.join(orphans)))
+        raise UserValueError("Xml found with no sheet: {0}".format(', '.join(orphans)))
     if len(extra_sheets) > 0:
-        raise ValueError("Sheet found with no xml: {0}".format(', '.join(extra_sheets)))
+        raise UserValueError("Sheet found with no xml: {0}".format(', '.join(extra_sheets)))
 
     animGroupData = []
     frames = []
@@ -155,23 +155,23 @@ def ImportSheets(inDir, strict=False):
 
             # check against inconsistent sizing
             if anim_img.size != offset_img.size or anim_img.size != shadow_img.size:
-                raise ValueError("Anim, Offset, and Shadow sheets for {0} must be the same size!".format(anim_name))
+                raise UserValueError("Anim, Offset, and Shadow sheets for {0} must be the same size!".format(anim_name))
 
             if anim_img.size[0] % tileSize[0] != 0 or anim_img.size[1] % tileSize[1] != 0:
-                raise ValueError("Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
+                raise UserValueError("Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
                     anim_img.size[0], anim_img.size[1], tileSize[0], tileSize[1], anim_name))
 
             total_frames = anim_img.size[0] // tileSize[0]
             # check against inconsistent duration counts
             if total_frames != len(durations):
-                raise ValueError("Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(anim_name, len(durations)))
+                raise UserValueError("Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(anim_name, len(durations)))
 
             if anim_stats[idx].rushFrame >= len(durations):
-                raise ValueError("RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].rushFrame, len(durations), anim_name))
+                raise UserValueError("RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].rushFrame, len(durations), anim_name))
             if anim_stats[idx].hitFrame >= len(durations):
-                raise ValueError("HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].hitFrame, len(durations), anim_name))
+                raise UserValueError("HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].hitFrame, len(durations), anim_name))
             if anim_stats[idx].returnFrame >= len(durations):
-                raise ValueError("ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].returnFrame, len(durations), anim_name))
+                raise UserValueError("ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].returnFrame, len(durations), anim_name))
 
             group = []
             total_dirs = anim_img.size[1] // tileSize[1]
@@ -198,7 +198,7 @@ def ImportSheets(inDir, strict=False):
                     if frame_offset[2] is None:
                         # raise warning if there's missing shadow or offsets
                         if strict:
-                            raise ValueError("No frame offset found in frame {0} for {1}".format((jj, dir), anim_name))
+                            raise UserValueError("No frame offset found in frame {0} for {1}".format((jj, dir), anim_name))
                         offsets = FrameOffset(rel_center, rel_center, rel_center, rel_center)
                     else:
                         offsets.center = frame_offset[2]
@@ -214,7 +214,7 @@ def ImportSheets(inDir, strict=False):
                     if shadow_offset[4] is not None:
                         shadow = shadow_offset[4]
                     elif strict:
-                        raise ValueError("No shadow offset found in frame {0} for {1}".format((jj, dir), anim_name))
+                        raise UserValueError("No shadow offset found in frame {0} for {1}".format((jj, dir), anim_name))
                     shadow_diff = exUtils.addLoc(shadow, rect, True)
                     shadow = exUtils.addLoc(shadow, rel_center, True)
 
@@ -313,7 +313,7 @@ def ImportSheets(inDir, strict=False):
     colors = combinedImg.getcolors()
 
     if strict and len(colors) > 16:
-        raise ValueError("Number of (nontransparent) colors over 15: {0}".format(len(colors)))
+        raise UserValueError("Number of (nontransparent) colors over 15: {0}".format(len(colors)))
 
     transparent = (0, 127, 151, 255)
     foundTrans = True
@@ -549,7 +549,7 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
             continue
 
         if idx >= len(anim_name_map) or anim_name_map[idx][0] == '':
-            raise ValueError("Animation #{0} needs a name!".format(idx))
+            raise UserValueError("Animation #{0} needs a name!".format(idx))
 
         dupe_idx = -1
         for cmp_idx in ANIM_ORDER:

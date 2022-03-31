@@ -33,6 +33,8 @@ from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, 
 from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
 from skytemple_files.common.i18n_util import f, _
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol
+from skytemple_files.hardcoded.monster_sprite_data_table import IdleAnimType
+
 XML_MONSTER = "Pokemon"
 XML_MONSTER__GAME_VERSION = "gameVersion"
 XML_STRINGS = "Strings"
@@ -635,7 +637,7 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
                        stats: Optional[LevelBinEntry],
                        portraits: Optional[List[KaoImageProtocol]], portraits2: Optional[List[KaoImageProtocol]],
                        personality1: Optional[int] = None, personality2: Optional[int] = None,
-                       idle_anim1: Optional[int] = None, idle_anim2: Optional[int] = None
+                       idle_anim1: Optional[IdleAnimType] = None, idle_anim2: Optional[IdleAnimType] = None
                        ) -> ElementTree:
     """
     Exports properties of all given things as an XML file. If a second Md entry is given,
@@ -646,9 +648,9 @@ def monster_xml_export(game_version: str, md_gender1: Optional[MdEntry], md_gend
     if names:
         xml.append(StringsXml.to_xml(names))
     if md_gender1:
-        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender1, personality1, idle_anim1)))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender1, personality1, idle_anim1.value if idle_anim1 else None)))
     if md_gender2:
-        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender2, personality2, idle_anim2)))
+        xml.append(GenderedEntityXml.to_xml(GenderedConvertEntry(md_gender2, personality2, idle_anim2.value if idle_anim2 else None)))
     if moveset:
         xml.append(MovesetXml.to_xml(moveset))
     if moveset2:

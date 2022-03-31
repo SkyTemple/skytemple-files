@@ -23,6 +23,7 @@ import tempfile
 from skytemple_files.common.util import open_utf8, get_resources_dir, set_rw_permission_folder
 from skytemple_files.common.i18n_util import f, _
 from skytemple_files.patch.arm_patcher import PatchError, ArmipsNotInstalledError
+from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = '__main.asm'
 OUT_BIN = 'code_out.bin'
@@ -56,13 +57,13 @@ class ArmipsImporter:
                                           cwd=tmp)
                 retcode = result.wait()
             except FileNotFoundError as ex:
-                raise ArmipsNotInstalledError(_("ARMIPS could not be found. Make sure, that "
-                                                "'armips' is inside your system's PATH.")) from ex
+                raise make_user_err(ArmipsNotInstalledError, _("ARMIPS could not be found. Make sure, that "
+                                                               "'armips' is inside your system's PATH.")) from ex
 
             if retcode != 0:
-                raise PatchError(_("ARMIPS reported an error while applying the patch."),
-                                 str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8')  # type: ignore
-                                 if result.stderr else '')
+                raise make_user_err(PatchError, _("ARMIPS reported an error while applying the patch."),
+                                    str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8')  # type: ignore
+                                    if result.stderr else '')
 
             out_bin_path = os.path.join(tmp, OUT_BIN)
             if not os.path.exists(out_bin_path):

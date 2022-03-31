@@ -156,7 +156,7 @@ class ArmPatcher:
 
                 if retcode != 0:
                     raise make_user_err(PatchError, _("ARMIPS reported an error while applying the patch."),
-                                        str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8')
+                                        str(result.stdout.read(), 'utf-8'), str(result.stderr.read(), 'utf-8')  # type: ignore
                                         if result.stderr else '')  # type: ignore
 
                 # Load the binaries back into the ROM

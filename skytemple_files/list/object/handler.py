@@ -16,17 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.list.object.model import ObjectListBin
 from skytemple_files.list.object.writer import ObjectListBinWriter
 
 
 class ObjectListBinHandler(DataHandler[ObjectListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ObjectListBin':
+    def deserialize(cls, data: bytes, **kwargs) -> 'ObjectListBin':
         return ObjectListBin(data)
 
     @classmethod
-    def serialize(cls, data: 'ObjectListBin', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: 'ObjectListBin', **kwargs) -> bytes:
         return ObjectListBinWriter(data).write()
 

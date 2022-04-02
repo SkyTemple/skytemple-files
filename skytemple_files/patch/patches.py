@@ -60,6 +60,7 @@ from skytemple_files.patch.handler.externalize_waza import ExternalizeWazaPatchH
 from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
 from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
 from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
+from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandler
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
 from skytemple_files.patch.handler.pkmn_ground_anim import PkmnGroundAnimPatchHandler
@@ -102,6 +103,7 @@ class PatchType(Enum):
     EXTRACT_MOVE_CODE = ExtractMoveCodePatchHandler
     EXTRACT_ITEM_CODE = ExtractItemCodePatchHandler
     EXTRACT_SP_CODE = ExtractSPCodePatchHandler
+    EXTRACT_OBJECT_TABLE = ExtractObjectTablePatchHandler
     MOVE_GROWTH = MoveGrowthPatchHandler
     CHANGE_TBBG = ChangeTextBoxColorPatchHandler
     EXTRACT_ANIM_DATA = ExtractAnimDataPatchHandler

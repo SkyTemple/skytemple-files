@@ -81,6 +81,7 @@ from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandl
 from skytemple_files.graphics.pal.handler import PalHandler
 from skytemple_files.list.actor.handler import ActorListBinHandler
 from skytemple_files.list.level.handler import LevelListBinHandler
+from skytemple_files.list.object.handler import ObjectListBinHandler
 from skytemple_files.script.lsd.handler import LsdHandler
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
 from skytemple_files.script.ssb.handler import SsbHandler
@@ -184,3 +185,4 @@ class FileType:
     # (skytemple_files.common.util.get_ppmdu_config_for_rom).
     ACTOR_LIST_BIN = ActorListBinHandler
     LEVEL_LIST_BIN = LevelListBinHandler
+    OBJECT_LIST_BIN = ObjectListBinHandler

@@ -75,7 +75,7 @@
     <!-- **************** -->
     <!-- Explorers of Sky -->
     <!-- **************** -->
-    
+
     <!--NorthAmerica-->
     <Game id="EoS_NA" id2="EoSWVC_NA">
       <!-- arm9 -->
@@ -600,7 +600,7 @@
     <!-- ********************* -->
     <!-- Explorers of Darkness -->
     <!-- ********************* -->
-    
+
     <!--NorthAmerica-->
     <Game id="EoD_NA">
       <!-- arm9 -->
@@ -608,7 +608,7 @@
         <Block name="Entities"          beg="0x09F6F4" end="0x0A02A0"/>
       </Bin>
     </Game>
-    
+
     <!--Europe-->
     <Game id="EoD_EU">
       <!-- arm9 -->
@@ -616,7 +616,7 @@
         <Block name="Entities"          beg="0x09ECFC" end="0x09F8A8"/>
       </Bin>
     </Game>
-    
+
     <!--Japan-->
     <Game id="EoD_JP">
       <!-- arm9 -->
@@ -624,11 +624,11 @@
         <Block name="Entities"          beg="0x0A0AC8" end="0x0A1674"/>
       </Bin>
     </Game>
-    
+
     <!-- ***************** -->
     <!-- Explorers of Time -->
     <!-- ***************** -->
-    
+
     <!--NorthAmerica-->
     <Game id="EoT_NA">
       <!-- arm9 -->
@@ -636,7 +636,7 @@
         <Block name="Entities"          beg="0x09F790" end="0x0A033C"/>
       </Bin>
     </Game>
-    
+
     <!--Europe-->
     <Game id="EoT_EU">
       <!-- arm9 -->
@@ -644,7 +644,7 @@
         <Block name="Entities"          beg="0x09ED98" end="0x09F944"/>
       </Bin>
     </Game>
-    
+
     <!--Japan-->
     <Game id="EoT_JP">
       <!-- arm9 -->
@@ -652,7 +652,7 @@
         <Block name="Entities"          beg="0x0A0B64" end="0x0A1710"/>
       </Bin>
     </Game>
-    
+
   </Binaries>
 
   <!--=======================================================================-->
@@ -752,7 +752,7 @@
         <StringBlock name="New Pokemon Categories"                     beg="20499"  end="22547"/>
       </StringBlocks>
     </Game>
-    
+
     <!--Explorers of Time and Darkness, North America-->
     <Game id="EoT_NA" id2="EoD_NA">
       <Languages>
@@ -763,19 +763,19 @@
         <StringBlock name="Move Names"                beg="5927"  end="6488"/>
         <StringBlock name="Pokemon Names"             beg="6488"  end="7088"/>
         <StringBlock name="Pokemon Categories"        beg="7088"  end="7688"/>
-        
+
         <StringBlock name="Move Descriptions"         beg="7897"  end="8456"/>
         <StringBlock name="Item Long Descriptions"    beg="8456"  end="9456"/>
         <StringBlock name="Item Short Descriptions"   beg="9456"  end="10456"/>
-        
+
         <StringBlock name="Type Names"                beg="10713" end="10732"/>
         <StringBlock name="Ability Names"             beg="10732" end="10856"/>
         <StringBlock name="Ability Descriptions"      beg="10856" end="10980"/>
-        
+
         <StringBlock name="Portrait Names"            beg="12401" end="12433"/>
       </StringBlocks>
     </Game>
-    
+
     <!--Explorers of Sky, Japan-->
     <Game id="EoS_JP">
       <Languages>
@@ -787,7 +787,7 @@
         <StringBlock name="Pokemon Names"             beg="5519"  end="6119"/>
       </StringBlocks>
     </Game>
-    
+
     <!--Explorers of Time and Darkness, Japan-->
     <Game id="EoT_JP" id2="EoD_JP">
       <Languages>
@@ -797,7 +797,7 @@
         <!--#TODO-->
       </StringBlocks>
     </Game>
-    
+
     <!--Explorers of Sky, Europe-->
     <Game id="EoS_EU" id2="EoSWVC_EU">
       <Languages>
@@ -909,7 +909,7 @@
         <StringBlock name="New Pokemon Categories"                     beg="20530"  end="22578"/>
       </StringBlocks>
     </Game>
-    
+
     <!--Explorers of Time and Darkness, Europe-->
     <Game id="EoT_EU" id2="EoD_EU">
       <Languages>
@@ -923,21 +923,21 @@
         <!--#TODO-->
       </StringBlocks>
     </Game>
-    
+
   </StringIndexData>
-  
+
   <!--=======================================================================-->
   <!--ASM Patches Constants-->
   <!--=======================================================================-->
   <!--Constants used within several utilities for generating the asm patches
       and locating the appropriate patch files.-->
-  <ASMPatchesConstants>  
+  <ASMPatchesConstants>
     <!--*******************-->
     <!--LooseBinFiles-->
     <!--*******************-->
     <!--List of where to write which file containing dumped hardcoded data for the patches to work with at runtime-->
     <LooseBinFiles>
-      
+
       <!--Explorers of Sky-->
       <Game id="EoS_NA" id2="EoS_JP" id3="EoS_EU" id4="EoSWVC_NA" id5="EoSWVC_EU">
         <File srcdata="Events"      filepath="BALANCE/level_list.bin"   />
@@ -948,8 +948,8 @@
       </Game>
 
     </LooseBinFiles>
-    
-    
+
+
     <!--*******************-->
     <!--Patches directories-->
     <!--*******************-->
@@ -963,7 +963,7 @@
       <!--Explorers of Time-->
       <!--Explorers of Darkness-->
     </PatchesDir>
-    
+
     <!--*******************-->
     <!--Patches list-->
     <!--*******************-->
@@ -972,7 +972,7 @@
       <!--###############################-->
       <!--Explorers of Sky-->
       <!--###############################-->
-      
+
       <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
         <!-- for JP the cmn_eos_jp.asm needs to be implemented to actually work! -->
 
@@ -997,7 +997,7 @@
 	  	<Include filename ="anonymous_asm_mods/atupx_support/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract move code -->
         <Patch id="ExtractMoveCode" >
           <OpenBin filepath="overlay/overlay_0010.bin">
@@ -1007,7 +1007,7 @@
 	  	<Include filename ="anonymous_asm_mods/extract_move_code/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to provide support for changing the textbox color -->
         <Patch id="ChangeTextBoxBackground" >
           <OpenBin filepath="arm9.bin">
@@ -1027,18 +1027,25 @@
 	  	<Include filename ="anonymous_asm_mods/fs_waza_p/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract item code -->
         <Patch id="ExtractItemCode" >
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="anonymous_asm_mods/extract_item_code/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract special process code -->
         <Patch id="ExtractSPCode" >
           <OpenBin filepath="overlay/overlay_0011.bin">
 	  	<Include filename ="anonymous_asm_mods/extract_sp_code/selector_overlay11.asm"/>
+	  </OpenBin>
+        </Patch>
+        
+        <!-- A patch to extract special process code -->
+        <Patch id="ExtractObjectTable" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="anonymous_asm_mods/obj_table/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
 
@@ -1074,14 +1081,14 @@
 	  	<Include filename ="anonymous_asm_mods/add_type/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to implement Fairy-type gummies -->
         <Patch id="ImplementFairyGummies" >
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="anonymous_asm_mods/implement_fairy_gummies/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to change move stats display -->
         <Patch id="ChangeMoveStatsDisplay" >
           <OpenBin filepath="arm9.bin">
@@ -1102,14 +1109,14 @@
 	  	<Include filename ="anonymous_asm_mods/extract_bar_list/selector_overlay19.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract hardcoded item lists -->
         <Patch id="ExtractHardcodedItemLists" >
           <OpenBin filepath="arm9.bin">
 	  	<Include filename ="anonymous_asm_mods/extract_item_lists/selector_arm9.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract dungeon data -->
         <Patch id="ExtractDungeonData" >
           <OpenBin filepath="arm9.bin">
@@ -1135,7 +1142,7 @@
 	  	<Param name="StartGraphicPos" label="ID of the first icon in markfont.dat (24 entries used)" min="0" max="255" default="92" type="int"/>
           </Parameters>
         </Patch>
-        
+
         <!-- A patch to implement dungeon interruptions -->
         <Patch id="DungeonInterrupt" >
           <OpenBin filepath="arm9.bin">
@@ -1157,21 +1164,28 @@
             </Param>
           </Parameters>
         </Patch>
-        
+
         <!-- A patch to change pokémon animations -->
         <Patch id="ChangePokemonGroundAnim" >
           <OpenBin filepath="overlay/overlay_0011.bin">
 	  	<Include filename ="anonymous_asm_mods/pkmn_ground_anim/selector_overlay11.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
+        <!-- A patch to extract the object table -->
+        <Patch id="ExtractObjectTable" >
+          <OpenBin filepath="overlay/overlay_0011.bin">
+	  	<Include filename ="anonymous_asm_mods/obj_table/selector_overlay11.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <!-- A patch to change fixed floor properties -->
         <Patch id="ChangeFixedFloorProperties" >
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="anonymous_asm_mods/change_ff_prop/selector_overlay29.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to extract animations table data -->
         <Patch id="ExtractAnimData" >
           <OpenBin filepath="arm9.bin">
@@ -1188,7 +1202,7 @@
 	  	<Include filename ="anonymous_asm_mods/fix_evolution/patch.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to enable exp. share -->
         <Patch id="AddExperienceShare" >
           <OpenBin filepath="arm9.bin">
@@ -1204,21 +1218,21 @@
             <Param name="PercentageShared" label="% of exp. shared" min="0" max="255" default="100" type="int"/>
           </Parameters>
         </Patch>
-        
+
         <!-- A patch to let the player choose its starter after the quiz -->
         <Patch id="ChooseStarter" >
           <OpenBin filepath="overlay/overlay_0013.bin">
 	  	<Include filename ="anonymous_asm_mods/choose_starter/selector_overlay13.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <!-- A patch to let the player choose its starter after the quiz -->
         <Patch id="SkipQuiz" >
           <OpenBin filepath="overlay/overlay_0013.bin">
 	  	<Include filename ="anonymous_asm_mods/skip_quiz/selector_overlay13.asm"/>
 	  </OpenBin>
         </Patch>
-        
+
         <Patch id="ExpandPokeList" >
           <OpenBin filepath="arm9.bin">
 		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_arm9.asm"/>
@@ -1239,7 +1253,7 @@
 		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay31.asm"/>
           </OpenBin>
         </Patch>
-        
+
         <!-- A patch that fixes the unused dungeon chance -->
         <Patch id="UnusedDungeonChancePatch" >
           <OpenBin filepath="overlay/overlay_0029.bin">
@@ -1333,7 +1347,7 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>
         </SimplePatch>
-        
+
         <SimplePatch id="FixMemorySoftlock">
           <Include filename="end_asm_mods/src/FixMemorySoftlock.asm"/>
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>

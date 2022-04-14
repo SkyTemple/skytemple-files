@@ -49,6 +49,8 @@ class SsaWriter:
             trigger_bytes += self.uint16(trigger.coroutine.id)
             trigger_bytes += self.uint16(trigger.unk2)
             trigger_bytes += self.uint16(trigger.unk3)
+            if trigger.script_id < 0:
+                raise ValueError(_("Can not save a scene event without a defined triggered script."))
             trigger_bytes += self.uint16(trigger.script_id)
 
         # Collect all the data that is referenced by layers

@@ -55,7 +55,6 @@ DOJO_MAPPA_ENTRY = 0x35
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x5449C
 PATCH_CHECK_ADDR_APPLIED_EU = 0x54818
-PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0x00000483
 
 US_TABLE_SF = 0xA3D14
@@ -120,8 +119,6 @@ and to save a backup of your ROM before applying this.""")
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED
-            if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

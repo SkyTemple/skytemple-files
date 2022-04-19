@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
+from skytemple_files.common.string_codec import PMD2_STR_ENCODER
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.str.model import Str
@@ -22,8 +22,8 @@ from skytemple_files.data.str.model import Str
 
 class StrHandler(DataHandler[Str]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Str:
-        return Str(data)
+    def deserialize(cls, data: bytes, *, string_encoding: str = PMD2_STR_ENCODER, **kwargs: OptionalKwargs) -> Str:
+        return Str(data, string_encoding)
 
     @classmethod
     def serialize(cls, data: Str, **kwargs: OptionalKwargs) -> bytes:

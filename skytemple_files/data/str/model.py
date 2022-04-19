@@ -19,7 +19,7 @@ from skytemple_files.common.util import *
 
 
 class Str:
-    def __init__(self, data: bytes):
+    def __init__(self, data: bytes, string_encoding: str = PMD2_STR_ENCODER):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         after_end = len(data)
@@ -27,6 +27,7 @@ class Str:
         pointers = []
         current_pointer = 0
         cursor = 0
+        self.string_encoding = string_encoding
         while current_pointer < after_end:
             current_pointer = read_uintle(data, cursor, 4)
             if current_pointer < after_end:
@@ -37,9 +38,8 @@ class Str:
         for pnt in pointers:
             self.strings.append(self._read_string(data, pnt))
 
-    @staticmethod
-    def _read_string(data, pnt):
-        return read_var_length_string(data, pnt)[1]
+    def _read_string(self, data, pnt):
+        return read_var_length_string(data, pnt, self.string_encoding)[1]
 
     def to_bytes(self):
         """Convert the string list back to bytes"""
@@ -48,7 +48,7 @@ class Str:
         offset_list = []
         strings_bytes = []
         for s in self.strings:
-            b = bytes(s, PMD2_STR_ENCODER) + bytes([0])
+            b = bytes(s, self.string_encoding) + bytes([0])
             offset_list.append(length_of_index + length_of_str_bytes)
             length_of_str_bytes += len(b)
             strings_bytes.append(b)

@@ -39,7 +39,6 @@ TABLE_ENTRIES_JP = 0
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x1FEC8
 PATCH_CHECK_ADDR_APPLIED_EU = 0x1FF28
-PATCH_CHECK_ADDR_APPLIED_JP = 0
 PATCH_CHECK_INSTR_APPLIED = 0xE5D50008
 
 OBJECT_TABLE_PATH = "BALANCE/objects.bin"
@@ -72,8 +71,6 @@ class ExtractObjectTablePatchHandler(AbstractPatchHandler):
                 return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
                 return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
-            if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

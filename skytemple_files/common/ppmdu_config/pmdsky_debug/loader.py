@@ -168,6 +168,8 @@ class _IncompleteBinary:
     symbols: List[Pmd2BinarySymbol] = field(default_factory=list)
     description: str = field(default_factory=str)
 
+    _discard: bool = False
+
     @classmethod
     def get(cls, pool: Dict[str, '_IncompleteBinary'], name: str) -> '_IncompleteBinary':
         if name in pool:
@@ -216,6 +218,11 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
     for bin_name, definition in yml.items():
         assert isinstance(bin_name, str)
         binary = _IncompleteBinary.get(binaries, bin_name)
+        if 'versions' in definition:
+            # If it isn't we assume it's valid for all regions.
+            if region not in definition['versions']:
+                binary._discard = True
+                continue
         if 'address' in definition:
             if region in definition['address']:
                 if binary.loadaddress is None:
@@ -244,6 +251,8 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
 def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
     out = []
     for bin_name, incl_bin in binaries.items():
+        if incl_bin._discard:
+            continue
         if incl_bin.loadaddress is None:
             raise ValueError(f"Did not find a load address for {bin_name}.")
         if incl_bin.length is None:

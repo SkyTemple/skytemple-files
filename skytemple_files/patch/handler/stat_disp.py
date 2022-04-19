@@ -34,7 +34,6 @@ from skytemple_files.common.i18n_util import _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x243A0
 PATCH_CHECK_ADDR_APPLIED_EU = 0x24600
-PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0xEA000004
 
 SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'anonymous_asm_mods', 'stat_disp', 'src')
@@ -70,8 +69,6 @@ This patch may not be compatible if the markfont.dat file has been modified.""")
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
                 return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
-            if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

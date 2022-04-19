@@ -27,7 +27,6 @@ from skytemple_files.data.str.handler import StrHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x3E68
 PATCH_CHECK_ADDR_APPLIED_EU = 0x3E68
-PATCH_CHECK_ADDR_APPLIED_JP = 0x0
 PATCH_CHECK_INSTR_APPLIED = 0xBA000006
 
 INTER_PATH = "BALANCE/inter_d.bin"
@@ -63,8 +62,6 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
                 return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
-            if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

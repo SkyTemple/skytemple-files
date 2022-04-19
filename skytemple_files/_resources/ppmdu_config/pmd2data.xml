@@ -165,8 +165,8 @@
         <StringBlock name="Spinda's Juice Bar Strings"             beg="17800"  end="17900"/>
         <StringBlock name="Recycle Shop Strings"                   beg="17900"  end="17960"/>
         <StringBlock name="Staff Roll"                             beg="17960"  end="18451"/>
-        <StringBlock name="New Pokemon Names"                          beg="18451"  end="20499"/>
-        <StringBlock name="New Pokemon Categories"                     beg="20499"  end="22547"/>
+        <StringBlock name="New Pokemon Names"                      beg="18451"  end="20499"/>
+        <StringBlock name="New Pokemon Categories"                 beg="20499"  end="22547"/>
       </StringBlocks>
     </Game>
 
@@ -196,19 +196,22 @@
     <!--Explorers of Sky, Japan-->
     <Game id="EoS_JP">
       <Languages>
-        <Language filename="text_j.str" name="Japanese" locale=".932" />
+        <Language filename="text_j.str" name="Japanese" locale="jp-JP">
+        	<m2n filename="st_m2n_j.bin" />
+        	<n2m filename="st_n2m_j.bin" />
+        	<i2n filename="st_i2n_j.bin" />
+        </Language>
       </Languages>
       <StringBlocks>
-        <!--#TODO-->
         <StringBlock name="Portrait Names"            beg="5465" end="5497"/>
-        <StringBlock name="Pokemon Names"             beg="5519"  end="6119"/>
+        <StringBlock name="Pokemon Names"             beg="5519" end="6119"/>
       </StringBlocks>
     </Game>
 
     <!--Explorers of Time and Darkness, Japan-->
     <Game id="EoT_JP" id2="EoD_JP">
       <Languages>
-        <Language filename="text_j.str" name="Japanese" locale=".932" />
+        <Language filename="text_j.str" name="Japanese" locale="jp-JP" />
       </Languages>
       <StringBlocks>
         <!--#TODO-->
@@ -322,8 +325,8 @@
         <StringBlock name="Spinda's Juice Bar Strings"             beg="17831"  end="17931"/>
         <StringBlock name="Recycle Shop Strings"                   beg="17931"  end="17991"/>
         <StringBlock name="Staff Roll"                             beg="17991"  end="18482"/>
-        <StringBlock name="New Pokemon Names"                          beg="18482"  end="20530"/>
-        <StringBlock name="New Pokemon Categories"                     beg="20530"  end="22578"/>
+        <StringBlock name="New Pokemon Names"                      beg="18482"  end="20530"/>
+        <StringBlock name="New Pokemon Categories"                 beg="20530"  end="22578"/>
       </StringBlocks>
     </Game>
 

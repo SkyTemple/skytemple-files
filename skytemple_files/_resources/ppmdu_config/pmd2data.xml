@@ -203,8 +203,85 @@
         </Language>
       </Languages>
       <StringBlocks>
-        <StringBlock name="Portrait Names"            beg="5465" end="5497"/>
-        <StringBlock name="Pokemon Names"             beg="5519" end="6119"/>
+        <!-- TODO: Experimental! -->
+        <StringBlock name="Explorer Ranks Names"                   beg="894"  end="907"/>
+        <StringBlock name="Default Team Names"                     beg="1218"  end="1224"/>
+        <!--<StringBlock name="Job Debriefing Related Strings"         beg="1278"  end="673"/> --><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="Member Joined Menu"                     beg="9336"  end="9342"/>
+        <StringBlock name="Some Item Menu Strings"                 beg="12234"  end="12248"/>
+        <StringBlock name="Gummi Eating Strings"                   beg="12248"  end="12260"/>
+        <StringBlock name="Items and Pokemon Menu Strings"         beg="12263"  end="12277"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="Kangaskhan Storage Strings"             beg="12876"  end="12905"/>
+        <StringBlock name="Evolution Strings"                      beg="13004"  end="13033"/>
+        <StringBlock name="Music tracks names"                     beg="1350"  end="1492"/>
+        <StringBlock name="Personality Quiz Questions"             beg="12422"  end="12489"/>
+        <StringBlock name="Personality Quiz Answers"               beg="12489"  end="12664"/>
+        <StringBlock name="Personality Quiz result strings"        beg="12664"  end="12712"/>
+        <StringBlock name="Personality string natures"             beg="12741"  end="12745"/>
+        <StringBlock name="Weather Change Feedback"                beg="3157"  end="3165"/>  <!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="Weather Names"                          beg="16116"  end="16124"/>
+        <StringBlock name="Floor-Wide Status Names+Desc"           beg="18511"  end="18533"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="IQ Skills Menu"                         beg="2674"  end="2679"/>  <!-- Darkaim: Needs a lot of work -->
+        <StringBlock name="Test Dungeon"                           beg="711"  end="712"/>    <!-- Darkaim: Maybe right? (also 452, also maybe 711?) -->
+        <StringBlock name="Mission Objectives"                     beg="712"  end="894"/>
+        <StringBlock name="Mission Failure/Faint Strings"          beg="1584"  end="1600"/>
+        <StringBlock name="Speed Change Feedback"                  beg="1600"  end="1605"/>
+        <StringBlock name="Potential Recruit Strings"              beg="1605"  end="1608"/>
+        <StringBlock name="Gummi Feedback"                         beg="1608"  end="1619"/>
+        <StringBlock name="Traps Feedback"                         beg="1619"  end="1643"/>  <!-- Darkaim: Go over again with Capypara (No "There is nothing at [string:0]'s feet.") -->
+        <StringBlock name="More Dungeon Feedback"                  beg="2922"  end="3069"/>  <!-- Darkaim: Redundant?? -->
+        <StringBlock name="Something's Stirring String"            beg="2363"  end="2371"/>
+        <StringBlock name="More Dungeon Feedback"                  beg="2371"  end="2466"/>
+        <StringBlock name="Some Fake items Dialogue"               beg="2466"  end="2479"/>
+        <StringBlock name="Shaymin Form Change Strings"            beg="2479"  end="2485"/>
+        <StringBlock name="Recruited A Pokemon Strings"            beg="2486"  end="2497"/>
+        <StringBlock name="Battle Feedback Messages"               beg="2497"  end="2886"/>  <!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="Misson Feedback"                        beg="2886"  end="2953"/>
+        <StringBlock name="Kecleon Dungeon Shop Strings"           beg="2954"  end="2966"/>
+        <StringBlock name="Misc Battle Events Strings"             beg="2966"  end="3157??"/><!-- Darkaim: Go over again with Capypara (This one needs a lot of work) -->
+        <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3890"/>  <!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="Kirila Secret Bazaar Greeting"          beg="2216"  end="2217"/>  <!-- Darkaim: Go over again with Capypara (?) -->
+        <StringBlock name="Grab Bags Shop Strings"                 beg="2217"  end="2229"/>
+        <StringBlock name="Shedinja Shop Strings"                  beg="2229"  end="2240"/>
+        <StringBlock name="Mime Jr. Spa Strings"                   beg="2240"  end="2250"/>
+        <StringBlock name="Swalot's Shop Strings"                  beg="2250"  end="2260"/>
+        <StringBlock name="Team Tactics Menu strings"              beg="5514"  end="5518"/>
+        <StringBlock name="Item Became Sticky"                     beg="2485"  end="2486"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialogue"              beg="11167"  end="11512"/>
+        <StringBlock name="Pokemon WAIT Dialogue"                  beg="11512"  end="11857"/>
+        <StringBlock name="Pokemon HEALTHY Dialogue"               beg="9367"  end="10477"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialogue"             beg="10477"  end="10822"/>
+        <StringBlock name="Pokemon PINCH Dialogue"                 beg="10822"  end="11167"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialogue"           beg="11857"  end="12202"/>
+        <StringBlock name="Item Names"                             beg="3474"  end="4874"/>
+        <StringBlock name="Move Names"                             beg="4874"  end="5435"/>
+        <StringBlock name="Pokemon Names"                          beg="5519"  end="6119"/>  <!-- Darkaim: Go over again with Capypara (Also English names in text) -->
+        <StringBlock name="Pokemon Categories"                     beg="6719"  end="7319"/>
+        <StringBlock name="Tactics Names"                          beg="16124"  end="16135"/>
+        <StringBlock name="Tactics Descriptions"                   beg="16135"  end="16146"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="IQ Skills Names"                        beg="16146"  end="16215"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="IQ Skills Descriptions"                 beg="16215"  end="16284"/>
+        <StringBlock name="Move Targets Strings"                   beg="18808"  end="18840"/>
+        <StringBlock name="Accuracy/Power Stars Ratings"           beg="18840"  end="18857"/><!-- Darkaim: Go over again with Capypara ("Always Hit" and "No Damage" found in 16284 and 16285) -->
+        <StringBlock name="Move Descriptions"                      beg="16287"  end="16845"/>
+        <StringBlock name="Item Long Descriptions"                 beg="16845"  end="18245"/>
+        <StringBlock name="Item Short Descriptions"                beg="7488"  end="8888"/>  <!-- Darkaim: Go over again with Capypara (Is "-" needed?) -->
+        <StringBlock name="Trap Names"                             beg="18245"  end="18271"/>
+        <StringBlock name="Trap Descriptions"                      beg="18271"  end="18295"/><!-- Darkaim: Go over again with Capypara (Possibly out of order) -->
+        <StringBlock name="Statuses Names and Descriptions"        beg="18295"  end="18507"/><!-- Darkaim: Go over again with Capypara (Missing "Stair Spotter", Extra = 18507 to 18510) -->
+        <StringBlock name="Type Names"                             beg="18541"  end="18560"/>
+        <StringBlock name="Ability Names"                          beg="18560"  end="18684"/>
+        <StringBlock name="Ability Descriptions"                   beg="18684"  end="18808"/><!-- Darkaim: WiFi related strings are 13143 to 14496 -->
+        <StringBlock name="Debug Menu Strings"                     beg="954"  end="3394"/>   <!-- Darkaim: Go over again with Capypara (15971 to 16075 are 3394 to 3473, but doesn't include 16052 to 16075) -->
+        <StringBlock name="Portrait Names"                         beg="5465"  end="5497"/>  <!-- Darkaim: 16108 to 16433 are 5497 to 5518, but doesn't include 16122 to 16433) -->
+        <StringBlock name="Ground Map Names"                       beg="63"  end="193"/>
+        <StringBlock name="Dungeon Names (Main)"                   beg="193"  end="449"/>    <!-- Darkaim: 16802 to 16822 are 449 to 451[Dungeons possibly enterchangable] -->
+        <StringBlock name="Dungeon Names (Selection)"              beg="452"  end="708"/>    <!-- Darkaim: 17079 to 17081 are 708 to 710 -->
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="1902"  end="2158"/>  <!-- Darkaim: 17339 is 2158 -->
+        <StringBlock name="Dungeon Names (Banner)"                 beg="1643"  end="1899"/>  <!-- Darkaim: 17595 to 17799 is 1899 to 1901 and 12278 to 12421 (missing a lot of lines, kind of all over the place, papa and mama are 1276 and 1277) -->
+        <StringBlock name="Spinda's Juice Bar Strings"             beg="14702"  end="14800"/>
+        <StringBlock name="Recycle Shop Strings"                   beg="7336"  end="7396"/>
+        <StringBlock name="Staff Roll"                             beg="14815"  end="15306"/>
       </StringBlocks>
     </Game>
 

@@ -45,16 +45,16 @@ class EntitySpawnEntry(AutoString):
 
 
 class ItemSpawn(AutoString):
-    def __init__(self, item_id: int, null1: int, null2: int, null3: int):
+    def __init__(self, item_id: int, quantity: int, null2: int, null3: int):
         self.item_id = item_id
-        self.null1 = null1
+        self.quantity = quantity
         self.null2 = null2
         self.null3 = null3
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(8)
         write_uintle(buffer, self.item_id, 0, 4)
-        write_uintle(buffer, self.null1, 2, 2)
+        write_uintle(buffer, self.quantity, 2, 2)
         write_uintle(buffer, self.null2, 4, 2)
         write_uintle(buffer, self.null3, 6, 2)
         return buffer
@@ -63,7 +63,7 @@ class ItemSpawn(AutoString):
         if not isinstance(other, ItemSpawn):
             return False
         return self.item_id == other.item_id and \
-               self.null1 == other.null1 and \
+               self.quantity == other.quantity and \
                self.null2 == other.null2 and \
                self.null3 == other.null3
 

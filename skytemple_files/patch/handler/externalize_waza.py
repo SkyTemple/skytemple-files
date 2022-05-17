@@ -48,7 +48,7 @@ Depends on the ActorAndLevelLoader patch, as it needs some space provided by thi
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return '0.0.2'
 
     @property
     def category(self) -> PatchCategory:

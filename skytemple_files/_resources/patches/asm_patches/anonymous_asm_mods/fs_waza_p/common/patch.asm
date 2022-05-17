@@ -206,7 +206,7 @@ loop_buffer:
 there:
 	ldr r0,=string_mv
 	mov r1,r4
-	bl PrintF
+	;bl PrintF - Can cause a stack overflow
 	bl FStreamAlloc
 	mov r0,r7
 	mov r1,r8
@@ -252,7 +252,7 @@ buffer_ptr:
 	ldr r0,=string_ms
 	mov r1,r5
 	mov r2,r4
-	bl PrintF
+	;bl PrintF - Can cause a stack overflow
 	bl FStreamAlloc
 	ldr r3,=CurrentWazaInfo
 	ldr r1,=WazaFileInfo

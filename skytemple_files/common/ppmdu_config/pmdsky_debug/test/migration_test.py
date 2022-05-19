@@ -64,7 +64,8 @@ OLD_ENTRIES = {
                  'PartnerStartLevel': (False, False),
                  'RankUpTable': (True, False),
                  'SaveScriptVariableValue': (False, True),
-                 'SaveScriptVariableValueWithOffset': (False, True),
+                 # was renamed:
+                 #'SaveScriptVariableValueWithOffset': (False, True),
                  #'ScriptVars': (True, False),
                  #'ScriptVarsLocals': (True, False),
                  'SecondaryTerrains': (True, False),

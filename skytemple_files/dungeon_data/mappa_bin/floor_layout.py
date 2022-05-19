@@ -223,12 +223,12 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         )
         return cls(
             structure=MappaFloorStructureType(read_uintle(read.data, pointer + 0x00)),
-            room_density=read_uintle(read.data, pointer + 0x01),
+            room_density=read_sintle(read.data, pointer + 0x01),
             tileset_id=read_uintle(read.data, pointer + 0x02),
             music_id=read_uintle(read.data, pointer + 0x03),
             weather=MappaFloorWeather(read_uintle(read.data, pointer + 0x04)),
             floor_connectivity=read_uintle(read.data, pointer + 0x05),
-            initial_enemy_density=read_uintle(read.data, pointer + 0x06),
+            initial_enemy_density=read_sintle(read.data, pointer + 0x06),
             kecleon_shop_chance=read_uintle(read.data, pointer + 0x07),
             monster_house_chance=read_uintle(read.data, pointer + 0x08),
             unusued_chance=read_uintle(read.data, pointer + 0x09),
@@ -257,12 +257,12 @@ class MappaFloorLayout(AutoString, XmlSerializable):
     def to_mappa(self) -> bytes:
         data = bytearray(32)
         write_uintle(data, self.structure.value, 0x00, 1)
-        write_uintle(data, self.room_density, 0x01, 1)
+        write_sintle(data, self.room_density, 0x01, 1)
         write_uintle(data, self.tileset_id, 0x02, 1)
         write_uintle(data, self.music_id, 0x03, 1)
         write_uintle(data, self.weather.value, 0x04, 1)
         write_uintle(data, self.floor_connectivity, 0x05, 1)
-        write_uintle(data, self.initial_enemy_density, 0x06, 1)
+        write_sintle(data, self.initial_enemy_density, 0x06, 1)
         write_uintle(data, self.kecleon_shop_chance, 0x07, 1)
         write_uintle(data, self.monster_house_chance, 0x08, 1)
         write_uintle(data, self.unusued_chance, 0x09, 1)

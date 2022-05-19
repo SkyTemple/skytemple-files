@@ -105,7 +105,7 @@ class W16AtImage(W16Image):
 
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.COMMON_AT.deserialize(self.compressed_img_data).decompress()
+        return FileType.COMMON_AT.deserialize(bytes(self.compressed_img_data)).decompress()
 
 
 class W16RawImage(W16Image):

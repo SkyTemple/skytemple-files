@@ -238,7 +238,7 @@
         <StringBlock name="Battle Feedback Messages"               beg="2497"  end="2886"/>  <!-- Darkaim: Go over again with Capypara -->
         <StringBlock name="Misson Feedback"                        beg="2886"  end="2953"/>
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="2954"  end="2966"/>
-        <StringBlock name="Misc Battle Events Strings"             beg="2966"  end="3157??"/><!-- Darkaim: Go over again with Capypara (This one needs a lot of work) -->
+        <!--<StringBlock name="Misc Battle Events Strings"             beg="2966"  end="3157??"/> --><!-- Darkaim: Go over again with Capypara (This one needs a lot of work) -->
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3890"/>  <!-- Darkaim: Go over again with Capypara -->
         <StringBlock name="Kirila Secret Bazaar Greeting"          beg="2216"  end="2217"/>  <!-- Darkaim: Go over again with Capypara (?) -->
         <StringBlock name="Grab Bags Shop Strings"                 beg="2217"  end="2229"/>

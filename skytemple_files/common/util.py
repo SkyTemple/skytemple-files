@@ -33,6 +33,7 @@ from PIL import Image
 from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import any_int
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
@@ -53,6 +54,8 @@ MONSTER_BIN = 'MONSTER/monster.bin'
 DUNGEON_BIN = 'DUNGEON/dungeon.bin'
 
 DEBUG = False
+_READ_WRITE_DEPRECATION_WARNING = "The functions read_{s|u}int{be|le} and write_{s|u}int{be|le} are deprecated. " \
+                                  "Use the specific read/write functions instead."
 logger = logging.getLogger(__name__)
 
 
@@ -136,6 +139,7 @@ def add_extension_if_missing(fn: str, ext: str) -> str:
         return fn + '.' + ext
     return fn
 
+
 def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     """
     Read a number of bytes (default 1) from a bytes-like object
@@ -144,35 +148,51 @@ def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     return data[start:(start + length)]
 
 
-def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
+def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
     Return an unsiged integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
+
+    .. deprecated:: 1.4.0
+           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=False)
 
 
-def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
+def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
     Return an signed integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
+
+    .. deprecated:: 1.4.0
+           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=True)
 
 
-def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
+def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
     Return an unsiged integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
+
+    .. deprecated:: 1.4.0
+           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=False)
 
 
-def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
+def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
     Return an signed integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
+
+    .. deprecated:: 1.4.0
+           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=True)
 
 
@@ -192,31 +212,47 @@ def read_var_length_string(data: bytes, start: int = 0, codec: str = string_code
     return cursor - start, str(bytes_of_string, codec)
 
 
-def write_uintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
+def write_uintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsiged integer in little endian to the bytes-like mutable object at the given position.
+
+    .. deprecated:: 1.4.0
+           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=False)
 
 
-def write_sintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
+def write_sintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
     Write an signed integer in little endian to the bytes-like mutable object at the given position.
+
+    .. deprecated:: 1.4.0
+           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=True)
 
 
-def write_uintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
+def write_uintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsiged integer in big endian to the bytes-like mutable object at the given position.
+
+    .. deprecated:: 1.4.0
+           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=False)
 
 
-def write_sintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
+def write_sintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
     Write an signed integer in big endian to the bytes-like mutable object at the given position.
+
+    .. deprecated:: 1.4.0
+           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
     """
+    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=True)
 
 

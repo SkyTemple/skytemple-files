@@ -1,0 +1,23 @@
+[MAIN]
+ignore-patterns=.*?_test.py
+
+jobs=0
+suggestion-mode=yes
+
+# Those don't really work with skytemple-rust, since they can't deal with __init__.pyi
+# But mypy already takes care of these.
+disable=
+    no-name-in-module,
+    import-error,
+    no-member,
+    # This one seems to be broken with make_user_err.
+    raising-non-exception,
+
+fail-under=8.0
+fail-on=
+    deprecated-method-st,
+    E,
+    F,
+
+[REPORTS]
+reports=yes

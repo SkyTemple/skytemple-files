@@ -26,6 +26,7 @@ WIN_THEME_REG_PATH = r"Software\Microsoft\Windows\CurrentVersion\Themes\Personal
 WIN_THEME_REG_KEY = 'AppsUseLightTheme'
 
 
+# pylint: disable=undefined-variable
 def win_use_light_theme():
     """Function to check if the current Windows theme is the light theme or the dark theme"""
     try:

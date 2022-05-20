@@ -150,7 +150,7 @@ def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
 
 def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
-    Return an unsiged integer in little endian from the bytes-like object at the given position.
+    Return an unsigned integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
@@ -162,7 +162,7 @@ def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
 
 def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
-    Return an signed integer in little endian from the bytes-like object at the given position.
+    Return a signed integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
@@ -174,7 +174,7 @@ def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
 
 def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
-    Return an unsiged integer in big endian from the bytes-like object at the given position.
+    Return an unsigned integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
@@ -186,7 +186,7 @@ def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
 
 def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
     """
-    Return an signed integer in big endian from the bytes-like object at the given position.
+    Return a signed integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
@@ -214,7 +214,7 @@ def read_var_length_string(data: bytes, start: int = 0, codec: str = string_code
 
 def write_uintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
-    Write an unsiged integer in little endian to the bytes-like mutable object at the given position.
+    Write an unsigned integer in little endian to the bytes-like mutable object at the given position.
 
     .. deprecated:: 1.4.0
            Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
@@ -225,7 +225,7 @@ def write_uintle(data: bytearray, to_write: any_int, start: int = 0, length: int
 
 def write_sintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
-    Write an signed integer in little endian to the bytes-like mutable object at the given position.
+    Write a signed integer in little endian to the bytes-like mutable object at the given position.
 
     .. deprecated:: 1.4.0
            Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
@@ -236,7 +236,7 @@ def write_sintle(data: bytearray, to_write: any_int, start: int = 0, length: int
 
 def write_uintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
-    Write an unsiged integer in big endian to the bytes-like mutable object at the given position.
+    Write an unsigned integer in big endian to the bytes-like mutable object at the given position.
 
     .. deprecated:: 1.4.0
            Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
@@ -247,7 +247,7 @@ def write_uintbe(data: bytearray, to_write: any_int, start: int = 0, length: int
 
 def write_sintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
     """
-    Write an signed integer in big endian to the bytes-like mutable object at the given position.
+    Write a signed integer in big endian to the bytes-like mutable object at the given position.
 
     .. deprecated:: 1.4.0
            Use the more specific write_* (write_i8, write_u16, etc.) functions instead.

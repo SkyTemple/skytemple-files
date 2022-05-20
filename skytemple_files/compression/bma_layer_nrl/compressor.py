@@ -15,8 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_uintle, read_bytes, iter_bytes
-from skytemple_files.compression.generic_nrl import CMD_ZERO_OUT, CMD_COPY_BYTES, CMD_FILL_OUT
+from skytemple_files.common.util import read_bytes, iter_bytes, read_u32, read_u16
+from skytemple_files.compression.generic_nrl import CMD_COPY_BYTES, CMD_FILL_OUT
 
 
 # How much pair24 we look ahead for at most
@@ -75,7 +75,7 @@ class BmaLayerNrlCompressor:
             if DEBUG:
                 print(f"Read {repeats} repeats of {current_int_pair:08x}")
             self.cursor += repeats * 4
-            if read_uintle(current_int_pair, 0, 4) == 0:
+            if read_u32(current_int_pair, 0) == 0:
                 if DEBUG:
                     print(f"CMD_ZERO_OUT")
                 # CMD_ZERO_OUT
@@ -120,8 +120,8 @@ class BmaLayerNrlCompressor:
     def _write_pair24(self, data: bytes):
         """Writes 4 bytes of 2 16 bit LE integers in pair24 encoding."""
         assert len(data) == 4
-        int1 = read_uintle(data, 0, 2)
-        int2 = read_uintle(data, 2, 2)
+        int1 = read_u16(data, 0)
+        int2 = read_u16(data, 2)
         pair24 = ((int1 & 0xff) << 16) + ((int2 & 0xf) << 12) + (int1 & 0xf00) + ((int2 & 0xff0) >> 4)
         if DEBUG:
             print(f"W {int1:02x} and {int2:02x} as {pair24:06x}")

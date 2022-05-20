@@ -220,5 +220,4 @@ class BpcImageDecompressor:
             print("r", end="")
         oc = self.cursor
         self.cursor += bytes
-        return read_uintle(self.compressed_data, oc, bytes)
-
+        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=False, signed=False)

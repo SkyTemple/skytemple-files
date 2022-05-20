@@ -20,14 +20,19 @@ from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class Atupx(CommonAt):
+    length_compressed: u16
+    length_decompressed: u32
+
     def __init__(self, data: bytes=None):
         """
         Create a ATUPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
         """
+        self.length_compressed: u16 = u16(0)
+        self.length_decompressed: u32 = u32(0)
         if data:
             self.length_compressed = self.cont_size(data)
-            self.length_decompressed = read_uintle(data, 7, 4)
+            self.length_decompressed = read_u32(data, 7)
             self.compressed_data = data[0xb:]
 
     def decompress(self) -> bytes:
@@ -46,7 +51,7 @@ class Atupx(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'Atupx':
@@ -57,6 +62,6 @@ class Atupx(CommonAt):
         compressed_data = FileType.CUSTOM_999.compress(data)
 
         new_container.compressed_data = compressed_data
-        new_container.length_decompressed = len(data)
-        new_container.length_compressed = len(compressed_data) + 0xb
+        new_container.length_decompressed = u32(len(data))
+        new_container.length_compressed = u16(len(compressed_data) + 0xb)
         return new_container

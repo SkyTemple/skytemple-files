@@ -20,6 +20,9 @@ from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class At4px(CommonAt):
+    length_compressed: u16
+    length_decompressed: u16
+
     def __init__(self, data: bytes=None):
         """
         Create a AT4PX container from already compressed data.
@@ -28,7 +31,7 @@ class At4px(CommonAt):
         if data:
             self.length_compressed = self.cont_size(data)
             self.compression_flags = read_bytes(data, 7, 9)
-            self.length_decompressed = read_uintle(data, 0x10, 2)
+            self.length_decompressed = read_u16(data, 0x10)
             self.compressed_data = data[0x12:]
 
     def decompress(self) -> bytes:
@@ -50,7 +53,7 @@ class At4px(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'At4px':
@@ -61,7 +64,7 @@ class At4px(CommonAt):
         flags, px_data = FileType.PX.compress(data)
 
         new_container.compression_flags = flags
-        new_container.length_decompressed = len(data)
+        new_container.length_decompressed = u16(len(data))
         new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x12
+        new_container.length_compressed = u16(len(px_data) + 0x12)
         return new_container

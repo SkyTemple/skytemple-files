@@ -25,15 +25,15 @@ import os
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
-from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, Type, \
-    Any, Sequence, Generator
+from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, \
+    Any, Sequence, Generator, get_type_hints
 
 import pkg_resources
 from PIL import Image
 from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import any_int
+from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
@@ -148,52 +148,95 @@ def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     return data[start:(start + length)]
 
 
-def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
+def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an unsigned integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
            Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
+           Use read_dynamic if you need a varying length.
     """
     warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=False)
 
 
-def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
+def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return a signed integer in little endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
            Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
+           Use read_dynamic if you need a varying length.
     """
     warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='little', signed=True)
 
 
-def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
+def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return an unsigned integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
            Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
+           Use read_dynamic if you need a varying length.
     """
     warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=False)
 
 
-def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> any_int:
+def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
     """
     Return a signed integer in big endian from the bytes-like object at the given position.
     Recommended usage with memoryview for performance!
 
     .. deprecated:: 1.4.0
            Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
+           Use read_dynamic if you need a varying length.
     """
     warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     return int.from_bytes(data[start:(start + length)], byteorder='big', signed=True)
+
+
+def read_dynamic(
+        data: ByteReadable, start: int = 0, *, length: int, signed: bool, big_endian: bool
+) -> int:
+    """
+    Return an integer from the bytes-like object at the given position.
+    """
+    return int.from_bytes(data[start:(start + length)], byteorder='big' if big_endian else 'little', signed=signed)
+
+
+def read_u8(data: ByteReadable, start: int = 0) -> u8:
+    """Returns an unsigned 8-bit integer from the bytes-like object at the given position."""
+    return u8(data[start])
+
+
+def read_i8(data: ByteReadable, start: int = 0) -> i8:
+    """Returns a signed 8-bit integer from the bytes-like object at the given position."""
+    return i8(data[start] - 256 if data[start] >= 128 else data[start])
+
+
+def read_u16(data: ByteReadable, start: int = 0, *, big_endian: bool = False) -> u16:
+    """Returns an unsigned 16-bit integer from the bytes-like object at the given position."""
+    return u16(int.from_bytes(data[start:(start + 2)], byteorder='big' if big_endian else 'little', signed=False))
+
+
+def read_i16(data: ByteReadable, start: int = 0, *, big_endian: bool = False) -> i16:
+    """Returns a signed 16-bit integer from the bytes-like object at the given position."""
+    return i16(int.from_bytes(data[start:(start + 2)], byteorder='big' if big_endian else 'little', signed=True))
+
+
+def read_u32(data: ByteReadable, start: int = 0, *, big_endian: bool = False) -> u32:
+    """Returns an unsigned 32-bit integer from the bytes-like object at the given position."""
+    return u32(int.from_bytes(data[start:(start + 4)], byteorder='big' if big_endian else 'little', signed=False))
+
+
+def read_i32(data: ByteReadable, start: int = 0, *, big_endian: bool = False) -> i32:
+    """Returns a signed 32-bit integer from the bytes-like object at the given position."""
+    return i32(int.from_bytes(data[start:(start + 4)], byteorder='big' if big_endian else 'little', signed=True))
 
 
 def read_var_length_string(data: bytes, start: int = 0, codec: str = string_codec.PMD2_STR_ENCODER) -> Tuple[int, str]:
@@ -212,7 +255,7 @@ def read_var_length_string(data: bytes, start: int = 0, codec: str = string_code
     return cursor - start, str(bytes_of_string, codec)
 
 
-def write_uintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
+def write_uintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsigned integer in little endian to the bytes-like mutable object at the given position.
 
@@ -223,7 +266,7 @@ def write_uintle(data: bytearray, to_write: any_int, start: int = 0, length: int
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=False)
 
 
-def write_sintle(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
+def write_sintle(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write a signed integer in little endian to the bytes-like mutable object at the given position.
 
@@ -234,7 +277,7 @@ def write_sintle(data: bytearray, to_write: any_int, start: int = 0, length: int
     data[start:start + length] = to_write.to_bytes(length, byteorder='little', signed=True)
 
 
-def write_uintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
+def write_uintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write an unsigned integer in big endian to the bytes-like mutable object at the given position.
 
@@ -245,7 +288,7 @@ def write_uintbe(data: bytearray, to_write: any_int, start: int = 0, length: int
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=False)
 
 
-def write_sintbe(data: bytearray, to_write: any_int, start: int = 0, length: int = 1) -> None:
+def write_sintbe(data: bytearray, to_write: int, start: int = 0, length: int = 1) -> None:
     """
     Write a signed integer in big endian to the bytes-like mutable object at the given position.
 
@@ -254,6 +297,36 @@ def write_sintbe(data: bytearray, to_write: any_int, start: int = 0, length: int
     """
     warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
     data[start:start + length] = to_write.to_bytes(length, byteorder='big', signed=True)
+
+
+def write_u8(data: bytearray, to_write: u8, start: int = 0):
+    """Writes an unsigned 8-bit integer into the bytearray at the given position."""
+    data[start:start+1] = to_write.to_bytes(1, byteorder='little', signed=False)
+
+
+def write_i8(data: bytearray, to_write: i8, start: int = 0):
+    """Writes a signed 8-bit integer into the bytearray at the given position."""
+    data[start:start+1] = to_write.to_bytes(1, byteorder='little', signed=True)
+
+
+def write_u16(data: bytearray, to_write: u16, start: int = 0, *, big_endian: bool = False):
+    """Writes an unsigned 16-bit integer into the bytearray at the given position."""
+    data[start:start+2] = to_write.to_bytes(2, byteorder='big' if big_endian else 'little', signed=False)
+
+
+def write_i16(data: bytearray, to_write: i16, start: int = 0, *, big_endian: bool = False):
+    """Writes a signed 16-bit integer into the bytearray at the given position."""
+    data[start:start+2] = to_write.to_bytes(2, byteorder='big' if big_endian else 'little', signed=True)
+
+
+def write_u32(data: bytearray, to_write: u32, start: int = 0, *, big_endian: bool = False):
+    """Writes an unsigned 32-bit integer into the bytearray at the given position."""
+    data[start:start+4] = to_write.to_bytes(4, byteorder='big' if big_endian else 'little', signed=False)
+
+
+def write_i32(data: bytearray, to_write: i32, start: int = 0, *, big_endian: bool = False):
+    """Writes a signed 32-bit integer into the bytearray at the given position."""
+    data[start:start+4] = to_write.to_bytes(4, byteorder='big' if big_endian else 'little', signed=True)
 
 
 def iter_bits(number: int) -> Iterable[int]:
@@ -420,7 +493,7 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> 'Pmd2Data':
     from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
     data_general = Pmd2XmlReader.load_default()
     game_code = rom.idCode.decode('ascii')
-    arm9off14 = read_uintle(rom.arm9[0xE:0x10], 0, 2)
+    arm9off14 = read_u16(rom.arm9[0xE:0x10], 0)
 
     matched_edition = None
     for edition_name, edition in data_general.game_editions.items():
@@ -599,6 +672,24 @@ def mutate_sequence(obj: object, attr: str) -> Generator[List[Any], None, None]:
     l = list(seq)
     yield l
     setattr(obj, attr, l)
+
+
+class CheckedIntWrites:
+    """
+    A base class that checks attribute writes, if they are annotated with an integer type
+    annotated with a ValueRange.
+
+    If writing is attempted that would not fit, a ValueError is raised.
+    """
+    def __setattr__(self, key, value):
+        if hasattr(self, key) or key in get_type_hints(self.__class__, include_extras=True):
+            if not check_int((self.__class__, key), value):
+                typ = get_type_hints(self.__class__, include_extras=True)[key]
+                r = get_range(typ)
+                if r is not None:
+                    raise ValueError(f(_("The value '{value}' does not fit into the field '{key}'. "
+                                         "The value must fit into the range [{r.min},{r.max}].")))
+        super().__setattr__(key, value)
 
 
 class AutoString:

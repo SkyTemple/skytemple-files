@@ -43,7 +43,7 @@ class At4pn(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     # For compatibility with other AT formats
     def decompress(self) -> bytes:

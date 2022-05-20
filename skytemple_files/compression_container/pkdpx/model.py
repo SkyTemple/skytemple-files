@@ -20,15 +20,20 @@ from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class Pkdpx(CommonAt):
+    length_compressed: u16
+    length_decompressed: u32
+
     def __init__(self, data: bytes=None):
         """
         Create a PKDPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
         """
+        self.length_compressed: u16 = u16(0)
+        self.length_decompressed: u32 = u32(0)
         if data:
             self.length_compressed = self.cont_size(data)
             self.compression_flags = read_bytes(data, 7, 9)
-            self.length_decompressed = read_uintle(data, 0x10, 4)
+            self.length_decompressed = read_u32(data, 0x10)
             self.compressed_data = data[0x14:]
 
     def decompress(self) -> bytes:
@@ -50,7 +55,7 @@ class Pkdpx(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'Pkdpx':
@@ -61,7 +66,7 @@ class Pkdpx(CommonAt):
         flags, px_data = FileType.PX.compress(data)
 
         new_container.compression_flags = flags
-        new_container.length_decompressed = len(data)
+        new_container.length_decompressed = u32(len(data))
         new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x14
+        new_container.length_compressed = u16(len(px_data) + 0x14)
         return new_container

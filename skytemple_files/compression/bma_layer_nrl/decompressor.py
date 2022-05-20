@@ -96,7 +96,7 @@ class BmaLayerNrlDecompressor:
             raise ValueError("BMA Layer NRL Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += bytes
-        return read_uintbe(self.compressed_data, oc, bytes)
+        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=True, signed=False)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as 2 16 bit integers"""

@@ -14,15 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
-from skytemple_files.common.util import read_uintle
+from range_typed_integers import u16
+
+from skytemple_files.common.util import read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class BpcImageCompressionContainer(CommonAt):
+    length_decompressed: u16
+
     def __init__(self, data: bytes = None):
         if data:
-            self.length_decompressed = read_uintle(data, 6, 2)
+            self.length_decompressed = read_u16(data, 6)
             self.compressed_data = data[8:]
 
     def decompress(self) -> bytes:
@@ -48,6 +51,6 @@ class BpcImageCompressionContainer(CommonAt):
         new_container = cls()
         compressed_data = FileType.BPC_IMAGE.compress(data)
 
-        new_container.length_decompressed = len(data)
+        new_container.length_decompressed = u16(len(data))
         new_container.compressed_data = compressed_data
         return new_container

@@ -107,7 +107,7 @@ class PxDecompressor:
         pass
 
     def _read_next_byte(self):
-        b = read_uintle(self.compressed_data, self.cursor)
+        b = read_u8(self.compressed_data, self.cursor)
         if DEBUG:
             print(f"IDX {int(self.cursor)} - READING BYTE: {b:>08b}")
         self.cursor += 1

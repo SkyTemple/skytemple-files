@@ -34,7 +34,11 @@ class Sir0Writer:
             self.model.content = bytearray(self.model.content)
         for i, pnt_off in enumerate(self.model.content_pointer_offsets):
             self.model.content_pointer_offsets[i] = pnt_off + HEADER_LEN
-            write_uintle(self.model.content, read_uintle(self.model.content, pnt_off, 4) + HEADER_LEN, pnt_off, 4)
+            write_u32(
+                self.model.content,
+                u32(read_u32(self.model.content, pnt_off) + HEADER_LEN),
+                pnt_off
+            )
 
         # Also add the two header pointers
         pointer_offsets = [4, 8] + self.model.content_pointer_offsets
@@ -89,5 +93,5 @@ class Sir0Writer:
 
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-    def _encode_pointer_offsets(self, buffer: bytearray, pointer_offsets: List[int]):
+    def _encode_pointer_offsets(self, buffer: bytearray, pointer_offsets: List[int]) -> u32:
         return encode_sir0_pointer_offsets(buffer, pointer_offsets)

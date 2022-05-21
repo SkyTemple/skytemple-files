@@ -25,16 +25,16 @@ class DataCD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        limit = read_uintle(data, 0, 4)
+        limit = read_u32(data, 0)
         self.items_effects = []
         self.effects_code: List[bytes] = []
         for x in range(4, limit, 2):
-            self.items_effects.append(read_uintle(data, x, 2))
+            self.items_effects.append(read_u16(data, x))
 
-        last_ptr = read_uintle(data, limit, 4)
+        last_ptr = read_u32(data, limit)
         for x in range(limit, last_ptr, 8):
-            start = read_uintle(data, x, 4)
-            length = read_uintle(data, x+4, 4)
+            start = read_u32(data, x)
+            length = read_u32(data, x+4)
             self.effects_code.append(data[start:start+length])
 
     def nb_items(self) -> int:
@@ -43,16 +43,16 @@ class DataCD(AutoString):
     def get_item_effect_id(self, item_id: int) -> int:
         return self.items_effects[item_id]
 
-    def set_item_effect_id(self, item_id: int, effect_id: int) -> None:
+    def set_item_effect_id(self, item_id: int, effect_id: u16) -> None:
         self.items_effects[item_id] = effect_id
         
-    def add_item_effect_id(self, effect_id: int) -> None:
+    def add_item_effect_id(self, effect_id: u16) -> None:
         self.items_effects.append(effect_id)
         
     def get_all_of(self, effect_id: int) -> List[int]:
         item_ids = []
         for i, x in enumerate(self.items_effects):
-            if x==effect_id:
+            if x == effect_id:
                 item_ids.append(i)
         return item_ids
     
@@ -63,11 +63,11 @@ class DataCD(AutoString):
         return self.effects_code[effect_id]
     
     def del_effect_code(self, effect_id: int) -> None:
-        if len(self.get_all_of(effect_id))!=0:
+        if len(self.get_all_of(effect_id)) != 0:
             raise UserValueError(_("To delete this effect, no items must use it."))
         for i in range(len(self.items_effects)):
-            if self.items_effects[i]>effect_id:
-                self.items_effects[i] -= 1
+            if self.items_effects[i] > effect_id:
+                self.items_effects[i] -= 1  # type: ignore
         
         del self.effects_code[effect_id]
     

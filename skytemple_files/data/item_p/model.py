@@ -27,24 +27,40 @@ if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
 
-class ItemPEntry(AutoString):
+class ItemPEntry(AutoString, CheckedIntWrites):
+    buy_price: u16
+    sell_price: u16
+    category: u8
+    sprite: u8
+    item_id: u16
+    move_id: u16
+    range_min: u8
+    range_max: u8
+    palette: u8
+    action_name: u8
+    is_valid: bool
+    is_in_td: bool
+    ai_flag_1: bool
+    ai_flag_2: bool
+    ai_flag_3: bool
+
     def __init__(self, data: bytes):
-        self.buy_price = read_uintle(data, 0, 2) # Buy Price in Kecleon Shops
-        self.sell_price = read_uintle(data, 2, 2) # Sell Price in Kecleon Shops
-        self.category = read_uintle(data, 4, 1) # Category
-        self.sprite = read_uintle(data, 5, 1) # Sprite ID associated to that item
-        self.item_id = read_uintle(data, 6, 2) # Item ID
-        self.move_id = read_uintle(data, 8, 2) # Move ID associated to that item
-        self.range_min = read_uintle(data, 10, 1) # For stackable, indicates the minimum amount you can get for 1 instance of that item
-        self.range_max = read_uintle(data, 11, 1) # For stackable, indicates the maximum amount you can get for 1 instance of that item
-        self.palette = read_uintle(data, 12, 1) # Palette ID associated to that item
-        self.action_name = read_uintle(data, 13, 1) # Action name displayed in dungeon menus (Use, Eat, Ingest, Equip...)
-        bitfield = read_uintle(data, 14, 1)
-        self.is_valid = (bitfield&0x1)!=0 # Is Valid
-        self.is_in_td = (bitfield&0x2)!=0 # Is in Time/Darkness
-        self.ai_flag_1 = (bitfield&0x20)!=0 # Flag 1 for the AI?
-        self.ai_flag_2 = (bitfield&0x40)!=0 # Flag 2 for the AI?
-        self.ai_flag_3 = (bitfield&0x80)!=0 # Flag 3 for the AI?
+        self.buy_price = read_u16(data, 0)  # Buy Price in Kecleon Shops
+        self.sell_price = read_u16(data, 2)  # Sell Price in Kecleon Shops
+        self.category = read_u8(data, 4)  # Category
+        self.sprite = read_u8(data, 5)  # Sprite ID associated to that item
+        self.item_id = read_u16(data, 6)  # Item ID
+        self.move_id = read_u16(data, 8)  # Move ID associated to that item
+        self.range_min = read_u8(data, 10)  # For stackable, indicates the minimum amount you can get for 1 instance of that item
+        self.range_max = read_u8(data, 11)  # For stackable, indicates the maximum amount you can get for 1 instance of that item
+        self.palette = read_u8(data, 12)  # Palette ID associated to that item
+        self.action_name = read_u8(data, 13)  # Action name displayed in dungeon menus (Use, Eat, Ingest, Equip...)
+        bitfield = read_u8(data, 14)
+        self.is_valid = (bitfield & 0x1) != 0  # Is Valid
+        self.is_in_td = (bitfield & 0x2) != 0  # Is in Time/Darkness
+        self.ai_flag_1 = (bitfield & 0x20) != 0  # Flag 1 for the AI?
+        self.ai_flag_2 = (bitfield & 0x40) != 0  # Flag 2 for the AI?
+        self.ai_flag_3 = (bitfield & 0x80) != 0  # Flag 3 for the AI?
 
     def category_enum(self) -> 'MappaItemCategory':
         """:deprecated: Use category_pmd2obj"""
@@ -56,28 +72,28 @@ class ItemPEntry(AutoString):
 
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_P_ENTRY_SIZE)
-        write_uintle(data, self.buy_price, 0, 2)
-        write_uintle(data, self.sell_price, 2, 2)
-        write_uintle(data, self.category, 4, 1)
-        write_uintle(data, self.sprite, 5, 1)
-        write_uintle(data, self.item_id, 6, 2)
-        write_uintle(data, self.move_id, 8, 2)
-        write_uintle(data, self.range_min, 10, 1)
-        write_uintle(data, self.range_max, 11, 1)
-        write_uintle(data, self.palette, 12, 1)
-        write_uintle(data, self.action_name, 13, 1)
+        write_u16(data, self.buy_price, 0)
+        write_u16(data, self.sell_price, 2)
+        write_u8(data, self.category, 4)
+        write_u8(data, self.sprite, 5)
+        write_u16(data, self.item_id, 6)
+        write_u16(data, self.move_id, 8)
+        write_u8(data, self.range_min, 10)
+        write_u8(data, self.range_max, 11)
+        write_u8(data, self.palette, 12)
+        write_u8(data, self.action_name, 13)
         bitfield = 0
         if self.is_valid:
-            bitfield|=0x1
+            bitfield |= 0x1
         if self.is_in_td:
-            bitfield|=0x2
+            bitfield |= 0x2
         if self.ai_flag_1:
-            bitfield|=0x20
+            bitfield |= 0x20
         if self.ai_flag_2:
-            bitfield|=0x40
+            bitfield |= 0x40
         if self.ai_flag_3:
-            bitfield|=0x80
-        write_uintle(data, bitfield, 14, 1)
+            bitfield |= 0x80
+        write_u8(data, u8(bitfield), 14)
         return bytes(data)
     
     def __eq__(self, other: object) -> bool:
@@ -123,5 +139,5 @@ class ItemP(Sir0Serializable, AutoString):
         return self.item_list == other.item_list
 
     @staticmethod
-    def _decode_ints(data: bytes, pnt_start: int) -> List[int]:
+    def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[int]:
         return decode_sir0_pointer_offsets(data, pnt_start, False)

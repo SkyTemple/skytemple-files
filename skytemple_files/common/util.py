@@ -33,7 +33,7 @@ from PIL import Image
 from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range
+from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range, ValueRange, IntegerBoundError
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
@@ -680,6 +680,13 @@ class CheckedIntWrites:
     annotated with a ValueRange.
 
     If writing is attempted that would not fit, a ValueError is raised.
+
+    **Note for contributors:**
+    Do not rely on this for UI purposes. This error message will only work for Python-implemented code
+    and should be considered a helpful fallback for the SkyTemple UI and tests.
+    Code implemented in Rust will instead (as of writing) raise a plain OverflowError when an integer type error occurs
+    (with no custom message detailing the error for the user).
+    The UI code should make sure user input is properly validated separately.
     """
     def __setattr__(self, key, value):
         if hasattr(self, key) or key in get_type_hints(self.__class__, include_extras=True):
@@ -687,8 +694,10 @@ class CheckedIntWrites:
                 typ = get_type_hints(self.__class__, include_extras=True)[key]
                 r = get_range(typ)
                 if r is not None:
-                    raise ValueError(f(_("The value '{value}' does not fit into the field '{key}'. "
-                                         "The value must fit into the range [{r.min},{r.max}].")))
+                    raise IntegerBoundError(
+                        f(_("The value '{value}' does not fit into the field '{key}'. "
+                            "The value must fit into the range [{r.min},{r.max}]."))
+                    )
         super().__setattr__(key, value)
 
 

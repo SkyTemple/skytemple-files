@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked, u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
@@ -28,8 +29,6 @@ class Atupx(CommonAt):
         Create a ATUPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
         """
-        self.length_compressed: u16 = u16(0)
-        self.length_decompressed: u32 = u32(0)
         if data:
             self.length_compressed = self.cont_size(data)
             self.length_decompressed = read_u32(data, 7)
@@ -62,6 +61,6 @@ class Atupx(CommonAt):
         compressed_data = FileType.CUSTOM_999.compress(data)
 
         new_container.compressed_data = compressed_data
-        new_container.length_decompressed = u32(len(data))
-        new_container.length_compressed = u16(len(compressed_data) + 0xb)
+        new_container.length_decompressed = u32_checked(len(data))
+        new_container.length_compressed = u16_checked(len(compressed_data) + 0xb)
         return new_container

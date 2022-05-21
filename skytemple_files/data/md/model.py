@@ -405,63 +405,87 @@ class ShadowSize(Enum):
         return self._print_name_
 
 
-class MdEntry(AutoString):
-    def __init__(self, *, bitflag1: int, **data: List[int]):
-        self.md_index: int = 0
-        self.entid: int = 0
-        self.unk31: int = 0
-        self.national_pokedex_number: int = 0
-        self.base_movement_speed: int = 0
-        self.pre_evo_index: int = 0
-        self.evo_method: EvolutionMethod = EvolutionMethod.NONE
-        self.evo_param1: int = 0
-        self.evo_param2: AdditionalRequirement = AdditionalRequirement.NONE
-        self.sprite_index: int = 0
-        self.gender: Gender = Gender.INVALID
-        self.body_size: int = 0
-        self.type_primary: PokeType = PokeType.NONE
-        self.type_secondary: PokeType = PokeType.NONE
-        self.movement_type: MovementType = MovementType.STANDARD
-        self.iq_group: IQGroup = IQGroup.INVALID
-        self.ability_primary: Ability = Ability.NONE
-        self.ability_secondary: Ability = Ability.NONE
+class MdEntry(AutoString, CheckedIntWrites):
+    md_index: u32
+    entid: u16
+    unk31: u16
+    national_pokedex_number: u16
+    base_movement_speed: u16
+    pre_evo_index: u16
+    evo_method: EvolutionMethod
+    evo_param1: u16
+    evo_param2: AdditionalRequirement
+    sprite_index: i16
+    gender: Gender
+    body_size: u8
+    type_primary: PokeType
+    type_secondary: PokeType
+    movement_type: MovementType
+    iq_group: IQGroup
+    ability_primary: Ability
+    ability_secondary: Ability
+    exp_yield: u16
+    recruit_rate1: i16
+    base_hp: u16
+    recruit_rate2: i16
+    base_atk: u8
+    base_sp_atk: u8
+    base_def: u8
+    base_sp_def: u8
+    weight: i16
+    size: i16
+    unk17: u8
+    unk18: u8
+    shadow_size: ShadowSize
+    chance_spawn_asleep: i8
+    # @End:
+    # The % of HP that this pokémon species regenerates at the end of each turn is equal to 1/(value * 2)
+    # (Before applying any modifiers)
+    # The final value is capped between 1/30 and 1/500
+    hp_regeneration: u8
+    unk21_h: i8
+    base_form_index: i16
+    exclusive_item1: i16
+    exclusive_item2: i16
+    exclusive_item3: i16
+    exclusive_item4: i16
+    unk27: i16
+    unk28: i16
+    unk29: i16
+    unk30: i16
+    bitfield1_0: bool
+    bitfield1_1: bool
+    bitfield1_2: bool
+    bitfield1_3: bool
+    can_move: bool
+    bitfield1_5: bool
+    can_evolve: bool
+    item_required_for_spawning: bool
+    
+    def __init__(self, *, bitflag1: u16, **data: List):
         self.bitfield1_0, self.bitfield1_1, self.bitfield1_2, self.bitfield1_3, \
-            self.can_move, self.bitfield1_5, self.can_evolve, self.item_required_for_spawning = \
+        self.can_move, self.bitfield1_5, self.can_evolve, self.item_required_for_spawning = \
             (bool(bitflag1 >> i & 1) for i in range(8))
-        self.exp_yield: int = 0
-        self.recruit_rate1: int = 0
-        self.base_hp: int = 0
-        self.recruit_rate2: int = 0
-        self.base_atk: int = 0
-        self.base_sp_atk: int = 0
-        self.base_def: int = 0
-        self.base_sp_def: int = 0
-        self.weight: int = 0
-        self.size: int = 0
-        self.unk17: int = 0
-        self.unk18: int = 0
-        self.shadow_size: ShadowSize = ShadowSize.SMALL
-        self.chance_spawn_asleep: int = 0
-        # @End:
-        # The % of HP that this pokémon species regenerates at the end of each turn is equal to 1/(value * 2)
-        # (Before applying any modifiers)
-        # The final value is capped between 1/30 and 1/500
-        self.hp_regeneration: int = 0
-        self.unk21_h: int = 0
-        self.base_form_index: int = 0
-        self.exclusive_item1: int = 0
-        self.exclusive_item2: int = 0
-        self.exclusive_item3: int = 0
-        self.exclusive_item4: int = 0
-        self.unk27: int = 0
-        self.unk28: int = 0
-        self.unk29: int = 0
-        self.unk30: int = 0
 
+        # Set all attributes and make sure all are provided and no extra.
+        type_hints_pending = set(get_type_hints(self.__class__, include_extras=True).keys())
+        # We already set these values:
+        type_hints_pending.remove('bitfield1_0')
+        type_hints_pending.remove('bitfield1_1')
+        type_hints_pending.remove('bitfield1_2')
+        type_hints_pending.remove('bitfield1_3')
+        type_hints_pending.remove('can_move')
+        type_hints_pending.remove('bitfield1_5')
+        type_hints_pending.remove('can_evolve')
+        type_hints_pending.remove('item_required_for_spawning')
         for key in data:
-            if not hasattr(self, key):
+            if key not in type_hints_pending:
                 raise KeyError(f"Unknown attribute key {key}.")
             setattr(self, key, data[key])
+            type_hints_pending.remove(key)
+        
+        if len(type_hints_pending) > 0:
+            raise ValueError(f"Missing MD entry attributes: {type_hints_pending}")
 
     @property
     def md_index_base(self) -> int:
@@ -474,59 +498,57 @@ class Md:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        number_entries = read_uintle(data, 4, 4)
+        number_entries = read_u32(data, 4)
 
         self.entries: List[MdEntry] = []
         self._entries_by_entid: Dict[int, List[Tuple[int, MdEntry]]] = {}
         for i in range(0, number_entries):
-            rs = lambda offset, length=2: read_sintle(data, 8 + (i * MD_ENTRY_LEN) + offset, length)
-            ru = lambda offset, length=2: read_uintle(data, 8 + (i * MD_ENTRY_LEN) + offset, length)
-
+            start = (i * MD_ENTRY_LEN)
             entry: MdEntry = MdEntry(**{
-                'md_index': i,
-                'entid': ru(0x00),
-                'unk31': ru(0x02),
-                'national_pokedex_number': ru(0x04),
-                'base_movement_speed': ru(0x06),
-                'pre_evo_index': ru(0x08),
-                'evo_method': EvolutionMethod(ru(0x0A)),
-                'evo_param1': ru(0x0C),
-                'evo_param2': AdditionalRequirement(ru(0x0E)),
-                'sprite_index': rs(0x10),
-                'gender': Gender(ru(0x12, 1)),
-                'body_size': ru(0x13, 1),
-                'type_primary': PokeType(ru(0x14, 1)),
-                'type_secondary': PokeType(ru(0x15, 1)),
-                'movement_type': MovementType(ru(0x16, 1)),
-                'iq_group': IQGroup(ru(0x17, 1)),
-                'ability_primary': Ability(ru(0x18, 1)),
-                'ability_secondary': Ability(ru(0x19, 1)),
-                'bitflag1': ru(0x1A),
-                'exp_yield': ru(0x1C),
-                'recruit_rate1': rs(0x1E),
-                'base_hp': ru(0x20),
-                'recruit_rate2': rs(0x22),
-                'base_atk': ru(0x24, 1),
-                'base_sp_atk': ru(0x25, 1),
-                'base_def': ru(0x26, 1),
-                'base_sp_def': ru(0x27, 1),
-                'weight': rs(0x28),
-                'size': rs(0x2A),
-                'unk17': ru(0x2C, 1),
-                'unk18': ru(0x2D, 1),
-                'shadow_size': ShadowSize(rs(0x2E, 1)),
-                'chance_spawn_asleep': rs(0x2F, 1),
-                'hp_regeneration': ru(0x30, 1),
-                'unk21_h': rs(0x31, 1),
-                'base_form_index': rs(0x32),
-                'exclusive_item1': rs(0x34),
-                'exclusive_item2': rs(0x36),
-                'exclusive_item3': rs(0x38),
-                'exclusive_item4': rs(0x3A),
-                'unk27': rs(0x3C),
-                'unk28': rs(0x3E),
-                'unk29': rs(0x40),
-                'unk30': rs(0x42),
+                'md_index': u32(i),
+                'entid': read_u16(data, start + 0x00),
+                'unk31': read_u16(data, start + 0x02),
+                'national_pokedex_number': read_u16(data, start + 0x04),
+                'base_movement_speed': read_u16(data, start + 0x06),
+                'pre_evo_index': read_u16(data, start + 0x08),
+                'evo_method': EvolutionMethod(read_u16(data, start + 0x0A)),
+                'evo_param1': read_u16(data, start + 0x0C),
+                'evo_param2': AdditionalRequirement(read_u16(data, start + 0x0E)),
+                'sprite_index': read_i16(data, start + 0x10),
+                'gender': Gender(read_u8(data, start + 0x12)),
+                'body_size': read_u8(data, start + 0x13),
+                'type_primary': PokeType(read_u8(data, start + 0x14)),
+                'type_secondary': PokeType(read_u8(data, start + 0x15)),
+                'movement_type': MovementType(read_u8(data, start + 0x16)),
+                'iq_group': IQGroup(read_u8(data, start + 0x17)),
+                'ability_primary': Ability(read_u8(data, start + 0x18)),
+                'ability_secondary': Ability(read_u8(data, start + 0x19)),
+                'bitflag1': read_u16(data, start + 0x1A),
+                'exp_yield': read_u16(data, start + 0x1C),
+                'recruit_rate1': read_i16(data, start + 0x1E),
+                'base_hp': read_u16(data, start + 0x20),
+                'recruit_rate2': read_i16(data, start + 0x22),
+                'base_atk': read_u8(data, start + 0x24),
+                'base_sp_atk': read_u8(data, start + 0x25),
+                'base_def': read_u8(data, start + 0x26),
+                'base_sp_def': read_u8(data, start + 0x27),
+                'weight': read_i16(data, start + 0x28),
+                'size': read_i16(data, start + 0x2A),
+                'unk17': read_u8(data, start + 0x2C),
+                'unk18': read_u8(data, start + 0x2D),
+                'shadow_size': ShadowSize(read_i8(data, start + 0x2E)),
+                'chance_spawn_asleep': read_i8(data, start + 0x2F),
+                'hp_regeneration': read_u8(data, start + 0x30),
+                'unk21_h': read_i8(data, start + 0x31),
+                'base_form_index': read_i16(data, start + 0x32),
+                'exclusive_item1': read_i16(data, start + 0x34),
+                'exclusive_item2': read_i16(data, start + 0x36),
+                'exclusive_item3': read_i16(data, start + 0x38),
+                'exclusive_item4': read_i16(data, start + 0x3A),
+                'unk27': read_i16(data, start + 0x3C),
+                'unk28': read_i16(data, start + 0x3E),
+                'unk29': read_i16(data, start + 0x40),
+                'unk30': read_i16(data, start + 0x42),
             })
 
             self.entries.append(entry)

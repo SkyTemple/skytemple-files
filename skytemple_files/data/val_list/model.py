@@ -18,23 +18,24 @@ from typing import Optional
 
 from skytemple_files.common.util import *
 
+
 class ValList(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.data = bytearray(data)
 
-    def get_list(self, value_size = 2):
+    def get_list(self, value_size=2):
         lst = []
         for x in range(0, len(self.data), value_size):
-            lst.append(read_uintle(self.data, x, value_size))
+            lst.append(read_dynamic(self.data, x, length=value_size, signed=False, big_endian=False))
         return lst
-    
-    def set_list(self, lst, value_size = 2):
-        self.data = bytearray(len(lst)*value_size)
+
+    def set_list(self, lst, value_size=2):
+        self.data = bytearray(len(lst) * value_size)
         for i, x in enumerate(lst):
-            write_uintle(self.data, x, i*value_size, value_size)
-    
+            write_uintle(self.data, x, i * value_size, value_size)
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ValList):
             return False

@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
@@ -60,5 +61,5 @@ class At3px(CommonAt):
 
         new_container.compression_flags = flags
         new_container.compressed_data = px_data
-        new_container.length_compressed = u16(len(px_data) + 0x10)
+        new_container.length_compressed = u16_checked(len(px_data) + 0x10)
         return new_container

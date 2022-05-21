@@ -20,16 +20,21 @@ from skytemple_files.common.util import *
 PADDING = bytes([0xff] * 16)
 
 
-class BinPackTocEntry:
+class BinPackTocEntry(CheckedIntWrites):
+    pointer: u32
+    length: u32
+
     def __init__(self, data: memoryview):
-        self.pointer = read_uintle(data, 0, 4)
-        self.length = read_uintle(data, 4, 4)
+        self.pointer = read_u32(data, 0)
+        self.length = read_u32(data, 4)
 
 
-class BinPackHeader:
+class BinPackHeader(CheckedIntWrites):
     """Header for a BinPack"""
+    number_files: u32
+
     def __init__(self, data: memoryview):
-        self.number_files = read_uintle(data, 4, 4)
+        self.number_files = read_u32(data, 4)
         self.toc: List[BinPackTocEntry] = []
         for i in range(0, self.number_files):
             self.toc.append(BinPackTocEntry(data[8 + i * 8:8 + (i + 1) * 8]))

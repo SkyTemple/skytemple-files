@@ -20,11 +20,19 @@ from skytemple_files.common.util import *
 LEVEL_BIN_ENTRY_LEVEL_LEN = 12
 
 
-class LevelEntry(AutoString):
+class LevelEntry(AutoString, CheckedIntWrites):
+    experience_required: u32
+    hp_growth: u16
+    attack_growth: u8
+    special_attack_growth: u8
+    defense_growth: u8
+    special_defense_growth: u8
+    null: u16
+
     def __init__(
-            self, experience_required: int, hp_growth: int,
-            attack_growth: int, special_attack_growth: int,
-            defense_growth: int, special_defense_growth: int, null: int
+            self, experience_required: u32, hp_growth: u16,
+            attack_growth: u8, special_attack_growth: u8,
+            defense_growth: u8, special_defense_growth: u8, null: u16
     ):
         self.experience_required = experience_required
         self.hp_growth = hp_growth
@@ -45,13 +53,13 @@ class LevelBinEntry(AutoString):
 
         for chunk in chunks(data, LEVEL_BIN_ENTRY_LEVEL_LEN):
             self.levels.append(LevelEntry(
-                read_sintle(chunk, 0, 4),
-                read_uintle(chunk, 4, 2),
-                read_uintle(chunk, 6),
-                read_uintle(chunk, 7),
-                read_uintle(chunk, 8),
-                read_uintle(chunk, 9),
-                read_uintle(chunk, 10, 2)
+                read_u32(chunk, 0),
+                read_u16(chunk, 4),
+                read_u8(chunk, 6),
+                read_u8(chunk, 7),
+                read_u8(chunk, 8),
+                read_u8(chunk, 9),
+                read_u16(chunk, 10)
             ))
 
     def __len__(self):

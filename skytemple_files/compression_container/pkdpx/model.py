@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked, u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
@@ -28,8 +29,6 @@ class Pkdpx(CommonAt):
         Create a PKDPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
         """
-        self.length_compressed: u16 = u16(0)
-        self.length_decompressed: u32 = u32(0)
         if data:
             self.length_compressed = self.cont_size(data)
             self.compression_flags = read_bytes(data, 7, 9)
@@ -66,7 +65,7 @@ class Pkdpx(CommonAt):
         flags, px_data = FileType.PX.compress(data)
 
         new_container.compression_flags = flags
-        new_container.length_decompressed = u32(len(data))
+        new_container.length_decompressed = u32_checked(len(data))
         new_container.compressed_data = px_data
-        new_container.length_compressed = u16(len(px_data) + 0x14)
+        new_container.length_compressed = u16_checked(len(px_data) + 0x14)
         return new_container

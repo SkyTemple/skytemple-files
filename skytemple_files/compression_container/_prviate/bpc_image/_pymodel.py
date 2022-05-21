@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u16
+from range_typed_integers import u16, u16_checked
 
 from skytemple_files.common.util import read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
@@ -51,6 +51,6 @@ class BpcImageCompressionContainer(CommonAt):
         new_container = cls()
         compressed_data = FileType.BPC_IMAGE.compress(data)
 
-        new_container.length_decompressed = u16(len(data))
+        new_container.length_decompressed = u16_checked(len(data))
         new_container.compressed_data = compressed_data
         return new_container

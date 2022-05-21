@@ -25,14 +25,14 @@ class FloorAttribute:
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.attrs = []
-        last_ptr = read_uintle(data, 0, 4)
+        last_ptr = read_u32(data, 0)
         nbgroups = last_ptr // 4
         for g in range(nbgroups):
-            start = read_uintle(data, g * 4, 4)
+            start = read_u32(data, g * 4)
             if g == nbgroups - 1:
                 end = len(data)
             else:
-                end = read_uintle(data, g * 4 + 4, 4)
+                end = read_u32(data, g * 4 + 4)
             g_list = list(data[start:end])
             self.attrs.append(g_list)
 

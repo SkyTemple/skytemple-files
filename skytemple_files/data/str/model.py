@@ -29,7 +29,7 @@ class Str:
         cursor = 0
         self.string_encoding = string_encoding
         while current_pointer < after_end:
-            current_pointer = read_uintle(data, cursor, 4)
+            current_pointer = read_u32(data, cursor)
             if current_pointer < after_end:
                 pointers.append(current_pointer)
                 cursor += 4
@@ -83,7 +83,7 @@ class Str:
         current_pointer = 0
         cursor = 0
         while current_pointer < after_end:
-            current_pointer = read_uintle(data, cursor, 4)
+            current_pointer = read_u32(data, cursor)
             if current_pointer < after_end:
                 pointers.append(current_pointer)
                 cursor += 4

@@ -14,14 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from enum import Enum
-from typing import TYPE_CHECKING
 from xml.etree.ElementTree import Element
 
 import typing
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle, generate_bitfield, EnumCompatibleInt, \
-    read_sintle, write_sintle
+from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked
+
+from skytemple_files.common.util import *
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import *
 from skytemple_files.common.i18n_util import f, _
@@ -128,8 +127,8 @@ class MappaFloorTerrainSettings:
             and self.unk7 == other.unk7
 
     def to_mappa(self):
-        return generate_bitfield((self.unk7, self.unk6, self.unk5, self.unk4, self.unk3, self.generate_imperfect_rooms,
-                                  self.unk1, self.has_secondary_terrain))
+        return u8(generate_bitfield((self.unk7, self.unk6, self.unk5, self.unk4, self.unk3, self.generate_imperfect_rooms,
+                                     self.unk1, self.has_secondary_terrain)))
 
 
 class MappaFloorDarknessLevel(Enum):
@@ -159,18 +158,48 @@ class MappaFloorDarknessLevel(Enum):
         return self._print_name_
 
 
-# I hate this class.
-class MappaFloorLayout(AutoString, XmlSerializable):
+class MappaFloorLayout(AutoString, XmlSerializable, CheckedIntWrites):
+    structure: MappaFloorStructureType
+    room_density: i8
+    tileset_id: u8
+    music_id: u8
+    weather: MappaFloorWeather
+    floor_connectivity: u8
+    initial_enemy_density: i8
+    kecleon_shop_chance: u8
+    monster_house_chance: u8
+    unusued_chance: u8
+    sticky_item_chance: u8
+    dead_ends: bool
+    secondary_terrain: u8
+    terrain_settings: MappaFloorTerrainSettings
+    unk_e: bool
+    item_density: u8
+    trap_density: u8
+    floor_number: u8
+    fixed_floor_id: u8
+    extra_hallway_density: u8
+    buried_item_density: u8
+    water_density: u8
+    darkness_level: MappaFloorDarknessLevel
+    max_coin_amount: int
+    kecleon_shop_item_positions: u8
+    empty_monster_house_chance: u8
+    unk_hidden_stairs: u8
+    hidden_stairs_spawn_chance: u8
+    enemy_iq: u16
+    iq_booster_boost: i16
+
     def __init__(
-            self, *, structure: MappaFloorStructureType, room_density: int, tileset_id: int, music_id: int,
-            weather: MappaFloorWeather, floor_connectivity: int, initial_enemy_density: int, kecleon_shop_chance: int,
-            monster_house_chance: int, unusued_chance: int, sticky_item_chance: int, dead_ends: bool,
-            secondary_terrain: int, terrain_settings: MappaFloorTerrainSettings,
-            unk_e: bool, item_density: int, trap_density: int, floor_number: int, fixed_floor_id: int,
-            extra_hallway_density: int, buried_item_density: int, water_density: int,
-            darkness_level: MappaFloorDarknessLevel, max_coin_amount: int, kecleon_shop_item_positions: int,
-            empty_monster_house_chance: int, unk_hidden_stairs: int, hidden_stairs_spawn_chance: int, enemy_iq: int,
-            iq_booster_boost: int
+            self, *, structure: MappaFloorStructureType, room_density: i8, tileset_id: u8, music_id: u8,
+            weather: MappaFloorWeather, floor_connectivity: u8, initial_enemy_density: i8, kecleon_shop_chance: u8,
+            monster_house_chance: u8, unusued_chance: u8, sticky_item_chance: u8, dead_ends: bool,
+            secondary_terrain: u8, terrain_settings: MappaFloorTerrainSettings,
+            unk_e: bool, item_density: u8, trap_density: u8, floor_number: u8, fixed_floor_id: u8,
+            extra_hallway_density: u8, buried_item_density: u8, water_density: u8,
+            darkness_level: MappaFloorDarknessLevel, max_coin_amount: int, kecleon_shop_item_positions: u8,
+            empty_monster_house_chance: u8, unk_hidden_stairs: u8, hidden_stairs_spawn_chance: u8, enemy_iq: u16,
+            iq_booster_boost: i16
     ):
         self.structure = structure
         self.room_density = room_density
@@ -184,8 +213,7 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         self.unusued_chance = unusued_chance
         self.sticky_item_chance = sticky_item_chance
         self.dead_ends = dead_ends
-        self._secondary_terrain = EnumCompatibleInt(secondary_terrain)
-        self._secondary_terrain.former('MappaFloorSecondaryTerrainType')
+        self.secondary_terrain = secondary_terrain
         self.terrain_settings = terrain_settings
         self.unk_e = unk_e
         self.item_density = item_density
@@ -205,87 +233,77 @@ class MappaFloorLayout(AutoString, XmlSerializable):
         # If <=0: Disabled
         self.iq_booster_boost = iq_booster_boost
 
-    # backwards compat.
-    @property
-    def secondary_terrain(self):
-        return self._secondary_terrain
-
-    @secondary_terrain.setter
-    def secondary_terrain(self, value):
-        self._secondary_terrain = EnumCompatibleInt(value)
-        self._secondary_terrain.former('MappaFloorSecondaryTerrainType')
-
     @classmethod
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int):
-        terrain_settings_bitflag = read_uintle(read.data, pointer + 0x0D)
+        terrain_settings_bitflag = read_u8(read.data, pointer + 0x0D)
         terrain_settings = MappaFloorTerrainSettings(
             *(bool(terrain_settings_bitflag >> i & 1) for i in range(8))
         )
         return cls(
-            structure=MappaFloorStructureType(read_uintle(read.data, pointer + 0x00)),
-            room_density=read_sintle(read.data, pointer + 0x01),
-            tileset_id=read_uintle(read.data, pointer + 0x02),
-            music_id=read_uintle(read.data, pointer + 0x03),
-            weather=MappaFloorWeather(read_uintle(read.data, pointer + 0x04)),
-            floor_connectivity=read_uintle(read.data, pointer + 0x05),
-            initial_enemy_density=read_sintle(read.data, pointer + 0x06),
-            kecleon_shop_chance=read_uintle(read.data, pointer + 0x07),
-            monster_house_chance=read_uintle(read.data, pointer + 0x08),
-            unusued_chance=read_uintle(read.data, pointer + 0x09),
-            sticky_item_chance=read_uintle(read.data, pointer + 0x0A),
-            dead_ends=bool(read_uintle(read.data, pointer + 0x0B)),
-            secondary_terrain=read_uintle(read.data, pointer + 0x0C),
+            structure=MappaFloorStructureType(read_u8(read.data, pointer + 0x00)),
+            room_density=read_i8(read.data, pointer + 0x01),
+            tileset_id=read_u8(read.data, pointer + 0x02),
+            music_id=read_u8(read.data, pointer + 0x03),
+            weather=MappaFloorWeather(read_u8(read.data, pointer + 0x04)),
+            floor_connectivity=read_u8(read.data, pointer + 0x05),
+            initial_enemy_density=read_i8(read.data, pointer + 0x06),
+            kecleon_shop_chance=read_u8(read.data, pointer + 0x07),
+            monster_house_chance=read_u8(read.data, pointer + 0x08),
+            unusued_chance=read_u8(read.data, pointer + 0x09),
+            sticky_item_chance=read_u8(read.data, pointer + 0x0A),
+            dead_ends=bool(read_u8(read.data, pointer + 0x0B)),
+            secondary_terrain=read_u8(read.data, pointer + 0x0C),
             terrain_settings=terrain_settings,
-            unk_e=bool(read_uintle(read.data, pointer + 0x0E)),
-            item_density=read_uintle(read.data, pointer + 0x0F),
-            trap_density=read_uintle(read.data, pointer + 0x10),
-            floor_number=read_uintle(read.data, pointer + 0x11),
-            fixed_floor_id=read_uintle(read.data, pointer + 0x12),
-            extra_hallway_density=read_uintle(read.data, pointer + 0x13),
-            buried_item_density=read_uintle(read.data, pointer + 0x14),
-            water_density=read_uintle(read.data, pointer + 0x15),
-            darkness_level=MappaFloorDarknessLevel(read_uintle(read.data, pointer + 0x16)),
-            max_coin_amount=read_uintle(read.data, pointer + 0x17) * 5,
-            kecleon_shop_item_positions=read_uintle(read.data, pointer + 0x18),
-            empty_monster_house_chance=read_uintle(read.data, pointer + 0x19),
-            unk_hidden_stairs=read_uintle(read.data, pointer + 0x1A),
-            hidden_stairs_spawn_chance=read_uintle(read.data, pointer + 0x1B),
-            enemy_iq=read_uintle(read.data, pointer + 0x1C, 2),
-            iq_booster_boost=read_sintle(read.data, pointer + 0x1E, 2)
+            unk_e=bool(read_u8(read.data, pointer + 0x0E)),
+            item_density=read_u8(read.data, pointer + 0x0F),
+            trap_density=read_u8(read.data, pointer + 0x10),
+            floor_number=read_u8(read.data, pointer + 0x11),
+            fixed_floor_id=read_u8(read.data, pointer + 0x12),
+            extra_hallway_density=read_u8(read.data, pointer + 0x13),
+            buried_item_density=read_u8(read.data, pointer + 0x14),
+            water_density=read_u8(read.data, pointer + 0x15),
+            darkness_level=MappaFloorDarknessLevel(read_u8(read.data, pointer + 0x16)),
+            max_coin_amount=read_u8(read.data, pointer + 0x17) * 5,
+            kecleon_shop_item_positions=read_u8(read.data, pointer + 0x18),
+            empty_monster_house_chance=read_u8(read.data, pointer + 0x19),
+            unk_hidden_stairs=read_u8(read.data, pointer + 0x1A),
+            hidden_stairs_spawn_chance=read_u8(read.data, pointer + 0x1B),
+            enemy_iq=read_u16(read.data, pointer + 0x1C),
+            iq_booster_boost=read_i16(read.data, pointer + 0x1E)
         )
 
     def to_mappa(self) -> bytes:
         data = bytearray(32)
-        write_uintle(data, self.structure.value, 0x00, 1)
-        write_sintle(data, self.room_density, 0x01, 1)
-        write_uintle(data, self.tileset_id, 0x02, 1)
-        write_uintle(data, self.music_id, 0x03, 1)
-        write_uintle(data, self.weather.value, 0x04, 1)
-        write_uintle(data, self.floor_connectivity, 0x05, 1)
-        write_sintle(data, self.initial_enemy_density, 0x06, 1)
-        write_uintle(data, self.kecleon_shop_chance, 0x07, 1)
-        write_uintle(data, self.monster_house_chance, 0x08, 1)
-        write_uintle(data, self.unusued_chance, 0x09, 1)
-        write_uintle(data, self.sticky_item_chance, 0x0A, 1)
-        write_uintle(data, self.dead_ends, 0x0B, 1)
-        write_uintle(data, self.secondary_terrain.value, 0x0C, 1)
-        write_uintle(data, self.terrain_settings.to_mappa(), 0x0D, 1)
-        write_uintle(data, self.unk_e, 0x0E, 1)
-        write_uintle(data, self.item_density, 0x0F, 1)
-        write_uintle(data, self.trap_density, 0x10, 1)
-        write_uintle(data, self.floor_number, 0x11, 1)
-        write_uintle(data, self.fixed_floor_id, 0x12, 1)
-        write_uintle(data, self.extra_hallway_density, 0x13, 1)
-        write_uintle(data, self.buried_item_density, 0x14, 1)
-        write_uintle(data, self.water_density, 0x15, 1)
-        write_uintle(data, self.darkness_level.value, 0x16, 1)
-        write_uintle(data, int(self.max_coin_amount / 5), 0x17, 1)
-        write_uintle(data, self.kecleon_shop_item_positions, 0x18, 1)
-        write_uintle(data, self.empty_monster_house_chance, 0x19, 1)
-        write_uintle(data, self.unk_hidden_stairs, 0x1A, 1)
-        write_uintle(data, self.hidden_stairs_spawn_chance, 0x1B, 1)
-        write_uintle(data, self.enemy_iq, 0x1C, 2)
-        write_sintle(data, self.iq_booster_boost, 0x1E, 2)
+        write_u8(data, self.structure.value, 0x00)
+        write_i8(data, self.room_density, 0x01)
+        write_u8(data, self.tileset_id, 0x02)
+        write_u8(data, self.music_id, 0x03)
+        write_u8(data, self.weather.value, 0x04)
+        write_u8(data, self.floor_connectivity, 0x05)
+        write_i8(data, self.initial_enemy_density, 0x06)
+        write_u8(data, self.kecleon_shop_chance, 0x07)
+        write_u8(data, self.monster_house_chance, 0x08)
+        write_u8(data, self.unusued_chance, 0x09)
+        write_u8(data, self.sticky_item_chance, 0x0A)
+        write_u8(data, u8(int(self.dead_ends)), 0x0B)
+        write_u8(data, self.secondary_terrain, 0x0C)
+        write_u8(data, self.terrain_settings.to_mappa(), 0x0D)
+        write_u8(data, u8(int(self.unk_e)), 0x0E)
+        write_u8(data, self.item_density, 0x0F)
+        write_u8(data, self.trap_density, 0x10)
+        write_u8(data, self.floor_number, 0x11)
+        write_u8(data, self.fixed_floor_id, 0x12)
+        write_u8(data, self.extra_hallway_density, 0x13)
+        write_u8(data, self.buried_item_density, 0x14)
+        write_u8(data, self.water_density, 0x15)
+        write_u8(data, self.darkness_level.value, 0x16)
+        write_u8(data, u8(self.max_coin_amount // 5), 0x17)
+        write_u8(data, self.kecleon_shop_item_positions, 0x18)
+        write_u8(data, self.empty_monster_house_chance, 0x19)
+        write_u8(data, self.unk_hidden_stairs, 0x1A)
+        write_u8(data, self.hidden_stairs_spawn_chance, 0x1B)
+        write_u16(data, self.enemy_iq, 0x1C)
+        write_i16(data, self.iq_booster_boost, 0x1E)
 
         return data
 
@@ -443,18 +461,18 @@ class MappaFloorLayout(AutoString, XmlSerializable):
 
         return cls(
             structure=structure,
-            room_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY)),
-            tileset_id=int(ele.get(XML_FLOOR_LAYOUT__TILESET)),
-            music_id=int(ele.get(XML_FLOOR_LAYOUT__BGM)),
+            room_density=i8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY))),
+            tileset_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__TILESET))),
+            music_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__BGM))),
             weather=weather,
-            floor_connectivity=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY)),
-            initial_enemy_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY)),
-            kecleon_shop_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__SHOP)),
-            monster_house_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE)),
-            unusued_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED)),
-            sticky_item_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM)),
+            floor_connectivity=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY))),
+            initial_enemy_density=i8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY))),
+            kecleon_shop_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__SHOP))),
+            monster_house_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE))),
+            unusued_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED))),
+            sticky_item_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM))),
             dead_ends=bool(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__DEAD_ENDS))),
-            secondary_terrain=int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE)),
+            secondary_terrain=u8_checked(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE))),
             terrain_settings=MappaFloorTerrainSettings(
                 has_secondary_terrain=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED))),
                 unk1=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK1))),
@@ -466,21 +484,21 @@ class MappaFloorLayout(AutoString, XmlSerializable):
                 unk7=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK7))),
             ),
             unk_e=bool(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNKE))),
-            item_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ITEM_DENSITY)),
-            trap_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__TRAP_DENSITY)),
-            floor_number=int(ele.get(XML_FLOOR_LAYOUT__NUMBER)),
-            fixed_floor_id=int(ele.get(XML_FLOOR_LAYOUT__FIXED_FLOOR_ID)),
-            extra_hallway_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY)),
-            buried_item_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__BURIED_ITEM_DENSITY)),
-            water_density=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY)),
+            item_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ITEM_DENSITY))),
+            trap_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__TRAP_DENSITY))),
+            floor_number=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__NUMBER))),
+            fixed_floor_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__FIXED_FLOOR_ID))),
+            extra_hallway_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY))),
+            buried_item_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__BURIED_ITEM_DENSITY))),
+            water_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY))),
             darkness_level=darkness_level,
             max_coin_amount=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__MAX_COIN_AMOUNT)),
-            kecleon_shop_item_positions=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS)),
-            empty_monster_house_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE)),
-            unk_hidden_stairs=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS)),
-            hidden_stairs_spawn_chance=int(chances.get(XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS)),
-            enemy_iq=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ)),
-            iq_booster_boost=int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST)),
+            kecleon_shop_item_positions=u8_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS))),
+            empty_monster_house_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE))),
+            unk_hidden_stairs=u8_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS))),
+            hidden_stairs_spawn_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS))),
+            enemy_iq=u16_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ))),
+            iq_booster_boost=i16_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST))),
         )
 
     def __eq__(self, other: object) -> bool:

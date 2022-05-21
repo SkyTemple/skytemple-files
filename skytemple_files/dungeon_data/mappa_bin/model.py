@@ -35,11 +35,11 @@ FLOOR_IDX_ENTRY_LEN = 18
 class MappaBinReadContainer:
     def __init__(self, data: bytes, header_start: int, items: List[Pmd2DungeonItem]):
         self.data = data
-        self.dungeon_list_index_start = read_uintle(data, header_start + 0x00, 4)
-        self.floor_layout_data_start = read_uintle(data, header_start + 0x04, 4)
-        self.item_spawn_list_index_start = read_uintle(data, header_start + 0x08, 4)
-        self.monster_spawn_list_index_start = read_uintle(data, header_start + 0x0C, 4)
-        self.trap_spawn_list_index_start = read_uintle(data, header_start + 0x10, 4)
+        self.dungeon_list_index_start = read_u32(data, header_start + 0x00)
+        self.floor_layout_data_start = read_u32(data, header_start + 0x04)
+        self.item_spawn_list_index_start = read_u32(data, header_start + 0x08)
+        self.monster_spawn_list_index_start = read_u32(data, header_start + 0x0C)
+        self.trap_spawn_list_index_start = read_u32(data, header_start + 0x10)
 
         #assert self.dungeon_list_index_start % 4 == 0
         #assert self.floor_layout_data_start % 4 == 0
@@ -52,7 +52,6 @@ class MappaBinReadContainer:
 
 
 class MappaBin(Sir0Serializable, XmlSerializable):
-
     def __init__(self, floor_lists: List[List[MappaFloor]]):
         self.floor_lists = floor_lists
 
@@ -74,11 +73,11 @@ class MappaBin(Sir0Serializable, XmlSerializable):
         end = read.floor_layout_data_start
         dungeons = []
         for i in range(start, end, 4):
-            dungeons.append(cls._read_floors(read, read_uintle(read.data, i, 4)))
+            dungeons.append(cls._read_floors(read, read_u32(read.data, i)))
         return dungeons
 
     @classmethod
-    def _read_floors(cls, read: MappaBinReadContainer, pointer):
+    def _read_floors(cls, read: MappaBinReadContainer, pointer: int):
         # The zeroth floor is just nulls, we omit it.
         empty = bytes(FLOOR_IDX_ENTRY_LEN)
         assert read.data[pointer:pointer + FLOOR_IDX_ENTRY_LEN] == empty, \

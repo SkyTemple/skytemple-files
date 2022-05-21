@@ -20,7 +20,9 @@ from xml.etree.ElementTree import Element
 
 import typing
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle
+from range_typed_integers import u16, u16_checked
+
+from skytemple_files.common.util import read_uintle, AutoString, write_uintle, read_u16
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_TRAP_LIST, XML_TRAP, XML_TRAP__NAME, XML_TRAP__WEIGHT
 from skytemple_files.common.i18n_util import f, _
@@ -77,7 +79,9 @@ class MappaTrapType(Enum):
 
 
 class MappaTrapList(AutoString, XmlSerializable):
-    def __init__(self, weights: Union[List[int], Dict[MappaTrapType, int]]):
+    weights: Dict[MappaTrapType, u16]
+
+    def __init__(self, weights: Union[List[u16], Dict[MappaTrapType, u16]]):
         if isinstance(weights, list):
             if len(weights) != 25:
                 raise ValueError("MappaTrapList constructor needs a weight value for all of the 25 traps.")
@@ -95,7 +99,7 @@ class MappaTrapList(AutoString, XmlSerializable):
     def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int) -> 'MappaTrapList':
         weights = []
         for i in range(pointer, pointer + 50, 2):
-            weights.append(read_uintle(read.data, i, 2))
+            weights.append(read_u16(read.data, i))
         return MappaTrapList(weights)
 
     def to_mappa(self):
@@ -124,7 +128,7 @@ class MappaTrapList(AutoString, XmlSerializable):
             name = child.get(XML_TRAP__NAME)
             if not hasattr(MappaTrapType, name):
                 raise XmlValidateError(f(_("Unknown trap {name}.")))
-            weights[getattr(MappaTrapType, name)] = int(child.get(XML_TRAP__WEIGHT))
+            weights[getattr(MappaTrapType, name)] = u16_checked(int(child.get(XML_TRAP__WEIGHT)))
         try:
             return cls(weights)
         except ValueError as ex:

@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Optional, Tuple
 
+from range_typed_integers import u8
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel, Pmd2ScriptLevelMapType
 from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle
@@ -115,7 +117,7 @@ def resolve_mapping_for_level(
     layout = mappa.floor_lists[mappa_idx][start_offset + floor_id].layout
     tileset_id = layout.tileset_id
     if tileset_id > 169:
-        tileset_id = 0
+        tileset_id = u8(0)
     dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
     dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
     dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')

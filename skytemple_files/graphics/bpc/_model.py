@@ -17,6 +17,8 @@
 
 import math
 
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
@@ -27,10 +29,10 @@ from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
-class BpcLayer(BpcLayerProtocol):
-    def __init__(self, number_tiles: int, bpas: List[int], chunk_tilemap_len: int, tiles: List[bytes], tilemap: List[TilemapEntryProtocol]) -> None:
+class BpcLayer(BpcLayerProtocol, CheckedIntWrites):
+    def __init__(self, number_tiles: u16, bpas: List[u16], chunk_tilemap_len: u16, tiles: List[bytes], tilemap: List[TilemapEntryProtocol]) -> None:
         # The actual number of tiles is one lower
-        self.number_tiles = number_tiles - 1
+        self.number_tiles = u16(number_tiles - 1)
         # There must be 4 BPAs. (0 for not used)
         assert len(bpas) == 4
         self.bpas = bpas
@@ -63,8 +65,8 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         self.tiling_height = tiling_height
 
         # Only stored for debug. They are not updated, only regenerated when serialized:
-        self._upper_layer_pointer = read_uintle(data, 0, 2)
-        self._lower_layer_pointer = read_uintle(data, 2, 2)
+        self._upper_layer_pointer = read_u16(data, 0)
+        self._lower_layer_pointer = read_u16(data, 2)
 
         self.number_of_layers = 2 if self._lower_layer_pointer > 0 else 1
 
@@ -73,14 +75,14 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         # The BMA contains tiling w/h and w/h of the map. See bg_list.dat for mapping.
         self.layers: List[BpcLayer] = []
         for layer_spec in iter_bytes(data, 12, 4, 4 + (12 * self.number_of_layers)):
-            bpas: List[int] = [
-                read_uintle(layer_spec, 2, 2),
-                read_uintle(layer_spec, 4, 2),
-                read_uintle(layer_spec, 6, 2),
-                read_uintle(layer_spec, 8, 2)
+            bpas: List[u16] = [
+                read_u16(layer_spec, 2),
+                read_u16(layer_spec, 4),
+                read_u16(layer_spec, 6),
+                read_u16(layer_spec, 8)
             ]
             self.layers.append(BpcLayer(
-                read_uintle(layer_spec, 0, 2), bpas, read_uintle(layer_spec, 10, 2),
+                read_u16(layer_spec, 0), bpas, read_u16(layer_spec, 10),
                 [], []  # dummys
             ))
 
@@ -322,7 +324,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
             image.width, image.height, optimize=False
         )
-        self.layers[layer].number_tiles = len(self.layers[layer].tiles) - 1
+        self.layers[layer].number_tiles = u16_checked(len(self.layers[layer].tiles) - 1)
 
     def pil_to_chunks(self, layer: int, image: Image.Image, force_import: bool = True) -> List[List[int]]:
         """
@@ -343,8 +345,8 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
             image.width, image.height, 3, 3, force_import
         )
-        self.layers[layer].number_tiles = len(self.layers[layer].tiles) - 1
-        self.layers[layer].chunk_tilemap_len = int(len(self.layers[layer].tilemap) / self.tiling_width / self.tiling_height)
+        self.layers[layer].number_tiles = u16_checked(len(self.layers[layer].tiles) - 1)
+        self.layers[layer].chunk_tilemap_len = u16_checked(int(len(self.layers[layer].tilemap) / self.tiling_width / self.tiling_height))
         return palettes  # type: ignore
 
     def get_tile(self, layer: int, index: int) -> TilemapEntryProtocol:
@@ -365,7 +367,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         if not contains_null_tile:
             tiles = [bytes(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))] + tiles
         self.layers[layer].tiles = tiles
-        self.layers[layer].number_tiles = len(tiles) - 1
+        self.layers[layer].number_tiles = u16(len(tiles) - 1)
 
     def import_tile_mappings(
             self, layer: int, tile_mappings: List[TilemapEntryProtocol],
@@ -385,7 +387,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         if not contains_null_chunk:
             tile_mappings = [TilemapEntry.from_int(0) for _ in range(0, nb_tiles_in_chunk)] + tile_mappings  # type: ignore
         self.layers[layer].tilemap = tile_mappings
-        self.layers[layer].chunk_tilemap_len = int(len(tile_mappings) / self.tiling_width / self.tiling_height)
+        self.layers[layer].chunk_tilemap_len = u16_checked(int(len(tile_mappings) / self.tiling_width / self.tiling_height))
 
     def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[Optional[BpaProtocol]]) -> List[BpaProtocol]:
         """
@@ -436,13 +438,13 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         for i in range(0, self.tiling_width * self.tiling_height):
             tilemap.append(TilemapEntry.from_int(0))
         self.layers[0] = BpcLayer(
-            1, [0, 0, 0, 0], 1,
+            u16(1), [u16(0), u16(0), u16(0), u16(0)], u16(1),
             # The first tile is not stored, but is always empty
             [bytearray(int(BPC_TILE_DIM * BPC_TILE_DIM / 2))],
             tilemap  # type: ignore
         )
 
-    def process_bpa_change(self, bpa_index: int, tiles_bpa_new: int) -> None:
+    def process_bpa_change(self, bpa_index: int, tiles_bpa_new: u16) -> None:
         """
         Update the layer entries for BPA tile number change and also re-map all tilemappings,
         so that they still match their original tile, even though some tiles in-between may now

@@ -35,16 +35,16 @@ class Dpla:
     def __init__(self, data: bytes, pointer_to_pointers: int):
         toc_pointers = []
         for i in range(pointer_to_pointers, len(data), 4):
-            toc_pointers.append(read_uintle(data, i, 4))
+            toc_pointers.append(read_u32(data, i))
 
         # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
         self.colors = []
         self.durations_per_frame_for_colors = []
         for pnt in toc_pointers:
             # 0x0         2           uint16      (NbColors) The amount of colors in this entry.
-            number_colors = read_uintle(data, pnt, 2)
+            number_colors = read_u16(data, pnt)
             # 0x2         2           uint16      unknown
-            self.durations_per_frame_for_colors.append(read_uintle(data, pnt + 2, 2))
+            self.durations_per_frame_for_colors.append(read_u16(data, pnt + 2))
             # 0x4         (NbColors * 4)          A list of colors. Always at least 4 bytes even when empty! Is completely 0 if nb of color == 0 !
             # [
             #     0x0     4           RGBX32      A color.

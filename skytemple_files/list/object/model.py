@@ -21,26 +21,27 @@ from skytemple_files.common.i18n_util import _
 
 LEN_OBJECT_ENTRY = 16
 
+
 class ObjectListBin(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.list: List[Pmd2ScriptObject] = []
 
-        for i in range(0, len(data)//LEN_OBJECT_ENTRY):
-            offset = i*LEN_OBJECT_ENTRY
+        for i in range(0, len(data) // LEN_OBJECT_ENTRY):
+            offset = i * LEN_OBJECT_ENTRY
             obj_name = ""
-            char = offset+5
-            while data[char]!=0:
+            char = offset + 5
+            while data[char] != 0:
                 obj_name += chr(data[char])
                 char += 1
-            if obj_name=="":
+            if obj_name == "":
                 obj_name = "NULL"
             self.list.append(Pmd2ScriptObject(
                 id=i,
-                unk1=read_uintle(data, offset + 0, 2),
-                unk2=read_uintle(data, offset + 2, 2),
-                unk3=read_uintle(data, offset + 4, 1),
+                unk1=read_u16(data, offset + 0),
+                unk2=read_u16(data, offset + 2),
+                unk3=read_u8(data, offset + 4),
                 name=obj_name
             ))
 

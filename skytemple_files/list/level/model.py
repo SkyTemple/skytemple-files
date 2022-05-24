@@ -14,14 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, List, Optional, TYPE_CHECKING
+from typing import Tuple, List, Optional
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
-from skytemple_files.common.util import read_uintle, read_var_length_string, write_uintle, read_sintle, write_sintle
+from skytemple_files.common.util import read_var_length_string, write_uintle, write_sintle, \
+    read_u32, read_u16
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-
 
 LEN_LEVEL_ENTRY = 12
 PADDING_END = b'\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa'
@@ -35,19 +35,19 @@ class LevelListBin(Sir0Serializable):
             data = memoryview(data)
         self.list: List[Pmd2ScriptLevel] = []
 
-        #pointer_start = read_uintle(data, header_start, 4)
-        #number_entries = read_uintle(data, header_start + 4, 4)
+        # pointer_start = read_uintle(data, header_start, 4)
+        # number_entries = read_uintle(data, header_start + 4, 4)
         for i in range(0, len(data) - header_start):
             start = header_start + (i * LEN_LEVEL_ENTRY)
             if data[start:start + 12] == b'\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa':
                 break
             self.list.append(Pmd2ScriptLevel(
                 id=i,
-                mapty=read_uintle(data, start + 0, 2),
-                nameid=read_uintle(data, start + 2, 2),
-                mapid=read_uintle(data, start + 4, 2),
-                weather=read_sintle(data, start + 6, 2),
-                name=self._read_string(data, read_uintle(data, start + 8, 4))
+                mapty=read_u16(data, start + 0),
+                nameid=read_u16(data, start + 2),
+                mapid=read_u16(data, start + 4),
+                weather=read_u16(data, start + 6),
+                name=self._read_string(data, read_u32(data, start + 8))
             ))
 
     def serialize(self) -> bytes:
@@ -84,14 +84,15 @@ class LevelListBin(Sir0Serializable):
         self._pad(out_data)
 
         # 4. Write sub-header
-        #sir0_pointer_offsets.append(len(out_data))
-        #out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
-        #out_data += len(self.list).to_bytes(4, byteorder='little', signed=False)
+        # sir0_pointer_offsets.append(len(out_data))
+        # out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
+        # out_data += len(self.list).to_bytes(4, byteorder='little', signed=False)
 
         return out_data, sir0_pointer_offsets, pointer_data_block
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'LevelListBin':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
+                    static_data: Optional[Pmd2Data] = None) -> 'LevelListBin':
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

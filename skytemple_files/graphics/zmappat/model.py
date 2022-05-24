@@ -59,8 +59,8 @@ class ZMappaT(Sir0Serializable, AutoString):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        pointer_tiles = read_uintle(data, header_pnt, 4)
-        pointer_pal = read_uintle(data, header_pnt + 0x4, 4)
+        pointer_tiles = read_u32(data, header_pnt)
+        pointer_pal = read_u32(data, header_pnt + 0x4)
 
         self.tiles, self.masks = self._read_tiles(data, pointer_tiles, (pointer_pal - pointer_tiles) // 4)
         self.palette = self._read_palette(data, pointer_pal)
@@ -81,7 +81,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         tiles = []
         masks = []
         for i in range(nb_tiles):
-            offset = read_uintle(data, pointer_tiles + i * 0x4, 4)
+            offset = read_u32(data, pointer_tiles + i * 0x4)
             data_tile = data[offset:offset + ZMAPPAT_TILE_SIZE]
             current_mask = bytearray(ZMAPPAT_TILE_SIZE // 2)
             current_tile = bytearray(ZMAPPAT_TILE_SIZE // 2)

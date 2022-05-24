@@ -17,6 +17,7 @@
 import os
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16
 
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.util import get_ppmdu_config_for_rom
@@ -58,7 +59,7 @@ if __name__ == '__main__':
     assert actor_list_before.list == actor_list_after.list
 
     for entry in actor_list_after.list:
-        entry.entid = 328
+        entry.entid = u16(328)
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_after))
     rom.setFileByName('BALANCE/actor_list.bin', bin_after)

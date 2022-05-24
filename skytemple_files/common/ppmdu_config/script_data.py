@@ -22,6 +22,8 @@ import warnings
 from enum import Enum, IntEnum
 from typing import List, Dict, Optional
 
+from range_typed_integers import u8, u16
+
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
 from skytemple_files.common.i18n_util import f, _
@@ -80,7 +82,7 @@ class Pmd2ScriptGameVar(AutoString):
 
 
 class Pmd2ScriptObject(AutoString):
-    def __init__(self, id: int, unk1: int, unk2: int, unk3: int, name: str):
+    def __init__(self, id: int, unk1: u16, unk2: u16, unk3: u8, name: str):
         self.id = id
         self.unk1 = unk1
         self.unk2 = unk2
@@ -153,7 +155,7 @@ class Pmd2ScriptLevelMapType(Enum):
 
 
 class Pmd2ScriptLevel(AutoString):
-    def __init__(self, id: int, mapid: int, name: str, mapty: int, nameid: int, weather: int):
+    def __init__(self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: u16):
         self.id = id
         self.mapid = mapid
         self.name = name
@@ -167,19 +169,19 @@ class Pmd2ScriptLevel(AutoString):
         
     # Backwards compat:
     @property
-    def unk2(self) -> int:
+    def unk2(self) -> u16:
         return self.nameid
     
     @unk2.setter
-    def unk2(self, value: int) -> None:
+    def unk2(self, value: u16) -> None:
         self.nameid = value
 
     @property
-    def unk4(self) -> int:
+    def unk4(self) -> u16:
         return self.weather
     
     @unk4.setter
-    def unk4(self, value: int) -> None:
+    def unk4(self, value: u16) -> None:
         self.weather = value
 
     def __eq__(self, other: object) -> bool:
@@ -191,7 +193,7 @@ class Pmd2ScriptLevel(AutoString):
 
 
 class Pmd2ScriptEntity(AutoString):
-    def __init__(self, id: int, entid: int, name: str, type: int, unk3: int, unk4: int):
+    def __init__(self, id: int, entid: u16, name: str, type: u16, unk3: u16, unk4: u16):
         self.id = id
         self.entid = entid
         self.name = name

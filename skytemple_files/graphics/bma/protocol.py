@@ -18,6 +18,7 @@ from abc import abstractmethod
 from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, Sequence, runtime_checkable
 
 from PIL import Image
+from range_typed_integers import *
 
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
@@ -30,28 +31,28 @@ L = TypeVar('L', bound=BplProtocol, contravariant=True)
 
 @runtime_checkable
 class BmaProtocol(Protocol[P, C, L]):
-    map_width_camera: int
-    map_height_camera: int
+    map_width_camera: u8
+    map_height_camera: u8
     # ALL game maps have the same values here. Changing them does nothing,
     # so the game seems to be hardcoded to 3x3.
-    tiling_width: int
-    tiling_height: int
+    tiling_width: u8
+    tiling_height: u8
     # Map width & height in chunks, so map.map_width_camera / map.tiling_width
     # The only maps this is not true for are G01P08A. S01P01B, S15P05A, S15P05B, it seems they
     # are missing one tile in width (32x instead of 33x)
     # The game doesn't seem to care if this value is off by less than 3 (tiling_w/h).
     # But NOTE that this has consequences for the collision and unknown data layers! See notes at collision
     # below!
-    map_width_chunks: int
-    map_height_chunks: int
+    map_width_chunks: u8
+    map_height_chunks: u8
     # Through tests against the BPC, it was determined that unk5 is the number of layers:
     # It seems to be ignored by the game, however
-    number_of_layers: int
+    number_of_layers: u16
     # Some kind of boolean flag? Seems to control if there is a third data block between
     # layer data and collision - Seems to be related to NPC conversations, see below.
-    unk6: int
+    unk6: u16
     # Some maps weirdly have 0x02 here and then have two collision layers, but they always seem redundant?
-    number_of_collision_layers: int
+    number_of_collision_layers: u16
 
     layer0: Sequence[int]
     layer1: Optional[Sequence[int]]

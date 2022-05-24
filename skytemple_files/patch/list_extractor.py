@@ -17,13 +17,14 @@
 from typing import List
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u32_checked, u32
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2LooseBinFile
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import create_file_in_rom, get_binary_from_rom_ppmdu, read_var_length_string, \
-    read_uintle, write_uintle
+    read_u32, write_u32
 
 
 class ListExtractor:
@@ -63,10 +64,10 @@ class ListExtractor:
                 new_pointer = self._push_string(
                     full_binary,
                     out_data,
-                    read_uintle(table_data, i + string_off, 4) - self._binary.loadaddress
+                    u32_checked(read_u32(table_data, i + string_off) - self._binary.loadaddress)
                 )
                 pointer_offsets.append(i + string_off)
-                write_uintle(table_data, new_pointer, i + string_off, 4)
+                write_u32(table_data, new_pointer, i + string_off)
             number_entries += 1
         # Padding
         self._pad(out_data)
@@ -92,10 +93,10 @@ class ListExtractor:
         # 5. Convert into SIR0
         return FileType.SIR0.serialize(FileType.SIR0.wrap(out_data, pointer_offsets, data_pointer))
 
-    def _push_string(self, full_binary: bytes, out_data: bytearray, pointer: int) -> int:
+    def _push_string(self, full_binary: bytes, out_data: bytearray, pointer: u32) -> u32:
         """Add the string that's being pointed to to in full_binary to out_data and return a new relative pointer"""
         str_len, string = read_var_length_string(full_binary, pointer)
-        new_pointer = len(out_data)
+        new_pointer = u32_checked(len(out_data))
         out_data += bytes(string, string_codec.PMD2_STR_ENCODER)
         number_of_nulls = self._read_nulls(full_binary, pointer + str_len) + 1
         out_data += (b'\0' * number_of_nulls)

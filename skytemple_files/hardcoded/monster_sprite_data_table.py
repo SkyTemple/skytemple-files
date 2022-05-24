@@ -20,18 +20,17 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
-
-from enum import Enum, auto
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, AutoString
+from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
 
 ENTRY_LEN = 2
 
 
-class MonsterSpriteDataTableEntry(AutoString):
-    def __init__(self, sprite_tile_slots: int, unk1: int):
+class MonsterSpriteDataTableEntry(AutoString, CheckedIntWrites):
+    sprite_tile_slots: u8
+    unk1: u8
+
+    def __init__(self, sprite_tile_slots: u8, unk1: u8):
         self.sprite_tile_slots = sprite_tile_slots
         self.unk1 = unk1
 
@@ -52,8 +51,8 @@ class HardcodedMonsterSpriteDataTable:
         lst = []
         for i in range(block.begin, block.end, ENTRY_LEN):
             lst.append(MonsterSpriteDataTableEntry(
-                read_uintle(arm9bin, i + 0x00, 1),
-                read_uintle(arm9bin, i + 0x01, 1)
+                read_u8(arm9bin, i + 0x00),
+                read_u8(arm9bin, i + 0x01)
             ))
         return lst
 

@@ -17,15 +17,19 @@
 
 from enum import Enum
 
+from range_typed_integers import u8
+
+
 class FontType(Enum):
     FONT_DAT = 0x00
     FONT_SIR0 = 0x01
     BANNER_FONT = 0x02
     GRAPHIC_FONT = 0x03
 
-FONT_DEFAULT_BPROW = 2
-FONT_DEFAULT_CAT = 0x02
-FONT_DEFAULT_PADDING = 0xFF
+
+FONT_DEFAULT_BPROW = u8(2)
+FONT_DEFAULT_CAT = u8(0x02)
+FONT_DEFAULT_PADDING = u8(0xFF)
 
 FONT_VALID_TABLES = [0x00, 0x30, 0x81, 0x82, 0x83, 0x84, 0x87, 0xFF]
 

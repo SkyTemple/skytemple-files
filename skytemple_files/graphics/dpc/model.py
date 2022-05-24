@@ -35,7 +35,7 @@ class Dpc:
 
         all_tilemaps = []
         for bytes2 in iter_bytes(data, 2):
-            all_tilemaps.append(TilemapEntry.from_int(read_uintle(bytes2, 0, 2)))
+            all_tilemaps.append(TilemapEntry.from_int(read_u16(bytes2, 0)))
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
 
     def chunks_to_pil(self, dpci: Dpci, palettes: List[List[int]], width_in_mtiles=16) -> Image.Image:

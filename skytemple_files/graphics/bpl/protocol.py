@@ -17,14 +17,16 @@
 from abc import abstractmethod
 from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, runtime_checkable, Sequence
 
+from range_typed_integers import *
+
 
 @runtime_checkable
 class BplAnimationSpecProtocol(Protocol):
-    duration_per_frame: int
-    number_of_frames: int
+    duration_per_frame: u16
+    number_of_frames: u16
 
     @abstractmethod
-    def __init__(self, duration_per_frame: int, number_of_frames: int): ...
+    def __init__(self, duration_per_frame: u16, number_of_frames: u16): ...
 
 
 T = TypeVar('T', bound=BplAnimationSpecProtocol)
@@ -32,7 +34,7 @@ T = TypeVar('T', bound=BplAnimationSpecProtocol)
 
 @runtime_checkable
 class BplProtocol(Protocol[T]):
-    number_palettes: int
+    number_palettes: u16
     has_palette_animation: bool
     palettes: Sequence[Sequence[int]]
     animation_specs: Sequence[T]

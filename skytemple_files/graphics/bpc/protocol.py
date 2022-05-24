@@ -18,6 +18,7 @@ from abc import abstractmethod
 from typing import Protocol, Optional, TypeVar, List, Sequence, runtime_checkable
 
 from PIL import Image
+from range_typed_integers import *
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
@@ -26,11 +27,11 @@ from skytemple_files.graphics.bpa.protocol import BpaProtocol
 @runtime_checkable
 class BpcLayerProtocol(Protocol):
     # The actual number of tiles is one lower
-    number_tiles: int
+    number_tiles: u16
     # There must be 4 BPAs. (0 for not used)
-    bpas: Sequence[int]
+    bpas: Sequence[u16]
     # NOTE: Incosistent with number_tiles. We are including the null chunk in this count.
-    chunk_tilemap_len: int
+    chunk_tilemap_len: u16
     # May also be set from outside after creation:
     tiles:  Sequence[bytes]
     tilemap: Sequence[TilemapEntryProtocol]
@@ -225,7 +226,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def process_bpa_change(self, bpa_index: int, tiles_bpa_new: int) -> None:
+    def process_bpa_change(self, bpa_index: int, tiles_bpa_new: u16) -> None:
         """
         Update the layer entries for BPA tile number change and also re-map all tilemappings,
         so that they still match their original tile, even though some tiles in-between may now

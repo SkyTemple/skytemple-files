@@ -17,27 +17,29 @@
 
 # Normal spawn delay (0x24): [EU]overlay_0010:0x7A74 / [US]overlay_0010:0x7A5C
 # Spawn delay after stealing from a shop (3): [EU]overlay_0010:0x7BD8 / [US]overlay_0010:0x7BC0
+from range_typed_integers import u16
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle
+from skytemple_files.common.util import read_u16, write_u16
 
 
 class HardcodedSpawnRate:
     @staticmethod
-    def get_normal_spawn_rate(ov10: bytes, config: Pmd2Data) -> int:
+    def get_normal_spawn_rate(ov10: bytes, config: Pmd2Data) -> u16:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['SpawnDelayNormal']
-        return read_uintle(ov10, block.begin, 2)
+        return read_u16(ov10, block.begin)
 
     @staticmethod
-    def set_normal_spawn_rate(value: int, ov10: bytearray, config: Pmd2Data) -> None:
+    def set_normal_spawn_rate(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['SpawnDelayNormal']
-        write_uintle(ov10, value, block.begin, 2)
+        write_u16(ov10, value, block.begin)
         
     @staticmethod
-    def get_stolen_spawn_rate(ov10: bytes, config: Pmd2Data) -> int:
+    def get_stolen_spawn_rate(ov10: bytes, config: Pmd2Data) -> u16:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['SpawnDelayStealing']
-        return read_uintle(ov10, block.begin, 2)
+        return read_u16(ov10, block.begin)
 
     @staticmethod
-    def set_stolen_spawn_rate(value: int, ov10: bytearray, config: Pmd2Data) -> None:
+    def set_stolen_spawn_rate(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['SpawnDelayStealing']
-        write_uintle(ov10, value, block.begin, 2)
+        write_u16(ov10, value, block.begin)

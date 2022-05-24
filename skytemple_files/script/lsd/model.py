@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import string
 
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.util import *
 
 ALLOWED_CHARS = set(string.digits + string.ascii_uppercase)
@@ -29,7 +31,7 @@ class Lsd:
             return
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        number_entries = read_uintle(data, 0, 2)
+        number_entries = read_u16(data, 0)
         self.entries = []
         for entry in iter_bytes(data, 8, 2, (2 + number_entries * 8)):
             self.entries.append(read_bytes(bytes(entry), 0, 8).rstrip(b'\0').decode('ascii'))
@@ -37,7 +39,7 @@ class Lsd:
     def to_bytes(self):
         """Convert the LSD back to bytes"""
         data = bytearray(2 + len(self.entries) * MAX_LEN)
-        write_uintle(data, len(self.entries), 0, 2)
+        write_u16(data, u16_checked(len(self.entries)), 0)
         bytes_written = 2
         for e in self.entries:
             data[bytes_written:bytes_written + MAX_LEN] = self._str_to_bytes(e)

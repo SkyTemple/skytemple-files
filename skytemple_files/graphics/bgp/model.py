@@ -40,20 +40,29 @@ BGP_TOTAL_NUMBER_TILES_ACTUALLY = 1024
 # NOTE: Tile 0 is always 0x0. <- THIS
 
 
-class BgpHeader:
+class BgpHeader(CheckedIntWrites):
     """Header for a Bgp Image"""
+    palette_begin: u32
+    palette_length: u32
+    tiles_begin: u32
+    tiles_length: u32
+    tilemap_data_begin: u32
+    tilemap_data_length: u32
+    unknown3: u32
+    unknown4: u32
+    
     def __init__(self, data: bytes, offset=0):
         # WARNING: The pointers and lengths are not updated after creation. The writer re-generates them.
-        self.palette_begin = read_uintle(data, offset, 4)
+        self.palette_begin = read_u32(data, offset)
         if self.palette_begin != BGP_HEADER_LENGTH:
             raise ValueError("Invalid BGP image: Palette pointer too low.")
-        self.palette_length = read_uintle(data, offset + 4, 4)
-        self.tiles_begin = read_uintle(data, offset + 8, 4)
-        self.tiles_length = read_uintle(data, offset + 12, 4)
-        self.tilemap_data_begin = read_uintle(data, offset + 16, 4)
-        self.tilemap_data_length = read_uintle(data, offset + 20, 4)
-        self.unknown3 = read_uintle(data, offset + 24, 4)
-        self.unknown4 = read_uintle(data, offset + 28, 4)
+        self.palette_length = read_u32(data, offset + 4)
+        self.tiles_begin = read_u32(data, offset + 8)
+        self.tiles_length = read_u32(data, offset + 12)
+        self.tilemap_data_begin = read_u32(data, offset + 16)
+        self.tilemap_data_length = read_u32(data, offset + 20)
+        self.unknown3 = read_u32(data, offset + 24)
+        self.unknown4 = read_u32(data, offset + 28)
 
 
 class Bgp:

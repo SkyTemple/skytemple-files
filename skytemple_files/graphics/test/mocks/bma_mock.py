@@ -17,6 +17,7 @@
 from typing import Optional, List, Sequence
 
 from PIL import Image
+from range_typed_integers import *
 
 from skytemple_files.graphics.bma.protocol import BmaProtocol, P, C, L
 
@@ -24,15 +25,15 @@ from skytemple_files.graphics.bma.protocol import BmaProtocol, P, C, L
 class BmaStub(BmaProtocol[P, C, L]):
     def __init__(self, data: bytes):
         self.stub_init_data = data
-        self.map_width_camera: int = 0
-        self.map_height_camera: int = 0
-        self.tiling_width: int = 0
-        self.tiling_height: int = 0
-        self.map_width_chunks: int = 0
-        self.map_height_chunks: int = 0
-        self.number_of_layers: int = 0
-        self.unk6: int = 0
-        self.number_of_collision_layers: int = 0
+        self.map_width_camera: u8 = u8(0)
+        self.map_height_camera: u8 = u8(0)
+        self.tiling_width: u8 = u8(0)
+        self.tiling_height: u8 = u8(0)
+        self.map_width_chunks: u8 = u8(0)
+        self.map_height_chunks: u8 = u8(0)
+        self.number_of_layers: u16 = u16(0)
+        self.unk6: u16 = u16(0)
+        self.number_of_collision_layers: u16 = u16(0)
         self.layer0: List[int] = []
         self.layer1: Optional[List[int]] = None
         self.unknown_data_block: Optional[List[int]] = None

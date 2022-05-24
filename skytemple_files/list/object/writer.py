@@ -29,17 +29,17 @@ class ObjectListBinWriter:
         object_list = []
         for o in self.model.list:
             obj_data = bytearray(LEN_OBJECT_ENTRY)
-            write_uintle(obj_data, o.unk1, 0, 2)
-            write_uintle(obj_data, o.unk2, 2, 2)
-            write_uintle(obj_data, o.unk3, 4, 1)
-            if o.name!="NULL":
+            write_u16(obj_data, o.unk1, 0)
+            write_u16(obj_data, o.unk2, 2)
+            write_u8(obj_data, o.unk3, 4)
+            if o.name != "NULL":
                 count = 0
                 for c in o.name:
-                    if count>=10:
+                    if count >= 10:
                         raise ValueError("Invalid string length (more than 10 characters)")
-                    if ord(c)>=256:
+                    if ord(c) >= 256:
                         raise ValueError("Invalid string (non-ASCII characters)")
-                    obj_data[5+count] = ord(c)
-                    count+=1
+                    obj_data[5 + count] = ord(c)
+                    count += 1
             object_list.append(obj_data)
         return b''.join(object_list)

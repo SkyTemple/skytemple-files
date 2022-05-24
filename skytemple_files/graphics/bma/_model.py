@@ -38,34 +38,34 @@ from skytemple_files.common.i18n_util import f, _
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
 
-class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
+class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
     def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.map_width_camera = read_uintle(data, 0)
-        self.map_height_camera = read_uintle(data, 1)
+        self.map_width_camera = read_u8(data, 0)
+        self.map_height_camera = read_u8(data, 1)
         # ALL game maps have the same values here. Changing them does nothing,
         # so the game seems to be hardcoded to 3x3.
-        self.tiling_width = read_uintle(data, 2)
-        self.tiling_height = read_uintle(data, 3)
+        self.tiling_width = read_u8(data, 2)
+        self.tiling_height = read_u8(data, 3)
         # Map width & height in chunks, so map.map_width_camera / map.tiling_width
         # The only maps this is not true for are G01P08A. S01P01B, S15P05A, S15P05B, it seems they
         # are missing one tile in width (32x instead of 33x)
         # The game doesn't seem to care if this value is off by less than 3 (tiling_w/h).
         # But NOTE that this has consequences for the collision and unknown data layers! See notes at collision
         # below!
-        self.map_width_chunks = read_uintle(data, 4)
-        self.map_height_chunks = read_uintle(data, 5)
+        self.map_width_chunks = read_u8(data, 4)
+        self.map_height_chunks = read_u8(data, 5)
         # Through tests against the BPC, it was determined that unk5 is the number of layers:
         # It seems to be ignored by the game, however
-        self.number_of_layers = read_uintle(data, 6, 2)
+        self.number_of_layers = read_u16(data, 6)
         # Some kind of boolean flag? Seems to control if there is a third data block between
         # layer data and collision - Seems to be related to NPC conversations, see below.
-        self.unk6 = read_uintle(data, 8, 2)
+        self.unk6 = read_u16(data, 8)
         # Some maps weirdly have 0x02 here and then have two collision layers, but they always seem redundant?
-        self.number_of_collision_layers = read_uintle(data, 0xA, 2)
+        self.number_of_collision_layers = read_u16(data, 0xA)
 
         # in p01p01a: 0xc - 0x27: Layer 1 header? 0xc messes everthing up. after that each row? 27 rows...?
         #             0xc -> 0xc8 = 200

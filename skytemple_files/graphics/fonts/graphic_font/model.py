@@ -28,49 +28,50 @@ class GraphicFont(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        number_entries = read_uintle(data, 0x02, 2)//GRAPHIC_FONT_ENTRY_LEN
+        number_entries = read_u16(data, 0x02) // GRAPHIC_FONT_ENTRY_LEN
 
         self.palette: Optional[Pal] = None
         self.entries: List[Optional[Image.Image]] = []
         for i in range(0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN):
-            width = read_uintle(data, i + 0x00)
-            height = read_uintle(data, i + 0x01)
-            offset = read_uintle(data, i + 0x02, 2)
-            if width>0 or height>0:
-                data_raw = data[offset:offset+width*height]
-                self.entries.append(Image.frombytes(mode='P', size=(width,height), data=bytes(data_raw)))
+            width = read_u8(data, i + 0x00)
+            height = read_u8(data, i + 0x01)
+            offset = read_u16(data, i + 0x02)
+            if width > 0 or height > 0:
+                data_raw = data[offset:offset + width * height]
+                self.entries.append(Image.frombytes(mode='P', size=(width, height), data=bytes(data_raw)))
             else:
                 self.entries.append(None)
-        
+
     def set_palette(self, palette: Pal):
         self.palette = palette
-        
+
     def get_palette_raw(self) -> List[int]:
         if self.palette:
-            return [0,0,255]*(0x80)+self.palette.get_palette_4bpc()[:0x80*3]
+            return [0, 0, 255] * 0x80 + self.palette.get_palette_4bpc()[:0x80 * 3]
         else:
-            return [0,0,255]*(0x80)+[(i//3)%16*16+(i//3)//16 for i in range(0x80*3)]
-    
+            return [0, 0, 255] * 0x80 + [(i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)]
+
     def set_palette_raw(self, data: List[int]):
         if self.palette:
-            self.palette.set_palette_4bpc(data[0x80*3:])
-    
+            self.palette.set_palette_4bpc(data[0x80 * 3:])
+
     def get_nb_entries(self) -> int:
         return len(self.entries)
-    
+
     def get_entry(self, index) -> Image.Image:
         entry = self.entries[index]
         if entry:
             entry = entry.convert(mode="P")
             entry.putpalette(self.get_palette_raw())
         return entry
+
     def set_entries(self, entries: List[Optional[Image.Image]]):
         self.entries = entries
         for e in entries:
             if e:
                 self.set_palette_raw(list(e.palette.palette))
                 break
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, GraphicFont):
             return False

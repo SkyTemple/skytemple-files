@@ -18,6 +18,7 @@
 import math
 
 from collections.abc import Iterator
+from typing import cast
 
 from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_IMG_METAPIXELS_DIM, \
     KAO_IMG_IMG_DIM
@@ -101,7 +102,7 @@ class Kao(KaoProtocol[KaoImage]):
         # first_toc = next(x for x, val in enumerate(data) if val != 0)
         assert first_toc % SUBENTRIES * SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
         # first pointer = end of TOC
-        first_pointer = read_uintle(data, first_toc, SUBENTRY_LEN)
+        first_pointer = read_u32(data, first_toc)
         toc_len = int((first_pointer - first_toc) / (SUBENTRIES * SUBENTRY_LEN))
 
         self.original_data: bytearray = data   # type: ignore
@@ -128,7 +129,7 @@ class Kao(KaoProtocol[KaoImage]):
         last_pnt = 0
         for x in range(self.toc_len * SUBENTRIES):
             start = self.first_toc + x * SUBENTRY_LEN
-            pnt = read_sintle(self.original_data, start, SUBENTRY_LEN)
+            pnt = cast(int, read_i32(self.original_data, start))
             if pnt < 0:
                 pnt -= expand_size
                 last_pnt = pnt
@@ -157,7 +158,7 @@ class Kao(KaoProtocol[KaoImage]):
             raise ValueError(f"The subindex requested must be between 0 and {SUBENTRIES}")
         if self.loaded_kaos[index][subindex] is None:
             start_toc_entry = self.first_toc + (index * SUBENTRIES * SUBENTRY_LEN) + subindex * SUBENTRY_LEN
-            pnt = read_sintle(self.original_data, start_toc_entry, SUBENTRY_LEN)
+            pnt = read_i32(self.original_data, start_toc_entry)
             if pnt < 0:
                 # NULL pointer
                 return None

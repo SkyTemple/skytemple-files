@@ -136,19 +136,19 @@ class W16:
         i = 0
         while True:
             # Read TOC entry
-            pointer = read_uintle(data, i * 8, 4)
+            pointer = read_u32(data, i * 8)
             if pointer == len(data):
                 break
-            unk1 = read_uintle(data, i * 8 + 4)
-            unk2 = read_uintle(data, i * 8 + 5)
-            index = read_uintle(data, i * 8 + 6)
-            null = read_uintle(data, i * 8 + 7)
+            unk1 = read_u8(data, i * 8 + 4)
+            unk2 = read_u8(data, i * 8 + 5)
+            index = read_u8(data, i * 8 + 6)
+            null = read_u8(data, i * 8 + 7)
             assert null == 0
             entry_data = W16TocEntry(unk1, unk2, index, null)
             # Read palette
             pal = self._read_pal(data[pointer:pointer + len_pal_bytes])
             # Read image
-            next_pointer = read_uintle(data, (i+1) * 8, 4)
+            next_pointer = read_u32(data, (i+1) * 8)
             img_data = data[pointer + len_pal_bytes:next_pointer]
             if FileType.COMMON_AT.matches(img_data):
                 self._files.append(W16AtImage(entry_data, img_data, pal))

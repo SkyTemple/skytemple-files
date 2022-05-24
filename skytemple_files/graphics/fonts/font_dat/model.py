@@ -26,74 +26,75 @@ from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, 
 from skytemple_files.common.i18n_util import f, _
 from PIL import Image
 
-class FontDatEntry(AbstractFontEntry):
-    def __init__(self, char: int, table: int, width: int, bprow: int, data: bytes):
+
+class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
+    def __init__(self, char: u8, table: u8, width: u8, bprow: u8, data: bytes):
         self.char = char
         self.table = table
         self.width = width
-        self.bprow = bprow # bytes per row; never checked by the game
+        self.bprow = bprow  # bytes per row; never checked by the game
         self.data = data
-    
+
     @classmethod
     def get_class_properties(cls) -> List[str]:
         return ["char", "width", "bprow"]
 
     def get_properties(self) -> Dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
-        return {"char":self.char, "width":self.width, "bprow":self.bprow}
+        return {"char": self.char, "width": self.width, "bprow": self.bprow}
 
     def set_properties(self, properties: Dict[str, int]):
         """Sets a list of the properties of the entry"""
         if "char" in properties:
-            self.char = properties["char"]
+            self.char = u8(properties["char"])
         if "width" in properties:
-            self.width = properties["width"]
+            self.width = u8(properties["width"])
         if "bprow" in properties:
-            self.bprow = properties["bprow"]
+            self.bprow = u8(properties["bprow"])
 
     def to_pil(self) -> Image.Image:
         data = []
-        bprow = FONT_DEFAULT_BPROW # Unused, so always use default
-        for i in range(len(self.data)//bprow):
+        bprow = FONT_DEFAULT_BPROW  # Unused, so always use default
+        for i in range(len(self.data) // bprow):
             pos = 0
             for j in range(bprow):
-                v = self.data[i*bprow+j]
+                v = self.data[i * bprow + j]
                 for x in range(8):
-                    if pos<FONT_DAT_SIZE:
-                        if v&(2**x):
+                    if pos < FONT_DAT_SIZE:
+                        if v & (2 ** x):
                             data.append(0xf)
                         else:
                             data.append(0x0)
                     pos += 1
-        image = Image.frombytes(mode='P', size=(FONT_DAT_SIZE,FONT_DAT_SIZE), data=bytes(data))
+        image = Image.frombytes(mode='P', size=(FONT_DAT_SIZE, FONT_DAT_SIZE), data=bytes(data))
         return image
 
     def to_xml(self) -> Element:
         attrs = {
-                XML_CHAR__ID: str(self.char),
-                XML_CHAR__WIDTH: str(self.width)
+            XML_CHAR__ID: str(self.char),
+            XML_CHAR__WIDTH: str(self.width)
         }
-        if self.bprow!=FONT_DEFAULT_BPROW:
+        if self.bprow != FONT_DEFAULT_BPROW:
             attrs[XML_CHAR__BPROW] = str(self.bprow)
         xml_entry = Element(XML_CHAR, attrs)
         return xml_entry
-    
+
     @classmethod
-    def from_pil(cls, img: Image.Image, char: int, table: int, width: int, bprow_field: int) -> 'FontDatEntry':
-        if img.mode!='P':
+    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8) -> 'FontDatEntry':
+        if img.mode != 'P':
             raise AttributeError(_("This must be a color indexed image!"))
-        bprow = FONT_DEFAULT_BPROW # Unused, so always use default
+        bprow = FONT_DEFAULT_BPROW  # Unused, so always use default
         data = []
         raw_data = img.tobytes("raw", "P")
         for i in range(FONT_DAT_SIZE):
-            data += [0]*bprow
+            data += [0] * bprow
             for j in range(FONT_DAT_SIZE):
-                v = raw_data[i*FONT_DAT_SIZE+j]
-                pos = -bprow + j//8
+                v = raw_data[i * FONT_DAT_SIZE + j]
+                pos = -bprow + j // 8
                 if v:
-                    data[pos] = data[pos]|(2**(j%8))
+                    data[pos] = data[pos] | (2 ** (j % 8))
         return FontDatEntry(char, table, width, bprow_field, bytes(data))
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDatEntry):
             return False
@@ -104,37 +105,37 @@ class FontDatEntry(AbstractFontEntry):
                self.data == other.data
 
 
-class FontDat(AbstractFont):
+class FontDat(AbstractFont, CheckedIntWrites):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        number_entries = read_uintle(data, 0, 4)
+        number_entries = read_u32(data, 0)
 
         self.entries = []
         for i in range(4, 4 + number_entries * FONT_DAT_ENTRY_LEN, FONT_DAT_ENTRY_LEN):
             self.entries.append(FontDatEntry(
-                read_uintle(data, i + 0x00),
-                read_uintle(data, i + 0x01),
-                read_uintle(data, i + 0x02),
-                read_uintle(data, i + 0x03),
+                read_u8(data, i + 0x00),
+                read_u8(data, i + 0x01),
+                read_u8(data, i + 0x02),
+                read_u8(data, i + 0x03),
                 data[i + 0x4:i + FONT_DAT_ENTRY_LEN]
             ))
-    
+
     def get_entry_image_size(self) -> int:
         return FONT_DAT_SIZE
-        
+
     def get_entry_properties(self) -> List[str]:
         return FontDatEntry.get_class_properties()
-    
+
     def delete_entry(self, entry: AbstractFontEntry):
         self.entries.remove(entry)  # type: ignore
-    
-    def create_entry_for_table(self, table) -> AbstractFontEntry:
-        entry = FontDatEntry(0, table, 0, FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN-0x4))
+
+    def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
+        entry = FontDatEntry(u8(0), table, u8(0), FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN - 0x4))
         self.entries.append(entry)
         return entry
-    
-    def get_entries_from_table(self, table) -> List[AbstractFontEntry]:
+
+    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
         entries = []
         for item in self.entries:
             if item.table == table:
@@ -144,16 +145,17 @@ class FontDat(AbstractFont):
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(mode='P', size=(FONT_DAT_SIZE*16, FONT_DAT_SIZE*16), color=0)
-            tables[t].putpalette([min(255, 256-(i//3)*16) for i in range(16*3)])
+            tables[t] = Image.new(mode='P', size=(FONT_DAT_SIZE * 16, FONT_DAT_SIZE * 16), color=0)
+            tables[t].putpalette([min(255, 256 - (i // 3) * 16) for i in range(16 * 3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
-                tables[item.table].paste(item.to_pil(), box=((item.char%16)*FONT_DAT_SIZE, (item.char//16)*FONT_DAT_SIZE))
+                tables[item.table].paste(item.to_pil(),
+                                         box=((item.char % 16) * FONT_DAT_SIZE, (item.char // 16) * FONT_DAT_SIZE))
         return tables
 
     def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
-        
+
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Element(XML_TABLE, {
@@ -182,10 +184,13 @@ class FontDat(AbstractFont):
                     charid = int(char.get(XML_CHAR__ID))
                     width = int(char.get(XML_CHAR__WIDTH))
                     bprow = int(char.get(XML_CHAR__BPROW, default=FONT_DEFAULT_BPROW))
-                    x = (charid%16)*FONT_DAT_SIZE
-                    y = (charid//16)*FONT_DAT_SIZE
-                    self.entries.append(FontDatEntry.from_pil(tables[t].crop(box=[x, y, x+FONT_DAT_SIZE, y+FONT_DAT_SIZE]), charid, t, width, bprow))
+                    x = (charid % 16) * FONT_DAT_SIZE
+                    y = (charid // 16) * FONT_DAT_SIZE
+                    self.entries.append(
+                        FontDatEntry.from_pil(tables[t].crop(box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]), charid,
+                                              t, width, bprow))
         pass
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDat):
             return False

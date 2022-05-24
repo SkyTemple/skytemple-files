@@ -15,20 +15,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
-
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle
+from typing import cast
+from skytemple_files.common.util import *
 
 
 class HardcodedRecruitmentTables:
     @classmethod
-    def get_monster_species_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[int]:
+    def get_monster_species_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the list of Pokémon species from the recruitment table."""
-        return cls._get_generic(overlay11bin, config, 'RecruitmentTableSpecies', 2)
+        return cast(List[u16], cls._get_generic(overlay11bin, config, 'RecruitmentTableSpecies', 2))
 
     @classmethod
-    def set_monster_species_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
+    def set_monster_species_list(cls, value: List[u16], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment species list.
         The length of the list must exactly match the original ROM's length (see get_monster_species_list).
@@ -36,9 +34,9 @@ class HardcodedRecruitmentTables:
         cls._set_generic(overlay11bin, config, 'RecruitmentTableSpecies', 2, value)
         
     @classmethod
-    def get_monster_levels_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[int]:
+    def get_monster_levels_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the list of Pokémon levels from the recruitment table."""
-        return cls._get_generic(overlay11bin, config, 'RecruitmentTableLevels', 2)
+        return cast(List[u16], cls._get_generic(overlay11bin, config, 'RecruitmentTableLevels', 2))
 
     @classmethod
     def set_monster_levels_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
@@ -49,9 +47,9 @@ class HardcodedRecruitmentTables:
         cls._set_generic(overlay11bin, config, 'RecruitmentTableLevels', 2, value)
         
     @classmethod
-    def get_monster_locations_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[int]:
+    def get_monster_locations_list(cls, overlay11bin: bytes, config: Pmd2Data) -> List[u8]:
         """Returns the list of Pokémon locations from the recruitment table."""
-        return cls._get_generic(overlay11bin, config, 'RecruitmentTableLocations', 1)
+        return cast(List[u8], cls._get_generic(overlay11bin, config, 'RecruitmentTableLocations', 1))
 
     @classmethod
     def set_monster_locations_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
@@ -66,14 +64,19 @@ class HardcodedRecruitmentTables:
         block = config.binaries['overlay/overlay_0011.bin'].symbols[block_name]
         lst = []
         for i in range(block.begin, block.end, bytelen):
-            lst.append(read_uintle(ov11, i, bytelen))
+            lst.append(read_dynamic(ov11, i, length=bytelen, big_endian=False, signed=False))
         return lst
     
     @staticmethod
-    def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: List[int]) -> None:
+    def _set_generic(ov11: bytearray, config: Pmd2Data, block_name: str, bytelen: int, value: Sequence[int]) -> None:
         block = config.binaries['overlay/overlay_0011.bin'].symbols[block_name]
         expected_length = int((block.end - block.begin) / bytelen)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            write_uintle(ov11, entry, block.begin + i * bytelen, bytelen)
+            if bytelen == 1:
+                write_u8(ov11, u8(entry), block.begin + i * bytelen)
+            elif bytelen == 2:
+                write_u16(ov11, u16(entry), block.begin + i * bytelen)
+            else:
+                raise ValueError("Unsupported byte length.")

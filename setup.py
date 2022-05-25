@@ -42,9 +42,9 @@ setup(
         'explorerscript >= 0.1.1',
         'skytemple-rust >= 1.3.7',
         'tilequant >= 0.4.0',
-        'typing-extensions == 3.7.4.2; python_version<"3.7"',
         'pyobjc==8.5; sys_platform == "darwin"',
-        'dungeon-eos==0.0.5'
+        'dungeon-eos==0.0.5',
+        'typing_extensions >= 3.9; python_version < "3.9"'
     ],
     entry_points='''
         [console_scripts]

@@ -26,7 +26,13 @@ from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
 from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, \
-    Any, Sequence, Generator, get_type_hints
+    Any, Sequence, Generator
+
+try:
+    # We prefer this version since it has include_extras for sure.
+    from typing_extensions import get_type_hints  # type: ignore
+except ImportError:
+    from typing import get_type_hints  # type: ignore
 
 import pkg_resources
 from PIL import Image

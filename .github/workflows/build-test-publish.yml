@@ -23,6 +23,12 @@ jobs:
       env:
         PYTHONPATH: .
 
+  code-formatting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
+
   typechecks:
     runs-on: ubuntu-latest
     name: Type checks

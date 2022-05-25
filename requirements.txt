@@ -13,5 +13,6 @@ types-PyYAML==6.0.7
 types-setuptools
 pytest
 pylint
+black
 parameterized
 typing_extensions >= 3.9; python_version < "3.9"

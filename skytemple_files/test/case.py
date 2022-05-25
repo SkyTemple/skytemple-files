@@ -126,7 +126,7 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
 def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
     equal_size = img1.height == img2.height and img1.width == img2.width
 
-    if img1.mode == img2.mode == "RGBA":
+    if img1.mode == img2.mode == "RGBA":  # type: ignore
         img1_alphas = [pixel[3] for pixel in img1.getdata()]
         img2_alphas = [pixel[3] for pixel in img2.getdata()]
         equal_alphas = img1_alphas == img2_alphas

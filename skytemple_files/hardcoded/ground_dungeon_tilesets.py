@@ -116,7 +116,7 @@ def resolve_mapping_for_level(
     mappa_idx = dungeons[dungeon_id].mappa_index
     start_offset = dungeons[dungeon_id].start_after
     length = dungeons[dungeon_id].number_floors
-    floor_id = cast(u8, min(length - 1, floor_id))
+    floor_id = cast(u8, min(length - 1, floor_id))  # type: ignore
     layout = mappa.floor_lists[mappa_idx][start_offset + floor_id].layout
     tileset_id = layout.tileset_id
     if tileset_id > 169:

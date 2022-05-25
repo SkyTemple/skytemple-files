@@ -7,7 +7,7 @@ git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 tilequant==0.4.0.post0
 dungeon-eos==0.0.5
 skytemple-3rdparty-typestubs
-types-Pillow==9.0.15
+types-Pillow==9.0.16
 types-PyYAML==6.0.7
 types-setuptools
 pytest

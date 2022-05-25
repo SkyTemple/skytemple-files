@@ -18,6 +18,8 @@
 from itertools import chain
 from typing import Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.mappa_bin.item_list import GUARANTEED
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
@@ -47,19 +49,19 @@ class MappaBinWriter:
         if len(data) % 16 != 0:
             data += bytes(0x00 for _ in range(0, 16 - (len(data) % 16)))
         # Floor list LUT
-        start_floor_list_lut = len(data)
+        start_floor_list_lut = u32_checked(len(data))
         floor_list_lut = bytearray(4 * len(floor_lists))
-        cursor_floor_data = 0
+        cursor_floor_data = u32(0)
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(start_floor_list_lut + i * 4)
-            write_uintle(floor_list_lut, cursor_floor_data, i * 4, 4)
-            cursor_floor_data += (len(floor_list) + 1) * 18
+            write_u32(floor_list_lut, cursor_floor_data, i * 4)
+            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 18)
         data += floor_list_lut
         # Padding
         if len(data) % 4 != 0:
             data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Floor layout data
-        start_floor_layout_data = len(data)
+        start_floor_layout_data = u32_checked(len(data))
         layout_data = bytearray(32 * len(floor_layouts))
         for i, layout in enumerate(floor_layouts):
             layout_data[i * 32: (i + 1) * 32] = layout.to_mappa()
@@ -73,7 +75,7 @@ class MappaBinWriter:
         monster_data_cursor = 0
         monster_data_pointer = []
         for i, monster_list in enumerate(monster_lists):
-            monster_data_pointer.append(monster_data_start + monster_data_cursor)
+            monster_data_pointer.append(u32_checked(monster_data_start + monster_data_cursor))
 
             single_monster_list_data = bytes(chain.from_iterable(monster.to_mappa() for monster in monster_list)) + bytes(8)
             len_single = len(single_monster_list_data)
@@ -84,11 +86,11 @@ class MappaBinWriter:
         if len(data) % 4 != 0:
             data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Monster spawn LUT
-        start_monster_lut = len(data)
+        start_monster_lut = u32_checked(len(data))
         monster_lut = bytearray(4 * len(monster_data_pointer))
         for i, pnt in enumerate(monster_data_pointer):
             pointer_offsets.append(start_monster_lut + i * 4)
-            write_uintle(monster_lut, pnt, i * 4, 4)
+            write_u32(monster_lut, pnt, i * 4)
         data += monster_lut
         # Padding
         if len(data) % 4 != 0:
@@ -99,7 +101,7 @@ class MappaBinWriter:
         trap_data_cursor = 0
         trap_data_pointer = []
         for trap_list in trap_lists:
-            trap_data_pointer.append(trap_data_start + trap_data_cursor)
+            trap_data_pointer.append(u32_checked(trap_data_start + trap_data_cursor))
             single_trap_list_data = trap_list.to_mappa()
 
             len_single = len(single_trap_list_data)
@@ -112,11 +114,11 @@ class MappaBinWriter:
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Trap lists LUT
-        start_traps_lut = len(data)
+        start_traps_lut = u32_checked(len(data))
         trap_lut = bytearray(4 * len(trap_data_pointer))
         for i, pnt in enumerate(trap_data_pointer):
             pointer_offsets.append(start_traps_lut + i * 4)
-            write_uintle(trap_lut, pnt, i * 4, 4)
+            write_u32(trap_lut, pnt, i * 4)
         data += trap_lut
         # Item spawn lists data
         item_data_start = len(data)
@@ -125,7 +127,7 @@ class MappaBinWriter:
         item_data_cursor = 0
         item_data_pointer = []
         for item_list in item_lists:
-            item_data_pointer.append(item_data_start + item_data_cursor)
+            item_data_pointer.append(u32_checked(item_data_start + item_data_cursor))
 
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
@@ -137,11 +139,11 @@ class MappaBinWriter:
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Item spawn lists LUT
-        start_items_lut = len(data)
+        start_items_lut = u32_checked(len(data))
         item_list_lut = bytearray(4 * len(item_data_pointer))
         for i, pnt in enumerate(item_data_pointer):
             pointer_offsets.append(start_items_lut + i * 4)
-            write_uintle(item_list_lut, pnt, i * 4, 4)
+            write_u32(item_list_lut, pnt, i * 4)
         data += item_list_lut
         # Padding
         if len(data) % 16 != 0:
@@ -150,15 +152,15 @@ class MappaBinWriter:
         data_pointer = len(data)
         subheader = bytearray(4 * 5)
         pointer_offsets.append(data_pointer + 0x00)
-        write_uintle(subheader, start_floor_list_lut, 0x00, 4)
+        write_u32(subheader, start_floor_list_lut, 0x00)
         pointer_offsets.append(data_pointer + 0x04)
-        write_uintle(subheader, start_floor_layout_data, 0x04, 4)
+        write_u32(subheader, start_floor_layout_data, 0x04)
         pointer_offsets.append(data_pointer + 0x08)
-        write_uintle(subheader, start_items_lut, 0x08, 4)
+        write_u32(subheader, start_items_lut, 0x08)
         pointer_offsets.append(data_pointer + 0x0C)
-        write_uintle(subheader, start_monster_lut, 0x0C, 4)
+        write_u32(subheader, start_monster_lut, 0x0C)
         pointer_offsets.append(data_pointer + 0x10)
-        write_uintle(subheader, start_traps_lut, 0x10, 4)
+        write_u32(subheader, start_traps_lut, 0x10)
         data += subheader
 
         return data, pointer_offsets, data_pointer

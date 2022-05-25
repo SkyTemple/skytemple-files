@@ -18,6 +18,8 @@
 
 import string
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bgp.model import Bgp, BGP_PAL_NUMBER_COLORS, BGP_PAL_ENTRY_LEN, BGP_TILEMAP_ENTRY_BYTELEN, \
     BGP_HEADER_LENGTH, BGP_TILE_DIM, BGP_PAL_UNKNOWN4_COLOR_VAL
@@ -32,24 +34,24 @@ class BgpWriter:
     def write(self) -> bytes:
         bytelen_single_tile = int(BGP_TILE_DIM * BGP_TILE_DIM / 2)
 
-        palette_length = len(self.model.palettes) * BGP_PAL_NUMBER_COLORS * BGP_PAL_ENTRY_LEN
-        tiles_length = len(self.model.tiles) * bytelen_single_tile
-        tilemapping_length = len(self.model.tilemap) * BGP_TILEMAP_ENTRY_BYTELEN
+        palette_length = u32_checked(len(self.model.palettes) * BGP_PAL_NUMBER_COLORS * BGP_PAL_ENTRY_LEN)
+        tiles_length = u32_checked(len(self.model.tiles) * bytelen_single_tile)
+        tilemapping_length = u32_checked(len(self.model.tilemap) * BGP_TILEMAP_ENTRY_BYTELEN)
         palette_begin = BGP_HEADER_LENGTH
-        tilemapping_begin = palette_begin + palette_length
-        tiles_begin = tilemapping_begin + tilemapping_length
+        tilemapping_begin = u32_checked(palette_begin + palette_length)
+        tiles_begin = u32_checked(tilemapping_begin + tilemapping_length)
         # 32 byte header + palette, tiles and tilemapping data
         self.data = bytearray(BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length)
 
         # Header
-        write_uintle(self.data, palette_begin, 0, 4)
-        write_uintle(self.data, palette_length, 4, 4)
-        write_uintle(self.data, tiles_begin, 8, 4)
-        write_uintle(self.data, tiles_length, 12, 4)
-        write_uintle(self.data, tilemapping_begin, 16, 4)
-        write_uintle(self.data, tilemapping_length, 20, 4)
-        write_uintle(self.data, self.model.header.unknown3, 24, 4)
-        write_uintle(self.data, self.model.header.unknown4, 28, 4)
+        write_u32(self.data, u32(palette_begin), 0)
+        write_u32(self.data, palette_length, 4)
+        write_u32(self.data, tiles_begin, 8)
+        write_u32(self.data, tiles_length, 12)
+        write_u32(self.data, tilemapping_begin, 16)
+        write_u32(self.data, tilemapping_length, 20)
+        write_u32(self.data, self.model.header.unknown3, 24)
+        write_u32(self.data, self.model.header.unknown4, 28)
         self.bytes_written = BGP_HEADER_LENGTH
 
         assert self.bytes_written == palette_begin
@@ -64,7 +66,7 @@ class BgpWriter:
         assert self.bytes_written == tilemapping_begin
         # Tile Mappings
         for entry in self.model.tilemap:
-            write_uintle(self.data, entry.to_int(), self.bytes_written, BGP_TILEMAP_ENTRY_BYTELEN)
+            write_u16(self.data, entry.to_int(), self.bytes_written)
             self.bytes_written += BGP_TILEMAP_ENTRY_BYTELEN
 
         assert self.bytes_written == tiles_begin
@@ -76,5 +78,5 @@ class BgpWriter:
         return self.data
 
     def _write_byte(self, val):
-        write_uintle(self.data, val, self.bytes_written)
+        write_u8(self.data, val, self.bytes_written)
         self.bytes_written += 1

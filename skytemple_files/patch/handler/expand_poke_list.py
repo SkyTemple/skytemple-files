@@ -18,6 +18,7 @@
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.data.str.handler import StrHandler
@@ -49,9 +50,9 @@ from skytemple_files.common.i18n_util import _
 NUM_PREVIOUS_ENTRIES = 600
 NUM_PREVIOUS_MD_MAX = 1155
 
-DOJO_DUNGEONS_FIRST = 0xB4
-DOJO_DUNGEONS_LAST = 0xBF
-DOJO_MAPPA_ENTRY = 0x35
+DOJO_DUNGEONS_FIRST = u8(0xB4)
+DOJO_DUNGEONS_LAST = u8(0xBF)
+DOJO_MAPPA_ENTRY = u8(0x35)
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x5449C
 PATCH_CHECK_ADDR_APPLIED_EU = 0x54818
@@ -116,9 +117,9 @@ and to save a backup of your ROM before applying this.""")
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4) != PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4) != PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -208,7 +209,7 @@ and to save a backup of your ROM before applying this.""")
             md_bin = rom.getFileByName('BALANCE/monster.md')
             md_model = MdHandler.deserialize(md_bin)
             while len(md_model.entries) < NUM_NEW_ENTRIES:
-                md_model.entries.append(MdEntry(bitflag1=0, entid=len(md_model.entries)))
+                md_model.entries.append(MdEntry.new_empty(u16_checked(len(md_model.entries))))
             for i in range(NUM_PREVIOUS_ENTRIES):
                 md_model.entries[i].entid = i
                 if md_model.entries[NUM_PREVIOUS_ENTRIES + i].gender == Gender.INVALID:
@@ -227,24 +228,24 @@ and to save a backup of your ROM before applying this.""")
                 md_model.entries[i // 2].bitfield1_3 = False
 
             x = table_sf
-            while read_uintle(rom.arm9, x, 2) != 0:
-                pkmn_id = read_uintle(rom.arm9, x, 2)
-                md_model.entries[pkmn_id].bitfield1_3 = True
+            while read_u16(rom.arm9, x) != 0:
+                pkmn_id = read_u16(rom.arm9, x)
+                md_model.entries[pkmn_id].bitfield1_3 = True  # pylint: disable=invalid-sequence-index
                 if md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender != Gender.INVALID:
                     md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_3 = True
                 x += 2
             x = table_mf
-            while read_uintle(rom.arm9, x, 2) != 0:
-                pkmn_id = read_uintle(rom.arm9, x, 2)
-                md_model.entries[pkmn_id].bitfield1_2 = True
+            while read_u16(rom.arm9, x) != 0:
+                pkmn_id = read_u16(rom.arm9, x)
+                md_model.entries[pkmn_id].bitfield1_2 = True  # pylint: disable=invalid-sequence-index
                 if md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender != Gender.INVALID:
                     md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_2 = True
                 x += 2
             ov19 = rom.loadArm9Overlays([19])[19].data
             for x in range(table_sp, table_sp + TABLE_SP_SIZE, 2):
-                pkmn_id = read_uintle(ov19, x, 2)
-                md_model.entries[pkmn_id].bitfield1_1 = True
-                md_model.entries[pkmn_id].bitfield1_0 = True
+                pkmn_id = read_u16(ov19, x)
+                md_model.entries[pkmn_id].bitfield1_1 = True  # pylint: disable=invalid-sequence-index
+                md_model.entries[pkmn_id].bitfield1_0 = True  # pylint: disable=invalid-sequence-index
                 if md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender != Gender.INVALID:
                     md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_1 = True
                     md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_0 = True
@@ -258,11 +259,11 @@ and to save a backup of your ROM before applying this.""")
             # Handle Dojos
             start_floor = 0
             for x in range(DOJO_DUNGEONS_FIRST, DOJO_DUNGEONS_LAST - 2):
-                dl.append(DungeonDefinition(5, DOJO_MAPPA_ENTRY, start_floor, 0))
+                dl.append(DungeonDefinition(u8(5), DOJO_MAPPA_ENTRY, u8(start_floor), u8(0)))
                 start_floor += 5
-            dl.append(DungeonDefinition(1, DOJO_MAPPA_ENTRY, start_floor, 0))
+            dl.append(DungeonDefinition(u8(1), DOJO_MAPPA_ENTRY, u8(start_floor), u8(0)))
             start_floor += 1
-            dl.append(DungeonDefinition(0x30, DOJO_MAPPA_ENTRY, start_floor, 0))
+            dl.append(DungeonDefinition(u8(0x30), DOJO_MAPPA_ENTRY, u8(start_floor), u8(0)))
             start_floor += 0x30
             for dungeon in dl:
                 for f in range(dungeon.start_after + 1, dungeon.start_after + dungeon.number_floors, 2):

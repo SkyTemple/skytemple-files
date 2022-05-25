@@ -55,16 +55,20 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.UTILITY
-    
+
     def depends_on(self) -> List[str]:
         return ['ActorAndLevelLoader']
-    
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -75,22 +79,20 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
                 if config.game_region == GAME_REGION_EU:
                     start_table = START_TABLE_EU
         if ANIM_PATH not in rom.filenames:
-
             data = rom.loadArm9Overlays([10])[10].data
 
-            header = bytearray(5*4)
-            write_uintle(header, 5*4, 0, 4)
-            write_uintle(header, 5*4+52, 4, 4)
-            write_uintle(header, 5*4+52+5600, 8, 4)
-            write_uintle(header, 5*4+52+5600+13512, 12, 4)
-            write_uintle(header, 5*4+52+5600+13512+19600, 16, 4)
-            file_data = bytes(header) + bytes(data[start_table:start_table+0x14560])
+            header = bytearray(5 * 4)
+            write_u32(header, u32(5 * 4), 0)
+            write_u32(header, u32(5 * 4 + 52), 4)
+            write_u32(header, u32(5 * 4 + 52 + 5600), 8)
+            write_u32(header, u32(5 * 4 + 52 + 5600 + 13512), 12)
+            write_u32(header, u32(5 * 4 + 52 + 5600 + 13512 + 19600), 16)
+            file_data = bytes(header) + bytes(data[start_table:start_table + 0x14560])
             create_file_in_rom(rom, ANIM_PATH, file_data)
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

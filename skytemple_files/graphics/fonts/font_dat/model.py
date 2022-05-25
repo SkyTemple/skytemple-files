@@ -90,7 +90,7 @@ class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
             data += [0] * bprow
             for j in range(FONT_DAT_SIZE):
                 v = raw_data[i * FONT_DAT_SIZE + j]
-                pos = -bprow + j // 8
+                pos = -bprow + j // 8  # pylint: disable=invalid-unary-operand-type
                 if v:
                     data[pos] = data[pos] | (2 ** (j % 8))
         return FontDatEntry(char, table, width, bprow_field, bytes(data))

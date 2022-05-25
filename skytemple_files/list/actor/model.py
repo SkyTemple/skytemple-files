@@ -14,8 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u16_checked
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptEntity
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -37,7 +38,7 @@ class ActorListBin(Sir0Serializable):
         for i in range(0, number_entries):
             start = pointer_start + (i * LEN_ACTOR_ENTRY)
             self.list.append(Pmd2ScriptEntity(
-                id=i,
+                id=u16_checked(i),
                 type=read_u16(data, start + 0),
                 entid=read_u16(data, start + 2),
                 name=self._read_string(data, read_u32(data, start + 4)),

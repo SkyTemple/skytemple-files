@@ -55,9 +55,9 @@ class Dpl:
         cursor = 0
         for pal in self.palettes:
             for i, col in enumerate(pal):
-                write_uintle(data, col, cursor)
+                write_u8(data, col, cursor)
                 cursor += 1
                 if i % 3 == 2:
-                    write_uintle(data, DPL_FOURTH_COLOR, cursor)
+                    write_u8(data, u8(DPL_FOURTH_COLOR), cursor)
                     cursor += 1
         return data

@@ -40,6 +40,7 @@ class At3px(CommonAt):
         data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x10], self.compression_flags)
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'AT3PX'\

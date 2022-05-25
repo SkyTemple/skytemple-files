@@ -18,6 +18,7 @@ from math import ceil
 
 from range_typed_integers import u32_checked
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 
 

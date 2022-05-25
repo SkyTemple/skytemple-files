@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u8_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
@@ -40,7 +40,7 @@ class MdEvoEntry(AutoString):
         write_u16(mevo_data, u16_checked(len(self.evos)), 0)
         for j, x in enumerate(self.evos):
             write_u16(mevo_data, x, j*2+2)
-        write_uintle(mevo_data, len(self.eggs), 0x12)
+        write_u8(mevo_data, u8_checked(len(self.eggs)), 0x12)
         for j, x in enumerate(self.eggs):
             write_u16(mevo_data, x, j*2+0x14)
         return mevo_data

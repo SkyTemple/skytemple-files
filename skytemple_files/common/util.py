@@ -17,11 +17,11 @@
 import bisect
 import contextlib
 import logging
+import os
 import re
+import stat
 import unicodedata
 import warnings
-import stat
-import os
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
@@ -33,11 +33,11 @@ from PIL import Image
 from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range, ValueRange, IntegerBoundError
+from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range, IntegerBoundError
 
 from skytemple_files.common import string_codec
-from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.user_error import UserValueError
 
 if TYPE_CHECKING:
@@ -690,7 +690,7 @@ class CheckedIntWrites:
     """
     def __setattr__(self, key, value):
         if hasattr(self, key) or key in get_type_hints(self.__class__, include_extras=True):
-            if not check_int((self.__class__, key), value):
+            if not check_int((self.__class__, key), value, suppress_warning_for_unresolved_hints=True):
                 typ = get_type_hints(self.__class__, include_extras=True)[key]
                 r = get_range(typ)
                 if r is not None:

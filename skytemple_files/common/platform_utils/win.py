@@ -20,7 +20,7 @@ if not sys.platform.lower().startswith('win'):
     raise OSError("This module is only available under Windows.")
 
 
-import winreg
+import winreg  # pylint: disable=import-error
 
 WIN_THEME_REG_PATH = r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
 WIN_THEME_REG_KEY = 'AppsUseLightTheme'
@@ -43,6 +43,6 @@ def win_set_error_mode():
     This tells Windows not to show error dialogs for 'No Disk'.
     See: https://github.com/SkyTemple/skytemple/issues/12
     """
-    import msvcrt
+    import msvcrt  # pylint: disable=import-error
     old_mode = msvcrt.SetErrorMode(0)
     msvcrt.SetErrorMode(old_mode & msvcrt.SEM_FAILCRITICALERRORS)

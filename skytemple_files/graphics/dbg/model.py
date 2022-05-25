@@ -123,7 +123,7 @@ class Dbg:
     def to_bytes(self) -> bytes:
         buffer = bytearray(2 * len(self.mappings))
         for i, m in enumerate(self.mappings):
-            write_uintle(buffer, m, i * 2, 2)
+            write_u16(buffer, m, i * 2)
         return buffer
 
     def __eq__(self, other: object) -> bool:

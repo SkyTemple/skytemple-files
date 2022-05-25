@@ -16,8 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_uintle, OptionalKwargs
-from skytemple_files.graphics.w16.model import W16, TOC_ENTRY_LEN
+from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.graphics.w16.model import W16
 from skytemple_files.graphics.w16.writer import W16Writer
 
 

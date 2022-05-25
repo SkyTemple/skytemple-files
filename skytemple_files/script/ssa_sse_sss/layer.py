@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
+from typing import List, Optional
 
 from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss import ACTOR_ENTRY_LEN, OBJECT_ENTRY_LEN, PERFORMERS_ENTRY_LEN, \
@@ -33,11 +33,11 @@ class SsaLayer(AutoString):
     """
     def __init__(self,
                  header: SsaHeader = None,
-                 actors_count=None, actors_pointer=None,
-                 objects_count=None, objects_pointer=None,
-                 performers_count=None, performers_pointer=None,
-                 events_count=None, events_pointer=None,
-                 unk10_block_count=None, unk10_block_pointer=None):
+                 actors_count: Optional[int] = None, actors_pointer: Optional[int] = None,
+                 objects_count: Optional[int] = None, objects_pointer: Optional[int] = None,
+                 performers_count: Optional[int] = None, performers_pointer: Optional[int] = None,
+                 events_count: Optional[int] = None, events_pointer: Optional[int] = None,
+                 unk10_block_count: Optional[int] = None, unk10_block_pointer: Optional[int] = None):
 
         self.actors: List[SsaActor] = []
         self.objects: List[SsaObject] = []
@@ -48,6 +48,10 @@ class SsaLayer(AutoString):
         if header is None:
             # Empty layer
             return
+        assert actors_count is not None and objects_count is not None and performers_count is not None \
+               and events_count is not None and unk10_block_count is not None
+        assert actors_pointer is not None and objects_pointer is not None and performers_pointer is not None \
+               and events_pointer is not None and unk10_block_pointer is not None
 
         # These fields are only used to build the layer data in self.fill_data.
         # If a value is (start offset of data block - 2), then it's count is 0.
@@ -67,27 +71,32 @@ class SsaLayer(AutoString):
             return
 
         if self._actors_count > 0:
-            self._actors_first_offset = int((actors_pointer - header.actor_pointer) / ACTOR_ENTRY_LEN)
+            assert header.actor_pointer is not None
+            self._actors_first_offset = (actors_pointer - header.actor_pointer) // ACTOR_ENTRY_LEN
         elif header.actor_pointer is not None:
             assert header.actor_pointer - 2 == actors_pointer
 
         if self._objects_count > 0:
-            self._objects_first_offset = int((objects_pointer - header.object_pointer) / OBJECT_ENTRY_LEN)
+            assert header.object_pointer is not None
+            self._objects_first_offset = (objects_pointer - header.object_pointer) // OBJECT_ENTRY_LEN
         elif header.object_pointer is not None:
             assert header.object_pointer - 2 == objects_pointer
 
         if self._performers_count > 0:
-            self._performers_first_offset = int((performers_pointer - header.performer_pointer) / PERFORMERS_ENTRY_LEN)
+            assert header.performer_pointer is not None
+            self._performers_first_offset = (performers_pointer - header.performer_pointer) // PERFORMERS_ENTRY_LEN
         elif header.performer_pointer is not None:
             assert header.performer_pointer - 2 == performers_pointer
 
         if self._events_count > 0:
-            self._events_first_offset = int((events_pointer - header.events_pointer) / EVENTS_ENTRY_LEN)
+            assert header.events_pointer is not None
+            self._events_first_offset = (events_pointer - header.events_pointer) // EVENTS_ENTRY_LEN
         elif header.events_pointer is not None:
             assert header.events_pointer - 2 == events_pointer
 
         if self._unk10_block_count > 0:
-            self._unk10_block_first_offset = int((unk10_block_pointer - header.unk10_pointer) / UNK10_ENTRY_LEN)
+            assert header.unk10_pointer is not None
+            self._unk10_block_first_offset = (unk10_block_pointer - header.unk10_pointer) / UNK10_ENTRY_LEN
         elif header.unk10_pointer is not None:
             assert header.unk10_pointer - 2 == unk10_block_pointer
 

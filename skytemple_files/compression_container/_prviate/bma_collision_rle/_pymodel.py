@@ -38,7 +38,7 @@ class BmaCollisionRleCompressionContainer(CommonAt):
     def to_bytes(self) -> bytes:
         return b'BMARLE'\
                + self.length_decompressed.to_bytes(2, 'little') \
-               + self.compressed_data
+               + self.compressed_data  # pylint: disable=no-member
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):

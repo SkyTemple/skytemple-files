@@ -17,6 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import cast
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel, Pmd2ScriptLevelMapType
 from skytemple_files.common.util import *
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack

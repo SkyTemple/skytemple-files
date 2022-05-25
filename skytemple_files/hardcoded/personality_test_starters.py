@@ -20,7 +20,7 @@ from typing import List
 from range_typed_integers import u16, u8
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, read_u16, write_u16
+from skytemple_files.common.util import read_u16, write_u16
 from skytemple_files.hardcoded.default_starters import HardcodedDefaultStarters
 
 

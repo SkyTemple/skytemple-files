@@ -41,6 +41,7 @@ class Atupx(CommonAt):
         data = FileType.CUSTOM_999.decompress(self.compressed_data[:self.length_compressed - 0xb], self.length_decompressed)
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'ATUPX'\

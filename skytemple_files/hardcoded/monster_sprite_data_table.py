@@ -20,6 +20,7 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
 

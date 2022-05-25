@@ -135,7 +135,7 @@ class TileRuleType(Enum):
 
     @classmethod
     def has_value(cls, value):
-        return value in cls._value2member_map_
+        return value in cls._value2member_map_  # pylint: disable=no-member
 
     def __str__(self):
         return f'TileRule<"{self.explanation}">'

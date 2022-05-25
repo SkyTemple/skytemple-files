@@ -20,7 +20,8 @@ from typing import Callable, Dict, List, Set
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.patch.asm_tools import AsmFunction
@@ -38,7 +39,7 @@ PATCH_CHECK_INSTR_APPLIED = 0xB3A00000
 # Too lazy to put that in an actual file
 ITEM_EFFECT_US = b'\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x96\x04\x00\xeb*\x03\x00\xea'
 ITEM_EFFECT_EU = b'\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x98\x04\x00\xeb*\x03\x00\xea'
-ITEM_EFFECT_JP = None #TODO
+ITEM_EFFECT_JP = None  # TODO
 
 GUMMI_ITEM_ID = 138
 OTHER_GUMMI_ID = 136
@@ -86,6 +87,8 @@ Los de tipo Hada las adoran.
 También llena ligeramente su
 [CS:E]Tripa[CR].""",
              "MESSAGE/text_j.str": "---"}
+
+
 class ImplementFairyGummiesPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
@@ -105,22 +108,22 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
     @property
     def version(self) -> str:
         return '0.0.1'
-    
+
     def depends_on(self) -> List[str]:
         return ['ExtractItemCode', 'ExtractBarItemList', 'AddTypes']
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.NEW_MECHANIC
-    
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -152,7 +155,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
         gummi.ai_flag_2 = True
         gummi.ai_flag_3 = False
         rom.setFileByName('BALANCE/item_p.bin', ItemPHandler.serialize(item_p_model))
-        
+
         # Apply Gummi item dungeon effect
         item_cd_bin = rom.getFileByName('BALANCE/item_cd.bin')
         item_cd_model = DataCDHandler.deserialize(item_cd_bin)
@@ -160,20 +163,20 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
         item_cd_model.add_effect_code(item_effect)
         item_cd_model.set_item_effect_id(GUMMI_ITEM_ID, effect_id)
         rom.setFileByName('BALANCE/item_cd.bin', DataCDHandler.serialize(item_cd_model))
-        
+
         # Change item's text attributes
         for filename in get_files_from_rom_with_extension(rom, 'str'):
             bin_before = rom.getFileByName(filename)
             strings = StrHandler.deserialize(bin_before)
             block = config.string_index_data.string_blocks['Item Names']
-            strings.strings[block.begin+GUMMI_ITEM_ID] = NAME_LIST[filename]
+            strings.strings[block.begin + GUMMI_ITEM_ID] = NAME_LIST[filename]
             block = config.string_index_data.string_blocks['Item Short Descriptions']
-            strings.strings[block.begin+GUMMI_ITEM_ID] = SDES_LIST[filename]
+            strings.strings[block.begin + GUMMI_ITEM_ID] = SDES_LIST[filename]
             block = config.string_index_data.string_blocks['Item Long Descriptions']
-            strings.strings[block.begin+GUMMI_ITEM_ID] = LDES_LIST[filename]
+            strings.strings[block.begin + GUMMI_ITEM_ID] = LDES_LIST[filename]
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
-        
+
         bar_bin = rom.getFileByName('BALANCE/itembar.bin')
         bar_model = DataSTHandler.deserialize(bar_bin)
         gummi_id = bar_model.get_item_struct_id(OTHER_GUMMI_ID)
@@ -185,6 +188,5 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

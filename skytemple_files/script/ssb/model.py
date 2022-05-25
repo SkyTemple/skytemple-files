@@ -74,8 +74,8 @@ class Ssb:
         # WARNING: This is NOT updated by this model. Only the writer can update it.
         self.original_binary_data = bytes(data)
 
-        start_of_const_table = begin_data_offset + (read_uintle(data, begin_data_offset + 0x00, 2) * 2)
-        number_of_routines = read_uintle(data, begin_data_offset + 0x02, 2)
+        start_of_const_table = begin_data_offset + (read_u16(data, begin_data_offset + 0x00) * 2)
+        number_of_routines = read_u16(data, begin_data_offset + 0x02)
 
         self._header = header
         self.routine_info = []  # Offset, RoutineInfo
@@ -117,7 +117,7 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table + read_uintle(data, i, 2) - (header.number_of_strings * 2)
+                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
             )
         self.constants = []
         cursor = start_of_constants
@@ -146,7 +146,7 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table + read_uintle(data, i, 2) + previous_languages_block_sizes
+                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings
@@ -165,9 +165,9 @@ class Ssb:
 
     def _read_routine_info(self, data, number_of_routines, cursor):
         for i in range(0, number_of_routines):
-            self.routine_info.append((read_uintle(data, cursor, 2) * 2, SsbRoutineInfo(
-                type=SsbRoutineType(read_uintle(data, cursor + 2, 2)),
-                linked_to=read_uintle(data, cursor + 4, 2),
+            self.routine_info.append((read_u16(data, cursor) * 2, SsbRoutineInfo(
+                type=SsbRoutineType(read_u16(data, cursor + 2)),
+                linked_to=read_u16(data, cursor + 4),
             )))
             cursor += SSB_LEN_ROUTINE_INFO_ENTRY
         return cursor
@@ -182,16 +182,16 @@ class Ssb:
 
     def _read_single_op_code(self, data, cursor, len_header):
         opcode_offset = int((cursor - len_header) / 2)
-        op_code = self._scriptdata.op_codes__by_id[read_uintle(data, cursor, 2)]
+        op_code = self._scriptdata.op_codes__by_id[read_u16(data, cursor)]
         cursor += 2
         arguments = []
         cnt_params = op_code.params
         if cnt_params == -1:
             # Variable length opcode
-            cnt_params = read_uintle(data, cursor, 2)
+            cnt_params = read_u16(data, cursor)
             cursor += 2
         for i in range(0, cnt_params):
-            arguments.append(read_uintle(data, cursor, 2))
+            arguments.append(read_u16(data, cursor))
             cursor += 2
 
         return SkyTempleSsbOperation(opcode_offset, op_code, arguments), cursor
@@ -388,7 +388,7 @@ class Ssb:
         else:
             raise ValueError(f"Unsupported game edition: {region}")
 
-        start_of_const_table = header.data_offset + (read_uintle(data, header.data_offset + 0x00, 2) * 2)
+        start_of_const_table = header.data_offset + (read_u16(data, header.data_offset + 0x00) * 2)
 
         # ### CONSTANT OFFSETS AND CONSTANT STRINGS
         # Read const offset table
@@ -397,7 +397,7 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table + read_uintle(data, i, 2) - (header.number_of_strings * 2)
+                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
             )
         constants = []
         cursor = start_of_constants
@@ -425,7 +425,7 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table + read_uintle(data, i, 2) + previous_languages_block_sizes
+                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings

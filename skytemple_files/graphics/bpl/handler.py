@@ -34,7 +34,7 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BplProtocol]:
-        from skytemple_rust.st_bpl import Bpl
+        from skytemple_rust.st_bpl import Bpl  # pylint: disable=no-name-in-module,no-member,import-error
         return Bpl
 
     @classmethod
@@ -44,13 +44,13 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpl']]:  # type: ignore
-        from skytemple_rust.st_bpl import BplWriter
+        from skytemple_rust.st_bpl import BplWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BplWriter
 
     @classmethod
     def get_animation_spec_model_cls(cls) -> Type[BplAnimationSpecProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bpl import BplAnimationSpec as BplAnimationSpecNative
+            from skytemple_rust.st_bpl import BplAnimationSpec as BplAnimationSpecNative  # pylint: disable=no-name-in-module,no-member,import-error
             return BplAnimationSpecNative
         from skytemple_files.graphics.bpl._model import BplAnimationSpec
         return BplAnimationSpec

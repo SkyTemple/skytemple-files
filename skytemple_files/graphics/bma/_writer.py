@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked, u8_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bma._model import Bma
@@ -111,7 +112,7 @@ class BmaWriter:
             for col in range(0, self.model.map_width_chunks):
                 i = row * self.model.map_width_chunks + col
                 actual_value = layer[i] ^ previous_row_values[col]
-                write_uintle(row_bytes, actual_value, col*2, 2)
+                write_u16(row_bytes, u16_checked(actual_value), col*2)
                 previous_row_values[col] = layer[i]
             assert len(row_bytes) == int(size / self.model.map_height_chunks)
             # Extra null tile is already there because of the bytearray size!
@@ -146,7 +147,7 @@ class BmaWriter:
             for col in range(0, self.model.map_width_camera):
                 i = row * self.model.map_width_camera + col
                 actual_value = collision_layer[i] ^ previous_row_values[col]  # type: ignore
-                write_uintle(row_bytes, actual_value, col)
+                write_u8(row_bytes, u8(actual_value), col)
                 previous_row_values[col] = collision_layer[i]  # type: ignore
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.BMA_COLLISION_RLE.compress(row_bytes)
@@ -175,7 +176,7 @@ class BmaWriter:
             for col in range(0, self.model.map_width_camera):
                 i = row * self.model.map_width_camera + col
                 actual_value = self.model.unknown_data_block[i]
-                write_uintle(row_bytes, actual_value, col)
+                write_u8(row_bytes, u8_checked(actual_value), col)
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.GENERIC_NRL.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
@@ -184,12 +185,12 @@ class BmaWriter:
 
         return layer_bytes[:layer_bytes_cursor]
 
-    def _write_16uintle(self, val: int) -> None:
+    def _write_16uintle(self, val: u16) -> None:
         assert val <= 0xffff
-        write_uintle(self.data, val, self.bytes_written, 2)
+        write_u16(self.data, val, self.bytes_written)
         self.bytes_written += 2
 
-    def _write_byte(self, val: int) -> None:
+    def _write_byte(self, val: u8) -> None:
         assert val <= 0xff
-        write_uintle(self.data, val, self.bytes_written)
+        write_u8(self.data, val, self.bytes_written)
         self.bytes_written += 1

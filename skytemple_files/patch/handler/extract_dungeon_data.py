@@ -16,12 +16,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Callable
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 from skytemple_files.common.util import _
+
 PATCH_CHECK_ADDR_APPLIED_US = 0x4F7F8
 PATCH_CHECK_INSTR_APPLIED_US = 0x359F1010
 PATCH_CHECK_ADDR_APPLIED_EU = 0x4FB30
@@ -41,7 +44,11 @@ FLOOR_FORBID_PATH = "BALANCE/fforbid.bin"
 FLOOR_RANKS_PATH = "BALANCE/f_ranks.bin"
 AVAILABLE_ITEMS_PATH = "BALANCE/a_items.bin"
 # TODO: move this somewhere else
-FLOORS_NB = [3, 5, 6, 10, 8, 12, 9, 5, 14, 5, 11, 5, 16, 20, 15, 21, 11, 14, 8, 15, 15, 8, 12, 20, 15, 24, 24, 14, 25, 25, 20, 18, 50, 20, 23, 30, 18, 30, 20, 8, 13, 20, 10, 15, 20, 20, 30, 6, 5, 10, 5, 50, 20, 99, 30, 19, 19, 17, 25, 75, 40, 40, 99, 1, 50, 99, 10, 5, 15, 20, 25, 30, 40, 17, 7, 10, 15, 11, 16, 20, 8, 10, 15, 10, 18, 10, 11, 5, 5, 11, 19, 16, 5, 6, 7, 6, 5, 5, 5, 5]
+FLOORS_NB = [3, 5, 6, 10, 8, 12, 9, 5, 14, 5, 11, 5, 16, 20, 15, 21, 11, 14, 8, 15, 15, 8, 12, 20, 15, 24, 24, 14, 25,
+             25, 20, 18, 50, 20, 23, 30, 18, 30, 20, 8, 13, 20, 10, 15, 20, 20, 30, 6, 5, 10, 5, 50, 20, 99, 30, 19, 19,
+             17, 25, 75, 40, 40, 99, 1, 50, 99, 10, 5, 15, 20, 25, 30, 40, 17, 7, 10, 15, 11, 16, 20, 8, 10, 15, 10, 18,
+             10, 11, 5, 5, 11, 19, 16, 5, 6, 7, 6, 5, 5, 5, 5]
+
 
 class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
 
@@ -51,7 +58,8 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system.')
+        return _(
+            'Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system.')
 
     @property
     def author(self) -> str:
@@ -68,9 +76,9 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED_US
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED_EU
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -85,28 +93,28 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
                     item_table = ITEM_AVAILABLE_TABLE_EU
                     forbid_table = FLOOR_FORBID_TABLE_EU
 
-            header = bytearray(NB_ITEMS_TABLE*4)
+            header = bytearray(NB_ITEMS_TABLE * 4)
             rank_data = bytearray(0)
             forbid_data = bytearray(0)
-            current_ptr = len(header)
+            current_ptr = u32_checked(len(header))
             for i in range(NB_ITEMS_TABLE):
-                start = read_uintle(rom.arm9, rank_table+i*4, 4)-ARM9_START
-                end = start+1+FLOORS_NB[i]
-                if end%4!=0:
-                    end += 4-(end%4)
+                start = read_u32(rom.arm9, rank_table + i * 4) - ARM9_START
+                end = start + 1 + FLOORS_NB[i]
+                if end % 4 != 0:
+                    end += 4 - (end % 4)
                 rdata = rom.arm9[start:end]
                 fdata = bytearray(len(rdata))
                 x = forbid_table
-                while rom.arm9[x]!=0x64:
-                    if rom.arm9[x]==i:
-                        fdata[rom.arm9[x+1]] = 1
+                while rom.arm9[x] != 0x64:
+                    if rom.arm9[x] == i:
+                        fdata[rom.arm9[x + 1]] = 1
                     x += 2
-                rom.arm9 = rom.arm9[:start]+bytes([0xCC]*(end-start))+rom.arm9[end:]
-                write_uintle(header, current_ptr, i*4, 4)
+                rom.arm9 = rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
+                write_u32(header, current_ptr, i * 4)
                 rank_data += bytearray(rdata)
                 forbid_data += bytearray(fdata)
-                
-                current_ptr += end-start
+
+                current_ptr += end - start  # type: ignore
             file_data = header + rank_data
             if FLOOR_RANKS_PATH not in rom.filenames:
                 create_file_in_rom(rom, FLOOR_RANKS_PATH, file_data)
@@ -123,11 +131,11 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
             print(hex(len(groups)))
             list_available = []
             for x in range(AVAILABLE_ITEMS_NB):
-                list_available.append(bytearray(0x100//8))
+                list_available.append(bytearray(0x100 // 8))
                 for i, g in enumerate(groups):
-                    off = item_table + g * (AVAILABLE_ITEMS_NB//8) + (x//8)
-                    if rom.arm9[off]&(1<<(x%8)):
-                        list_available[-1][i//8] |= 1<<(i%8)
+                    off = item_table + g * (AVAILABLE_ITEMS_NB // 8) + (x // 8)
+                    if rom.arm9[off] & (1 << (x % 8)):
+                        list_available[-1][i // 8] |= 1 << (i % 8)
             file_data = bytearray().join(list_available)
             if AVAILABLE_ITEMS_PATH not in rom.filenames:
                 create_file_in_rom(rom, AVAILABLE_ITEMS_PATH, file_data)

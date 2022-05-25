@@ -15,7 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
@@ -31,36 +31,38 @@ class FontSir0Writer:
     def write(self) -> Tuple[bytes, List[int], Optional[int]]:
         pointer_offsets = []
 
-        sorted_entries = sorted(self.model.entries, key=lambda x:(x.table, x.char))
+        sorted_entries = sorted(self.model.entries, key=lambda x: (x.table, x.char))
         buffer = bytearray()
         # Image data
         for i, e in enumerate(sorted_entries):
             buffer += e.data
 
-        if len(buffer)%16!=0:
-            buffer += bytearray([0xAA] * (16 - len(buffer)%16))
+        if len(buffer) % 16 != 0:
+            buffer += bytearray([0xAA] * (16 - len(buffer) % 16))
         # Character pointers
         char_pointer = bytearray(len(self.model.entries) * FONT_SIR0_ENTRY_LEN)
         char_pointer_offset = len(buffer)
         last: Tuple[Optional[int], Optional[int]] = (None, None)
         for i, e in enumerate(sorted_entries):
-            if last==(e.char, e.table):
-                raise ValueError(_("Character {e.char} in table {e.table} is be defined multiple times in a font file!"))
+            if last == (e.char, e.table):
+                raise ValueError(
+                    f(_("Character {e.char} in table {e.table} is be defined multiple times in a font file!"))
+                )
             last = (e.char, e.table)
-            pointer_offsets.append(len(buffer)+i * FONT_SIR0_ENTRY_LEN)
-            write_uintle(char_pointer, i * FONT_SIR0_DATA_LEN, i * FONT_SIR0_ENTRY_LEN, 4)
-            write_uintle(char_pointer, e.char, i * FONT_SIR0_ENTRY_LEN + 0x4)
-            write_uintle(char_pointer, e.table, i * FONT_SIR0_ENTRY_LEN + 0x5)
-            write_uintle(char_pointer, e.width, i * FONT_SIR0_ENTRY_LEN + 0x6, 4)
-            write_uintle(char_pointer, e.cat, i * FONT_SIR0_ENTRY_LEN + 0xA)
-            write_uintle(char_pointer, e.padding, i * FONT_SIR0_ENTRY_LEN + 0xB)
+            pointer_offsets.append(len(buffer) + i * FONT_SIR0_ENTRY_LEN)
+            write_u32(char_pointer, u32_checked(i * FONT_SIR0_DATA_LEN), i * FONT_SIR0_ENTRY_LEN)
+            write_u8(char_pointer, e.char, i * FONT_SIR0_ENTRY_LEN + 0x4)
+            write_u8(char_pointer, e.table, i * FONT_SIR0_ENTRY_LEN + 0x5)
+            write_u32(char_pointer, e.width, i * FONT_SIR0_ENTRY_LEN + 0x6)
+            write_u8(char_pointer, e.cat, i * FONT_SIR0_ENTRY_LEN + 0xA)
+            write_u8(char_pointer, e.padding, i * FONT_SIR0_ENTRY_LEN + 0xB)
         buffer += char_pointer
-        
+
         # Header
         header = bytearray(0x8)
-        write_uintle(header, len(self.model.entries), 0, 4)
-        pointer_offsets.append(len(buffer)+4)
-        write_uintle(header, char_pointer_offset, 0x4, 4)
+        write_u32(header, u32_checked(len(self.model.entries)), 0)
+        pointer_offsets.append(len(buffer) + 4)
+        write_u32(header, u32_checked(char_pointer_offset), 0x4)
 
         header_pointer = len(buffer)
         buffer += header

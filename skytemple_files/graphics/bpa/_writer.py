@@ -47,6 +47,6 @@ class BpaWriter:
 
         return data
 
-    def _write_16uintle(self, data: bytearray, val: int) -> None:
-        write_uintle(data, val, self.bytes_written, 2)
+    def _write_16uintle(self, data: bytearray, val: u16) -> None:
+        write_u16(data, val, self.bytes_written)
         self.bytes_written += 2

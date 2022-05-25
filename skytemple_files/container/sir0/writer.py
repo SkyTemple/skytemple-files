@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
@@ -25,7 +26,7 @@ from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 class Sir0Writer:
     def __init__(self, model: Sir0):
         self.model = model
-        self.data: Optional[bytearray] = None
+        self.data: bytearray = None  # type: ignore
         self.bytes_written = 0
 
     def write(self) -> bytes:
@@ -57,9 +58,9 @@ class Sir0Writer:
 
         # Header
         self._append(b'SIR0')
-        self._write_data(self.model.data_pointer + HEADER_LEN)
-        self._write_data(pointer_pol)
-        self._write_data(0)
+        self._write_u32(u32_checked(self.model.data_pointer + HEADER_LEN))
+        self._write_u32(u32_checked(pointer_pol))
+        self._write_u32(u32(0))
 
         assert self.bytes_written == HEADER_LEN
         self._append(self.model.content)
@@ -84,12 +85,9 @@ class Sir0Writer:
             return 0
         return 16 - (cur_len % 16)
 
-    def _write_data(self, val, length=4, signed=False):
-        if signed:
-            write_sintle(self.data, val, self.bytes_written, length)
-        else:
-            write_uintle(self.data, val, self.bytes_written, length)
-        self.bytes_written += length
+    def _write_u32(self, val: u32):
+        write_u32(self.data, val, self.bytes_written)
+        self.bytes_written += 4
 
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/

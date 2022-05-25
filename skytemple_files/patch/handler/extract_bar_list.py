@@ -17,9 +17,11 @@
 from typing import Callable, Dict, List, Set
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import _
@@ -66,11 +68,17 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_JP
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -84,19 +92,19 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
                     bar_list = BAR_LIST_JP
 
             data = rom.loadArm9Overlays([19])[19].data
-            
-            header = bytearray([0xFF]*(4+2*NB_ITEMS))
-            write_uintle(header, 4+2*NB_ITEMS, 0, 4)
+
+            header = bytearray([0xFF] * (4 + 2 * NB_ITEMS))
+            write_u32(header, u32(4 + 2 * NB_ITEMS), 0)
             list_data: List[bytes] = []
-            for x in range(bar_list, bar_list+BAR_LIST_SIZE, BAR_LIST_ENTRY_SIZE):
-                item_id = read_uintle(data, x, 2)
-                cdata = bytes(data[x+2:x+BAR_LIST_ENTRY_SIZE])
+            for x in range(bar_list, bar_list + BAR_LIST_SIZE, BAR_LIST_ENTRY_SIZE):
+                item_id = read_u16(data, x)
+                cdata = bytes(data[x + 2:x + BAR_LIST_ENTRY_SIZE])
                 if cdata in list_data:
                     index = list_data.index(cdata)
                 else:
                     index = len(list_data)
                     list_data.append(cdata)
-                write_uintle(header, index, 4+2*item_id, 2)
+                write_u16(header, u16_checked(index), 4 + 2 * item_id)
             file_data = header + b''.join(list_data)
             if ITEM_LIST_PATH not in rom.filenames:
                 create_file_in_rom(rom, ITEM_LIST_PATH, file_data)
@@ -107,6 +115,5 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

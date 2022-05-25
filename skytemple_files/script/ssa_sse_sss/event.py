@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16
+
 from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss import TRIGGER_ENTRY_LEN
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
@@ -22,7 +24,15 @@ INVALID_TRIGGER = 99999
 
 
 class SsaEvent(AutoString):
-    def __init__(self, trigger_width, trigger_height, trigger_pointer, trigger_table_start, pos: SsaPosition, unkE):
+    """NOTE: This is called Trigger in SkyTemple. Event is the historic name from reverse engineering."""
+    trigger_width: u16
+    trigger_height: u16
+    trigger_pointer: int
+    trigger_table_start: u16
+    pos: SsaPosition
+    unkE: u16
+
+    def __init__(self, trigger_width: u16, trigger_height: u16, trigger_pointer: int, trigger_table_start: u16, pos: SsaPosition, unkE: u16):
         self.trigger_width = trigger_width
         self.trigger_height = trigger_height
         # If the table start is 0, switch to "set id mode"
@@ -30,7 +40,7 @@ class SsaEvent(AutoString):
             self.trigger_id = trigger_pointer
         else:
             try:
-                self.trigger_id = int((trigger_pointer - trigger_table_start) / TRIGGER_ENTRY_LEN)
+                self.trigger_id = (trigger_pointer - trigger_table_start) // TRIGGER_ENTRY_LEN
             except TypeError:
                 # If this fails, this event has somehow no trigger assigned.
                 self.trigger_id = INVALID_TRIGGER

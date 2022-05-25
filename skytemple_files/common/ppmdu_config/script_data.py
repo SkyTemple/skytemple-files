@@ -22,7 +22,7 @@ import warnings
 from enum import Enum, IntEnum
 from typing import List, Dict, Optional
 
-from range_typed_integers import u8, u16
+from range_typed_integers import u8, u16, i16
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
@@ -82,7 +82,7 @@ class Pmd2ScriptGameVar(AutoString):
 
 
 class Pmd2ScriptObject(AutoString):
-    def __init__(self, id: int, unk1: u16, unk2: u16, unk3: u8, name: str):
+    def __init__(self, id: u16, unk1: u16, unk2: u16, unk3: u8, name: str):
         self.id = id
         self.unk1 = unk1
         self.unk2 = unk2
@@ -155,7 +155,7 @@ class Pmd2ScriptLevelMapType(Enum):
 
 
 class Pmd2ScriptLevel(AutoString):
-    def __init__(self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: u16):
+    def __init__(self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: i16):
         self.id = id
         self.mapid = mapid
         self.name = name
@@ -177,11 +177,11 @@ class Pmd2ScriptLevel(AutoString):
         self.nameid = value
 
     @property
-    def unk4(self) -> u16:
+    def unk4(self) -> i16:
         return self.weather
     
     @unk4.setter
-    def unk4(self, value: u16) -> None:
+    def unk4(self, value: i16) -> None:
         self.weather = value
 
     def __eq__(self, other: object) -> bool:
@@ -193,7 +193,9 @@ class Pmd2ScriptLevel(AutoString):
 
 
 class Pmd2ScriptEntity(AutoString):
-    def __init__(self, id: int, entid: u16, name: str, type: u16, unk3: u16, unk4: u16):
+    """aka. Actor"""
+
+    def __init__(self, id: u16, entid: u16, name: str, type: u16, unk3: u16, unk4: u16):
         self.id = id
         self.entid = entid
         self.name = name

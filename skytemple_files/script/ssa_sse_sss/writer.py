@@ -15,6 +15,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import *
 from skytemple_files.script.ssa_sse_sss.model import Ssa
@@ -167,30 +169,30 @@ class SsaWriter:
 
         # Collect Header
         header = bytearray(LEN_HEADER)
-        actor_list_start = trigger_start + int(len(trigger_bytes) / 2)
-        object_list_start = actor_list_start + int(len(actor_bytes) / 2)
-        performer_list_start = object_list_start + int(len(object_bytes) / 2)
-        event_list_start = performer_list_start + int(len(performer_bytes) / 2)
-        pos_mark_list_start = event_list_start + int(len(event_bytes) / 2)
-        unk10_list_start = pos_mark_list_start + int(len(pos_mark_bytes) / 2)
-        layer_list_start = unk10_list_start + int(len(unk10_bytes) / 2)
-        write_uintle(header, len(self.model.layer_list), 0x00, 2)
-        write_uintle(header, layer_list_start, 0x02, 2)
-        write_uintle(header, int(LEN_HEADER / 2), 0x04, 2)
-        write_uintle(header, actor_list_start, 0x06, 2)
-        write_uintle(header, object_list_start, 0x08, 2)
-        write_uintle(header, performer_list_start, 0x0A, 2)
-        write_uintle(header, event_list_start, 0x0C, 2)
-        write_uintle(header, pos_mark_list_start, 0x0E, 2)
-        write_uintle(header, unk10_list_start, 0x10, 2)
+        actor_list_start = trigger_start + len(trigger_bytes) // 2
+        object_list_start = actor_list_start + len(actor_bytes) // 2
+        performer_list_start = object_list_start + len(object_bytes) // 2
+        event_list_start = performer_list_start + len(performer_bytes) // 2
+        pos_mark_list_start = event_list_start + len(event_bytes) // 2
+        unk10_list_start = pos_mark_list_start + len(pos_mark_bytes) // 2
+        layer_list_start = unk10_list_start + len(unk10_bytes) // 2
+        write_u16(header, u16_checked(len(self.model.layer_list)), 0x00)
+        write_u16(header, u16_checked(layer_list_start), 0x02)
+        write_u16(header, u16(LEN_HEADER // 2), 0x04)
+        write_u16(header, u16_checked(actor_list_start), 0x06)
+        write_u16(header, u16_checked(object_list_start), 0x08)
+        write_u16(header, u16_checked(performer_list_start), 0x0A)
+        write_u16(header, u16_checked(event_list_start), 0x0C)
+        write_u16(header, u16_checked(pos_mark_list_start), 0x0E)
+        write_u16(header, u16_checked(unk10_list_start), 0x10)
 
         # Add the offsets to the lists to the layer list offsets
         for i, layer in enumerate(self.model.layer_list):
-            write_uintle(layer_bytes, actor_list_start     + read_sintle(layer_bytes, (i * 0x14) + 0x02, 2), (i * 0x14) + 0x02, 2)
-            write_uintle(layer_bytes, object_list_start    + read_sintle(layer_bytes, (i * 0x14) + 0x06, 2), (i * 0x14) + 0x06, 2)
-            write_uintle(layer_bytes, performer_list_start + read_sintle(layer_bytes, (i * 0x14) + 0x0A, 2), (i * 0x14) + 0x0A, 2)
-            write_uintle(layer_bytes, event_list_start     + read_sintle(layer_bytes, (i * 0x14) + 0x0E, 2), (i * 0x14) + 0x0E, 2)
-            write_uintle(layer_bytes, unk10_list_start     + read_sintle(layer_bytes, (i * 0x14) + 0x12, 2), (i * 0x14) + 0x12, 2)
+            write_u16(layer_bytes, u16(actor_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x02)), (i * 0x14) + 0x02)
+            write_u16(layer_bytes, u16(object_list_start    + read_i16(layer_bytes, (i * 0x14) + 0x06)), (i * 0x14) + 0x06)
+            write_u16(layer_bytes, u16(performer_list_start + read_i16(layer_bytes, (i * 0x14) + 0x0A)), (i * 0x14) + 0x0A)
+            write_u16(layer_bytes, u16(event_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x0E)), (i * 0x14) + 0x0E)
+            write_u16(layer_bytes, u16(unk10_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x12)), (i * 0x14) + 0x12)
 
         # Build everything together and return
         return header + trigger_bytes + actor_bytes + object_bytes + performer_bytes + \

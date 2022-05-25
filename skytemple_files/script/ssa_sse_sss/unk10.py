@@ -14,11 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.util import AutoString
+from range_typed_integers import i16
+
+from skytemple_files.common.util import AutoString, CheckedIntWrites
 
 
-class SsaUnk10(AutoString):
-    def __init__(self, unk0, unk2, unk4, unk6):
+class SsaUnk10(AutoString, CheckedIntWrites):
+    unk0: i16
+    unk2: i16
+    unk4: i16
+    unk6: i16
+
+    def __init__(self, unk0: i16, unk2: i16, unk4: i16, unk6: i16):
         self.unk0 = unk0
         self.unk2 = unk2
         self.unk4 = unk4

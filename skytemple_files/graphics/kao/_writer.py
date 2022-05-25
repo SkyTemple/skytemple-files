@@ -72,11 +72,11 @@ class KaoWriter:
             else:
                 # Copy image data from beginning to that point - this will also copy the old TOC but we will write over that
                 current_toc_offset = kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
-                pnt = read_sintle(kao.original_data, current_toc_offset, SUBENTRY_LEN)
+                pnt = read_i32(kao.original_data, current_toc_offset)
                 if pnt < 0:
-                    current_image_offset = -pnt
+                    current_image_offset = -pnt  # pylint: disable=invalid-unary-operand-type
                 else:
-                    current_image_offset = pnt
+                    current_image_offset = pnt  # pylint: disable=invalid-unary-operand-type
                 self.new_data[0:current_image_offset] = kao.original_data[0:current_image_offset]
                 if DEBUG:
                     print(f"KaoWriter: First modified image: {start_index}, {start_subindex} "
@@ -87,7 +87,7 @@ class KaoWriter:
             current_toc_offset = kao.first_toc
             current_image_offset = current_toc_offset + size_toc
         
-        current_null_pointer = -current_image_offset  # Always start at that null pointer!
+        current_null_pointer = -current_image_offset  # Always start at that null pointer!  # pylint: disable=invalid-unary-operand-type
         #Otherwise, stuff will break since a 0 pointer is considered as valid in the model!
 
         # Rebuild KAO
@@ -105,7 +105,7 @@ class KaoWriter:
                     image_data_end = len(image_data_bs)
                 else:
                     # Image is not loaded, get image data directly, is faster than building KaoImage first
-                    pnt = read_sintle(kao.original_data, current_toc_offset, SUBENTRY_LEN)
+                    pnt = read_i32(kao.original_data, current_toc_offset)
                     if pnt < 0:
                         # Null pointer, write new null pointer
                         if DEBUG:

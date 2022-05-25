@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.string_codec import PMD2_STR_ENCODER
 from skytemple_files.common.util import *
 
@@ -49,17 +51,17 @@ class Str:
         strings_bytes = []
         for s in self.strings:
             b = bytes(s, self.string_encoding) + bytes([0])
-            offset_list.append(length_of_index + length_of_str_bytes)
+            offset_list.append(u32_checked(length_of_index + length_of_str_bytes))
             length_of_str_bytes += len(b)
             strings_bytes.append(b)
 
         result = bytearray(length_of_index + length_of_str_bytes)
         cursor = 0
         for pnt in offset_list:
-            write_uintle(result, pnt, cursor, 4)
+            write_u32(result, pnt, cursor)
             cursor += 4
         # End of pointers markers
-        write_uintle(result, length_of_index + length_of_str_bytes, cursor, 4)
+        write_u32(result, u32_checked(length_of_index + length_of_str_bytes), cursor)
         cursor += 4
 
         # Write string bytes

@@ -32,5 +32,5 @@ class AtupxHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_atupx import Atupx
+        from skytemple_rust.st_atupx import Atupx  # pylint: disable=no-name-in-module,no-member,import-error
         return Atupx

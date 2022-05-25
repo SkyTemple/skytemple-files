@@ -557,6 +557,55 @@ class MdEntry(AutoString, CheckedIntWrites):
         self.unk29 = unk29
         self.unk30 = unk30
 
+    @classmethod
+    def new_empty(cls, entid: u16) -> 'MdEntry':
+        return MdEntry(
+                md_index=u32(0),
+                entid=entid,
+                unk31=u16(0),
+                national_pokedex_number=u16(0),
+                base_movement_speed=u16(0),
+                pre_evo_index=u16(0),
+                evo_method=EvolutionMethod.NONE,
+                evo_param1=u16(0),
+                evo_param2=AdditionalRequirement.NONE,
+                sprite_index=i16(0),
+                gender=Gender.INVALID,
+                body_size=u8(0),
+                type_primary=PokeType.NONE,
+                type_secondary=PokeType.NONE,
+                movement_type=MovementType.UNKNOWN1,
+                iq_group=IQGroup.INVALID,
+                ability_primary=Ability.NONE,
+                ability_secondary=Ability.NONE,
+                bitflag1=u16(0),
+                exp_yield=u16(0),
+                recruit_rate1=i16(0),
+                base_hp=u16(0),
+                recruit_rate2=i16(0),
+                base_atk=u8(0),
+                base_sp_atk=u8(0),
+                base_def=u8(0),
+                base_sp_def=u8(0),
+                weight=i16(0),
+                size=i16(0),
+                unk17=u8(0),
+                unk18=u8(0),
+                shadow_size=ShadowSize.SMALL,
+                chance_spawn_asleep=i8(0),
+                hp_regeneration=u8(0),
+                unk21_h=i8(0),
+                base_form_index=i16(0),
+                exclusive_item1=i16(0),
+                exclusive_item2=i16(0),
+                exclusive_item3=i16(0),
+                exclusive_item4=i16(0),
+                unk27=i16(0),
+                unk28=i16(0),
+                unk29=i16(0),
+                unk30=i16(0),
+        )
+
     @property
     def md_index_base(self) -> int:
         return self.md_index % MdProperties.NUM_ENTITIES

@@ -498,7 +498,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         def clone(t: TilemapEntry) -> TilemapEntry:
             return TilemapEntry.from_int(t.to_int())
 
-        null_chunk = [TilemapEntry.from_int(0) for _ in range(0, 9)]
+        null_chunk = [TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]
         dummy_mappings = [
             TilemapEntry(1, False, True, 0),
             TilemapEntry(2, True, False, 1),

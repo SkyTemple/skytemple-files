@@ -37,6 +37,8 @@ BGP_RES_HEIGHT_IN_TILES = int(BGP_RES_HEIGHT / BGP_TILE_DIM)
 BGP_TOTAL_NUMBER_TILES = BGP_RES_WIDTH_IN_TILES * BGP_RES_HEIGHT_IN_TILES
 # All BPGs have this many tiles and tilemapping entries for some reason
 BGP_TOTAL_NUMBER_TILES_ACTUALLY = 1024
+
+
 # NOTE: Tile 0 is always 0x0. <- THIS
 
 
@@ -50,7 +52,7 @@ class BgpHeader(CheckedIntWrites):
     tilemap_data_length: u32
     unknown3: u32
     unknown4: u32
-    
+
     def __init__(self, data: bytes, offset=0):
         # WARNING: The pointers and lengths are not updated after creation. The writer re-generates them.
         self.palette_begin = read_u32(data, offset)
@@ -95,7 +97,8 @@ class Bgp:
     def _extract_tilemap(self):
         tilemap_end = self.header.tilemap_data_begin + self.header.tilemap_data_length
         self.tilemap = []
-        for i, entry in enumerate(iter_bytes(self.data, BGP_TILEMAP_ENTRY_BYTELEN, self.header.tilemap_data_begin, tilemap_end)):
+        for i, entry in enumerate(
+                iter_bytes(self.data, BGP_TILEMAP_ENTRY_BYTELEN, self.header.tilemap_data_begin, tilemap_end)):
             # NOTE: There will likely be more than 768 (BGP_TOTAL_NUMBER_TILES) tiles. Why is unknown, but the
             #       rest is just zero padding.
             self.tilemap.append(TilemapEntry.from_int(int.from_bytes(entry, 'little')))
@@ -124,7 +127,8 @@ class Bgp:
         For dimension calculating, see the constants of this module.
         """
         return to_pil(
-            self.tilemap[:BGP_TOTAL_NUMBER_TILES], self.tiles, self.palettes, BGP_TILE_DIM, BGP_RES_WIDTH, BGP_RES_HEIGHT, 1, 1, ignore_flip_bits
+            self.tilemap[:BGP_TOTAL_NUMBER_TILES], self.tiles, self.palettes, BGP_TILE_DIM, BGP_RES_WIDTH,
+            BGP_RES_HEIGHT, 1, 1, ignore_flip_bits
         )
 
     def to_pil_tiled(self, ignore_flip_bits=False) -> List[Image.Image]:
@@ -157,7 +161,7 @@ class Bgp:
             BGP_RES_HEIGHT, 1, 1, force_import
         )
 
-        if len(self.tiles)==0x3FF:
+        if len(self.tiles) == 0x3FF:
             raise AttributeError(f"Error when importing: max tile count reached.")
 
         # Add the 0 tile (used to clear bgs)
@@ -165,13 +169,12 @@ class Bgp:
         # Shift tile indices by 1
         for x in self.tilemap:
             x.idx += 1
-        
+
         # Fill up the tiles and tilemaps to 1024, which seems to be the required default
         for _ in range(len(self.tiles), BGP_TOTAL_NUMBER_TILES_ACTUALLY):
             self.tiles.append(bytearray(int(BGP_TILE_DIM * BGP_TILE_DIM / 2)))
         for _ in range(len(self.tilemap), BGP_TOTAL_NUMBER_TILES_ACTUALLY):
-            self.tilemap.append(TilemapEntry.from_int(0))
-        
+            self.tilemap.append(TilemapEntry.from_int(u16(0)))
 
     def from_pil_tiled(self, pils: List[Image.Image]) -> None:
         """

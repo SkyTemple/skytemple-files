@@ -126,21 +126,21 @@ class Kao(KaoProtocol[KaoImage]):
         expand_size = expand_len * (SUBENTRIES * SUBENTRY_LEN)
         limit = self.first_toc + (self.toc_len * SUBENTRIES * SUBENTRY_LEN)
         # Rewrite all pointers
-        last_pnt = 0
+        last_pnt = i32(0)
         for x in range(self.toc_len * SUBENTRIES):
             start = self.first_toc + x * SUBENTRY_LEN
-            pnt = cast(int, read_i32(self.original_data, start))
+            pnt = read_i32(self.original_data, start)
             if pnt < 0:
-                pnt -= expand_size
+                pnt -= expand_size  # type: ignore
                 last_pnt = pnt
             elif pnt > 0:
-                last_pnt = -KaoImage(self.original_data, pnt).size() - expand_size
-                pnt += expand_size
-            write_sintle(self.original_data, pnt, start, SUBENTRY_LEN)
+                last_pnt = -KaoImage(self.original_data, pnt).size() - expand_size  # type: ignore
+                pnt += expand_size  # type: ignore
+            write_i32(self.original_data, pnt, start)
 
         # Expand
         expand_pnt = bytearray(4)
-        write_sintle(expand_pnt, last_pnt, 0, SUBENTRY_LEN)
+        write_i32(expand_pnt, last_pnt, 0)
         self.original_data = self.original_data[:limit] + (expand_pnt * (expand_len * SUBENTRIES)) + self.original_data[
                                                                                                      limit:]
         self.toc_len = new_size

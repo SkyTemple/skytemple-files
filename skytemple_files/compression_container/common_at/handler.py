@@ -116,7 +116,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
         for t in compression_type:
             if t in CommonAtHandler.allowed_types:
                 try:
-                    cont = t.handler.compress(data)
+                    cont = t.handler.compress(data)  # pylint: disable=no-member
                     size = len(cont.to_bytes())
                     if DEBUG:
                         print("*** COMMON AT DEBUG: Compress", t, "size", size)

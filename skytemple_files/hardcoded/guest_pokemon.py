@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
 
@@ -73,7 +74,7 @@ class ExtraDungeonDataEntry(AutoString):
         if self.hlr_cleared:
             entry |= 0x4000
 
-        write_uintle(buffer, entry, 0, 2)
+        write_u16(buffer, u16(entry), 0)
         return buffer
 
     @classmethod

@@ -44,6 +44,7 @@ class At4px(CommonAt):
         assert len(data) == self.length_decompressed
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'AT4PX'\

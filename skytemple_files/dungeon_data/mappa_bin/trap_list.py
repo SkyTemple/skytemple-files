@@ -22,7 +22,7 @@ import typing
 
 from range_typed_integers import u16, u16_checked
 
-from skytemple_files.common.util import read_uintle, AutoString, write_uintle, read_u16
+from skytemple_files.common.util import AutoString, read_u16, write_u16
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
 from skytemple_files.dungeon_data.mappa_bin import XML_TRAP_LIST, XML_TRAP, XML_TRAP__NAME, XML_TRAP__WEIGHT
 from skytemple_files.common.i18n_util import f, _
@@ -105,7 +105,7 @@ class MappaTrapList(AutoString, XmlSerializable):
     def to_mappa(self):
         data = bytearray(50)
         for i in range(0, 25):
-            write_uintle(data, self.weights[MappaTrapType(i)], i * 2, 2)
+            write_u16(data, self.weights[MappaTrapType(i)], i * 2)
         return data
 
     def to_xml(self) -> Element:

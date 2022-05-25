@@ -18,6 +18,8 @@ from abc import abstractmethod
 from typing import Protocol
 from typing import runtime_checkable
 
+from range_typed_integers import u16
+
 
 @runtime_checkable
 class RomFileProviderProtocol(Protocol):
@@ -34,7 +36,7 @@ class TilemapEntryProtocol(Protocol):
     @abstractmethod
     def __init__(self, idx: int, flip_x: bool, flip_y: bool, pal_idx: int, ignore_too_large: bool = False): ...
     @abstractmethod
-    def to_int(self) -> int: ...
+    def to_int(self) -> u16: ...
     @classmethod
     @abstractmethod
-    def from_int(cls, entry: int) -> 'TilemapEntryProtocol': ...
+    def from_int(cls, entry: u16) -> 'TilemapEntryProtocol': ...

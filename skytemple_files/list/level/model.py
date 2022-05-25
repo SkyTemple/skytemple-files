@@ -16,11 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Tuple, List, Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
-from skytemple_files.common.util import read_var_length_string, write_uintle, write_sintle, \
-    read_u32, read_u16
+from skytemple_files.common.util import read_var_length_string, read_u32, read_u16, write_u16, write_i16, write_u32, \
+    read_i16
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 LEN_LEVEL_ENTRY = 12
@@ -46,7 +48,7 @@ class LevelListBin(Sir0Serializable):
                 mapty=read_u16(data, start + 0),
                 nameid=read_u16(data, start + 2),
                 mapid=read_u16(data, start + 4),
-                weather=read_u16(data, start + 6),
+                weather=read_i16(data, start + 6),
                 name=self._read_string(data, read_u32(data, start + 8))
             ))
 
@@ -58,9 +60,9 @@ class LevelListBin(Sir0Serializable):
 
         out_data = bytearray()
         # 1. Write strings
-        pointer_offsets: List[int] = []
+        pointer_offsets = []
         for entry in self.list:
-            pointer_offsets.append(len(out_data))
+            pointer_offsets.append(u32_checked(len(out_data)))
             out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b'\0'
 
         # Padding
@@ -71,12 +73,12 @@ class LevelListBin(Sir0Serializable):
         pointer_data_block = len(out_data)
         for i, entry in enumerate(self.list):
             entry_buffer = bytearray(LEN_LEVEL_ENTRY)
-            write_uintle(entry_buffer, entry.mapty, 0, 2)
-            write_uintle(entry_buffer, entry.nameid, 2, 2)
-            write_uintle(entry_buffer, entry.mapid, 4, 2)
-            write_sintle(entry_buffer, entry.weather, 6, 2)
+            write_u16(entry_buffer, entry.mapty, 0)
+            write_u16(entry_buffer, entry.nameid, 2)
+            write_u16(entry_buffer, entry.mapid, 4)
+            write_i16(entry_buffer, entry.weather, 6)
             sir0_pointer_offsets.append(len(out_data) + 8)
-            write_uintle(entry_buffer, pointer_offsets[i], 8, 4)
+            write_u32(entry_buffer, pointer_offsets[i], 8)
             out_data += entry_buffer
         out_data += PADDING_END
 

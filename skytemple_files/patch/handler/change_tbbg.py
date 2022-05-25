@@ -23,7 +23,8 @@ from skytemple_files.patch.category import PatchCategory
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import _
 
@@ -31,6 +32,7 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x277F4
 PATCH_CHECK_ADDR_APPLIED_EU = 0x27AE8
 PATCH_CHECK_ADDR_APPLIED_JP = 0x27B54
 PATCH_CHECK_INSTR_APPLIED = 0xE3A00020
+
 
 class ChangeTextBoxColorPatchHandler(AbstractPatchHandler):
 
@@ -57,11 +59,11 @@ class ChangeTextBoxColorPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -70,6 +72,5 @@ class ChangeTextBoxColorPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

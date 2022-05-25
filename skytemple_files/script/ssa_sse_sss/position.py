@@ -16,10 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import warnings
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
+
+from range_typed_integers import u16
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptDirection
-from skytemple_files.common.util import AutoString
+from skytemple_files.common.util import AutoString, CheckedIntWrites
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 
 logger = logging.getLogger(__name__)
@@ -30,8 +32,15 @@ ACTOR_DEFAULT_HITBOX_W = 2 * BPC_TILE_DIM
 ACTOR_DEFAULT_HITBOX_H = 1 * BPC_TILE_DIM
 
 
-class SsaPosition(AutoString):
-    def __init__(self, scriptdata: Pmd2ScriptData, x_pos, y_pos, x_offset, y_offset, direction=None):
+class SsaPosition(AutoString, CheckedIntWrites):
+    scriptdata: Pmd2ScriptData
+    x_pos: u16
+    y_pos: u16
+    x_offset: u16
+    y_offset: u16
+    direction: Optional[Pmd2ScriptDirection]
+
+    def __init__(self, scriptdata: Pmd2ScriptData, x_pos: u16, y_pos: u16, x_offset: u16, y_offset: u16, direction: Optional[u16] = None):
         """
         Common SSA position specification. Direction is optional if not applicable.
         """
@@ -41,7 +50,7 @@ class SsaPosition(AutoString):
         self.x_offset = x_offset
         self.y_offset = y_offset
 
-        self.direction: Union[Pmd2ScriptDirection, None] = None
+        self.direction = None
         if direction is not None:
             try:
                 self.direction = scriptdata.directions__by_ssa_id[direction]

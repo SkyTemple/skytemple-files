@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpc._model import Bpc
@@ -35,7 +36,7 @@ class BpcWriter:
             tiles.append(self._convert_tiles(model, i))
             tilemaps.append(self._convert_tilemap(model, i))
 
-        end_of_layer_specs = 4 + (12 * model.number_of_layers)
+        end_of_layer_specs = u16_checked(4 + (12 * model.number_of_layers))
 
         length_of_first_layer = len(tiles[0]) + len(tilemaps[0])
         # The length is increased by 1 if a padding has to be added:
@@ -60,14 +61,14 @@ class BpcWriter:
         self._write_16uintle(data, end_of_layer_specs)
         # lower layer pointer ( if two layers )
         if model.number_of_layers > 1:
-            self._write_16uintle(data, end_of_layer_specs + length_of_first_layer)
+            self._write_16uintle(data, u16_checked(end_of_layer_specs + length_of_first_layer))
         else:
-            self._write_16uintle(data, 0)
+            self._write_16uintle(data, u16(0))
 
         # for each layer specs:
         for i in range(0, model.number_of_layers):
             # number tiles + 1
-            self._write_16uintle(data, model.layers[i].number_tiles + 1)
+            self._write_16uintle(data, u16_checked(model.layers[i].number_tiles + 1))
             # bpa1-4
             self._write_16uintle(data, model.layers[i].bpas[0])
             self._write_16uintle(data, model.layers[i].bpas[1])
@@ -122,12 +123,12 @@ class BpcWriter:
 
         # Skip first chunk (null)
         for entry in layer.tilemap[model.tiling_width*model.tiling_height:]:
-            write_uintle(data, entry.to_int(), bytes_written, BPC_TILEMAP_BYTELEN)
+            write_u16(data, entry.to_int(), bytes_written)
             bytes_written += BPC_TILEMAP_BYTELEN
         assert bytes_written == length
 
         return FileType.BPC_TILEMAP.compress(data)
 
-    def _write_16uintle(self, data: bytearray, val: int) -> None:
-        write_uintle(data, val, self.bytes_written, 2)
+    def _write_16uintle(self, data: bytearray, val: u16) -> None:
+        write_u16(data, val, self.bytes_written)
         self.bytes_written += 2

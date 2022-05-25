@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.graphics.wte.model import Wte, MAGIC_NUMBER
 
@@ -41,11 +43,11 @@ class WteWriter:
         palette_buffer = bytearray(len(self.model.palette) + int(len(self.model.palette) / 3))
         j = 0
         for i, p in enumerate(self.model.palette):
-            write_uintle(palette_buffer, p, j)
+            write_u8(palette_buffer, u8(p), j)
             j += 1
             if i % 3 == 2:
                 # Insert the fourth color
-                write_uintle(palette_buffer, 0x80, j)
+                write_u8(palette_buffer, u8(0x80), j)
                 j += 1
         assert j == len(palette_buffer)
         buffer += palette_buffer
@@ -55,16 +57,16 @@ class WteWriter:
         header = bytearray(0x34)
         header[0:4] = MAGIC_NUMBER
         pointer_offsets.append(len(buffer) + 0x04)
-        write_uintle(header, image_pointer, 0x04, 4)
-        write_uintle(header, len(self.model.image_data), 0x08, 4)
-        write_uintle(header, self.model.actual_dim, 0x0C, 1)
-        write_uintle(header, self.model.image_type.value, 0x0D, 1)
-        write_uintle(header, self.model.unk10, 0x10, 4)
-        write_uintle(header, self.model.width, 0x14, 2)
-        write_uintle(header, self.model.height, 0x16, 2)
+        write_u32(header, u32_checked(image_pointer), 0x04)
+        write_u32(header, u32_checked(len(self.model.image_data)), 0x08)
+        write_u8(header, self.model.actual_dim, 0x0C)
+        write_u8(header, self.model.image_type.value, 0x0D)
+        write_u32(header, self.model.unk10, 0x10)
+        write_u16(header, self.model.width, 0x14)
+        write_u16(header, self.model.height, 0x16)
         pointer_offsets.append(len(buffer) + 0x18)
-        write_uintle(header, palette_pointer, 0x18, 4)
-        write_uintle(header, int(len(self.model.palette) / 3), 0x1C, 4)
+        write_u32(header, u32_checked(palette_pointer), 0x18)
+        write_u32(header, u32_checked(len(self.model.palette) // 3), 0x1C)
 
         header_pointer = len(buffer)
         buffer += header

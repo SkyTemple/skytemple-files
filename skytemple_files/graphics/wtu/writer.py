@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.wtu.model import Wtu, MAGIC_NUMBER, WTU_ENTRY_LEN
@@ -27,14 +28,14 @@ class WtuWriter:
     def write(self) -> bytes:
         buffer = bytearray(self.model.header_size + WTU_ENTRY_LEN * len(self.model.entries))
         buffer[0:4] = MAGIC_NUMBER
-        write_uintle(buffer, len(self.model.entries), 0x4, 4)
-        write_uintle(buffer, self.model.image_mode, 0x8, 4)
-        write_uintle(buffer, self.model.header_size, 0xC, 4)
+        write_u32(buffer, u32_checked(len(self.model.entries)), 0x4)
+        write_u32(buffer, self.model.image_mode, 0x8)
+        write_u32(buffer, self.model.header_size, 0xC)
 
         for i, e in enumerate(self.model.entries):
-            write_uintle(buffer, e.x, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x00, 2)
-            write_uintle(buffer, e.y, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x02, 2)
-            write_uintle(buffer, e.width, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x04, 2)
-            write_uintle(buffer, e.height, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x06, 2)
+            write_u16(buffer, e.x, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x00)
+            write_u16(buffer, e.y, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x02)
+            write_u16(buffer, e.width, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x04)
+            write_u16(buffer, e.height, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x06)
 
         return buffer

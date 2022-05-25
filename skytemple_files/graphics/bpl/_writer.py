@@ -39,15 +39,15 @@ class BplWriter:
 
         # Header
         self._write_16uintle(data, model.number_palettes)
-        self._write_16uintle(data, model.has_palette_animation)
+        self._write_16uintle(data, u16(int(model.has_palette_animation)))
 
         for palette in model.get_real_palettes():
             # Palettes [Starts with transparent color! This is removed!]
             for i, color in enumerate(palette[3:]):
-                self._write_byte(data, color)
+                self._write_byte(data, u8(color))
                 if i % 3 == 2:
                     # Insert the fourth color
-                    self._write_byte(data, BPL_FOURTH_COLOR)
+                    self._write_byte(data, u8(BPL_FOURTH_COLOR))
 
         if model.has_palette_animation:
             # Palette Animation Spec
@@ -58,17 +58,17 @@ class BplWriter:
             # Palette Animation Palette
             for frame in model.animation_palette:
                 for i, color in enumerate(frame):
-                    self._write_byte(data, color)
+                    self._write_byte(data, u8(color))
                     if i % 3 == 2:
                         # Insert the fourth color
-                        self._write_byte(data, BPL_FOURTH_COLOR)
+                        self._write_byte(data, u8(BPL_FOURTH_COLOR))
 
         return data
 
-    def _write_16uintle(self, data: bytearray, val: int) -> None:
-        write_uintle(data, val, self.bytes_written, 2)
+    def _write_16uintle(self, data: bytearray, val: u16) -> None:
+        write_u16(data, val, self.bytes_written)
         self.bytes_written += 2
 
-    def _write_byte(self, data: bytearray, val: int) -> None:
-        write_uintle(data, val, self.bytes_written)
+    def _write_byte(self, data: bytearray, val: u8) -> None:
+        write_u8(data, val, self.bytes_written)
         self.bytes_written += 1

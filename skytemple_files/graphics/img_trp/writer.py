@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.graphics.img_trp import PAL_LEN, PAL_ENTRY_LEN
 from skytemple_files.graphics.img_trp.model import ImgTrp
@@ -40,19 +42,19 @@ class ImgTrpWriter:
         cursor = 0
         for pal in self.model.palettes:
             for i, col in enumerate(pal):
-                write_uintle(data, col, cursor)
+                write_u8(data, u8(col), cursor)
                 cursor += 1
                 if i % 3 == 2:
-                    write_uintle(data, 0xAA, cursor)
+                    write_u8(data, u8(0xAA), cursor)
                     cursor += 1
         buffer += data
 
         # Header
         header = bytearray(4*4)
-        write_uintle(header, spr_pointer, 0x00, 4)
-        write_uintle(header, len(self.model.sprites), 0x04, 4)
-        write_uintle(header, pal_pointer, 0x08, 4)
-        write_uintle(header, len(self.model.palettes) * PAL_LEN, 0x0C, 4)
+        write_u32(header, u32_checked(spr_pointer), 0x00)
+        write_u32(header, u32_checked(len(self.model.sprites)), 0x04)
+        write_u32(header, u32_checked(pal_pointer), 0x08)
+        write_u32(header, u32_checked(len(self.model.palettes) * PAL_LEN), 0x0C)
         pointer_offsets = [len(buffer), len(buffer) + 8]
         header_pointer = len(buffer)
         buffer += header

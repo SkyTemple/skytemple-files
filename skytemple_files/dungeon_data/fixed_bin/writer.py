@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin
 
@@ -30,7 +32,7 @@ class FixedBinWriter:
         fixed_floors = bytearray()
         pointers = []
         for floor in self.model.fixed_floors:
-            pointers.append(len(fixed_floors))
+            pointers.append(u32_checked(len(fixed_floors)))
             fixed_floors += floor.to_bytes()
 
         # Padding
@@ -42,7 +44,7 @@ class FixedBinWriter:
         i = 0
         for i, pointer in enumerate(pointers):
             pointer_offsets.append(len(fixed_floors) + i * 4)
-            write_uintle(header_buffer, pointer, i * 4, 4)
-        write_uintle(header_buffer, 0xAAAAAAAA, (i + 1) * 4, 4)
+            write_u32(header_buffer, pointer, i * 4)
+        write_u32(header_buffer, u32(0xAAAAAAAA), (i + 1) * 4)
 
         return fixed_floors + header_buffer, pointer_offsets, len(fixed_floors)

@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 
 SE_PC_LNTRY_LEN = 0x14
@@ -48,16 +49,16 @@ class SpecialEpisodePc(AutoString, CheckedIntWrites):
 
     def to_bytes(self) -> bytes:
         b = bytearray(SE_PC_LNTRY_LEN)
-        write_uintle(b, self.poke_id, 0, 2)
-        write_uintle(b, self.joined_at, 2, 2)
-        write_uintle(b, self.move1, 4, 2)
-        write_uintle(b, self.move2, 6, 2)
-        write_uintle(b, self.move3, 8, 2)
-        write_uintle(b, self.move4, 10, 2)
-        write_uintle(b, u16(int(self.do_not_fix_entire_moveset)), 12, 2)
-        write_uintle(b, self.level, 14, 2)
-        write_uintle(b, self.iq, 16, 2)
-        write_uintle(b, self.fixed_hp, 18, 2)
+        write_u16(b, self.poke_id, 0)
+        write_u16(b, self.joined_at, 2)
+        write_u16(b, self.move1, 4)
+        write_u16(b, self.move2, 6)
+        write_u16(b, self.move3, 8)
+        write_u16(b, self.move4, 10)
+        write_u16(b, u16(int(self.do_not_fix_entire_moveset)), 12)
+        write_u16(b, self.level, 14)
+        write_u16(b, self.iq, 16)
+        write_u16(b, self.fixed_hp, 18)
         return b
 
     def __eq__(self, other: object) -> bool:

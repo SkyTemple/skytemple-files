@@ -97,7 +97,7 @@ class Dpc:
         all_tilemaps = list(itertools.chain.from_iterable(self.chunks))
         data = bytearray(len(all_tilemaps) * 2)
         for i, tm in enumerate(all_tilemaps):
-            write_uintle(data, tm.to_int(), i * 2, 2)
+            write_u16(data, tm.to_int(), i * 2)
         return data
 
     def import_tile_mappings(
@@ -117,11 +117,11 @@ class Dpc:
                     if not contains_null_chunk:
                         entry.idx += 1
         if not contains_null_chunk:
-            tile_mappings = [[TilemapEntry.from_int(0) for _ in range(0, 9)]] + tile_mappings
+            tile_mappings = [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] + tile_mappings
         self.chunks = tile_mappings  # type: ignore
         self.re_fill_chunks()
 
     def re_fill_chunks(self):
         if len(self.chunks) > 400:
             raise ValueError(_("A dungeon background or tilemap can not have more than 400 chunks."))
-        self.chunks += [[TilemapEntry.from_int(0) for _ in range(0, 9)]] * (400 - len(self.chunks))
+        self.chunks += [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] * (400 - len(self.chunks))

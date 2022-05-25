@@ -137,9 +137,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         tilemap = []
         # The first chunk is not stored, but is always empty
         for i in range(0, self.tiling_width*self.tiling_height):
-            tilemap.append(TilemapEntry.from_int(0))
+            tilemap.append(TilemapEntry.from_int(u16(0)))
         for i, entry in enumerate(iter_bytes(data, BPC_TILEMAP_BYTELEN)):
-            tilemap.append(TilemapEntry.from_int(int.from_bytes(entry, 'little')))
+            tilemap.append(TilemapEntry.from_int(u16(int.from_bytes(entry, 'little'))))
         return tilemap  # type: ignore
 
     def chunks_to_pil(self, layer: int, palettes: Sequence[Sequence[int]], width_in_mtiles: int = 20) -> Image.Image:
@@ -436,7 +436,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         tilemap = []
         # The first chunk is not stored, but is always empty
         for i in range(0, self.tiling_width * self.tiling_height):
-            tilemap.append(TilemapEntry.from_int(0))
+            tilemap.append(TilemapEntry.from_int(u16(0)))
         self.layers[0] = BpcLayer(
             u16(1), [u16(0), u16(0), u16(0), u16(0)], u16(1),
             # The first tile is not stored, but is always empty

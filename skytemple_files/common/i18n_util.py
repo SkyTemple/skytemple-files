@@ -80,12 +80,12 @@ def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> Non
     import builtins
     try:
         from explorerscript import util
-        util._ = builtins._  # type: ignore
+        util._ = builtins._  # type: ignore  # pylint: disable=no-member
     except ImportError:
         pass
     try:
         from desmume import i18n_util
-        i18n_util._ = builtins._  # type: ignore
+        i18n_util._ = builtins._  # type: ignore  # pylint: disable=no-member
     except ImportError:
         pass
 

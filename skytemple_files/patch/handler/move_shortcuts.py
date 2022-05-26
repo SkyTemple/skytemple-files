@@ -45,7 +45,7 @@ class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
 
     @property
     def version(self) -> str:
-        return '0.2.0'
+        return '0.2.1'
 
     def depends_on(self) -> List[str]:
         return ['ExtraSpace']

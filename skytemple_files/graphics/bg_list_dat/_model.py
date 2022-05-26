@@ -162,3 +162,7 @@ class BgList(BgListProtocol[BgListEntry]):
                 if bpa == name:
                     count += 1
         return count
+
+    def add_level(self, level: BgListEntry):
+        """Add a level to the list."""
+        self.level.append(level)

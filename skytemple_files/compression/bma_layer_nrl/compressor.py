@@ -73,7 +73,7 @@ class BmaLayerNrlCompressor:
             current_int_pair = self._read()
             repeats = self._look_ahead_repeats(current_int_pair)
             if DEBUG:
-                print(f"Read {repeats} repeats of {current_int_pair:08x}")
+                print(f"Read {repeats} repeats of {current_int_pair:08x}")  # type: ignore
             self.cursor += repeats * 4
             if read_u32(current_int_pair, 0) == 0:
                 if DEBUG:
@@ -152,7 +152,7 @@ class BmaLayerNrlCompressor:
                 repeat_counter += 1
             else:
                 repeat_counter = 0
-            previous_ints_at_pos = ints_at_pos
+            previous_ints_at_pos = ints_at_pos  # type: ignore
 
             seq[seq_len*4:(seq_len*4)+4] = ints_at_pos
 

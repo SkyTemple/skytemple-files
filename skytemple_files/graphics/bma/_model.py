@@ -215,7 +215,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         return unk, data[1]
 
     def to_pil_single_layer(
-            self, bpc: Bpc, palettes: List[List[int]], bpas: Sequence[Optional[Bpa]], layer: int
+            self, bpc: Bpc, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[Bpa]], layer: int
     ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
@@ -507,14 +507,14 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         """Remove the upper layer. Silently does nothing when it doesn't exist."""
         if self.number_of_layers == 1:
             return
-        self.number_of_layers = 1
+        self.number_of_layers = u16(1)
         self.layer1 = None
 
     def add_upper_layer(self):
         """Add an upper layer. Silently does nothing when it already exists."""
         if self.number_of_layers == 2:
             return
-        self.number_of_layers = 2
+        self.number_of_layers = u16(2)
         self.layer1 = [0 for _ in range(0, self.map_width_chunks * self.map_height_chunks)]
 
     def resize(self, new_width_chunks, new_height_chunks, new_width_camera, new_height_camera):

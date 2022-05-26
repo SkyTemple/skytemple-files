@@ -58,6 +58,7 @@ class AsyncTaskRunner(Thread):
             pass
 
     def stop(self):
+        assert self._loop is not None
         self._loop.call_soon_threadsafe(self._loop.stop)
 
     def run_task(self, coro):

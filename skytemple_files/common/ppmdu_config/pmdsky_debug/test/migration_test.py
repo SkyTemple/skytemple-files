@@ -19,13 +19,15 @@ import unittest
 
 # First tuple entry:   Has end?
 # Second tuple entry:  type == Pmd2BinarySymbolType.FUNCTION
+from typing import Dict, Tuple
+
 from parameterized import parameterized
 
-from skytemple_files.common.ppmdu_config.data import Pmd2GameEdition, GAME_VERSION_EOS, GAME_REGION_EU, GAME_REGION_US
+from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS, GAME_REGION_EU, GAME_REGION_US
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import SymbolHasNoEndError, Pmd2BinarySymbolType
 from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import load_binaries
 
-OLD_ENTRIES = {
+OLD_ENTRIES: Dict[str, Dict[str, Tuple[bool, bool]]] = {
     'arm9.bin': {'CartRemovedImgData': (True, False),
                  'CompressedIqGroupsSkills': (True, False),
                  'DebugPrint': (False, True),

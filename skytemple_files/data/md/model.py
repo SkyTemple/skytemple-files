@@ -622,7 +622,7 @@ class Md:
         self.entries: List[MdEntry] = []
         self._entries_by_entid: Dict[int, List[Tuple[int, MdEntry]]] = {}
         for i in range(0, number_entries):
-            start = (i * MD_ENTRY_LEN)
+            start = 8 + (i * MD_ENTRY_LEN)
             entry = MdEntry(
                 md_index=u32(i),
                 entid=read_u16(data, start + 0x00),

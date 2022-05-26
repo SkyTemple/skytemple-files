@@ -27,19 +27,19 @@ class SsaHeader(AutoString, CheckedIntWrites):
     Only contains information used during read-in of the data. Not used for saving.
     """
     layer_count: u16
-    layer_list_pointer: Optional[u16]
-    trigger_pointer: Optional[u16]
-    actor_pointer: Optional[u16]
-    object_pointer: Optional[u16]
-    performer_pointer: Optional[u16]
-    events_pointer: Optional[u16]
-    position_marker_pointer: Optional[u16]
-    unk10_pointer: Optional[u16]
+    layer_list_pointer: Optional[int]
+    trigger_pointer: Optional[int]
+    actor_pointer: Optional[int]
+    object_pointer: Optional[int]
+    performer_pointer: Optional[int]
+    events_pointer: Optional[int]
+    position_marker_pointer: Optional[int]
+    unk10_pointer: Optional[int]
 
-    def __init__(self, layer_count: u16, layer_list_pointer: u16,
-                 trigger_pointer: u16, actor_pointer: u16,
-                 object_pointer: u16, performer_pointer: u16,
-                 events_pointer: u16, position_marker_pointer: u16, unk10_pointer: u16):
+    def __init__(self, layer_count: u16, layer_list_pointer: int,
+                 trigger_pointer: int, actor_pointer: int,
+                 object_pointer: int, performer_pointer: int,
+                 events_pointer: int, position_marker_pointer: int, unk10_pointer: int):
 
         # If the pointer of the following entry is the same, then this layer doesn't actually exist.
         self.layer_count = layer_count

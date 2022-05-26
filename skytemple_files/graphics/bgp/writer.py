@@ -28,7 +28,7 @@ from skytemple_files.graphics.bgp.model import Bgp, BGP_PAL_NUMBER_COLORS, BGP_P
 class BgpWriter:
     def __init__(self, model: Bgp):
         self.model = model
-        self.data: Optional[bytearray] = None
+        self.data: bytearray = None  # type: ignore
         self.bytes_written = 0
 
     def write(self) -> bytes:
@@ -58,10 +58,10 @@ class BgpWriter:
         # Palettes
         for palette in self.model.palettes:
             for i, color in enumerate(palette):
-                self._write_byte(color)
+                self._write_byte(u8(color))
                 if i % 3 == 2:
                     # Insert the fourth color
-                    self._write_byte(BGP_PAL_UNKNOWN4_COLOR_VAL)
+                    self._write_byte(u8(BGP_PAL_UNKNOWN4_COLOR_VAL))
 
         assert self.bytes_written == tilemapping_begin
         # Tile Mappings
@@ -77,6 +77,6 @@ class BgpWriter:
 
         return self.data
 
-    def _write_byte(self, val):
+    def _write_byte(self, val: u8):
         write_u8(self.data, val, self.bytes_written)
         self.bytes_written += 1

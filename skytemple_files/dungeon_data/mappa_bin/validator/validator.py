@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List, Tuple, Set, Dict, Optional
 
+from range_typed_integers import u8, u8_checked
+
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
 from skytemple_files.dungeon_data.mappa_bin.validator.exception import DungeonValidatorError, \
     InvalidFloorListReferencedError, InvalidFloorReferencedError, FloorReusedError, DungeonTotalFloorCountInvalidError, \
@@ -119,7 +121,7 @@ class DungeonValidator:
         for i in range(start_after, start_after + number_floors):
             self._visited_floor_lists[mappa_index].append(i)
 
-    def _mappa_group_count_invalid(self, dungeons: List[DungeonDefinition], mappa_index: int) -> Tuple[int, List[int]]:
+    def _mappa_group_count_invalid(self, dungeons: List[DungeonDefinition], mappa_index: int) -> Tuple[u8, List[int]]:
         count_floor_expected = 0
         dungeons_to_check = []
         invalid = []
@@ -130,7 +132,7 @@ class DungeonValidator:
         for i in dungeons_to_check:
             if dungeons[i].number_floors_in_group != count_floor_expected:
                 invalid.append(i)
-        return count_floor_expected, invalid
+        return u8_checked(count_floor_expected), invalid
 
     def _mappa_which_dungeon_uses(self, mappa_index: int, start_after: int, number_floors: int) -> int:
         for i, dungeon in enumerate(self.dungeons):  # type: ignore

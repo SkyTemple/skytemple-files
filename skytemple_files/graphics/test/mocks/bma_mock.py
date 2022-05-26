@@ -40,7 +40,7 @@ class BmaStub(BmaProtocol[P, C, L]):
         self.collision: Optional[List[bool]] = None
         self.collision2: Optional[List[bool]] = None
 
-    def to_pil_single_layer(self, bpc: C, palettes: List[List[int]], bpas: Sequence[Optional[P]], layer: int) -> Image.Image:
+    def to_pil_single_layer(self, bpc: C, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[P]], layer: int) -> Image.Image:
         raise NotImplementedError("Not implemented on mock.")
 
     def to_pil(self, bpc: C, bpl: L, bpas: List[Optional[P]], include_collision: bool = True,

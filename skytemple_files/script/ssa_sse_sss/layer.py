@@ -96,18 +96,23 @@ class SsaLayer(AutoString):
 
         if self._unk10_block_count > 0:
             assert header.unk10_pointer is not None
-            self._unk10_block_first_offset = (unk10_block_pointer - header.unk10_pointer) / UNK10_ENTRY_LEN
+            self._unk10_block_first_offset = (unk10_block_pointer - header.unk10_pointer) // UNK10_ENTRY_LEN
         elif header.unk10_pointer is not None:
             assert header.unk10_pointer - 2 == unk10_block_pointer
 
     def fill_data(self, all_actors, all_objects, all_performers, all_events, all_unk10s):
         if self._actors_count > 0:
+            assert self._actors_first_offset is not None
             self.actors = all_actors[self._actors_first_offset:(self._actors_first_offset+self._actors_count)]
         if self._objects_count > 0:
+            assert self._objects_first_offset is not None
             self.objects = all_objects[self._objects_first_offset:(self._objects_first_offset+self._objects_count)]
         if self._performers_count > 0:
+            assert self._performers_first_offset is not None
             self.performers = all_performers[self._performers_first_offset:(self._performers_first_offset+self._performers_count)]
         if self._events_count > 0:
+            assert self._events_first_offset is not None
             self.events = all_events[self._events_first_offset:(self._events_first_offset+self._events_count)]
         if self._unk10_block_count > 0:
+            assert self._unk10_block_first_offset is not None
             self.unk10s = all_unk10s[self._unk10_block_first_offset:(self._unk10_block_first_offset + self._unk10_block_count)]

@@ -66,6 +66,10 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_tiles))):
             self.tiles.append(bytearray(tile))
 
+    @classmethod
+    def new_empty(cls) -> BpaProtocol:
+        return cls(None)
+
     def __str__(self) -> str:
         return f"Idx: {self.number_of_tiles}, " \
                f"#c: {self.number_of_frames}"

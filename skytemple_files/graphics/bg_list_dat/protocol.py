@@ -79,3 +79,8 @@ class BgListProtocol(Protocol[T]):
     def find_bpa(self, name: str) -> int:
         """Count all occurrences of this BPA in the list."""
         ...
+
+    @abstractmethod
+    def add_level(self, level: T):
+        """Adds a level to the level list."""
+        ...

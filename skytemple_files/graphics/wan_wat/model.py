@@ -61,7 +61,7 @@ class MetaFramePositioningSpecs:
 
 class Wan:
     def __init__(self, data):
-        self.model: WanImage = WanImage(data)
+        self.model: WanImage = WanImage(data)  # type: ignore
 
     @property
     def frame_groups(self):

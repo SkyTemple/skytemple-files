@@ -108,7 +108,7 @@ SIZE_Y = 56
 class DungeonFloorGenerator:
     def __init__(self,
                  unknown_dungeon_chance_patch_applied=False, fix_dead_end_error=False, fix_outer_room_error=False,
-                 gen_properties: RandomGenProperties=None
+                 gen_properties: Optional[RandomGenProperties] = None
                  ):
         self.unknown_dungeon_chance_patch_applied = unknown_dungeon_chance_patch_applied
         self.fix_dead_end_error = fix_dead_end_error
@@ -134,7 +134,7 @@ class DungeonFloorGenerator:
         Properties.layout = floor_layout.structure.value
         Properties.mh_chance = floor_layout.monster_house_chance
         Properties.kecleon_chance = floor_layout.kecleon_shop_chance
-        Properties.middle_room_secondary = floor_layout.secondary_terrain.value
+        Properties.middle_room_secondary = floor_layout.secondary_terrain
         Properties.nb_rooms = floor_layout.room_density
         Properties.bit_flags = floor_layout.terrain_settings.to_mappa()
         Properties.floor_connectivity = floor_layout.floor_connectivity

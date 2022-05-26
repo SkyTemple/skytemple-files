@@ -189,8 +189,8 @@ def romtest(*, file_ext, path):
                     parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
                 # since expands now adds the tests to our locals, we need to pass them back...
                 # this isn't hacky at all wdym??????ßßß
-                frame_locals = inspect.currentframe().f_back.f_locals
-                for local_name, local in inspect.currentframe().f_locals.items():
+                frame_locals = inspect.currentframe().f_back.f_locals  # type: ignore
+                for local_name, local in inspect.currentframe().f_locals.items():  # type: ignore
                     if local_name.startswith('test_'):
                         frame_locals[local_name] = local
 

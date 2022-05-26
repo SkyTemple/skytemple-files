@@ -19,7 +19,7 @@
 from collections import deque
 
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, Deque
 
 from skytemple_files.common.util import *
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN, PX_LOOKBACK_BUFFER_SIZE, PX_MAX_MATCH_SEQLEN, \
@@ -93,9 +93,9 @@ class PxCompressor:
         self.input_size = len(self.uncompressed_data)
 
     def reset(self):
-        self.control_flags = None
-        self.compressed_data = None
-        self.pending_operations = deque()
+        self.control_flags: bytes = None  # type: ignore
+        self.compressed_data: bytearray = None  # type: ignore
+        self.pending_operations: Deque[CompOp] = deque()
         self.high_nibble_lenghts_possible = []
         self.nb_compressed_byte_written = 0
 

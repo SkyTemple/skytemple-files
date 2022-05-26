@@ -62,3 +62,7 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
     @classmethod
     def serialize(cls, data: BpaProtocol, **kwargs: OptionalKwargs) -> bytes:
         return cls.get_writer_cls()().write(data)
+
+    @classmethod
+    def new(cls) -> BpaProtocol:
+        return cls.get_model_cls().new_empty()

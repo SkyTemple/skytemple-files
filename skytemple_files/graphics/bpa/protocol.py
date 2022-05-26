@@ -43,6 +43,12 @@ class BpaProtocol(Protocol[T]):
     @abstractmethod
     def __init__(self, data: bytes): ...
 
+    @classmethod
+    @abstractmethod
+    def new_empty(cls) -> 'BpaProtocol':
+        """Returns a new empty Bpa"""
+        ...
+
     @abstractmethod
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""

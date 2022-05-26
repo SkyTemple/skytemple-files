@@ -41,7 +41,7 @@ class HardcodedRecruitmentTables:
         return cast(List[u16], cls._get_generic(overlay11bin, config, 'RecruitmentTableLevels', 2))
 
     @classmethod
-    def set_monster_levels_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
+    def set_monster_levels_list(cls, value: List[u16], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment levels list.
         The length of the list must exactly match the original ROM's length (see get_monster_levels_list).
@@ -54,7 +54,7 @@ class HardcodedRecruitmentTables:
         return cast(List[u8], cls._get_generic(overlay11bin, config, 'RecruitmentTableLocations', 1))
 
     @classmethod
-    def set_monster_locations_list(cls, value: List[int], overlay11bin: bytearray, config: Pmd2Data) -> None:
+    def set_monster_locations_list(cls, value: List[u8], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment locations list.
         The length of the list must exactly match the original ROM's length (see get_monster_locations_list).

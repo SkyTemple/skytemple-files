@@ -101,7 +101,7 @@ class Bgp:
                 iter_bytes(self.data, BGP_TILEMAP_ENTRY_BYTELEN, self.header.tilemap_data_begin, tilemap_end)):
             # NOTE: There will likely be more than 768 (BGP_TOTAL_NUMBER_TILES) tiles. Why is unknown, but the
             #       rest is just zero padding.
-            self.tilemap.append(TilemapEntry.from_int(int.from_bytes(entry, 'little')))
+            self.tilemap.append(TilemapEntry.from_int(u16(int.from_bytes(entry, 'little'))))
         if len(self.tilemap) < BGP_TOTAL_NUMBER_TILES:
             raise ValueError(f"Invalid BGP image: Too few tiles ({len(self.tilemap)}) in tile mapping."
                              f"Must be at least {BGP_TOTAL_NUMBER_TILES}.")

@@ -1,6 +1,6 @@
 ndspy==3.0.0
 pyyaml==6.0
-range-typed-integers==1.0.0
+range-typed-integers==1.0.1
 Pillow==9.1.1
 appdirs==1.4.4
 explorerscript==0.1.1

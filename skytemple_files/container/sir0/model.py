@@ -14,30 +14,38 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 
 
 class Sir0:
+    data_pointer: u32
+
     def __init__(self, content: bytes, pointer_offsets: List[int], data_pointer: int = None):
         self.content = content
         self.content_pointer_offsets = pointer_offsets
         if data_pointer is None:
             data_pointer = 0
-        self.data_pointer = data_pointer
+        self.data_pointer = u32(data_pointer)
 
     @classmethod
     def from_bin(cls, data: bytes):
         data = memoryview(bytearray(data))
-        data_pointer = read_uintle(data, 0x04, 4)
-        pointer_offset_list_pointer = read_uintle(data, 0x08, 4)
+        data_pointer = read_u32(data, 0x04)
+        pointer_offset_list_pointer = read_u32(data, 0x08)
 
         pointer_offsets = cls._decode_pointer_offsets(data, pointer_offset_list_pointer)
 
         # Correct pointers by subtracting the header
         for pnt_off in pointer_offsets:
-            write_uintle(data, read_uintle(data, pnt_off, 4) - HEADER_LEN, pnt_off, 4)  # type: ignore
+            write_u32(
+                data,  # type: ignore
+                u32_checked(read_u32(data, pnt_off) - HEADER_LEN),
+                pnt_off
+            )
 
         # The first two are for the pointers in the header, we remove them now, they are not
         # part of the content pointers
@@ -52,5 +60,5 @@ class Sir0:
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     @classmethod
-    def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: int) -> List[int]:
+    def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pointer_offset_list_pointer)

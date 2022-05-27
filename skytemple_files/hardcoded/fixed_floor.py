@@ -14,18 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Any
-from enum import Enum
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2BinaryBlock, Pmd2Binary
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
 
 
 class EntitySpawnEntry(AutoString):
-    def __init__(self, overlay29bin: Pmd2Binary, item_spawn_pointer: int,
-                 monster_spawn_pointer: int, tile_spawn_pointer: int):
+    def __init__(self, overlay29bin: Pmd2Binary, item_spawn_pointer: u32,
+                 monster_spawn_pointer: u32, tile_spawn_pointer: u32):
         self._overlay29bin = overlay29bin
         self.item_id = (item_spawn_pointer - self._overlay29bin.symbols['ItemSpawnTable'].begin_absolute) // 8
         self.monster_id = (monster_spawn_pointer - self._overlay29bin.symbols['MonsterSpawnTable'].begin_absolute) // 4
@@ -33,9 +32,9 @@ class EntitySpawnEntry(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(12)
-        write_uintle(buffer, self.item_id * 8 + self._overlay29bin.symbols['ItemSpawnTable'].begin_absolute, 0, 4)
-        write_uintle(buffer, self.monster_id * 4 + self._overlay29bin.symbols['MonsterSpawnTable'].begin_absolute, 4, 4)
-        write_uintle(buffer, self.tile_id * 4 + self._overlay29bin.symbols['TileSpawnTable'].begin_absolute, 8, 4)
+        write_u32(buffer, u32_checked(self.item_id * 8 + self._overlay29bin.symbols['ItemSpawnTable'].begin_absolute), 0)
+        write_u32(buffer, u32_checked(self.monster_id * 4 + self._overlay29bin.symbols['MonsterSpawnTable'].begin_absolute), 4)
+        write_u32(buffer, u32_checked(self.tile_id * 4 + self._overlay29bin.symbols['TileSpawnTable'].begin_absolute), 8)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -44,8 +43,13 @@ class EntitySpawnEntry(AutoString):
         return self.item_id == other.item_id and self.monster_id == other.monster_id and self.tile_id == other.tile_id
 
 
-class ItemSpawn(AutoString):
-    def __init__(self, item_id: int, quantity: int, null2: int, null3: int):
+class ItemSpawn(AutoString, CheckedIntWrites):
+    item_id: u16
+    quantity: u16
+    null2: u16
+    null3: u16
+
+    def __init__(self, item_id: u16, quantity: u16, null2: u16, null3: u16):
         self.item_id = item_id
         self.quantity = quantity
         self.null2 = null2
@@ -53,10 +57,10 @@ class ItemSpawn(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(8)
-        write_uintle(buffer, self.item_id, 0, 4)
-        write_uintle(buffer, self.quantity, 2, 2)
-        write_uintle(buffer, self.null2, 4, 2)
-        write_uintle(buffer, self.null3, 6, 2)
+        write_u16(buffer, self.item_id, 0)
+        write_u16(buffer, self.quantity, 2)
+        write_u16(buffer, self.null2, 4)
+        write_u16(buffer, self.null3, 6)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -134,8 +138,11 @@ class MonsterSpawnType(Enum):
         self.description = description
 
 
-class MonsterSpawn(AutoString):
-    def __init__(self, md_idx: int, stats_entry: int, enemy_settings: int):
+class MonsterSpawn(AutoString, CheckedIntWrites):
+    md_idx: u16
+    stats_entry: u8
+
+    def __init__(self, md_idx: u16, stats_entry: u8, enemy_settings: u8):
         self.md_idx = md_idx
         self.stats_entry = stats_entry
         # 3: (?) 6 if the pokémon is an enemy, 0xA if it's an ally, 9 if the only thing that is being spawned is
@@ -144,9 +151,9 @@ class MonsterSpawn(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)
-        write_uintle(buffer, self.md_idx, 0, 2)
-        write_uintle(buffer, self.stats_entry, 2, 1)
-        write_uintle(buffer, self.enemy_settings.value, 3, 1)
+        write_u16(buffer, self.md_idx, 0)
+        write_u8(buffer, self.stats_entry, 2)
+        write_u8(buffer, u8(self.enemy_settings.value), 3)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -157,8 +164,13 @@ class MonsterSpawn(AutoString):
                self.enemy_settings == other.enemy_settings
 
 
-class TileSpawn(AutoString):
-    def __init__(self, trap_id: int, trap_data: int, room_id: int, flags: int):
+class TileSpawn(AutoString, CheckedIntWrites):
+    trap_id: u8
+    trap_data: u8
+    room_id: u8
+    flags: u8
+
+    def __init__(self, trap_id: u8, trap_data: u8, room_id: u8, flags: u8):
         self.trap_id = trap_id
         self.trap_data = trap_data
         self.room_id = room_id
@@ -166,10 +178,10 @@ class TileSpawn(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)
-        write_uintle(buffer, self.trap_id, 0, 1)
-        write_uintle(buffer, self.trap_data, 1, 1)
-        write_uintle(buffer, self.room_id, 2, 1)
-        write_uintle(buffer, self.flags, 3, 1)
+        write_u8(buffer, self.trap_id, 0)
+        write_u8(buffer, self.trap_data, 1)
+        write_u8(buffer, self.room_id, 2)
+        write_u8(buffer, self.flags, 3)
         return buffer
 
     def can_be_broken(self) -> bool:
@@ -190,9 +202,18 @@ class TileSpawn(AutoString):
                self.flags == other.flags
 
 
-class MonsterSpawnStats(AutoString):
-    def __init__(self, level: int, hp: int, exp_yield: int,
-                 attack: int, special_attack: int, defense: int, special_defense: int, unkA: int):
+class MonsterSpawnStats(AutoString, CheckedIntWrites):
+    level: u16
+    hp: u16
+    exp_yield: u16
+    attack: u8
+    special_attack: u8
+    defense: u8
+    special_defense: u8
+    unkA: u16
+
+    def __init__(self, level: u16, hp: u16, exp_yield: u16,
+                 attack: u8, special_attack: u8, defense: u8, special_defense: u8, unkA: u16):
         self.level = level
         self.hp = hp
         self.exp_yield = exp_yield
@@ -204,14 +225,14 @@ class MonsterSpawnStats(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(12)
-        write_uintle(buffer, self.level, 0, 2)
-        write_uintle(buffer, self.hp, 2, 2)
-        write_uintle(buffer, self.exp_yield, 4, 2)
-        write_uintle(buffer, self.attack, 6, 1)
-        write_uintle(buffer, self.special_attack, 7, 1)
-        write_uintle(buffer, self.defense, 8, 1)
-        write_uintle(buffer, self.special_defense, 9, 1)
-        write_uintle(buffer, self.unkA, 10, 2)
+        write_u16(buffer, self.level, 0)
+        write_u16(buffer, self.hp, 2)
+        write_u16(buffer, self.exp_yield, 4)
+        write_u8(buffer, self.attack, 6)
+        write_u8(buffer, self.special_attack, 7)
+        write_u8(buffer, self.defense, 8)
+        write_u8(buffer, self.special_defense, 9)
+        write_u16(buffer, self.unkA, 10)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -227,9 +248,19 @@ class MonsterSpawnStats(AutoString):
                self.unkA == other.unkA
 
 
-class FixedFloorProperties(AutoString):
-    def __init__(self, music_track: int, unk4: bool, unk5: bool, moves_enabled: bool, orbs_enabled: bool,
-                 unk8: bool, unk9: bool, exit_floor_when_defeating_enemies: bool, null: int):
+class FixedFloorProperties(AutoString, CheckedIntWrites):
+    music_track: u32
+    unk4: bool
+    unk5: bool
+    moves_enabled: bool
+    orbs_enabled: bool
+    unk8: bool
+    unk9: bool
+    exit_floor_when_defeating_enemies: bool
+    null: u8
+
+    def __init__(self, music_track: u32, unk4: bool, unk5: bool, moves_enabled: bool, orbs_enabled: bool,
+                 unk8: bool, unk9: bool, exit_floor_when_defeating_enemies: bool, null: u8):
         self.music_track = music_track
         self.unk4 = unk4
         self.unk5 = unk5
@@ -242,15 +273,15 @@ class FixedFloorProperties(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(12)
-        write_uintle(buffer, self.music_track, 0, 4)
-        write_uintle(buffer, self.unk4, 4, 1)
-        write_uintle(buffer, self.unk5, 5, 1)
-        write_uintle(buffer, self.moves_enabled, 6, 1)
-        write_uintle(buffer, self.orbs_enabled, 7, 1)
-        write_uintle(buffer, self.unk8, 8, 1)
-        write_uintle(buffer, self.unk9, 9, 1)
-        write_uintle(buffer, self.exit_floor_when_defeating_enemies, 10, 1)
-        write_uintle(buffer, self.null, 11, 1)
+        write_u32(buffer, self.music_track, 0)
+        write_u8(buffer, u8(int(self.unk4)), 4)
+        write_u8(buffer, u8(int(self.unk5)), 5)
+        write_u8(buffer, u8(int(self.moves_enabled)), 6)
+        write_u8(buffer, u8(int(self.orbs_enabled)), 7)
+        write_u8(buffer, u8(int(self.unk8)), 8)
+        write_u8(buffer, u8(int(self.unk9)), 9)
+        write_u8(buffer, u8(int(self.exit_floor_when_defeating_enemies)), 10)
+        write_u8(buffer, self.null, 11)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -280,9 +311,9 @@ class HardcodedFixedFloorTables:
         for i in range(block.begin, block.end, 12):
             lst.append(EntitySpawnEntry(
                 binary,
-                read_uintle(overlay29, i + 0x00, 4),
-                read_uintle(overlay29, i + 0x04, 4),
-                read_uintle(overlay29, i + 0x08, 4),
+                read_u32(overlay29, i + 0x00),
+                read_u32(overlay29, i + 0x04),
+                read_u32(overlay29, i + 0x08),
             ))
         return lst
 
@@ -304,10 +335,10 @@ class HardcodedFixedFloorTables:
         lst = []
         for i in range(block.begin, block.end, 8):
             lst.append(ItemSpawn(
-                read_uintle(overlay29, i + 0x00, 2),
-                read_uintle(overlay29, i + 0x02, 2),
-                read_uintle(overlay29, i + 0x04, 2),
-                read_uintle(overlay29, i + 0x06, 2),
+                read_u16(overlay29, i + 0x00),
+                read_u16(overlay29, i + 0x02),
+                read_u16(overlay29, i + 0x04),
+                read_u16(overlay29, i + 0x06),
             ))
         return lst
 
@@ -329,9 +360,9 @@ class HardcodedFixedFloorTables:
         lst = []
         for i in range(block.begin, block.end, 4):
             lst.append(MonsterSpawn(
-                read_uintle(overlay29, i + 0x00, 2),
-                read_uintle(overlay29, i + 0x02, 1),
-                read_uintle(overlay29, i + 0x03, 1)
+                read_u16(overlay29, i + 0x00),
+                read_u8(overlay29, i + 0x02),
+                read_u8(overlay29, i + 0x03)
             ))
         return lst
 
@@ -353,10 +384,10 @@ class HardcodedFixedFloorTables:
         lst = []
         for i in range(block.begin, block.end, 4):
             lst.append(TileSpawn(
-                read_uintle(overlay29, i + 0x00, 1),
-                read_uintle(overlay29, i + 0x01, 1),
-                read_uintle(overlay29, i + 0x02, 1),
-                read_uintle(overlay29, i + 0x03, 1)
+                read_u8(overlay29, i + 0x00),
+                read_u8(overlay29, i + 0x01),
+                read_u8(overlay29, i + 0x02),
+                read_u8(overlay29, i + 0x03)
             ))
         return lst
 
@@ -378,14 +409,14 @@ class HardcodedFixedFloorTables:
         lst = []
         for i in range(block.begin, block.end, 12):
             lst.append(MonsterSpawnStats(
-                read_uintle(overlay10, i + 0x00, 2),
-                read_uintle(overlay10, i + 0x02, 2),
-                read_uintle(overlay10, i + 0x04, 2),
-                read_uintle(overlay10, i + 0x06, 1),
-                read_uintle(overlay10, i + 0x07, 1),
-                read_uintle(overlay10, i + 0x08, 1),
-                read_uintle(overlay10, i + 0x09, 1),
-                read_uintle(overlay10, i + 0x0A, 2)
+                read_u16(overlay10, i + 0x00),
+                read_u16(overlay10, i + 0x02),
+                read_u16(overlay10, i + 0x04),
+                read_u8(overlay10, i + 0x06),
+                read_u8(overlay10, i + 0x07),
+                read_u8(overlay10, i + 0x08),
+                read_u8(overlay10, i + 0x09),
+                read_u16(overlay10, i + 0x0A)
             ))
         return lst
 
@@ -407,15 +438,15 @@ class HardcodedFixedFloorTables:
         lst = []
         for i in range(block.begin, block.end, 12):
             lst.append(FixedFloorProperties(
-                read_uintle(overlay10, i + 0x00, 4),
-                bool(read_uintle(overlay10, i + 0x04, 1)),
-                bool(read_uintle(overlay10, i + 0x05, 1)),
-                bool(read_uintle(overlay10, i + 0x06, 1)),
-                bool(read_uintle(overlay10, i + 0x07, 1)),
-                bool(read_uintle(overlay10, i + 0x08, 1)),
-                bool(read_uintle(overlay10, i + 0x09, 1)),
-                bool(read_uintle(overlay10, i + 0x0A, 1)),
-                read_uintle(overlay10, i + 0x0B, 1)
+                read_u32(overlay10, i + 0x00),
+                bool(read_u8(overlay10, i + 0x04)),
+                bool(read_u8(overlay10, i + 0x05)),
+                bool(read_u8(overlay10, i + 0x06)),
+                bool(read_u8(overlay10, i + 0x07)),
+                bool(read_u8(overlay10, i + 0x08)),
+                bool(read_u8(overlay10, i + 0x09)),
+                bool(read_u8(overlay10, i + 0x0A)),
+                read_u8(overlay10, i + 0x0B)
             ))
         return lst
 
@@ -429,18 +460,18 @@ class HardcodedFixedFloorTables:
                  config.binaries['overlay/overlay_0010.bin'].symbols['FixedFloorProperties'], 12)
 
     @classmethod
-    def get_fixed_floor_overrides(cls, overlay29: bytes, config: Pmd2Data) -> List[int]:
+    def get_fixed_floor_overrides(cls, overlay29: bytes, config: Pmd2Data) -> List[u8]:
         """
         Returns the list of overrides for fixed floors.
         """
         block = config.binaries['overlay/overlay_0029.bin'].symbols['FixedFloorOverrides']
         lst = []
         for i in range(block.begin, block.end):
-            lst.append(read_uintle(overlay29, i, 1))
+            lst.append(read_u8(overlay29, i))
         return lst
 
     @classmethod
-    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: List[int], config: Pmd2Data) -> None:
+    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: List[u8], config: Pmd2Data) -> None:
         """
         Sets the list of overrides for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_overrides).

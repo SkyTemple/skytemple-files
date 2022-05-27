@@ -18,6 +18,7 @@
 from typing import Callable, Dict, List, Set
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
@@ -30,7 +31,6 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x3F76C
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3500F67
 PATCH_CHECK_ADDR_APPLIED_EU = 0x3F88C
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE3500F67
-
 
 START_OV29_US = 0x022DC240
 START_TABLE_US = 0x0231B9AC
@@ -72,9 +72,13 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED_US
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED_US
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED_EU
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED_EU
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -92,53 +96,54 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                     start_m_functions = START_M_FUNC_EU
                     end_m_functions = END_M_FUNC_EU
                     data_seg = DATA_SEG_EU
-            
+
             main_func = dict()
 
             data = rom.loadArm9Overlays([29])[29].data
-            
-            switch = AsmFunction(data[start_table-start_ov29:start_m_functions-start_ov29], start_table)
+
+            switch = AsmFunction(data[start_table - start_ov29:start_m_functions - start_ov29], start_table)
             ext_data = switch.process()[1]
             lst_data = {}
             data_processed = set()
             for offset in ext_data:
                 code = 0
                 for x in range(4):
-                    code += data[offset-start_ov29+x]*(256**x)
+                    code += data[offset - start_ov29 + x] * (256 ** x)
                 lst_data[offset] = code
                 data_processed.add(offset)
             switch.provide_data(lst_data)
-            main_calls = switch.process_switch(0, (0,1400), {})
-            
+            main_calls = switch.process_switch(0, (0, 1400), {})
+
             unique_main_calls = set(main_calls)
             unique_main_calls.add(data_seg)
             unique_main_calls = list(sorted(unique_main_calls))
             unique_main_calls.append(end_m_functions)
 
-            for i in range(len(unique_main_calls)-1):
-                if unique_main_calls[i]!=data_seg:
+            for i in range(len(unique_main_calls) - 1):
+                if unique_main_calls[i] != data_seg:
                     start = unique_main_calls[i]
-                    end = unique_main_calls[i+1]
-                    func_data = data[start-start_ov29:end-start_ov29]
+                    end = unique_main_calls[i + 1]
+                    func_data = data[start - start_ov29:end - start_ov29]
                     main_func[start] = AsmFunction(func_data, start)
                     ext_data = main_func[start].process()[1]
-                    if i>=len(unique_main_calls)-3:
-                        new_baddr = (end_m_functions-len(func_data)-start_m_functions-0x8)//0x4
-                        if new_baddr<0:
-                            new_baddr += 2*0x800000
-                        main_func[start].add_instructions(bytes([new_baddr%256, (new_baddr//256)%256, (new_baddr//65536)%256, 0xEA]))
+                    if i >= len(unique_main_calls) - 3:
+                        new_baddr = (end_m_functions - len(func_data) - start_m_functions - 0x8) // 0x4
+                        if new_baddr < 0:
+                            new_baddr += 2 * 0x800000
+                        main_func[start].add_instructions(
+                            bytes([new_baddr % 256, (new_baddr // 256) % 256, (new_baddr // 65536) % 256, 0xEA]))
                     lst_data = {}
                     for offset in ext_data:
                         code = 0
                         for x in range(4):
-                            code += data[offset-start_ov29+x]*(256**x)
+                            code += data[offset - start_ov29 + x] * (256 ** x)
                         lst_data[offset] = code
                         data_processed.add(offset)
                     main_func[start].provide_data(lst_data)
 
             nb_items = len(main_calls)
-            header = bytearray(4+2*nb_items+len(main_func)*8)
-            write_uintle(header, 4+2*nb_items, 0, 4)
+            header = bytearray(4 + 2 * nb_items + len(main_func) * 8)
+            write_u32(header, u32_checked(4 + 2 * nb_items), 0)
             code_data = bytearray(0)
             current_ptr = len(header)
             id_codes = dict()
@@ -147,13 +152,13 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                 x = t[1]
                 id_codes[k] = i
                 fdata = bytearray(x.compile(start_m_functions))
-                write_uintle(header, current_ptr, 4+2*nb_items+i*8, 4)
-                write_uintle(header, len(fdata), 4+2*nb_items+i*8+4, 4)
+                write_u32(header, u32_checked(current_ptr), 4 + 2 * nb_items + i * 8)
+                write_u32(header, u32_checked(len(fdata)), 4 + 2 * nb_items + i * 8 + 4)
                 code_data += fdata
-                
+
                 current_ptr += len(fdata)
             for i, x in enumerate(main_calls):
-                write_uintle(header, id_codes[x], 4+2*i, 2)
+                write_u16(header, u16(id_codes[x]), 4 + 2 * i)
             file_data = header + code_data
             if ITEM_CODE_PATH not in rom.filenames:
                 create_file_in_rom(rom, ITEM_CODE_PATH, file_data)
@@ -164,6 +169,5 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

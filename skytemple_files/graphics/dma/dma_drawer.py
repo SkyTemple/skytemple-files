@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import itertools
 from random import choice
-from typing import List, Optional, Union, Iterable
+from typing import List, Optional, Union, Iterable, Sequence
 
 from PIL import Image
 

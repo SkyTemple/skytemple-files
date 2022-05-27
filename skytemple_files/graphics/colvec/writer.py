@@ -34,11 +34,11 @@ class ColvecWriter:
             palette_buffer = bytearray(COLVEC_DATA_LEN)
             j = 0
             for i, p in enumerate(colormap):
-                write_uintle(palette_buffer, p, j)
+                write_u8(palette_buffer, u8(p), j)
                 j += 1
                 if i % 3 == 2:
                     # Insert the fourth color
-                    write_uintle(palette_buffer, 0xff, j)
+                    write_u8(palette_buffer, u8(0xff), j)
                     j += 1
             assert j == len(palette_buffer)
             buffer += palette_buffer

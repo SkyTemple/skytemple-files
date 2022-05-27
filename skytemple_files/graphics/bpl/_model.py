@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
 
 from skytemple_files.graphics.bpl import BPL_PAL_LEN, BPL_MAX_PAL, BPL_PAL_ENTRY_LEN, BPL_PAL_SIZE, \
     BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
@@ -22,7 +23,7 @@ from skytemple_files.common.util import *
 
 
 class BplAnimationSpec(BplAnimationSpecProtocol):
-    def __init__(self, duration_per_frame: int, number_of_frames: int) -> None:
+    def __init__(self, duration_per_frame: u16, number_of_frames: u16) -> None:
         self.duration_per_frame = duration_per_frame
         self.number_of_frames = number_of_frames
 
@@ -35,11 +36,11 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.number_palettes = read_uintle(data, 0, 2)
+        self.number_palettes = read_u16(data, 0)
 
         # The second 2 byte value should just be a boolean
         #assert 0 <= read_bytes(data, 2, 2).uintle <= 1
-        self.has_palette_animation = read_uintle(data, 2, 2) > 0
+        self.has_palette_animation = read_u16(data, 2) > 0
 
         # Read palettes:
         pal_end = 4 + (self.number_palettes * BPL_PAL_SIZE)
@@ -75,8 +76,8 @@ class Bpl(BplProtocol[BplAnimationSpec]):
             cit_end = pal_end + self.number_palettes * BPL_COL_INDEX_ENTRY_LEN
             for entry in iter_bytes(data, BPL_COL_INDEX_ENTRY_LEN, pal_end, cit_end):
                 self.animation_specs.append(BplAnimationSpec(
-                    duration_per_frame=read_uintle(entry, 0, 2),
-                    number_of_frames=read_uintle(entry, 2, 2)
+                    duration_per_frame=read_u16(entry, 0),
+                    number_of_frames=read_u16(entry, 2)
                 ))
 
             # Read color table 2
@@ -97,7 +98,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         """
         assert len(palettes) <= BPL_MAX_PAL
         nb_pal_old = self.number_palettes
-        self.number_palettes = len(palettes)
+        self.number_palettes = u16_checked(len(palettes))
         self.palettes = palettes
         if self.has_palette_animation:
             if self.number_palettes < nb_pal_old:
@@ -107,7 +108,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
                 # Add missing spec entries
                 for _ in range(nb_pal_old, self.number_palettes):
                     self.animation_specs.append(BplAnimationSpec(
-                        duration_per_frame=0, number_of_frames=0
+                        duration_per_frame=u16(0), number_of_frames=u16(0)
                     ))
 
     def apply_palette_animations(self, frame: int) -> List[List[int]]:
@@ -147,6 +148,6 @@ class Bpl(BplProtocol[BplAnimationSpec]):
     def set_palettes(self, palettes: List[List[int]]) -> None:
         """Sets the palette properly, adding dummy grayscale entries if needed. """
         self.palettes = palettes
-        self.number_palettes = len(palettes)
-        while len(self.palettes)< BPL_MAX_PAL:
-            self.palettes.append([(i//3) * BPL_MAX_PAL for i in range(BPL_MAX_PAL * 3)])
+        self.number_palettes = u16_checked(len(palettes))
+        while len(self.palettes) < BPL_MAX_PAL:
+            self.palettes.append([(i // 3) * BPL_MAX_PAL for i in range(BPL_MAX_PAL * 3)])

@@ -15,11 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Optional, Tuple
+from typing import cast
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel, Pmd2ScriptLevelMapType
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle
+from skytemple_files.common.util import *
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, FixedBin
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
@@ -31,8 +31,13 @@ from skytemple_files.graphics.dpla.model import Dpla
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
-class GroundTilesetMapping(AutoString):
-    def __init__(self, ground_level: int, dungeon_tileset: int, floor_id: int, unk3: int):
+class GroundTilesetMapping(AutoString, CheckedIntWrites):
+    ground_level: i16
+    dungeon_tileset: u8
+    floor_id: u8
+    unk3: u32
+
+    def __init__(self, ground_level: i16, dungeon_tileset: u8, floor_id: u8, unk3: u32):
         self.ground_level = ground_level
         self.dungeon_id = dungeon_tileset
         self.floor_id = floor_id
@@ -40,11 +45,11 @@ class GroundTilesetMapping(AutoString):
 
     # Compat
     @property
-    def unk2(self) -> int:
+    def unk2(self) -> u8:
         return self.floor_id
 
     @unk2.setter
-    def unk2(self, value: int) -> None:
+    def unk2(self, value: u8) -> None:
         self.floor_id = value
 
     def __eq__(self, other: object) -> bool:
@@ -70,10 +75,10 @@ class HardcodedGroundDungeonTilesets:
         lst = []
         for i in range(block.begin, block.end, 8):
             lst.append(GroundTilesetMapping(
-                read_sintle(overlay11bin, i, 2),
-                read_uintle(overlay11bin, i + 2, 1),
-                read_uintle(overlay11bin, i + 3, 1),
-                read_uintle(overlay11bin, i + 4, 4),
+                read_i16(overlay11bin, i),
+                read_u8(overlay11bin, i + 2),
+                read_u8(overlay11bin, i + 3),
+                read_u32(overlay11bin, i + 4),
             ))
         return lst
 
@@ -111,11 +116,11 @@ def resolve_mapping_for_level(
     mappa_idx = dungeons[dungeon_id].mappa_index
     start_offset = dungeons[dungeon_id].start_after
     length = dungeons[dungeon_id].number_floors
-    floor_id = min(length - 1, floor_id)
+    floor_id = cast(u8, min(length - 1, floor_id))  # type: ignore
     layout = mappa.floor_lists[mappa_idx][start_offset + floor_id].layout
     tileset_id = layout.tileset_id
     if tileset_id > 169:
-        tileset_id = 0
+        tileset_id = u8(0)
     dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
     dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
     dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')

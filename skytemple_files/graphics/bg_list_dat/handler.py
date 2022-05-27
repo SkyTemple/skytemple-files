@@ -34,7 +34,7 @@ class BgListDatHandler(HybridDataHandler[BgListProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BgListProtocol]:
-        from skytemple_rust.st_bg_list_dat import BgList
+        from skytemple_rust.st_bg_list_dat import BgList  # pylint: disable=no-name-in-module,no-member,import-error
         return BgList
 
     @classmethod
@@ -44,13 +44,13 @@ class BgListDatHandler(HybridDataHandler[BgListProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBgList']]:  # type: ignore
-        from skytemple_rust.st_bg_list_dat import BgListWriter
+        from skytemple_rust.st_bg_list_dat import BgListWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BgListWriter
 
     @classmethod
     def get_entry_model_cls(cls) -> Type[BgListEntryProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bg_list_dat import BgListEntry as BgListEntryNative
+            from skytemple_rust.st_bg_list_dat import BgListEntry as BgListEntryNative  # pylint: disable=no-name-in-module,no-member,import-error
             return BgListEntryNative
         from skytemple_files.graphics.bg_list_dat._model import BgListEntry
         return BgListEntry

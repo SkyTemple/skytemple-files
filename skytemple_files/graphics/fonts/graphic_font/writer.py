@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u8_checked, u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
@@ -32,12 +33,12 @@ class GraphicFontWriter:
         # Font Data
         for i, e in enumerate(self.model.entries):
             if e:
-                write_uintle(buffer, e.width, i*GRAPHIC_FONT_ENTRY_LEN+0x00)
-                write_uintle(buffer, e.height, i*GRAPHIC_FONT_ENTRY_LEN+0x01)
-                write_uintle(buffer, len(buffer), i*GRAPHIC_FONT_ENTRY_LEN+0x02, 2)
+                write_u8(buffer, u8_checked(e.width), i*GRAPHIC_FONT_ENTRY_LEN+0x00)
+                write_u8(buffer, u8_checked(e.height), i*GRAPHIC_FONT_ENTRY_LEN+0x01)
+                write_u16(buffer, u16_checked(len(buffer)), i*GRAPHIC_FONT_ENTRY_LEN+0x02)
                 data_raw = e.tobytes("raw", "P")
                 buffer += bytearray(data_raw)
             else:
-                write_uintle(buffer, 0xffff0000, i*GRAPHIC_FONT_ENTRY_LEN+0x00, 4)
+                write_u32(buffer, u32(0xffff0000), i*GRAPHIC_FONT_ENTRY_LEN+0x00)
 
         return buffer

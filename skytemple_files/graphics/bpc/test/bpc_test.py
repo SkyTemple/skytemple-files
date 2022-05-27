@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import typing
 
+from range_typed_integers import u16
+
 from skytemple_files.common.tiled_image import TilemapEntry
 from skytemple_files.common.util import chunks
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
@@ -100,9 +102,9 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         # two layer -> one layer
         self.two_layers1.number_of_layers = 1
         self.two_layers1.layers = [self.two_layers1.layers[0]]
-        self.two_layers1.layers[0].bpas = [1, 2, 10, 20]
-        self.two_layers1.layers[0].number_tiles = 1  # without null tile
-        self.two_layers1.layers[0].chunk_tilemap_len = 2  # with null chunk
+        self.two_layers1.layers[0].bpas = [u16(1), u16(2), u16(10), u16(20)]
+        self.two_layers1.layers[0].number_tiles = u16(1)  # without null tile
+        self.two_layers1.layers[0].chunk_tilemap_len = u16(2)  # with null chunk
         self.two_layers1.layers[0].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.two_layers1.layers[0].tilemap = [TilemapEntry(0, False, False, 0)] * 2 * 9
         saved = self._save_and_reload_main_fixture(self.two_layers1)
@@ -117,14 +119,14 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         # one layer -> two layer
         self.single_layer1.number_of_layers = 2
         self.single_layer1.layers = [self.single_layer1.layers[0], self.two_layers2.layers[1]]
-        self.single_layer1.layers[0].bpas = [1, 2, 10, 20]
-        self.single_layer1.layers[0].number_tiles = 1  # without null tile
-        self.single_layer1.layers[0].chunk_tilemap_len = 2  # with null chunk
+        self.single_layer1.layers[0].bpas = [u16(1), u16(2), u16(10), u16(20)]
+        self.single_layer1.layers[0].number_tiles = u16(1)  # without null tile
+        self.single_layer1.layers[0].chunk_tilemap_len = u16(2)  # with null chunk
         self.single_layer1.layers[0].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.single_layer1.layers[0].tilemap = [TilemapEntry(0, False, False, 0)] * 2 * 9
-        self.single_layer1.layers[1].bpas = [0, 1, 0, 123]
-        self.single_layer1.layers[1].number_tiles = 2  # without null tile
-        self.single_layer1.layers[1].chunk_tilemap_len = 1  # with null chunk
+        self.single_layer1.layers[1].bpas = [u16(0), u16(1), u16(0), u16(123)]
+        self.single_layer1.layers[1].number_tiles = u16(2)  # without null tile
+        self.single_layer1.layers[1].chunk_tilemap_len = u16(1)  # with null chunk
         self.single_layer1.layers[1].tiles = [bytearray(NULL_TILE), bytearray(NULL_TILE), bytearray(NULL_TILE)]
         self.single_layer1.layers[1].tilemap = [TilemapEntry(0, False, False, 0)] * 1 * 9
         saved = self._save_and_reload_main_fixture(self.single_layer1)
@@ -236,7 +238,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             )
 
         # We don't have this BPA mocked
-        self.single_layer2.layers[0].bpas = [0] * 4
+        self.single_layer2.layers[0].bpas = [u16(0)] * 4
         for iimg, img in enumerate(self.single_layer2.chunks_animated_to_pil(0, SIMPLE_DUMMY_PALETTE, self._bpas, 1)):
             self.assertImagesEqual(
                 self._fix_path_expected(["chunks_animated_to_pil", "single_layer2", "0", f"{iimg}.png"]),
@@ -255,7 +257,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             )
 
         # We don't have this BPA mocked
-        self.two_layers2.layers[1].bpas = [0] * 4
+        self.two_layers2.layers[1].bpas = [u16(0)] * 4
         for iimg, img in enumerate(self.two_layers2.chunks_animated_to_pil(0, SIMPLE_DUMMY_PALETTE, self._bpas, 1)):
             self.assertImagesEqual(
                 self._fix_path_expected(["chunks_animated_to_pil", "two_layers2", "0", f"{iimg}.png"]),
@@ -276,7 +278,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
                 )
 
         # We don't have this BPA mocked
-        self.single_layer2.layers[0].bpas = [0] * 4
+        self.single_layer2.layers[0].bpas = [u16(0)] * 4
         for i in range(0, 1880):
             for iimg, img in enumerate(self.single_layer2.single_chunk_animated_to_pil(0, i, SIMPLE_DUMMY_PALETTE, self._bpas)):
                 self.assertImagesEqual(
@@ -298,7 +300,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
                 )
 
         # We don't have this BPA mocked
-        self.two_layers2.layers[1].bpas = [0] * 4
+        self.two_layers2.layers[1].bpas = [u16(0)] * 4
         for i in range(0, 1080):
             for iimg, img in enumerate(self.two_layers2.single_chunk_animated_to_pil(0, i, SIMPLE_DUMMY_PALETTE, self._bpas)):
                 self.assertImagesEqual(
@@ -496,7 +498,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         def clone(t: TilemapEntry) -> TilemapEntry:
             return TilemapEntry.from_int(t.to_int())
 
-        null_chunk = [TilemapEntry.from_int(0) for _ in range(0, 9)]
+        null_chunk = [TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]
         dummy_mappings = [
             TilemapEntry(1, False, True, 0),
             TilemapEntry(2, True, False, 1),
@@ -610,12 +612,12 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         self.assertEqual(2, saved.number_of_layers)
 
     def test_process_bpa_change(self) -> None:
-        self.two_layers1.layers[0].bpas = [50, 60, 0, 100]
-        self.two_layers1.layers[1].bpas = [10, 20, 30, 40]
+        self.two_layers1.layers[0].bpas = [u16(50), u16(60), u16(0), u16(100)]
+        self.two_layers1.layers[1].bpas = [u16(10), u16(20), u16(30), u16(40)]
         self.two_layers1.layers[0].tiles = [bytearray()] * 10
         self.two_layers1.layers[1].tiles = [bytearray()] * 20
-        self.two_layers1.layers[0].number_tiles = 10
-        self.two_layers1.layers[1].number_tiles = 20
+        self.two_layers1.layers[0].number_tiles = u16(10)
+        self.two_layers1.layers[1].number_tiles = u16(20)
         self.two_layers1.layers[0].tilemap = [
             TilemapEntry(5, False, False, 0),
             TilemapEntry(55, False, False, 0),
@@ -633,7 +635,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ]
 
-        self.two_layers1.process_bpa_change(0, 10)
+        self.two_layers1.process_bpa_change(u16(0), u16(10))
         self.assertEqual([10, 60, 0, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([10, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -653,7 +655,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(0, 100)
+        self.two_layers1.process_bpa_change(u16(0), u16(100))
         self.assertEqual([100, 60, 0, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([10, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -673,7 +675,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(1, 100)
+        self.two_layers1.process_bpa_change(u16(1), u16(100))
         self.assertEqual([100, 100, 0, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([10, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -693,7 +695,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(1, 10)
+        self.two_layers1.process_bpa_change(u16(1), u16(10))
         self.assertEqual([100, 10, 0, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([10, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -713,7 +715,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(2, 100)
+        self.two_layers1.process_bpa_change(2, u16(100))
         self.assertEqual([100, 10, 100, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([10, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -733,7 +735,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(41, False, False, 0),
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(4, 100)
+        self.two_layers1.process_bpa_change(4, u16(100))
         self.assertEqual([100, 10, 100, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([100, 20, 30, 40], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -753,7 +755,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(131, False, False, 0)
         ], self.two_layers1.layers[1].tilemap)
 
-        self.two_layers1.process_bpa_change(7, 100)
+        self.two_layers1.process_bpa_change(7, u16(100))
         self.assertEqual([100, 10, 100, 100], self.two_layers1.layers[0].bpas)
         self.assertEqual([100, 20, 30, 100], self.two_layers1.layers[1].bpas)
         assert_tilemap_lists_equal([
@@ -773,7 +775,7 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
             TilemapEntry(131, False, False, 0)
         ], self.two_layers1.layers[1].tilemap)
 
-    def     test_metadata(self) -> None:
+    def test_metadata(self) -> None:
         # single_layer21
         self.assertEqual(1, self.single_layer1.number_of_layers)
         self.assertEqual(3, self.single_layer1.tiling_width)

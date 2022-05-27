@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_uintle
+from skytemple_files.common.util import read_u8
 from skytemple_files.compression.generic_nrl import CMD_ZERO_OUT, CMD_COPY_BYTES, CMD_FILL_OUT
 
 
@@ -115,7 +115,7 @@ class GenericNrlCompressor:
             raise ValueError("Generic NRL Compressor: Reached EOF while reading data.")
         oc = self.cursor
         self.cursor += cursor_process_multiplier
-        return read_uintle(self.uncompressed_data, oc)
+        return read_u8(self.uncompressed_data, oc)
 
     def _write(self, data):
         """Writes to the output as byte"""
@@ -128,9 +128,9 @@ class GenericNrlCompressor:
         """Look how often the byte in the input data repeats, up to NRL_LOOKAHEAD_MAX_BYTES"""
         nc = self.cursor
         repeats = 0
-        while read_uintle(self.uncompressed_data, nc) == data and \
-                repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES and \
-                nc < self.length_input:
+        while nc < self.length_input and \
+                read_u8(self.uncompressed_data, nc) == data and \
+                repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES:
             repeats += 1
             nc += cursor_process_multiplier
         return repeats
@@ -143,8 +143,8 @@ class GenericNrlCompressor:
         repeat_counter = 0
         previous_byt_at_pos = 0x100  # Impossible "null" value for now
         nc = self.cursor
-        while True:
-            byt_at_pos = read_uintle(self.uncompressed_data, nc)
+        while nc >= self.length_input:
+            byt_at_pos = read_u8(self.uncompressed_data, nc)
             if byt_at_pos == previous_byt_at_pos:
                 repeat_counter += 1
             else:

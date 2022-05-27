@@ -31,8 +31,11 @@ MOVE_COUNT = 559
 MOVE_ENTRY_BYTELEN = 26
 
 
-class LevelUpMove(AutoString):
-    def __init__(self, move_id: int, level_id: int):
+class LevelUpMove(AutoString, CheckedIntWrites):
+    move_id: u16
+    level_id: u16
+
+    def __init__(self, move_id: u16, level_id: u16):
         self.move_id = move_id
         self.level_id = level_id
 
@@ -42,8 +45,12 @@ class LevelUpMove(AutoString):
         return self.move_id == other.move_id and self.level_id == other.level_id
 
 
-class MoveLearnset(AutoString):
-    def __init__(self, level_up_moves: List[LevelUpMove], tm_hm_moves: List[int], egg_moves: List[int]):
+class MoveLearnset(AutoString, CheckedIntWrites):
+    level_up_moves: List[LevelUpMove]
+    tm_hm_moves: Sequence[u32]
+    egg_moves: Sequence[u32]
+
+    def __init__(self, level_up_moves: List[LevelUpMove], tm_hm_moves: Sequence[u32], egg_moves: Sequence[u32]):
         self.level_up_moves = level_up_moves
         self.tm_hm_moves = tm_hm_moves
         self.egg_moves = egg_moves
@@ -206,7 +213,7 @@ class WazaMoveRangeCondition(Enum):
 
 class WazaMoveRangeSettings(AutoString):
     def __init__(self, data: Union[memoryview, bytes]):
-        val = read_uintle(data, 0, 2)
+        val = read_u16(data, 0)
         n4, n3, n2, n1 = val >> 12 & 0xf, val >> 8 & 0xf, val >> 4 & 0xf, val & 0xf
         self.target = WazaMoveRangeTarget(int(n1))  # type: ignore
         self.range = WazaMoveRangeRange(int(n2))  # type: ignore
@@ -225,79 +232,101 @@ class WazaMoveRangeSettings(AutoString):
                self.unused == other.unused
 
 
-class WazaMove(AutoString):
+class WazaMove(AutoString, CheckedIntWrites):
+    base_power: u16
+    type: PokeType
+    category: WazaMoveCategory
+    settings_range: WazaMoveRangeSettings
+    settings_range_ai: WazaMoveRangeSettings
+    base_pp: u8
+    ai_weight: u8
+    miss_accuracy: u8
+    accuracy: u8
+    ai_condition1_chance: u8
+    number_chained_hits: u8
+    max_upgrade_level: u8
+    crit_chance: u8
+    affected_by_magic_coat: bool
+    is_snatchable: bool
+    uses_mouth: bool
+    unk13: u8
+    ignores_taunted: bool
+    unk15: u8
+    move_id: u16
+    message_id: u8
+    
     def __init__(self, data: Union[memoryview, bytes]):
         # 0x00	2	uint16	Base Power	The base power of the move.
-        self.base_power = read_uintle(data, 0x00, 2)
+        self.base_power = read_u16(data, 0x00)
         # 0x02	1	uint8	Type	The type of the move.
-        self.type = PokeType(read_uintle(data, 0x02))
+        self.type = PokeType(read_u8(data, 0x02))
         # 0x03	1	uint8	Category	What kind of move is it.
-        self.category = WazaMoveCategory(read_uintle(data, 0x03))  # type: ignore
+        self.category = WazaMoveCategory(read_u8(data, 0x03))  # type: ignore
         # 0x04	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Actual values.
         self.settings_range = WazaMoveRangeSettings(data[0x04:0x06])
-        assert read_uintle(data, 0x04, 2) == int(self.settings_range)
+        assert read_u16(data, 0x04) == int(self.settings_range)
         # 0x06	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Settings for AI calculation.
         self.settings_range_ai = WazaMoveRangeSettings(data[0x06:0x08])
         # 0x08	1	uint8	Base PPs	The base amount of PP for the move.
-        self.base_pp = read_uintle(data, 0x08)
+        self.base_pp = read_u8(data, 0x08)
         # 0x09	1	uint8	Unk#6	Possibly move weight to specify how likely the AI will use the move.
-        self.ai_weight = read_uintle(data, 0x09)
+        self.ai_weight = read_u8(data, 0x09)
         # 0x0A	1	uint8	Unk#7	Possibly secondary accuracy value.
         # A different message will be shown if this accuracy test fails.
-        self.miss_accuracy = read_uintle(data, 0x0A)
+        self.miss_accuracy = read_u8(data, 0x0A)
         # 0x0B	1	uint8	Move Accuracy
         # The percentage indicating the chances the move will succeed.
         # 100 is perfect accuracy. Anything higher than 100 is a never-miss move.
-        self.accuracy = read_uintle(data, 0x0B)
+        self.accuracy = read_u8(data, 0x0B)
         # 0x0C	1	uint8	Unk#9	Unknown.
-        self.ai_condition1_chance = read_uintle(data, 0x0C)
+        self.ai_condition1_chance = read_u8(data, 0x0C)
         # 0x0D	1	uint8	Unk#10	Possibly the number of times a move hits in a row.
-        self.number_chained_hits = read_uintle(data, 0x0D)
+        self.number_chained_hits = read_u8(data, 0x0D)
         # 0x0E	1	uint8	Unk#11	Max number of time the move can be powered up.
-        self.max_upgrade_level = read_uintle(data, 0x0E)
+        self.max_upgrade_level = read_u8(data, 0x0E)
         # 0x0F	1	uint8	Unk#12	Critical hit chance. 60 is apparently pretty much guaranteed crit.
-        self.crit_chance = read_uintle(data, 0x0F)
+        self.crit_chance = read_u8(data, 0x0F)
         # 0x10	1	uint8	Unk#13	Boolean, whether the move is affected by magic coat.
-        self.affected_by_magic_coat = bool(read_uintle(data, 0x10))
+        self.affected_by_magic_coat = bool(read_u8(data, 0x10))
         # 0x11	1	uint8	Unk#14	Boolean, whether the move is affected by snatch.
-        self.is_snatchable = bool(read_uintle(data, 0x11))
+        self.is_snatchable = bool(read_u8(data, 0x11))
         # 0x12	1	uint8	Unk#15	Boolean, whether the move is disabled by the "muzzled" status.
-        self.uses_mouth = bool(read_uintle(data, 0x12))
+        self.uses_mouth = bool(read_u8(data, 0x12))
         # 0x13	1	uint8	Unk#16	Unknown.
-        self.unk13 = read_uintle(data, 0x13)
+        self.unk13 = read_u8(data, 0x13)
         # 0x14	1	uint8	Unk#17	Boolean, whether the move can be used while taunted.
-        self.ignores_taunted = bool(read_uintle(data, 0x14))
+        self.ignores_taunted = bool(read_u8(data, 0x14))
         # 0x15	1	uint8	Unk#18	Unknown. Possible bitfield.
-        self.unk15 = read_uintle(data, 0x15)
+        self.unk15 = read_u8(data, 0x15)
         # 0x16	2	uint16	Move ID	The move's ID, possibly used by the game code for allocating resources and etc..
-        self.move_id = read_uintle(data, 0x16, 2)
+        self.move_id = read_u16(data, 0x16)
         # 0x18	1	uint8	Unk#19	Message ID offset that is displayed for the move.
         # 0 = Is default, higher values are added as string offset from the default string.
-        self.message_id = read_uintle(data, 0x18)
+        self.message_id = read_u8(data, 0x18)
 
     def to_bytes(self) -> bytes:
         data = bytearray(WAZA_MOVE_ENTRY_LEN)
-        write_uintle(data, self.base_power, 0, 2)
-        write_uintle(data, self.type.value, 2, 1)
-        write_uintle(data, self.category.value, 3, 1)
-        write_uintle(data, int(self.settings_range), 4, 2)
-        write_uintle(data, int(self.settings_range_ai), 6, 2)
-        write_uintle(data, self.base_pp, 8, 1)
-        write_uintle(data, self.ai_weight, 9, 1)
-        write_uintle(data, self.miss_accuracy, 10, 1)
-        write_uintle(data, self.accuracy, 11, 1)
-        write_uintle(data, self.ai_condition1_chance, 12, 1)
-        write_uintle(data, self.number_chained_hits, 13, 1)
-        write_uintle(data, self.max_upgrade_level, 14, 1)
-        write_uintle(data, self.crit_chance, 15, 1)
-        write_uintle(data, int(self.affected_by_magic_coat), 16, 1)
-        write_uintle(data, int(self.is_snatchable), 17, 1)
-        write_uintle(data, int(self.uses_mouth), 18, 1)
-        write_uintle(data, self.unk13, 19, 1)
-        write_uintle(data, int(self.ignores_taunted), 20, 1)
-        write_uintle(data, self.unk15, 21, 1)
-        write_uintle(data, self.move_id, 22, 2)
-        write_uintle(data, self.message_id, 24, 1)
+        write_u16(data, self.base_power, 0)
+        write_u8(data, self.type.value, 2)
+        write_u8(data, self.category.value, 3)
+        write_u16(data, u16(int(self.settings_range)), 4)
+        write_u16(data, u16(int(self.settings_range_ai)), 6)
+        write_u8(data, self.base_pp, 8)
+        write_u8(data, self.ai_weight, 9)
+        write_u8(data, self.miss_accuracy, 10)
+        write_u8(data, self.accuracy, 11)
+        write_u8(data, self.ai_condition1_chance, 12)
+        write_u8(data, self.number_chained_hits, 13)
+        write_u8(data, self.max_upgrade_level, 14)
+        write_u8(data, self.crit_chance, 15)
+        write_u8(data, u8(int(self.affected_by_magic_coat)), 16)
+        write_u8(data, u8(int(self.is_snatchable)), 17)
+        write_u8(data, u8(int(self.uses_mouth)), 18)
+        write_u8(data, self.unk13, 19)
+        write_u8(data, u8(int(self.ignores_taunted)), 20)
+        write_u8(data, self.unk15, 21)
+        write_u16(data, self.move_id, 22)
+        write_u8(data, self.message_id, 24)
         return bytes(data)
 
     def __eq__(self, other: object) -> bool:
@@ -331,8 +360,8 @@ class WazaP(Sir0Serializable, AutoString):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        move_data_pointer = read_uintle(data, waza_content_pointer, 4)
-        move_learnset_pointer = read_uintle(data, waza_content_pointer + 4, 4)
+        move_data_pointer = read_u32(data, waza_content_pointer)
+        move_learnset_pointer = read_u32(data, waza_content_pointer + 4)
 
         self.moves = list(self._read_moves(data[move_data_pointer:move_data_pointer+(MOVE_COUNT*MOVE_ENTRY_BYTELEN)]))
 
@@ -343,12 +372,12 @@ class WazaP(Sir0Serializable, AutoString):
                 break
             list_pointers = data[move_learnset_pointer+(i*12):move_learnset_pointer+((i+1)*12)]
             level_up = []
-            tm_hm = []
-            egg = []
+            tm_hm: Sequence[u32] = []
+            egg: Sequence[u32] = []
 
-            pointer_level_up = read_uintle(list_pointers, 0, 4)
-            pointer_tm_hm = read_uintle(list_pointers, 4, 4)
-            pointer_egg = read_uintle(list_pointers, 8, 4)
+            pointer_level_up = read_u32(list_pointers, 0)
+            pointer_tm_hm = read_u32(list_pointers, 4)
+            pointer_egg = read_u32(list_pointers, 8)
             if pointer_level_up == 0xAAAAAAAA or pointer_tm_hm == 0xAAAAAAAA or pointer_egg == 0xAAAAAAAA:
                 break
 
@@ -356,7 +385,7 @@ class WazaP(Sir0Serializable, AutoString):
             if pointer_level_up != 0:
                 level_up_raw = self._decode_ints(data, pointer_level_up)
                 for move_id, level_id in chunks(level_up_raw, 2):
-                    level_up.append(LevelUpMove(move_id, level_id))
+                    level_up.append(LevelUpMove(u16(move_id), u16(level_id)))
 
             # TM/HM Move data
             if pointer_tm_hm:
@@ -386,7 +415,7 @@ class WazaP(Sir0Serializable, AutoString):
         return self.learnsets == other.learnsets and self.moves == other.moves
 
     @staticmethod
-    def _decode_ints(data: bytes, pnt_start: int) -> List[int]:
+    def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pnt_start, False)
 
     def _read_moves(self, moves: Union[bytes, memoryview]) -> Iterable[WazaMove]:

@@ -33,7 +33,7 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BpcProtocol]:
-        from skytemple_rust.st_bpc import Bpc
+        from skytemple_rust.st_bpc import Bpc  # pylint: disable=no-name-in-module,no-member,import-error
         return Bpc
 
     @classmethod
@@ -43,7 +43,7 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpc']]:  # type: ignore
-        from skytemple_rust.st_bpc import BpcWriter
+        from skytemple_rust.st_bpc import BpcWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BpcWriter
 
     @classmethod

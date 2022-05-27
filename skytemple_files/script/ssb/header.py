@@ -81,14 +81,14 @@ class SsbHeaderUs(AbstractSsbHeader):
             return
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self._number_of_constants = read_uintle(data, 0x0, 2)
-        self._number_of_strings = read_uintle(data, 0x2, 2)
-        self._constant_strings_start = read_uintle(data, 0x4, 2) * 2
-        self._const_table_length = read_uintle(data, 0x6, 2) * 2
+        self._number_of_constants = read_u16(data, 0x0)
+        self._number_of_strings = read_u16(data, 0x2)
+        self._constant_strings_start = read_u16(data, 0x4) * 2
+        self._const_table_length = read_u16(data, 0x6) * 2
         self._string_table_lengths = OrderedDict({
-            LANG_EN: read_uintle(data, 0x8, 2) * 2
+            LANG_EN: read_u16(data, 0x8) * 2
         })
-        self._unknown = read_uintle(data, 0xA, 2)
+        self._unknown = read_u16(data, 0xA)
 
     @classmethod
     def supported_langs(cls):
@@ -130,16 +130,16 @@ class SsbHeaderEu(AbstractSsbHeader):
             return
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self._number_of_constants = read_uintle(data, 0x0, 2)
-        self._number_of_strings = read_uintle(data, 0x2, 2)
-        self._constant_strings_start = read_uintle(data, 0x4, 2) * 2
-        self._const_table_length = read_uintle(data, 0x6, 2) * 2
+        self._number_of_constants = read_u16(data, 0x0)
+        self._number_of_strings = read_u16(data, 0x2)
+        self._constant_strings_start = read_u16(data, 0x4) * 2
+        self._const_table_length = read_u16(data, 0x6) * 2
         self._string_table_lengths = OrderedDict({
-            LANG_EN: read_uintle(data, 0x8, 2) * 2,
-            LANG_FR: read_uintle(data, 0xA, 2) * 2,
-            LANG_DE: read_uintle(data, 0xC, 2) * 2,
-            LANG_IT: read_uintle(data, 0xE, 2) * 2,
-            LANG_SP: read_uintle(data, 0x10, 2) * 2
+            LANG_EN: read_u16(data, 0x8) * 2,
+            LANG_FR: read_u16(data, 0xA) * 2,
+            LANG_DE: read_u16(data, 0xC) * 2,
+            LANG_IT: read_u16(data, 0xE) * 2,
+            LANG_SP: read_u16(data, 0x10) * 2
         })
 
     @classmethod
@@ -178,12 +178,12 @@ class SsbHeaderJp(AbstractSsbHeader):
             return
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self._number_of_constants = read_uintle(data, 0x0, 2)
-        self._dummy = read_uintle(data, 0x2, 2)
-        self._constant_strings_start = read_uintle(data, 0x4, 2) * 2
-        self._const_table_length = read_uintle(data, 0x6, 2) * 2
-        self._dummy2 = read_uintle(data, 0x8, 2)
-        self._dummy3 = read_uintle(data, 0xA, 2)
+        self._number_of_constants = read_u16(data, 0x0)
+        self._dummy = read_u16(data, 0x2)
+        self._constant_strings_start = read_u16(data, 0x4) * 2
+        self._const_table_length = read_u16(data, 0x6) * 2
+        self._dummy2 = read_u16(data, 0x8)
+        self._dummy3 = read_u16(data, 0xA)
 
     @classmethod
     def supported_langs(cls):

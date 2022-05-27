@@ -14,12 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked, u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class Atupx(CommonAt):
+    length_compressed: u16
+    length_decompressed: u32
+
     def __init__(self, data: bytes=None):
         """
         Create a ATUPX container from already compressed data.
@@ -27,7 +31,7 @@ class Atupx(CommonAt):
         """
         if data:
             self.length_compressed = self.cont_size(data)
-            self.length_decompressed = read_uintle(data, 7, 4)
+            self.length_decompressed = read_u32(data, 7)
             self.compressed_data = data[0xb:]
 
     def decompress(self) -> bytes:
@@ -37,6 +41,7 @@ class Atupx(CommonAt):
         data = FileType.CUSTOM_999.decompress(self.compressed_data[:self.length_compressed - 0xb], self.length_decompressed)
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'ATUPX'\
@@ -46,7 +51,7 @@ class Atupx(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'Atupx':
@@ -57,6 +62,6 @@ class Atupx(CommonAt):
         compressed_data = FileType.CUSTOM_999.compress(data)
 
         new_container.compressed_data = compressed_data
-        new_container.length_decompressed = len(data)
-        new_container.length_compressed = len(compressed_data) + 0xb
+        new_container.length_decompressed = u32_checked(len(data))
+        new_container.length_compressed = u16_checked(len(compressed_data) + 0xb)
         return new_container

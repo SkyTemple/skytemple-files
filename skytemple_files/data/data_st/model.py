@@ -24,10 +24,10 @@ class DataST(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        limit = read_uintle(data, 0, 4)
+        limit = read_u32(data, 0)
         self.struct_ids = []
         for x in range(4, limit, 2):
-            self.struct_ids.append(read_sintle(data, x, 2))
+            self.struct_ids.append(read_i16(data, x))
         self.struct_data = bytes(data[limit:])
 
     def nb_struct_ids(self) -> int:
@@ -36,20 +36,19 @@ class DataST(AutoString):
     def get_item_struct_id(self, item_id: int) -> int:
         return self.struct_ids[item_id]
 
-    def set_item_struct_id(self, item_id: int, struct_id: int):
+    def set_item_struct_id(self, item_id: int, struct_id: i16):
         self.struct_ids[item_id] = struct_id
         
-    def add_item_struct_id(self, struct_id: int):
+    def add_item_struct_id(self, struct_id: i16):
         self.struct_ids.append(struct_id)
         
     def get_all_of(self, struct_id: int) -> List[int]:
         ids = []
         for i, x in enumerate(self.struct_ids):
-            if x==struct_id:
+            if x == struct_id:
                 ids.append(i)
         return ids
-    
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataST):
             return False

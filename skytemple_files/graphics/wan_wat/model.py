@@ -17,7 +17,7 @@
 from typing import List, Tuple
 
 from PIL import Image, ImageOps
-from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation, ImageBytes
+from skytemple_rust.pmd_wan import WanImage, MetaFrameGroup, MetaFrame, Animation, ImageBytes  # pylint: disable=no-name-in-module,no-member,import-error
 
 
 class MetaFramePositioningSpecs:
@@ -61,7 +61,7 @@ class MetaFramePositioningSpecs:
 
 class Wan:
     def __init__(self, data):
-        self.model: WanImage = WanImage(data)
+        self.model: WanImage = WanImage(data)  # type: ignore
 
     @property
     def frame_groups(self):

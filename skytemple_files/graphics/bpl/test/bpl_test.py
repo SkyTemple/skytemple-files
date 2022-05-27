@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import typing
 
+from range_typed_integers import u16
+
 from skytemple_files.graphics.bpl.handler import BplHandler
 from skytemple_files.graphics.bpl.protocol import BplProtocol, BplAnimationSpecProtocol
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
@@ -42,7 +44,7 @@ class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpe
         self.assertEqual([[0, 0, 0, 0, 132, 206, 0, 99, 181, 0, 107, 189, 49, 162, 221, 8, 107, 181, 16, 99, 189, 8, 99, 173, 33, 107, 197, 16, 99, 173, 47, 157, 224, 0, 107, 197, 0, 115, 197, 0, 123, 206, 0, 140, 214, 25, 90, 165], [0, 0, 0, 25, 90, 165, 33, 90, 140, 41, 82, 140, 41, 90, 140, 33, 82, 140, 33, 90, 148, 25, 90, 156, 41, 90, 140, 41, 90, 140, 33, 90, 148, 41, 90, 140, 33, 82, 140, 33, 90, 148, 16, 90, 156, 33, 90, 148], [0, 0, 0, 41, 90, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 66, 107, 132, 49, 90, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 99, 140, 58, 90, 140], [0, 0, 0, 58, 26, 42, 178, 146, 153, 128, 136, 149, 102, 90, 100, 85, 77, 89, 140, 148, 164, 66, 49, 63, 151, 117, 123, 193, 148, 148, 166, 173, 187, 148, 147, 159, 192, 143, 151, 206, 156, 156, 124, 104, 110, 149, 158, 173], [0, 0, 0, 66, 99, 132, 66, 99, 132, 58, 99, 140, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132, 66, 99, 132], [0, 0, 0, 98, 164, 255, 156, 197, 230, 197, 230, 255, 174, 215, 240, 136, 214, 255, 222, 239, 255, 123, 206, 255, 148, 230, 255, 206, 239, 255, 115, 189, 255, 132, 206, 255, 239, 247, 255, 140, 222, 255, 107, 181, 255, 123, 197, 255], [0, 0, 0, 66, 107, 140, 66, 107, 132, 82, 107, 132, 74, 107, 140, 82, 82, 99, 74, 107, 132, 82, 99, 123, 82, 74, 90, 82, 115, 132, 90, 82, 99, 82, 107, 123, 82, 74, 82, 82, 90, 111, 90, 90, 107, 90, 82, 90], [0, 0, 0, 58, 28, 44, 111, 115, 128, 156, 165, 181, 132, 140, 156, 155, 168, 176, 76, 68, 80, 140, 148, 164, 191, 146, 149, 169, 144, 149, 167, 175, 192, 148, 156, 173, 140, 156, 164, 92, 88, 100, 63, 45, 59, 124, 139, 147], [0, 0, 0, 58, 28, 44, 74, 107, 140, 66, 50, 62, 135, 142, 155, 82, 74, 82, 82, 115, 132, 82, 75, 92, 84, 105, 121, 90, 82, 90, 91, 102, 110, 151, 161, 175, 92, 79, 97, 96, 91, 101, 87, 93, 109, 111, 116, 126], [0, 0, 0, 30, 189, 229, 8, 156, 230, 10, 102, 181, 55, 159, 225, 0, 140, 214, 58, 167, 221, 2, 165, 222, 0, 132, 206, 0, 107, 197, 49, 123, 206, 0, 123, 206, 3, 176, 225, 54, 157, 226, 97, 186, 241, 33, 107, 197], [0, 0, 0, 74, 107, 140, 82, 82, 96, 74, 107, 132, 74, 107, 132, 82, 74, 82, 83, 104, 130, 90, 82, 90, 82, 107, 140, 82, 74, 90, 90, 90, 107, 82, 115, 132, 90, 82, 99, 83, 91, 108, 83, 106, 122, 90, 74, 90], [0, 0, 0, 58, 30, 46, 63, 42, 55, 70, 61, 72, 102, 109, 123, 91, 82, 90, 142, 151, 163, 186, 141, 145, 81, 113, 131, 92, 88, 100, 82, 74, 90, 82, 74, 82, 100, 91, 98, 58, 33, 41, 85, 88, 104, 93, 76, 92], [0, 0, 0, 10, 112, 175, 90, 156, 255, 41, 156, 222, 107, 173, 255, 123, 201, 252, 114, 181, 255, 172, 219, 251, 99, 165, 255, 0, 127, 207, 0, 107, 197, 114, 194, 253, 214, 242, 255, 8, 103, 176, 66, 156, 230, 112, 189, 253], [0, 0, 0, 64, 230, 249, 0, 169, 222, 140, 239, 247, 39, 195, 229, 0, 230, 239, 230, 255, 255, 58, 214, 247, 16, 197, 230, 64, 239, 232, 64, 230, 250, 64, 236, 237, 8, 181, 230, 49, 214, 239, 64, 244, 221, 64, 232, 246], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], self.two.palettes)
         self.assertEqual([], self.two.animation_palette)
         
-        self.one.number_palettes = len(SIMPLE_DUMMY_PALETTE) * 2
+        self.one.number_palettes = u16(len(SIMPLE_DUMMY_PALETTE) * 2)
         self.one.has_palette_animation = False
         self.one.palettes = list(SIMPLE_DUMMY_PALETTE + SIMPLE_DUMMY_PALETTE)
         self.one.animation_palette = []
@@ -52,12 +54,12 @@ class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpe
         self.assertEqual(SIMPLE_DUMMY_PALETTE + SIMPLE_DUMMY_PALETTE, saved.palettes)
         self.assertEqual([], saved.animation_palette)
 
-        self.two.number_palettes = len(SIMPLE_DUMMY_PALETTE)
+        self.two.number_palettes = u16(len(SIMPLE_DUMMY_PALETTE))
         self.two.has_palette_animation = True
         self.two.palettes = list(SIMPLE_DUMMY_PALETTE)
         self.two.animation_palette = [[3] * 45] + [[2] * 45] + [[1] * 45]
         self.two.animation_specs = [
-            self.handler.get_animation_spec_model_cls()(0, 0)
+            self.handler.get_animation_spec_model_cls()(u16(0), u16(0))
         ] * len(SIMPLE_DUMMY_PALETTE)
         saved = self._save_and_reload_main_fixture(self.two)
         self.assertEqual(len(SIMPLE_DUMMY_PALETTE), saved.number_palettes)
@@ -74,10 +76,10 @@ class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpe
         self.assertEqual(4, self.one.animation_specs[9].number_of_frames)
         self.assertEqual(20, self.one.animation_specs[9].duration_per_frame)
 
-        self.one.animation_specs[0].number_of_frames = 1
-        self.one.animation_specs[0].duration_per_frame = 2
-        self.one.animation_specs[9].number_of_frames = 3
-        self.one.animation_specs[9].duration_per_frame = 4
+        self.one.animation_specs[0].number_of_frames = u16(1)
+        self.one.animation_specs[0].duration_per_frame = u16(2)
+        self.one.animation_specs[9].number_of_frames = u16(3)
+        self.one.animation_specs[9].duration_per_frame = u16(4)
 
         saved = self._save_and_reload_main_fixture(self.one)
         

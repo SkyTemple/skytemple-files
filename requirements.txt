@@ -1,5 +1,6 @@
 ndspy==3.0.0
 pyyaml==6.0
+range-typed-integers==1.0.0
 Pillow==9.1.1
 appdirs==1.4.4
 explorerscript==0.1.1
@@ -11,4 +12,7 @@ types-Pillow==9.0.15
 types-PyYAML==6.0.7
 types-setuptools
 pytest
+pylint
+black
 parameterized
+typing_extensions >= 3.9; python_version < "3.9"

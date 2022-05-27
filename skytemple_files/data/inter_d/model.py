@@ -41,23 +41,30 @@ class InterDEntryType(Enum):
         self.explanation = explanation
 
 
-class InterDEntry(AutoString):
+class InterDEntry(AutoString, CheckedIntWrites):
+    floor: u8
+    continue_music: bool
+    ent_type: InterDEntryType
+    game_var_id: u16
+    param1: u8
+    param2: u8
+
     def __init__(self, data: bytes = bytes(6)):
-        floor_attrib = read_uintle(data, 0, 1)
-        self.floor = floor_attrib & 0x7F
+        floor_attrib = read_u8(data, 0)
+        self.floor = u8(floor_attrib & 0x7F)
         self.continue_music = bool(floor_attrib & 0x80)
-        self.ent_type = InterDEntryType(read_uintle(data, 1, 1))  # type: ignore
-        self.game_var_id = read_uintle(data, 2, 2)
-        self.param1 = read_uintle(data, 4, 1)
-        self.param2 = read_uintle(data, 5, 1)
+        self.ent_type = InterDEntryType(read_u8(data, 1))  # type: ignore
+        self.game_var_id = read_u16(data, 2)
+        self.param1 = read_u8(data, 4)
+        self.param2 = read_u8(data, 5)
 
     def to_bytes(self) -> bytes:
         data = bytearray(6)
-        write_uintle(data, (self.floor & 0x7F) + (int(self.continue_music)<<7), 0, 1)
-        write_uintle(data, self.ent_type.value, 1, 1)
-        write_uintle(data, self.game_var_id, 2, 2)
-        write_uintle(data, self.param1, 4, 1)
-        write_uintle(data, self.param2, 5, 1)
+        write_u8(data, u8((self.floor & 0x7F) + (int(self.continue_music) << 7)), 0)
+        write_u8(data, self.ent_type.value, 1)
+        write_u16(data, self.game_var_id, 2)
+        write_u8(data, self.param1, 4)
+        write_u8(data, self.param2, 5)
         return bytes(data)
 
 
@@ -66,10 +73,10 @@ class InterD(AutoString):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.list_dungeons: List[List[InterDEntry]] = []
-        limit = read_uintle(data, 0, 4)
-        prev = read_uintle(data, 4, 2)
+        limit = read_u32(data, 0)
+        prev = read_u16(data, 4)
         for x in range(6, limit, 2):
-            cur = read_uintle(data, x, 2)
+            cur = read_u16(data, x)
             self.list_dungeons.append([])
             for y in range(limit+prev*6, limit+cur*6, 6):
                 self.list_dungeons[-1].append(InterDEntry(data[y:y+6]))

@@ -17,23 +17,25 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List
 
+from range_typed_integers import u16, u8
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle
+from skytemple_files.common.util import read_u16, write_u16
 from skytemple_files.hardcoded.default_starters import HardcodedDefaultStarters
 
 
 class HardcodedPersonalityTestStarters:
     @staticmethod
-    def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> List[int]:
+    def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the monster.md indices of the partner starter choices (total index, with gender form!)"""
         block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersPartnerIds']
         ids = []
         for i in range(block.begin, block.end, 2):
-            ids.append(read_uintle(overlay13, i, 2))
+            ids.append(read_u16(overlay13, i))
         return ids
 
     @staticmethod
-    def set_partner_md_ids(value: List[int], overlay13: bytearray, config: Pmd2Data) -> None:
+    def set_partner_md_ids(value: List[u16], overlay13: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md indices of the partner starter choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_partner_md_ids).
@@ -43,19 +45,19 @@ class HardcodedPersonalityTestStarters:
         if len(value) != expected_length:
             raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
         for i, v in enumerate(value):
-            write_uintle(overlay13, v, block.begin + (i * 2), 2)
+            write_u16(overlay13, v, block.begin + (i * 2))
 
     @staticmethod
-    def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> List[int]:
+    def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the monster.md indices of the player starter choices (total index, with gender form!)"""
         block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersHeroIds']
         ids = []
         for i in range(block.begin, block.end, 2):
-            ids.append(read_uintle(overlay13, i, 2))
+            ids.append(read_u16(overlay13, i))
         return ids
 
     @staticmethod
-    def set_player_md_ids(value: List[int], overlay13: bytearray, config: Pmd2Data) -> None:
+    def set_player_md_ids(value: List[u16], overlay13: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md indices of the player partner choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_player_md_ids).
@@ -65,31 +67,31 @@ class HardcodedPersonalityTestStarters:
         if len(value) != expected_length:
             raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
         for i, v in enumerate(value):
-            write_uintle(overlay13, v, block.begin + (i * 2), 2)
+            write_u16(overlay13, v, block.begin + (i * 2))
 
     @staticmethod
-    def get_partner_level(arm9: bytes, config: Pmd2Data) -> int:
+    def get_partner_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the partner starter
         """
         return HardcodedDefaultStarters.get_partner_level(arm9, config)
 
     @staticmethod
-    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_partner_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the partner starter
         """
         return HardcodedDefaultStarters.set_partner_level(value, arm9, config)
 
     @staticmethod
-    def get_player_level(arm9: bytes, config: Pmd2Data) -> int:
+    def get_player_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the player starter
         """
         return HardcodedDefaultStarters.get_player_level(arm9, config)
 
     @staticmethod
-    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_player_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the player starter
         """

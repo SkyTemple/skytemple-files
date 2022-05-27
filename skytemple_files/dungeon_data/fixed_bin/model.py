@@ -19,6 +19,8 @@ from abc import ABC, abstractmethod
 from enum import Enum, auto
 from typing import Optional, Union
 
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.dungeon_floor_generator.generator import Tile
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.util import *
@@ -133,7 +135,7 @@ class TileRuleType(Enum):
 
     @classmethod
     def has_value(cls, value):
-        return value in cls._value2member_map_
+        return value in cls._value2member_map_  # type: ignore  # pylint: disable=no-member
 
     def __str__(self):
         return f'TileRule<"{self.explanation}">'
@@ -184,17 +186,22 @@ class DirectRule(FixedFloorActionRule):
         raise NotImplementedError("Not applicable for direct rules.")
 
 
-class FixedFloor:
-    def __init__(self, data: bytes, floor_pointer: int, static_data: Pmd2Data):
+class FixedFloor(CheckedIntWrites):
+    width: u16
+    height: u16
+    unk3: u16
+    actions: List[FixedFloorActionRule]
+
+    def __init__(self, data: bytes, floor_pointer: u32, static_data: Pmd2Data):
         if data is not None:
-            self.width = read_uintle(data, floor_pointer, 2)
-            self.height = read_uintle(data, floor_pointer + 2, 2)
-            self.unk4 = read_uintle(data, floor_pointer + 4, 2)
+            self.width = read_u16(data, floor_pointer)
+            self.height = read_u16(data, floor_pointer + 2)
+            self.unk4 = read_u16(data, floor_pointer + 4)
             self.static_data = static_data
-            self.actions: List[FixedFloorActionRule] = self.read_actions(data, floor_pointer + 6, self.width * self.height)
+            self.actions = self.read_actions(data, floor_pointer + 6, self.width * self.height)
 
     @classmethod
-    def new(cls, width: int, height: int, actions: List[FixedFloorActionRule]):
+    def new(cls, width: u16, height: u16, actions: List[FixedFloorActionRule]):
         n = cls(None, None, None)  # type: ignore
         n.width = width
         n.height = height
@@ -212,14 +219,14 @@ class FixedFloor:
         return actions
 
     def _read_action(self, data: bytes, action_pointer: int) -> Tuple[FixedFloorActionRule, int]:
-        action_value = read_uintle(data, action_pointer, 2)
+        action_value = read_u16(data, action_pointer)
         action_id = action_value & 0xFFF
         parameter = action_value >> 0xC
         direction = None
         if parameter > 0:
             direction = self.static_data.script_data.directions__by_ssa_id[parameter]
 
-        repeat_times = read_uintle(data, action_pointer + 2, 2)
+        repeat_times = read_u16(data, action_pointer + 2)
         if TileRuleType.has_value(action_id):
             return TileRule(
                 TileRuleType(action_id), direction  # type: ignore
@@ -230,9 +237,9 @@ class FixedFloor:
 
     def to_bytes(self) -> bytes:
         header = bytearray(6)
-        write_uintle(header, self.width, 0x00, 2)
-        write_uintle(header, self.height, 0x02, 2)
-        write_uintle(header, self.unk4, 0x04, 2)
+        write_u16(header, self.width, 0x00)
+        write_u16(header, self.height, 0x02)
+        write_u16(header, self.unk4, 0x04)
         return header + self._actions_to_bytes()
 
     def resize(self, width, height):
@@ -267,8 +274,8 @@ class FixedFloor:
         buffer = bytearray(4 * len(actions))
 
         for i, (action, n_times) in enumerate(actions):
-            write_uintle(buffer, int(action), i * 4, 2)
-            write_uintle(buffer, n_times - 1, i * 4 + 0x02, 2)
+            write_u16(buffer, u16_checked(int(action)), i * 4)
+            write_u16(buffer, u16_checked(n_times - 1), i * 4 + 0x02)
 
         return buffer
 
@@ -280,7 +287,7 @@ class FixedBin(Sir0Serializable):
         cursor = floor_list_offset
         self.fixed_floors = []
         while data[cursor:cursor+4] != END_OF_LIST_PADDING:
-            self.fixed_floors.append(FixedFloor(data, read_uintle(data, cursor, 4), static_data))
+            self.fixed_floors.append(FixedFloor(data, read_u32(data, cursor), static_data))
             cursor += 4
             assert cursor < len(data)
 

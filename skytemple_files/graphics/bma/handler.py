@@ -34,7 +34,7 @@ class BmaHandler(HybridDataHandler[BmaProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BmaProtocol]:
-        from skytemple_rust.st_bma import Bma
+        from skytemple_rust.st_bma import Bma  # pylint: disable=no-name-in-module,no-member,import-error
         return Bma
 
     @classmethod
@@ -44,7 +44,7 @@ class BmaHandler(HybridDataHandler[BmaProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBma']]:  # type: ignore
-        from skytemple_rust.st_bma import BmaWriter
+        from skytemple_rust.st_bma import BmaWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BmaWriter
 
     @classmethod

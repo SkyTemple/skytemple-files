@@ -15,12 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List
+from typing import List, cast, Sequence
+from range_typed_integers import u32
 
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-def decode_sir0_pointer_offsets(data: bytes, pointer_offset_list_pointer: int, relative=True) -> List[int]:
+
+
+def decode_sir0_pointer_offsets(data: bytes, pointer_offset_list_pointer: u32, relative=True) -> Sequence[u32]:
     decoded = []
     # This is used to sum up all offsets and obtain the offset relative to the file, and not the last offset
     offsetsum = 0
@@ -51,12 +54,12 @@ def decode_sir0_pointer_offsets(data: bytes, pointer_offset_list_pointer: int, r
                 decoded.append(buffer)
             buffer = 0
 
-    return decoded
+    return cast(List[u32], decoded)
 
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-def encode_sir0_pointer_offsets(buffer: bytearray, pointer_offsets: List[int], relative=True):
+def encode_sir0_pointer_offsets(buffer: bytearray, pointer_offsets: Sequence[int], relative=True) -> u32:
     cursor = 0
     # used to add up the sum of all the offsets up to the current one
     offset_so_far = 0
@@ -85,4 +88,4 @@ def encode_sir0_pointer_offsets(buffer: bytearray, pointer_offsets: List[int], r
                 cursor += 1
                 has_higher_non_zero = True
 
-    return cursor + 1
+    return u32(cursor + 1)

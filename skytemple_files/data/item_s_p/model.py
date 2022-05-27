@@ -88,15 +88,18 @@ class ItemSPType(Enum):
         return str(self)
 
 
-class ItemSPEntry(AutoString):
+class ItemSPEntry(AutoString, CheckedIntWrites):
+    type: ItemSPType
+    parameter: u16
+
     def __init__(self, data: bytes):
-        self.type = ItemSPType(read_uintle(data, 0, 2))  # type: ignore  # Item Type
-        self.parameter = read_uintle(data, 2, 2)  # Item Parameter
+        self.type = ItemSPType(read_u16(data, 0))  # type: ignore
+        self.parameter = read_u16(data, 2)
     
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_S_P_ENTRY_SIZE)
-        write_uintle(data, self.type.value, 0, 2)
-        write_uintle(data, self.parameter, 2, 2)
+        write_u16(data, u16(self.type.value), 0)
+        write_u16(data, self.parameter, 2)
         return bytes(data)
     
     def __eq__(self, other: object) -> bool:
@@ -129,5 +132,5 @@ class ItemSP(Sir0Serializable, AutoString):
         return self.item_list == other.item_list
 
     @staticmethod
-    def _decode_ints(data: bytes, pnt_start: int) -> List[int]:
+    def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pnt_start, False)

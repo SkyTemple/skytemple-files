@@ -19,10 +19,11 @@ import itertools
 
 from PIL import Image
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16
 
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
-from skytemple_files.common.util import read_uintle, read_bytes, write_uintle, iter_bytes, chunks, iter_bytes_4bit_le
 from skytemple_files.common.nds_hashing import nds_crc16
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
+from skytemple_files.common.util import read_u16, read_bytes, write_u16, chunks
 
 
 def _utf16_encode_fixed(title: str) -> bytes:
@@ -43,7 +44,7 @@ class Icon:
         self.bitmap = bitmap
         self._palette = []
         for i in range(0, len(palette) // 2):
-            bgr = read_uintle(palette, i * 2, 2)
+            bgr = read_u16(palette, i * 2)
             self._palette.append((bgr & 0x001F) * 0x08)
             self._palette.append(((bgr & 0x03E0) >> 5) * 0x08)
             self._palette.append(((bgr & 0x7C00) >> 10) * 0x08)
@@ -56,7 +57,7 @@ class Icon:
             r //= 8
             g = (g // 8) << 5
             b = (b // 8) << 10
-            write_uintle(data, r + g + b, cursor, 2)
+            write_u16(data, u16(r + g + b), cursor)
             cursor += 2
         return data
 
@@ -85,11 +86,11 @@ class IconBanner:
         self.rom = rom
         data = rom.iconBanner
 
-        self.version = read_uintle(data, 0x0, 0x2)
+        self.version = read_u16(data, 0x0)
         assert len(data) == ICON_BANNER_SIZE
         assert self.version == 1  # EoS should always use version 1
 
-        self.checksum = read_uintle(data, 0x2, 0x2)
+        self.checksum = read_u16(data, 0x2)
 
         self.icon = Icon(read_bytes(data, 0x20, 0x200), read_bytes(data, 0x220, 0x20))
 
@@ -103,7 +104,7 @@ class IconBanner:
     def save_to_rom(self) -> None:
         data = bytearray(ICON_BANNER_SIZE)
 
-        write_uintle(data, self.version, 0x0, 0x2)
+        write_u16(data, self.version, 0x0)
 
         data[0x20:0x20 + 0x200] = self.icon.bitmap
         data[0x220:0x220 + 0x20] = self.icon.palette
@@ -116,6 +117,6 @@ class IconBanner:
         data[0x740:0x740 + 0x100] = _utf16_encode_fixed(self.title_spanish)
 
         calculated_checksum = nds_crc16(data, 0x20, 0x820)
-        write_uintle(data, calculated_checksum, 0x2, 0x2)
+        write_u16(data, calculated_checksum, 0x2)
 
         self.rom.iconBanner = data

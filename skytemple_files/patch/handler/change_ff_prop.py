@@ -20,7 +20,8 @@ from ndspy.code import loadOverlayTable, saveOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
@@ -54,37 +55,43 @@ Removes restrictions. """)
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.UTILITY
-    
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
-            table = loadOverlayTable(rom.arm9OverlayTable, lambda x,y:bytes())
+            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: bytes())
             ov = table[10]
             ov10 = bytearray(rom.files[ov.fileID])
             props = HardcodedFixedFloorTables.get_fixed_floor_properties(ov10, config)
             for i, p in enumerate(props):
-                p.null = 0
-                if i==0 or i>=0xA5:
+                p.null = u8(0)
+                if i == 0 or i >= 0xA5:
                     p.orbs_enabled = True
                     p.unk8 = True
                     p.unk9 = True
                 else:
-                    p.null |= 0x1
-                    
-                if 0<i<0x51:
-                    p.null |= 0x2
-                    
-                if 0<i<=0x6E:
-                    p.null |= 0x4
+                    p.null |= 0x1  # type: ignore
+
+                if 0 < i < 0x51:
+                    p.null |= 0x2  # type: ignore
+
+                if 0 < i <= 0x6E:
+                    p.null |= 0x4  # type: ignore
             HardcodedFixedFloorTables.set_fixed_floor_properties(ov10, props, config)
             rom.files[ov.fileID] = bytes(ov10)
         try:
@@ -92,6 +99,5 @@ Removes restrictions. """)
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

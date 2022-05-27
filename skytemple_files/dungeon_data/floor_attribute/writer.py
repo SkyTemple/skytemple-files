@@ -15,6 +15,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.floor_attribute import *
 from skytemple_files.dungeon_data.floor_attribute.model import FloorAttribute
@@ -25,14 +27,14 @@ class FloorAttributeWriter:
         self.model = model
 
     def write(self) -> bytes:
-        header = bytearray(len(self.model.attrs)*4)
+        header = bytearray(len(self.model.attrs) * 4)
         data = bytearray(0)
         for i, g_list in enumerate(self.model.attrs):
-            current_ptr = len(header)+len(data)
+            current_ptr = u32_checked(len(header) + len(data))
             d_list = bytearray(g_list)
-            if len(d_list)%4!=0:
-                d_list += bytearray(4-(len(d_list)%4))
-            write_uintle(header, current_ptr, i*4, 4)
+            if len(d_list) % 4 != 0:
+                d_list += bytearray(4 - (len(d_list) % 4))
+            write_u32(header, current_ptr, i * 4)
             data += d_list
-        data = header+data
+        data = header + data
         return bytes(data)

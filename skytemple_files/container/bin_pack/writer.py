@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.container.bin_pack.model import BinPack
@@ -39,16 +40,16 @@ class BinPackWriter:
             )
         )
 
-        write_uintle(out_buffer, 0, 0x00, 4)
-        write_uintle(out_buffer, len(files), 0x04, 4)
+        write_u32(out_buffer, u32(0), 0x00)
+        write_u32(out_buffer, u32_checked(len(files)), 0x04)
 
         data_cursor = len_header
         toc_curosr = 8
         for file in files:
             # toc pointer
-            write_uintle(out_buffer, data_cursor, toc_curosr, 4)
+            write_u32(out_buffer, u32_checked(data_cursor), toc_curosr)
             # toc length
-            write_uintle(out_buffer, len(file), toc_curosr + 0x04, 4)
+            write_u32(out_buffer, u32_checked(len(file)), toc_curosr + 0x04)
             # file
             out_buffer[data_cursor:data_cursor+len(file)] = file
 

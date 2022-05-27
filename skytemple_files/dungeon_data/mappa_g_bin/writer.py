@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.mappa_g_bin.model import MappaGBin
 
@@ -41,16 +43,16 @@ class MappaGBinWriter:
                 data[cursor:cursor + 4] = floor.to_mappa()
                 cursor += 4
         # Floor list LUT
-        start_floor_list_lut = len(data)
+        start_floor_list_lut = u32_checked(len(data))
         floor_list_lut = bytearray(4 * len(floor_lists))
-        cursor_floor_data = 0
+        cursor_floor_data = u32(0)
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(start_floor_list_lut + i * 4)
-            write_uintle(floor_list_lut, cursor_floor_data, i * 4, 4)
-            cursor_floor_data += (len(floor_list) + 1) * 4
+            write_u32(floor_list_lut, cursor_floor_data, i * 4)
+            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 4)
         data += floor_list_lut
         # Floor layout data
-        start_floor_layout_data = len(data)
+        start_floor_layout_data = u32_checked(len(data))
         layout_data = bytearray(4 * len(floor_layouts))
         for i, layout in enumerate(floor_layouts):
             layout_data[i * 4: (i + 1) * 4] = layout.to_mappa()
@@ -59,9 +61,9 @@ class MappaGBinWriter:
         data_pointer = len(data)
         subheader = bytearray(8)
         pointer_offsets.append(data_pointer + 0x00)
-        write_uintle(subheader, start_floor_list_lut, 0x00, 4)
+        write_u32(subheader, start_floor_list_lut, 0x00)
         pointer_offsets.append(data_pointer + 0x04)
-        write_uintle(subheader, start_floor_layout_data, 0x04, 4)
+        write_u32(subheader, start_floor_layout_data, 0x04)
         data += subheader
 
         return data, pointer_offsets, data_pointer

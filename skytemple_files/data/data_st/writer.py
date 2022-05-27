@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional, Dict
 
+from range_typed_integers import u32_checked, i16_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.data.data_st.model import DataST
 
@@ -29,10 +31,10 @@ class DataSTWriter:
         nb_items = len(self.model.struct_ids)
         
         header = bytearray(4+2*nb_items)
-        write_uintle(header, 4+2*nb_items, 0, 4)
+        write_u32(header, u32_checked(4+2*nb_items), 0)
         
         for i, x in enumerate(self.model.struct_ids):
-            write_sintle(header, x, 4+2*i, 2)
+            write_i16(header, i16_checked(x), 4+2*i)
         
         file_data = header + self.model.struct_data
         return bytes(file_data)

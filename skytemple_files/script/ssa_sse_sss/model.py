@@ -55,15 +55,15 @@ class Ssa:
     def _init_header(self, data):
         # All offsets/pointers must be multiplied by 2, since they're counting 16 bits words and not bytes!
         return SsaHeader(
-            layer_count=read_uintle(data, 0x0, 2),
-            layer_list_pointer=read_uintle(data, 0x2, 2) * 2,
-            trigger_pointer=read_uintle(data, 0x4, 2) * 2,
-            actor_pointer=read_uintle(data, 0x6, 2) * 2,
-            object_pointer=read_uintle(data, 0x8, 2) * 2,
-            performer_pointer=read_uintle(data, 0xA, 2) * 2,
-            events_pointer=read_uintle(data, 0xC, 2) * 2,
-            position_marker_pointer=read_uintle(data, 0xE, 2) * 2,
-            unk10_pointer=read_uintle(data, 0x10, 2) * 2
+            layer_count=read_u16(data, 0x0),
+            layer_list_pointer=read_u16(data, 0x2) * 2,
+            trigger_pointer=read_u16(data, 0x4) * 2,
+            actor_pointer=read_u16(data, 0x6) * 2,
+            object_pointer=read_u16(data, 0x8) * 2,
+            performer_pointer=read_u16(data, 0xA) * 2,
+            events_pointer=read_u16(data, 0xC) * 2,
+            position_marker_pointer=read_u16(data, 0xE) * 2,
+            unk10_pointer=read_u16(data, 0x10) * 2
         )
 
     def _init_layer_list(self, data):
@@ -73,16 +73,16 @@ class Ssa:
             # All pointers in this list are multiplied by 2, see _init_header info above why
             lst.append(SsaLayer(
                 header=self.header,
-                actors_count=read_uintle(data, offset + 0x0, 2),
-                actors_pointer=read_uintle(data, offset + 0x2, 2) * 2,
-                objects_count=read_uintle(data, offset + 0x4, 2),
-                objects_pointer=read_uintle(data, offset + 0x6, 2) * 2,
-                performers_count=read_uintle(data, offset + 0x8, 2),
-                performers_pointer=read_uintle(data, offset + 0xA, 2) * 2,
-                events_count=read_uintle(data, offset + 0xC, 2),
-                events_pointer=read_uintle(data, offset + 0xE, 2) * 2,
-                unk10_block_count=read_uintle(data, offset + 0x10, 2),
-                unk10_block_pointer=read_uintle(data, offset + 0x12, 2) * 2
+                actors_count=read_u16(data, offset + 0x0),
+                actors_pointer=read_u16(data, offset + 0x2) * 2,
+                objects_count=read_u16(data, offset + 0x4),
+                objects_pointer=read_u16(data, offset + 0x6) * 2,
+                performers_count=read_u16(data, offset + 0x8),
+                performers_pointer=read_u16(data, offset + 0xA) * 2,
+                events_count=read_u16(data, offset + 0xC),
+                events_pointer=read_u16(data, offset + 0xE) * 2,
+                unk10_block_count=read_u16(data, offset + 0x10),
+                unk10_block_pointer=read_u16(data, offset + 0x12) * 2
             ))
         return lst
 
@@ -92,10 +92,10 @@ class Ssa:
             for entry in iter_bytes(data, TRIGGER_ENTRY_LEN, self.header.trigger_pointer, self.header.trigger_end_pointer):
                 lst.append(SsaTrigger(
                     scriptdata=self._scriptdata,
-                    coroutine_id=read_uintle(entry, 0x0, 2),
-                    unk2=read_uintle(entry, 0x2, 2),
-                    unk3=read_uintle(entry, 0x4, 2),
-                    script_id=read_uintle(entry, 0x6, 2)
+                    coroutine_id=read_u16(entry, 0x0),
+                    unk2=read_u16(entry, 0x2),
+                    unk3=read_u16(entry, 0x4),
+                    script_id=read_u16(entry, 0x6)
                 ))
         return lst
 
@@ -105,17 +105,17 @@ class Ssa:
             for entry in iter_bytes(data, ACTOR_ENTRY_LEN, self.header.actor_pointer, self.header.actor_end_pointer):
                 lst.append(SsaActor(
                     scriptdata=self._scriptdata,
-                    actor_id=read_uintle(entry, 0x0, 2),
+                    actor_id=read_u16(entry, 0x0),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
-                        direction=read_uintle(entry, 0x2, 2),
-                        x_pos=read_uintle(entry, 0x4, 2),
-                        y_pos=read_uintle(entry, 0x6, 2),
-                        x_offset=read_uintle(entry, 0x8, 2),
-                        y_offset=read_uintle(entry, 0xA, 2),
+                        direction=read_u16(entry, 0x2),
+                        x_pos=read_u16(entry, 0x4),
+                        y_pos=read_u16(entry, 0x6),
+                        x_offset=read_u16(entry, 0x8),
+                        y_offset=read_u16(entry, 0xA),
                     ),
-                    script_id=read_sintle(entry, 0xC, 2),
-                    unkE=read_sintle(entry, 0xE, 2),
+                    script_id=read_i16(entry, 0xC),
+                    unkE=read_i16(entry, 0xE),
                 ))
         return lst
 
@@ -125,19 +125,19 @@ class Ssa:
             for entry in iter_bytes(data, OBJECT_ENTRY_LEN, self.header.object_pointer, self.header.object_end_pointer):
                 lst.append(SsaObject(
                     scriptdata=self._scriptdata,
-                    object_id=read_uintle(entry, 0x0, 2),
-                    htibox_w=read_sintle(entry, 0x4, 2),
-                    hitbox_h=read_sintle(entry, 0x6, 2),
+                    object_id=read_u16(entry, 0x0),
+                    htibox_w=read_i16(entry, 0x4),
+                    hitbox_h=read_i16(entry, 0x6),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
-                        direction=read_uintle(entry, 0x2, 2),
-                        x_pos=read_uintle(entry, 0x8, 2),
-                        y_pos=read_uintle(entry, 0xA, 2),
-                        x_offset=read_uintle(entry, 0xC, 2),
-                        y_offset=read_uintle(entry, 0xE, 2),
+                        direction=read_u16(entry, 0x2),
+                        x_pos=read_u16(entry, 0x8),
+                        y_pos=read_u16(entry, 0xA),
+                        x_offset=read_u16(entry, 0xC),
+                        y_offset=read_u16(entry, 0xE),
                     ),
-                    script_id=read_sintle(entry, 0x10, 2),
-                    unk12=read_sintle(entry, 0x12, 2),
+                    script_id=read_i16(entry, 0x10),
+                    unk12=read_i16(entry, 0x12),
                 ))
         return lst
 
@@ -146,19 +146,19 @@ class Ssa:
         if self.header.performer_pointer is not None:
             for entry in iter_bytes(data, PERFORMERS_ENTRY_LEN, self.header.performer_pointer, self.header.performer_end_pointer):
                 lst.append(SsaPerformer(
-                    type=read_uintle(entry, 0x0, 2),
-                    hitbox_w=read_sintle(entry, 0x4, 2),
-                    hitbox_h=read_sintle(entry, 0x6, 2),
+                    type=read_u16(entry, 0x0),
+                    hitbox_w=read_i16(entry, 0x4),
+                    hitbox_h=read_i16(entry, 0x6),
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
-                        direction=read_uintle(entry, 0x2, 2),
-                        x_pos=read_uintle(entry, 0x8, 2),
-                        y_pos=read_uintle(entry, 0xA, 2),
-                        x_offset=read_uintle(entry, 0xC, 2),
-                        y_offset=read_uintle(entry, 0xE, 2),
+                        direction=read_u16(entry, 0x2),
+                        x_pos=read_u16(entry, 0x8),
+                        y_pos=read_u16(entry, 0xA),
+                        x_offset=read_u16(entry, 0xC),
+                        y_offset=read_u16(entry, 0xE),
                     ),
-                    unk10=read_sintle(entry, 0x10, 2),
-                    unk12=read_sintle(entry, 0x12, 2),
+                    unk10=read_i16(entry, 0x10),
+                    unk12=read_i16(entry, 0x12),
                 ))
         return lst
 
@@ -167,18 +167,18 @@ class Ssa:
         if self.header.events_pointer is not None:
             for entry in iter_bytes(data, EVENTS_ENTRY_LEN, self.header.events_pointer, self.header.events_end_pointer):
                 lst.append(SsaEvent(
-                    trigger_width=read_uintle(entry, 0x0, 2),
-                    trigger_height=read_uintle(entry, 0x2, 2),
-                    trigger_pointer=read_uintle(entry, 0xC, 2) * 2,
+                    trigger_width=read_u16(entry, 0x0),
+                    trigger_height=read_u16(entry, 0x2),
+                    trigger_pointer=read_u16(entry, 0xC) * 2,
                     trigger_table_start=self.header.trigger_pointer,
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
-                        x_pos=read_uintle(entry, 0x4, 2),
-                        y_pos=read_uintle(entry, 0x6, 2),
-                        x_offset=read_uintle(entry, 0x8, 2),
-                        y_offset=read_uintle(entry, 0xA, 2),
+                        x_pos=read_u16(entry, 0x4),
+                        y_pos=read_u16(entry, 0x6),
+                        x_offset=read_u16(entry, 0x8),
+                        y_offset=read_u16(entry, 0xA),
                     ),
-                    unkE=read_uintle(entry, 0xE, 2),
+                    unkE=read_u16(entry, 0xE),
                 ))
         return lst
 
@@ -190,15 +190,15 @@ class Ssa:
                     pos=SsaPosition(
                         scriptdata=self._scriptdata,
                         direction=None,
-                        x_pos=read_uintle(entry, 0x0, 2),
-                        y_pos=read_uintle(entry, 0x2, 2),
-                        x_offset=read_uintle(entry, 0x4, 2),
-                        y_offset=read_uintle(entry, 0x6, 2),
+                        x_pos=read_u16(entry, 0x0),
+                        y_pos=read_u16(entry, 0x2),
+                        x_offset=read_u16(entry, 0x4),
+                        y_offset=read_u16(entry, 0x6),
                     ),
-                    unk8=read_sintle(entry, 0x8, 2),
-                    unkA=read_sintle(entry, 0xA, 2),
-                    unkC=read_sintle(entry, 0xC, 2),
-                    unkE=read_sintle(entry, 0xE, 2)
+                    unk8=read_i16(entry, 0x8),
+                    unkA=read_i16(entry, 0xA),
+                    unkC=read_i16(entry, 0xC),
+                    unkE=read_i16(entry, 0xE)
                 ))
         return lst
 
@@ -207,9 +207,9 @@ class Ssa:
         if self.header.unk10_pointer is not None:
             for entry in iter_bytes(data, UNK10_ENTRY_LEN, self.header.unk10_pointer, self.header.unk10_end_pointer):
                 lst.append(SsaUnk10(
-                    unk0=read_sintle(entry, 0x0, 2),
-                    unk2=read_sintle(entry, 0x2, 2),
-                    unk4=read_sintle(entry, 0x4, 2),
-                    unk6=read_sintle(entry, 0x6, 2)
+                    unk0=read_i16(entry, 0x0),
+                    unk2=read_i16(entry, 0x2),
+                    unk4=read_i16(entry, 0x4),
+                    unk6=read_i16(entry, 0x6)
                 ))
         return lst

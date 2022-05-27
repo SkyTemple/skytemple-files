@@ -15,17 +15,26 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
-
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.util import *
 
 SE_PC_LNTRY_LEN = 0x14
 
 
-class SpecialEpisodePc(AutoString):
-    def __init__(self, poke_id: int, joined_at: int, move1: int, move2: int, move3: int, move4: int,
-                 do_not_fix_entire_moveset: bool, level: int, iq: int, fixed_hp: int):
+class SpecialEpisodePc(AutoString, CheckedIntWrites):
+    poke_id: u16
+    joined_at: u16
+    move1: u16
+    move2: u16
+    move3: u16
+    move4: u16
+    do_not_fix_entire_moveset: bool
+    level: u16
+    iq: u16
+    fixed_hp: u16
+    
+    def __init__(self, poke_id: u16, joined_at: u16, move1: u16, move2: u16, move3: u16, move4: u16,
+                 do_not_fix_entire_moveset: bool, level: u16, iq: u16, fixed_hp: u16):
         self.poke_id = poke_id
         self.joined_at = joined_at
         self.move1 = move1
@@ -40,16 +49,16 @@ class SpecialEpisodePc(AutoString):
 
     def to_bytes(self) -> bytes:
         b = bytearray(SE_PC_LNTRY_LEN)
-        write_uintle(b, self.poke_id, 0, 2)
-        write_uintle(b, self.joined_at, 2, 2)
-        write_uintle(b, self.move1, 4, 2)
-        write_uintle(b, self.move2, 6, 2)
-        write_uintle(b, self.move3, 8, 2)
-        write_uintle(b, self.move4, 10, 2)
-        write_uintle(b, int(self.do_not_fix_entire_moveset), 12, 2)
-        write_uintle(b, self.level, 14, 2)
-        write_uintle(b, self.iq, 16, 2)
-        write_uintle(b, self.fixed_hp, 18, 2)
+        write_u16(b, self.poke_id, 0)
+        write_u16(b, self.joined_at, 2)
+        write_u16(b, self.move1, 4)
+        write_u16(b, self.move2, 6)
+        write_u16(b, self.move3, 8)
+        write_u16(b, self.move4, 10)
+        write_u16(b, u16(int(self.do_not_fix_entire_moveset)), 12)
+        write_u16(b, self.level, 14)
+        write_u16(b, self.iq, 16)
+        write_u16(b, self.fixed_hp, 18)
         return b
 
     def __eq__(self, other: object) -> bool:
@@ -69,68 +78,68 @@ class SpecialEpisodePc(AutoString):
 
 class HardcodedDefaultStarters:
     @staticmethod
-    def get_partner_md_id(arm9: bytes, config: Pmd2Data) -> int:
+    def get_partner_md_id(arm9: bytes, config: Pmd2Data) -> u16:
         """
         Gets the monster.md index of the default partner starter
         """
         block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
-        return read_uintle(arm9, block.begin, 2)
+        return read_u16(arm9, block.begin)
 
     @staticmethod
-    def set_partner_md_id(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_partner_md_id(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default partner starter
         """
         block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
-        write_uintle(arm9, value, block.begin, 2)
+        write_u16(arm9, value, block.begin)
 
     @staticmethod
-    def get_player_md_id(arm9: bytes, config: Pmd2Data) -> int:
+    def get_player_md_id(arm9: bytes, config: Pmd2Data) -> u16:
         """
         Gets the monster.md index of the default player starter
         """
         block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
-        return read_uintle(arm9, block.begin, 2)
+        return read_u16(arm9, block.begin)
 
     @staticmethod
-    def set_player_md_id(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_player_md_id(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default player starter
         """
         block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
-        write_uintle(arm9, value, block.begin, 2)
+        write_u16(arm9, value, block.begin)
 
     @staticmethod
-    def get_partner_level(arm9: bytes, config: Pmd2Data) -> int:
+    def get_partner_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the partner starter
         """
         block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
-        return read_uintle(arm9, block.begin, 1)
+        return read_u8(arm9, block.begin)
 
     @staticmethod
-    def set_partner_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_partner_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the partner starter
         """
         block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
-        write_uintle(arm9, value, block.begin, 1)
+        write_u8(arm9, value, block.begin)
 
     @staticmethod
-    def get_player_level(arm9: bytes, config: Pmd2Data) -> int:
+    def get_player_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the player starter
         """
         block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
-        return read_uintle(arm9, block.begin, 1)
+        return read_u8(arm9, block.begin)
 
     @staticmethod
-    def set_player_level(value: int, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_player_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the player starter
         """
         block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
-        write_uintle(arm9, value, block.begin, 1)
+        write_u8(arm9, value, block.begin)
 
     @staticmethod
     def get_special_episode_pcs(arm9: bytes, config: Pmd2Data) -> List[SpecialEpisodePc]:
@@ -141,16 +150,16 @@ class HardcodedDefaultStarters:
         lst = []
         for i in range(block.begin, block.end, SE_PC_LNTRY_LEN):
             lst.append(SpecialEpisodePc(
-                read_uintle(arm9, i + 0, 2),
-                read_uintle(arm9, i + 2, 2),
-                read_uintle(arm9, i + 4, 2),
-                read_uintle(arm9, i + 6, 2),
-                read_uintle(arm9, i + 8, 2),
-                read_uintle(arm9, i + 10, 2),
-                bool(read_uintle(arm9, i + 12, 2)),
-                read_uintle(arm9, i + 14, 2),
-                read_uintle(arm9, i + 16, 2),
-                read_uintle(arm9, i + 18, 2),
+                read_u16(arm9, i + 0),
+                read_u16(arm9, i + 2),
+                read_u16(arm9, i + 4),
+                read_u16(arm9, i + 6),
+                read_u16(arm9, i + 8),
+                read_u16(arm9, i + 10),
+                bool(read_u16(arm9, i + 12)),
+                read_u16(arm9, i + 14),
+                read_u16(arm9, i + 16),
+                read_u16(arm9, i + 18),
             ))
         return lst
 

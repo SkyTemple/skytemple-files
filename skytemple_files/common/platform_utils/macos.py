@@ -14,12 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+# mypy: ignore-errors
 import sys
 
 if not sys.platform.lower().startswith('darwin'):
     raise OSError("This module is only available under macOS.")
 
-from Foundation import NSUserDefaults
+from Foundation import NSUserDefaults  # pylint: disable=import-error
 
 
 def macos_use_light_theme():

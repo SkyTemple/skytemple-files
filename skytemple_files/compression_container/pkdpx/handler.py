@@ -32,5 +32,5 @@ class PkdpxHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_pkdpx import Pkdpx
+        from skytemple_rust.st_pkdpx import Pkdpx  # pylint: disable=no-name-in-module,no-member,import-error
         return Pkdpx

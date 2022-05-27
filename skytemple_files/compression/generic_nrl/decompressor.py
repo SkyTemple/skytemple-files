@@ -91,7 +91,7 @@ class GenericNrlDecompressor:
             raise ValueError("Generic NRL Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += 1
-        return read_uintle(self.compressed_data, oc)
+        return read_u8(self.compressed_data, oc)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as byte"""

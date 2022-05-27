@@ -217,12 +217,12 @@ class BpcImageCompressor:
 
     def _look_ahead_repeats(self):
         """Look how often the byte in the input data repeats, up to NRL_LOOKAHEAD_MAX_BYTES"""
-        byte_at_pos = read_uintle(self.uncompressed_data, self.cursor)
+        byte_at_pos = read_u8(self.uncompressed_data, self.cursor)
         nc = self.cursor + 1
         repeats = 0
-        while read_uintle(self.uncompressed_data, nc) == byte_at_pos and \
-                repeats < BPC_IMGC_REPEAT_MAX_NEXT and \
-                nc < self.length_input:
+        while nc < self.length_input and \
+                read_u8(self.uncompressed_data, nc) == byte_at_pos and \
+                repeats < BPC_IMGC_REPEAT_MAX_NEXT:
             repeats += 1
             nc += 1
         return byte_at_pos, repeats
@@ -236,7 +236,7 @@ class BpcImageCompressor:
         previous_byt_at_pos = 0x100  # Impossible "null" value for now
         nc = self.cursor
         while True:
-            byt_at_pos = read_uintle(self.uncompressed_data, nc)
+            byt_at_pos = read_dynamic(self.uncompressed_data, nc, length=1, big_endian=False, signed=False)
             if byt_at_pos == previous_byt_at_pos:
                 repeat_counter += 1
             else:

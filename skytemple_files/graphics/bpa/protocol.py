@@ -18,12 +18,13 @@ from abc import abstractmethod
 from typing import Protocol, Optional, Tuple, TypeVar, Iterable, Union, Iterator, List, Sequence, runtime_checkable
 
 from PIL import Image
+from range_typed_integers import *
 
 
 @runtime_checkable
 class BpaFrameInfoProtocol(Protocol):
-    duration_per_frame: int
-    unk2: int
+    duration_per_frame: u16
+    unk2: u16
 
     @abstractmethod
     def __init__(self, duration_per_frame: int, unk2: int): ...
@@ -34,13 +35,19 @@ T = TypeVar('T', bound=BpaFrameInfoProtocol)
 
 @runtime_checkable
 class BpaProtocol(Protocol[T]):
-    number_of_tiles: int
-    number_of_frames: int
+    number_of_tiles: u16
+    number_of_frames: u16
     tiles: Sequence[bytes]
     frame_info: Sequence[T]
 
     @abstractmethod
     def __init__(self, data: bytes): ...
+
+    @classmethod
+    @abstractmethod
+    def new_empty(cls) -> 'BpaProtocol':
+        """Returns a new empty Bpa"""
+        ...
 
     @abstractmethod
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:

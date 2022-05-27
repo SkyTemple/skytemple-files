@@ -14,10 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
-
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_bytes
+from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
 
 GUEST_DATA_ENTRY_SIZE = 36
@@ -76,12 +74,12 @@ class ExtraDungeonDataEntry(AutoString):
         if self.hlr_cleared:
             entry |= 0x4000
 
-        write_uintle(buffer, entry, 0, 2)
+        write_u16(buffer, u16(entry), 0)
         return buffer
 
     @classmethod
     def from_bytes(cls, b: bytes) -> 'ExtraDungeonDataEntry':
-        data_int = read_uintle(b, 0, 2)
+        data_int = read_u16(b, 0)
         guest1_index = (data_int & 0x3F) - 1
         guest2_index = ((data_int & 0x3F00) >> 8) - 1
         return cls(guest1_index, guest2_index, bool(data_int & 0x80), bool(data_int & 0x40), bool(data_int & 0x8000),
@@ -96,9 +94,23 @@ class ExtraDungeonDataEntry(AutoString):
         return -1 <= index <= 62
 
 
-class GuestPokemon(AutoString):
-    def __init__(self, unk1: int, poke_id: int, joined_at: int, moves: List[int], hp: int, level: int,
-                 iq: int, atk: int, sp_atk: int, def_: int, sp_def: int, unk3: int, exp: int):
+class GuestPokemon(AutoString, CheckedIntWrites):
+    unk1: u32
+    poke_id: u16
+    joined_at: u16
+    moves: List[u16]
+    hp: u16
+    level: u16
+    iq: u16
+    atk: u16
+    sp_atk: u16
+    def_: u16
+    sp_def: u16
+    unk3: u16
+    exp: u32
+    
+    def __init__(self, unk1: u32, poke_id: u16, joined_at: u16, moves: List[u16], hp: u16, level: u16,
+                 iq: u16, atk: u16, sp_atk: u16, def_: u16, sp_def: u16, unk3: u16, exp: u32):
         self.unk1 = unk1
         self.poke_id = poke_id
         self.joined_at = joined_at
@@ -149,33 +161,33 @@ class GuestPokemon(AutoString):
     def to_bytes(self) -> bytes:
         buffer = bytearray(0x24)
 
-        write_uintle(buffer, self.unk1, 0, 4)
-        write_uintle(buffer, self.poke_id, 4, 2)
-        write_uintle(buffer, self.joined_at, 6, 2)
-        write_uintle(buffer, self.moves[0], 8, 2)
-        write_uintle(buffer, self.moves[1], 10, 2)
-        write_uintle(buffer, self.moves[2], 12, 2)
-        write_uintle(buffer, self.moves[3], 14, 2)
-        write_uintle(buffer, self.hp, 16, 2)
-        write_uintle(buffer, self.level, 18, 2)
-        write_uintle(buffer, self.iq, 20, 2)
-        write_uintle(buffer, self.atk, 22, 2)
-        write_uintle(buffer, self.sp_atk, 24, 2)
-        write_uintle(buffer, self.def_, 26, 2)
-        write_uintle(buffer, self.sp_def, 28, 2)
-        write_uintle(buffer, self.unk3, 30, 2)
-        write_uintle(buffer, self.exp, 32, 4)
+        write_u32(buffer, self.unk1, 0)
+        write_u16(buffer, self.poke_id, 4)
+        write_u16(buffer, self.joined_at, 6)
+        write_u16(buffer, self.moves[0], 8)
+        write_u16(buffer, self.moves[1], 10)
+        write_u16(buffer, self.moves[2], 12)
+        write_u16(buffer, self.moves[3], 14)
+        write_u16(buffer, self.hp, 16)
+        write_u16(buffer, self.level, 18)
+        write_u16(buffer, self.iq, 20)
+        write_u16(buffer, self.atk, 22)
+        write_u16(buffer, self.sp_atk, 24)
+        write_u16(buffer, self.def_, 26)
+        write_u16(buffer, self.sp_def, 28)
+        write_u16(buffer, self.unk3, 30)
+        write_u32(buffer, self.exp, 32)
 
         return buffer
 
     @classmethod
     def from_bytes(cls, b: bytes) -> 'GuestPokemon':
         return cls(
-            read_uintle(b, 0, 4), read_uintle(b, 4, 2), read_uintle(b, 6, 2),
-            [read_uintle(b, 8, 2), read_uintle(b, 10, 2), read_uintle(b, 12, 2), read_uintle(b, 14, 2)],
-            read_uintle(b, 16, 2), read_uintle(b, 18, 2), read_uintle(b, 20, 2), read_uintle(b, 22, 2),
-            read_uintle(b, 24, 2), read_uintle(b, 26, 2), read_uintle(b, 28, 2), read_uintle(b, 30, 2),
-            read_uintle(b, 32, 4)
+            read_u32(b, 0), read_u16(b, 4), read_u16(b, 6),
+            [read_u16(b, 8), read_u16(b, 10), read_u16(b, 12), read_u16(b, 14)],
+            read_u16(b, 16), read_u16(b, 18), read_u16(b, 20), read_u16(b, 22),
+            read_u16(b, 24), read_u16(b, 26), read_u16(b, 28), read_u16(b, 30),
+            read_u32(b, 32)
         )
 
 

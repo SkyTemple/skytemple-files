@@ -47,7 +47,7 @@ class AbstractFont(ABC, AutoString):
         """Gets the properties of entries of this table"""
     
     @abstractmethod
-    def get_entries_from_table(self, table: int) -> List[AbstractFontEntry]:
+    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
         """Gets all entries of a specific table"""
         
     @abstractmethod
@@ -55,7 +55,7 @@ class AbstractFont(ABC, AutoString):
         """Deletes the specified entry"""
         
     @abstractmethod
-    def create_entry_for_table(self, table: int) -> AbstractFontEntry:
+    def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
         """Create an entry for a table"""
     
     @abstractmethod

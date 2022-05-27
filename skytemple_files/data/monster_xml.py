@@ -25,6 +25,8 @@ from typing import Optional, List, Tuple, Dict, Generic, TypeVar
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
+from range_typed_integers import u8
+
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
@@ -213,7 +215,7 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
 
 
 class GenderedConvertEntry:
-    def __init__(self, md_entry: MdEntry, personality: Optional[int], idle_anim: Optional[int]):
+    def __init__(self, md_entry: MdEntry, personality: Optional[u8], idle_anim: Optional[u8]):
         self.md_entry = md_entry
         self.personality = personality
         self.idle_anim = idle_anim

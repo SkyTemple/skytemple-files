@@ -19,8 +19,13 @@ MAGIC_NUMBER = b'WTU\0'
 WTU_ENTRY_LEN = 8
 
 
-class WtuEntry(AutoString):
-    def __init__(self, x: int, y: int, width: int, height: int):
+class WtuEntry(AutoString, CheckedIntWrites):
+    x: u16
+    y: u16
+    width: u16
+    height: u16
+
+    def __init__(self, x: u16, y: u16, width: u16, height: u16):
         self.x = x
         self.y = y
         self.width = width
@@ -35,23 +40,26 @@ class WtuEntry(AutoString):
                self.height == other.height
 
 
-class Wtu(AutoString):
+class Wtu(AutoString, CheckedIntWrites):
+    image_mode: u32
+    header_size: u32
+
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         assert self.matches(data, 0), "The Wtu file must begin with the WTU magic number"
-        number_entries = read_uintle(data, 0x4, 4)
-        self.image_mode = read_uintle(data, 0x8, 4)
+        number_entries = read_u32(data, 0x4)
+        self.image_mode = read_u32(data, 0x8)
         # The size of this header; Wtu entries start from this address
-        self.header_size = read_uintle(data, 0xC, 4)
+        self.header_size = read_u32(data, 0xC)
 
         self.entries = []
         for i in range(self.header_size, self.header_size + number_entries * WTU_ENTRY_LEN, WTU_ENTRY_LEN):
             self.entries.append(WtuEntry(
-                read_uintle(data, i + 0x00, 2),
-                read_uintle(data, i + 0x02, 2),
-                read_uintle(data, i + 0x04, 2),
-                read_uintle(data, i + 0x06, 2),
+                read_u16(data, i + 0x00),
+                read_u16(data, i + 0x02),
+                read_u16(data, i + 0x04),
+                read_u16(data, i + 0x06),
             ))
 
     @staticmethod

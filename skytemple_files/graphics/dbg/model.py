@@ -15,11 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import math
-from typing import List
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
-from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
-from skytemple_files.common.util import read_uintle, write_uintle, chunks
+from skytemple_files.common.tiled_image import from_pil, search_for_chunk
+from skytemple_files.common.util import *
 from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
 from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
 from skytemple_files.graphics.dpl.model import Dpl, DPL_PAL_LEN, DPL_MAX_PAL
@@ -34,12 +33,14 @@ DBG_WIDTH_AND_HEIGHT = 32
 
 
 class Dbg:
+    mappings: List[u16]
+
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.mappings = []
         for pos in range(0, len(data), 2):
-            self.mappings.append(read_uintle(data, pos, 2))
+            self.mappings.append(read_u16(data, pos))
 
     def to_pil(
             self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]
@@ -107,10 +108,10 @@ class Dbg:
             chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]
             start_of_existing_chunk = search_for_chunk(chunk, tile_mappings)
             if start_of_existing_chunk is not None:
-                chunk_mappings.append(int(start_of_existing_chunk / tiles_in_chunk) + 1)
+                chunk_mappings.append(u16(int(start_of_existing_chunk / tiles_in_chunk) + 1))
             else:
                 tile_mappings += chunk
-                chunk_mappings.append(chunk_mappings_counter)
+                chunk_mappings.append(u16(chunk_mappings_counter))
                 chunk_mappings_counter += 1
 
         dpc.import_tile_mappings(list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM)))  # type: ignore
@@ -122,7 +123,7 @@ class Dbg:
     def to_bytes(self) -> bytes:
         buffer = bytearray(2 * len(self.mappings))
         for i, m in enumerate(self.mappings):
-            write_uintle(buffer, m, i * 2, 2)
+            write_u16(buffer, m, i * 2)
         return buffer
 
     def __eq__(self, other: object) -> bool:

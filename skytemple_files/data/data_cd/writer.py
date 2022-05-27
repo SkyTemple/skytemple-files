@@ -15,7 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional, Dict
+from range_typed_integers import u16_checked, u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.data.data_cd.model import DataCD
@@ -29,16 +29,16 @@ class DataCDWriter:
         nb_items = len(self.model.items_effects)
         
         header = bytearray(4+2*nb_items+len(self.model.effects_code)*8)
-        write_uintle(header, 4+2*nb_items, 0, 4)
+        write_u32(header, u32_checked(4+2*nb_items), 0)
         code_data = bytearray(0)
         current_ptr = len(header)
         for i, c in enumerate(self.model.effects_code):
-            write_uintle(header, current_ptr, 4+2*nb_items+i*8, 4)
-            write_uintle(header, len(c), 4+2*nb_items+i*8+4, 4)
+            write_u32(header, u32_checked(current_ptr), 4+2*nb_items+i*8)
+            write_u32(header, u32_checked(len(c)), 4+2*nb_items+i*8+4)
             code_data += bytearray(c)
             current_ptr += len(c)
         
         for i, x in enumerate(self.model.items_effects):
-            write_uintle(header, x, 4+2*i, 2)
+            write_u16(header, u16_checked(x), 4+2*i)
         file_data = header + code_data
         return bytes(file_data)

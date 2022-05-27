@@ -160,7 +160,7 @@ def run_offsets(version: str, binary: str, offset: int) -> int:
     ]
     result = call_checked(args)
     try:
-        return int(OFFSETS_REGEX.match(result.splitlines()[-1]).group(2), 16)
+        return int(OFFSETS_REGEX.match(result.splitlines()[-1]).group(2), 16)  # type: ignore
     except Exception:
         print(f"Failed to find offset from output:\n{result}", file=sys.stderr)
         raise

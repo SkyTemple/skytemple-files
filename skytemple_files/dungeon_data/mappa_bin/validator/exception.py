@@ -14,7 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List
+from typing import List, Optional
+
+from range_typed_integers import u8
 
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 from skytemple_files.common.i18n_util import f, _
@@ -53,7 +55,7 @@ class FloorReusedError(DungeonValidatorError):
     def __init__(self, dungeon: DungeonDefinition, dungeon_id: int, reused_of_dungeon_with_id: int):
         super().__init__(dungeon, dungeon_id)
         self.reused_of_dungeon_with_id = reused_of_dungeon_with_id
-        self.reused_of_dungeon_name = None
+        self.reused_of_dungeon_name: Optional[str] = None
 
     @property
     def name(self) -> str:
@@ -65,7 +67,7 @@ class FloorReusedError(DungeonValidatorError):
 
 
 class DungeonTotalFloorCountInvalidError(DungeonValidatorError):
-    def __init__(self, dungeon: DungeonDefinition, dungeon_id: int, expected_floor_count_in_group: int):
+    def __init__(self, dungeon: DungeonDefinition, dungeon_id: int, expected_floor_count_in_group: u8):
         super().__init__(dungeon, dungeon_id)
         self.expected_floor_count_in_group = expected_floor_count_in_group
         self.makes_fully_invalid = False

@@ -36,7 +36,8 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters.')
+        return _(
+            'Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters.')
 
     @property
     def author(self) -> str:
@@ -53,7 +54,9 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED_US
+                return read_u32(
+                    rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED_US
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

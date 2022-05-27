@@ -15,16 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from abc import ABC
-from enum import Enum
-from typing import List, Tuple
-
 import typing
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString, read_sintle, write_sintle, \
-    generate_bitfield
+from skytemple_files.common.util import *
 from skytemple_files.data.md.model import PokeType
 
 DUNGEON_LIST_ENTRY_LEN = 4
@@ -34,8 +29,13 @@ MAP_MARKER_PLACEMENTS_ENTRY_LEN = 8
 TILESET_PROPERTIES_ENTRY_LEN = 0xC
 
 
-class DungeonDefinition(AutoString):
-    def __init__(self, number_floors: int, mappa_index: int, start_after: int, number_floors_in_group: int):
+class DungeonDefinition(AutoString, CheckedIntWrites):
+    number_floors: u8
+    mappa_index: u8
+    start_after: u8
+    number_floors_in_group: u8
+
+    def __init__(self, number_floors: u8, mappa_index: u8, start_after: u8, number_floors_in_group: u8):
         self.number_floors = number_floors
         self.mappa_index = mappa_index
         self.start_after = start_after
@@ -55,13 +55,32 @@ class DungeonRestrictionDirection(Enum):
     UP = 1
 
 
-class DungeonRestriction(AutoString):
+class DungeonRestriction(AutoString, CheckedIntWrites):
+    direction: DungeonRestrictionDirection
+    enemies_evolve_when_team_member_koed: bool
+    enemies_grant_exp: bool
+    recruiting_allowed: bool
+    level_reset: bool
+    money_allowed: bool
+    leader_can_be_changed: bool
+    dont_save_before_entering: bool
+    iq_skills_disabled: bool
+    traps_remain_invisible_on_attack: bool
+    enemies_can_drop_chests: bool
+    max_rescue_attempts: i8
+    max_items_allowed: i8
+    max_party_members: i8
+    null7: i8
+    turn_limit: i16
+    nullA: i8
+    nullB: i8
+
     def __init__(
             self, direction: DungeonRestrictionDirection, enemies_evolve_when_team_member_koed: bool, enemies_grant_exp: bool,
             recruiting_allowed: bool, level_reset: bool, money_allowed: bool, leader_can_be_changed: bool,
             dont_save_before_entering: bool, iq_skills_disabled: bool, traps_remain_invisible_on_attack: bool,
-            enemies_can_drop_chests: bool, max_rescue_attempts: int, max_items_allowed: int, max_party_members: int,
-            null7: int, turn_limit: int, nullA: int, nullB: int
+            enemies_can_drop_chests: bool, max_rescue_attempts: i8, max_items_allowed: i8, max_party_members: i8,
+            null7: i8, turn_limit: i16, nullA: i8, nullB: i8
     ):
         self.direction = direction
         self.enemies_evolve_when_team_member_koed = enemies_evolve_when_team_member_koed
@@ -84,44 +103,44 @@ class DungeonRestriction(AutoString):
 
     @classmethod
     def from_bytes(cls, b: bytes) -> 'DungeonRestriction':
-        bitfield0 = read_uintle(b, 0)
-        bitfield1 = read_uintle(b, 1)
+        bitfield0 = read_u8(b, 0)
+        bitfield1 = read_u8(b, 1)
         dir_bool, enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed, \
             level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering = \
             (bool(bitfield0 >> i & 1) for i in range(8))
         iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests = \
             (bool(bitfield1 >> i & 1) for i in range(3))
-        assert read_uintle(b, 2) == 0
-        assert read_uintle(b, 3) == 0
+        assert read_u8(b, 2) == 0
+        assert read_u8(b, 3) == 0
         return cls(
             DungeonRestrictionDirection(int(dir_bool)), enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed,
             level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering,
             iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests,
-            read_sintle(b, 4), read_sintle(b, 5), read_sintle(b, 6),
-            read_sintle(b, 7), read_sintle(b, 8, 2), read_sintle(b, 10), read_sintle(b, 11),
+            read_i8(b, 4), read_i8(b, 5), read_i8(b, 6),
+            read_i8(b, 7), read_i16(b, 8), read_i8(b, 10), read_i8(b, 11),
         )
 
     def to_bytes(self) -> bytes:
-        bitfield0 = generate_bitfield((self.dont_save_before_entering, self.leader_can_be_changed, self.money_allowed,
-                                       self.level_reset, self.recruiting_allowed, self.enemies_grant_exp,
-                                       self.enemies_evolve_when_team_member_koed, bool(self.direction.value)))
-        bitfield1 = generate_bitfield((False, False, False, False, False,
-                                      self.enemies_can_drop_chests, self.traps_remain_invisible_on_attack,
-                                      self.iq_skills_disabled))
-        bitfield2 = 0
-        bitfield3 = 0
+        bitfield0 = u8(generate_bitfield((self.dont_save_before_entering, self.leader_can_be_changed, self.money_allowed,
+                                          self.level_reset, self.recruiting_allowed, self.enemies_grant_exp,
+                                          self.enemies_evolve_when_team_member_koed, bool(self.direction.value))))
+        bitfield1 = u8(generate_bitfield((False, False, False, False, False,
+                                         self.enemies_can_drop_chests, self.traps_remain_invisible_on_attack,
+                                         self.iq_skills_disabled)))
+        bitfield2 = u8(0)
+        bitfield3 = u8(0)
         buff = bytearray(DUNGEON_RESTRICTIONS_ENTRY_LEN)
-        write_uintle(buff, bitfield0, 0, 1)
-        write_uintle(buff, bitfield1, 1, 1)
-        write_uintle(buff, bitfield2, 2, 1)
-        write_uintle(buff, bitfield3, 3, 1)
-        write_sintle(buff, self.max_rescue_attempts, 4, 1)
-        write_sintle(buff, self.max_items_allowed, 5, 1)
-        write_sintle(buff, self.max_party_members, 6, 1)
-        write_sintle(buff, self.null7, 7, 1)
-        write_sintle(buff, self.turn_limit, 8, 2)
-        write_sintle(buff, self.nullA, 10, 1)
-        write_sintle(buff, self.nullB, 11, 1)
+        write_u8(buff, bitfield0, 0)
+        write_u8(buff, bitfield1, 1)
+        write_u8(buff, bitfield2, 2)
+        write_u8(buff, bitfield3, 3)
+        write_i8(buff, self.max_rescue_attempts, 4)
+        write_i8(buff, self.max_items_allowed, 5)
+        write_i8(buff, self.max_party_members, 6)
+        write_i8(buff, self.null7, 7)
+        write_i16(buff, self.turn_limit, 8)
+        write_i8(buff, self.nullA, 10)
+        write_i8(buff, self.nullB, 11)
         return buff
 
     def __eq__(self, other: object) -> bool:
@@ -153,8 +172,13 @@ class SecondaryTerrainTableEntry(Enum):
     VOID = 2
 
 
-class MapMarkerPlacement(AutoString):
-    def __init__(self, level_id: int, reference_id: int, x: int, y: int):
+class MapMarkerPlacement(AutoString, CheckedIntWrites):
+    level_id: i16
+    reference_id: i16
+    x: i16
+    y: i16
+
+    def __init__(self, level_id: i16, reference_id: i16, x: i16, y: i16):
         self.level_id = level_id
         self.reference_id = reference_id
         self.x = x
@@ -163,18 +187,18 @@ class MapMarkerPlacement(AutoString):
     @classmethod
     def from_bytes(cls, b: bytes) -> 'MapMarkerPlacement':
         return MapMarkerPlacement(
-            read_sintle(b, 0, 2),
-            read_sintle(b, 2, 2),
-            read_sintle(b, 4, 2),
-            read_sintle(b, 6, 2)
+            read_i16(b, 0),
+            read_i16(b, 2),
+            read_i16(b, 4),
+            read_i16(b, 6)
         )
 
     def to_bytes(self) -> bytes:
         buff = bytearray(MAP_MARKER_PLACEMENTS_ENTRY_LEN)
-        write_sintle(buff, self.level_id, 0, 2)
-        write_sintle(buff, self.reference_id, 2, 2)
-        write_sintle(buff, self.x, 4, 2)
-        write_sintle(buff, self.y, 6, 2)
+        write_i16(buff, self.level_id, 0)
+        write_i16(buff, self.reference_id, 2)
+        write_i16(buff, self.x, 4)
+        write_i16(buff, self.y, 6)
         return buff
 
     def __eq__(self, other: object) -> bool:
@@ -266,6 +290,14 @@ class TilesetWeatherEffect(TilesetBaseEnum):
 
 
 class TilesetProperties(AutoString):
+    map_color: TilesetMapColor
+    stirring_effect: TilesetStirringEffect
+    secret_power_effect: TilesetSecretPowerEffect
+    camouflage_type: PokeType
+    nature_power_move_entry: TilesetNaturePowerMoveEntry
+    weather_effect: TilesetWeatherEffect
+    full_water_floor: bool
+
     def __init__(self, map_color: TilesetMapColor, stirring_effect: TilesetStirringEffect,
                  secret_power_effect: TilesetSecretPowerEffect, camouflage_type: PokeType,
                  nature_power_move_entry: TilesetNaturePowerMoveEntry, weather_effect: TilesetWeatherEffect,
@@ -282,24 +314,24 @@ class TilesetProperties(AutoString):
     @typing.no_type_check
     def from_bytes(cls, b: bytes) -> 'TilesetProperties':
         return TilesetProperties(
-            TilesetMapColor(read_uintle(b, 0, 4)),
-            TilesetStirringEffect(read_uintle(b, 4, 1)),
-            TilesetSecretPowerEffect(read_uintle(b, 5, 1)),
-            PokeType(read_uintle(b, 6, 2)),
-            TilesetNaturePowerMoveEntry(read_uintle(b, 8, 2)),
-            TilesetWeatherEffect(read_uintle(b, 10, 1)),
-            bool(read_uintle(b, 11, 1)),
+            TilesetMapColor(read_u32(b, 0)),
+            TilesetStirringEffect(read_u8(b, 4)),
+            TilesetSecretPowerEffect(read_u8(b, 5)),
+            PokeType(read_u16(b, 6)),
+            TilesetNaturePowerMoveEntry(read_u16(b, 8)),
+            TilesetWeatherEffect(read_u8(b, 10)),
+            bool(read_u8(b, 11)),
         )
 
     def to_bytes(self) -> bytes:
         buff = bytearray(TILESET_PROPERTIES_ENTRY_LEN)
-        write_uintle(buff, self.map_color.value, 0, 4)
-        write_uintle(buff, self.stirring_effect.value, 4, 1)
-        write_uintle(buff, self.secret_power_effect.value, 5, 1)
-        write_uintle(buff, self.camouflage_type.value, 6, 2)
-        write_uintle(buff, self.nature_power_move_entry.value, 8, 2)
-        write_uintle(buff, self.weather_effect.value, 10, 1)
-        write_uintle(buff, int(self.full_water_floor), 11, 1)
+        write_u32(buff, self.map_color.value, 0)
+        write_u8(buff, self.stirring_effect.value, 4)
+        write_u8(buff, self.secret_power_effect.value, 5)
+        write_u16(buff, self.camouflage_type.value, 6)
+        write_u16(buff, self.nature_power_move_entry.value, 8)
+        write_u8(buff, self.weather_effect.value, 10)
+        write_u8(buff, u8(int(self.full_water_floor)), 11)
         return buff
 
     def __eq__(self, other: object) -> bool:
@@ -322,10 +354,10 @@ class HardcodedDungeons:
         lst = []
         for i in range(block.begin, block.end, DUNGEON_LIST_ENTRY_LEN):
             lst.append(DungeonDefinition(
-                read_uintle(arm9bin, i),
-                read_uintle(arm9bin, i + 1),
-                read_uintle(arm9bin, i + 2),
-                read_uintle(arm9bin, i + 3),
+                read_u8(arm9bin, i),
+                read_u8(arm9bin, i + 1),
+                read_u8(arm9bin, i + 2),
+                read_u8(arm9bin, i + 3),
             ))
         return lst
 

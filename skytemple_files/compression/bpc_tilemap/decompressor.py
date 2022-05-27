@@ -116,13 +116,13 @@ class BpcTilemapDecompressor:
             if DEBUG:
                 print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
             for i in range(CMD_2_SEEK_OFFSET-1, cmd):
-                self._write(read_uintle(self.decompressed_data, self.bytes_written, 2) | cmd_value)
+                self._write(read_u16(self.decompressed_data, self.bytes_written) | cmd_value)
         else:  # elif cmd > CMD_2_COPY_LOW:
             # cmd - CMD_2_COPY_LOW is the nb of words to write with the sequence of bytes as low byte
             if DEBUG:
                 print(f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}")
             for i in range(CMD_2_COPY_LOW-1, cmd):
-                value_at_pos = read_uintle(self.decompressed_data, self.bytes_written, 2)
+                value_at_pos = read_u16(self.decompressed_data, self.bytes_written)
                 value_at_pos |= self._read()
                 self._write(value_at_pos)
 
@@ -132,7 +132,7 @@ class BpcTilemapDecompressor:
             raise ValueError("BPC Tilemap Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += bytes
-        return read_uintle(self.compressed_data, oc, bytes)
+        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=False, signed=False)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""

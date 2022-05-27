@@ -14,26 +14,27 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Tuple, Optional
-
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.util import *
 
 
-class DungeonMusicEntry(AutoString):
-    def __init__(self, data: Optional[int], track_ref: Optional[int] = None, is_random_ref: bool = False):
+class DungeonMusicEntry(AutoString, CheckedIntWrites):
+    track_or_ref: u16
+    is_random_ref: bool
+
+    def __init__(self, data: Optional[u16], track_ref: Optional[u16] = None, is_random_ref: bool = False):
         if track_ref is not None:
             self.track_or_ref = track_ref
             self.is_random_ref = is_random_ref
         else:
             assert data is not None
-            self.track_or_ref = data & ~0x8000
+            self.track_or_ref = u16(data & ~0x8000)
             self.is_random_ref = data & 0x8000 > 0
             assert data == self.to_int()
 
-    def to_int(self) -> int:
+    def to_int(self) -> u16:
         if self.is_random_ref:
-            return 0x8000 + self.track_or_ref
+            return u16(0x8000 + self.track_or_ref)
         return self.track_or_ref
 
 
@@ -44,7 +45,7 @@ class HardcodedDungeonMusic:
         lst = []
         for i in range(block.begin, block.end, 2):
             lst.append(DungeonMusicEntry(
-                read_uintle(ov10, i, 2),
+                read_u16(ov10, i),
             ))
         return lst
 
@@ -55,29 +56,29 @@ class HardcodedDungeonMusic:
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            write_uintle(ov10, entry.to_int(), block.begin + i * 2, 2)
+            write_u16(ov10, entry.to_int(), block.begin + i * 2)
 
     @staticmethod
-    def get_random_music_list(ov10: bytes, config: Pmd2Data) -> List[Tuple[int, int, int, int]]:
+    def get_random_music_list(ov10: bytes, config: Pmd2Data) -> List[Tuple[u16, u16, u16, u16]]:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
         lst = []
         for i in range(block.begin, block.end, 8):
             lst.append((
-                read_uintle(ov10, i, 2),
-                read_uintle(ov10, i + 2, 2),
-                read_uintle(ov10, i + 4, 2),
-                read_uintle(ov10, i + 6, 2),
+                read_u16(ov10, i),
+                read_u16(ov10, i + 2),
+                read_u16(ov10, i + 4),
+                read_u16(ov10, i + 6),
             ))
         return lst
 
     @staticmethod
-    def set_random_music_list(value: List[Tuple[int, int, int, int]], ov10: bytearray, config: Pmd2Data) -> None:
+    def set_random_music_list(value: List[Tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
         expected_length = int((block.end - block.begin) / 8)
         if len(value) != expected_length:
             raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, (a, b, c, d) in enumerate(value):
-            write_uintle(ov10, a, block.begin + i * 8 + 0, 2)
-            write_uintle(ov10, b, block.begin + i * 8 + 2, 2)
-            write_uintle(ov10, c, block.begin + i * 8 + 4, 2)
-            write_uintle(ov10, d, block.begin + i * 8 + 6, 2)
+            write_u16(ov10, a, block.begin + i * 8 + 0)
+            write_u16(ov10, b, block.begin + i * 8 + 2)
+            write_u16(ov10, c, block.begin + i * 8 + 4)
+            write_u16(ov10, d, block.begin + i * 8 + 6)

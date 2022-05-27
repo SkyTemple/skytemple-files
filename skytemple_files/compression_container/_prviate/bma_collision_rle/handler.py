@@ -32,5 +32,5 @@ class BmaCollisionRleHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bma_collision_rle_compression import BmaCollisionRleCompressionContainer  # type: ignore
+        from skytemple_rust._st_bma_collision_rle_compression import BmaCollisionRleCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
         return BmaCollisionRleCompressionContainer

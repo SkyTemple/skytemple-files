@@ -14,12 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked, u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class Pkdpx(CommonAt):
+    length_compressed: u16
+    length_decompressed: u32
+
     def __init__(self, data: bytes=None):
         """
         Create a PKDPX container from already compressed data.
@@ -28,7 +32,7 @@ class Pkdpx(CommonAt):
         if data:
             self.length_compressed = self.cont_size(data)
             self.compression_flags = read_bytes(data, 7, 9)
-            self.length_decompressed = read_uintle(data, 0x10, 4)
+            self.length_decompressed = read_u32(data, 0x10)
             self.compressed_data = data[0x14:]
 
     def decompress(self) -> bytes:
@@ -40,6 +44,7 @@ class Pkdpx(CommonAt):
         assert len(data) == self.length_decompressed
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'PKDPX'\
@@ -50,7 +55,7 @@ class Pkdpx(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'Pkdpx':
@@ -61,7 +66,7 @@ class Pkdpx(CommonAt):
         flags, px_data = FileType.PX.compress(data)
 
         new_container.compression_flags = flags
-        new_container.length_decompressed = len(data)
+        new_container.length_decompressed = u32_checked(len(data))
         new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x14
+        new_container.length_compressed = u16_checked(len(px_data) + 0x14)
         return new_container

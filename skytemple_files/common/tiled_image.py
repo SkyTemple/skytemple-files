@@ -23,6 +23,8 @@ from typing import List, Tuple, Union, Sequence, Optional
 
 import typing
 
+from range_typed_integers import u16
+
 from skytemple_files.common.i18n_util import f, _
 from skytemple_files.user_error import UserValueError
 
@@ -57,15 +59,15 @@ class TilemapEntry(TilemapEntryProtocol):
             return self.to_int() == other.to_int()  # type: ignore
         return False
 
-    def to_int(self) -> int:
+    def to_int(self) -> u16:
         """Converts tile map entry back into the byte format used by game"""
         xf = 1 if self.flip_x else 0
         yf = 1 if self.flip_y else 0
         # '0010000000100101'
-        return (self.idx & 0x3FF) + (xf << 10) + (yf << 11) + ((self.pal_idx & 0x3F) << 12)
+        return u16((self.idx & 0x3FF) + (xf << 10) + (yf << 11) + ((self.pal_idx & 0x3F) << 12))
 
     @classmethod
-    def from_int(cls, entry: int) -> 'TilemapEntry':
+    def from_int(cls, entry: u16) -> 'TilemapEntry':
         """Create a tile map entry from the common two byte format used by the game"""
         return cls(
             # 0000 0011 1111 1111, tile index

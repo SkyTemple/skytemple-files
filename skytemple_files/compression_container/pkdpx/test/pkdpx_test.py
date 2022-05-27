@@ -21,7 +21,7 @@ import pytest
 from parameterized import parameterized
 
 from skytemple_files.common.impl_cfg import env_use_native
-from skytemple_files.common.util import read_uintle
+from skytemple_files.common.util import read_u16, read_u32
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 from skytemple_files.compression_container.test.util import load_dataset, dataset_name_func
@@ -42,8 +42,8 @@ class PkdpxTestCase(SkyTempleFilesTestCase[PkdpxHandler, CompressionContainerPro
         model = self.handler().compress(in_bytes)
         model_bytes = model.to_bytes()
         self.assertEqual(len(model_bytes), model.cont_size(model_bytes))
-        self.assertEqual(read_uintle(model_bytes, 5, 2), len(model_bytes))
-        self.assertEqual(read_uintle(model_bytes, 0x10, 4), len(in_bytes))
+        self.assertEqual(read_u16(model_bytes, 5), len(model_bytes))
+        self.assertEqual(read_u32(model_bytes, 0x10), len(in_bytes))
         self.assertTrue(model_bytes.startswith(b'PKDPX'))
         self.assertEqual(model_bytes, self.handler().serialize(self.handler().deserialize(model_bytes)))
         self.assertEqual(in_bytes, model.decompress())

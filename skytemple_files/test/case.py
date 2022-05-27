@@ -126,7 +126,7 @@ class SkyTempleFilesTestCase(unittest.TestCase, Generic[T, U], ABC):
 def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
     equal_size = img1.height == img2.height and img1.width == img2.width
 
-    if img1.mode == img2.mode == "RGBA":
+    if img1.mode == img2.mode == "RGBA":  # type: ignore
         img1_alphas = [pixel[3] for pixel in img1.getdata()]
         img2_alphas = [pixel[3] for pixel in img2.getdata()]
         equal_alphas = img1_alphas == img2_alphas
@@ -189,8 +189,8 @@ def romtest(*, file_ext, path):
                     parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
                 # since expands now adds the tests to our locals, we need to pass them back...
                 # this isn't hacky at all wdym??????ßßß
-                frame_locals = inspect.currentframe().f_back.f_locals
-                for local_name, local in inspect.currentframe().f_locals.items():
+                frame_locals = inspect.currentframe().f_back.f_locals  # type: ignore
+                for local_name, local in inspect.currentframe().f_locals.items():  # type: ignore
                     if local_name.startswith('test_'):
                         frame_locals[local_name] = local
 

@@ -59,6 +59,10 @@ class BpaMock(BpaProtocol[BpaFrameInfoMock]):
             BpaFrameInfoMock(5, 0)
         ]
 
+    @classmethod
+    def new_empty(cls) -> BpaProtocol:
+        raise NotImplementedError("Not implemented on mock.")
+
     # Properties; because the mock only supports reading!
     @property
     def number_of_tiles(self) -> int:  # type: ignore

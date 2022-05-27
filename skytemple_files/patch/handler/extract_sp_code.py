@@ -18,6 +18,7 @@
 from typing import Callable, Dict, List, Set
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
@@ -29,7 +30,6 @@ from skytemple_files.common.i18n_util import _
 PATCH_CHECK_ADDR_APPLIED_US = 0xAF00
 PATCH_CHECK_ADDR_APPLIED_EU = 0xAF00
 PATCH_CHECK_INSTR_APPLIED = 0xE355003E
-
 
 START_OV11_US = 0x022DC240
 START_TABLE_US = 0x022E7140
@@ -69,9 +69,13 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -91,28 +95,28 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
             main_func = dict()
 
             data = rom.loadArm9Overlays([11])[11].data
-            
-            switch = AsmFunction(data[start_table-start_ov11:start_m_functions-start_ov11], start_table)
+
+            switch = AsmFunction(data[start_table - start_ov11:start_m_functions - start_ov11], start_table)
             switch.process()
-            main_calls = switch.process_switch(5, (0,64), {})
-            
+            main_calls = switch.process_switch(5, (0, 64), {})
+
             unique_main_calls = list(sorted(set(main_calls)))
             unique_main_calls.append(end_m_functions)
 
             last_call = None
-            for i in range(len(unique_main_calls)-1):
+            for i in range(len(unique_main_calls) - 1):
                 start = unique_main_calls[i]
-                end = unique_main_calls[i+1]
-                func_data = data[start-start_ov11:end-start_ov11]
+                end = unique_main_calls[i + 1]
+                func_data = data[start - start_ov11:end - start_ov11]
                 main_func[start] = AsmFunction(func_data, start)
                 main_func[start].process()
                 last_call = start
 
             nb_proc = len(main_calls)
-            header = bytearray(4+2*nb_proc+len(main_func)*8)
-            write_uintle(header, 4+2*nb_proc, 0, 4)
+            header = bytearray(4 + 2 * nb_proc + len(main_func) * 8)
+            write_u32(header, u32_checked(4 + 2 * nb_proc), 0)
             code_data = bytearray(0)
-            current_ptr = len(header)
+            current_ptr = u32_checked(len(header))
             id_codes = dict()
             print(nb_proc)
             for i, t in enumerate(main_func.items()):
@@ -120,16 +124,16 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
                 x = t[1]
                 id_codes[k] = i
                 fdata = bytearray(x.compile(start_m_functions))
-                if k==last_call:
+                if k == last_call:
                     # Add a branch to the end for the last case since it doesn't have one
                     fdata += bytearray([0x1C, 0x2, 0x00, 0xEA])
-                write_uintle(header, current_ptr, 4+2*nb_proc+i*8, 4)
-                write_uintle(header, len(fdata), 4+2*nb_proc+i*8+4, 4)
+                write_u32(header, current_ptr, 4 + 2 * nb_proc + i * 8)
+                write_u32(header, u32_checked(len(fdata)), 4 + 2 * nb_proc + i * 8 + 4)
                 code_data += fdata
-                
-                current_ptr += len(fdata)
+
+                current_ptr += len(fdata)  # type: ignore
             for i, x in enumerate(main_calls):
-                write_uintle(header, id_codes[x], 4+2*i, 2)
+                write_u16(header, id_codes[x], 4 + 2 * i)
             file_data = header + code_data
             create_file_in_rom(rom, SP_CODE_PATH, file_data)
         try:
@@ -137,6 +141,5 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

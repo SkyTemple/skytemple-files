@@ -17,6 +17,8 @@
 
 import math
 
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
@@ -25,8 +27,8 @@ from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 from skytemple_files.common.i18n_util import _
 
 
-class BpaFrameInfo(BpaFrameInfoProtocol):
-    def __init__(self, duration_per_frame: int, unk2: int):
+class BpaFrameInfo(BpaFrameInfoProtocol, CheckedIntWrites):
+    def __init__(self, duration_per_frame: u16, unk2: u16):
         # speed?
         self.duration_per_frame = duration_per_frame
         # always 0?
@@ -37,10 +39,10 @@ class BpaFrameInfo(BpaFrameInfoProtocol):
         return f"BpaFrameInfo({self.duration_per_frame}, {self.unk2})"
 
 
-class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
+class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
     def __init__(self, data: Optional[bytes]):
-        self.number_of_tiles = 0
-        self.number_of_frames = 0
+        self.number_of_tiles = u16(0)
+        self.number_of_frames = u16(0)
         self.tiles: List[bytes] = []
         self.frame_info = []
         if data is None:
@@ -48,14 +50,14 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
 
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.number_of_tiles = read_uintle(data, 0, 2)
-        self.number_of_frames = read_uintle(data, 2, 2)
+        self.number_of_tiles = read_u16(data, 0)
+        self.number_of_frames = read_u16(data, 2)
 
         # Read image header
         for i in range(0, self.number_of_frames):
             self.frame_info.append(BpaFrameInfo(
-                read_uintle(data, 4 + i*4, 2),
-                read_uintle(data, 4 + i*4 + 2, 2),
+                read_u16(data, 4 + i*4),
+                read_u16(data, 4 + i*4 + 2),
             ))
         end_header = 4 + self.number_of_frames * 4
 
@@ -63,6 +65,10 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         slice_size = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
         for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_tiles))):
             self.tiles.append(bytearray(tile))
+
+    @classmethod
+    def new_empty(cls) -> BpaProtocol:
+        return cls(None)
 
     def __str__(self) -> str:
         return f"Idx: {self.number_of_tiles}, " \
@@ -137,8 +143,8 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
             image.width, image.height, optimize=False
         )
         self.tiles = []
-        self.number_of_frames = int(image.width / BPA_TILE_DIM)
-        self.number_of_tiles = int(image.height / BPA_TILE_DIM)
+        self.number_of_frames = u16_checked(int(image.width / BPA_TILE_DIM))
+        self.number_of_tiles = u16_checked(int(image.height / BPA_TILE_DIM))
 
         # We need to re-order the tiles to actually save them
         for frame_idx in range(0, self.number_of_frames):
@@ -160,8 +166,8 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
             if (image.width, image.height) != first_image_dims:
                 raise ValueError(_("The dimensions of all images must be the same."))
         self.tiles = []
-        self.number_of_frames = len(frames)
-        self.number_of_tiles = int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM))
+        self.number_of_frames = u16_checked(len(frames))
+        self.number_of_tiles = u16_checked(int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM)))
 
         for tile in frames:
             self.tiles += tile
@@ -180,7 +186,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
                     self.frame_info.append(self.frame_info[len_finfo-1])
                 else:
                     # ... or we default to 10.
-                    self.frame_info.append(BpaFrameInfo(10, 0))
+                    self.frame_info.append(BpaFrameInfo(u16(10), u16(0)))
 
     def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""

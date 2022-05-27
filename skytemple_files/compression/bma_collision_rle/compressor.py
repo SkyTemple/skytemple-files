@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_uintle
+from skytemple_files.common.util import read_u8
 
 RLE_MAX_LOOKAHEAD_SIZE = 127
 
@@ -61,7 +61,7 @@ class BmaCollisionRleCompressor:
             raise ValueError("BMA Collision RLE Compressor: Reached EOF while reading data.")
         oc = self.cursor
         self.cursor += 1
-        return 1 if read_uintle(self.uncompressed_data, oc) > 0 else 0
+        return 1 if read_u8(self.uncompressed_data, oc) > 0 else 0
 
     def _write(self, data):
         """Writes to the output as byte"""
@@ -72,9 +72,9 @@ class BmaCollisionRleCompressor:
         """Look how often the byte in the input data repeats, up to RLE_MAX_LOOKAHEAD_SIZE"""
         nc = self.cursor
         repeats = 0
-        while read_uintle(self.uncompressed_data, nc) == data and \
-                repeats < RLE_MAX_LOOKAHEAD_SIZE and \
-                nc < self.length_input:
+        while nc < self.length_input and \
+                read_u8(self.uncompressed_data, nc) == data and \
+                repeats < RLE_MAX_LOOKAHEAD_SIZE:
             repeats += 1
             nc += 1
         return repeats

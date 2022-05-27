@@ -83,7 +83,7 @@ class RomDataLoader:
         item_p_bin = self.rom.getFileByName('BALANCE/item_p.bin')
         item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
-        cats: Dict[Pmd2DungeonItemCategory, List[int]] = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
+        cats: Dict["Pmd2DungeonItemCategory", List[int]] = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
 
         for idx, entry in enumerate(item_p.item_list):
             cats[entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)].append(idx)

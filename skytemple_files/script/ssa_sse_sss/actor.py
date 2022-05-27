@@ -17,19 +17,27 @@
 import logging
 import warnings
 
+from range_typed_integers import u16, i16
+
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptEntity
-from skytemple_files.common.util import AutoString
+from skytemple_files.common.util import AutoString, CheckedIntWrites
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 logger = logging.getLogger(__name__)
 
 
-class SsaActor(AutoString):
-    def __init__(self, scriptdata: Pmd2ScriptData, actor_id: int, pos: SsaPosition, script_id: int, unkE: int):
+class SsaActor(AutoString, CheckedIntWrites):
+    scriptdata: Pmd2ScriptData
+    actor_id: u16
+    pos: SsaPosition
+    script_id: i16
+    unkE: i16
+
+    def __init__(self, scriptdata: Pmd2ScriptData, actor_id: u16, pos: SsaPosition, script_id: i16, unkE: i16):
         try:
             self.actor = scriptdata.level_entities__by_id[actor_id]
         except KeyError:
             logger.warning(f"Unknown actor id: {actor_id}")
-            self.actor = Pmd2ScriptEntity(actor_id, 0, 'UNKNOWN', 0, 0, 0)
+            self.actor = Pmd2ScriptEntity(actor_id, u16(0), 'UNKNOWN', u16(0), u16(0), u16(0))
         self.pos = pos
         self.script_id = script_id
         self.unkE = unkE

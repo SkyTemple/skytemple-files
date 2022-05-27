@@ -16,21 +16,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-import itertools
 import os
 
-from PIL import Image
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry
+from skytemple_files.common.tiled_image import TilemapEntry
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, iter_bytes_4bit_le, write_uintle, \
-    read_uintle
+from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes, \
+    read_u16, write_u16
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
-from skytemple_files.compression_container.common_at.model import CommonAt
-
-from itertools import islice
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
@@ -85,11 +79,11 @@ def corrupt341():
 
     for j in range(1, 300):
         for i, m in enumerate(dummy_map):
-            write_uintle(img341new, m.to_int(), (j * 18) + 2 * i, 2)
+            write_u16(img341new, m.to_int(), (j * 18) + 2 * i)
 
     all_tilemaps = []
     for bytes2 in iter_bytes(img341new, 2):
-        all_tilemaps.append(TilemapEntry.from_int(read_uintle(bytes2, 0, 2)))
+        all_tilemaps.append(TilemapEntry.from_int(read_u16(bytes2, 0)))
 
     # Encode XOR
     #rows_encoded = []

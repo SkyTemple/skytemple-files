@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
@@ -29,19 +30,19 @@ class FontDatWriter:
 
     def write(self) -> bytes:
         buffer = bytearray(FONT_DAT_ENTRY_LEN * len(self.model.entries))
-        write_uintle(buffer, len(self.model.entries), 0x00, 4)
+        write_u32(buffer, u32_checked(len(self.model.entries)), 0x00)
 
         # Font Data
         last: Tuple[Optional[int], Optional[int]] = (None, None)
-        for i, e in enumerate(sorted(self.model.entries, key=lambda x:(x.table, x.char))):
-            if last==(e.char, e.table):
+        for i, e in enumerate(sorted(self.model.entries, key=lambda x: (x.table, x.char))):
+            if last == (e.char, e.table):
                 raise ValueError(_("Character {e.char} in table {e.table} is defined multiple times in a font file!"))
             last = (e.char, e.table)
             off_start = 0x4 + (i * FONT_DAT_ENTRY_LEN)
-            write_uintle(buffer, e.char, off_start + 0x00)
-            write_uintle(buffer, e.table, off_start + 0x01)
-            write_uintle(buffer, e.width, off_start + 0x02)
-            write_uintle(buffer, e.bprow, off_start + 0x03)
+            write_u8(buffer, e.char, off_start + 0x00)
+            write_u8(buffer, e.table, off_start + 0x01)
+            write_u8(buffer, e.width, off_start + 0x02)
+            write_u8(buffer, e.bprow, off_start + 0x03)
             buffer[off_start + 0x04:off_start + FONT_DAT_ENTRY_LEN] = e.data
 
         return buffer

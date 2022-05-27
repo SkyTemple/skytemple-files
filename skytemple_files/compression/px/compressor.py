@@ -19,7 +19,7 @@
 from collections import deque
 
 from enum import Enum
-from typing import Tuple
+from typing import Tuple, Deque
 
 from skytemple_files.common.util import *
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN, PX_LOOKBACK_BUFFER_SIZE, PX_MAX_MATCH_SEQLEN, \
@@ -93,9 +93,9 @@ class PxCompressor:
         self.input_size = len(self.uncompressed_data)
 
     def reset(self):
-        self.control_flags = None
-        self.compressed_data = None
-        self.pending_operations = deque()
+        self.control_flags: bytes = None  # type: ignore
+        self.compressed_data: bytearray = None  # type: ignore
+        self.pending_operations: Deque[CompOp] = deque()
         self.high_nibble_lenghts_possible = []
         self.nb_compressed_byte_written = 0
 
@@ -199,7 +199,7 @@ class PxCompressor:
 
         else:  # Level 0
             # If all else fails, add the byte as-is
-            b = read_uintle(self.uncompressed_data, self.cursor)
+            b = read_u8(self.uncompressed_data, self.cursor)
             myoperation.type = Operation.COPY_ASIS
             myoperation.highnybble = (b >> 4) & 0x0F
             myoperation.lownybble = b & 0x0F
@@ -217,7 +217,7 @@ class PxCompressor:
         both_bytes = 0
         for i in [1, 0]:
             if l_cursor < self.input_size:
-                both_bytes |= read_uintle(self.uncompressed_data, l_cursor) << 8 * i
+                both_bytes |= read_u8(self.uncompressed_data, l_cursor) << 8 * i
                 l_cursor += 1
             else:
                 return False
@@ -241,7 +241,7 @@ class PxCompressor:
         # Read 4 nibbles from the input
         for i in [0, 2]:
             if l_cursor < self.input_size:
-                b = read_uintle(self.uncompressed_data, l_cursor)
+                b = read_u8(self.uncompressed_data, l_cursor)
                 nibbles[i] = (b >> 4) & 0x0F
                 nibbles[i+1] = b & 0x0F
                 l_cursor += 1
@@ -514,7 +514,7 @@ class PxCompressor:
         :return:
         """
         count = 0
-        while first_1 != last_1 and first_2 != last_2 and read_uintle(self.uncompressed_data, first_1) == read_uintle(self.uncompressed_data, first_2):
+        while first_1 != last_1 and first_2 != last_2 and read_u8(self.uncompressed_data, first_1) == read_u8(self.uncompressed_data, first_2):
             count += 1
             first_1 += 1
             first_2 += 1

@@ -1,0 +1,18 @@
+[MAIN]
+ignore-patterns=.*?_test.py
+
+jobs=0
+suggestion-mode=yes
+
+disable=
+    # This one seems to be broken with make_user_err.
+    raising-non-exception,
+
+fail-under=8.0
+fail-on=
+    deprecated-method-st,
+    E,
+    F,
+
+[REPORTS]
+reports=yes

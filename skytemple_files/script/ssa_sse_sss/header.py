@@ -14,18 +14,32 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.util import AutoString
+from typing import Optional
+
+from range_typed_integers import u16
+
+from skytemple_files.common.util import AutoString, CheckedIntWrites
 
 
-class SsaHeader(AutoString):
+class SsaHeader(AutoString, CheckedIntWrites):
     """
     The header of a read SSA file.
     Only contains information used during read-in of the data. Not used for saving.
     """
-    def __init__(self, layer_count, layer_list_pointer,
-                 trigger_pointer, actor_pointer,
-                 object_pointer, performer_pointer,
-                 events_pointer, position_marker_pointer, unk10_pointer):
+    layer_count: u16
+    layer_list_pointer: Optional[int]
+    trigger_pointer: Optional[int]
+    actor_pointer: Optional[int]
+    object_pointer: Optional[int]
+    performer_pointer: Optional[int]
+    events_pointer: Optional[int]
+    position_marker_pointer: Optional[int]
+    unk10_pointer: Optional[int]
+
+    def __init__(self, layer_count: u16, layer_list_pointer: int,
+                 trigger_pointer: int, actor_pointer: int,
+                 object_pointer: int, performer_pointer: int,
+                 events_pointer: int, position_marker_pointer: int, unk10_pointer: int):
 
         # If the pointer of the following entry is the same, then this layer doesn't actually exist.
         self.layer_count = layer_count

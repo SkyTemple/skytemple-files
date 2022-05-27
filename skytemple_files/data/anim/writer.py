@@ -19,6 +19,8 @@ from typing import Optional, Dict
 
 import typing
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.data.anim import *
 from skytemple_files.data.anim.model import Anim
@@ -31,19 +33,19 @@ class AnimWriter:
     @typing.no_type_check
     def write(self) -> bytes:
         data = bytearray(HEADER_SIZE)
-        write_uintle(data, len(data), 0, 4)
+        write_u32(data, u32_checked(len(data)), 0)
         for e in self.model.trap_table:
             data += e.to_bytes()
-        write_uintle(data, len(data), 4, 4)
+        write_u32(data, u32_checked(len(data)), 4)
         for e in self.model.item_table:
             data += e.to_bytes()
-        write_uintle(data, len(data), 8, 4)
+        write_u32(data, u32_checked(len(data)), 8)
         for e in self.model.move_table:
             data += e.to_bytes()
-        write_uintle(data, len(data), 12, 4)
+        write_u32(data, u32_checked(len(data)), 12)
         for e in self.model.general_table:
             data += e.to_bytes()
-        write_uintle(data, len(data), 16, 4)
+        write_u32(data, u32_checked(len(data)), 16)
         for e in self.model.special_move_table:
             data += e.to_bytes()
         return bytes(data)

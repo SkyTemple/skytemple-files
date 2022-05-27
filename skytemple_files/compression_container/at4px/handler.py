@@ -33,5 +33,5 @@ class At4pxHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_at4px import At4px
+        from skytemple_rust.st_at4px import At4px  # pylint: disable=no-name-in-module,no-member,import-error
         return At4px

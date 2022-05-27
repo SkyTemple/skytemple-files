@@ -36,6 +36,7 @@ ITEM_LISTS_NB = 26
 LIST_PATH = "TABLEDAT/list_%02d.bin"
 ARM9_START = 0x02000000
 
+
 class ExtractItemListsPatchHandler(AbstractPatchHandler):
 
     @property
@@ -44,7 +45,8 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.')
+        return _(
+            'Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.')
 
     @property
     def author(self) -> str:
@@ -61,16 +63,16 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED_US
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED_EU
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
-            path_len = len(LIST_PATH%0)+1
-            if path_len%4!=0:
-                path_len += 4-(path_len%4)
+            path_len = len(LIST_PATH % 0) + 1
+            if path_len % 4 != 0:
+                path_len += 4 - (path_len % 4)
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
                     table = ITEM_LISTS_TABLE_US
@@ -79,46 +81,47 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
 
             ranges = []
             for i in range(ITEM_LISTS_NB):
-                start = read_uintle(rom.arm9, table+i*4, 4)-ARM9_START
+                start = read_u32(rom.arm9, table + i * 4) - ARM9_START
                 end = start
                 size = 0
-                while size<ITEM_LISTS_SIZE:
-                    val = read_uintle(rom.arm9, end, 2)
-                    if val>=30000:
-                        size += (val-30000)*2
+                while size < ITEM_LISTS_SIZE:
+                    val = read_u16(rom.arm9, end)
+                    if val >= 30000:
+                        size += (val - 30000) * 2
                     else:
                         size += 2
                     end += 2
                 data = rom.arm9[start:end]
-                if end%4!=0:
-                    end += 4-(end%4)
-                path = LIST_PATH%i
+                if end % 4 != 0:
+                    end += 4 - (end % 4)
+                path = LIST_PATH % i
                 if path not in rom.filenames:
                     create_file_in_rom(rom, path, data)
                 else:
                     rom.setFileByName(path, data)
-                rom.arm9 = rom.arm9[:start]+bytes([0xCC]*(end-start))+rom.arm9[end:]
+                rom.arm9 = rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
                 ranges.append([start, end])
             ranges.sort()
             i = 0
-            while i<len(ranges)-1:
-                if ranges[i][1]==ranges[i+1][0]:
-                    ranges[i][1] = ranges[i+1][1]
-                    del ranges[i+1]
-                    i-=1
-                i+=1
-            buffer = bytearray(4*ITEM_LISTS_NB)
+            while i < len(ranges) - 1:
+                if ranges[i][1] == ranges[i + 1][0]:
+                    ranges[i][1] = ranges[i + 1][1]
+                    del ranges[i + 1]
+                    i -= 1
+                i += 1
+            buffer = bytearray(4 * ITEM_LISTS_NB)
             for i in range(ITEM_LISTS_NB):
-                path = LIST_PATH%i
-                while ranges[0][1]-ranges[0][0]<path_len:
+                path = LIST_PATH % i
+                while ranges[0][1] - ranges[0][0] < path_len:
                     del ranges[0]
-                    if len(ranges)==0:
+                    if len(ranges) == 0:
                         raise RuntimeError(_("Don't have enough space to put filenames! "))
-                
-                rom.arm9 = rom.arm9[:ranges[0][0]]+path.encode(encoding="ascii")+bytes(path_len-len(path))+rom.arm9[ranges[0][0]+path_len:]
-                write_uintle(buffer, ARM9_START+ranges[0][0], i*4, 4)
+
+                rom.arm9 = rom.arm9[:ranges[0][0]] + path.encode(encoding="ascii") + bytes(
+                    path_len - len(path)) + rom.arm9[ranges[0][0] + path_len:]
+                write_u32(buffer, u32(ARM9_START + ranges[0][0]), i * 4)
                 ranges[0][0] += path_len
-            rom.arm9 = rom.arm9[:table]+buffer+rom.arm9[table+len(buffer):]
+            rom.arm9 = rom.arm9[:table] + buffer + rom.arm9[table + len(buffer):]
         try:
             apply()
         except RuntimeError as ex:

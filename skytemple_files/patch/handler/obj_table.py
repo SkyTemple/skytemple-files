@@ -20,7 +20,8 @@ from ndspy.code import loadOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import _
@@ -42,6 +43,7 @@ PATCH_CHECK_ADDR_APPLIED_EU = 0x1FF28
 PATCH_CHECK_INSTR_APPLIED = 0xE5D50008
 
 OBJECT_TABLE_PATH = "BALANCE/objects.bin"
+
 
 class ExtractObjectTablePatchHandler(AbstractPatchHandler):
 
@@ -68,9 +70,13 @@ class ExtractObjectTablePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -93,25 +99,25 @@ class ExtractObjectTablePatchHandler(AbstractPatchHandler):
                 data = rom.loadArm9Overlays([11])[11].data
 
                 table = []
-                            
+
                 for i in range(table_entries):
-                    offset = start_table-start_ov11+i*0xC
+                    offset = start_table - start_ov11 + i * 0xC
                     array = bytearray(0x10)
-                    attr = read_uintle(data, offset, 4)
-                    write_uintle(array, attr, 0, 4)
-                    attr = read_uintle(data, offset+8, 1)
-                    write_uintle(array, attr, 4, 1)
-                    addr = read_uintle(data, offset+4, 4)
-                    if addr!=0:
+                    attr = read_u32(data, offset)
+                    write_u32(array, attr, 0)
+                    attr2 = read_u8(data, offset + 8)
+                    write_u8(array, attr2, 4)
+                    addr: int = read_u32(data, offset + 4)
+                    if addr != 0:
                         addr -= start_ov11
                         count = 0
-                        while data[addr+count]!=0:
-                            if count>=10:
+                        while data[addr + count] != 0:
+                            if count >= 10:
                                 raise ValueError("Invalid string length (more than 10 characters)")
-                            array[5+count] = data[addr+count]
-                            count+=1
-                    if sum(array)==0:
-                        print("Found blank entry, stopping at",i)
+                            array[5 + count] = data[addr + count]
+                            count += 1
+                    if sum(array) == 0:
+                        print("Found blank entry, stopping at", i)
                         break
                     table.append(array)
                 file_data = b''.join(table)
@@ -121,6 +127,5 @@ class ExtractObjectTablePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

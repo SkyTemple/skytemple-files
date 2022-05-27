@@ -17,6 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional, Dict
 
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 from skytemple_files.data.waza_p.model import WazaP
@@ -30,7 +32,7 @@ class WazaPWriter:
         pointer_offsets: List[int] = []
         data = bytearray(3)
         # Learnset
-        learnset_pointers: List[Tuple[int, int, int]] = []
+        learnset_pointers: List[Tuple[u32, u32, u32]] = []
         for learnset in self.model.learnsets:
             # Level Up
             pnt_lvlup = len(data)
@@ -52,7 +54,7 @@ class WazaPWriter:
             c = encode_sir0_pointer_offsets(buff, learnset.egg_moves, False)
             data += buff[:c]
 
-            learnset_pointers.append((pnt_lvlup, pnt_tm_hm, pnt_egg))
+            learnset_pointers.append((u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg)))
         # Padding
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
@@ -70,9 +72,9 @@ class WazaPWriter:
             pointer_offsets.append(len(data) + i * 12)
             pointer_offsets.append(len(data) + i * 12 + 4)
             pointer_offsets.append(len(data) + i * 12 + 8)
-            write_uintle(learnset_pointer_table, lvlup, i * 12, 4)
-            write_uintle(learnset_pointer_table, tm_hm, i * 12 + 4, 4)
-            write_uintle(learnset_pointer_table, egg, i * 12 + 8, 4)
+            write_u32(learnset_pointer_table, lvlup, i * 12)
+            write_u32(learnset_pointer_table, tm_hm, i * 12 + 4)
+            write_u32(learnset_pointer_table, egg, i * 12 + 8)
         data += learnset_pointer_table
         # Padding
         if len(data) % 16 != 0:
@@ -81,9 +83,9 @@ class WazaPWriter:
         header = bytearray(8)
         waza_header_start = len(data)
         pointer_offsets.append(waza_header_start)
-        write_uintle(header, move_pointer, 0, 4)
+        write_u32(header, u32_checked(move_pointer), 0)
         pointer_offsets.append(waza_header_start + 4)
-        write_uintle(header, learnset_pointer_table_pnt, 4, 4)
+        write_u32(header, u32_checked(learnset_pointer_table_pnt), 4)
         data += header
         # Padding
         if len(data) % 16 != 0:

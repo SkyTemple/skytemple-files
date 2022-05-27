@@ -17,6 +17,8 @@
 from itertools import islice
 from typing import Optional
 
+from range_typed_integers import u8_checked, u32_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import f, _
 DPLA_COLORS_PER_PALETTE = 16
@@ -35,16 +37,16 @@ class Dpla:
     def __init__(self, data: bytes, pointer_to_pointers: int):
         toc_pointers = []
         for i in range(pointer_to_pointers, len(data), 4):
-            toc_pointers.append(read_uintle(data, i, 4))
+            toc_pointers.append(read_u32(data, i))
 
         # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
         self.colors = []
         self.durations_per_frame_for_colors = []
         for pnt in toc_pointers:
             # 0x0         2           uint16      (NbColors) The amount of colors in this entry.
-            number_colors = read_uintle(data, pnt, 2)
+            number_colors = read_u16(data, pnt)
             # 0x2         2           uint16      unknown
-            self.durations_per_frame_for_colors.append(read_uintle(data, pnt + 2, 2))
+            self.durations_per_frame_for_colors.append(read_u16(data, pnt + 2))
             # 0x4         (NbColors * 4)          A list of colors. Always at least 4 bytes even when empty! Is completely 0 if nb of color == 0 !
             # [
             #     0x0     4           RGBX32      A color.
@@ -131,13 +133,13 @@ class Dpla:
         pointers = []
         pointer_offsets = []
         for i, color_frames in enumerate(self.colors):
-            pointers.append(len(data))
-            number_colors = int(len(color_frames) / 3)
+            pointers.append(u32_checked(len(data)))
+            number_colors = len(color_frames) // 3
             buffer_entry = bytearray(((number_colors + 1) * 4))
             # Number colors
-            write_uintle(buffer_entry, number_colors, 0)
+            write_u8(buffer_entry, u8_checked(number_colors), 0)
             # Unk
-            write_uintle(buffer_entry, self.durations_per_frame_for_colors[i], 2)
+            write_u8(buffer_entry, u8_checked(self.durations_per_frame_for_colors[i]), 2)
             # Always one null color
             null_color = False
             if len(color_frames) == 0:
@@ -145,17 +147,17 @@ class Dpla:
                 color_frames = [0, 0, 0]
             cursor = 4
             for j, (r, g, b) in enumerate(chunk(color_frames, 3)):
-                write_uintle(buffer_entry, r, cursor)
-                write_uintle(buffer_entry, g, cursor + 1)
-                write_uintle(buffer_entry, b, cursor + 2)
-                write_uintle(buffer_entry, 128 if not null_color else 0, cursor + 3)
+                write_u8(buffer_entry, r, cursor)
+                write_u8(buffer_entry, g, cursor + 1)
+                write_u8(buffer_entry, b, cursor + 2)
+                write_u8(buffer_entry, u8(128 if not null_color else 0), cursor + 3)
                 cursor += 4
 
             data += buffer_entry
         data_offset = cursor = len(data)
         data += bytes(4 * len(pointers))
         for pnt in pointers:
-            write_uintle(data, pnt, cursor, 4)
+            write_u32(data, pnt, cursor)
             pointer_offsets.append(cursor)
             cursor += 4
 

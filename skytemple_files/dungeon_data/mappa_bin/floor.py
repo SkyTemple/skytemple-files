@@ -36,32 +36,42 @@ if TYPE_CHECKING:
 
 class StubMappaFloor:
     """A mappa floor that only referneces an index for all of it's data."""
+    layout_idx: u16
+    monsters_idx: u16
+    traps_idx: u16
+    floor_items_idx: u16
+    shop_items_idx: u16
+    monster_house_items_idx: u16
+    buried_items_idx: u16
+    unk_items1_idx: u16
+    unk_items2_idx: u16
+
     def __init__(
-        self, layout_idx: int, monsters_idx: int, traps_idx: int, floor_items_idx: int,
-        shop_items_idx: int, monster_house_items_idx: int, buried_items_idx: int,
-        unk_items1_idx: int, unk_items2_idx: int
+        self, layout_idx: u16, monsters_idx: u16, traps_idx: u16, floor_items_idx: u16,
+        shop_items_idx: u16, monster_house_items_idx: u16, buried_items_idx: u16,
+        unk_items1_idx: u16, unk_items2_idx: u16
     ):
-        self.layout_idx: int = layout_idx
-        self.monsters_idx: int = monsters_idx
-        self.traps_idx: int = traps_idx
-        self.floor_items_idx: int = floor_items_idx
-        self.shop_items_idx: int = shop_items_idx
-        self.monster_house_items_idx: int = monster_house_items_idx
-        self.buried_items_idx: int = buried_items_idx
-        self.unk_items1_idx: int = unk_items1_idx
-        self.unk_items2_idx: int = unk_items2_idx
+        self.layout_idx = layout_idx
+        self.monsters_idx = monsters_idx
+        self.traps_idx = traps_idx
+        self.floor_items_idx = floor_items_idx
+        self.shop_items_idx = shop_items_idx
+        self.monster_house_items_idx = monster_house_items_idx
+        self.buried_items_idx = buried_items_idx
+        self.unk_items1_idx = unk_items1_idx
+        self.unk_items2_idx = unk_items2_idx
 
     def to_mappa(self) -> bytes:
         data = bytearray(18)
-        write_uintle(data, self.layout_idx, 0x00, 2)
-        write_uintle(data, self.monsters_idx, 0x02, 2)
-        write_uintle(data, self.traps_idx, 0x04, 2)
-        write_uintle(data, self.floor_items_idx, 0x06, 2)
-        write_uintle(data, self.shop_items_idx, 0x08, 2)
-        write_uintle(data, self.monster_house_items_idx, 0x0A, 2)
-        write_uintle(data, self.buried_items_idx, 0x0C, 2)
-        write_uintle(data, self.unk_items1_idx, 0x0E, 2)
-        write_uintle(data, self.unk_items2_idx, 0x10, 2)
+        write_u16(data, self.layout_idx, 0x00)
+        write_u16(data, self.monsters_idx, 0x02)
+        write_u16(data, self.traps_idx, 0x04)
+        write_u16(data, self.floor_items_idx, 0x06)
+        write_u16(data, self.shop_items_idx, 0x08)
+        write_u16(data, self.monster_house_items_idx, 0x0A)
+        write_u16(data, self.buried_items_idx, 0x0C)
+        write_u16(data, self.unk_items1_idx, 0x0E)
+        write_u16(data, self.unk_items2_idx, 0x10)
         if bytes(18) in data:
             raise ValueError(_("Could not save floor: It contains too much empty data.\nThis probably happened "
                                "because a lot of spawn lists are empty.\nPlease check the floors you edited and fill "
@@ -90,54 +100,54 @@ class MappaFloor(AutoString, XmlSerializable):
         return cls(
             cls._from_cache(
                 read,
-                read.floor_layout_data_start + 32 * read_uintle(floor_data, 0x00, 2),
+                read.floor_layout_data_start + 32 * read_u16(floor_data, 0x00),
                 lambda pnt: MappaFloorLayout.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_uintle(floor_data, 0x02, 2)),
+                cls._read_pointer(read.data, read.monster_spawn_list_index_start, read_u16(floor_data, 0x02)),
                 lambda pnt: MappaMonster.list_from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.trap_spawn_list_index_start, read_uintle(floor_data, 0x04, 2)),
+                cls._read_pointer(read.data, read.trap_spawn_list_index_start, read_u16(floor_data, 0x04)),
                 lambda pnt: MappaTrapList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x06, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x06)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x08, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x08)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0A, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x0A)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0C, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x0C)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x0E, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x0E)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             ),
             cls._from_cache(
                 read,
-                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_uintle(floor_data, 0x10, 2)),
+                cls._read_pointer(read.data, read.item_spawn_list_index_start, read_u16(floor_data, 0x10)),
                 lambda pnt: MappaItemList.from_mappa(read, pnt)
             )
         )
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
-        return read_uintle(data, start + (4 * index), 4)
+        return read_u32(data, start + (4 * index))
 
     @staticmethod
     def _from_cache(read, pnt, load_callback):

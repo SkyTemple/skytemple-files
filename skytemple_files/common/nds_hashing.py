@@ -17,15 +17,18 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 # http://problemkaputt.de/gbatek.htm#biosmiscfunctions
-def nds_crc16(data: bytes, offset: int, length: int) -> int:
-  val = [0xC0C1, 0xC181, 0xC301, 0xC601, 0xCC01, 0xD801, 0xF001, 0xA001]
-  crc = 0xFFFF
-  for i in range(offset, offset+length):
-    crc = crc ^ data[i]
-    for j in range(0, 8):
-      carry = crc & 1
-      crc = crc >> 1
-      if carry:
-        crc = crc ^ (val[j] << (7 - j))
+from range_typed_integers import u16
 
-  return crc
+
+def nds_crc16(data: bytes, offset: int, length: int) -> u16:
+    val = [0xC0C1, 0xC181, 0xC301, 0xC601, 0xCC01, 0xD801, 0xF001, 0xA001]
+    crc = 0xFFFF
+    for i in range(offset, offset + length):
+        crc = crc ^ data[i]
+        for j in range(0, 8):
+            carry = crc & 1
+            crc = crc >> 1
+            if carry:
+                crc = crc ^ (val[j] << (7 - j))
+
+    return u16(crc)

@@ -15,6 +15,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.w16.model import W16
@@ -32,12 +33,12 @@ class W16Writer:
         for w16 in self.model:
             # TOC entry
             # Pointer
-            write_uintle(toc_buffer, len(toc_buffer) + len(image_buffer), toc_cursor, 4)
+            write_u32(toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor)
             # entry data
-            write_uintle(toc_buffer, w16.entry_data.width, toc_cursor + 4, 1)
-            write_uintle(toc_buffer, w16.entry_data.height, toc_cursor + 5, 1)
-            write_uintle(toc_buffer, w16.entry_data.index, toc_cursor + 6, 1)
-            write_uintle(toc_buffer, w16.entry_data.null, toc_cursor + 7, 1)
+            write_u8(toc_buffer, w16.entry_data.width, toc_cursor + 4)
+            write_u8(toc_buffer, w16.entry_data.height, toc_cursor + 5)
+            write_u8(toc_buffer, w16.entry_data.index, toc_cursor + 6)
+            write_u8(toc_buffer, w16.entry_data.null, toc_cursor + 7)
             toc_cursor += 8
             # Palettes
             pal = bytes(w16.pal)
@@ -47,6 +48,6 @@ class W16Writer:
             image_buffer += w16.compressed_img_data
 
         # Null toc entry
-        write_uintle(toc_buffer, len(toc_buffer) + len(image_buffer), toc_cursor, 4)
+        write_u32(toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor)
 
         return toc_buffer + image_buffer

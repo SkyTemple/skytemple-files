@@ -19,7 +19,8 @@ from typing import Callable, Dict, List, Set
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
+    GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.data.str.handler import StrHandler
@@ -30,7 +31,6 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x2EAA4
 PATCH_CHECK_ADDR_APPLIED_EU = 0x2EBD8
 PATCH_CHECK_ADDR_APPLIED_JP = 0x2E97C
 PATCH_CHECK_INSTR_APPLIED = 0xE3A00024
-
 
 TYPE_TABLE_US = 0x8C30
 TYPE_TABLE_EU = 0x8C48
@@ -71,7 +71,7 @@ NEW_TYPES = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
              2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
              2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
              2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Leftovers
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Leftovers
 
 NEW_IQ_GUMMI = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 5, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 1, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0,
@@ -100,7 +100,7 @@ NEW_IQ_GUMMI = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-NEW_BELLY_GUMMI = [30 if x==5 else x*5 for x in NEW_IQ_GUMMI]
+NEW_BELLY_GUMMI = [30 if x == 5 else x * 5 for x in NEW_IQ_GUMMI]
 
 TYPE_LIST = {"MESSAGE/text_e.str": "Fairy",
              "MESSAGE/text_f.str": "Fée",
@@ -108,6 +108,7 @@ TYPE_LIST = {"MESSAGE/text_e.str": "Fairy",
              "MESSAGE/text_i.str": "Folletto",
              "MESSAGE/text_s.str": "Hada",
              "MESSAGE/text_j.str": "フェアリー"}
+
 
 class AddTypePatchHandler(AbstractPatchHandler):
 
@@ -117,7 +118,8 @@ class AddTypePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _('Add types to the type matchup table. This will replace the old matchup table by the 6th+ Gen type table, Fairy type being added to the end.')
+        return _(
+            'Add types to the type matchup table. This will replace the old matchup table by the 6th+ Gen type table, Fairy type being added to the end.')
 
     @property
     def author(self) -> str:
@@ -134,11 +136,17 @@ class AddTypePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                ) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return read_uintle(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP, 4)!=PATCH_CHECK_INSTR_APPLIED
+                return read_u32(
+                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
+                ) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
@@ -155,10 +163,10 @@ class AddTypePatchHandler(AbstractPatchHandler):
                 type_table = TYPE_TABLE_JP
                 gummi_iq_table = GUMMI_IQ_TABLE_JP
                 gummi_belly_table = GUMMI_BELLY_TABLE_JP
-        
+
         bincfg = config.binaries['overlay/overlay_0010.bin']
         data = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
-        data[type_table:type_table+TABLE_LEN] = bytearray(NEW_TYPES)
+        data[type_table:type_table + TABLE_LEN] = bytearray(NEW_TYPES)
         set_binary_in_rom_ppmdu(rom, bincfg, bytes(data))
 
         # Change Fairy's type name
@@ -166,14 +174,14 @@ class AddTypePatchHandler(AbstractPatchHandler):
             bin_before = rom.getFileByName(filename)
             strings = StrHandler.deserialize(bin_before)
             block = config.string_index_data.string_blocks['Type Names']
-            strings.strings[block.begin+18] = TYPE_LIST[filename]
+            strings.strings[block.begin + 18] = TYPE_LIST[filename]
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
-        
+
         bincfg = config.binaries['arm9.bin']
         data = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
-        data[gummi_iq_table:gummi_iq_table+TABLE_LEN] = bytearray(NEW_IQ_GUMMI)
-        data[gummi_belly_table:gummi_belly_table+TABLE_LEN] = bytearray(NEW_BELLY_GUMMI)
+        data[gummi_iq_table:gummi_iq_table + TABLE_LEN] = bytearray(NEW_IQ_GUMMI)
+        data[gummi_belly_table:gummi_belly_table + TABLE_LEN] = bytearray(NEW_BELLY_GUMMI)
         set_binary_in_rom_ppmdu(rom, bincfg, bytes(data))
 
         try:
@@ -181,6 +189,5 @@ class AddTypePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

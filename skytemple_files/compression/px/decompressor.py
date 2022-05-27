@@ -107,7 +107,7 @@ class PxDecompressor:
         pass
 
     def _read_next_byte(self):
-        b = read_uintle(self.compressed_data, self.cursor)
+        b = read_u8(self.compressed_data, self.cursor)
         if DEBUG:
             print(f"IDX {int(self.cursor)} - READING BYTE: {b:>08b}")
         self.cursor += 1
@@ -130,7 +130,7 @@ class PxDecompressor:
         # Based on the control flag, build two new bytes from the low_nibble data
         two_bytes = compute_four_nibbles_pattern(idx_ctrl_flags, low_nibble)
         if DEBUG:
-            print(f"> Inserting by byte pattern: {two_bytes}")
+            print(f"> Inserting by byte pattern: {two_bytes}")  # type: ignore
         self.uncompressed_data += two_bytes
         pass
 

@@ -16,14 +16,21 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import List
 
+from range_typed_integers import u32
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import read_uintle, write_uintle, AutoString
+from skytemple_files.common.util import read_u32, write_u32, AutoString, CheckedIntWrites
 
 ENTRY_LEN = 16
 
 
-class Rank(AutoString):
-    def __init__(self, rank_name_str: int, points_needed_next: int, storage_capacity: int, item_awarded: int):
+class Rank(AutoString, CheckedIntWrites):
+    rank_name_str: u32
+    points_needed_next: u32
+    storage_capacity: u32
+    item_awarded: u32
+
+    def __init__(self, rank_name_str: u32, points_needed_next: u32, storage_capacity: u32, item_awarded: u32):
         self.rank_name_str = rank_name_str
         self.points_needed_next = points_needed_next
         self.storage_capacity = storage_capacity
@@ -31,10 +38,10 @@ class Rank(AutoString):
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(ENTRY_LEN)
-        write_uintle(buffer, self.rank_name_str, 0x00, 4)
-        write_uintle(buffer, self.points_needed_next, 0x04, 4)
-        write_uintle(buffer, self.storage_capacity, 0x08, 4)
-        write_uintle(buffer, self.item_awarded, 0x0C, 4)
+        write_u32(buffer, self.rank_name_str, 0x00)
+        write_u32(buffer, self.points_needed_next, 0x04)
+        write_u32(buffer, self.storage_capacity, 0x08)
+        write_u32(buffer, self.item_awarded, 0x0C)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -52,10 +59,10 @@ class HardcodedRankUpTable:
         lst = []
         for i in range(block.begin, block.end, ENTRY_LEN):
             lst.append(Rank(
-                read_uintle(arm9bin, i + 0x00, 4),
-                read_uintle(arm9bin, i + 0x04, 4),
-                read_uintle(arm9bin, i + 0x08, 4),
-                read_uintle(arm9bin, i + 0x0C, 4)
+                read_u32(arm9bin, i + 0x00),
+                read_u32(arm9bin, i + 0x04),
+                read_u32(arm9bin, i + 0x08),
+                read_u32(arm9bin, i + 0x0C)
             ))
         return lst
 

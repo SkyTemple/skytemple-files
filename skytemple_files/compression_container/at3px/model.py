@@ -14,12 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 
 class At3px(CommonAt):
+    length_decompressed: u16
+
     def __init__(self, data: bytes=None):
         """
         Create a AT3PX container from already compressed data.
@@ -37,6 +40,7 @@ class At3px(CommonAt):
         data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x10], self.compression_flags)
         return data
 
+    # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
         return b'AT3PX'\
@@ -46,7 +50,7 @@ class At3px(CommonAt):
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
-        return read_uintle(data, byte_offset + 5, 2)
+        return read_u16(data, byte_offset + 5)
 
     @classmethod
     def compress(cls, data: bytes) -> 'At3px':
@@ -58,5 +62,5 @@ class At3px(CommonAt):
 
         new_container.compression_flags = flags
         new_container.compressed_data = px_data
-        new_container.length_compressed = len(px_data) + 0x10
+        new_container.length_compressed = u16_checked(len(px_data) + 0x10)
         return new_container

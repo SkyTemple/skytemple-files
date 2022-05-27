@@ -14,12 +14,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, List, Optional
+from range_typed_integers import u32_checked, u16_checked
 
-from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptEntity
-from skytemple_files.common.util import read_uintle, read_var_length_string, write_uintle
+from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 
@@ -34,17 +33,17 @@ class ActorListBin(Sir0Serializable):
             data = memoryview(data)
         self.list: List[Pmd2ScriptEntity] = []
 
-        pointer_start = read_uintle(data, header_start, 4)
-        number_entries = read_uintle(data, header_start + 4, 4)
+        pointer_start = read_u32(data, header_start)
+        number_entries = read_u32(data, header_start + 4)
         for i in range(0, number_entries):
             start = pointer_start + (i * LEN_ACTOR_ENTRY)
             self.list.append(Pmd2ScriptEntity(
-                id=i,
-                type=read_uintle(data, start + 0, 2),
-                entid=read_uintle(data, start + 2, 2),
-                name=self._read_string(data, read_uintle(data, start + 4, 4)),
-                unk3=read_uintle(data, start + 8, 2),
-                unk4=read_uintle(data, start + 10, 2)
+                id=u16_checked(i),
+                type=read_u16(data, start + 0),
+                entid=read_u16(data, start + 2),
+                name=self._read_string(data, read_u32(data, start + 4)),
+                unk3=read_u16(data, start + 8),
+                unk4=read_u16(data, start + 10)
             ))
 
     def serialize(self) -> bytes:
@@ -55,9 +54,9 @@ class ActorListBin(Sir0Serializable):
 
         out_data = bytearray()
         # 1. Write strings
-        pointer_offsets: List[int] = []
+        pointer_offsets: List[u32] = []
         for entry in self.list:
-            pointer_offsets.append(len(out_data))
+            pointer_offsets.append(u32_checked(len(out_data)))
             out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b'\0'
 
         # Padding
@@ -68,12 +67,12 @@ class ActorListBin(Sir0Serializable):
         pointer_data_block = len(out_data)
         for i, entry in enumerate(self.list):
             entry_buffer = bytearray(LEN_ACTOR_ENTRY)
-            write_uintle(entry_buffer, entry.type, 0, 2)
-            write_uintle(entry_buffer, entry.entid, 2, 2)
+            write_u16(entry_buffer, entry.type, 0)
+            write_u16(entry_buffer, entry.entid, 2)
             sir0_pointer_offsets.append(len(out_data) + 4)
-            write_uintle(entry_buffer, pointer_offsets[i], 4, 4)
-            write_uintle(entry_buffer, entry.unk3, 8, 2)
-            write_uintle(entry_buffer, entry.unk4, 10, 2)
+            write_u32(entry_buffer, pointer_offsets[i], 4)
+            write_u16(entry_buffer, entry.unk3, 8)
+            write_u16(entry_buffer, entry.unk4, 10)
             out_data += entry_buffer
 
         # Padding

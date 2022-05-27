@@ -32,13 +32,13 @@ class ImgTrp(Sir0Serializable):
             data = memoryview(data)
         self.sprites: List[List[bytes]] = self._read_sprites(
             data,
-            read_uintle(data, header_pnt + 0x04, 4),
-            read_uintle(data, header_pnt + 0x00, 4)
+            read_u32(data, header_pnt + 0x04),
+            read_u32(data, header_pnt + 0x00)
         )
         self.palettes: List[List[int]] = self._read_palettes(
             data,
-            read_uintle(data, header_pnt + 0x0C, 4) // PAL_LEN,
-            read_uintle(data, header_pnt + 0x08, 4)
+            read_u32(data, header_pnt + 0x0C) // PAL_LEN,
+            read_u32(data, header_pnt + 0x08)
         )
 
     @classmethod
@@ -72,7 +72,7 @@ class ImgTrp(Sir0Serializable):
         if import_palettes:
             self.palettes = palettes[:len(self.palettes)]
 
-    def _read_sprites(self, data, count, data_pointer):
+    def _read_sprites(self, data, count, data_pointer: u32):
         tiles = []
         T = TILE_DIM * TILE_DIM * CHUNK_DIM * CHUNK_DIM // 2
         for x in range(count):
@@ -80,7 +80,7 @@ class ImgTrp(Sir0Serializable):
             tiles.append(list(iter_bytes(xdata, int(TILE_DIM * TILE_DIM / 2))))  # / 2 because 4bpp
         return tiles
 
-    def _read_palettes(self, data, count, data_pointer):
+    def _read_palettes(self, data, count, data_pointer: u32):
         palettes = []
         data = data[data_pointer:data_pointer+PAL_ENTRY_LEN*PAL_LEN*count]
         pal = []

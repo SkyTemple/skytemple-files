@@ -15,6 +15,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u16_checked
+
 from skytemple_files.common.util import *
 from skytemple_files.data.tbl_talk import *
 from skytemple_files.data.tbl_talk.model import TblTalk
@@ -26,16 +28,16 @@ class TblTalkWriter:
 
     def write(self) -> bytes:
         data = bytearray(len(self.model.groups)*TBL_TALK_PERSONALITY_LEN*2+2)
-        last_ptr = len(data)
-        write_uintle(data, last_ptr, 0, 2)
+        last_ptr = u16_checked(len(data))
+        write_u16(data, last_ptr, 0)
         for g in range(len(self.model.groups)):
             for i in range(TBL_TALK_PERSONALITY_LEN):
                 for t in self.model.groups[g][i]:
                     buffer = bytearray(2)
-                    write_uintle(buffer, t, 0, 2)
+                    write_u16(buffer, t, 0)
                     data += buffer
-                    last_ptr += 2
-                write_uintle(data, last_ptr, 2+(i+g*TBL_TALK_PERSONALITY_LEN)*2, 2)
+                    last_ptr += 2  # type: ignore
+                write_u16(data, last_ptr, 2+(i+g*TBL_TALK_PERSONALITY_LEN)*2)
 
         data += bytes(self.model.monster_personalities)+bytes(self.model.special_personalities)
         return data

@@ -38,44 +38,45 @@ class TalkType(Enum):
     def __init__(self, _: int, description: str):
         self.description = description
 
+
 class TblTalk:
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.groups = []
-        last_ptr = read_uintle(data, 0, 2)
+        last_ptr = read_u16(data, 0)
         nbgroups = ((last_ptr//2)-1)//TBL_TALK_PERSONALITY_LEN
         for g in range(nbgroups):
             personality = []
             for i in range(TBL_TALK_PERSONALITY_LEN):
-                next_ptr = read_uintle(data, 2+g*TBL_TALK_PERSONALITY_LEN*2+i*2, 2)
+                next_ptr = read_u16(data, 2+g*TBL_TALK_PERSONALITY_LEN*2+i*2)
                 talk_type = []
-                while last_ptr!=next_ptr:
-                    talk_type.append(read_uintle(data, last_ptr, 2))
-                    last_ptr += 2
+                while last_ptr != next_ptr:
+                    talk_type.append(read_u16(data, last_ptr))
+                    last_ptr += 2  # type: ignore
                 personality.append(talk_type)
             self.groups.append(personality)
         self.monster_personalities = []
-        while last_ptr<len(data):
-            self.monster_personalities.append(read_uintle(data, last_ptr))
-            last_ptr += 1
+        while last_ptr < len(data):
+            self.monster_personalities.append(read_u8(data, last_ptr))
+            last_ptr += 1  # type: ignore
         self.special_personalities = self.monster_personalities[-TBL_TALK_SPEC_LEN:]
         self.monster_personalities = self.monster_personalities[:-TBL_TALK_SPEC_LEN]
 
     def remove_group(self, group: int):
-        #IMPORTANT! This doesn't work because the game needs a specific number of groups 
+        # IMPORTANT! This doesn't work because the game needs a specific number of groups
         del self.groups[group]
     
     def add_group(self):
-        #IMPORTANT! This doesn't work because the game needs a specific number of groups 
+        # IMPORTANT! This doesn't work because the game needs a specific number of groups
         self.groups.append([])
         for _ in range(TBL_TALK_PERSONALITY_LEN):
             self.groups[-1].append([])
 
-    def get_dialogues(self, group: int, talk_type: TalkType):
+    def get_dialogues(self, group: int, talk_type: TalkType) -> List[u16]:
         return self.groups[group][talk_type.value]
     
-    def set_dialogues(self, group: int, talk_type: TalkType, dialogues: List[int]):
+    def set_dialogues(self, group: int, talk_type: TalkType, dialogues: List[u16]):
         self.groups[group][talk_type.value] = dialogues
 
     def get_nb_groups(self) -> int:
@@ -87,16 +88,16 @@ class TblTalk:
     def get_nb_monsters(self) -> int:
         return len(self.monster_personalities)
     
-    def set_monster_personality(self, ent_id, personality):
+    def set_monster_personality(self, ent_id: int, personality: u8):
         self.monster_personalities[ent_id] = personality
         
     def add_monster_personality(self, personality):
         self.monster_personalities.append(personality)
 
-    def get_special_personality(self, spec_id) -> int:
+    def get_special_personality(self, spec_id: int) -> u8:
         return self.special_personalities[spec_id]
     
-    def set_special_personality(self, spec_id, personality):
+    def set_special_personality(self, spec_id: int, personality: u8):
         self.special_personalities[spec_id] = personality
     
     

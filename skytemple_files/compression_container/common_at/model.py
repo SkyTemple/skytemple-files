@@ -16,9 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC
+
+from skytemple_files.common.util import CheckedIntWrites
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
-# DEPRECATED. Use CompressionContainerProtocol.
-class CommonAt(CompressionContainerProtocol, ABC):
+class CommonAt(CompressionContainerProtocol, CheckedIntWrites, ABC):
     pass

@@ -21,21 +21,26 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 G_FLOOR_IDX_ENTRY_LEN = 4
 
 
-class MappaGBinReadContainer:
+class MappaGBinReadContainer(CheckedIntWrites):
+    dungeon_list_index_start: u32
+    floor_layout_data_start: u32
+
     def __init__(self, data: bytes, header_start: int):
         self.data = data
-        self.dungeon_list_index_start = read_uintle(data, header_start + 0x00, 4)
-        self.floor_layout_data_start = read_uintle(data, header_start + 0x04, 4)
+        self.dungeon_list_index_start = read_u32(data, header_start + 0x00)
+        self.floor_layout_data_start = read_u32(data, header_start + 0x04)
 
 
-class StubMappaGFloor:
+class StubMappaGFloor(CheckedIntWrites):
     """A mappa_g floor that only references an index for all of it's data."""
-    def __init__(self, layout_idx: int):
-        self.layout_idx: int = layout_idx
+    layout_idx: u16
+
+    def __init__(self, layout_idx: u16):
+        self.layout_idx = layout_idx
 
     def to_mappa(self) -> bytes:
         data = bytearray(4)
-        write_uintle(data, self.layout_idx, 0x00, 2)
+        write_u16(data, self.layout_idx, 0x00)
         return data
 
 
@@ -46,12 +51,12 @@ class MappaGFloor(AutoString):
     @classmethod
     def from_mappa(cls, read: 'MappaGBinReadContainer', floor_data: bytes) -> 'MappaGFloor':
         return cls(MappaGFloorLayout.from_mappa(
-            read, read.floor_layout_data_start + 4 * read_uintle(floor_data, 0x00, 2)
+            read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)
         ))
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
-        return read_uintle(data, start + (4 * index), 4)
+        return read_u32(data, start + (4 * index))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGFloor):
@@ -59,22 +64,25 @@ class MappaGFloor(AutoString):
         return self.layout == other.layout
 
 
-class MappaGFloorLayout(AutoString):
-    def __init__(self, tileset_id: int, fixed_floor_id: int):
+class MappaGFloorLayout(AutoString, CheckedIntWrites):
+    tileset_id: u8
+    fixed_floor_id: u8
+
+    def __init__(self, tileset_id: u8, fixed_floor_id: u8):
         self.tileset_id = tileset_id
         self.fixed_floor_id = fixed_floor_id
 
     @classmethod
     def from_mappa(cls, read: 'MappaGBinReadContainer', pointer: int):
         return cls(
-            tileset_id=read_uintle(read.data, pointer + 0x00),
-            fixed_floor_id=read_uintle(read.data, pointer + 0x01),
+            tileset_id=read_u8(read.data, pointer + 0x00),
+            fixed_floor_id=read_u8(read.data, pointer + 0x01),
         )
 
     def to_mappa(self) -> bytes:
         data = bytearray(4)
-        write_uintle(data, self.tileset_id, 0x00, 1)
-        write_uintle(data, self.fixed_floor_id, 0x01, 1)
+        write_u8(data, self.tileset_id, 0x00)
+        write_u8(data, self.fixed_floor_id, 0x01)
         return data
 
     def __eq__(self, other: object) -> bool:
@@ -106,9 +114,9 @@ class MappaGBin(Sir0Serializable):
             if i + 4 == end:
                 end_pnt = start
             else:
-                end_pnt = read_uintle(read.data, i + 4, 4)
+                end_pnt = read_u32(read.data, i + 4)
             dungeons.append(cls._read_floors(
-                read, read_uintle(read.data, i, 4), end_pnt
+                read, read_u32(read.data, i), end_pnt
             ))
         return dungeons
 
@@ -138,7 +146,7 @@ class MappaGBin(Sir0Serializable):
         Returned are all lists.
         """
         floor_lists = []
-        floor_layouts = [MappaGFloorLayout(0, 0)]
+        floor_layouts = [MappaGFloorLayout(u8(0), u8(0))]
         for floor_list in self.floor_lists:
             stub_floor_list = []
             for floor in floor_list:

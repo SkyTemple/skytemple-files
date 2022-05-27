@@ -61,7 +61,7 @@ class MappaItemList(AutoString, XmlSerializable):
         categories = {}
 
         while item_or_cat_id <= MAX_ITEM_ID:
-            val = read_uintle(data, pointer, 2)
+            val = read_u16(data, pointer)
             len_read += 2
             skip = val > CMD_SKIP and val != GUARANTEED
 

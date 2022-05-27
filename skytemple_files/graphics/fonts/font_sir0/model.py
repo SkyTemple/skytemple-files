@@ -31,8 +31,8 @@ from skytemple_files.common.i18n_util import f, _
 from PIL import Image
 
 
-class FontSir0Entry(AbstractFontEntry):
-    def __init__(self, char: int, table: int, width: int, cat: int, padding: int, data: bytes):
+class FontSir0Entry(AbstractFontEntry, CheckedIntWrites):
+    def __init__(self, char: u8, table: u8, width: u32, cat: u8, padding: u8, data: bytes):
         self.char = char
         self.table = table
         self.width = width
@@ -41,52 +41,52 @@ class FontSir0Entry(AbstractFontEntry):
         self.data = data
 
     def to_pil(self) -> Image.Image:
-        data = b''.join([bytes([v%16, v//16]) for v in self.data])
-        image = Image.frombytes(mode='P', size=(FONT_SIR0_SIZE,FONT_SIR0_SIZE), data=data)
+        data = b''.join([bytes([v % 16, v // 16]) for v in self.data])
+        image = Image.frombytes(mode='P', size=(FONT_SIR0_SIZE, FONT_SIR0_SIZE), data=data)
         return image
 
     def to_xml(self) -> Element:
         attrs = {XML_CHAR__ID: str(self.char),
-                XML_CHAR__WIDTH: str(self.width)}
-        if self.cat!=FONT_DEFAULT_CAT:
+                 XML_CHAR__WIDTH: str(self.width)}
+        if self.cat != FONT_DEFAULT_CAT:
             attrs[XML_CHAR__CAT] = str(self.cat)
-        if self.padding!=FONT_DEFAULT_PADDING:
+        if self.padding != FONT_DEFAULT_PADDING:
             attrs[XML_CHAR__PADDING] = str(self.padding)
         xml_entry = Element(XML_CHAR, attrs)
         return xml_entry
-    
+
     @classmethod
     def get_class_properties(cls) -> List[str]:
         return ["char", "width", "cat", "padding"]
 
     def get_properties(self) -> Dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
-        return {"char":self.char, "width":self.width, "cat":self.cat, "padding":self.padding}
+        return {"char": self.char, "width": self.width, "cat": self.cat, "padding": self.padding}
 
     def set_properties(self, properties: Dict[str, int]):
         """Sets a list of the properties of the entry"""
         if "char" in properties:
-            self.char = properties["char"]
+            self.char = u8(properties["char"])
         if "width" in properties:
-            self.width = properties["width"]
+            self.width = u32(properties["width"])
         if "cat" in properties:
-            self.cat = properties["cat"]
+            self.cat = u8(properties["cat"])
         if "padding" in properties:
-            self.padding = properties["padding"]
-    
+            self.padding = u8(properties["padding"])
+
     @classmethod
-    def from_pil(cls, img: Image.Image, char: int, table: int, width: int, cat: int, padding: int) -> 'FontSir0Entry':
-        if img.mode!='P':
+    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: u32, cat: u8, padding: u8) -> 'FontSir0Entry':
+        if img.mode != 'P':
             raise AttributeError(_("This must be a color indexed image!"))
         data = []
         raw_data = img.tobytes("raw", "P")
         for i in range(FONT_SIR0_DATA_LEN):
             v = 0
             for j in range(2):
-                v += raw_data[i*2+j]*(16**j)
+                v += raw_data[i * 2 + j] * (16 ** j)
             data.append(v)
         return FontSir0Entry(char, table, width, cat, padding, bytes(data))
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontSir0Entry):
             return False
@@ -98,26 +98,26 @@ class FontSir0Entry(AbstractFontEntry):
                self.data == other.data
 
 
-class FontSir0(Sir0Serializable, AbstractFont):
+class FontSir0(Sir0Serializable, AbstractFont, CheckedIntWrites):
     def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        number_entries = read_uintle(data, header_pnt, 4)
-        pt_entries = read_uintle(data, header_pnt+0x4, 4)
-        
+        number_entries = read_u32(data, header_pnt)
+        pt_entries = read_u32(data, header_pnt + 0x4)
+
         self.entries = []
         for i in range(pt_entries, pt_entries + number_entries * FONT_SIR0_ENTRY_LEN, FONT_SIR0_ENTRY_LEN):
-            pt_data = read_uintle(data, i + 0x00, 4)
-            
+            pt_data = read_u32(data, i + 0x00)
+
             self.entries.append(FontSir0Entry(
-                read_uintle(data, i + 0x04),
-                read_uintle(data, i + 0x05),
-                read_uintle(data, i + 0x06, 4),
-                read_uintle(data, i + 0x0A),
-                read_uintle(data, i + 0x0B),
+                read_u8(data, i + 0x04),
+                read_u8(data, i + 0x05),
+                read_u32(data, i + 0x06),
+                read_u8(data, i + 0x0A),
+                read_u8(data, i + 0x0B),
                 data[pt_data:pt_data + FONT_SIR0_DATA_LEN]
             ))
-    
+
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
                     static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
@@ -126,41 +126,42 @@ class FontSir0(Sir0Serializable, AbstractFont):
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
         return FontSir0Writer(self).write()  # type: ignore
-    
+
     def get_entry_image_size(self) -> int:
         return FONT_SIR0_SIZE
-        
+
     def get_entry_properties(self) -> List[str]:
         return FontSir0Entry.get_class_properties()
 
     def delete_entry(self, entry: AbstractFontEntry):
         self.entries.remove(entry)  # type: ignore
-    
-    def create_entry_for_table(self, table) -> AbstractFontEntry:
-        entry = FontSir0Entry(0, table, 0, FONT_DEFAULT_CAT, FONT_DEFAULT_PADDING, bytes(FONT_SIR0_DATA_LEN))
+
+    def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
+        entry = FontSir0Entry(u8(0), table, u32(0), FONT_DEFAULT_CAT, FONT_DEFAULT_PADDING, bytes(FONT_SIR0_DATA_LEN))
         self.entries.append(entry)
         return entry
-        
-    def get_entries_from_table(self, table) -> List[AbstractFontEntry]:
+
+    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
         entries = []
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
         return entries  # type: ignore
-    
+
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(mode='P', size=(FONT_SIR0_SIZE*16, FONT_SIR0_SIZE*16), color=0)
-            tables[t].putpalette([min(255, 256-(i//3)*16) for i in range(16*3)])
+            tables[t] = Image.new(mode='P', size=(FONT_SIR0_SIZE * 16, FONT_SIR0_SIZE * 16), color=0)
+            tables[t].putpalette([min(255, 256 - (i // 3) * 16) for i in range(16 * 3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
-                tables[item.table].paste(item.to_pil(), box=((item.char%16)*FONT_SIR0_SIZE, (item.char//16)*FONT_SIR0_SIZE))
+                tables[item.table].paste(item.to_pil(),
+                                         box=((item.char % 16) * FONT_SIR0_SIZE, (item.char // 16) * FONT_SIR0_SIZE))
         return tables
 
     def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
-        
+
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Element(XML_TABLE, {
@@ -190,9 +191,11 @@ class FontSir0(Sir0Serializable, AbstractFont):
                     width = int(char.get(XML_CHAR__WIDTH))
                     cat = int(char.get(XML_CHAR__CAT, default=FONT_DEFAULT_CAT))
                     padding = int(char.get(XML_CHAR__PADDING, default=FONT_DEFAULT_PADDING))
-                    x = (charid%16)*FONT_SIR0_SIZE
-                    y = (charid//16)*FONT_SIR0_SIZE
-                    self.entries.append(FontSir0Entry.from_pil(tables[t].crop(box=[x, y, x+FONT_SIR0_SIZE, y+FONT_SIR0_SIZE]), charid, t, width, cat, padding))
+                    x = (charid % 16) * FONT_SIR0_SIZE
+                    y = (charid // 16) * FONT_SIR0_SIZE
+                    self.entries.append(
+                        FontSir0Entry.from_pil(tables[t].crop(box=[x, y, x + FONT_SIR0_SIZE, y + FONT_SIR0_SIZE]),
+                                               charid, t, width, cat, padding))
         pass
 
     def __eq__(self, other: object) -> bool:

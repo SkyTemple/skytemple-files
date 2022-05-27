@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class SsaObject(AutoString, CheckedIntWrites):
     object_id: Pmd2ScriptObject
-    htibox_w: i16
+    hitbox_w: i16
     hitbox_h: i16
     pos: SsaPosition
     script_id: i16

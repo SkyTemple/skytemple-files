@@ -29,7 +29,7 @@ OFFSET_EU = 0x12738
 OFFSET_US = 0x126C4
 
 
-class PatchHandler(AbstractPatchHandler):
+class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def name(self) -> str:

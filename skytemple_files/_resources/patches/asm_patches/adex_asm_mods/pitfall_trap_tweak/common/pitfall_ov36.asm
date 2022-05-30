@@ -12,7 +12,6 @@ FallenAndCantGetUp:
 	bl DungeonGoesUp
 	cmp r0,#0
 	beq fall_ret ; Dungeon is descending
-dungeon_is_ascending:
 	ldrb r0,[r4,0x749] ; Floor ID
 	subs r0,r0,#2
 	movmi r0,#0 ; Avoiding underflow

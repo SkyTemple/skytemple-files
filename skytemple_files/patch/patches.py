@@ -74,6 +74,7 @@ from skytemple_files.patch.handler.fix_memory_softlock import FixMemorySoftlockP
 from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
 from skytemple_files.patch.handler.disarm_one_room_mh import DisarmOneRoomMHPatchHandler
 from skytemple_files.patch.handler.dynamic_bosses_everywhere import DynamicBossesEverywherePatchHandler
+from skytemple_files.patch.handler.pitfall_trap_tweak import PitfallTrapTweakPatchHandler
 from skytemple_files.common.i18n_util import f, _
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
@@ -121,6 +122,7 @@ class PatchType(Enum):
     COMPRESS_IQ_DATA = CompressIQDataPatchHandler
     DISARM_ONE_ROOM_MH = DisarmOneRoomMHPatchHandler
     DYNAMIC_BOSSES_EVERYWHERE = DynamicBossesEverywherePatchHandler
+    PITFALL_TRAP_TWEAK = PitfallTrapTweakPatchHandler
 
 
 class Patcher:

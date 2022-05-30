@@ -1,5 +1,5 @@
-.org 0x023A7080+0x9F0 ; TODO: Ask End for a proper region
-.area 0xA20-0x9F0
+.org 0x023A7080+0xA00
+.area 0xA30-0xA00
 
 FallenAndCantGetUp:
     

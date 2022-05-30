@@ -866,7 +866,7 @@
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="adex_asm_mods/pitfall_trap_tweak/selector_overlay29.asm"/>
 	  </OpenBin>
-	<OpenBin filepath="overlay/overlay_0036.bin">
+	  <OpenBin filepath="overlay/overlay_0036.bin">
 	  	<Include filename ="adex_asm_mods/pitfall_trap_tweak/selector_overlay36.asm"/>
 	  </OpenBin>
         </Patch>

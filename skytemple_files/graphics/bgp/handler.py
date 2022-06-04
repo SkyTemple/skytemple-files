@@ -37,7 +37,7 @@ class BgpHandler(HybridDataHandler[BgpProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BgpProtocol]:
-        from skytemple_rust.st_bgp import Bgp
+        from skytemple_rust.st_bgp import Bgp  # pylint: disable=no-name-in-module,no-member,import-error
         # Tilemap protocol issue:
         return Bgp  # type: ignore
 
@@ -48,7 +48,7 @@ class BgpHandler(HybridDataHandler[BgpProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBgp']]:  # type: ignore
-        from skytemple_rust.st_bgp import BgpWriter
+        from skytemple_rust.st_bgp import BgpWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BgpWriter
 
     @classmethod

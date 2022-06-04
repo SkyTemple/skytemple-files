@@ -37,7 +37,7 @@ class DmaHandler(HybridDataHandler[DmaProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[DmaProtocol]:
-        from skytemple_rust.st_dma import Dma
+        from skytemple_rust.st_dma import Dma  # pylint: disable=no-name-in-module,no-member,import-error
         return Dma
 
     @classmethod
@@ -47,7 +47,7 @@ class DmaHandler(HybridDataHandler[DmaProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeDma']]:  # type: ignore
-        from skytemple_rust.st_dma import DmaWriter
+        from skytemple_rust.st_dma import DmaWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return DmaWriter
 
     @classmethod

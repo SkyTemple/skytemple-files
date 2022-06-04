@@ -37,7 +37,7 @@ class DpciHandler(HybridDataHandler[DpciProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[DpciProtocol]:
-        from skytemple_rust.st_dpci import Dpci
+        from skytemple_rust.st_dpci import Dpci  # pylint: disable=no-name-in-module,no-member,import-error
         return Dpci
 
     @classmethod
@@ -47,7 +47,7 @@ class DpciHandler(HybridDataHandler[DpciProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeDpci']]:  # type: ignore
-        from skytemple_rust.st_dpci import DpciWriter
+        from skytemple_rust.st_dpci import DpciWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return DpciWriter
 
     @classmethod

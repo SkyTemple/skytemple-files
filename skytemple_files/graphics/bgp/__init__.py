@@ -14,6 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u8
 
 from __future__ import annotations
 
@@ -21,7 +22,7 @@ BGP_RES_WIDTH = 256
 BGP_RES_HEIGHT = 192
 BGP_HEADER_LENGTH = 32
 BGP_PAL_ENTRY_LEN = 4
-BGP_PAL_UNKNOWN4_COLOR_VAL = 0x80
+BGP_PAL_UNKNOWN4_COLOR_VAL = u8(0x80)
 # The palette is actually a list of smaller palettes. Each palette has this many colors:
 BGP_PAL_NUMBER_COLORS = 16
 # The maximum number of palettes supported

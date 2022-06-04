@@ -15,6 +15,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from range_typed_integers import u32_checked
+
 from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bgp._model import Bgp
@@ -36,31 +38,31 @@ class BgpWriter(WriterProtocol[Bgp]):
         data = bytearray(BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length)
 
         # Header
-        write_uintle(data, palette_begin, 0, 4)
-        write_uintle(data, palette_length, 4, 4)
-        write_uintle(data, tiles_begin, 8, 4)
-        write_uintle(data, tiles_length, 12, 4)
-        write_uintle(data, tilemapping_begin, 16, 4)
-        write_uintle(data, tilemapping_length, 20, 4)
-        write_uintle(data, model.header.unknown3, 24, 4)
-        write_uintle(data, model.header.unknown4, 28, 4)
+        write_u32(data, u32(palette_begin), 0)
+        write_u32(data, u32_checked(palette_length), 4)
+        write_u32(data, u32_checked(tiles_begin), 8)
+        write_u32(data, u32_checked(tiles_length), 12)
+        write_u32(data, u32_checked(tilemapping_begin), 16)
+        write_u32(data, u32_checked(tilemapping_length), 20)
+        write_u32(data, model.header.unknown3, 24)
+        write_u32(data, model.header.unknown4, 28)
         bytes_written = BGP_HEADER_LENGTH
 
         assert bytes_written == palette_begin
         # Palettes
         for palette in model.palettes:
             for i, color in enumerate(palette):
-                write_uintle(data, color, bytes_written)
+                write_u8(data, u8(color), bytes_written)
                 bytes_written += 1
                 if i % 3 == 2:
                     # Insert the fourth color
-                    write_uintle(data, BGP_PAL_UNKNOWN4_COLOR_VAL, bytes_written)
+                    write_u8(data, BGP_PAL_UNKNOWN4_COLOR_VAL, bytes_written)
                     bytes_written += 1
 
         assert bytes_written == tilemapping_begin
         # Tile Mappings
         for entry in model.tilemap:
-            write_uintle(data, entry.to_int(), bytes_written, BGP_TILEMAP_ENTRY_BYTELEN)
+            write_u16(data, entry.to_int(), bytes_written)
             bytes_written += BGP_TILEMAP_ENTRY_BYTELEN
 
         assert bytes_written == tiles_begin

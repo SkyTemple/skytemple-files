@@ -47,4 +47,19 @@ how to use this library. After installing the package you will have is as a cli 
 In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
 be installed and in the system's ``PATH`` to be able to apply ROM patches.
 
+Extras
+~~~~~~
+
+spritecollab
+------------
+With the ``spritecollab`` extra, the package ``skytemple_files.common.spritecollab.client`` is available to
+interact with the SpriteCollab GraphQL server for retrieving portrait and sprite assets by the community.
+
+More information:
+
+- https://sprites.pmdcollab.org
+- https://spriteserver.pmdcollab.org
+- https://github.com/PMDCollab/SpriteCollab
+- https://github.com/PMDCollab/spritecollab-srv
+
 |kofi|

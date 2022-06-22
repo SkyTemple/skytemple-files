@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<AnimData>
+  <ShadowSize>1</ShadowSize>
+  <Anims>
+    <Anim>
+      <Name>Sleep</Name>
+      <Index>5</Index>
+      <FrameWidth>24</FrameWidth>
+      <FrameHeight>24</FrameHeight>
+      <Durations>
+        <Duration>30</Duration>
+        <Duration>35</Duration>
+      </Durations>
+    </Anim>
+    <Anim>
+      <Name>EventSleep</Name>
+      <Index>14</Index>
+      <CopyOf>Sleep</CopyOf>
+    </Anim>
+    <Anim>
+      <Name>Laying</Name>
+      <Index>27</Index>
+      <CopyOf>Sleep</CopyOf>
+    </Anim>
+  </Anims>
+</AnimData>

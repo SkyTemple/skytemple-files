@@ -110,6 +110,16 @@ class Kao(KaoProtocol[KaoImage]):
         self.toc_len: int = toc_len
         self.reset(toc_len)
 
+    @classmethod
+    def create_new(cls, number_entries: int):
+        """Creates a new empty KAO with the specified number of entries."""
+        self = cls.__new__(cls)
+        self.first_toc = (SUBENTRIES * SUBENTRY_LEN)
+        self.original_data = bytearray([255] * (self.first_toc + (SUBENTRIES * SUBENTRY_LEN) * number_entries))
+        self.toc_len = number_entries
+        self.reset(self.toc_len)
+        return self
+
     def n_entries(self) -> int:
         return self.toc_len
 

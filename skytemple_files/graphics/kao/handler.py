@@ -61,3 +61,8 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
     def serialize(cls, data: KaoProtocol, **kwargs: OptionalKwargs) -> bytes:
         return cls.get_writer_cls()().write(data)
+
+    @classmethod
+    def new(cls, number_entries) -> KaoProtocol:
+        """Create a new empty KAO with the given number of entries."""
+        return cls.get_model_cls().create_new(number_entries)

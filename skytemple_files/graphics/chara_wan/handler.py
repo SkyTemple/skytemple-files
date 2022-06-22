@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
-from typing import List, Dict
+from typing import List, Dict, IO
 
 from PIL import Image
 
@@ -67,7 +67,7 @@ class CharaWanHandler(DataHandler[WanFile]):
         return ImportSheets(in_dir, strict)  # type: ignore
 
     @classmethod
-    def import_sheets_from_zip(cls, zip_file: str, strict: bool = False) -> 'WanFile':
+    def import_sheets_from_zip(cls, zip_file: str | IO[bytes], strict: bool = False) -> 'WanFile':
         return ImportSheetsFromZip(zip_file, strict)  # type: ignore
 
     @classmethod

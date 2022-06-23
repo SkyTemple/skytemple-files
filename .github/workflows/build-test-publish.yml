@@ -60,7 +60,8 @@ jobs:
     - uses: theCapypara/mypy-check@rust-support
       name: Run type checks
       with:
-        mypy_flags: 'skytemple_files --config-file mypy.ini --junit-xml mypy.xml'
+        path: 'skytemple_files'
+        mypy_flags: '--config-file mypy.ini --junit-xml mypy.xml'
         requirements: '-r requirements.txt'
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results

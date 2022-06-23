@@ -37,6 +37,5 @@ class BpcImgHandler(CompressionContainerHandler):
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bpc_image_compression import \
-            BpcImageCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bpc_image_compression import BpcImageCompressionContainer  # pylint: disable=no-name-in-module,no-member,import-error
         return BpcImageCompressionContainer

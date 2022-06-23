@@ -41,6 +41,6 @@ class BmaLayerNrlHandler(CompressionContainerHandler):
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
         from skytemple_rust._st_bma_layer_nrl_compression import (
             BmaLayerNrlCompressionContainer,
-        )  # pylint: disable=no-name-in-module,no-member,import-error
+        )
 
         return BmaLayerNrlCompressionContainer

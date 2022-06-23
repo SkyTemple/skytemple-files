@@ -39,9 +39,9 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BpaProtocol]:
-        from skytemple_rust.st_bpa import (
+        from skytemple_rust.st_bpa import (  # pylint: disable=no-name-in-module,no-member,import-error
             Bpa,
-        )  # pylint: disable=no-name-in-module,no-member,import-error
+        )
 
         return Bpa
 

@@ -41,7 +41,7 @@ class At4pnHandler(CompressionContainerHandler):
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
         from skytemple_rust.st_at4pn import (
             At4pn,
-        )  # pylint: disable=no-name-in-module,no-member,import-error
+        )
 
         return At4pn
 

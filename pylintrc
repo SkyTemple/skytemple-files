@@ -14,6 +14,13 @@ disable=
     import-outside-toplevel,
     # These clash with black:
     wrong-import-order,
+    # BLOCKED by
+    #  - https://github.com/PyCQA/pylint/issues/6696
+    #  - https://github.com/PyCQA/astroid/pull/1301
+    # Covered (better) by mypy:
+    invalid-sequence-index,
+    invalid-unary-operand-type,
+    no-member,
 
 fail-under=7.5
 fail-on=
@@ -26,6 +33,11 @@ max-line-length=120
 
 [DESIGN]
 max-args=10
+
+[TYPECHECK]
+# see https://github.com/PyCQA/pylint/issues/4987
+ignored-modules=skytemple_rust
+generated-members=skytemple_rust.*
 
 [REPORTS]
 reports=yes

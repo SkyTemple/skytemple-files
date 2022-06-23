@@ -39,9 +39,9 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BplProtocol]:
-        from skytemple_rust.st_bpl import (
+        from skytemple_rust.st_bpl import (  # pylint: disable=no-name-in-module,no-member,import-error
             Bpl,
-        )  # pylint: disable=no-name-in-module,no-member,import-error
+        )
 
         return Bpl
 

@@ -24,7 +24,7 @@ import aiohttp
 from gql.transport import AsyncTransport
 from gql.transport.aiohttp import AIOHTTPTransport
 from graphql import DocumentNode, ExecutionResult, GraphQLSchema
-from lru import LRU
+from lru import LRU  # pylint: disable=no-name-in-module
 from PIL import Image
 
 

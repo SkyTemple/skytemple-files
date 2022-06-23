@@ -28,11 +28,11 @@ from skytemple_files.script.ssb.header import SsbHeaderEu
 
 
 def main():
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
-    for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
+    for file_name in get_files_from_rom_with_extension(rom, "ssb"):
         print(file_name)
 
         bin_before = rom.getFileByName(file_name)
@@ -48,19 +48,33 @@ def main():
 
         ssb_after = SsbHandler.deserialize(bin_after)
 
-        assert(ssb_before._header.number_of_strings == ssb_after._header.number_of_strings)
-        assert(ssb_before._header.const_table_length == ssb_after._header.const_table_length)
-        assert(ssb_before._header.constant_strings_start == ssb_after._header.constant_strings_start)
-        assert(ssb_before._header.data_offset == ssb_after._header.data_offset)
-        assert(ssb_before._header.number_of_constants == ssb_after._header.number_of_constants)
-        assert(ssb_before._header.string_table_lengths == ssb_after._header.string_table_lengths)
-        assert(ssb_before.routine_info == ssb_after.routine_info)
-        assert(ssb_before.routine_ops == ssb_after.routine_ops)
-        assert(ssb_before.constants == ssb_after.constants)
-        assert(ssb_before.strings == ssb_after.strings)
-        assert(len(bin_before) == len(bin_after))
-        assert(bin_before == bin_after)
+        assert (
+            ssb_before._header.number_of_strings == ssb_after._header.number_of_strings
+        )
+        assert (
+            ssb_before._header.const_table_length
+            == ssb_after._header.const_table_length
+        )
+        assert (
+            ssb_before._header.constant_strings_start
+            == ssb_after._header.constant_strings_start
+        )
+        assert ssb_before._header.data_offset == ssb_after._header.data_offset
+        assert (
+            ssb_before._header.number_of_constants
+            == ssb_after._header.number_of_constants
+        )
+        assert (
+            ssb_before._header.string_table_lengths
+            == ssb_after._header.string_table_lengths
+        )
+        assert ssb_before.routine_info == ssb_after.routine_info
+        assert ssb_before.routine_ops == ssb_after.routine_ops
+        assert ssb_before.constants == ssb_after.constants
+        assert ssb_before.strings == ssb_after.strings
+        assert len(bin_before) == len(bin_after)
+        assert bin_before == bin_after
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

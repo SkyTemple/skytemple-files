@@ -21,10 +21,12 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
@@ -35,22 +37,23 @@ OFFSET_US = 0x31924
 
 
 class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'AllowUnrecruitableMons'
+        return "AllowUnrecruitableMons"
 
     @property
     def description(self) -> str:
-        return _("Allows recruiting the other Deoxys forms and the regis inside dungeons.")
+        return _(
+            "Allows recruiting the other Deoxys forms and the regis inside dungeons."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
@@ -59,14 +62,24 @@ class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_US) != ORIGINAL_INSTRUCTION
+                return (
+                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_US)
+                    != ORIGINAL_INSTRUCTION
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_EU) != ORIGINAL_INSTRUCTION
+                return (
+                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_EU)
+                    != ORIGINAL_INSTRUCTION
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

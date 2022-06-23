@@ -26,23 +26,28 @@ from xml.etree.ElementTree import ParseError
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import *
 from skytemple_files.common.ppmdu_config.dungeon_data import (
-    Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonDungeon, Pmd2DungeonItem,
-    Pmd2DungeonItemCategory)
-from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import \
-    load_binaries
+    Pmd2BinPackFile,
+    Pmd2DungeonBinFiles,
+    Pmd2DungeonDungeon,
+    Pmd2DungeonItem,
+    Pmd2DungeonItemCategory,
+)
+from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import load_binaries
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
 
 def id_matches_edition(e_game, edition):
     for key, value in e_game.attrib.items():
-        if key.startswith('id') and value == edition:
+        if key.startswith("id") and value == edition:
             return True
     return False
 
 
 class Pmd2XmlReader:
-    def __init__(self, file_names: List[str], game_edition: str, translate_strings=True):
+    def __init__(
+        self, file_names: List[str], game_edition: str, translate_strings=True
+    ):
         """
         Create a parser.
         :param file_names: XML files. these will be merged.
@@ -55,28 +60,36 @@ class Pmd2XmlReader:
         for f in file_names:
             this_file_root = ElementTree.parse(f).getroot()
             for elem in this_file_root:
-                if elem.tag == 'External':
-                    filepath = os.path.join(os.path.dirname(f), elem.attrib['filepath'])
-                    this_file_root = XmlCombiner(
-                        [this_file_root, ElementTree.parse(filepath).getroot()]
-                    ).combine().getroot()
+                if elem.tag == "External":
+                    filepath = os.path.join(os.path.dirname(f), elem.attrib["filepath"])
+                    this_file_root = (
+                        XmlCombiner(
+                            [this_file_root, ElementTree.parse(filepath).getroot()]
+                        )
+                        .combine()
+                        .getroot()
+                    )
             roots.append(this_file_root)
         self._root = XmlCombiner(roots).combine().getroot()
         self._game_edition = game_edition
-        self._game_version = game_edition.split('_')[0]
+        self._game_version = game_edition.split("_")[0]
         self._translate_strings = translate_strings
 
     @classmethod
-    def load_default(cls, for_version='EoS_EU', translate_strings=True) -> Pmd2Data:
+    def load_default(cls, for_version="EoS_EU", translate_strings=True) -> Pmd2Data:
         """
         Load the default pmd2data.xml, patched with the skytemple.xml and create a Pmd2Data object for the version
         passed.
         """
-        res_dir = os.path.join(get_resources_dir(), 'ppmdu_config')
-        return Pmd2XmlReader([
-            os.path.join(res_dir, 'pmd2data.xml'),
-            os.path.join(res_dir, 'skytemple.xml')
-        ], for_version, translate_strings).parse()
+        res_dir = os.path.join(get_resources_dir(), "ppmdu_config")
+        return Pmd2XmlReader(
+            [
+                os.path.join(res_dir, "pmd2data.xml"),
+                os.path.join(res_dir, "skytemple.xml"),
+            ],
+            for_version,
+            translate_strings,
+        ).parse()
 
     def parse(self) -> Pmd2Data:
         """
@@ -93,89 +106,110 @@ class Pmd2XmlReader:
         animation_names = {}
         for e in self._root:
             ###########################
-            if e.tag == 'GameEditions':
+            if e.tag == "GameEditions":
                 for e_edition in e:
-                    game_editions.append(Pmd2GameEdition(
-                        e_edition.attrib['id'],
-                        e_edition.attrib['gamecode'],
-                        e_edition.attrib['version'],
-                        e_edition.attrib['region'],
-                        self.xml_int(e_edition.attrib['arm9off14']),
-                        e_edition.attrib['defaultlang'],
-                        self._xml_bool(e_edition.attrib['issupported'])
-                    ))
+                    game_editions.append(
+                        Pmd2GameEdition(
+                            e_edition.attrib["id"],
+                            e_edition.attrib["gamecode"],
+                            e_edition.attrib["version"],
+                            e_edition.attrib["region"],
+                            self.xml_int(e_edition.attrib["arm9off14"]),
+                            e_edition.attrib["defaultlang"],
+                            self._xml_bool(e_edition.attrib["issupported"]),
+                        )
+                    )
             ###########################
-            elif e.tag == 'GameConstants':
+            elif e.tag == "GameConstants":
                 for e_game in e:
-                    if ('version' in e_game.attrib and e_game.attrib['version'] == self._game_version) or \
-                       ('version2' in e_game.attrib and e_game.attrib['version2'] == self._game_version) or \
-                       ('version3' in e_game.attrib and e_game.attrib['version3'] == self._game_version):
+                    if (
+                        (
+                            "version" in e_game.attrib
+                            and e_game.attrib["version"] == self._game_version
+                        )
+                        or (
+                            "version2" in e_game.attrib
+                            and e_game.attrib["version2"] == self._game_version
+                        )
+                        or (
+                            "version3" in e_game.attrib
+                            and e_game.attrib["version3"] == self._game_version
+                        )
+                    ):
                         for e_value in e_game:
-                            game_constants[e_value.attrib['id']] = self.xml_int(e_value.attrib['value'])
+                            game_constants[e_value.attrib["id"]] = self.xml_int(
+                                e_value.attrib["value"]
+                            )
             ###########################
-            elif e.tag == 'ASMPatchesConstants':
-                asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
+            elif e.tag == "ASMPatchesConstants":
+                asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(
+                    self._game_edition
+                ).read(e)
             ###########################
-            elif e.tag == 'StringIndexData':
+            elif e.tag == "StringIndexData":
                 for e_game in e:
                     if id_matches_edition(e_game, self._game_edition):
                         languages = []
                         string_blocks = []
                         for e_sub in e_game:
-                            if e_sub.tag == 'Languages':
+                            if e_sub.tag == "Languages":
                                 for e_language in e_sub:
                                     m2n = None
                                     n2m = None
                                     i2n = None
                                     for e_sort in e_language:
-                                        if e_sort.tag=="m2n":
-                                            m2n=e_sort.attrib['filename']
-                                        elif e_sort.tag=="n2m":
-                                            n2m=e_sort.attrib['filename']
-                                        elif e_sort.tag=="i2n":
-                                            i2n=e_sort.attrib['filename']
-                                    languages.append(Pmd2Language(
-                                        e_language.attrib['filename'],
-                                        e_language.attrib['name'],
-                                        self._(e_language.attrib['name']),
-                                        e_language.attrib['locale'],
-                                        Pmd2SortLists(m2n, n2m, i2n)
-                                    ))
-                            if e_sub.tag == 'StringBlocks':
+                                        if e_sort.tag == "m2n":
+                                            m2n = e_sort.attrib["filename"]
+                                        elif e_sort.tag == "n2m":
+                                            n2m = e_sort.attrib["filename"]
+                                        elif e_sort.tag == "i2n":
+                                            i2n = e_sort.attrib["filename"]
+                                    languages.append(
+                                        Pmd2Language(
+                                            e_language.attrib["filename"],
+                                            e_language.attrib["name"],
+                                            self._(e_language.attrib["name"]),
+                                            e_language.attrib["locale"],
+                                            Pmd2SortLists(m2n, n2m, i2n),
+                                        )
+                                    )
+                            if e_sub.tag == "StringBlocks":
                                 for e_string_block in e_sub:
-                                    string_blocks.append(Pmd2StringBlock(
-                                        e_string_block.attrib['name'],
-                                        self._(e_string_block.attrib['name']),
-                                        self.xml_int(e_string_block.attrib['beg']),
-                                        self.xml_int(e_string_block.attrib['end'])
-                                    ))
+                                    string_blocks.append(
+                                        Pmd2StringBlock(
+                                            e_string_block.attrib["name"],
+                                            self._(e_string_block.attrib["name"]),
+                                            self.xml_int(e_string_block.attrib["beg"]),
+                                            self.xml_int(e_string_block.attrib["end"]),
+                                        )
+                                    )
                         string_index_data = Pmd2StringIndexData(
                             languages, string_blocks
                         )
             ###########################
-            elif e.tag == 'ScriptData':
+            elif e.tag == "ScriptData":
                 script_data = self._parse_script_data(e)
             ###########################
-            elif e.tag == 'DungeonData':
+            elif e.tag == "DungeonData":
                 dungeon_data = self._parse_dungeon_data(e)
             ###########################
-            elif e.tag == 'StringEncoding':
+            elif e.tag == "StringEncoding":
                 for e_game in e:
                     if id_matches_edition(e_game, self._game_edition):
-                        string_encoding = e_game.attrib['codec']
+                        string_encoding = e_game.attrib["codec"]
             ###########################
-            elif e.tag == 'AnimationNames':
+            elif e.tag == "AnimationNames":
                 for e_game in e:
                     if id_matches_edition(e_game, self._game_edition):
                         for e_sprite in e_game:
                             indices = {}
                             for e_index in e_sprite:
                                 names: List[str] = []
-                                idx = self.xml_int(e_index.attrib['id'])
+                                idx = self.xml_int(e_index.attrib["id"])
                                 indices[idx] = Pmd2Index(idx, names)
                                 for e_name in e_index:
                                     names.append(e_name.text)  # type: ignore
-                            idx = self.xml_int(e_sprite.attrib['id'])
+                            idx = self.xml_int(e_sprite.attrib["id"])
                             animation_names[idx] = Pmd2Sprite(idx, indices)
 
         game_edition_for_this_rom = None
@@ -184,7 +218,9 @@ class Pmd2XmlReader:
                 game_edition_for_this_rom = game_edition
                 break
         if game_edition_for_this_rom is None:
-            raise ValueError(f"Game edition {self._game_edition} is not defined in the XML.")
+            raise ValueError(
+                f"Game edition {self._game_edition} is not defined in the XML."
+            )
         return Pmd2Data(
             game_edition_for_this_rom,
             game_editions,
@@ -195,7 +231,7 @@ class Pmd2XmlReader:
             script_data,  # type: ignore
             dungeon_data,  # type: ignore
             string_encoding,  # type: ignore
-            animation_names
+            animation_names,
         )
 
     def _parse_script_data(self, script_root) -> Pmd2ScriptData:
@@ -217,143 +253,181 @@ class Pmd2XmlReader:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
                     ###########################
-                    if e.tag == 'GameVariablesTable' or e.tag == 'GameVariablesTableExtended':
+                    if (
+                        e.tag == "GameVariablesTable"
+                        or e.tag == "GameVariablesTableExtended"
+                    ):
                         for i, e_var in enumerate(e):
-                            game_variables_table.append(Pmd2ScriptGameVar(
-                                i if e.tag == 'GameVariablesTable' else i + 0x400,
-                                self.xml_int(e_var.attrib['type']),
-                                self.xml_int(e_var.attrib['unk1']),
-                                self.xml_int(e_var.attrib['memoffset']),
-                                self.xml_int(e_var.attrib['bitshift']),
-                                self.xml_int(e_var.attrib['nbvalues']),
-                                self.xml_int(e_var.attrib['unk4']),
-                                e_var.attrib['name'],
-                                e.tag == 'GameVariablesTableExtended'
-                            ))
+                            game_variables_table.append(
+                                Pmd2ScriptGameVar(
+                                    i if e.tag == "GameVariablesTable" else i + 0x400,
+                                    self.xml_int(e_var.attrib["type"]),
+                                    self.xml_int(e_var.attrib["unk1"]),
+                                    self.xml_int(e_var.attrib["memoffset"]),
+                                    self.xml_int(e_var.attrib["bitshift"]),
+                                    self.xml_int(e_var.attrib["nbvalues"]),
+                                    self.xml_int(e_var.attrib["unk4"]),
+                                    e_var.attrib["name"],
+                                    e.tag == "GameVariablesTableExtended",
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'ObjectsList':
+                    elif e.tag == "ObjectsList":
                         for e_obj in e:
-                            objects_list.append(Pmd2ScriptObject(
-                                self.xml_int(e_obj.attrib['_id']),
-                                self.xml_int(e_obj.attrib['unk1']),
-                                self.xml_int(e_obj.attrib['unk2']),
-                                self.xml_int(e_obj.attrib['unk3']),
-                                e_obj.attrib['name']
-                            ))
+                            objects_list.append(
+                                Pmd2ScriptObject(
+                                    self.xml_int(e_obj.attrib["_id"]),
+                                    self.xml_int(e_obj.attrib["unk1"]),
+                                    self.xml_int(e_obj.attrib["unk2"]),
+                                    self.xml_int(e_obj.attrib["unk3"]),
+                                    e_obj.attrib["name"],
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'FaceNames':
+                    elif e.tag == "FaceNames":
                         for i, e_fn in enumerate(e):
                             face_names.append(Pmd2ScriptFaceName(i, e_fn.text))
                     ###########################
-                    elif e.tag == 'FacePositionModes':
+                    elif e.tag == "FacePositionModes":
                         for i, e_mode in enumerate(e):
-                            face_position_modes.append(Pmd2ScriptFacePositionMode(i, e_mode.text))
+                            face_position_modes.append(
+                                Pmd2ScriptFacePositionMode(i, e_mode.text)
+                            )
                     ###########################
-                    elif e.tag == 'Directions':
+                    elif e.tag == "Directions":
                         for idx, e_dir in enumerate(e):
-                            i = self.xml_int(e_dir.attrib['_id'])
+                            i = self.xml_int(e_dir.attrib["_id"])
                             directions[i] = Pmd2ScriptDirection(i, e_dir.text, idx)
                     ###########################
-                    elif e.tag == 'CommonRoutineInfo':
+                    elif e.tag == "CommonRoutineInfo":
                         for e_cri in e:
-                            common_routine_info.append(Pmd2ScriptRoutine(
-                                self.xml_int(e_cri.attrib['id']),
-                                self.xml_int(e_cri.attrib['unk1']),
-                                e_cri.attrib['name']
-                            ))
+                            common_routine_info.append(
+                                Pmd2ScriptRoutine(
+                                    self.xml_int(e_cri.attrib["id"]),
+                                    self.xml_int(e_cri.attrib["unk1"]),
+                                    e_cri.attrib["name"],
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'MenuIds':
+                    elif e.tag == "MenuIds":
                         for e_menu in e:
-                            menu_ids.append(Pmd2ScriptMenu(
-                                self.xml_int(e_menu.attrib['id']),
-                                e_menu.attrib['name']
-                            ))
+                            menu_ids.append(
+                                Pmd2ScriptMenu(
+                                    self.xml_int(e_menu.attrib["id"]),
+                                    e_menu.attrib["name"],
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'ProcessSpecialIDs':
+                    elif e.tag == "ProcessSpecialIDs":
                         for e_psid in e:
-                            process_specials.append(Pmd2ScriptSpecial(
-                                self.xml_int(e_psid.attrib['id']),
-                                e_psid.attrib['name']
-                            ))
+                            process_specials.append(
+                                Pmd2ScriptSpecial(
+                                    self.xml_int(e_psid.attrib["id"]),
+                                    e_psid.attrib["name"],
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'SpriteEffectIDs':
+                    elif e.tag == "SpriteEffectIDs":
                         for e_sei in e:
-                            sprite_effects.append(Pmd2ScriptSpriteEffect(
-                                self.xml_int(e_sei.attrib['id']),
-                                e_sei.attrib['name']
-                            ))
+                            sprite_effects.append(
+                                Pmd2ScriptSpriteEffect(
+                                    self.xml_int(e_sei.attrib["id"]),
+                                    e_sei.attrib["name"],
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'BackgroundMusicIDs':
+                    elif e.tag == "BackgroundMusicIDs":
                         for i, e_bgm in enumerate(e):
-                            bgms.append(Pmd2ScriptBgm(
-                                i, e_bgm.text,
-                                self._xml_bool(e_bgm.attrib['loops']) if 'loops' in e_bgm.attrib else False
-                            ))
+                            bgms.append(
+                                Pmd2ScriptBgm(
+                                    i,
+                                    e_bgm.text,
+                                    self._xml_bool(e_bgm.attrib["loops"])
+                                    if "loops" in e_bgm.attrib
+                                    else False,
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'LevelList':
+                    elif e.tag == "LevelList":
                         for e_level in e:
-                            level_list.append(Pmd2ScriptLevel(
-                                self.xml_int(e_level.attrib['_id']),
-                                self.xml_int(e_level.attrib['mapid']),
-                                e_level.attrib['name'],
-                                self.xml_int(e_level.attrib['mapty']) if 'mapty' in e_level.attrib else None,
-                                self.xml_int(e_level.attrib['unk2']),
-                                self.xml_int(e_level.attrib['unk4'])
-                            ))
+                            level_list.append(
+                                Pmd2ScriptLevel(
+                                    self.xml_int(e_level.attrib["_id"]),
+                                    self.xml_int(e_level.attrib["mapid"]),
+                                    e_level.attrib["name"],
+                                    self.xml_int(e_level.attrib["mapty"])
+                                    if "mapty" in e_level.attrib
+                                    else None,
+                                    self.xml_int(e_level.attrib["unk2"]),
+                                    self.xml_int(e_level.attrib["unk4"]),
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'LivesEntityTable':
+                    elif e.tag == "LivesEntityTable":
                         for e_ent in e:
-                            lives_entities.append(Pmd2ScriptEntity(
-                                self.xml_int(e_ent.attrib['_id']),
-                                self.xml_int(e_ent.attrib['entid']),
-                                e_ent.attrib['name'],
-                                self.xml_int(e_ent.attrib['type']),
-                                self.xml_int(e_ent.attrib['unk3']),
-                                self.xml_int(e_ent.attrib['unk4'])
-                            ))
+                            lives_entities.append(
+                                Pmd2ScriptEntity(
+                                    self.xml_int(e_ent.attrib["_id"]),
+                                    self.xml_int(e_ent.attrib["entid"]),
+                                    e_ent.attrib["name"],
+                                    self.xml_int(e_ent.attrib["type"]),
+                                    self.xml_int(e_ent.attrib["unk3"]),
+                                    self.xml_int(e_ent.attrib["unk4"]),
+                                )
+                            )
                     ###########################
-                    elif e.tag == 'OpCodes':
+                    elif e.tag == "OpCodes":
                         for e_code in e:
                             arguments = []
                             repeating_argument_group = None
                             for e_argument in e_code:
-                                if e_argument.tag == 'Argument':
-                                    arguments.append(Pmd2ScriptOpCodeArgument(
-                                        self.xml_int(e_argument.attrib['id']),
-                                        e_argument.attrib['type'],
-                                        e_argument.attrib['name'],
-                                    ))
-                                elif e_argument.tag == 'RepeatingArgumentGroup':
+                                if e_argument.tag == "Argument":
+                                    arguments.append(
+                                        Pmd2ScriptOpCodeArgument(
+                                            self.xml_int(e_argument.attrib["id"]),
+                                            e_argument.attrib["type"],
+                                            e_argument.attrib["name"],
+                                        )
+                                    )
+                                elif e_argument.tag == "RepeatingArgumentGroup":
                                     arg_group_args = []
                                     for e_arg_group_arg in e_argument:
-                                        arg_group_args.append(Pmd2ScriptOpCodeArgument(
-                                            # Arguments in repeating groups have no ids,
-                                            # they are ordered and repeating instead.
-                                            -1,
-                                            e_arg_group_arg.attrib['type'],
-                                            e_arg_group_arg.attrib['name'],
-                                        ))
-                                    repeating_argument_group = Pmd2ScriptOpCodeRepeatingArgumentGroup(
-                                        self.xml_int(e_argument.attrib['id']),
-                                        arg_group_args
+                                        arg_group_args.append(
+                                            Pmd2ScriptOpCodeArgument(
+                                                # Arguments in repeating groups have no ids,
+                                                # they are ordered and repeating instead.
+                                                -1,
+                                                e_arg_group_arg.attrib["type"],
+                                                e_arg_group_arg.attrib["name"],
+                                            )
+                                        )
+                                    repeating_argument_group = (
+                                        Pmd2ScriptOpCodeRepeatingArgumentGroup(
+                                            self.xml_int(e_argument.attrib["id"]),
+                                            arg_group_args,
+                                        )
                                     )
                             arguments = sorted(arguments, key=lambda a: a.id)
-                            op_codes.append(Pmd2ScriptOpCode(
-                                self.xml_int(e_code.attrib['id']),
-                                e_code.attrib['name'],
-                                self.xml_int(e_code.attrib['params']),
-                                self.xml_int(e_code.attrib['stringidx']),
-                                self.xml_int(e_code.attrib['unk2']),
-                                self.xml_int(e_code.attrib['unk3']),
-                                arguments,
-                                repeating_argument_group
-                            ))
-                    elif e.tag == 'GroundStateStructs':
+                            op_codes.append(
+                                Pmd2ScriptOpCode(
+                                    self.xml_int(e_code.attrib["id"]),
+                                    e_code.attrib["name"],
+                                    self.xml_int(e_code.attrib["params"]),
+                                    self.xml_int(e_code.attrib["stringidx"]),
+                                    self.xml_int(e_code.attrib["unk2"]),
+                                    self.xml_int(e_code.attrib["unk3"]),
+                                    arguments,
+                                    repeating_argument_group,
+                                )
+                            )
+                    elif e.tag == "GroundStateStructs":
                         for e_code in e:
-                            ground_state_structs[e_code.tag] = Pmd2ScriptGroundStateStruct(
-                                self.xml_int(e_code.attrib['offset']),
-                                self.xml_int(e_code.attrib['entrylength']),
-                                self.xml_int(e_code.attrib['maxentries'])
+                            ground_state_structs[
+                                e_code.tag
+                            ] = Pmd2ScriptGroundStateStruct(
+                                self.xml_int(e_code.attrib["offset"]),
+                                self.xml_int(e_code.attrib["entrylength"]),
+                                self.xml_int(e_code.attrib["maxentries"]),
                             )
         return Pmd2ScriptData(
             game_variables_table,
@@ -369,7 +443,7 @@ class Pmd2XmlReader:
             level_list,
             lives_entities,
             op_codes,
-            ground_state_structs
+            ground_state_structs,
         )
 
     def _parse_dungeon_data(self, dungeon_root) -> Pmd2DungeonData:
@@ -381,50 +455,55 @@ class Pmd2XmlReader:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
                     ###########################
-                    if e.tag == 'DungeonBinFiles':
+                    if e.tag == "DungeonBinFiles":
                         files = []
                         for i, e_var in enumerate(e):
-                            files.append(Pmd2BinPackFile(
-                                self.xml_int(e_var.attrib['idxfirst']),
-                                self.xml_int(e_var.attrib['idxlast']) if 'idxlast' in e_var.attrib else None,
-                                e_var.attrib['type'],
-                                e_var.attrib['name']
-                            ))
+                            files.append(
+                                Pmd2BinPackFile(
+                                    self.xml_int(e_var.attrib["idxfirst"]),
+                                    self.xml_int(e_var.attrib["idxlast"])
+                                    if "idxlast" in e_var.attrib
+                                    else None,
+                                    e_var.attrib["type"],
+                                    e_var.attrib["name"],
+                                )
+                            )
                         dungeon_bin_files = Pmd2DungeonBinFiles(files)
                     ###########################
-                    if e.tag == 'Items':
+                    if e.tag == "Items":
                         for i, e_item in enumerate(e):
                             items.append(Pmd2DungeonItem(i, e_item.text))
                     ###########################
-                    if e.tag == 'Dungeons':
+                    if e.tag == "Dungeons":
                         for i, e_dungeon in enumerate(e):
                             dungeons.append(Pmd2DungeonDungeon(i, e_dungeon.text))
                     ###########################
-                    if e.tag == 'ItemCategories':
+                    if e.tag == "ItemCategories":
                         for e_game in e:
                             if id_matches_edition(e_game, self._game_edition):
                                 for i, e_item_cat in enumerate(e_game):
                                     citems = []
                                     for e_item in e_item_cat:
-                                        if e_item.tag != 'Item':
-                                            raise ValueError("Excpeted Item as subtag for ItemCategory.")
+                                        if e_item.tag != "Item":
+                                            raise ValueError(
+                                                "Excpeted Item as subtag for ItemCategory."
+                                            )
                                         citems.append(self.xml_int(e_item.text))
-                                    item_categories[self.xml_int(e_item_cat.attrib['id'])] = Pmd2DungeonItemCategory(
-                                        self.xml_int(e_item_cat.attrib['id']),
-                                        e_item_cat.attrib['name'],
-                                        citems
+                                    item_categories[
+                                        self.xml_int(e_item_cat.attrib["id"])
+                                    ] = Pmd2DungeonItemCategory(
+                                        self.xml_int(e_item_cat.attrib["id"]),
+                                        e_item_cat.attrib["name"],
+                                        citems,
                                     )
         return Pmd2DungeonData(
-            dungeon_bin_files,  # type: ignore
-            items,
-            dungeons,
-            item_categories
+            dungeon_bin_files, items, dungeons, item_categories  # type: ignore
         )
 
     @staticmethod
     def xml_int(s: str):
         s = s.strip()
-        if s.startswith('0x'):
+        if s.startswith("0x"):
             return int(s, 16)
         return int(s)
 
@@ -451,29 +530,39 @@ class Pmd2AsmPatchesConstantsXmlReader:
         patch_dir = None
         patches: List[Union[Pmd2Patch, Pmd2SimplePatch]] = []
         for sub_e in e:
-            if sub_e.tag == 'LooseBinFiles':
+            if sub_e.tag == "LooseBinFiles":
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
                         for e_node in e_game:
-                            loose_bin_files.append(Pmd2LooseBinFile(
-                                e_node.attrib['srcdata'],
-                                e_node.attrib['filepath'],
-                            ))
-            elif sub_e.tag == 'PatchesDir':
+                            loose_bin_files.append(
+                                Pmd2LooseBinFile(
+                                    e_node.attrib["srcdata"],
+                                    e_node.attrib["filepath"],
+                                )
+                            )
+            elif sub_e.tag == "PatchesDir":
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
-                        patch_dir = Pmd2PatchDir(e_game.attrib['filepath'], e_game.attrib['stubpath'])
-            elif sub_e.tag == 'Patches':
+                        patch_dir = Pmd2PatchDir(
+                            e_game.attrib["filepath"], e_game.attrib["stubpath"]
+                        )
+            elif sub_e.tag == "Patches":
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
                         for e_node in e_game:
-                            if e_node.tag == 'Patch':
+                            if e_node.tag == "Patch":
                                 patch = self._parse_patch(e_node)
-                                patch.parameters = {param.name: param for param in self._read_parameter_node(e_node)}
+                                patch.parameters = {
+                                    param.name: param
+                                    for param in self._read_parameter_node(e_node)
+                                }
                                 patches.append(patch)
-                            if e_node.tag == 'SimplePatch':
+                            if e_node.tag == "SimplePatch":
                                 spatch = self._parse_simple_patch(e_node)
-                                spatch.parameters = {param.name: param for param in self._read_parameter_node(e_node)}
+                                spatch.parameters = {
+                                    param.name: param
+                                    for param in self._read_parameter_node(e_node)
+                                }
                                 patches.append(spatch)
         return Pmd2AsmPatchesConstants(
             loose_bin_files,
@@ -485,70 +574,90 @@ class Pmd2AsmPatchesConstantsXmlReader:
         includes = []
         open_bins = []
         for e_sub in e_patch:
-            if e_sub.tag == 'Include':
-                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
-            if e_sub.tag == 'OpenBin':
+            if e_sub.tag == "Include":
+                includes.append(Pmd2PatchInclude(e_sub.attrib["filename"]))
+            if e_sub.tag == "OpenBin":
                 open_bin_includes = []
                 for e_include in e_sub:
-                    open_bin_includes.append(Pmd2PatchInclude(e_include.attrib['filename']))
-                open_bins.append(Pmd2PatchOpenBin(e_sub.attrib['filepath'], open_bin_includes))
-        return Pmd2Patch(
-            e_patch.attrib['id'],
-            includes,
-            open_bins,
-            []
-        )
+                    open_bin_includes.append(
+                        Pmd2PatchInclude(e_include.attrib["filename"])
+                    )
+                open_bins.append(
+                    Pmd2PatchOpenBin(e_sub.attrib["filepath"], open_bin_includes)
+                )
+        return Pmd2Patch(e_patch.attrib["id"], includes, open_bins, [])
 
     def _parse_simple_patch(self, e_patch) -> Pmd2SimplePatch:
         includes = []
         string_replacements = []
         for e_sub in e_patch:
-            if e_sub.tag == 'Include':
-                includes.append(Pmd2PatchInclude(e_sub.attrib['filename']))
-            if e_sub.tag == 'Replace':
+            if e_sub.tag == "Include":
+                includes.append(Pmd2PatchInclude(e_sub.attrib["filename"]))
+            if e_sub.tag == "Replace":
                 games = []
                 for e_game in e_sub:
-                    games.append(Pmd2PatchStringReplacementGame(
-                        e_game.attrib['id'], e_game.attrib['replace']
-                    ))
-                string_replacements.append(Pmd2PatchStringReplacement(
-                    e_sub.attrib['filename'], re.compile(e_sub.attrib['regexp']), games
-                ))
-        return Pmd2SimplePatch(
-            e_patch.attrib['id'],
-            includes,
-            string_replacements,
-            []
-        )
+                    games.append(
+                        Pmd2PatchStringReplacementGame(
+                            e_game.attrib["id"], e_game.attrib["replace"]
+                        )
+                    )
+                string_replacements.append(
+                    Pmd2PatchStringReplacement(
+                        e_sub.attrib["filename"],
+                        re.compile(e_sub.attrib["regexp"]),
+                        games,
+                    )
+                )
+        return Pmd2SimplePatch(e_patch.attrib["id"], includes, string_replacements, [])
 
     def _read_parameter_node(self, e_patch) -> List[Pmd2PatchParameter]:
         params = []
         for e_sub in e_patch:
-            if e_sub.tag == 'Parameters':
+            if e_sub.tag == "Parameters":
                 for e_param in e_sub:
-                    if e_param.tag == 'Param':
+                    if e_param.tag == "Param":
                         options = []
                         for e_option in e_param:
-                            if e_option.tag == 'Option':
-                                value_type = Pmd2PatchParameterType(e_param.attrib['type'])
-                                options.append(Pmd2PatchParameterOption(
-                                    type=value_type,
-                                    value=Pmd2XmlReader.xml_int(e_option.text) if value_type == Pmd2PatchParameterType.INTEGER else e_option.text,
-                                    label=e_option.attrib['label'] if 'label' in e_option.attrib else e_option.attrib['value'],
-                                ))
-                        param_type = Pmd2PatchParameterType(e_param.attrib['type'])
+                            if e_option.tag == "Option":
+                                value_type = Pmd2PatchParameterType(
+                                    e_param.attrib["type"]
+                                )
+                                options.append(
+                                    Pmd2PatchParameterOption(
+                                        type=value_type,
+                                        value=Pmd2XmlReader.xml_int(e_option.text)
+                                        if value_type == Pmd2PatchParameterType.INTEGER
+                                        else e_option.text,
+                                        label=e_option.attrib["label"]
+                                        if "label" in e_option.attrib
+                                        else e_option.attrib["value"],
+                                    )
+                                )
+                        param_type = Pmd2PatchParameterType(e_param.attrib["type"])
                         default = None
-                        if 'default' in e_param.attrib:
-                            default = Pmd2XmlReader.xml_int(e_param.attrib['default']) if param_type == Pmd2PatchParameterType.INTEGER else e_param.attrib['default']
-                        params.append(Pmd2PatchParameter(
-                            name=e_param.attrib['name'],
-                            type=param_type,
-                            label=e_param.attrib['label'] if 'label' in e_param.attrib else e_param.attrib['name'],
-                            min=Pmd2XmlReader.xml_int(e_param.attrib['min']) if 'min' in e_param.attrib else None,
-                            max=Pmd2XmlReader.xml_int(e_param.attrib['max']) if 'max' in e_param.attrib else None,
-                            options=options,
-                            default=default
-                        ))
+                        if "default" in e_param.attrib:
+                            default = (
+                                Pmd2XmlReader.xml_int(e_param.attrib["default"])
+                                if param_type == Pmd2PatchParameterType.INTEGER
+                                else e_param.attrib["default"]
+                            )
+                        params.append(
+                            Pmd2PatchParameter(
+                                name=e_param.attrib["name"],
+                                type=param_type,
+                                label=e_param.attrib["label"]
+                                if "label" in e_param.attrib
+                                else e_param.attrib["name"],
+                                min=Pmd2XmlReader.xml_int(e_param.attrib["min"])
+                                if "min" in e_param.attrib
+                                else None,
+                                max=Pmd2XmlReader.xml_int(e_param.attrib["max"])
+                                if "max" in e_param.attrib
+                                else None,
+                                options=options,
+                                default=default,
+                            )
+                        )
         return params
 
 
@@ -572,7 +681,9 @@ class XmlCombiner:
         # return the string representation
         return ElementTree.ElementTree(self.roots[0])
 
-    def combine_element(self, one, other, merge_config: Union[XmlCombinerMergeConfig, None]):
+    def combine_element(
+        self, one, other, merge_config: Union[XmlCombinerMergeConfig, None]
+    ):
         """
         This function recursively updates either the text or the children
         of an element if another element is found in `one`, or adds it
@@ -591,7 +702,7 @@ class XmlCombiner:
                     one_mapping[el.tag] = el
                     one.append(el)
                     continue
-            elif merge_config.strategy == 'key':
+            elif merge_config.strategy == "key":
                 # Key based merge strategy: Map via a field and update all attributes. If no mapping found, append
                 matching_element_in_one = self.ms_key__find(one, el, merge_config.key)
                 if matching_element_in_one is None:
@@ -608,9 +719,9 @@ class XmlCombiner:
                 self.combine_element(matching_element_in_one, el, new_merge_config)
 
     def read_merge_config(self, r):
-        if 'merge_strategy' in r.attrib:
-            merge_key = r.attrib['merge_key'] if 'merge_key' in r.attrib else None
-            return XmlCombinerMergeConfig(r.attrib['merge_strategy'], merge_key)
+        if "merge_strategy" in r.attrib:
+            merge_key = r.attrib["merge_key"] if "merge_key" in r.attrib else None
+            return XmlCombinerMergeConfig(r.attrib["merge_strategy"], merge_key)
         return None
 
     def ms_key__find(self, elem_to_search_in, elem_with_search_field, key):
@@ -621,5 +732,5 @@ class XmlCombiner:
         return None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(Pmd2XmlReader.load_default())

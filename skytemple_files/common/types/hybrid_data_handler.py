@@ -19,11 +19,10 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Generic, Protocol, Type, TypeVar
 
-from skytemple_files.common.impl_cfg import (ImplementationType,
-                                             get_implementation_type)
+from skytemple_files.common.impl_cfg import ImplementationType, get_implementation_type
 from skytemple_files.common.types.data_handler import DataHandler
 
-U = TypeVar('U', contravariant=True)
+U = TypeVar("U", contravariant=True)
 
 
 class WriterProtocol(Protocol[U]):
@@ -32,7 +31,7 @@ class WriterProtocol(Protocol[U]):
         pass
 
 
-P = TypeVar('P')
+P = TypeVar("P")
 
 
 class HybridDataHandler(Generic[P], DataHandler[P], ABC):
@@ -43,6 +42,7 @@ class HybridDataHandler(Generic[P], DataHandler[P], ABC):
 
     The load methods should import on-demand.
     """
+
     @classmethod
     @abstractmethod
     def load_python_model(cls) -> Type[P]:

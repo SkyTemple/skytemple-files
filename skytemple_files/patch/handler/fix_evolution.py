@@ -20,9 +20,11 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.common.util import _
 from skytemple_files.patch.category import PatchCategory
@@ -33,23 +35,23 @@ PATCH_CHECK_INSTR_APPLIED_US = 0xEBF2611C
 
 
 class FixEvolutionPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'FixEvolutionGlitch'
+        return "FixEvolutionGlitch"
 
     @property
     def description(self) -> str:
         return _(
-            'Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters.')
+            "Fixes the evolution glitch that freezes the game when attempting to evolve a pokémon whose name has 10 characters."
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -58,16 +60,23 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED_US
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED_US
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

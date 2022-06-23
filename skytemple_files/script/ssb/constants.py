@@ -19,40 +19,42 @@ from __future__ import annotations
 import re
 from typing import Iterable, TypeVar, Union
 
-from explorerscript.ssb_converting.ssb_data_types import (DungeonModeConstants,
-                                                          SsbOpParamConstant)
+from explorerscript.ssb_converting.ssb_data_types import (
+    DungeonModeConstants,
+    SsbOpParamConstant,
+)
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.user_error import UserValueError
 
-PREFIX_DIRECTION = 'DIR_'
-PREFIX_PROCESS_SPECIAL = 'PROCESS_SPECIAL_'
-PREFIX_MENU = 'MENU_'
-PREFIX_LEVEL = 'LEVEL_'
-PREFIX_FACE_POS = 'FACE_POS_'
-PREFIX_FACE = 'FACE_'
-PREFIX_OBJECT = 'OBJECT_'
-PREFIX_ACTOR = 'ACTOR_'
-PREFIX_EFFECT = 'EFFECT_'
-PREFIX_CORO = 'CORO_'
-PREFIX_BGM = 'BGM_'
-PREFIX_VAR = '$'
-PREFIX_DMODE = 'DMODE_'
-CAMEL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
+PREFIX_DIRECTION = "DIR_"
+PREFIX_PROCESS_SPECIAL = "PROCESS_SPECIAL_"
+PREFIX_MENU = "MENU_"
+PREFIX_LEVEL = "LEVEL_"
+PREFIX_FACE_POS = "FACE_POS_"
+PREFIX_FACE = "FACE_"
+PREFIX_OBJECT = "OBJECT_"
+PREFIX_ACTOR = "ACTOR_"
+PREFIX_EFFECT = "EFFECT_"
+PREFIX_CORO = "CORO_"
+PREFIX_BGM = "BGM_"
+PREFIX_VAR = "$"
+PREFIX_DMODE = "DMODE_"
+CAMEL_REGEX = re.compile(r"(?<!^)(?=[A-Z])")
 
 
 # Mappings for renamed constants, for backwards compatibility
 CONSTANT_ALIASES = {
-    'MENU_DUNGEON_RESULT': 'MENU_DUNGEON_INITIALIZE_TEAM',
+    "MENU_DUNGEON_RESULT": "MENU_DUNGEON_INITIALIZE_TEAM",
     # Bug in SkyTemple 0.0.4, where the direction IDs were mapped against the SSA ids.
-    'DIRECTION_DOWN': 'DIR_DOWNRIGHT',
-    'DIRECTION_DOWNRIGHT': 'DIR_RIGHT',
-    'DIRECTION_RIGHT': 'DIR_UPRIGHT',
-    'DIRECTION_UPRIGHT': 'DIR_UP',
-    'DIRECTION_UP': 'DIR_UPLEFT',
-    'DIRECTION_UPLEFT': 'DIR_LEFT',
-    'DIRECTION_LEFT': 'DIR_DOWNLEFT'
+    "DIRECTION_DOWN": "DIR_DOWNRIGHT",
+    "DIRECTION_DOWNRIGHT": "DIR_RIGHT",
+    "DIRECTION_RIGHT": "DIR_UPRIGHT",
+    "DIRECTION_UPRIGHT": "DIR_UP",
+    "DIRECTION_UP": "DIR_UPLEFT",
+    "DIRECTION_UPLEFT": "DIR_LEFT",
+    "DIRECTION_LEFT": "DIR_DOWNLEFT",
 }
 
 
@@ -69,13 +71,13 @@ class DungeonMode(Enum):
 
     @classmethod
     def create_for(cls, string):
-        if string == 'CLOSED':
+        if string == "CLOSED":
             return cls.CLOSED
-        if string == 'OPEN':
+        if string == "OPEN":
             return cls.OPEN
-        if string == 'REQUEST':
+        if string == "REQUEST":
             return cls.REQUEST
-        if string == 'OPEN_AND_REQUEST':
+        if string == "OPEN_AND_REQUEST":
             return cls.OPEN_AND_REQUEST
         raise UserValueError(f(_("Invalid DungeonMode: {string}")))
 
@@ -87,13 +89,22 @@ class SsbScriptDirection(AutoString):
 
 
 SsbConstantPmdScriptMappable = Union[
-    Pmd2ScriptEntity, Pmd2ScriptObject, Pmd2ScriptRoutine,
-    Pmd2ScriptFaceName, Pmd2ScriptFacePositionMode, Pmd2ScriptGameVar,
-    Pmd2ScriptLevel, Pmd2ScriptMenu, Pmd2ScriptSpecial, Pmd2ScriptDirection, SsbScriptDirection,
-    Pmd2ScriptBgm, Pmd2ScriptSpriteEffect,
-    DungeonMode
+    Pmd2ScriptEntity,
+    Pmd2ScriptObject,
+    Pmd2ScriptRoutine,
+    Pmd2ScriptFaceName,
+    Pmd2ScriptFacePositionMode,
+    Pmd2ScriptGameVar,
+    Pmd2ScriptLevel,
+    Pmd2ScriptMenu,
+    Pmd2ScriptSpecial,
+    Pmd2ScriptDirection,
+    SsbScriptDirection,
+    Pmd2ScriptBgm,
+    Pmd2ScriptSpriteEffect,
+    DungeonMode,
 ]
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class SsbConstant(SsbOpParamConstant):
@@ -109,9 +120,12 @@ class SsbConstant(SsbOpParamConstant):
     (and an instance of Pmd2ScriptData) and be converted back with convert_to_script_entity.
     Giving it an unknown constant_as_string value will aise a ValueError.
     """
+
     def __init__(
-            self, constant_as_string: str,
-            script_data: Pmd2ScriptData = None, value: SsbConstantPmdScriptMappable = None
+        self,
+        constant_as_string: str,
+        script_data: Pmd2ScriptData = None,
+        value: SsbConstantPmdScriptMappable = None,
     ):
         """Either script_data or the value argument must be present."""
         super().__init__(constant_as_string)
@@ -126,7 +140,7 @@ class SsbConstant(SsbOpParamConstant):
         self.name = constant_as_string
 
     @classmethod
-    def create_for(cls, value: SsbConstantPmdScriptMappable) -> 'SsbConstant':
+    def create_for(cls, value: SsbConstantPmdScriptMappable) -> "SsbConstant":
         if isinstance(value, Pmd2ScriptEntity):
             return cls(PREFIX_ACTOR + value.name, value=value)
         elif isinstance(value, Pmd2ScriptObject):
@@ -134,7 +148,7 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptRoutine):
             return cls(PREFIX_CORO + value.name, value=value)
         elif isinstance(value, Pmd2ScriptFaceName):
-            return cls(PREFIX_FACE + value.name.replace('-', '_'), value=value)
+            return cls(PREFIX_FACE + value.name.replace("-", "_"), value=value)
         elif isinstance(value, Pmd2ScriptFacePositionMode):
             return cls(PREFIX_FACE_POS + value.name.upper(), value=value)
         elif isinstance(value, Pmd2ScriptGameVar):
@@ -144,13 +158,18 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptMenu):
             return cls(PREFIX_MENU + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpecial):
-            return cls(PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value)
+            return cls(
+                PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value
+            )
         elif isinstance(value, Pmd2ScriptBgm):
             return cls(PREFIX_BGM + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpriteEffect):
             return cls(PREFIX_EFFECT + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptDirection):
-            return cls(PREFIX_DIRECTION + value.name.upper(), value=SsbScriptDirection(value.ssb_id, value.name))
+            return cls(
+                PREFIX_DIRECTION + value.name.upper(),
+                value=SsbScriptDirection(value.ssb_id, value.name),
+            )
         elif isinstance(value, SsbScriptDirection):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=value)
         elif isinstance(value, DungeonMode):
@@ -158,62 +177,85 @@ class SsbConstant(SsbOpParamConstant):
         raise TypeError(f"value must be of type SsbConstantPmdScriptMappable.")
 
     @classmethod
-    def _map_back(cls, constant_as_string: str, script_data: Pmd2ScriptData) -> SsbConstantPmdScriptMappable:
+    def _map_back(
+        cls, constant_as_string: str, script_data: Pmd2ScriptData
+    ) -> SsbConstantPmdScriptMappable:
         """Inverse of create_for."""
         # Backwards compatibility
         if constant_as_string in CONSTANT_ALIASES:
             constant_as_string = CONSTANT_ALIASES[constant_as_string]
         try:
             if constant_as_string.startswith(PREFIX_ACTOR):
-                return script_data.level_entities__by_name[constant_as_string[len(PREFIX_ACTOR):]]
+                return script_data.level_entities__by_name[
+                    constant_as_string[len(PREFIX_ACTOR) :]
+                ]
             elif constant_as_string.startswith(PREFIX_OBJECT):
-                return cls._in_dict_insensitive(script_data.objects__by_unique_name, constant_as_string[len(PREFIX_OBJECT):])
+                return cls._in_dict_insensitive(
+                    script_data.objects__by_unique_name,
+                    constant_as_string[len(PREFIX_OBJECT) :],
+                )
             elif constant_as_string.startswith(PREFIX_CORO):
-                return script_data.common_routine_info__by_name[constant_as_string[len(PREFIX_CORO):]]
+                return script_data.common_routine_info__by_name[
+                    constant_as_string[len(PREFIX_CORO) :]
+                ]
             elif constant_as_string.startswith(PREFIX_FACE_POS):
-                return cls._in_dict_insensitive(script_data.face_position_modes__by_name, constant_as_string[len(PREFIX_FACE_POS):])
+                return cls._in_dict_insensitive(
+                    script_data.face_position_modes__by_name,
+                    constant_as_string[len(PREFIX_FACE_POS) :],
+                )
             elif constant_as_string.startswith(PREFIX_FACE):
-                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE):].replace('_', '-')]
+                return script_data.face_names__by_name[
+                    constant_as_string[len(PREFIX_FACE) :].replace("_", "-")
+                ]
             elif constant_as_string.startswith(PREFIX_VAR):
-                return script_data.game_variables__by_name[constant_as_string[len(PREFIX_VAR):]]
+                return script_data.game_variables__by_name[
+                    constant_as_string[len(PREFIX_VAR) :]
+                ]
             elif constant_as_string.startswith(PREFIX_LEVEL):
-                return script_data.level_list__by_name[constant_as_string[len(PREFIX_LEVEL):]]
+                return script_data.level_list__by_name[
+                    constant_as_string[len(PREFIX_LEVEL) :]
+                ]
             elif constant_as_string.startswith(PREFIX_MENU):
                 return cls._in_dict_insensitive(
                     script_data.menus__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_MENU):])
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_MENU) :]),
                 )
             elif constant_as_string.startswith(PREFIX_PROCESS_SPECIAL):
                 return cls._in_dict_insensitive(
                     script_data.process_specials__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_PROCESS_SPECIAL):])
+                    cls._cvrt_camel_inverse(
+                        constant_as_string[len(PREFIX_PROCESS_SPECIAL) :]
+                    ),
                 )
             elif constant_as_string.startswith(PREFIX_BGM):
                 return cls._in_dict_insensitive(
                     script_data.bgms__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_BGM):])
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_BGM) :]),
                 )
             elif constant_as_string.startswith(PREFIX_EFFECT):
                 return cls._in_dict_insensitive(
                     script_data.sprite_effects__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_EFFECT):])
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_EFFECT) :]),
                 )
             elif constant_as_string.startswith(PREFIX_DIRECTION):
-                pmd2_dir = cls._in_dict_insensitive(script_data.directions__by_name, constant_as_string[len(PREFIX_DIRECTION):])
+                pmd2_dir = cls._in_dict_insensitive(
+                    script_data.directions__by_name,
+                    constant_as_string[len(PREFIX_DIRECTION) :],
+                )
                 return SsbScriptDirection(pmd2_dir.ssb_id, pmd2_dir.name)
             elif constant_as_string.startswith(PREFIX_DMODE):
-                return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE):])
+                return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE) :])
         except KeyError:
             raise UserValueError(f(_("Unknown constant {constant_as_string}.")))
         raise UserValueError(f(_("Unknown constant {constant_as_string}.")))
 
     @staticmethod
     def _cvrt_camel(string) -> str:
-        return CAMEL_REGEX.sub('_', string).upper()
+        return CAMEL_REGEX.sub("_", string).upper()
 
     @staticmethod
     def _cvrt_camel_inverse(string) -> str:
-        return ''.join(word.title() for word in string.split('_'))
+        return "".join(word.title() for word in string.split("_"))
 
     @staticmethod
     def _in_dict_insensitive(d: Dict[str, T], k: str) -> T:
@@ -230,7 +272,7 @@ class SsbConstant(SsbOpParamConstant):
         return str(self)
 
     @classmethod
-    def collect_all(cls, rom_data: Pmd2ScriptData) -> Iterable['SsbConstant']:
+    def collect_all(cls, rom_data: Pmd2ScriptData) -> Iterable["SsbConstant"]:
         """Collects all possible constants from the given ROM data"""
         for a in rom_data.level_entities:
             yield cls.create_for(a)
@@ -256,7 +298,12 @@ class SsbConstant(SsbOpParamConstant):
             yield cls.create_for(k)
         for l in rom_data.directions.values():
             yield cls.create_for(l)
-        for m in [DungeonMode.CLOSED, DungeonMode.OPEN, DungeonMode.REQUEST, DungeonMode.OPEN_AND_REQUEST]:
+        for m in [
+            DungeonMode.CLOSED,
+            DungeonMode.OPEN,
+            DungeonMode.REQUEST,
+            DungeonMode.OPEN_AND_REQUEST,
+        ]:
             yield cls.create_for(m)
 
     @classmethod
@@ -265,5 +312,5 @@ class SsbConstant(SsbOpParamConstant):
             PREFIX_DMODE + DungeonMode.CLOSED.name,
             PREFIX_DMODE + DungeonMode.OPEN.name,
             PREFIX_DMODE + DungeonMode.REQUEST.name,
-            PREFIX_DMODE + DungeonMode.OPEN_AND_REQUEST.name
+            PREFIX_DMODE + DungeonMode.OPEN_AND_REQUEST.name,
         )

@@ -27,24 +27,29 @@ from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.list.actor.model import ActorListBin
 from skytemple_files.patch.patches import Patcher
 
-if __name__ == '__main__':
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+if __name__ == "__main__":
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_unpatched.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us_unpatched.nds"))
     patcher = Patcher(rom, get_ppmdu_config_for_rom(rom))
-    assert not patcher.is_applied('ActorAndLevelLoader')
+    assert not patcher.is_applied("ActorAndLevelLoader")
 
-    patcher.apply('ActorAndLevelLoader')
+    patcher.apply("ActorAndLevelLoader")
 
-    bin_before = rom.getFileByName('BALANCE/actor_list.bin')
+    bin_before = rom.getFileByName("BALANCE/actor_list.bin")
     # noinspection PyTypeChecker
     # - Bug in PyCharm with bound TypeVars
     actor_list_before: ActorListBin = Sir0Handler.unwrap_obj(
         Sir0Handler.deserialize(bin_before), ActorListBin
     )
     # This only works with unmodified ROMs!
-    assert actor_list_before.list == Pmd2XmlReader.load_default('EoS_NA').script_data.level_entities
-    assert len(Sir0Handler.deserialize(bin_before).content_pointer_offsets) == len(Sir0Handler.wrap_obj(actor_list_before).content_pointer_offsets)
+    assert (
+        actor_list_before.list
+        == Pmd2XmlReader.load_default("EoS_NA").script_data.level_entities
+    )
+    assert len(Sir0Handler.deserialize(bin_before).content_pointer_offsets) == len(
+        Sir0Handler.wrap_obj(actor_list_before).content_pointer_offsets
+    )
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_before))
     # noinspection PyTypeChecker
@@ -52,10 +57,10 @@ if __name__ == '__main__':
         Sir0Handler.deserialize(bin_after), ActorListBin
     )
 
-    with open('/tmp/before.bin', 'wb') as f:
+    with open("/tmp/before.bin", "wb") as f:
         f.write(bin_before)
 
-    with open('/tmp/after.bin', 'wb') as f:
+    with open("/tmp/after.bin", "wb") as f:
         f.write(bin_after)
 
     assert actor_list_before.list == actor_list_after.list
@@ -64,9 +69,9 @@ if __name__ == '__main__':
         entry.entid = u16(328)
 
     bin_after = Sir0Handler.serialize(Sir0Handler.wrap_obj(actor_list_after))
-    rom.setFileByName('BALANCE/actor_list.bin', bin_after)
+    rom.setFileByName("BALANCE/actor_list.bin", bin_after)
 
-    rom.saveToFile(os.path.join(base_dir, 'skyworkcopy_us_patched_edit.nds'))
+    rom.saveToFile(os.path.join(base_dir, "skyworkcopy_us_patched_edit.nds"))
 
     # Test config patching
     config = get_ppmdu_config_for_rom(rom)

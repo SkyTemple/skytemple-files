@@ -21,53 +21,62 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-ORIGINAL_BYTESEQ = bytes(b'w\x00\x00\xaa')
+ORIGINAL_BYTESEQ = bytes(b"w\x00\x00\xaa")
 OFFSET_EU = 0x642C8
 OFFSET_US = 0x64024
 
 
 class UnusedDungeonChancePatch(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'UnusedDungeonChancePatch'
+        return "UnusedDungeonChancePatch"
 
     @property
     def description(self) -> str:
-        return _("Fixes the 'unused' chance for dungeons. It now determines a chance that a room randomly has walls in it, with some of it replaced by secondary terrain.")
+        return _(
+            "Fixes the 'unused' chance for dungeons. It now determines a chance that a room randomly has walls in it, with some of it replaced by secondary terrain."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.BUGFIXES
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

@@ -23,16 +23,16 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.patch.patches import Patcher
 
-if __name__ == '__main__':
-    out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
+if __name__ == "__main__":
+    out_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
     os.makedirs(out_dir, exist_ok=True)
 
-    in_rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    in_rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
     patcher = Patcher(in_rom, get_ppmdu_config_for_rom(in_rom))
-    assert not patcher.is_applied('MoveShortcuts')
+    assert not patcher.is_applied("MoveShortcuts")
 
-    patcher.apply('MoveShortcuts')
+    patcher.apply("MoveShortcuts")
 
-    assert patcher.is_applied('MoveShortcuts')
-    in_rom.saveToFile(os.path.join(out_dir, 'patched.nds'))
+    assert patcher.is_applied("MoveShortcuts")
+    in_rom.saveToFile(os.path.join(out_dir, "patched.nds"))

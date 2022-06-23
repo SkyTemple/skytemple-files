@@ -30,44 +30,56 @@ class HardcodedPersonalityTestStarters:
     @staticmethod
     def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the monster.md indices of the partner starter choices (total index, with gender form!)"""
-        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersPartnerIds']
+        block = config.binaries["overlay/overlay_0013.bin"].symbols[
+            "StartersPartnerIds"
+        ]
         ids = []
         for i in range(block.begin, block.end, 2):
             ids.append(read_u16(overlay13, i))
         return ids
 
     @staticmethod
-    def set_partner_md_ids(value: List[u16], overlay13: bytearray, config: Pmd2Data) -> None:
+    def set_partner_md_ids(
+        value: List[u16], overlay13: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the monster.md indices of the partner starter choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_partner_md_ids).
         """
-        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersPartnerIds']
+        block = config.binaries["overlay/overlay_0013.bin"].symbols[
+            "StartersPartnerIds"
+        ]
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
-            raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The ID list must have exactly the length of {expected_length} entries."
+            )
         for i, v in enumerate(value):
             write_u16(overlay13, v, block.begin + (i * 2))
 
     @staticmethod
     def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
         """Returns the monster.md indices of the player starter choices (total index, with gender form!)"""
-        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersHeroIds']
+        block = config.binaries["overlay/overlay_0013.bin"].symbols["StartersHeroIds"]
         ids = []
         for i in range(block.begin, block.end, 2):
             ids.append(read_u16(overlay13, i))
         return ids
 
     @staticmethod
-    def set_player_md_ids(value: List[u16], overlay13: bytearray, config: Pmd2Data) -> None:
+    def set_player_md_ids(
+        value: List[u16], overlay13: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the monster.md indices of the player partner choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_player_md_ids).
         """
-        block = config.binaries['overlay/overlay_0013.bin'].symbols['StartersHeroIds']
+        block = config.binaries["overlay/overlay_0013.bin"].symbols["StartersHeroIds"]
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
-            raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The ID list must have exactly the length of {expected_length} entries."
+            )
         for i, v in enumerate(value):
             write_u16(overlay13, v, block.begin + (i * 2))
 

@@ -20,8 +20,7 @@ from __future__ import annotations
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.graphic_font.model import GraphicFont
-from skytemple_files.graphics.fonts.graphic_font.writer import \
-    GraphicFontWriter
+from skytemple_files.graphics.fonts.graphic_font.writer import GraphicFontWriter
 
 
 class GraphicFontHandler(DataHandler[GraphicFont]):

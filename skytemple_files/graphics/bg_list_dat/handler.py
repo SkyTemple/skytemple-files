@@ -18,13 +18,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 
-from skytemple_files.common.impl_cfg import (ImplementationType,
-                                             get_implementation_type)
+from skytemple_files.common.impl_cfg import ImplementationType, get_implementation_type
 from skytemple_files.common.types.hybrid_data_handler import (
-    HybridDataHandler, WriterProtocol)
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bg_list_dat.protocol import (BgListEntryProtocol,
-                                                           BgListProtocol)
+from skytemple_files.graphics.bg_list_dat.protocol import (
+    BgListEntryProtocol,
+    BgListProtocol,
+)
 
 if TYPE_CHECKING:
     pass
@@ -34,33 +37,41 @@ class BgListDatHandler(HybridDataHandler[BgListProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BgListProtocol]:
         from skytemple_files.graphics.bg_list_dat._model import BgList
+
         return BgList
 
     @classmethod
     def load_native_model(cls) -> Type[BgListProtocol]:
-        from skytemple_rust.st_bg_list_dat import \
-            BgList  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bg_list_dat import (
+            BgList,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BgList
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyBgList']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyBgList"]]:  # type: ignore
         from skytemple_files.graphics.bg_list_dat._writer import BgListWriter
+
         return BgListWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeBgList']]:  # type: ignore
-        from skytemple_rust.st_bg_list_dat import \
-            BgListWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeBgList"]]:  # type: ignore
+        from skytemple_rust.st_bg_list_dat import (
+            BgListWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BgListWriter
 
     @classmethod
     def get_entry_model_cls(cls) -> Type[BgListEntryProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bg_list_dat import \
-                BgListEntry as \
-                BgListEntryNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_bg_list_dat import (
+                BgListEntry as BgListEntryNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
             return BgListEntryNative
         from skytemple_files.graphics.bg_list_dat._model import BgListEntry
+
         return BgListEntry
 
     @classmethod

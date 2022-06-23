@@ -21,7 +21,9 @@ from typing import cast
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import (
-    Pmd2ScriptLevel, Pmd2ScriptLevelMapType)
+    Pmd2ScriptLevel,
+    Pmd2ScriptLevelMapType,
+)
 from skytemple_files.common.util import *
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
@@ -58,54 +60,74 @@ class GroundTilesetMapping(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, GroundTilesetMapping):
             return False
-        return self.ground_level == other.ground_level and \
-               self.dungeon_id == other.dungeon_id and \
-               self.unk2 == other.unk2 and \
-               self.unk3 == other.unk3
+        return (
+            self.ground_level == other.ground_level
+            and self.dungeon_id == other.dungeon_id
+            and self.unk2 == other.unk2
+            and self.unk3 == other.unk3
+        )
 
     def to_bytes(self) -> bytes:
-        return self.ground_level.to_bytes(2, 'little', signed=True) + \
-               self.dungeon_id.to_bytes(1, 'little', signed=False) + \
-               self.unk2.to_bytes(1, 'little', signed=False) + \
-               self.unk3.to_bytes(4, 'little', signed=False)
+        return (
+            self.ground_level.to_bytes(2, "little", signed=True)
+            + self.dungeon_id.to_bytes(1, "little", signed=False)
+            + self.unk2.to_bytes(1, "little", signed=False)
+            + self.unk3.to_bytes(4, "little", signed=False)
+        )
 
 
 class HardcodedGroundDungeonTilesets:
     @staticmethod
-    def get_ground_dungeon_tilesets(overlay11bin: bytes, config: Pmd2Data) -> List[GroundTilesetMapping]:
+    def get_ground_dungeon_tilesets(
+        overlay11bin: bytes, config: Pmd2Data
+    ) -> List[GroundTilesetMapping]:
         """Returns the list."""
-        block = config.binaries['overlay/overlay_0011.bin'].symbols['LevelTilemapList']
+        block = config.binaries["overlay/overlay_0011.bin"].symbols["LevelTilemapList"]
         lst = []
         for i in range(block.begin, block.end, 8):
-            lst.append(GroundTilesetMapping(
-                read_i16(overlay11bin, i),
-                read_u8(overlay11bin, i + 2),
-                read_u8(overlay11bin, i + 3),
-                read_u32(overlay11bin, i + 4),
-            ))
+            lst.append(
+                GroundTilesetMapping(
+                    read_i16(overlay11bin, i),
+                    read_u8(overlay11bin, i + 2),
+                    read_u8(overlay11bin, i + 3),
+                    read_u32(overlay11bin, i + 4),
+                )
+            )
         return lst
 
     @staticmethod
-    def set_ground_dungeon_tilesets(value: List[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data) -> None:
+    def set_ground_dungeon_tilesets(
+        value: List[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the  list.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
         """
-        block = config.binaries['overlay/overlay_0011.bin'].symbols['LevelTilemapList']
+        block = config.binaries["overlay/overlay_0011.bin"].symbols["LevelTilemapList"]
         expected_length = int((block.end - block.begin) / 8)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
-            overlay11bin[block.begin + i * 8:block.begin + (i + 1) * 8] = entry.to_bytes()
+            overlay11bin[
+                block.begin + i * 8 : block.begin + (i + 1) * 8
+            ] = entry.to_bytes()
 
 
 def resolve_mapping_for_level(
-    level: Pmd2ScriptLevel, tileset_mappings: List[GroundTilesetMapping],
-    mappa: MappaBin, fixed: FixedBin, dungeon_bin: DungeonBinPack,
-    dungeons: List[DungeonDefinition]
+    level: Pmd2ScriptLevel,
+    tileset_mappings: List[GroundTilesetMapping],
+    mappa: MappaBin,
+    fixed: FixedBin,
+    dungeon_bin: DungeonBinPack,
+    dungeons: List[DungeonDefinition],
 ) -> Optional[Tuple[Dma, Dpc, Dpci, Dpl, Dpla, Optional[FixedFloor]]]:
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
-    if level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM and level.mapty_enum != Pmd2ScriptLevelMapType.TILESET:
+    if (
+        level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM
+        and level.mapty_enum != Pmd2ScriptLevelMapType.TILESET
+    ):
         return None
     dungeon_id, floor_id = None, None
     for mapping in tileset_mappings:
@@ -124,11 +146,11 @@ def resolve_mapping_for_level(
     tileset_id = layout.tileset_id
     if tileset_id > 169:
         tileset_id = u8(0)
-    dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
-    dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
-    dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')
-    dpci: Dpci = dungeon_bin.get(f'dungeon{tileset_id}.dpci')
-    dpc: Dpc = dungeon_bin.get(f'dungeon{tileset_id}.dpc')
+    dma: Dma = dungeon_bin.get(f"dungeon{tileset_id}.dma")
+    dpl: Dpl = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
+    dpla: Dpla = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
+    dpci: Dpci = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
+    dpc: Dpc = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
 
     fixedf = None
     if level.mapty_enum == Pmd2ScriptLevelMapType.FIXED_ROOM:

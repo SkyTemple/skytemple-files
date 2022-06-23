@@ -36,7 +36,7 @@ BPC_IMGC_COPY_MAX_CMD = 127 - 2  # -2 because of the __NEXT reserved special cas
 # How much space for the __NEXT case there is (storing it in one separate byte)
 BPC_IMGC_COPY_MAX_NEXT = 255
 # How much space for the CMD_COPY__NEXT__LE_16 case there is (storing as 16 bit after cmd byte)
-BPC_IMGC_COPY_MAX_NEXT_16B = 0xffff
+BPC_IMGC_COPY_MAX_NEXT_16B = 0xFFFF
 
 # Minimum repeat count for using the pattern ops.
 BPC_MIN_REPEAT_COUNT = 3
@@ -89,7 +89,7 @@ class BpcImageCompressor:
         while self.cursor < self.length_input:
             self._process()
 
-        return self.compressed_data[:self.bytes_written]
+        return self.compressed_data[: self.bytes_written]
 
     def _process(self):
         """
@@ -99,7 +99,9 @@ class BpcImageCompressor:
         if DEBUG:
             print("----------------------")
             print(f"@0x{self.bytes_written:08x} [in input @0x{self.cursor:08x}]")
-            print(f"Pattern buffer before: {self.pattern:02x} and {self.pattern_buffer:02x}")
+            print(
+                f"Pattern buffer before: {self.pattern:02x} and {self.pattern_buffer:02x}"
+            )
         op = BpcImageCompressorOperation()
 
         # Check if byte repeats
@@ -134,7 +136,9 @@ class BpcImageCompressor:
         self._run_operation(op)
 
         if DEBUG:
-            print(f"Pattern buffer after: {self.pattern:02x} and {self.pattern_buffer:02x}")
+            print(
+                f"Pattern buffer after: {self.pattern:02x} and {self.pattern_buffer:02x}"
+            )
 
     def _run_operation(self, op: BpcImageCompressorOperation):
         """Actually write the operation"""
@@ -162,8 +166,10 @@ class BpcImageCompressor:
             self.pattern = op.byte_or_sequence
 
         # Determine the length
-        if op.repeats <= BPC_IMGC_REPEAT_MAX_CMD or (op.repeats <= BPC_IMGC_REPEAT_MAX_CMD_LOAD_AS_PATTERN
-                                                     and op.where_pattern == WherePattern.WRITE_AS_BYTE):
+        if op.repeats <= BPC_IMGC_REPEAT_MAX_CMD or (
+            op.repeats <= BPC_IMGC_REPEAT_MAX_CMD_LOAD_AS_PATTERN
+            and op.where_pattern == WherePattern.WRITE_AS_BYTE
+        ):
             # Fits in CMD
             cmd += op.repeats
             self._write(cmd)
@@ -198,8 +204,10 @@ class BpcImageCompressor:
         # Write the sequence
         # + 1 since we are counting repeats and always have 1
         len_of_seq = op.repeats + 1
-        #assert len_of_seq == len(op.byte_or_sequence)
-        self.compressed_data[self.bytes_written:self.bytes_written+len_of_seq] = op.byte_or_sequence
+        # assert len_of_seq == len(op.byte_or_sequence)
+        self.compressed_data[
+            self.bytes_written : self.bytes_written + len_of_seq
+        ] = op.byte_or_sequence
         # Don't forget to advance the cursors.
         self.bytes_written += len_of_seq
 
@@ -214,7 +222,9 @@ class BpcImageCompressor:
         """Writes to the output as 16 byte LE"""
         if DEBUG:
             print(f"W {data:04x}")
-        self.compressed_data[self.bytes_written:self.bytes_written+1] = data.to_bytes(2, 'little')
+        self.compressed_data[
+            self.bytes_written : self.bytes_written + 1
+        ] = data.to_bytes(2, "little")
         self.bytes_written += 2
 
     def _look_ahead_repeats(self):
@@ -222,9 +232,11 @@ class BpcImageCompressor:
         byte_at_pos = read_u8(self.uncompressed_data, self.cursor)
         nc = self.cursor + 1
         repeats = 0
-        while nc < self.length_input and \
-                read_u8(self.uncompressed_data, nc) == byte_at_pos and \
-                repeats < BPC_IMGC_REPEAT_MAX_NEXT:
+        while (
+            nc < self.length_input
+            and read_u8(self.uncompressed_data, nc) == byte_at_pos
+            and repeats < BPC_IMGC_REPEAT_MAX_NEXT
+        ):
             repeats += 1
             nc += 1
         return byte_at_pos, repeats
@@ -238,7 +250,9 @@ class BpcImageCompressor:
         previous_byt_at_pos = 0x100  # Impossible "null" value for now
         nc = self.cursor
         while True:
-            byt_at_pos = read_dynamic(self.uncompressed_data, nc, length=1, big_endian=False, signed=False)
+            byt_at_pos = read_dynamic(
+                self.uncompressed_data, nc, length=1, big_endian=False, signed=False
+            )
             if byt_at_pos == previous_byt_at_pos:
                 repeat_counter += 1
             else:
@@ -251,7 +265,7 @@ class BpcImageCompressor:
                 seq_len -= BPC_MIN_REPEAT_COUNT
                 break
 
-            if seq_len+1 >= BPC_IMGC_COPY_MAX_NEXT_16B or nc >= self.length_input:
+            if seq_len + 1 >= BPC_IMGC_COPY_MAX_NEXT_16B or nc >= self.length_input:
                 break
 
             seq_len += 1

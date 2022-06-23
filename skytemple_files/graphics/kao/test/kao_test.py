@@ -28,7 +28,7 @@ from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 FIX_IN_TEST_MAP: Dict[int, List[int]] = {
     0: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 32, 34],
     552: [0, 2, 4, 6, 8, 10],
-    1153: []
+    1153: [],
 }
 FIX_IN_LEN = 1154
 FIX_IN_LEN_SUB = 40
@@ -49,7 +49,9 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
                 self.assertGreater(kaoimg.size(), 0)
                 # Kaos are not guaranteed to use the same exact palette after storing.
                 self.assertImagesEqual(self._fix_path_png(idx, sidx), kaoimg.get())
-                self.assertImagesEqual(self._fix_path_png(idx, sidx, rgb=True), kaoimg.get())
+                self.assertImagesEqual(
+                    self._fix_path_png(idx, sidx, rgb=True), kaoimg.get()
+                )
 
     def test_get_missing(self) -> None:
         self.assertIsNone(self.kao.get(552, 1))
@@ -61,7 +63,9 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
     def test_get_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
         for i in FIX_COMPLEX_IDS:
-            self.assertImagesEqual(self._fix_path_complex_png(i), self.kao.get(0, i).get())
+            self.assertImagesEqual(
+                self._fix_path_complex_png(i), self.kao.get(0, i).get()
+            )
 
     def test_set_complex(self) -> None:
         self.kao = self._load_main_fixture(self._fix_path_complex())
@@ -69,7 +73,9 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
             self.kao.set_from_img(0, i, self._load_image(self._fix_path_complex_png(i)))
         new_kao = self._save_and_reload_main_fixture(self.kao)
         for i in FIX_COMPLEX_IDS:
-            self.assertImagesEqual(self._fix_path_complex_png(i), new_kao.get(0, i).get())
+            self.assertImagesEqual(
+                self._fix_path_complex_png(i), new_kao.get(0, i).get()
+            )
 
     def test_set_from_img(self) -> None:
         img = self._load_image(self._fix_path_png(0, 1))
@@ -200,13 +206,21 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.assertIsNotNone(self.kao)
 
         # AT3PX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 0)), self.kao.get(0, 0).get())
+        self.assertImagesEqual(
+            self._load_image(self._fix_path_png(0, 0)), self.kao.get(0, 0).get()
+        )
         # AT4PX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 1)), self.kao.get(0, 1).get())
+        self.assertImagesEqual(
+            self._load_image(self._fix_path_png(0, 1)), self.kao.get(0, 1).get()
+        )
         # PKDPX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 2)), self.kao.get(0, 2).get())
+        self.assertImagesEqual(
+            self._load_image(self._fix_path_png(0, 2)), self.kao.get(0, 2).get()
+        )
         # ATUPX
-        self.assertImagesEqual(self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get())
+        self.assertImagesEqual(
+            self._load_image(self._fix_path_png(0, 3)), self.kao.get(0, 3).get()
+        )
 
     def test_proper_toc_layout_writes(self) -> None:
         kao_data = self._save_and_reload_main_fixture_raw(self.kao)
@@ -226,7 +240,7 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
             toc_cur += 4
             number_entries += 1
 
-    @romtest(file_ext='kao', path='FONT/')
+    @romtest(file_ext="kao", path="FONT/")
     def test_using_rom(self, _, file):
         kao_before = self.handler.deserialize(file)
 
@@ -241,48 +255,64 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
                 try:
                     img.set(img.get())
                 except Exception as ex:
-                    raise AssertionError(f"Seting the image must not fail for image at {idx},{sidx}.") from ex
+                    raise AssertionError(
+                        f"Seting the image must not fail for image at {idx},{sidx}."
+                    ) from ex
         kao = self._save_and_reload_main_fixture(kao)
 
         # Compare all images
         for (idxb, sidxb, img1), (idx, sidx, img2) in zip(kao_before, kao):
-            self.assertEqual(idxb, idx, "When iterating over the Kao after saving it, indices must advance the same.")
-            self.assertEqual(sidxb, sidx, "When iterating over the Kao after saving it, subindices must advance the same.")
+            self.assertEqual(
+                idxb,
+                idx,
+                "When iterating over the Kao after saving it, indices must advance the same.",
+            )
+            self.assertEqual(
+                sidxb,
+                sidx,
+                "When iterating over the Kao after saving it, subindices must advance the same.",
+            )
             if img1 is None and img2 is not None:
-                self.fail(f"If image was None before, must be None after. [idx={idx}, sidx={sidx}]")
+                self.fail(
+                    f"If image was None before, must be None after. [idx={idx}, sidx={sidx}]"
+                )
             elif img2 is None and img1 is not None:
-                self.fail(f"If image was not None before, must not be None after. [idx={idx}, sidx={sidx}]")
+                self.fail(
+                    f"If image was not None before, must not be None after. [idx={idx}, sidx={sidx}]"
+                )
             elif img2 is not None:
-                self.assertImagesEqual(img1.get(), img2.get(), msg="[idx={idx}, sidx={sidx}]")
+                self.assertImagesEqual(
+                    img1.get(), img2.get(), msg="[idx={idx}, sidx={sidx}]"
+                )
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path_kao(cls) -> str:
-        return 'fixtures', 'kaomado.kao'
+        return "fixtures", "kaomado.kao"
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path_compression_algo(cls) -> str:
-        return 'fixtures', 'compression_algo.kao'
+        return "fixtures", "compression_algo.kao"
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path_complex(cls) -> str:
-        return 'fixtures', 'complex.kao'
+        return "fixtures", "complex.kao"
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path_png(cls, idx: int, sidx: int, rgb: bool = False) -> str:
         if rgb:
-            return 'fixtures', 'rgb', f'{idx:04}', f'{sidx:02}.png'
-        return 'fixtures', f'{idx:04}', f'{sidx:02}.png'
+            return "fixtures", "rgb", f"{idx:04}", f"{sidx:02}.png"
+        return "fixtures", f"{idx:04}", f"{sidx:02}.png"
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path_complex_png(cls, sidx: int) -> str:
-        return 'fixtures', f'complex', f'1_{sidx}.png'
+        return "fixtures", f"complex", f"1_{sidx}.png"

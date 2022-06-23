@@ -24,17 +24,21 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.tiled_image import TilemapEntry
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import (get_ppmdu_config_for_rom, iter_bytes,
-                                         read_u16, write_u16)
+from skytemple_files.common.util import (
+    get_ppmdu_config_for_rom,
+    iter_bytes,
+    read_u16,
+    write_u16,
+)
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-os.makedirs(os.path.join(output_dir, 'raw'), exist_ok=True)
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
+os.makedirs(os.path.join(output_dir, "raw"), exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
@@ -49,7 +53,7 @@ def corrupt171():
     Seems to be some kind of map assembling information."""
     img171 = dungeon_bin[171].decompress()
     # Make the first entry tile 2
-    img171 = b'\x02' * len(img171)
+    img171 = b"\x02" * len(img171)
     dungeon_bin[171] = FileType.COMMON_AT.compress(img171)
 
 
@@ -59,10 +63,10 @@ def corrupt341():
     img341new = bytearray(img341)
 
     # Decode XOR
-    #XOR_ROW_LEN = 7200#18 * 7
-    #rows_decoded = []
-    #row_before = bytes(XOR_ROW_LEN)
-    #for chunk in iter_bytes(img341, XOR_ROW_LEN):
+    # XOR_ROW_LEN = 7200#18 * 7
+    # rows_decoded = []
+    # row_before = bytes(XOR_ROW_LEN)
+    # for chunk in iter_bytes(img341, XOR_ROW_LEN):
     #    xored = bytearray(a ^ b for (a, b) in zip(chunk, row_before))
     #    row_before = xored
     #    rows_decoded.append(xored)
@@ -76,7 +80,7 @@ def corrupt341():
         TilemapEntry(5, False, True, 0),
         TilemapEntry(10, False, False, 6),
         TilemapEntry(10, True, False, 6),
-        TilemapEntry(10, False, True, 6)
+        TilemapEntry(10, False, True, 6),
     ]
 
     for j in range(1, 300):
@@ -88,16 +92,16 @@ def corrupt341():
         all_tilemaps.append(TilemapEntry.from_int(read_u16(bytes2, 0)))
 
     # Encode XOR
-    #rows_encoded = []
-    #row_before = bytes(XOR_ROW_LEN)
-    #for row in rows_decoded:
+    # rows_encoded = []
+    # row_before = bytes(XOR_ROW_LEN)
+    # for row in rows_decoded:
     #    xored = bytes(a ^ b for (a, b) in zip(row, row_before))
     #    row_before = row
     #    rows_encoded.append(xored)
-    #img341new = bytes(itertools.chain.from_iterable(rows_encoded))
-    #assert img341 == img341new
+    # img341new = bytes(itertools.chain.from_iterable(rows_encoded))
+    # assert img341 == img341new
 
-    with open('/tmp/corrupt.bin', 'wb') as f:
+    with open("/tmp/corrupt.bin", "wb") as f:
         f.write(img341new)
     dungeon_bin[341] = FileType.COMMON_AT.compress(img341new)
 
@@ -114,14 +118,15 @@ def corrupt511():
             img511new[i] = 2
     dungeon_bin[511] = FileType.COMMON_AT.compress(img511new)
 
+
 # -- /
 
 # Run corruption tasks
 corrupt171()
-#corrupt341()
-#corrupt511()
+# corrupt341()
+# corrupt511()
 
 dungeon_bin_bin_after_changes = DungeonBinHandler.serialize(dungeon_bin)
-rom.setFileByName('DUNGEON/dungeon.bin', dungeon_bin_bin_after_changes)
+rom.setFileByName("DUNGEON/dungeon.bin", dungeon_bin_bin_after_changes)
 assert dungeon_bin_bin != dungeon_bin_bin_after_changes
-rom.saveToFile(os.path.join(output_dir, 'corrupt.nds'))
+rom.saveToFile(os.path.join(output_dir, "corrupt.nds"))

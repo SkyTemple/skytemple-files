@@ -18,22 +18,22 @@ from __future__ import annotations
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.compression_container.common_at.handler import \
-    COMMON_AT_BEST_3
+from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
 from skytemple_files.graphics.dpci.model import Dpci
 
 
 class DbinAt4pxDpciHandler(DataHandler[Dpci]):
-
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpci:
         from skytemple_files.common.types.file_types import FileType
+
         at = FileType.COMMON_AT.deserialize(data)
         return FileType.DPCI.deserialize(at.decompress())
 
     @classmethod
     def serialize(cls, data: Dpci, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         serialized = FileType.DPCI.serialize(data)
         return FileType.COMMON_AT.serialize(
             FileType.COMMON_AT.compress(serialized, COMMON_AT_BEST_3)

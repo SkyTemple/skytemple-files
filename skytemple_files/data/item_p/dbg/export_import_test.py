@@ -24,20 +24,20 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.data.item_p.writer import ItemPWriter
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-item_p_bin = rom.getFileByName('BALANCE/item_p.bin')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
+item_p_bin = rom.getFileByName("BALANCE/item_p.bin")
 item_p = FileType.ITEM_P.deserialize(item_p_bin)
 sir0_pointers_before = FileType.SIR0.deserialize(item_p_bin).content_pointer_offsets
 
 sir0_pointers_after = ItemPWriter(item_p).write()[1]
 bin_after = FileType.ITEM_P.serialize(item_p)
 
-with open('/tmp/before.bin', 'wb') as f:
+with open("/tmp/before.bin", "wb") as f:
     f.write(item_p_bin)
 
-with open('/tmp/after.bin', 'wb') as f:
+with open("/tmp/after.bin", "wb") as f:
     f.write(bin_after)
 
 assert sir0_pointers_before == sir0_pointers_after

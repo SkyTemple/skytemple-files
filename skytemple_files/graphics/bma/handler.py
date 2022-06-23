@@ -19,7 +19,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Type
 
 from skytemple_files.common.types.hybrid_data_handler import (
-    HybridDataHandler, WriterProtocol)
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 
@@ -31,23 +33,29 @@ class BmaHandler(HybridDataHandler[BmaProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BmaProtocol]:
         from skytemple_files.graphics.bma._model import Bma
+
         return Bma
 
     @classmethod
     def load_native_model(cls) -> Type[BmaProtocol]:
-        from skytemple_rust.st_bma import \
-            Bma  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bma import (
+            Bma,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return Bma
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyBma']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyBma"]]:  # type: ignore
         from skytemple_files.graphics.bma._writer import BmaWriter
+
         return BmaWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeBma']]:  # type: ignore
-        from skytemple_rust.st_bma import \
-            BmaWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeBma"]]:  # type: ignore
+        from skytemple_rust.st_bma import (
+            BmaWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BmaWriter
 
     @classmethod

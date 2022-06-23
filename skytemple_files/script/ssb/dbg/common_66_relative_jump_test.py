@@ -26,13 +26,13 @@ from skytemple_files.script.ssb.handler import SsbHandler
 
 
 def main():
-    output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+    output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
-    file_name = 'SCRIPT/COMMON/unionall.ssb'
+    file_name = "SCRIPT/COMMON/unionall.ssb"
 
     # Files that don't work right now:
     print(file_name)
@@ -46,11 +46,17 @@ def main():
         print(f">>> Routine {i}:")
         for op in ops:
             offset = target_point - op.offset
-            offset_two = target_point - int.from_bytes(op.offset.to_bytes(2, byteorder='little', signed=False), byteorder='little', signed=True)
+            offset_two = target_point - int.from_bytes(
+                op.offset.to_bytes(2, byteorder="little", signed=False),
+                byteorder="little",
+                signed=True,
+            )
             for param in op.params:
                 if param == offset or param == offset_two:
-                    print(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {', '.join(hex(x) for x in op.params)}")
+                    print(
+                        f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {', '.join(hex(x) for x in op.params)}"
+                    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

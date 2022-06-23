@@ -22,8 +22,7 @@ from range_typed_integers import u32_checked
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.model import Sir0
-from skytemple_files.container.sir0.sir0_util import \
-    encode_sir0_pointer_offsets
+from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 
 
 class Sir0Writer:
@@ -41,7 +40,7 @@ class Sir0Writer:
             write_u32(
                 self.model.content,
                 u32(read_u32(self.model.content, pnt_off) + HEADER_LEN),
-                pnt_off
+                pnt_off,
             )
 
         # Also add the two header pointers
@@ -60,7 +59,7 @@ class Sir0Writer:
         self.data = bytearray(pointer_pol + len(pol) + len_eof_padding)
 
         # Header
-        self._append(b'SIR0')
+        self._append(b"SIR0")
         self._write_u32(u32_checked(self.model.data_pointer + HEADER_LEN))
         self._write_u32(u32_checked(pointer_pol))
         self._write_u32(u32(0))
@@ -77,7 +76,7 @@ class Sir0Writer:
         return self.data
 
     def _append(self, data: bytes):
-        self.data[self.bytes_written:self.bytes_written+len(data)] = data  # type: ignore
+        self.data[self.bytes_written : self.bytes_written + len(data)] = data  # type: ignore
         self.bytes_written += len(data)
 
     def _pad(self, padding_length):
@@ -94,5 +93,7 @@ class Sir0Writer:
 
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-    def _encode_pointer_offsets(self, buffer: bytearray, pointer_offsets: List[int]) -> u32:
+    def _encode_pointer_offsets(
+        self, buffer: bytearray, pointer_offsets: List[int]
+    ) -> u32:
         return encode_sir0_pointer_offsets(buffer, pointer_offsets)

@@ -20,11 +20,16 @@ from typing import List, Tuple
 
 from PIL import Image, ImageOps
 from skytemple_rust.pmd_wan import (  # pylint: disable=no-name-in-module,no-member,import-error
-    ImageBytes, MetaFrameGroup, WanImage)
+    ImageBytes,
+    MetaFrameGroup,
+    WanImage,
+)
 
 
 class MetaFramePositioningSpecs:
-    def __init__(self, img: Image.Image, width: int, height: int, x_offset: int, y_offset: int):
+    def __init__(
+        self, img: Image.Image, width: int, height: int, x_offset: int, y_offset: int
+    ):
         self.img = img
         self.width = width
         self.height = height
@@ -35,7 +40,9 @@ class MetaFramePositioningSpecs:
         self.final_relative_y = None
 
     @classmethod
-    def process(cls, items: List['MetaFramePositioningSpecs']) -> Tuple[int, int, int, int]:
+    def process(
+        cls, items: List["MetaFramePositioningSpecs"]
+    ) -> Tuple[int, int, int, int]:
         """
         Returns the full image dimensions and the image's center point and set's
         the final_relative_x/y attributes of all entries
@@ -59,7 +66,12 @@ class MetaFramePositioningSpecs:
             frame.final_relative_x = frame.x_offset - smallest_x  # type: ignore
             frame.final_relative_y = frame.y_offset - smallest_y  # type: ignore
 
-        return (biggest_x - smallest_x), (biggest_y - smallest_y), abs(smallest_x), abs(smallest_y)
+        return (
+            (biggest_x - smallest_x),
+            (biggest_y - smallest_y),
+            abs(smallest_x),
+            abs(smallest_y),
+        )
 
 
 class Wan:
@@ -74,34 +86,56 @@ class Wan:
     def anim_groups(self):
         return self.model.anim_store.anim_groups
 
-    def render_frame_group(self, frame_group: MetaFrameGroup) -> Tuple[Image.Image, Tuple[int, int]]:
+    def render_frame_group(
+        self, frame_group: MetaFrameGroup
+    ) -> Tuple[Image.Image, Tuple[int, int]]:
         """Returns the frame group as an image and it's center position as a tuple."""
         specs: List[MetaFramePositioningSpecs] = []
 
         for meta_frame in frame_group.meta_frames:
-            meta_frame_image_bytes: ImageBytes = self.model.image_store.images[meta_frame.image_index]
+            meta_frame_image_bytes: ImageBytes = self.model.image_store.images[
+                meta_frame.image_index
+            ]
 
-            im = Image.frombuffer('RGBA',
-                                  (meta_frame.resolution.x, meta_frame.resolution.y),
-                                  bytearray(meta_frame_image_bytes.to_image(self.model.palette, meta_frame)),
-                                  'raw', 'RGBA', 0, 1)
+            im = Image.frombuffer(
+                "RGBA",
+                (meta_frame.resolution.x, meta_frame.resolution.y),
+                bytearray(
+                    meta_frame_image_bytes.to_image(self.model.palette, meta_frame)
+                ),
+                "raw",
+                "RGBA",
+                0,
+                1,
+            )
             if meta_frame.h_flip:
                 im = ImageOps.mirror(im)
             if meta_frame.v_flip:
                 im = ImageOps.flip(im)
 
-            specs.append(MetaFramePositioningSpecs(im, meta_frame.resolution.x, meta_frame.resolution.y,
-                                                   meta_frame.offset_x, meta_frame.offset_y))
+            specs.append(
+                MetaFramePositioningSpecs(
+                    im,
+                    meta_frame.resolution.x,
+                    meta_frame.resolution.y,
+                    meta_frame.offset_x,
+                    meta_frame.offset_y,
+                )
+            )
 
         w, h, cx, cy = MetaFramePositioningSpecs.process(specs)
 
-        final_img = Image.new('RGBA', (w, h), (255, 0, 0, 0))
+        final_img = Image.new("RGBA", (w, h), (255, 0, 0, 0))
         for frame in specs:
             final_img.paste(
                 frame.img,
-                (frame.final_relative_x, frame.final_relative_y,
-                 frame.final_relative_x + frame.width, frame.final_relative_y + frame.height),  # type: ignore
-                frame.img
+                (
+                    frame.final_relative_x,
+                    frame.final_relative_y,
+                    frame.final_relative_x + frame.width,
+                    frame.final_relative_y + frame.height,
+                ),  # type: ignore
+                frame.img,
             )
 
         return final_img, (cx, cy)

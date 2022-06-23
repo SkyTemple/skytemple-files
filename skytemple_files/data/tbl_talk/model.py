@@ -24,12 +24,12 @@ from skytemple_files.data.tbl_talk import *
 
 
 class TalkType(Enum):
-    HEALTHY = 0x0, _('Healthy')
-    HALF_LIFE = 0x1, _('Half Life')
-    PINCH = 0x2, _('Pinch')
-    LEVEL_UP = 0x3, _('Level Up')
-    WAIT = 0x4, _('Wait')
-    GROUND_WAIT = 0x5, _('Ground Wait')
+    HEALTHY = 0x0, _("Healthy")
+    HALF_LIFE = 0x1, _("Half Life")
+    PINCH = 0x2, _("Pinch")
+    LEVEL_UP = 0x3, _("Level Up")
+    WAIT = 0x4, _("Wait")
+    GROUND_WAIT = 0x5, _("Ground Wait")
 
     def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
@@ -47,11 +47,11 @@ class TblTalk:
             data = memoryview(data)
         self.groups = []
         last_ptr = read_u16(data, 0)
-        nbgroups = ((last_ptr//2)-1)//TBL_TALK_PERSONALITY_LEN
+        nbgroups = ((last_ptr // 2) - 1) // TBL_TALK_PERSONALITY_LEN
         for g in range(nbgroups):
             personality = []
             for i in range(TBL_TALK_PERSONALITY_LEN):
-                next_ptr = read_u16(data, 2+g*TBL_TALK_PERSONALITY_LEN*2+i*2)
+                next_ptr = read_u16(data, 2 + g * TBL_TALK_PERSONALITY_LEN * 2 + i * 2)
                 talk_type = []
                 while last_ptr != next_ptr:
                     talk_type.append(read_u16(data, last_ptr))
@@ -68,7 +68,7 @@ class TblTalk:
     def remove_group(self, group: int):
         # IMPORTANT! This doesn't work because the game needs a specific number of groups
         del self.groups[group]
-    
+
     def add_group(self):
         # IMPORTANT! This doesn't work because the game needs a specific number of groups
         self.groups.append([])
@@ -77,29 +77,27 @@ class TblTalk:
 
     def get_dialogues(self, group: int, talk_type: TalkType) -> List[u16]:
         return self.groups[group][talk_type.value]
-    
+
     def set_dialogues(self, group: int, talk_type: TalkType, dialogues: List[u16]):
         self.groups[group][talk_type.value] = dialogues
 
     def get_nb_groups(self) -> int:
         return len(self.groups)
-    
+
     def get_monster_personality(self, ent_id) -> int:
         return self.monster_personalities[ent_id]
-    
+
     def get_nb_monsters(self) -> int:
         return len(self.monster_personalities)
-    
+
     def set_monster_personality(self, ent_id: int, personality: u8):
         self.monster_personalities[ent_id] = personality
-        
+
     def add_monster_personality(self, personality):
         self.monster_personalities.append(personality)
 
     def get_special_personality(self, spec_id: int) -> u8:
         return self.special_personalities[spec_id]
-    
+
     def set_special_personality(self, spec_id: int, personality: u8):
         self.special_personalities[spec_id] = personality
-    
-    

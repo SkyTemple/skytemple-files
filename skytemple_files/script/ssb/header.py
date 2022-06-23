@@ -21,9 +21,13 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 from typing import Dict, Optional
 
-from skytemple_files.common.ppmdu_config.data import (LANG_DE, LANG_EN,
-                                                      LANG_FR, LANG_IT,
-                                                      LANG_SP)
+from skytemple_files.common.ppmdu_config.data import (
+    LANG_DE,
+    LANG_EN,
+    LANG_FR,
+    LANG_IT,
+    LANG_SP,
+)
 from skytemple_files.common.util import *
 
 SSB_HEADER_US_LENGTH = 0x0C
@@ -88,9 +92,7 @@ class SsbHeaderUs(AbstractSsbHeader):
         self._number_of_strings = read_u16(data, 0x2)
         self._constant_strings_start = read_u16(data, 0x4) * 2
         self._const_table_length = read_u16(data, 0x6) * 2
-        self._string_table_lengths = OrderedDict({
-            LANG_EN: read_u16(data, 0x8) * 2
-        })
+        self._string_table_lengths = OrderedDict({LANG_EN: read_u16(data, 0x8) * 2})
         self._unknown = read_u16(data, 0xA)
 
     @classmethod
@@ -137,13 +139,15 @@ class SsbHeaderEu(AbstractSsbHeader):
         self._number_of_strings = read_u16(data, 0x2)
         self._constant_strings_start = read_u16(data, 0x4) * 2
         self._const_table_length = read_u16(data, 0x6) * 2
-        self._string_table_lengths = OrderedDict({
-            LANG_EN: read_u16(data, 0x8) * 2,
-            LANG_FR: read_u16(data, 0xA) * 2,
-            LANG_DE: read_u16(data, 0xC) * 2,
-            LANG_IT: read_u16(data, 0xE) * 2,
-            LANG_SP: read_u16(data, 0x10) * 2
-        })
+        self._string_table_lengths = OrderedDict(
+            {
+                LANG_EN: read_u16(data, 0x8) * 2,
+                LANG_FR: read_u16(data, 0xA) * 2,
+                LANG_DE: read_u16(data, 0xC) * 2,
+                LANG_IT: read_u16(data, 0xE) * 2,
+                LANG_SP: read_u16(data, 0x10) * 2,
+            }
+        )
 
     @classmethod
     def supported_langs(cls):

@@ -21,10 +21,12 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
@@ -43,23 +45,23 @@ ARM9_START = 0x02000000
 
 
 class ExtractItemListsPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ExtractHardcodedItemLists'
+        return "ExtractHardcodedItemLists"
 
     @property
     def description(self) -> str:
         return _(
-            'Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system.')
+            "Extracts the hardcoded item lists, used for mission rewards/treasure boxes content as well as Kecleon shop items, and put them in files. Provides support for reading them from the rom file system."
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.2'
+        return "0.0.2"
 
     @property
     def category(self) -> PatchCategory:
@@ -68,12 +70,20 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
+                    != PATCH_CHECK_INSTR_APPLIED_US
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED_EU
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             path_len = len(LIST_PATH % 0) + 1
             if path_len % 4 != 0:
@@ -104,7 +114,9 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
                     create_file_in_rom(rom, path, data)
                 else:
                     rom.setFileByName(path, data)
-                rom.arm9 = rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
+                rom.arm9 = (
+                    rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
+                )
                 ranges.append([start, end])
             ranges.sort()
             i = 0
@@ -120,17 +132,25 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
                 while ranges[0][1] - ranges[0][0] < path_len:
                     del ranges[0]
                     if len(ranges) == 0:
-                        raise RuntimeError(_("Don't have enough space to put filenames! "))
+                        raise RuntimeError(
+                            _("Don't have enough space to put filenames! ")
+                        )
 
-                rom.arm9 = rom.arm9[:ranges[0][0]] + path.encode(encoding="ascii") + bytes(
-                    path_len - len(path)) + rom.arm9[ranges[0][0] + path_len:]
+                rom.arm9 = (
+                    rom.arm9[: ranges[0][0]]
+                    + path.encode(encoding="ascii")
+                    + bytes(path_len - len(path))
+                    + rom.arm9[ranges[0][0] + path_len :]
+                )
                 write_u32(buffer, u32(ARM9_START + ranges[0][0]), i * 4)
                 ranges[0][0] += path_len
-            rom.arm9 = rom.arm9[:table] + buffer + rom.arm9[table + len(buffer):]
+            rom.arm9 = rom.arm9[:table] + buffer + rom.arm9[table + len(buffer) :]
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

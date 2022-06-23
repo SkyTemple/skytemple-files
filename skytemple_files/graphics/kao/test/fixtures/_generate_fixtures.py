@@ -24,13 +24,15 @@ from PIL import Image, ImageDraw
 
 from skytemple_files.graphics.kao.handler import KaoHandler
 
-rom: NintendoDSRom = NintendoDSRom.fromFile(os.path.join('..', '..', '..', '..', '..', '..', 'CLEAN_ROM', 'pmdsky.nds'))
+rom: NintendoDSRom = NintendoDSRom.fromFile(
+    os.path.join("..", "..", "..", "..", "..", "..", "CLEAN_ROM", "pmdsky.nds")
+)
 
-kao = KaoHandler.deserialize(rom.getFileByName('FONT/kaomado.kao'))
+kao = KaoHandler.deserialize(rom.getFileByName("FONT/kaomado.kao"))
 
 for idx, sidx, img in kao:
     print(idx, sidx, img)
-    pil = Image.new('P', (40, 40))
+    pil = Image.new("P", (40, 40))
     pal = bytearray()
     pil.putpalette([randrange(0, 256) for _ in range(0, 256 * 3)])
     for i in range(0, 15):
@@ -41,10 +43,10 @@ for idx, sidx, img in kao:
     if img is not None:
         img.set(pil)
     if idx in (0, 552, 1153):
-        os.makedirs(f'rgb/{idx:04}', exist_ok=True)
-        os.makedirs(f'{idx:04}', exist_ok=True)
-        pil.save(f'{idx:04}/{sidx:02}.png')
-        pil.convert('RGB').save(f'rgb/{idx:04}/{sidx:02}.png')
+        os.makedirs(f"rgb/{idx:04}", exist_ok=True)
+        os.makedirs(f"{idx:04}", exist_ok=True)
+        pil.save(f"{idx:04}/{sidx:02}.png")
+        pil.convert("RGB").save(f"rgb/{idx:04}/{sidx:02}.png")
 
-with open('kaomado.kao', 'wb') as f:
+with open("kaomado.kao", "wb") as f:
     f.write(KaoHandler.serialize(kao))

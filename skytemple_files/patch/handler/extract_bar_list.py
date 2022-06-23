@@ -22,11 +22,13 @@ from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_JP,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_JP,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
@@ -49,22 +51,21 @@ ITEM_LIST_PATH = "BALANCE/itembar.bin"
 
 
 class ExtractBarItemListPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ExtractBarItemList'
+        return "ExtractBarItemList"
 
     @property
     def description(self) -> str:
-        return _('Extracts Spinda bar\'s item list.')
+        return _("Extracts Spinda bar's item list.")
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -73,20 +74,31 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(
-                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_EU
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_JP:
-                return read_u32(
-                    rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_JP
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([19])[19].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -103,14 +115,14 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
             list_data: List[bytes] = []
             for x in range(bar_list, bar_list + BAR_LIST_SIZE, BAR_LIST_ENTRY_SIZE):
                 item_id = read_u16(data, x)
-                cdata = bytes(data[x + 2:x + BAR_LIST_ENTRY_SIZE])
+                cdata = bytes(data[x + 2 : x + BAR_LIST_ENTRY_SIZE])
                 if cdata in list_data:
                     index = list_data.index(cdata)
                 else:
                     index = len(list_data)
                     list_data.append(cdata)
                 write_u16(header, u16_checked(index), 4 + 2 * item_id)
-            file_data = header + b''.join(list_data)
+            file_data = header + b"".join(list_data)
             if ITEM_LIST_PATH not in rom.filenames:
                 create_file_in_rom(rom, ITEM_LIST_PATH, file_data)
             else:
@@ -120,5 +132,7 @@ class ExtractBarItemListPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

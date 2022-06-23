@@ -18,24 +18,29 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class BpcTilemapHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'BPCTLM'
+        return b"BPCTLM"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_files.compression_container._prviate.bpc_tilemap._pymodel import \
-            BpcTilemapCompressionContainer
+        from skytemple_files.compression_container._prviate.bpc_tilemap._pymodel import (
+            BpcTilemapCompressionContainer,
+        )
+
         return BpcTilemapCompressionContainer
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bpc_tilemap_compression import BpcTilemapCompressionContainer  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bpc_tilemap_compression import (
+            BpcTilemapCompressionContainer,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BpcTilemapCompressionContainer

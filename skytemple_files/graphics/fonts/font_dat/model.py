@@ -24,11 +24,9 @@ from PIL import Image
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import (validate_xml_attribs,
-                                             validate_xml_tag)
+from skytemple_files.common.xml_util import validate_xml_attribs, validate_xml_tag
 from skytemple_files.graphics.fonts import *
-from skytemple_files.graphics.fonts.abstract import (AbstractFont,
-                                                     AbstractFontEntry)
+from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from skytemple_files.graphics.fonts.font_dat import *
 
 
@@ -66,27 +64,28 @@ class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
                 v = self.data[i * bprow + j]
                 for x in range(8):
                     if pos < FONT_DAT_SIZE:
-                        if v & (2 ** x):
-                            data.append(0xf)
+                        if v & (2**x):
+                            data.append(0xF)
                         else:
                             data.append(0x0)
                     pos += 1
-        image = Image.frombytes(mode='P', size=(FONT_DAT_SIZE, FONT_DAT_SIZE), data=bytes(data))
+        image = Image.frombytes(
+            mode="P", size=(FONT_DAT_SIZE, FONT_DAT_SIZE), data=bytes(data)
+        )
         return image
 
     def to_xml(self) -> Element:
-        attrs = {
-            XML_CHAR__ID: str(self.char),
-            XML_CHAR__WIDTH: str(self.width)
-        }
+        attrs = {XML_CHAR__ID: str(self.char), XML_CHAR__WIDTH: str(self.width)}
         if self.bprow != FONT_DEFAULT_BPROW:
             attrs[XML_CHAR__BPROW] = str(self.bprow)
         xml_entry = Element(XML_CHAR, attrs)
         return xml_entry
 
     @classmethod
-    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8) -> 'FontDatEntry':
-        if img.mode != 'P':
+    def from_pil(
+        cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8
+    ) -> "FontDatEntry":
+        if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         bprow = FONT_DEFAULT_BPROW  # Unused, so always use default
         data = []
@@ -103,11 +102,13 @@ class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDatEntry):
             return False
-        return self.char == other.char and \
-               self.table == other.table and \
-               self.width == other.width and \
-               self.bprow == other.bprow and \
-               self.data == other.data
+        return (
+            self.char == other.char
+            and self.table == other.table
+            and self.width == other.width
+            and self.bprow == other.bprow
+            and self.data == other.data
+        )
 
 
 class FontDat(AbstractFont, CheckedIntWrites):
@@ -118,13 +119,15 @@ class FontDat(AbstractFont, CheckedIntWrites):
 
         self.entries = []
         for i in range(4, 4 + number_entries * FONT_DAT_ENTRY_LEN, FONT_DAT_ENTRY_LEN):
-            self.entries.append(FontDatEntry(
-                read_u8(data, i + 0x00),
-                read_u8(data, i + 0x01),
-                read_u8(data, i + 0x02),
-                read_u8(data, i + 0x03),
-                data[i + 0x4:i + FONT_DAT_ENTRY_LEN]
-            ))
+            self.entries.append(
+                FontDatEntry(
+                    read_u8(data, i + 0x00),
+                    read_u8(data, i + 0x01),
+                    read_u8(data, i + 0x02),
+                    read_u8(data, i + 0x03),
+                    data[i + 0x4 : i + FONT_DAT_ENTRY_LEN],
+                )
+            )
 
     def get_entry_image_size(self) -> int:
         return FONT_DAT_SIZE
@@ -136,7 +139,9 @@ class FontDat(AbstractFont, CheckedIntWrites):
         self.entries.remove(entry)  # type: ignore
 
     def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
-        entry = FontDatEntry(u8(0), table, u8(0), FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN - 0x4))
+        entry = FontDatEntry(
+            u8(0), table, u8(0), FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN - 0x4)
+        )
         self.entries.append(entry)
         return entry
 
@@ -150,12 +155,19 @@ class FontDat(AbstractFont, CheckedIntWrites):
     def to_pil(self) -> Dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(mode='P', size=(FONT_DAT_SIZE * 16, FONT_DAT_SIZE * 16), color=0)
+            tables[t] = Image.new(
+                mode="P", size=(FONT_DAT_SIZE * 16, FONT_DAT_SIZE * 16), color=0
+            )
             tables[t].putpalette([min(255, 256 - (i // 3) * 16) for i in range(16 * 3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
-                tables[item.table].paste(item.to_pil(),
-                                         box=((item.char % 16) * FONT_DAT_SIZE, (item.char // 16) * FONT_DAT_SIZE))
+                tables[item.table].paste(
+                    item.to_pil(),
+                    box=(
+                        (item.char % 16) * FONT_DAT_SIZE,
+                        (item.char // 16) * FONT_DAT_SIZE,
+                    ),
+                )
         return tables
 
     def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
@@ -163,9 +175,7 @@ class FontDat(AbstractFont, CheckedIntWrites):
 
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Element(XML_TABLE, {
-                XML_TABLE__ID: str(t)
-            })
+            tables[t] = Element(XML_TABLE, {XML_TABLE__ID: str(t)})
             font_xml.append(tables[t])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
@@ -192,8 +202,16 @@ class FontDat(AbstractFont, CheckedIntWrites):
                     x = (charid % 16) * FONT_DAT_SIZE
                     y = (charid // 16) * FONT_DAT_SIZE
                     self.entries.append(
-                        FontDatEntry.from_pil(tables[t].crop(box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]), charid,
-                                              t, width, bprow))
+                        FontDatEntry.from_pil(
+                            tables[t].crop(
+                                box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]
+                            ),
+                            charid,
+                            t,
+                            width,
+                            bprow,
+                        )
+                    )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDat):

@@ -20,13 +20,18 @@ import datetime
 from typing import List
 
 from skytemple_files.common.spritecollab.client import (
-    MonsterFormDetails, MonsterFormInfo, MonsterFormInfoWithPortrait,
-    SpriteUrls)
-from skytemple_files.common.spritecollab.schema import (PHASE_EXISTS,
-                                                        PHASE_FULL,
-                                                        PHASE_UNKNOWN, Config)
-from skytemple_files.common.spritecollab.test.requests_mock import \
-    AioRequestAdapterMock
+    MonsterFormDetails,
+    MonsterFormInfo,
+    MonsterFormInfoWithPortrait,
+    SpriteUrls,
+)
+from skytemple_files.common.spritecollab.schema import (
+    PHASE_EXISTS,
+    PHASE_FULL,
+    PHASE_UNKNOWN,
+    Config,
+)
+from skytemple_files.common.spritecollab.test.requests_mock import AioRequestAdapterMock
 
 CONFIG_FIX: Config = {
     "portraitSize": 40,
@@ -52,7 +57,7 @@ CONFIG_FIX: Config = {
         "Sigh",
         "Stunned",
         "Special2",
-        "Special3"
+        "Special3",
     ],
     "actions": [
         "Idle",
@@ -167,51 +172,16 @@ CONFIG_FIX: Config = {
         "Special28",
         "Special29",
         "Special30",
-        "Special31"
+        "Special31",
     ],
     "completionEmotions": [
-        [
-            0
-        ],
-        [
-            0
-        ],
-        [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            16,
-            17
-        ]
+        [0],
+        [0],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 16, 17],
     ],
     "completionActions": [
-        [
-            0,
-            1
-        ],
-        [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            39,
-            40,
-            41,
-            42
-        ],
+        [0, 1],
+        [0, 1, 2, 3, 4, 5, 39, 40, 41, 42],
         [
             0,
             1,
@@ -244,51 +214,21 @@ CONFIG_FIX: Config = {
             63,
             64,
             65,
-            66
-        ]
+            66,
+        ],
     ],
     "actionMap": [
-        {
-          "id": 1,
-          "name": "Attack"
-        },
-        {
-          "id": 7,
-          "name": "Idle"
-        },
-        {
-          "id": 9,
-          "name": "Double"
-        },
-        {
-          "id": 8,
-          "name": "Swing"
-        },
-        {
-          "id": 0,
-          "name": "Walk"
-        },
-        {
-          "id": 10,
-          "name": "Hop"
-        },
-        {
-          "id": 6,
-          "name": "Hurt"
-        },
-        {
-          "id": 12,
-          "name": "Rotate"
-        },
-        {
-          "id": 5,
-          "name": "Sleep"
-        },
-        {
-          "id": 11,
-          "name": "Charge"
-        }
-    ]
+        {"id": 1, "name": "Attack"},
+        {"id": 7, "name": "Idle"},
+        {"id": 9, "name": "Double"},
+        {"id": 8, "name": "Swing"},
+        {"id": 0, "name": "Walk"},
+        {"id": 10, "name": "Hop"},
+        {"id": 6, "name": "Hurt"},
+        {"id": 12, "name": "Rotate"},
+        {"id": 5, "name": "Sleep"},
+        {"id": 11, "name": "Charge"},
+    ],
 }
 
 LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
@@ -303,8 +243,12 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
+        ),
     ),
     MonsterFormInfo(
         _request_adapter=AioRequestAdapterMock(),
@@ -317,8 +261,12 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
     ),
     MonsterFormInfo(
         _request_adapter=AioRequestAdapterMock(),
@@ -331,8 +279,12 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
     ),
 ]
 
@@ -348,8 +300,12 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
+        ),
         preview_portrait="test-portrait:Special3.png",
     ),
     MonsterFormInfoWithPortrait(
@@ -363,8 +319,12 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
         preview_portrait="test-portrait:Normal.png",
     ),
     MonsterFormInfoWithPortrait(
@@ -378,8 +338,12 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
         preview_portrait=None,
     ),
 ]
@@ -396,8 +360,12 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
         portraits={
             "Special3": "test-portrait:Special3.png",
             "Special1": "test-portrait:Special1.png",
@@ -491,7 +459,7 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
                 anim="test-sprite:1:Attack-Anim.png",
                 shadows="test-sprite:1:Attack-Shadow.png",
                 offsets="test-sprite:1:Attack-Offsets.png",
-            )
+            ),
         },
         sprite_zip="test-sprite-zip:1",
         sprites_copy_of={
@@ -500,10 +468,20 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         },
         portrait_credits=[
             {"id": "CREDIT1", "name": None, "contact": None, "discordHandle": None},
-            {"id": "CREDIT2", "name": "Credit 2", "contact": "Credit 2 Contact", "discordHandle": None},
-            {"id": "CREDIT3", "name": None, "contact": None, "discordHandle": "Discord Handle"},
+            {
+                "id": "CREDIT2",
+                "name": "Credit 2",
+                "contact": "Credit 2 Contact",
+                "discordHandle": None,
+            },
+            {
+                "id": "CREDIT3",
+                "name": None,
+                "contact": None,
+                "discordHandle": "Discord Handle",
+            },
         ],
-        sprite_credits=[]
+        sprite_credits=[],
     ),
     MonsterFormDetails(
         _request_adapter=AioRequestAdapterMock(),
@@ -516,12 +494,16 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
+        ),
         portraits={
             "Special1": "test-portrait:Happy.png",
             "Happy": "test-portrait:Happy.png",
-            "Angry": "test-portrait:Happy.png"
+            "Angry": "test-portrait:Happy.png",
         },
         portrait_sheet="test-portrait-sheet:2",
         sprites={
@@ -534,7 +516,7 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         sprite_zip="test-sprite-zip:2",
         sprites_copy_of={},
         portrait_credits=[],
-        sprite_credits=[]
+        sprite_credits=[],
     ),
 ]
 
@@ -550,8 +532,12 @@ MONSTER_FORM_DETAILS_FIX_MULTI_MON = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
-        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
+        portraits_modified_date=datetime.datetime(
+            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
+        ),
+        sprites_modified_date=datetime.datetime(
+            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
+        ),
         portraits={
             "Normal": "dummy",
         },
@@ -560,7 +546,7 @@ MONSTER_FORM_DETAILS_FIX_MULTI_MON = [
         sprite_zip="test-sprite-zip:0",
         sprites_copy_of={},
         portrait_credits=[],
-        sprite_credits=[]
+        sprite_credits=[],
     ),
 ] + MONSTER_FORM_DETAILS_FIX
 

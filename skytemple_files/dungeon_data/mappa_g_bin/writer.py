@@ -42,7 +42,7 @@ class MappaGBinWriter:
         for floor_list in floor_lists:
             cursor += 4  # null floor
             for floor in floor_list:
-                data[cursor:cursor + 4] = floor.to_mappa()
+                data[cursor : cursor + 4] = floor.to_mappa()
                 cursor += 4
         # Floor list LUT
         start_floor_list_lut = u32_checked(len(data))
@@ -51,13 +51,15 @@ class MappaGBinWriter:
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(start_floor_list_lut + i * 4)
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
-            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 4)
+            cursor_floor_data = u32_checked(
+                cursor_floor_data + (len(floor_list) + 1) * 4
+            )
         data += floor_list_lut
         # Floor layout data
         start_floor_layout_data = u32_checked(len(data))
         layout_data = bytearray(4 * len(floor_layouts))
         for i, layout in enumerate(floor_layouts):
-            layout_data[i * 4: (i + 1) * 4] = layout.to_mappa()
+            layout_data[i * 4 : (i + 1) * 4] = layout.to_mappa()
         data += layout_data
         # Sub-header
         data_pointer = len(data)

@@ -47,11 +47,19 @@ class FontSir0Writer:
         for i, e in enumerate(sorted_entries):
             if last == (e.char, e.table):
                 raise ValueError(
-                    f(_("Character {e.char} in table {e.table} is be defined multiple times in a font file!"))
+                    f(
+                        _(
+                            "Character {e.char} in table {e.table} is be defined multiple times in a font file!"
+                        )
+                    )
                 )
             last = (e.char, e.table)
             pointer_offsets.append(len(buffer) + i * FONT_SIR0_ENTRY_LEN)
-            write_u32(char_pointer, u32_checked(i * FONT_SIR0_DATA_LEN), i * FONT_SIR0_ENTRY_LEN)
+            write_u32(
+                char_pointer,
+                u32_checked(i * FONT_SIR0_DATA_LEN),
+                i * FONT_SIR0_ENTRY_LEN,
+            )
             write_u8(char_pointer, e.char, i * FONT_SIR0_ENTRY_LEN + 0x4)
             write_u8(char_pointer, e.table, i * FONT_SIR0_ENTRY_LEN + 0x5)
             write_u32(char_pointer, e.width, i * FONT_SIR0_ENTRY_LEN + 0x6)

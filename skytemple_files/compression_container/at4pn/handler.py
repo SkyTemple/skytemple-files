@@ -20,33 +20,40 @@ from __future__ import annotations
 from typing import Type
 
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class At4pnHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'AT4PN'
+        return b"AT4PN"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.at4pn.model import At4pn
+
         return At4pn
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_at4pn import \
-            At4pn  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_at4pn import (
+            At4pn,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return At4pn
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
+    def deserialize(
+        cls, data: bytes, **kwargs: OptionalKwargs
+    ) -> CompressionContainerProtocol:
         """Load a container into a high-level representation"""
         if not cls.matches(data):
-            raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
+            raise ValueError(
+                f"The provided data is not a {str(cls.magic_word(), 'ascii')} container."
+            )
         return cls.get_model_cls()(data, False)
 
     @classmethod

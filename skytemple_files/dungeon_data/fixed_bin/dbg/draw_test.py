@@ -25,10 +25,15 @@ from PIL import Image, ImageDraw, ImageFont
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
-                                         get_ppmdu_config_for_rom)
-from skytemple_files.dungeon_data.fixed_bin.model import (FloorType, TileRule,
-                                                          TileRuleType)
+from skytemple_files.common.util import (
+    get_binary_from_rom_ppmdu,
+    get_ppmdu_config_for_rom,
+)
+from skytemple_files.dungeon_data.fixed_bin.model import (
+    FloorType,
+    TileRule,
+    TileRuleType,
+)
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
 from skytemple_files.graphics.dma.model import Dma, DmaType
 from skytemple_files.graphics.dpc.model import Dpc
@@ -37,26 +42,32 @@ from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
 from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(output_dir, 'test_fixed_floor.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(output_dir, "test_fixed_floor.nds"))
 static_data = get_ppmdu_config_for_rom(rom)
 
-ov29 = get_binary_from_rom_ppmdu(rom, static_data.binaries['overlay/overlay_0029.bin'])
+ov29 = get_binary_from_rom_ppmdu(rom, static_data.binaries["overlay/overlay_0029.bin"])
 
-fixed = FileType.FIXED_BIN.deserialize(rom.getFileByName('BALANCE/fixed.bin'), static_data)
-dungeon_bin = FileType.DUNGEON_BIN.deserialize(rom.getFileByName('DUNGEON/dungeon.bin'), static_data)
-mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName('BALANCE/mappa_s.bin'))
-monster_bin = FileType.BIN_PACK.deserialize(rom.getFileByName('MONSTER/monster.bin'))
-monster_md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
+fixed = FileType.FIXED_BIN.deserialize(
+    rom.getFileByName("BALANCE/fixed.bin"), static_data
+)
+dungeon_bin = FileType.DUNGEON_BIN.deserialize(
+    rom.getFileByName("DUNGEON/dungeon.bin"), static_data
+)
+mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName("BALANCE/mappa_s.bin"))
+monster_bin = FileType.BIN_PACK.deserialize(rom.getFileByName("MONSTER/monster.bin"))
+monster_md = FileType.MD.deserialize(rom.getFileByName("BALANCE/monster.md"))
 entity_table = HardcodedFixedFloorTables.get_entity_spawn_table(ov29, static_data)
 item_table = HardcodedFixedFloorTables.get_item_spawn_list(ov29, static_data)
 monster_table = HardcodedFixedFloorTables.get_monster_spawn_list(ov29, static_data)
 
 
-def draw_monster_sprite(img: Image.Image, x: int, y: int, monster_id: int, direction: Pmd2ScriptDirection):
+def draw_monster_sprite(
+    img: Image.Image, x: int, y: int, monster_id: int, direction: Pmd2ScriptDirection
+):
     sprite_index = monster_md.entries[monster_id].sprite_index
     if sprite_index >= len(monster_bin):
         return False
@@ -78,37 +89,39 @@ def draw_monster_sprite(img: Image.Image, x: int, y: int, monster_id: int, direc
 
 def draw_text(img: Image.Image, x: int, y: int, color: Tuple[int, int, int], text: str):
     fnt = ImageFont.load_default()
-    draw = ImageDraw.Draw(img, 'RGBA')
-    draw.text(
-        (x * 24, y * 24),
-        text,
-        font=fnt,
-        fill=color
-    )
+    draw = ImageDraw.Draw(img, "RGBA")
+    draw.text((x * 24, y * 24), text, font=fnt, fill=color)
 
 
 # Tileset IDs to use - if we can't render one for a fixed floor or don't have one use 0.
-fixed_floor_tileset_ids = {floor_id: 0 for floor_id in range(0, len(fixed.fixed_floors))}
+fixed_floor_tileset_ids = {
+    floor_id: 0 for floor_id in range(0, len(fixed.fixed_floors))
+}
 for floor_list in mappa.floor_lists:
     for floor in floor_list:
         if floor.layout.fixed_floor_id > 0 and floor.layout.tileset_id < 170:
-            fixed_floor_tileset_ids[floor.layout.fixed_floor_id] = floor.layout.tileset_id
+            fixed_floor_tileset_ids[
+                floor.layout.fixed_floor_id
+            ] = floor.layout.tileset_id
 
 for i, ffloor in enumerate(fixed.fixed_floors):
-    fname = os.path.join(output_dir, f'{i}.png')
+    fname = os.path.join(output_dir, f"{i}.png")
     tileset_id = fixed_floor_tileset_ids[i]
-    print(f'{i} using tileset {tileset_id}')
+    print(f"{i} using tileset {tileset_id}")
     if len(ffloor.actions) < 1:
-        print('Skipped empty.')
+        print("Skipped empty.")
 
-    dma: Dma = dungeon_bin.get(f'dungeon{tileset_id}.dma')
-    dpl: Dpl = dungeon_bin.get(f'dungeon{tileset_id}.dpl')
-    dpla: Dpla = dungeon_bin.get(f'dungeon{tileset_id}.dpla')
-    dpci: Dpci = dungeon_bin.get(f'dungeon{tileset_id}.dpci')
-    dpc: Dpc = dungeon_bin.get(f'dungeon{tileset_id}.dpc')
+    dma: Dma = dungeon_bin.get(f"dungeon{tileset_id}.dma")
+    dpl: Dpl = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
+    dpla: Dpla = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
+    dpci: Dpci = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
+    dpc: Dpc = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
 
-    draw_outside_as_second_terrain = any(action.tr_type == TileRuleType.SECONDARY_HALLWAY_VOID_ALL
-                                         for action in ffloor.actions if isinstance(action, TileRule))
+    draw_outside_as_second_terrain = any(
+        action.tr_type == TileRuleType.SECONDARY_HALLWAY_VOID_ALL
+        for action in ffloor.actions
+        if isinstance(action, TileRule)
+    )
     outside = DmaType.WATER if draw_outside_as_second_terrain else DmaType.WALL
 
     rules = []
@@ -143,7 +156,7 @@ for i, ffloor in enumerate(fixed.fixed_floors):
 
     drawer = DmaDrawer(dma)
     mappings = drawer.get_mappings_for_rules(rules, None, True)
-    dungeon_floor = drawer.draw(mappings, dpci, dpc, dpl, dpla)[0].convert('RGBA')
+    dungeon_floor = drawer.draw(mappings, dpci, dpc, dpl, dpla)[0].convert("RGBA")
 
     ridx = 0
     # Draw items and Pokémon
@@ -155,26 +168,60 @@ for i, ffloor in enumerate(fixed.fixed_floors):
                 if action.tr_type == TileRuleType.LEADER_SPAWN:
                     draw_monster_sprite(dungeon_floor, x, y, 1, action.direction)
                 # Key walls
-                if action.tr_type == TileRuleType.FL_WA_ROOM_FLAG_0C or action.tr_type == TileRuleType.FL_WA_ROOM_FLAG_0D:
-                    draw_text(dungeon_floor, x, y, (0, 255, 0), f'KEY\nDOOR')
+                if (
+                    action.tr_type == TileRuleType.FL_WA_ROOM_FLAG_0C
+                    or action.tr_type == TileRuleType.FL_WA_ROOM_FLAG_0D
+                ):
+                    draw_text(dungeon_floor, x, y, (0, 255, 0), f"KEY\nDOOR")
                 # Warp zone
-                if action.tr_type == TileRuleType.WARP_ZONE or action.tr_type == TileRuleType.WARP_ZONE_2:
-                    draw_text(dungeon_floor, x, y, (255, 255, 0),  f'WARP\nZONE')
+                if (
+                    action.tr_type == TileRuleType.WARP_ZONE
+                    or action.tr_type == TileRuleType.WARP_ZONE_2
+                ):
+                    draw_text(dungeon_floor, x, y, (255, 255, 0), f"WARP\nZONE")
             else:
                 entity_spawn_entry = entity_table[action.entity_rule_id]
                 # Monster spawn
                 monster_spawn_entry = monster_table[entity_spawn_entry.monster_id]
                 if 0 < monster_spawn_entry.md_idx <= 1154:
-                    if not draw_monster_sprite(dungeon_floor, x, y, monster_spawn_entry.md_idx, action.direction):
-                        direction = action.direction.name if action.direction is not None else 'Down'
-                        draw_text(dungeon_floor, x, y, (255, 0, 0), f'P{monster_spawn_entry.md_idx}\n{direction}')
+                    if not draw_monster_sprite(
+                        dungeon_floor,
+                        x,
+                        y,
+                        monster_spawn_entry.md_idx,
+                        action.direction,
+                    ):
+                        direction = (
+                            action.direction.name
+                            if action.direction is not None
+                            else "Down"
+                        )
+                        draw_text(
+                            dungeon_floor,
+                            x,
+                            y,
+                            (255, 0, 0),
+                            f"P{monster_spawn_entry.md_idx}\n{direction}",
+                        )
                 elif monster_spawn_entry.md_idx > 0:
-                    direction = action.direction.name if action.direction is not None else 'Down'
-                    draw_text(dungeon_floor, x, y, (255, 0, 0), f'P{monster_spawn_entry.md_idx}\n{direction}')
+                    direction = (
+                        action.direction.name
+                        if action.direction is not None
+                        else "Down"
+                    )
+                    draw_text(
+                        dungeon_floor,
+                        x,
+                        y,
+                        (255, 0, 0),
+                        f"P{monster_spawn_entry.md_idx}\n{direction}",
+                    )
                 # Item spawn
                 item_spawn_entry = item_table[entity_spawn_entry.item_id]
                 if item_spawn_entry.item_id > 0:
-                    draw_text(dungeon_floor, x, y, (0, 0, 255), f'I{item_spawn_entry.item_id}')
+                    draw_text(
+                        dungeon_floor, x, y, (0, 0, 255), f"I{item_spawn_entry.item_id}"
+                    )
             ridx += 1
 
     dungeon_floor.save(fname)

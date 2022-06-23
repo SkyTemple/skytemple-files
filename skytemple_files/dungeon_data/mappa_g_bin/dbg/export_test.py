@@ -22,12 +22,12 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-mappa_bin = rom.getFileByName('BALANCE/mappa_gs.bin')
+mappa_bin = rom.getFileByName("BALANCE/mappa_gs.bin")
 mappa_g = MappaGBinHandler.deserialize(mappa_bin)
 print(mappa_g)

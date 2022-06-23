@@ -47,21 +47,25 @@ class BgListWriter:
                 else:
                     self._write_string("")
 
-        return self.data[:self.bytes_written]
+        return self.data[: self.bytes_written]
 
     def _write_string(self, string: str) -> None:
         byts = self._read_string(string)
-        self.data[self.bytes_written:self.bytes_written + MAX_LEN] = byts  # type: ignore
+        self.data[self.bytes_written : self.bytes_written + MAX_LEN] = byts  # type: ignore
         self.bytes_written += MAX_LEN
 
     def _read_string(self, string: str) -> bytes:
         if set(string) > ALLOWED_CHARS:
-            raise ValueError(f"The string '{string}' can not be used for bg_list.dat. Only "
-                             f"digits and uppercase characters are allowed.")
+            raise ValueError(
+                f"The string '{string}' can not be used for bg_list.dat. Only "
+                f"digits and uppercase characters are allowed."
+            )
         length = len(string)
         if length > MAX_LEN:
-            raise ValueError(f"The string '{string}' is too long for bg_list.dat. Max size "
-                             f"is {MAX_LEN}")
+            raise ValueError(
+                f"The string '{string}' is too long for bg_list.dat. Max size "
+                f"is {MAX_LEN}"
+            )
         out = bytearray(MAX_LEN)
-        out[0:length] = bytearray(string, 'ascii')
+        out[0:length] = bytearray(string, "ascii")
         return out

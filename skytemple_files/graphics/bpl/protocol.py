@@ -28,10 +28,11 @@ class BplAnimationSpecProtocol(Protocol):
     number_of_frames: u16
 
     @abstractmethod
-    def __init__(self, duration_per_frame: u16, number_of_frames: u16): ...
+    def __init__(self, duration_per_frame: u16, number_of_frames: u16):
+        ...
 
 
-T = TypeVar('T', bound=BplAnimationSpecProtocol)
+T = TypeVar("T", bound=BplAnimationSpecProtocol)
 
 
 @runtime_checkable
@@ -43,7 +44,8 @@ class BplProtocol(Protocol[T]):
     animation_palette: Sequence[Sequence[int]]
 
     @abstractmethod
-    def __init__(self, data: bytes) -> None: ...
+    def __init__(self, data: bytes) -> None:
+        ...
 
     @abstractmethod
     def import_palettes(self, palettes: List[List[int]]) -> None:
@@ -70,15 +72,15 @@ class BplProtocol(Protocol[T]):
 
     @abstractmethod
     def is_palette_affected_by_animation(self, pal_idx: int) -> bool:
-        """Returns whether or not the palette with that index is affected by animation. """
+        """Returns whether or not the palette with that index is affected by animation."""
         ...
 
     @abstractmethod
     def get_real_palettes(self) -> List[List[int]]:
-        """Gets the actual palettes defined (without dummy grayscale entries). """
+        """Gets the actual palettes defined (without dummy grayscale entries)."""
         ...
 
     @abstractmethod
     def set_palettes(self, palettes: List[List[int]]) -> None:
-        """Sets the palette properly, adding dummy grayscale entries if needed. """
+        """Sets the palette properly, adding dummy grayscale entries if needed."""
         ...

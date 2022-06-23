@@ -38,11 +38,15 @@ class LocaleManager(AbstractLocaleManager):
         self.localedir = localedir
         self.main_languages = main_languages
 
-        self.main_translations = gettext.translation(domain, localedir=localedir, languages=main_languages)
+        self.main_translations = gettext.translation(
+            domain, localedir=localedir, languages=main_languages
+        )
 
     def translate(self, message: str, locale_code: str) -> str:
         try:
-            return gettext.translation(self.domain, localedir=self.localedir, languages=[locale_code]).gettext(message)
+            return gettext.translation(
+                self.domain, localedir=self.localedir, languages=[locale_code]
+            ).gettext(message)
         except Exception:
             return message
 
@@ -80,13 +84,16 @@ def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> Non
     _locales.main_translations.install()
     global __
     import builtins
+
     try:
         from explorerscript import util
+
         util._ = builtins._  # type: ignore  # pylint: disable=no-member
     except ImportError:
         pass
     try:
         from desmume import i18n_util
+
         i18n_util._ = builtins._  # type: ignore  # pylint: disable=no-member
     except ImportError:
         pass
@@ -97,12 +104,12 @@ def f(s: str, additional_locals: Any = None) -> str:
     if additional_locals is None:
         additional_locals = {}
     frame = currentframe().f_back  # type: ignore
-    s1 = s.replace("'", "\\'").replace('\n', '\\n')
+    s1 = s.replace("'", "\\'").replace("\n", "\\n")
     additional_locals.update(frame.f_locals)  # type: ignore
     try:
         return eval(f"f'{s1}'", additional_locals, frame.f_globals)  # type: ignore
     except SyntaxError as e:
         if "f-string expression part cannot include a backslash" in str(e):
-            s1 = s.replace('"', '\\"').replace('\n', '\\n')
+            s1 = s.replace('"', '\\"').replace("\n", "\\n")
             return eval(f'f"{s1}"', additional_locals, frame.f_globals)  # type: ignore
         raise

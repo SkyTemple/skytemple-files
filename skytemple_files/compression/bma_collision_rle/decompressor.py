@@ -48,11 +48,13 @@ class BmaCollisionRleDecompressor:
             self._process()
 
         if self.bytes_written != self.stop_when_size:
-            raise ValueError(f"BMA Collision RLE Decompressor: End result length unexpected. "
-                             f"Should be {self.stop_when_size}, is {self.bytes_written} "
-                             f"Diff: {self.bytes_written - self.stop_when_size}")
+            raise ValueError(
+                f"BMA Collision RLE Decompressor: End result length unexpected. "
+                f"Should be {self.stop_when_size}, is {self.bytes_written} "
+                f"Diff: {self.bytes_written - self.stop_when_size}"
+            )
 
-        return self.decompressed_data[:self.bytes_written], self.cursor
+        return self.decompressed_data[: self.bytes_written], self.cursor
 
     def _process(self):
         cmd = self._read()
@@ -68,12 +70,16 @@ class BmaCollisionRleDecompressor:
     def _read(self):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError("BMA Collision RLE Decompressor: Reached EOF while reading compressed data.")
+            raise ValueError(
+                "BMA Collision RLE Decompressor: Reached EOF while reading compressed data."
+            )
         oc = self.cursor
         self.cursor += 1
         return read_u8(self.compressed_data, oc)
 
     def _write(self, pattern_to_write):
         """Writes a byte"""
-        self.decompressed_data[self.bytes_written:self.bytes_written+1] = pattern_to_write.to_bytes(1, 'big')
+        self.decompressed_data[
+            self.bytes_written : self.bytes_written + 1
+        ] = pattern_to_write.to_bytes(1, "big")
         self.bytes_written += 1

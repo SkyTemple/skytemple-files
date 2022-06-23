@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from skytemple_files.common.util import *
 
-PADDING = bytes([0xff] * 16)
+PADDING = bytes([0xFF] * 16)
 
 
 class BinPackTocEntry(CheckedIntWrites):
@@ -32,13 +32,14 @@ class BinPackTocEntry(CheckedIntWrites):
 
 class BinPackHeader(CheckedIntWrites):
     """Header for a BinPack"""
+
     number_files: u32
 
     def __init__(self, data: memoryview):
         self.number_files = read_u32(data, 4)
         self.toc: List[BinPackTocEntry] = []
         for i in range(0, self.number_files):
-            self.toc.append(BinPackTocEntry(data[8 + i * 8:8 + (i + 1) * 8]))
+            self.toc.append(BinPackTocEntry(data[8 + i * 8 : 8 + (i + 1) * 8]))
 
 
 class BinPack:
@@ -55,7 +56,7 @@ class BinPack:
 
     def _read_file(self, data: memoryview, toc_entry: BinPackTocEntry):
         s = toc_entry.pointer
-        return data[s:s + toc_entry.length].tobytes()
+        return data[s : s + toc_entry.length].tobytes()
 
     def get_files_bytes(self):
         """Returns the binary representation of the files (or a copy), for writing."""

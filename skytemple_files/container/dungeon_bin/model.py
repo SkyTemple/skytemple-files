@@ -20,13 +20,15 @@ import logging
 from typing import Any, Dict, Optional, TypeVar
 
 from skytemple_files.common.ppmdu_config.dungeon_data import (
-    Pmd2BinPackFile, Pmd2DungeonBinFiles)
+    Pmd2BinPackFile,
+    Pmd2DungeonBinFiles,
+)
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.container.bin_pack.model import BinPack
 
 logger = logging.getLogger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class DungeonBinPack(BinPack):
@@ -53,13 +55,15 @@ class DungeonBinPack(BinPack):
     def get_filename(self, index):
         """Returns the filename for a file at a given index."""
         fdef = self.files_def.get(index)
-        return fdef.name.replace('%d', str(index)).replace('%i', str(index - fdef.idxfirst))
+        return fdef.name.replace("%d", str(index)).replace(
+            "%i", str(index - fdef.idxfirst)
+        )
 
     def get_files_with_ext(self, ext):
         files = []
         for idx in range(0, len(self)):
             fn = self.get_filename(idx)
-            if fn.endswith('.' + ext):
+            if fn.endswith("." + ext):
                 files.append(fn)
         return files
 
@@ -79,7 +83,9 @@ class DungeonBinPack(BinPack):
         self._set_model(index, value)
 
     def __delitem__(self, key):
-        raise NotImplementedError("The dungeon.bin model does not support removing files.")
+        raise NotImplementedError(
+            "The dungeon.bin model does not support removing files."
+        )
 
     def __iter__(self):
         for i in range(0, len(self)):
@@ -87,7 +93,9 @@ class DungeonBinPack(BinPack):
 
     def _get_model(self, index):
         if index not in self._loaded_models:
-            self._loaded_models[index] = self._load_model(self._files[index], self.files_def.get(index))
+            self._loaded_models[index] = self._load_model(
+                self._files[index], self.files_def.get(index)
+            )
         return self._loaded_models[index]
 
     def _set_model(self, index, value):
@@ -97,16 +105,21 @@ class DungeonBinPack(BinPack):
         handler = self._get_handler(file_def.type)
         if handler is None:
             # We don't have a handler... just return the bytes instead.
-            logger.warning(f"No file handler for {file_def.type} found, falling back to bytes.")
+            logger.warning(
+                f"No file handler for {file_def.type} found, falling back to bytes."
+            )
             return file_bytes
         try:
             return handler.deserialize(file_bytes)
         except NotImplementedError:
-            logger.warning(f"File handler for {file_def.type} not implemented, falling back to bytes.")
+            logger.warning(
+                f"File handler for {file_def.type} not implemented, falling back to bytes."
+            )
             return file_bytes
 
     def _get_handler(self, type_name: str) -> Optional[DataHandler]:
         from skytemple_files.common.types.file_types import FileType
+
         if hasattr(FileType, type_name):
             return getattr(FileType, type_name)
         return None

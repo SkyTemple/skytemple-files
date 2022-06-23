@@ -27,35 +27,44 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.model import Md, MdProperties
-from skytemple_files.data.monster_xml import (GenderedConvertEntry,
-                                              monster_xml_export,
-                                              monster_xml_import)
+from skytemple_files.data.monster_xml import (
+    GenderedConvertEntry,
+    monster_xml_export,
+    monster_xml_import,
+)
 from skytemple_files.data.tbl_talk.model import TblTalk
 from skytemple_files.data.waza_p.model import WazaP
 from skytemple_files.graphics.kao import SUBENTRIES
 from skytemple_files.graphics.kao._model import Kao
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 config = get_ppmdu_config_for_rom(rom)
 
+
 def write_xml(xml, fn):
-    with open(os.path.join(output_dir, fn), 'w') as f:
+    with open(os.path.join(output_dir, fn), "w") as f:
         f.write(prettify(xml))
 
 
-md: Md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
-waza_p: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName('BALANCE/waza_p.bin'))
-waza_p2: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName('BALANCE/waza_p2.bin'))
-level_bin: BinPack = FileType.BIN_PACK.deserialize(rom.getFileByName('BALANCE/m_level.bin'))
-kao: Kao = FileType.KAO.deserialize(rom.getFileByName('FONT/kaomado.kao'))
-tbl_talk: TblTalk = FileType.TBL_TALK.deserialize(rom.getFileByName('MESSAGE/tbl_talk.tlk'))
+md: Md = FileType.MD.deserialize(rom.getFileByName("BALANCE/monster.md"))
+waza_p: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName("BALANCE/waza_p.bin"))
+waza_p2: WazaP = FileType.WAZA_P.deserialize(rom.getFileByName("BALANCE/waza_p2.bin"))
+level_bin: BinPack = FileType.BIN_PACK.deserialize(
+    rom.getFileByName("BALANCE/m_level.bin")
+)
+kao: Kao = FileType.KAO.deserialize(rom.getFileByName("FONT/kaomado.kao"))
+tbl_talk: TblTalk = FileType.TBL_TALK.deserialize(
+    rom.getFileByName("MESSAGE/tbl_talk.tlk")
+)
 languages = {}
 for lang in config.string_index_data.languages:
-    languages[lang.name] = FileType.STR.deserialize(rom.getFileByName('MESSAGE/' + lang.filename))
+    languages[lang.name] = FileType.STR.deserialize(
+        rom.getFileByName("MESSAGE/" + lang.filename)
+    )
 
 
 for md_base_index in range(0, MdProperties.NUM_ENTITIES):
@@ -72,11 +81,19 @@ for md_base_index in range(0, MdProperties.NUM_ENTITIES):
     if MdProperties.NUM_ENTITIES + md_base_index < len(md.entries):
         md_gender2 = md.entries[MdProperties.NUM_ENTITIES + md_base_index]
 
-    string_id = config.string_index_data.string_blocks['Pokemon Names'].begin + md_base_index
-    cat_string_id = config.string_index_data.string_blocks['Pokemon Categories'].begin + md_base_index
+    string_id = (
+        config.string_index_data.string_blocks["Pokemon Names"].begin + md_base_index
+    )
+    cat_string_id = (
+        config.string_index_data.string_blocks["Pokemon Categories"].begin
+        + md_base_index
+    )
     names = {}
     for lang_name, lang_model in languages.items():
-        names[lang_name] = (lang_model.strings[string_id], lang_model.strings[cat_string_id])
+        names[lang_name] = (
+            lang_model.strings[string_id],
+            lang_model.strings[cat_string_id],
+        )
 
     if md_base_index < len(waza_p.learnsets):
         moveset = waza_p.learnsets[md_base_index]
@@ -87,7 +104,9 @@ for md_base_index in range(0, MdProperties.NUM_ENTITIES):
     stat_id = md_base_index - 1
     if stat_id > -1 and stat_id < len(level_bin):
         stats = FileType.LEVEL_BIN_ENTRY.deserialize(
-            FileType.COMMON_AT.deserialize(FileType.SIR0.deserialize(level_bin[stat_id]).content).decompress()
+            FileType.COMMON_AT.deserialize(
+                FileType.SIR0.deserialize(level_bin[stat_id]).content
+            ).decompress()
         )
 
     if stat_id > -1 and stat_id < kao.toc_len:
@@ -99,14 +118,21 @@ for md_base_index in range(0, MdProperties.NUM_ENTITIES):
         portraits2 = []
         for kao_i in range(0, SUBENTRIES):
             portraits2.append(kao.get(MdProperties.NUM_ENTITIES + stat_id, kao_i))
-    
+
     xml = monster_xml_export(
-        config.game_version, md_gender1, md_gender2,
+        config.game_version,
+        md_gender1,
+        md_gender2,
         names,
-        moveset, moveset2,
-        stats, portraits, portraits2,
+        moveset,
+        moveset2,
+        stats,
+        portraits,
+        portraits2,
         tbl_talk.get_monster_personality(md_gender1.md_index),
-        tbl_talk.get_monster_personality(md_gender2.md_index) if md_gender2 is not None else None
+        tbl_talk.get_monster_personality(md_gender2.md_index)
+        if md_gender2 is not None
+        else None,
     )
     fn = f'{md_base_index:04}_{languages["English"].strings[string_id].replace("?", "_")}.xml'
     print(fn)
@@ -114,20 +140,27 @@ for md_base_index in range(0, MdProperties.NUM_ENTITIES):
 
 
 # try to replace Bulbasaur data with Charmanders
-charmander_xml = ElementTree.parse(os.path.join(output_dir, '0004_Charmander.xml')).getroot()
+charmander_xml = ElementTree.parse(
+    os.path.join(output_dir, "0004_Charmander.xml")
+).getroot()
 
-#config.game_version
+# config.game_version
 md_gender1 = md.entries[1]
 md_gender2 = md.entries[601]
 names = {}
-string_id = config.string_index_data.string_blocks['Pokemon Names'].begin + 1
-cat_string_id = config.string_index_data.string_blocks['Pokemon Categories'].begin + 1
+string_id = config.string_index_data.string_blocks["Pokemon Names"].begin + 1
+cat_string_id = config.string_index_data.string_blocks["Pokemon Categories"].begin + 1
 for lang_name, lang_model in languages.items():
-    names[lang_name] = (lang_model.strings[string_id], lang_model.strings[cat_string_id])
+    names[lang_name] = (
+        lang_model.strings[string_id],
+        lang_model.strings[cat_string_id],
+    )
 moveset = waza_p.learnsets[1]
 moveset2 = waza_p.learnsets[1]
 stats = FileType.LEVEL_BIN_ENTRY.deserialize(
-    FileType.COMMON_AT.deserialize(FileType.SIR0.deserialize(level_bin[0]).content).decompress()
+    FileType.COMMON_AT.deserialize(
+        FileType.SIR0.deserialize(level_bin[0]).content
+    ).decompress()
 )
 portraits = []
 for kao_i in range(0, SUBENTRIES):
@@ -139,24 +172,30 @@ for kao_i in range(0, SUBENTRIES):
 # IMPORT CHARMANDER
 e1 = GenderedConvertEntry(md_gender1, 0)
 e2 = GenderedConvertEntry(md_gender2, 0)
-assert monster_xml_import(
-    charmander_xml,
-    e1, e2,
-    names,
-    moveset, moveset2,
-    stats, portraits, portraits2
-) == config.game_version
+assert (
+    monster_xml_import(
+        charmander_xml, e1, e2, names, moveset, moveset2, stats, portraits, portraits2
+    )
+    == config.game_version
+)
 
 bulbasaur_xml = monster_xml_export(
-        config.game_version, md_gender1, md_gender2,
-        names,
-        moveset, moveset2,
-        stats, portraits, portraits2,
-        e1.personality,
-        e2.personality
-    )
-write_xml(bulbasaur_xml, 'bulbasaur_but_actually_charmander.xml')
+    config.game_version,
+    md_gender1,
+    md_gender2,
+    names,
+    moveset,
+    moveset2,
+    stats,
+    portraits,
+    portraits2,
+    e1.personality,
+    e2.personality,
+)
+write_xml(bulbasaur_xml, "bulbasaur_but_actually_charmander.xml")
 
-with open(os.path.join(output_dir, '0004_Charmander.xml')) as f_char:
-    with open(os.path.join(output_dir, 'bulbasaur_but_actually_charmander.xml')) as f_bulba:
+with open(os.path.join(output_dir, "0004_Charmander.xml")) as f_char:
+    with open(
+        os.path.join(output_dir, "bulbasaur_but_actually_charmander.xml")
+    ) as f_bulba:
         assert f_char.read() == f_bulba.read()

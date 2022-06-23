@@ -60,7 +60,10 @@ class RleNibbleCompressor:
     def _search_max_seq(self, i):
         nibble = self.uncompressed_data[i]
         nb = 1
-        while i + nb < len(self.uncompressed_data) and self.uncompressed_data[i + nb] == nibble:
+        while (
+            i + nb < len(self.uncompressed_data)
+            and self.uncompressed_data[i + nb] == nibble
+        ):
             nb += 1
         return nb
 

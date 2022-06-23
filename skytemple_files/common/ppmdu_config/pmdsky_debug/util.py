@@ -19,8 +19,8 @@ from __future__ import annotations
 import re
 from typing import Dict, Generic, TypeVar
 
-V = TypeVar('V')
-PASCAL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')
+V = TypeVar("V")
+PASCAL_REGEX = re.compile(r"(?<!^)(?=[A-Z])")
 
 
 class MultiCasingDict(Dict[str, V], Generic[V]):
@@ -58,9 +58,8 @@ class MultiCasingDict(Dict[str, V], Generic[V]):
 
     @staticmethod
     def _pascal_to_screaming_snake(string: str) -> str:
-        return PASCAL_REGEX.sub('_', string).upper()
-
+        return PASCAL_REGEX.sub("_", string).upper()
 
     @staticmethod
     def _screaming_snake_to_pascal(string) -> str:
-        return ''.join(word.title() for word in string.split('_'))
+        return "".join(word.title() for word in string.split("_"))

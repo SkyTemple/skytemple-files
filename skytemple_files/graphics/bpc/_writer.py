@@ -57,13 +57,17 @@ class BpcWriter:
                 length_of_second_layer += 1
 
         # 4 byte header + layer specs + layer data
-        data = bytearray(end_of_layer_specs + length_of_first_layer + length_of_second_layer)
+        data = bytearray(
+            end_of_layer_specs + length_of_first_layer + length_of_second_layer
+        )
 
         # upper layer pointer
         self._write_16uintle(data, end_of_layer_specs)
         # lower layer pointer ( if two layers )
         if model.number_of_layers > 1:
-            self._write_16uintle(data, u16_checked(end_of_layer_specs + length_of_first_layer))
+            self._write_16uintle(
+                data, u16_checked(end_of_layer_specs + length_of_first_layer)
+            )
         else:
             self._write_16uintle(data, u16(0))
 
@@ -83,7 +87,7 @@ class BpcWriter:
         for i in range(0, model.number_of_layers):
             # tiles
             lentiles = len(tiles[i])
-            data[self.bytes_written:self.bytes_written+lentiles] = tiles[i]
+            data[self.bytes_written : self.bytes_written + lentiles] = tiles[i]
             self.bytes_written += lentiles
             # 2 bytes alignment
             if self.bytes_written % 2 != 0:
@@ -91,7 +95,7 @@ class BpcWriter:
                 self.bytes_written += 1
             # tilemap
             lentilemap = len(tilemaps[i])
-            data[self.bytes_written:self.bytes_written+lentilemap] = tilemaps[i]
+            data[self.bytes_written : self.bytes_written + lentilemap] = tilemaps[i]
             self.bytes_written += lentilemap
             # 2 bytes alignment
             if self.bytes_written % 2 != 0:
@@ -103,6 +107,7 @@ class BpcWriter:
     @staticmethod
     def _convert_tiles(model: Bpc, layeri: int) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         layer = model.layers[layeri]
         bytelen_single_tile = int(BPC_TILE_DIM * BPC_TILE_DIM / 2)
         data = bytearray(bytelen_single_tile * (len(layer.tiles) - 1))
@@ -110,7 +115,7 @@ class BpcWriter:
 
         # Skip first (null tile)
         for tile in layer.tiles[1:]:
-            data[bytes_written:bytes_written+bytelen_single_tile] = tile
+            data[bytes_written : bytes_written + bytelen_single_tile] = tile
             bytes_written += bytelen_single_tile
 
         return FileType.BPC_IMAGE.compress(data)
@@ -118,13 +123,18 @@ class BpcWriter:
     @staticmethod
     def _convert_tilemap(model: Bpc, layeri: int) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         layer = model.layers[layeri]
-        length = (layer.chunk_tilemap_len - 1) * (model.tiling_width * model.tiling_height) * BPC_TILEMAP_BYTELEN
+        length = (
+            (layer.chunk_tilemap_len - 1)
+            * (model.tiling_width * model.tiling_height)
+            * BPC_TILEMAP_BYTELEN
+        )
         data = bytearray(length)
         bytes_written = 0
 
         # Skip first chunk (null)
-        for entry in layer.tilemap[model.tiling_width*model.tiling_height:]:
+        for entry in layer.tilemap[model.tiling_width * model.tiling_height :]:
             write_u16(data, entry.to_int(), bytes_written)
             bytes_written += BPC_TILEMAP_BYTELEN
         assert bytes_written == length

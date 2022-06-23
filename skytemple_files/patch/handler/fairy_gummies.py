@@ -22,19 +22,20 @@ from typing import Callable, List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_JP,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_JP,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.data.data_cd.handler import DataCDHandler
 from skytemple_files.data.data_st.handler import DataSTHandler
 from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 PATCH_CHECK_ADDR_APPLIED_US = 0xCBF8
 PATCH_CHECK_ADDR_APPLIED_EU = 0xCC80
@@ -42,80 +43,87 @@ PATCH_CHECK_ADDR_APPLIED_JP = 0xCBF8
 PATCH_CHECK_INSTR_APPLIED = 0xB3A00000
 
 # Too lazy to put that in an actual file
-ITEM_EFFECT_US = b'\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x96\x04\x00\xeb*\x03\x00\xea'
-ITEM_EFFECT_EU = b'\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x98\x04\x00\xeb*\x03\x00\xea'
+ITEM_EFFECT_US = b"\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x96\x04\x00\xeb*\x03\x00\xea"
+ITEM_EFFECT_EU = b"\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x98\x04\x00\xeb*\x03\x00\xea"
 ITEM_EFFECT_JP = None  # TODO
 
 GUMMI_ITEM_ID = 138
 OTHER_GUMMI_ID = 136
 
 # TODO; support other languages
-NAME_LIST = {"MESSAGE/text_e.str": "Fairy Gummi",
-             "MESSAGE/text_f.str": "Gelée Féerique",
-             "MESSAGE/text_g.str": "Feegummi",
-             "MESSAGE/text_i.str": "Gommafolletto",
-             "MESSAGE/text_s.str": "Gomi Hada",
-             "MESSAGE/text_j.str": "---"}
+NAME_LIST = {
+    "MESSAGE/text_e.str": "Fairy Gummi",
+    "MESSAGE/text_f.str": "Gelée Féerique",
+    "MESSAGE/text_g.str": "Feegummi",
+    "MESSAGE/text_i.str": "Gommafolletto",
+    "MESSAGE/text_s.str": "Gomi Hada",
+    "MESSAGE/text_j.str": "---",
+}
 
 # TODO; support other languages
-SDES_LIST = {"MESSAGE/text_e.str": "Raises IQ.",
-             "MESSAGE/text_f.str": "Augmente le Q.I.",
-             "MESSAGE/text_g.str": "Erhöht den IQ.",
-             "MESSAGE/text_i.str": "Aumenta il QI.",
-             "MESSAGE/text_s.str": "Sube el CI.",
-             "MESSAGE/text_j.str": "---"}
+SDES_LIST = {
+    "MESSAGE/text_e.str": "Raises IQ.",
+    "MESSAGE/text_f.str": "Augmente le Q.I.",
+    "MESSAGE/text_g.str": "Erhöht den IQ.",
+    "MESSAGE/text_i.str": "Aumenta il QI.",
+    "MESSAGE/text_s.str": "Sube el CI.",
+    "MESSAGE/text_j.str": "---",
+}
 
 # TODO; support other languages
-LDES_LIST = {"MESSAGE/text_e.str": """A food item that permanently
+LDES_LIST = {
+    "MESSAGE/text_e.str": """A food item that permanently
 raises the [CS:E]IQ[CR] of a team member.
 Fairy-type Pokémon like it most.
 It also somewhat fills the Pokémon's
 [CS:E]Belly[CR].""",
-             "MESSAGE/text_f.str": """Aliment augmentant de façon
+    "MESSAGE/text_f.str": """Aliment augmentant de façon
 permanente le [CS:E]Q.I.[CR] du Pokémon
 qui le mange. Plaît particulièrement
 aux Pokémon de type Fée.
 Remplit un peu l'[CS:E]Estomac[CR]
 du Pokémon.""",
-             "MESSAGE/text_g.str": """Nahrungsmittel, das den [CS:E]IQ[CR] eines
+    "MESSAGE/text_g.str": """Nahrungsmittel, das den [CS:E]IQ[CR] eines
 Team-Mitglieds dauerhaft erhöht.
 Fee-Pokémon mögen es besonders.
 Füllt den [CS:E]Magen[CR] des
 Pokémon ein wenig.""",
-             "MESSAGE/text_i.str": """Un cibo che riempie un po' la [CS:E]pancia[CR] e fa
+    "MESSAGE/text_i.str": """Un cibo che riempie un po' la [CS:E]pancia[CR] e fa
 crescere permanentemente il [CS:E]QI[CR] di un
 membro della squadra. È la preferita
 dei Pokémon di tipo Folletto.""",
-             "MESSAGE/text_s.str": """Alimento que eleva de manera
+    "MESSAGE/text_s.str": """Alimento que eleva de manera
 permanente el [CS:E]CI[CR] del Pokémon.
 Los de tipo Hada las adoran.
 También llena ligeramente su
 [CS:E]Tripa[CR].""",
-             "MESSAGE/text_j.str": "---"}
+    "MESSAGE/text_j.str": "---",
+}
 
 
 class ImplementFairyGummiesPatchHandler(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'ImplementFairyGummies'
+        return "ImplementFairyGummies"
 
     @property
     def description(self) -> str:
-        return _("""Implements Fairy-type specialized gummies. Uses unused item 138.
+        return _(
+            """Implements Fairy-type specialized gummies. Uses unused item 138.
 Needs ExtractItemCode, ExtractBarItemList and AddTypes patches to be applied for this patch to work.
-Also, you'll need to reapply this if you apply AddTypes again. """)
+Also, you'll need to reapply this if you apply AddTypes again. """
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     def depends_on(self) -> List[str]:
-        return ['ExtractItemCode', 'ExtractBarItemList', 'AddTypes']
+        return ["ExtractItemCode", "ExtractBarItemList", "AddTypes"]
 
     @property
     def category(self) -> PatchCategory:
@@ -124,14 +132,25 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_JP:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 item_effect = ITEM_EFFECT_US
@@ -141,7 +160,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
                 item_effect = ITEM_EFFECT_JP
 
         # Apply Gummi item properties
-        item_p_bin = rom.getFileByName('BALANCE/item_p.bin')
+        item_p_bin = rom.getFileByName("BALANCE/item_p.bin")
         item_p_model = ItemPHandler.deserialize(item_p_bin)
         gummi = item_p_model.item_list[GUMMI_ITEM_ID]
         gummi.buy_price = 800
@@ -159,39 +178,41 @@ Also, you'll need to reapply this if you apply AddTypes again. """)
         gummi.ai_flag_1 = False
         gummi.ai_flag_2 = True
         gummi.ai_flag_3 = False
-        rom.setFileByName('BALANCE/item_p.bin', ItemPHandler.serialize(item_p_model))
+        rom.setFileByName("BALANCE/item_p.bin", ItemPHandler.serialize(item_p_model))
 
         # Apply Gummi item dungeon effect
-        item_cd_bin = rom.getFileByName('BALANCE/item_cd.bin')
+        item_cd_bin = rom.getFileByName("BALANCE/item_cd.bin")
         item_cd_model = DataCDHandler.deserialize(item_cd_bin)
         effect_id = item_cd_model.nb_effects()
         item_cd_model.add_effect_code(item_effect)
         item_cd_model.set_item_effect_id(GUMMI_ITEM_ID, effect_id)
-        rom.setFileByName('BALANCE/item_cd.bin', DataCDHandler.serialize(item_cd_model))
+        rom.setFileByName("BALANCE/item_cd.bin", DataCDHandler.serialize(item_cd_model))
 
         # Change item's text attributes
-        for filename in get_files_from_rom_with_extension(rom, 'str'):
+        for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
             strings = StrHandler.deserialize(bin_before)
-            block = config.string_index_data.string_blocks['Item Names']
+            block = config.string_index_data.string_blocks["Item Names"]
             strings.strings[block.begin + GUMMI_ITEM_ID] = NAME_LIST[filename]
-            block = config.string_index_data.string_blocks['Item Short Descriptions']
+            block = config.string_index_data.string_blocks["Item Short Descriptions"]
             strings.strings[block.begin + GUMMI_ITEM_ID] = SDES_LIST[filename]
-            block = config.string_index_data.string_blocks['Item Long Descriptions']
+            block = config.string_index_data.string_blocks["Item Long Descriptions"]
             strings.strings[block.begin + GUMMI_ITEM_ID] = LDES_LIST[filename]
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
 
-        bar_bin = rom.getFileByName('BALANCE/itembar.bin')
+        bar_bin = rom.getFileByName("BALANCE/itembar.bin")
         bar_model = DataSTHandler.deserialize(bar_bin)
         gummi_id = bar_model.get_item_struct_id(OTHER_GUMMI_ID)
         bar_model.set_item_struct_id(GUMMI_ITEM_ID, gummi_id)
-        rom.setFileByName('BALANCE/itembar.bin', DataSTHandler.serialize(bar_model))
+        rom.setFileByName("BALANCE/itembar.bin", DataSTHandler.serialize(bar_model))
 
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

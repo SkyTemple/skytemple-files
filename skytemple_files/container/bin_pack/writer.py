@@ -30,13 +30,17 @@ class BinPackWriter:
 
     def write(self) -> bytes:
         files = self.model.get_files_bytes()
-        len_header = (len(self.model.get_files_bytes()) + 1) * 8 + 16  # 16 is a row of padding
+        len_header = (
+            len(self.model.get_files_bytes()) + 1
+        ) * 8 + 16  # 16 is a row of padding
         if len_header % 16 != 0:
             len_header += 16 - (len_header % 16)
         out_buffer = bytearray(
-            b'\xff' * (
+            b"\xff"
+            * (
                 # Header len:
-                max(self.fixed_header_len, len_header) +
+                max(self.fixed_header_len, len_header)
+                +
                 # File data:
                 self._get_file_sizes(files)
             )
@@ -53,7 +57,7 @@ class BinPackWriter:
             # toc length
             write_u32(out_buffer, u32_checked(len(file)), toc_curosr + 0x04)
             # file
-            out_buffer[data_cursor:data_cursor+len(file)] = file
+            out_buffer[data_cursor : data_cursor + len(file)] = file
 
             data_cursor += len(file)
             # If the cursor is not aligned with 16 bytes, we pad.
@@ -65,7 +69,7 @@ class BinPackWriter:
         # If the toc cursor is not aligned with 16 bytes, we will with zeros
         if toc_curosr % 16 != 0:
             pad = 16 - (toc_curosr % 16)
-            out_buffer[toc_curosr:toc_curosr+pad] = b'\x00' * pad
+            out_buffer[toc_curosr : toc_curosr + pad] = b"\x00" * pad
 
         return out_buffer
 

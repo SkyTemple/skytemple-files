@@ -59,6 +59,7 @@ class Pmd2DungeonItemCategory(AutoString):
     @property
     def name_localized(self):
         from skytemple_files.common.i18n_util import _
+
         return _(self.name)
 
     def __eq__(self, other: object) -> bool:
@@ -72,8 +73,8 @@ class Pmd2DungeonItemCategory(AutoString):
 
     def item_ids(self, only_if_valid_in_mappa=True):
         if only_if_valid_in_mappa:
-            from skytemple_files.dungeon_data.mappa_bin.item_list import \
-                MAX_ITEM_ID
+            from skytemple_files.dungeon_data.mappa_bin.item_list import MAX_ITEM_ID
+
             return [x for x in self.items if x < MAX_ITEM_ID]
         return self.items
 
@@ -111,8 +112,11 @@ class Pmd2DungeonBinFiles(AutoString):
 
 class Pmd2DungeonData(AutoString):
     def __init__(
-            self, dungeon_bin_files: Pmd2DungeonBinFiles, items: List[Pmd2DungeonItem],
-            dungeons: List[Pmd2DungeonDungeon], item_categories: Dict[int, Pmd2DungeonItemCategory]
+        self,
+        dungeon_bin_files: Pmd2DungeonBinFiles,
+        items: List[Pmd2DungeonItem],
+        dungeons: List[Pmd2DungeonDungeon],
+        item_categories: Dict[int, Pmd2DungeonItemCategory],
     ):
         self.dungeon_bin_files = dungeon_bin_files
         self.items = items

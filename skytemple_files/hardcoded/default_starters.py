@@ -34,9 +34,20 @@ class SpecialEpisodePc(AutoString, CheckedIntWrites):
     level: u16
     iq: u16
     fixed_hp: u16
-    
-    def __init__(self, poke_id: u16, joined_at: u16, move1: u16, move2: u16, move3: u16, move4: u16,
-                 do_not_fix_entire_moveset: bool, level: u16, iq: u16, fixed_hp: u16):
+
+    def __init__(
+        self,
+        poke_id: u16,
+        joined_at: u16,
+        move1: u16,
+        move2: u16,
+        move3: u16,
+        move4: u16,
+        do_not_fix_entire_moveset: bool,
+        level: u16,
+        iq: u16,
+        fixed_hp: u16,
+    ):
         self.poke_id = poke_id
         self.joined_at = joined_at
         self.move1 = move1
@@ -66,16 +77,18 @@ class SpecialEpisodePc(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, SpecialEpisodePc):
             return False
-        return self.poke_id == other.poke_id \
-               and self.joined_at == other.joined_at \
-               and self.move1 == other.move1 \
-               and self.move2 == other.move2 \
-               and self.move3 == other.move3 \
-               and self.move4 == other.move4 \
-               and self.do_not_fix_entire_moveset == other.do_not_fix_entire_moveset \
-               and self.level == other.level \
-               and self.iq == other.iq \
-               and self.fixed_hp == other.fixed_hp
+        return (
+            self.poke_id == other.poke_id
+            and self.joined_at == other.joined_at
+            and self.move1 == other.move1
+            and self.move2 == other.move2
+            and self.move3 == other.move3
+            and self.move4 == other.move4
+            and self.do_not_fix_entire_moveset == other.do_not_fix_entire_moveset
+            and self.level == other.level
+            and self.iq == other.iq
+            and self.fixed_hp == other.fixed_hp
+        )
 
 
 class HardcodedDefaultStarters:
@@ -84,7 +97,7 @@ class HardcodedDefaultStarters:
         """
         Gets the monster.md index of the default partner starter
         """
-        block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
+        block = config.binaries["arm9.bin"].symbols["DefaultPartnerId"]
         return read_u16(arm9, block.begin)
 
     @staticmethod
@@ -92,7 +105,7 @@ class HardcodedDefaultStarters:
         """
         Sets the monster.md index of the default partner starter
         """
-        block = config.binaries['arm9.bin'].symbols['DefaultPartnerId']
+        block = config.binaries["arm9.bin"].symbols["DefaultPartnerId"]
         write_u16(arm9, value, block.begin)
 
     @staticmethod
@@ -100,7 +113,7 @@ class HardcodedDefaultStarters:
         """
         Gets the monster.md index of the default player starter
         """
-        block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
+        block = config.binaries["arm9.bin"].symbols["DefaultHeroId"]
         return read_u16(arm9, block.begin)
 
     @staticmethod
@@ -108,7 +121,7 @@ class HardcodedDefaultStarters:
         """
         Sets the monster.md index of the default player starter
         """
-        block = config.binaries['arm9.bin'].symbols['DefaultHeroId']
+        block = config.binaries["arm9.bin"].symbols["DefaultHeroId"]
         write_u16(arm9, value, block.begin)
 
     @staticmethod
@@ -116,7 +129,7 @@ class HardcodedDefaultStarters:
         """
         Gets the level of the partner starter
         """
-        block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
+        block = config.binaries["arm9.bin"].symbols["PartnerStartLevel"]
         return read_u8(arm9, block.begin)
 
     @staticmethod
@@ -124,7 +137,7 @@ class HardcodedDefaultStarters:
         """
         Sets the level of the partner starter
         """
-        block = config.binaries['arm9.bin'].symbols['PartnerStartLevel']
+        block = config.binaries["arm9.bin"].symbols["PartnerStartLevel"]
         write_u8(arm9, value, block.begin)
 
     @staticmethod
@@ -132,7 +145,7 @@ class HardcodedDefaultStarters:
         """
         Gets the level of the player starter
         """
-        block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
+        block = config.binaries["arm9.bin"].symbols["HeroStartLevel"]
         return read_u8(arm9, block.begin)
 
     @staticmethod
@@ -140,39 +153,51 @@ class HardcodedDefaultStarters:
         """
         Sets the level of the player starter
         """
-        block = config.binaries['arm9.bin'].symbols['HeroStartLevel']
+        block = config.binaries["arm9.bin"].symbols["HeroStartLevel"]
         write_u8(arm9, value, block.begin)
 
     @staticmethod
-    def get_special_episode_pcs(arm9: bytes, config: Pmd2Data) -> List[SpecialEpisodePc]:
+    def get_special_episode_pcs(
+        arm9: bytes, config: Pmd2Data
+    ) -> List[SpecialEpisodePc]:
         """
         Gets the special episode player characters
         """
-        block = config.binaries['arm9.bin'].symbols['SPECIAL_EPISODE_MAIN_CHARACTERS']
+        block = config.binaries["arm9.bin"].symbols["SPECIAL_EPISODE_MAIN_CHARACTERS"]
         lst = []
         for i in range(block.begin, block.end, SE_PC_LNTRY_LEN):
-            lst.append(SpecialEpisodePc(
-                read_u16(arm9, i + 0),
-                read_u16(arm9, i + 2),
-                read_u16(arm9, i + 4),
-                read_u16(arm9, i + 6),
-                read_u16(arm9, i + 8),
-                read_u16(arm9, i + 10),
-                bool(read_u16(arm9, i + 12)),
-                read_u16(arm9, i + 14),
-                read_u16(arm9, i + 16),
-                read_u16(arm9, i + 18),
-            ))
+            lst.append(
+                SpecialEpisodePc(
+                    read_u16(arm9, i + 0),
+                    read_u16(arm9, i + 2),
+                    read_u16(arm9, i + 4),
+                    read_u16(arm9, i + 6),
+                    read_u16(arm9, i + 8),
+                    read_u16(arm9, i + 10),
+                    bool(read_u16(arm9, i + 12)),
+                    read_u16(arm9, i + 14),
+                    read_u16(arm9, i + 16),
+                    read_u16(arm9, i + 18),
+                )
+            )
         return lst
 
     @staticmethod
-    def set_special_episode_pcs(value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data) -> None:
+    def set_special_episode_pcs(
+        value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the special episode player characters
         """
-        block = config.binaries['arm9.bin'].symbols['SPECIAL_EPISODE_MAIN_CHARACTERS']
+        block = config.binaries["arm9.bin"].symbols["SPECIAL_EPISODE_MAIN_CHARACTERS"]
         expected_length = int((block.end - block.begin) / SE_PC_LNTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
-            arm9[block.begin + i * SE_PC_LNTRY_LEN:block.begin + (i + 1) * SE_PC_LNTRY_LEN] = entry.to_bytes()
+            arm9[
+                block.begin
+                + i * SE_PC_LNTRY_LEN : block.begin
+                + (i + 1) * SE_PC_LNTRY_LEN
+            ] = entry.to_bytes()

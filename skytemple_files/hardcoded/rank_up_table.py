@@ -21,8 +21,12 @@ from typing import List
 from range_typed_integers import u32
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import (AutoString, CheckedIntWrites,
-                                         read_u32, write_u32)
+from skytemple_files.common.util import (
+    AutoString,
+    CheckedIntWrites,
+    read_u32,
+    write_u32,
+)
 
 ENTRY_LEN = 16
 
@@ -33,7 +37,13 @@ class Rank(AutoString, CheckedIntWrites):
     storage_capacity: u32
     item_awarded: u32
 
-    def __init__(self, rank_name_str: u32, points_needed_next: u32, storage_capacity: u32, item_awarded: u32):
+    def __init__(
+        self,
+        rank_name_str: u32,
+        points_needed_next: u32,
+        storage_capacity: u32,
+        item_awarded: u32,
+    ):
         self.rank_name_str = rank_name_str
         self.points_needed_next = points_needed_next
         self.storage_capacity = storage_capacity
@@ -50,34 +60,46 @@ class Rank(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Rank):
             return False
-        return self.rank_name_str == other.rank_name_str and self.points_needed_next == other.points_needed_next \
-                and self.storage_capacity == other.storage_capacity and self.item_awarded == other.item_awarded
+        return (
+            self.rank_name_str == other.rank_name_str
+            and self.points_needed_next == other.points_needed_next
+            and self.storage_capacity == other.storage_capacity
+            and self.item_awarded == other.item_awarded
+        )
 
 
 class HardcodedRankUpTable:
     @classmethod
     def get_rank_up_table(cls, arm9bin: bytes, config: Pmd2Data) -> List[Rank]:
         """Returns the list of ranks in the game."""
-        block = config.binaries['arm9.bin'].symbols['RankUpTable']
+        block = config.binaries["arm9.bin"].symbols["RankUpTable"]
         lst = []
         for i in range(block.begin, block.end, ENTRY_LEN):
-            lst.append(Rank(
-                read_u32(arm9bin, i + 0x00),
-                read_u32(arm9bin, i + 0x04),
-                read_u32(arm9bin, i + 0x08),
-                read_u32(arm9bin, i + 0x0C)
-            ))
+            lst.append(
+                Rank(
+                    read_u32(arm9bin, i + 0x00),
+                    read_u32(arm9bin, i + 0x04),
+                    read_u32(arm9bin, i + 0x08),
+                    read_u32(arm9bin, i + 0x0C),
+                )
+            )
         return lst
 
     @classmethod
-    def set_rank_up_table(cls, value: List[Rank], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def set_rank_up_table(
+        cls, value: List[Rank], arm9bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the list of ranks in the game.
         The length of the list must exactly match the original ROM's length (see get_rank_up_table).
         """
-        block = config.binaries['arm9.bin'].symbols['RankUpTable']
+        block = config.binaries["arm9.bin"].symbols["RankUpTable"]
         expected_length = int((block.end - block.begin) / ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
-            arm9bin[block.begin + (i * ENTRY_LEN):block.begin + ((i + 1) * ENTRY_LEN)] = entry.to_bytes()
+            arm9bin[
+                block.begin + (i * ENTRY_LEN) : block.begin + ((i + 1) * ENTRY_LEN)
+            ] = entry.to_bytes()

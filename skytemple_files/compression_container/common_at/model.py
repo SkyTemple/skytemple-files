@@ -20,8 +20,7 @@ from __future__ import annotations
 from abc import ABC
 
 from skytemple_files.common.util import CheckedIntWrites
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class CommonAt(CompressionContainerProtocol, CheckedIntWrites, ABC):

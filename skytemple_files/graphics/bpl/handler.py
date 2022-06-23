@@ -18,13 +18,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 
-from skytemple_files.common.impl_cfg import (ImplementationType,
-                                             get_implementation_type)
+from skytemple_files.common.impl_cfg import ImplementationType, get_implementation_type
 from skytemple_files.common.types.hybrid_data_handler import (
-    HybridDataHandler, WriterProtocol)
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpl.protocol import (BplAnimationSpecProtocol,
-                                                   BplProtocol)
+from skytemple_files.graphics.bpl.protocol import BplAnimationSpecProtocol, BplProtocol
 
 if TYPE_CHECKING:
     pass
@@ -34,33 +34,41 @@ class BplHandler(HybridDataHandler[BplProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[BplProtocol]:
         from skytemple_files.graphics.bpl._model import Bpl
+
         return Bpl
 
     @classmethod
     def load_native_model(cls) -> Type[BplProtocol]:
-        from skytemple_rust.st_bpl import \
-            Bpl  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpl import (
+            Bpl,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return Bpl
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyBpl']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyBpl"]]:  # type: ignore
         from skytemple_files.graphics.bpl._writer import BplWriter
+
         return BplWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeBpl']]:  # type: ignore
-        from skytemple_rust.st_bpl import \
-            BplWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeBpl"]]:  # type: ignore
+        from skytemple_rust.st_bpl import (
+            BplWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BplWriter
 
     @classmethod
     def get_animation_spec_model_cls(cls) -> Type[BplAnimationSpecProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bpl import \
-                BplAnimationSpec as \
-                BplAnimationSpecNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_bpl import (
+                BplAnimationSpec as BplAnimationSpecNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
             return BplAnimationSpecNative
         from skytemple_files.graphics.bpl._model import BplAnimationSpec
+
         return BplAnimationSpec
 
     @classmethod

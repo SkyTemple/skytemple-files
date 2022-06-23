@@ -23,11 +23,16 @@ from collections.abc import Iterator
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import (
-    COMMON_AT_MUST_COMPRESS_3, CommonAtType)
-from skytemple_files.graphics.kao import (KAO_IMG_IMG_DIM,
-                                          KAO_IMG_METAPIXELS_DIM,
-                                          KAO_IMG_PAL_B_SIZE, SUBENTRIES,
-                                          SUBENTRY_LEN)
+    COMMON_AT_MUST_COMPRESS_3,
+    CommonAtType,
+)
+from skytemple_files.graphics.kao import (
+    KAO_IMG_IMG_DIM,
+    KAO_IMG_METAPIXELS_DIM,
+    KAO_IMG_PAL_B_SIZE,
+    SUBENTRIES,
+    SUBENTRY_LEN,
+)
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 
 
@@ -39,17 +44,21 @@ class KaoImage(KaoImageProtocol):
         """Construct a KaoImage using a raw image buffer (16 color palette, followed by AT)"""
         from skytemple_files.common.types.file_types import FileType
 
-        cont_len = FileType.COMMON_AT.cont_size(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE)
+        cont_len = FileType.COMMON_AT.cont_size(
+            whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE
+        )
         # palette size + at container size
         self.original_size = KAO_IMG_PAL_B_SIZE + cont_len
         self.pal_data = read_bytes(whole_kao_data, start_pnt, KAO_IMG_PAL_B_SIZE)
-        self.compressed_img_data = read_bytes(whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len)
+        self.compressed_img_data = read_bytes(
+            whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len
+        )
         self.as_pil: Optional[Image.Image] = None  # lazy loading
         self.modified = False
         self.empty = False
 
     @classmethod
-    def create_from_raw(cls, cimg: bytes, pal: bytes) -> 'KaoImage':
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> "KaoImage":
         """Create from raw compressed image and palette data"""
         return cls(bytes(pal) + bytes(cimg), 0)
 
@@ -59,7 +68,7 @@ class KaoImage(KaoImageProtocol):
             self.as_pil = kao_to_pil(self)
         return self.as_pil
 
-    def clone(self) -> 'KaoImage':
+    def clone(self) -> "KaoImage":
         return KaoImage(self.get_internal(), 0)
 
     def size(self) -> int:
@@ -69,7 +78,7 @@ class KaoImage(KaoImageProtocol):
         """Returns the portrait as 16 color palette followed by AT compressed image data"""
         return bytes(self.pal_data) + bytes(self.compressed_img_data)
 
-    def set(self, pil: Image.Image) -> 'KaoImage':
+    def set(self, pil: Image.Image) -> "KaoImage":
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         self.pal_data = new_pal
@@ -80,7 +89,7 @@ class KaoImage(KaoImageProtocol):
         return self
 
     @classmethod
-    def new(cls, pil: Image.Image) -> 'KaoImage':
+    def new(cls, pil: Image.Image) -> "KaoImage":
         """Creates a new KaoImage from a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         new = cls(new_pal + new_img, 0)
@@ -99,15 +108,17 @@ class Kao(KaoProtocol[KaoImage]):
             data = memoryview(data)
 
         # First 160 bytes are padding
-        first_toc = (SUBENTRIES * SUBENTRY_LEN)
+        first_toc = SUBENTRIES * SUBENTRY_LEN
         # The following line won't work; what if the first byte of the first pointer is 0?
         # first_toc = next(x for x, val in enumerate(data) if val != 0)
-        assert first_toc % SUBENTRIES * SUBENTRY_LEN == 0  # Padding should be a whole TOC entry
+        assert (
+            first_toc % SUBENTRIES * SUBENTRY_LEN == 0
+        )  # Padding should be a whole TOC entry
         # first pointer = end of TOC
         first_pointer = read_u32(data, first_toc)
         toc_len = int((first_pointer - first_toc) / (SUBENTRIES * SUBENTRY_LEN))
 
-        self.original_data: bytearray = data   # type: ignore
+        self.original_data: bytearray = data  # type: ignore
         self.first_toc = first_toc
         self.toc_len: int = toc_len
         self.reset(toc_len)
@@ -116,8 +127,10 @@ class Kao(KaoProtocol[KaoImage]):
     def create_new(cls, number_entries: int):
         """Creates a new empty KAO with the specified number of entries."""
         self = cls.__new__(cls)
-        self.first_toc = (SUBENTRIES * SUBENTRY_LEN)
-        self.original_data = bytearray([255] * (self.first_toc + (SUBENTRIES * SUBENTRY_LEN) * number_entries))
+        self.first_toc = SUBENTRIES * SUBENTRY_LEN
+        self.original_data = bytearray(
+            [255] * (self.first_toc + (SUBENTRIES * SUBENTRY_LEN) * number_entries)
+        )
         self.toc_len = number_entries
         self.reset(self.toc_len)
         return self
@@ -153,23 +166,38 @@ class Kao(KaoProtocol[KaoImage]):
         # Expand
         expand_pnt = bytearray(4)
         write_i32(expand_pnt, last_pnt, 0)
-        self.original_data = self.original_data[:limit] + (expand_pnt * (expand_len * SUBENTRIES)) + self.original_data[
-                                                                                                     limit:]
+        self.original_data = (
+            self.original_data[:limit]
+            + (expand_pnt * (expand_len * SUBENTRIES))
+            + self.original_data[limit:]
+        )
         self.toc_len = new_size
         self.reset(new_size)
 
     def reset(self, toc_len: int) -> None:
-        self.loaded_kaos: List[List[Optional[KaoImage]]] = [[None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)]
-        self.loaded_kaos_flat: List[Tuple[int, int, KaoImage]] = []  # cache for performance
+        self.loaded_kaos: List[List[Optional[KaoImage]]] = [
+            [None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)
+        ]
+        self.loaded_kaos_flat: List[
+            Tuple[int, int, KaoImage]
+        ] = []  # cache for performance
 
     def get(self, index: int, subindex: int) -> Union[KaoImage, None]:
         """Get the KaoImage at the specified location or None if no image is specified"""
         if index >= self.toc_len or index < 0:
-            raise ValueError(f"The index requested must be between 0 and {self.toc_len}")
+            raise ValueError(
+                f"The index requested must be between 0 and {self.toc_len}"
+            )
         if subindex >= SUBENTRIES or subindex < 0:
-            raise ValueError(f"The subindex requested must be between 0 and {SUBENTRIES}")
+            raise ValueError(
+                f"The subindex requested must be between 0 and {SUBENTRIES}"
+            )
         if self.loaded_kaos[index][subindex] is None:
-            start_toc_entry = self.first_toc + (index * SUBENTRIES * SUBENTRY_LEN) + subindex * SUBENTRY_LEN
+            start_toc_entry = (
+                self.first_toc
+                + (index * SUBENTRIES * SUBENTRY_LEN)
+                + subindex * SUBENTRY_LEN
+            )
             pnt = read_i32(self.original_data, start_toc_entry)
             if pnt < 0:
                 # NULL pointer
@@ -186,19 +214,29 @@ class Kao(KaoProtocol[KaoImage]):
     def set_from_img(self, index: int, subindex: int, img: Image.Image) -> None:
         return self._set_impl(index, subindex, img)
 
-    def _set_impl(self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]) -> None:
+    def _set_impl(
+        self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]
+    ) -> None:
         """
         Set the KaoImage at the specified location. This fails,
         if there is already an image there. Use get instead.
         """
         if index > self.toc_len or index < 0:
-            raise ValueError(f"The index requested must be between 0 and {self.toc_len}")
+            raise ValueError(
+                f"The index requested must be between 0 and {self.toc_len}"
+            )
         if subindex > SUBENTRIES or subindex < 0:
-            raise ValueError(f"The subindex requested must be between 0 and {SUBENTRIES}")
+            raise ValueError(
+                f"The subindex requested must be between 0 and {SUBENTRIES}"
+            )
         k = self.get(index, subindex)
         if isinstance(img, KaoImage):
             if k is not None:
-                self.loaded_kaos_flat = [(i, s, x) for i, s, x in self.loaded_kaos_flat if i != index or s != subindex]
+                self.loaded_kaos_flat = [
+                    (i, s, x)
+                    for i, s, x in self.loaded_kaos_flat
+                    if i != index or s != subindex
+                ]
             img.modified = True
             self.loaded_kaos[index][subindex] = img
             self.loaded_kaos_flat.append((index, subindex, img))
@@ -224,7 +262,7 @@ class Kao(KaoProtocol[KaoImage]):
         """Returns whether or not a kao image at the specified index was loaded"""
         return self.loaded_kaos[index][subindex] is not None
 
-    def __iter__(self) -> 'KaoIterator':
+    def __iter__(self) -> "KaoIterator":
         """
         Iterates over all KaoImages.
         """
@@ -248,7 +286,9 @@ class KaoIterator(Iterator):  # type: ignore
             try:
                 ret = self.kao.get(self.current_index, self.current_subindex)
             except ValueError as ex:
-                warnings.warn(f(_("Could not load KAO at {old_index},{old_subindex}: {ex}")))
+                warnings.warn(
+                    f(_("Could not load KAO at {old_index},{old_subindex}: {ex}"))
+                )
             self.current_subindex += 1
             if self.current_subindex >= self.max_subindex:
                 self.current_index += 1
@@ -263,12 +303,16 @@ def kao_to_pil(kao: KaoImage) -> Image.Image:
     from skytemple_files.common.types.file_types import FileType
 
     # Generates an array where every three entries a new color begins (r, g, b, r, g, b...)
-    uncompressed_image_data = FileType.COMMON_AT.deserialize(kao.compressed_img_data).decompress()
+    uncompressed_image_data = FileType.COMMON_AT.deserialize(
+        kao.compressed_img_data
+    ).decompress()
 
     return uncompressed_kao_to_pil(kao.pal_data, uncompressed_image_data)
 
 
-def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data: bytes) -> Image.Image:
+def uncompressed_kao_to_pil(
+    pal_data: bytes, uncompressed_image_data: bytes
+) -> Image.Image:
     # The images are made up of 25 8x8 tiles stored linearly in the data, but to be arranged
     # as 5x5 "meta-pixels".
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
@@ -291,30 +335,43 @@ def uncompressed_kao_to_pil(pal_data: bytes, uncompressed_image_data: bytes) -> 
         pil_img_data[nidx] = pix
 
     assert len(pil_img_data) == img_dim * img_dim
-    im = Image.frombuffer('P', (img_dim, img_dim), pil_img_data, 'raw', 'P', 0, 1)
+    im = Image.frombuffer("P", (img_dim, img_dim), pil_img_data, "raw", "P", 0, 1)
 
     im.putpalette(pal_data)
 
     return im
 
 
-def pil_to_kao(pil: Image.Image, allowed_compressions: Optional[List[CommonAtType]] = None) -> Tuple[bytes, bytes]:
+def pil_to_kao(
+    pil: Image.Image, allowed_compressions: Optional[List[CommonAtType]] = None
+) -> Tuple[bytes, bytes]:
     """Converts a PIL image (with a 16 bit palette) to a kao palette and at compressed image data"""
     from skytemple_files.common.types.file_types import FileType
+
     if allowed_compressions is None:
         allowed_compressions = COMMON_AT_MUST_COMPRESS_3
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.width != img_dim or pil.height != img_dim:
-        raise ValueError(f(_('Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px.')))
-    if pil.mode != 'P' or pil.palette.mode != 'RGB' or len(pil.palette.palette) != 16 * 3:
+        raise ValueError(
+            f(
+                _(
+                    "Can not convert PIL image to Kao: Image dimensions must be {img_dim}x{img_dim}px."
+                )
+            )
+        )
+    if (
+        pil.mode != "P"
+        or pil.palette.mode != "RGB"
+        or len(pil.palette.palette) != 16 * 3
+    ):
         pil = simple_quant(pil, False)
     new_palette = bytearray(pil.palette.palette)
 
     # We have to cut the image back into this annoying tiling format :(
     new_img_size = int(img_dim * img_dim / 2)
     new_img = bytearray(new_img_size)
-    raw_pil_image = pil.tobytes('raw', 'P')
+    raw_pil_image = pil.tobytes("raw", "P")
     the_two_px_to_write = [0, 0]
     for idx, pix in enumerate(raw_pil_image):
         # We store 2 bytes as one... in LE
@@ -332,7 +389,13 @@ def pil_to_kao(pil: Image.Image, allowed_compressions: Optional[List[CommonAtTyp
             in_tile_y = y - KAO_IMG_METAPIXELS_DIM * tile_y
             idx_in_tile = in_tile_y * KAO_IMG_METAPIXELS_DIM + in_tile_x
 
-            nidx = int((tile_id * KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM + idx_in_tile) / 2)
+            nidx = int(
+                (
+                    tile_id * KAO_IMG_METAPIXELS_DIM * KAO_IMG_METAPIXELS_DIM
+                    + idx_in_tile
+                )
+                / 2
+            )
             # print(f"{idx}@{x}x{y}: {tile_id} : {tile_x}x{tile_y} -- {idx_in_tile} : {in_tile_x}x{in_tile_y} = {nidx}")
             # Little endian:
             new_img[nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
@@ -341,7 +404,12 @@ def pil_to_kao(pil: Image.Image, allowed_compressions: Optional[List[CommonAtTyp
     # configuration for the PX algorithm
     pairs: Dict[Tuple[int, int], int] = {}
     for x in range(len(new_img) - 1):
-        l = [new_img[x] % 16, new_img[x] // 16, new_img[x + 1] % 16, new_img[x + 1] // 16]
+        l = [
+            new_img[x] % 16,
+            new_img[x] // 16,
+            new_img[x + 1] % 16,
+            new_img[x + 1] // 16,
+        ]
         if l.count(l[0]) == 3 or (l.count(l[0]) == 1 and l.count(l[1]) == 3):
             a = l[0]
             for b in l:
@@ -400,12 +468,19 @@ def pil_to_kao(pil: Image.Image, allowed_compressions: Optional[List[CommonAtTyp
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
-    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, allowed_compressions))
+    new_img_compressed = FileType.COMMON_AT.serialize(
+        FileType.COMMON_AT.compress(new_img, allowed_compressions)
+    )
     if len(new_img_compressed) > 800:
         raise AttributeError(
-            f(_("This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
-                "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
-                "which might be able to better compress this image.")))
+            f(
+                _(
+                    "This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
+                    "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                    "which might be able to better compress this image."
+                )
+            )
+        )
     # You can check if compression works, by uncompressing and checking the image again:
     # >>> unc = FileType.COMMON_AT.unserialize(new_img_compressed).decompress()
     # >>> uncompressed_kao_to_pil(new_palette, unc).show()

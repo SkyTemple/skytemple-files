@@ -22,15 +22,16 @@ from skytemple_files.graphics.dpla.model import Dpla
 
 
 class DbinSir0DplaHandler(DataHandler[Dpla]):
-
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpla:
         from skytemple_files.common.types.file_types import FileType
+
         sir0 = FileType.SIR0.deserialize(data)
         return FileType.SIR0.unwrap_obj(sir0, Dpla)  # type: ignore
 
     @classmethod
     def serialize(cls, data: Dpla, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         sir0 = FileType.SIR0.wrap_obj(data)  # type: ignore
         return FileType.SIR0.serialize(sir0)

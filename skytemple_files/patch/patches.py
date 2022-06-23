@@ -30,97 +30,92 @@ from zipfile import ZipFile
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _, f
-from skytemple_files.common.ppmdu_config.data import (Pmd2AsmPatchesConstants,
-                                                      Pmd2Data,
-                                                      Pmd2PatchParameterType)
-from skytemple_files.common.ppmdu_config.xml_reader import \
-    Pmd2AsmPatchesConstantsXmlReader
+from skytemple_files.common.ppmdu_config.data import (
+    Pmd2AsmPatchesConstants,
+    Pmd2Data,
+    Pmd2PatchParameterType,
+)
+from skytemple_files.common.ppmdu_config.xml_reader import (
+    Pmd2AsmPatchesConstantsXmlReader,
+)
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
-from skytemple_files.patch.errors import (PatchDependencyError,
-                                          PatchNotConfiguredError,
-                                          PatchPackageError)
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
-from skytemple_files.patch.handler.actor_and_level_loader import \
-    ActorAndLevelListLoaderPatchHandler
+from skytemple_files.patch.errors import (
+    PatchDependencyError,
+    PatchNotConfiguredError,
+    PatchPackageError,
+)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.patch.handler.actor_and_level_loader import (
+    ActorAndLevelListLoaderPatchHandler,
+)
 from skytemple_files.patch.handler.add_type import AddTypePatchHandler
-from skytemple_files.patch.handler.allow_unrecruitable_mons import \
-    AllowUnrecruitableMonsPatchHandler
-from skytemple_files.patch.handler.change_evo import \
-    ChangeEvoSystemPatchHandler
-from skytemple_files.patch.handler.change_ff_prop import \
-    ChangeFixedFloorPropertiesPatchHandler
-from skytemple_files.patch.handler.change_tbbg import \
-    ChangeTextBoxColorPatchHandler
-from skytemple_files.patch.handler.choose_starter import \
-    ChooseStarterPatchHandler
-from skytemple_files.patch.handler.complete_team_control import \
-    CompleteTeamControl
-from skytemple_files.patch.handler.compress_iq_data import \
-    CompressIQDataPatchHandler
+from skytemple_files.patch.handler.allow_unrecruitable_mons import (
+    AllowUnrecruitableMonsPatchHandler,
+)
+from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
+from skytemple_files.patch.handler.change_ff_prop import (
+    ChangeFixedFloorPropertiesPatchHandler,
+)
+from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
+from skytemple_files.patch.handler.choose_starter import ChooseStarterPatchHandler
+from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
+from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
 from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
-from skytemple_files.patch.handler.disarm_one_room_mh import \
-    DisarmOneRoomMHPatchHandler
-from skytemple_files.patch.handler.dungeon_interrupt import \
-    DungeonInterruptPatchHandler
-from skytemple_files.patch.handler.dynamic_bosses_everywhere import \
-    DynamicBossesEverywherePatchHandler
-from skytemple_files.patch.handler.edit_extra_pokemon import \
-    EditExtraPokemonPatchHandler
+from skytemple_files.patch.handler.disarm_one_room_mh import DisarmOneRoomMHPatchHandler
+from skytemple_files.patch.handler.dungeon_interrupt import DungeonInterruptPatchHandler
+from skytemple_files.patch.handler.dynamic_bosses_everywhere import (
+    DynamicBossesEverywherePatchHandler,
+)
+from skytemple_files.patch.handler.edit_extra_pokemon import (
+    EditExtraPokemonPatchHandler,
+)
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
-from skytemple_files.patch.handler.expand_poke_list import \
-    ExpandPokeListPatchHandler
-from skytemple_files.patch.handler.externalize_mappa import \
-    ExternalizeMappaPatchHandler
-from skytemple_files.patch.handler.externalize_waza import \
-    ExternalizeWazaPatchHandler
+from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
+from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
+from skytemple_files.patch.handler.externalize_waza import ExternalizeWazaPatchHandler
 from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
-from skytemple_files.patch.handler.extract_anims import \
-    ExtractAnimDataPatchHandler
-from skytemple_files.patch.handler.extract_bar_list import \
-    ExtractBarItemListPatchHandler
-from skytemple_files.patch.handler.extract_dungeon_data import \
-    ExtractDungeonDataPatchHandler
-from skytemple_files.patch.handler.extract_item_code import \
-    ExtractItemCodePatchHandler
-from skytemple_files.patch.handler.extract_item_lists import \
-    ExtractItemListsPatchHandler
-from skytemple_files.patch.handler.extract_move_code import \
-    ExtractMoveCodePatchHandler
-from skytemple_files.patch.handler.extract_sp_code import \
-    ExtractSPCodePatchHandler
-from skytemple_files.patch.handler.fairy_gummies import \
-    ImplementFairyGummiesPatchHandler
-from skytemple_files.patch.handler.far_off_pal_overdrive import \
-    FarOffPalOverdrive
-from skytemple_files.patch.handler.fix_evolution import \
-    FixEvolutionPatchHandler
-from skytemple_files.patch.handler.fix_memory_softlock import \
-    FixMemorySoftlockPatchHandler
+from skytemple_files.patch.handler.extract_anims import ExtractAnimDataPatchHandler
+from skytemple_files.patch.handler.extract_bar_list import (
+    ExtractBarItemListPatchHandler,
+)
+from skytemple_files.patch.handler.extract_dungeon_data import (
+    ExtractDungeonDataPatchHandler,
+)
+from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
+from skytemple_files.patch.handler.extract_item_lists import (
+    ExtractItemListsPatchHandler,
+)
+from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
+from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
+from skytemple_files.patch.handler.fairy_gummies import (
+    ImplementFairyGummiesPatchHandler,
+)
+from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
+from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
+from skytemple_files.patch.handler.fix_memory_softlock import (
+    FixMemorySoftlockPatchHandler,
+)
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
-from skytemple_files.patch.handler.obj_table import \
-    ExtractObjectTablePatchHandler
-from skytemple_files.patch.handler.partners_trigger_hidden_traps import \
-    PartnersTriggerHiddenTraps
-from skytemple_files.patch.handler.pitfall_trap_tweak import \
-    PitfallTrapTweakPatchHandler
-from skytemple_files.patch.handler.pkmn_ground_anim import \
-    PkmnGroundAnimPatchHandler
-from skytemple_files.patch.handler.reduce_jumpcut_pause_time import \
-    ReduceJumpcutPauseTime
-from skytemple_files.patch.handler.same_type_partner import \
-    SameTypePartnerPatch
+from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandler
+from skytemple_files.patch.handler.partners_trigger_hidden_traps import (
+    PartnersTriggerHiddenTraps,
+)
+from skytemple_files.patch.handler.pitfall_trap_tweak import (
+    PitfallTrapTweakPatchHandler,
+)
+from skytemple_files.patch.handler.pkmn_ground_anim import PkmnGroundAnimPatchHandler
+from skytemple_files.patch.handler.reduce_jumpcut_pause_time import (
+    ReduceJumpcutPauseTime,
+)
+from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
-from skytemple_files.patch.handler.stat_disp import \
-    ChangeMoveStatDisplayPatchHandler
-from skytemple_files.patch.handler.support_atupx import \
-    AtupxSupportPatchHandler
-from skytemple_files.patch.handler.unused_dungeon_chance import \
-    UnusedDungeonChancePatch
+from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
+from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 
-CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
+CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), "patches")
 
 
 class PatchType(Enum):
@@ -169,7 +164,9 @@ class PatchType(Enum):
 
 
 class Patcher:
-    def __init__(self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches: bool = False):
+    def __init__(
+        self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches: bool = False
+    ):
         self._rom = rom
         self._config = config
         self._loaded_patches: Dict[str, AbstractPatchHandler] = {}
@@ -206,47 +203,83 @@ class Patcher:
             for patch_name in patch.depends_on():
                 try:
                     if not self.is_applied(patch_name):
-                        raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
-                                                       "apply '{name}'.")))
+                        raise PatchDependencyError(
+                            f(
+                                _(
+                                    "The patch '{patch_name}' needs to be applied before you can "
+                                    "apply '{name}'."
+                                )
+                            )
+                        )
                 except ValueError as err:
-                    raise PatchDependencyError(f(_("The patch '{patch_name}' needs to be applied before you can "
-                                                   "apply '{name}'. "
-                                                   "This patch could not be found."))) from err
+                    raise PatchDependencyError(
+                        f(
+                            _(
+                                "The patch '{patch_name}' needs to be applied before you can "
+                                "apply '{name}'. "
+                                "This patch could not be found."
+                            )
+                        )
+                    ) from err
         # Check config
         patch_data = self._config.asm_patches_constants.patches[name]
         if patch_data.has_parameters():
             if config is None:
-                raise PatchNotConfiguredError(_("No configuration was given."), "*", "No configuration was given.")
+                raise PatchNotConfiguredError(
+                    _("No configuration was given."), "*", "No configuration was given."
+                )
             for param in patch_data.parameters.values():
                 if param.name not in config:
-                    raise PatchNotConfiguredError(_("Missing configuration value."), param.name, "Not given.")
+                    raise PatchNotConfiguredError(
+                        _("Missing configuration value."), param.name, "Not given."
+                    )
                 if param.type == Pmd2PatchParameterType.INTEGER:
                     val = config[param.name]
                     if not isinstance(val, int):
-                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be int.")
+                        raise PatchNotConfiguredError(
+                            _("Invalid configuration value."),
+                            param.name,
+                            "Must be int.",
+                        )
                     if param.min is not None and val < param.min:
-                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, _("Must be >= {}.").format(param.min))
+                        raise PatchNotConfiguredError(
+                            _("Invalid configuration value."),
+                            param.name,
+                            _("Must be >= {}.").format(param.min),
+                        )
                     if param.max is not None and val > param.max:
-                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, _("Must be <= {}.").format(param.max))
+                        raise PatchNotConfiguredError(
+                            _("Invalid configuration value."),
+                            param.name,
+                            _("Must be <= {}.").format(param.max),
+                        )
                 if param.type == Pmd2PatchParameterType.STRING:
                     val = config[param.name]
                     if not isinstance(val, str):
-                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be str.")
+                        raise PatchNotConfiguredError(
+                            _("Invalid configuration value."),
+                            param.name,
+                            "Must be str.",
+                        )
                 if param.type == Pmd2PatchParameterType.SELECT:
                     val = config[param.name]
                     found = False
                     for option in param.options:  # type: ignore
-                        if not isinstance(val, type(option.value)) or option.value != val:
+                        if (
+                            not isinstance(val, type(option.value))
+                            or option.value != val
+                        ):
                             continue
                         found = True
                         break
                     if not found:
-                        raise PatchNotConfiguredError(_("Invalid configuration value."), param.name, "Must be one of the options.")
+                        raise PatchNotConfiguredError(
+                            _("Invalid configuration value."),
+                            param.name,
+                            "Must be one of the options.",
+                        )
             patch.supply_parameters(config)
-        patch.apply(
-            partial(self._apply_armips, name, patch),
-            self._rom, self._config
-        )
+        patch.apply(partial(self._apply_armips, name, patch), self._rom, self._config)
 
     def _apply_armips(self, name: str, calling_patch: AbstractPatchHandler) -> None:
         patch = self._config.asm_patches_constants.patches[name]
@@ -254,59 +287,89 @@ class Patcher:
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
         parameter_values = calling_patch.get_parameters()
 
-        self._arm_patcher.apply(patch, self._config.binaries,
-                                os.path.join(self._patch_dirs[name], patch_dir_for_version),
-                                stub_path_for_version, self._config.game_edition, parameter_values)
+        self._arm_patcher.apply(
+            patch,
+            self._config.binaries,
+            os.path.join(self._patch_dirs[name], patch_dir_for_version),
+            stub_path_for_version,
+            self._config.game_edition,
+            parameter_values,
+        )
 
     def add_pkg(self, path: str, is_zipped: bool = True) -> None:
         """Loads a skypatch file. Raises PatchPackageError on error."""
         tmpdir = TemporaryDirectory()
         self._created_tmpdirs.append(tmpdir)
         if is_zipped:
-            with ZipFile(path, 'r') as zip:
+            with ZipFile(path, "r") as zip:
                 zip.extractall(tmpdir.name)
                 f_id = id(zip)
         else:
-            shutil.copytree(os.path.join(path, '.'), os.path.join(tmpdir.name, '.'), dirs_exist_ok=True)
+            shutil.copytree(
+                os.path.join(path, "."),
+                os.path.join(tmpdir.name, "."),
+                dirs_exist_ok=True,
+            )
             f_id = id(tmpdir)
 
         # Load the configuration
         try:
-            config_xml = os.path.join(tmpdir.name, 'config.xml')
-            PatchPackageConfigMerger(config_xml, self._config.game_edition).merge(self._config.asm_patches_constants)
+            config_xml = os.path.join(tmpdir.name, "config.xml")
+            PatchPackageConfigMerger(config_xml, self._config.game_edition).merge(
+                self._config.asm_patches_constants
+            )
         except FileNotFoundError as ex:
             raise PatchPackageError(_("config.xml missing in patch package.")) from ex
         except ParseError as ex:
-            raise PatchPackageError(_("Syntax error in the config.xml while reading patch package.")) from ex
+            raise PatchPackageError(
+                _("Syntax error in the config.xml while reading patch package.")
+            ) from ex
 
         # Evalulate the module
         try:
             module_name = f"skytemple_files.__patches.p{f_id}"
-            spec = importlib.util.spec_from_file_location(module_name,
-                                                          os.path.join(tmpdir.name, 'patch.py'))
+            spec = importlib.util.spec_from_file_location(
+                module_name, os.path.join(tmpdir.name, "patch.py")
+            )
             assert spec is not None
             patch = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(patch)  # type: ignore
         except FileNotFoundError as ex:
             raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
-            raise PatchPackageError(_("The patch.py of the patch package contains a syntax error.")) from ex
+            raise PatchPackageError(
+                _("The patch.py of the patch package contains a syntax error.")
+            ) from ex
 
         try:
             handler = patch.PatchHandler()  # type: ignore
         except AttributeError as ex:
-            raise PatchPackageError(_("The patch.py of the patch package does not contain a 'PatchHandler'.")) from ex
+            raise PatchPackageError(
+                _(
+                    "The patch.py of the patch package does not contain a 'PatchHandler'."
+                )
+            ) from ex
 
         try:
             self.add_manually(handler, tmpdir.name)
         except ValueError as ex:
-            raise PatchPackageError(_("The patch package does not contain an entry for the handler's patch name "
-                                      "in the config.xml.")) from ex
+            raise PatchPackageError(
+                _(
+                    "The patch package does not contain an entry for the handler's patch name "
+                    "in the config.xml."
+                )
+            ) from ex
 
     def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str) -> None:
         # Try to find the patch in the config
         if handler.name not in self._config.asm_patches_constants.patches.keys():
-            raise ValueError(f(_("No patch for handler '{handler.name}' found in the configuration.")))
+            raise ValueError(
+                f(
+                    _(
+                        "No patch for handler '{handler.name}' found in the configuration."
+                    )
+                )
+            )
         self._loaded_patches[handler.name] = handler
         self._patch_dirs[handler.name] = patch_base_dir
 
@@ -325,7 +388,7 @@ class PatchPackageConfigMerger:
 
     def merge(self, into: Pmd2AsmPatchesConstants) -> None:
         for e in self._root:
-            if e.tag == 'ASMPatchesConstants':
+            if e.tag == "ASMPatchesConstants":
                 content_of_xml = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)  # type: ignore
                 into.patches.update(content_of_xml.patches)
                 into.loose_bin_files.update(content_of_xml.loose_bin_files)

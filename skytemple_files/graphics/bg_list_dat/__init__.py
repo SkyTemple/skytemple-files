@@ -17,8 +17,8 @@
 
 from __future__ import annotations
 
-DIR = 'MAP_BG'
-BPC_EXT = '.bpc'
-BPL_EXT = '.bpl'
-BMA_EXT = '.bma'
-BPA_EXT = '.bpa'
+DIR = "MAP_BG"
+BPC_EXT = ".bpc"
+BPL_EXT = ".bpl"
+BMA_EXT = ".bma"
+BPA_EXT = ".bpa"

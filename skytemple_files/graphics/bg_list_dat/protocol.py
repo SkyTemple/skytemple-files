@@ -25,10 +25,10 @@ from skytemple_files.graphics.bpa.protocol import BpaProtocol
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
-M = TypeVar('M', bound=BmaProtocol, covariant=True)
-P = TypeVar('P', bound=BpaProtocol)
-C = TypeVar('C', bound=BpcProtocol, covariant=True)
-L = TypeVar('L', bound=BplProtocol, covariant=True)
+M = TypeVar("M", bound=BmaProtocol, covariant=True)
+P = TypeVar("P", bound=BpaProtocol)
+C = TypeVar("C", bound=BpcProtocol, covariant=True)
+L = TypeVar("L", bound=BplProtocol, covariant=True)
 
 
 class BgListEntryProtocol(Protocol[M, P, C, L]):
@@ -36,30 +36,50 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
     bpc_name: str
     bma_name: str
     bpa_names: Sequence[Optional[str]]
-    @abstractmethod
-    def __init__(self, bpl_name: str, bpc_name: str, bma_name: str, bpa_names: List[Optional[str]]): ...
 
     @abstractmethod
-    def get_bpl(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> L: ...
+    def __init__(
+        self,
+        bpl_name: str,
+        bpc_name: str,
+        bma_name: str,
+        bpa_names: List[Optional[str]],
+    ):
+        ...
 
     @abstractmethod
-    def get_bpc(self, rom_or_directory_root: Union[str, RomFileProviderProtocol], bpc_tiling_width: int = 3, bpc_tiling_height: int = 3) -> C: ...
+    def get_bpl(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> L:
+        ...
 
     @abstractmethod
-    def get_bma(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> M: ...
+    def get_bpc(
+        self,
+        rom_or_directory_root: Union[str, RomFileProviderProtocol],
+        bpc_tiling_width: int = 3,
+        bpc_tiling_height: int = 3,
+    ) -> C:
+        ...
 
     @abstractmethod
-    def get_bpas(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> List[Optional[P]]: ...
+    def get_bma(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> M:
+        ...
+
+    @abstractmethod
+    def get_bpas(
+        self, rom_or_directory_root: Union[str, RomFileProviderProtocol]
+    ) -> List[Optional[P]]:
+        ...
 
 
-T = TypeVar('T', bound=BgListEntryProtocol)
+T = TypeVar("T", bound=BgListEntryProtocol)
 
 
 class BgListProtocol(Protocol[T]):
     level: Sequence[T]
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @abstractmethod
     def find_bma(self, name: str) -> int:

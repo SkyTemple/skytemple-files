@@ -18,24 +18,27 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class At3pxHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'AT3PX'
+        return b"AT3PX"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.at3px.model import At3px
+
         return At3px
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_at3px import \
-            At3px  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_at3px import (
+            At3px,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return At3px

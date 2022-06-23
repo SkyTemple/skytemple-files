@@ -24,7 +24,12 @@ class DungeonMusicEntry(AutoString, CheckedIntWrites):
     track_or_ref: u16
     is_random_ref: bool
 
-    def __init__(self, data: Optional[u16], track_ref: Optional[u16] = None, is_random_ref: bool = False):
+    def __init__(
+        self,
+        data: Optional[u16],
+        track_ref: Optional[u16] = None,
+        is_random_ref: bool = False,
+    ):
         if track_ref is not None:
             self.track_or_ref = track_ref
             self.is_random_ref = is_random_ref
@@ -43,42 +48,56 @@ class DungeonMusicEntry(AutoString, CheckedIntWrites):
 class HardcodedDungeonMusic:
     @staticmethod
     def get_music_list(ov10: bytes, config: Pmd2Data) -> List[DungeonMusicEntry]:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['MusicList']
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["MusicList"]
         lst = []
         for i in range(block.begin, block.end, 2):
-            lst.append(DungeonMusicEntry(
-                read_u16(ov10, i),
-            ))
+            lst.append(
+                DungeonMusicEntry(
+                    read_u16(ov10, i),
+                )
+            )
         return lst
 
     @staticmethod
-    def set_music_list(value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['MusicList']
+    def set_music_list(
+        value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data
+    ) -> None:
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["MusicList"]
         expected_length = int((block.end - block.begin) / 2)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             write_u16(ov10, entry.to_int(), block.begin + i * 2)
 
     @staticmethod
-    def get_random_music_list(ov10: bytes, config: Pmd2Data) -> List[Tuple[u16, u16, u16, u16]]:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
+    def get_random_music_list(
+        ov10: bytes, config: Pmd2Data
+    ) -> List[Tuple[u16, u16, u16, u16]]:
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["RandomMusicList"]
         lst = []
         for i in range(block.begin, block.end, 8):
-            lst.append((
-                read_u16(ov10, i),
-                read_u16(ov10, i + 2),
-                read_u16(ov10, i + 4),
-                read_u16(ov10, i + 6),
-            ))
+            lst.append(
+                (
+                    read_u16(ov10, i),
+                    read_u16(ov10, i + 2),
+                    read_u16(ov10, i + 4),
+                    read_u16(ov10, i + 6),
+                )
+            )
         return lst
 
     @staticmethod
-    def set_random_music_list(value: List[Tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['RandomMusicList']
+    def set_random_music_list(
+        value: List[Tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data
+    ) -> None:
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["RandomMusicList"]
         expected_length = int((block.end - block.begin) / 8)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, (a, b, c, d) in enumerate(value):
             write_u16(ov10, a, block.begin + i * 8 + 0)
             write_u16(ov10, b, block.begin + i * 8 + 2)

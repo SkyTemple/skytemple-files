@@ -24,11 +24,11 @@ from skytemple_files.data.anim import *
 
 
 class AnimPointType(Enum):
-    HEAD = 0x00, _('Head')
-    LEFT_HAND = 0x01, _('Left Hand')
-    RIGHT_HAND = 0x02, _('Right Hand')
-    CENTER = 0x03, _('Center')
-    NONE = 0xFF, _('None')
+    HEAD = 0x00, _("Head")
+    LEFT_HAND = 0x01, _("Left Hand")
+    RIGHT_HAND = 0x02, _("Right Hand")
+    CENTER = 0x03, _("Center")
+    NONE = 0xFF, _("None")
 
     def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
@@ -36,20 +36,18 @@ class AnimPointType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: int, description: str
-    ):
+    def __init__(self, _: int, description: str):
         self.description = description
 
 
 class AnimType(Enum):
-    INVALID = 0x00, _('Invalid')
-    WAN_FILE0 = 0x01, _('WAN File 0')
-    WAN_FILE1 = 0x02, _('WAN File 1')
-    WAN_OTHER = 0x03, _('WAN')
-    WAT = 0x04, _('WAT')
-    SCREEN = 0x05, _('Screen')
-    WBA = 0x06, _('WBA')
+    INVALID = 0x00, _("Invalid")
+    WAN_FILE0 = 0x01, _("WAN File 0")
+    WAN_FILE1 = 0x02, _("WAN File 1")
+    WAN_OTHER = 0x03, _("WAN")
+    WAT = 0x04, _("WAT")
+    SCREEN = 0x05, _("Screen")
+    WBA = 0x06, _("WBA")
 
     def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
@@ -57,9 +55,7 @@ class AnimType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: int, description: str
-    ):
+    def __init__(self, _: int, description: str):
         self.description = description
 
 
@@ -131,8 +127,13 @@ class MoveAnim(AutoString, CheckedIntWrites):
         write_u16(data, self.anim2, 2)
         write_u16(data, self.anim3, 4)
         write_u16(data, self.anim4, 6)
-        flags = self.dir | (int(self.flag1) << 3) | (int(self.flag2) << 4) | (int(self.flag3) << 5) | (
-                    int(self.flag4) << 6)
+        flags = (
+            self.dir
+            | (int(self.flag1) << 3)
+            | (int(self.flag2) << 4)
+            | (int(self.flag3) << 5)
+            | (int(self.flag4) << 6)
+        )
         write_u32(data, u32(flags), 8)
         write_u32(data, self.speed, 12)
         write_u8(data, self.animation, 16)
@@ -154,7 +155,7 @@ class GeneralAnim(AutoString, CheckedIntWrites):
     point: AnimPointType
     unk5: bool
     loop: bool
-    
+
     def __init__(self, data: bytes):
         self.anim_type = AnimType(read_u32(data, 0))  # type: ignore
         self.anim_file = read_u32(data, 4)
@@ -221,25 +222,29 @@ class Anim(AutoString):
 
         self.trap_table = []
         for x in range(trap_table_ptr, item_table_ptr, TRAP_DATA_SIZE):
-            self.trap_table.append(TrapAnim(data[x:x + TRAP_DATA_SIZE]))
+            self.trap_table.append(TrapAnim(data[x : x + TRAP_DATA_SIZE]))
         self.item_table = []
         for x in range(item_table_ptr, move_table_ptr, ITEM_DATA_SIZE):
-            self.item_table.append(ItemAnim(data[x:x + ITEM_DATA_SIZE]))
+            self.item_table.append(ItemAnim(data[x : x + ITEM_DATA_SIZE]))
         self.move_table = []
         for x in range(move_table_ptr, general_table_ptr, MOVE_DATA_SIZE):
-            self.move_table.append(MoveAnim(data[x:x + MOVE_DATA_SIZE]))
+            self.move_table.append(MoveAnim(data[x : x + MOVE_DATA_SIZE]))
         self.general_table = []
         for x in range(general_table_ptr, special_move_table_ptr, GENERAL_DATA_SIZE):
-            self.general_table.append(GeneralAnim(data[x:x + GENERAL_DATA_SIZE]))
+            self.general_table.append(GeneralAnim(data[x : x + GENERAL_DATA_SIZE]))
         self.special_move_table = []
         for x in range(special_move_table_ptr, len(data), SPECIAL_MOVE_DATA_SIZE):
-            self.special_move_table.append(SpecMoveAnim(data[x:x + SPECIAL_MOVE_DATA_SIZE]))
+            self.special_move_table.append(
+                SpecMoveAnim(data[x : x + SPECIAL_MOVE_DATA_SIZE])
+            )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Anim):
             return False
-        return self.trap_table == other.trap_table and \
-               self.item_table == other.item_table and \
-               self.move_table == other.move_table and \
-               self.general_table == other.general_table and \
-               self.special_move_table == other.special_move_table
+        return (
+            self.trap_table == other.trap_table
+            and self.item_table == other.item_table
+            and self.move_table == other.move_table
+            and self.general_table == other.general_table
+            and self.special_move_table == other.special_move_table
+        )

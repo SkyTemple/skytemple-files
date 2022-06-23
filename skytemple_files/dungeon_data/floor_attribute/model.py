@@ -38,14 +38,24 @@ class FloorAttribute:
             g_list = list(data[start:end])
             self.attrs.append(g_list)
 
-    def extend_nb_floors(self, group_id: int, start_floor: int, nb_floors: int, rank: int = 0):
+    def extend_nb_floors(
+        self, group_id: int, start_floor: int, nb_floors: int, rank: int = 0
+    ):
         if nb_floors > 0:
-            self.attrs[group_id] = self.attrs[group_id][:start_floor] + ([rank] * nb_floors) + self.attrs[group_id][
-                                                                                               start_floor:]
+            self.attrs[group_id] = (
+                self.attrs[group_id][:start_floor]
+                + ([rank] * nb_floors)
+                + self.attrs[group_id][start_floor:]
+            )
         elif nb_floors < 0:
-            self.attrs[group_id] = self.attrs[group_id][:start_floor + nb_floors] + self.attrs[group_id][start_floor:]
+            self.attrs[group_id] = (
+                self.attrs[group_id][: start_floor + nb_floors]
+                + self.attrs[group_id][start_floor:]
+            )
 
-    def reorder_floors(self, reorder_list: List[List[Tuple[int, Optional[int], Optional[int]]]]):
+    def reorder_floors(
+        self, reorder_list: List[List[Tuple[int, Optional[int], Optional[int]]]]
+    ):
         new_attrs = []
         for new_groups in reorder_list:
             new_attrs.append([0])

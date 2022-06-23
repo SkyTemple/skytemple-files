@@ -22,13 +22,13 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-tlk_bin = rom.getFileByName('MESSAGE/tbl_talk.tlk')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
+tlk_bin = rom.getFileByName("MESSAGE/tbl_talk.tlk")
 tlk_model = TblTalkHandler.deserialize(tlk_bin)
 
 print(tlk_model.groups)
 print(tlk_model.monster_personalities)
 print(tlk_model.special_personalities)
-assert TblTalkHandler.serialize(tlk_model)==tlk_bin
+assert TblTalkHandler.serialize(tlk_model) == tlk_bin

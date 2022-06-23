@@ -22,11 +22,13 @@ from ndspy.code import loadOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_JP,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_JP,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 from skytemple_files.patch.category import PatchCategory
@@ -39,23 +41,24 @@ PATCH_CHECK_INSTR_APPLIED = 0xE3500000
 
 
 class ChangeFixedFloorPropertiesPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ChangeFixedFloorProperties'
+        return "ChangeFixedFloorProperties"
 
     @property
     def description(self) -> str:
-        return _("""Changes and adds some properties for fixed floors.
-Removes restrictions. """)
+        return _(
+            """Changes and adds some properties for fixed floors.
+Removes restrictions. """
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -64,20 +67,31 @@ Removes restrictions. """)
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(
-                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_JP:
-                return read_u32(
-                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: bytes())
             ov = table[10]
@@ -104,5 +118,7 @@ Removes restrictions. """)
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

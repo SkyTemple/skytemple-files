@@ -23,10 +23,10 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.data.md.handler import MdHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-md_bin = rom.getFileByName('BALANCE/monster.md')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
+md_bin = rom.getFileByName("BALANCE/monster.md")
 md_model = MdHandler.deserialize(md_bin)
 
 for md in md_model:

@@ -22,7 +22,9 @@ from typing import Sequence
 from skytemple_files.common.protocol import TilemapEntryProtocol
 
 
-def assert_tilemap_lists_equal(expected: Sequence[TilemapEntryProtocol], actual: Sequence[TilemapEntryProtocol]):
+def assert_tilemap_lists_equal(
+    expected: Sequence[TilemapEntryProtocol], actual: Sequence[TilemapEntryProtocol]
+):
     assert isinstance(expected, collections.abc.Sequence)
     assert isinstance(actual, collections.abc.Sequence)
     assert len(expected) == len(actual)

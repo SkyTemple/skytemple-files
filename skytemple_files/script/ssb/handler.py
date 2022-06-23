@@ -18,14 +18,21 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_JP,
-                                                      GAME_REGION_US, Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_JP,
+    GAME_REGION_US,
+    Pmd2Data,
+)
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.script.ssb.header import (AbstractSsbHeader, SsbHeaderEu,
-                                               SsbHeaderJp, SsbHeaderUs)
+from skytemple_files.script.ssb.header import (
+    AbstractSsbHeader,
+    SsbHeaderEu,
+    SsbHeaderJp,
+    SsbHeaderUs,
+)
 from skytemple_files.script.ssb.model import Ssb
 from skytemple_files.script.ssb.writer import SsbWriter
 
@@ -45,7 +52,13 @@ class SsbHandler(DataHandler[Ssb]):
         else:
             raise ValueError(f"Unsupported game edition: {static_data.game_edition}")
 
-        return Ssb(data, ssb_header, ssb_header.data_offset, static_data.script_data, string_codec=static_data.string_encoding)
+        return Ssb(
+            data,
+            ssb_header,
+            ssb_header.data_offset,
+            static_data.script_data,
+            string_codec=static_data.string_encoding,
+        )
 
     @classmethod
     def serialize(cls, data: Ssb, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore

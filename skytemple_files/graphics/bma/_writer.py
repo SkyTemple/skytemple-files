@@ -68,20 +68,20 @@ class BmaWriter:
 
         for layer in layers:
             lenlayer = len(layer)
-            self.data[self.bytes_written:self.bytes_written+lenlayer] = layer
-            #print(f"w> layer 0x{self.bytes_written:02x}")
+            self.data[self.bytes_written : self.bytes_written + lenlayer] = layer
+            # print(f"w> layer 0x{self.bytes_written:02x}")
             self.bytes_written += lenlayer
 
         if unknown_data:
             lendata = len(unknown_data)
-            self.data[self.bytes_written:self.bytes_written+lendata] = unknown_data
-            #print(f"w> unk   0x{self.bytes_written:02x}")
+            self.data[self.bytes_written : self.bytes_written + lendata] = unknown_data
+            # print(f"w> unk   0x{self.bytes_written:02x}")
             self.bytes_written += lendata
 
         for col in collisions:
             lencol = len(col)
-            self.data[self.bytes_written:self.bytes_written+lencol] = col
-            #print(f"w> col   0x{self.bytes_written:02x}")
+            self.data[self.bytes_written : self.bytes_written + lencol] = col
+            # print(f"w> col   0x{self.bytes_written:02x}")
             self.bytes_written += lencol
 
         return self.data
@@ -114,13 +114,15 @@ class BmaWriter:
             for col in range(0, self.model.map_width_chunks):
                 i = row * self.model.map_width_chunks + col
                 actual_value = layer[i] ^ previous_row_values[col]
-                write_u16(row_bytes, u16_checked(actual_value), col*2)
+                write_u16(row_bytes, u16_checked(actual_value), col * 2)
                 previous_row_values[col] = layer[i]
             assert len(row_bytes) == int(size / self.model.map_height_chunks)
             # Extra null tile is already there because of the bytearray size!
             comp_row_bytes = FileType.BMA_LAYER_NRL.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[layer_bytes_cursor:layer_bytes_cursor+len_comp_row_bytes] = comp_row_bytes
+            layer_bytes[
+                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
+            ] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]
@@ -154,7 +156,9 @@ class BmaWriter:
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.BMA_COLLISION_RLE.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[layer_bytes_cursor:layer_bytes_cursor+len_comp_row_bytes] = comp_row_bytes
+            layer_bytes[
+                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
+            ] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]
@@ -182,17 +186,19 @@ class BmaWriter:
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.GENERIC_NRL.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[layer_bytes_cursor:layer_bytes_cursor+len_comp_row_bytes] = comp_row_bytes
+            layer_bytes[
+                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
+            ] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]
 
     def _write_16uintle(self, val: u16) -> None:
-        assert val <= 0xffff
+        assert val <= 0xFFFF
         write_u16(self.data, val, self.bytes_written)
         self.bytes_written += 2
 
     def _write_byte(self, val: u8) -> None:
-        assert val <= 0xff
+        assert val <= 0xFF
         write_u8(self.data, val, self.bytes_written)
         self.bytes_written += 1

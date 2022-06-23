@@ -20,14 +20,15 @@ from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
-from skytemple_files.container.sir0.sir0_util import \
-    decode_sir0_pointer_offsets
+from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 
 
 class Sir0:
     data_pointer: u32
 
-    def __init__(self, content: bytes, pointer_offsets: List[int], data_pointer: int = None):
+    def __init__(
+        self, content: bytes, pointer_offsets: List[int], data_pointer: int = None
+    ):
         self.content = content
         self.content_pointer_offsets = pointer_offsets
         if data_pointer is None:
@@ -47,7 +48,7 @@ class Sir0:
             write_u32(
                 data,  # type: ignore
                 u32_checked(read_u32(data, pnt_off) - HEADER_LEN),
-                pnt_off
+                pnt_off,
             )
 
         # The first two are for the pointers in the header, we remove them now, they are not
@@ -57,11 +58,13 @@ class Sir0:
         return cls(
             bytes(data[HEADER_LEN:pointer_offset_list_pointer]),
             content_pointer_offsets,
-            data_pointer - HEADER_LEN
+            data_pointer - HEADER_LEN,
         )
 
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     @classmethod
-    def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: u32) -> Sequence[u32]:
+    def _decode_pointer_offsets(
+        cls, data: bytes, pointer_offset_list_pointer: u32
+    ) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pointer_offset_list_pointer)

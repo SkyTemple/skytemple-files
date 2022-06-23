@@ -22,14 +22,14 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.w16.handler import W16Handler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
 
 origs = []
 
-filenames = ['FONT/rankmark.w16', 'FONT/clrmark1.w16', 'FONT/clrmark2.w16']
+filenames = ["FONT/rankmark.w16", "FONT/clrmark1.w16", "FONT/clrmark2.w16"]
 
 for fn in filenames:
     bin_before = rom.getFileByName(fn)
@@ -45,15 +45,15 @@ for fn in filenames:
     bin_after = rom.getFileByName(fn)
     w16 = W16Handler.deserialize(bin_after)
 
-    with open(f'/tmp/before.bin', 'wb') as f:
+    with open(f"/tmp/before.bin", "wb") as f:
         f.write(bin_before)
 
-    with open(f'/tmp/after.bin', 'wb') as f:
+    with open(f"/tmp/after.bin", "wb") as f:
         f.write(bin_after)
 
     for i, img in enumerate(w16):
         im = img.get()
-        #assert im == origs[i]
-    #assert bin_before == bin_after
+        # assert im == origs[i]
+    # assert bin_before == bin_after
 
-rom.saveToFile('/tmp/w16test.nds')
+rom.saveToFile("/tmp/w16test.nds")

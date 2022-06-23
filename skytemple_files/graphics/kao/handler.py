@@ -18,10 +18,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Type
 
-from skytemple_files.common.impl_cfg import (ImplementationType,
-                                             get_implementation_type)
+from skytemple_files.common.impl_cfg import ImplementationType, get_implementation_type
 from skytemple_files.common.types.hybrid_data_handler import (
-    HybridDataHandler, WriterProtocol)
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 
@@ -33,33 +34,41 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[KaoProtocol]:
         from skytemple_files.graphics.kao._model import Kao
+
         return Kao
 
     @classmethod
     def load_native_model(cls) -> Type[KaoProtocol]:
-        from skytemple_rust.st_kao import \
-            Kao  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_kao import (
+            Kao,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return Kao
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyKao']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyKao"]]:  # type: ignore
         from skytemple_files.graphics.kao._writer import KaoWriter
+
         return KaoWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeKao']]:  # type: ignore
-        from skytemple_rust.st_kao import \
-            KaoWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeKao"]]:  # type: ignore
+        from skytemple_rust.st_kao import (
+            KaoWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return KaoWriter
 
     @classmethod
     def get_image_model_cls(cls) -> Type[KaoImageProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_kao import \
-                KaoImage as \
-                KaoImageNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_kao import (
+                KaoImage as KaoImageNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
             return KaoImageNative
         from skytemple_files.graphics.kao._model import KaoImage
+
         return KaoImage
 
     @classmethod

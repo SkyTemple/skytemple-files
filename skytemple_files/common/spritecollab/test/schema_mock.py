@@ -19,16 +19,33 @@ from __future__ import annotations
 import typing
 from typing import Dict, List, Optional, Tuple
 
-from graphql import (GraphQLArgument, GraphQLBoolean, GraphQLEnumType,
-                     GraphQLField, GraphQLInt, GraphQLList, GraphQLNonNull,
-                     GraphQLObjectType, GraphQLScalarType, GraphQLSchema,
-                     GraphQLString, GraphQLUnionType)
+from graphql import (
+    GraphQLArgument,
+    GraphQLBoolean,
+    GraphQLEnumType,
+    GraphQLField,
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull,
+    GraphQLObjectType,
+    GraphQLScalarType,
+    GraphQLSchema,
+    GraphQLString,
+    GraphQLUnionType,
+)
 
 from skytemple_files.common.spritecollab.schema import (
-    PHASE_EXISTS, PHASE_FULL, PHASE_UNKNOWN, Config, Credit, Monster_Metadata,
-    MonsterForm, MonsterFormPortraits_Emotions, MonsterFormSprites_Actions)
-from skytemple_files.common.spritecollab.test.sc_offline_fixtures import \
-    CONFIG_FIX
+    PHASE_EXISTS,
+    PHASE_FULL,
+    PHASE_UNKNOWN,
+    Config,
+    Credit,
+    Monster_Metadata,
+    MonsterForm,
+    MonsterFormPortraits_Emotions,
+    MonsterFormSprites_Actions,
+)
+from skytemple_files.common.spritecollab.test.sc_offline_fixtures import CONFIG_FIX
 
 
 def mock_search_monster(_monster_name: str) -> List[Monster_Metadata]:
@@ -37,16 +54,8 @@ def mock_search_monster(_monster_name: str) -> List[Monster_Metadata]:
 
 def mock_monster(filter: Optional[List[int]]) -> List[Monster_Metadata]:
     index: Dict[int, Monster_Metadata] = {
-        9998: {
-            "id": 9998,
-            "rawId": "9998",
-            "name": "Dummy 9998"
-        },
-        9999: {
-            "id": 9999,
-            "rawId": "9999",
-            "name": "Dummy 9999"
-        },
+        9998: {"id": 9998, "rawId": "9998", "name": "Dummy 9998"},
+        9999: {"id": 9999, "rawId": "9999", "name": "Dummy 9999"},
     }
 
     result = []
@@ -69,8 +78,10 @@ def mock_config() -> Config:
 
 
 @typing.no_type_check
-def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple[int, bool, bool]], MonsterForm]:
-    if source['id'] == 9998:
+def mock_monster____all_forms(
+    source: Monster_Metadata,
+) -> Dict[Tuple[str, Tuple[int, bool, bool]], MonsterForm]:
+    if source["id"] == 9998:
         return {
             ("", (0, False, False)): {
                 "monsterId": 9998,
@@ -91,12 +102,18 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                     "sheetUrl": "test-portrait-sheet:0",
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "2000-12-01T13:14:15.000010+00:00",
-                    "emotions": [{
-                        "emotion": "Normal",
-                        "url": "dummy",
-                    }],
+                    "emotions": [
+                        {
+                            "emotion": "Normal",
+                            "url": "dummy",
+                        }
+                    ],
                     "emotionsFlipped": [],
-                    "previewEmotion": {'emotion': 'previewdummy', 'locked': False, 'url': 'test-portrait:Special3.png'},
+                    "previewEmotion": {
+                        "emotion": "previewdummy",
+                        "locked": False,
+                        "url": "test-portrait:Special3.png",
+                    },
                 },
                 "sprites": {
                     "required": True,
@@ -109,11 +126,11 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                     "zipUrl": "test-sprite-zip:0",
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "2001-03-02T04:12:03.000098+00:00",
-                    "actions": []
-                }
+                    "actions": [],
+                },
             },
         }
-    if source['id'] == 9999:
+    if source["id"] == 9999:
         return {
             ("", (0, True, False)): {
                 "monsterId": 9999,
@@ -133,60 +150,234 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                         "id": "CREDIT1",
                         "name": None,
                         "contact": None,
-                        "discordHandle": None
+                        "discordHandle": None,
                     },
                     "creditSecondary": [
-                        {"id": "CREDIT2", "name": "Credit 2", "contact": "Credit 2 Contact", "discordHandle": None},
-                        {"id": "CREDIT3", "name": None, "contact": None, "discordHandle": "Discord Handle"},
+                        {
+                            "id": "CREDIT2",
+                            "name": "Credit 2",
+                            "contact": "Credit 2 Contact",
+                            "discordHandle": None,
+                        },
+                        {
+                            "id": "CREDIT3",
+                            "name": None,
+                            "contact": None,
+                            "discordHandle": "Discord Handle",
+                        },
                     ],
                     "sheetUrl": "test-portrait-sheet:1",
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "3000-03-01T13:12:15.000010+00:00",
                     "emotions": [
-                        {'emotion': 'Special3', 'locked': False, 'url': 'test-portrait:Special3.png'},
-                        {'emotion': 'Special1', 'locked': False, 'url': 'test-portrait:Special1.png'},
-                        {'emotion': 'Shouting', 'locked': False, 'url': 'test-portrait:Shouting.png'},
-                        {'emotion': 'Stunned', 'locked': False, 'url': 'test-portrait:Stunned.png'},
-                        {'emotion': 'Happy', 'locked': False, 'url': 'test-portrait:Happy.png'},
-                        {'emotion': 'Surprised', 'locked': False, 'url': 'test-portrait:Surprised.png'},
-                        {'emotion': 'Crying', 'locked': False, 'url': 'test-portrait:Crying.png'},
-                        {'emotion': 'Sigh', 'locked': False, 'url': 'test-portrait:Sigh.png'},
-                        {'emotion': 'Teary-Eyed', 'locked': False, 'url': 'test-portrait:Teary-Eyed.png'},
-                        {'emotion': 'Inspired', 'locked': False, 'url': 'test-portrait:Inspired.png'},
-                        {'emotion': 'Angry', 'locked': False, 'url': 'test-portrait:Angry.png'},
-                        {'emotion': 'Special0', 'locked': False, 'url': 'test-portrait:Special0.png'},
-                        {'emotion': 'Normal', 'locked': False, 'url': 'test-portrait:Normal.png'},
-                        {'emotion': 'Joyous', 'locked': False, 'url': 'test-portrait:Joyous.png'},
-                        {'emotion': 'Determined', 'locked': False, 'url': 'test-portrait:Determined.png'},
-                        {'emotion': 'Dizzy', 'locked': False, 'url': 'test-portrait:Dizzy.png'},
-                        {'emotion': 'Special2', 'locked': False, 'url': 'test-portrait:Special2.png'},
-                        {'emotion': 'Sad', 'locked': False, 'url': 'test-portrait:Sad.png'},
-                        {'emotion': 'Pain', 'locked': False, 'url': 'test-portrait:Pain.png'},
-                        {'emotion': 'Worried', 'locked': False, 'url': 'test-portrait:Worried.png'},
+                        {
+                            "emotion": "Special3",
+                            "locked": False,
+                            "url": "test-portrait:Special3.png",
+                        },
+                        {
+                            "emotion": "Special1",
+                            "locked": False,
+                            "url": "test-portrait:Special1.png",
+                        },
+                        {
+                            "emotion": "Shouting",
+                            "locked": False,
+                            "url": "test-portrait:Shouting.png",
+                        },
+                        {
+                            "emotion": "Stunned",
+                            "locked": False,
+                            "url": "test-portrait:Stunned.png",
+                        },
+                        {
+                            "emotion": "Happy",
+                            "locked": False,
+                            "url": "test-portrait:Happy.png",
+                        },
+                        {
+                            "emotion": "Surprised",
+                            "locked": False,
+                            "url": "test-portrait:Surprised.png",
+                        },
+                        {
+                            "emotion": "Crying",
+                            "locked": False,
+                            "url": "test-portrait:Crying.png",
+                        },
+                        {
+                            "emotion": "Sigh",
+                            "locked": False,
+                            "url": "test-portrait:Sigh.png",
+                        },
+                        {
+                            "emotion": "Teary-Eyed",
+                            "locked": False,
+                            "url": "test-portrait:Teary-Eyed.png",
+                        },
+                        {
+                            "emotion": "Inspired",
+                            "locked": False,
+                            "url": "test-portrait:Inspired.png",
+                        },
+                        {
+                            "emotion": "Angry",
+                            "locked": False,
+                            "url": "test-portrait:Angry.png",
+                        },
+                        {
+                            "emotion": "Special0",
+                            "locked": False,
+                            "url": "test-portrait:Special0.png",
+                        },
+                        {
+                            "emotion": "Normal",
+                            "locked": False,
+                            "url": "test-portrait:Normal.png",
+                        },
+                        {
+                            "emotion": "Joyous",
+                            "locked": False,
+                            "url": "test-portrait:Joyous.png",
+                        },
+                        {
+                            "emotion": "Determined",
+                            "locked": False,
+                            "url": "test-portrait:Determined.png",
+                        },
+                        {
+                            "emotion": "Dizzy",
+                            "locked": False,
+                            "url": "test-portrait:Dizzy.png",
+                        },
+                        {
+                            "emotion": "Special2",
+                            "locked": False,
+                            "url": "test-portrait:Special2.png",
+                        },
+                        {
+                            "emotion": "Sad",
+                            "locked": False,
+                            "url": "test-portrait:Sad.png",
+                        },
+                        {
+                            "emotion": "Pain",
+                            "locked": False,
+                            "url": "test-portrait:Pain.png",
+                        },
+                        {
+                            "emotion": "Worried",
+                            "locked": False,
+                            "url": "test-portrait:Worried.png",
+                        },
                     ],
                     "emotionsFlipped": [
-                        {'emotion': 'Special3^', 'locked': False, 'url': 'test-portrait:Special3^.png'},
-                        {'emotion': 'Special1^', 'locked': False, 'url': 'test-portrait:Special1^.png'},
-                        {'emotion': 'Shouting^', 'locked': False, 'url': 'test-portrait:Shouting^.png'},
-                        {'emotion': 'Stunned^', 'locked': False, 'url': 'test-portrait:Stunned^.png'},
-                        {'emotion': 'Happy^', 'locked': False, 'url': 'test-portrait:Happy^.png'},
-                        {'emotion': 'Surprised^', 'locked': False, 'url': 'test-portrait:Surprised^.png'},
-                        {'emotion': 'Crying^', 'locked': False, 'url': 'test-portrait:Crying^.png'},
-                        {'emotion': 'Sigh^', 'locked': False, 'url': 'test-portrait:Sigh^.png'},
-                        {'emotion': 'Teary-Eyed^', 'locked': False, 'url': 'test-portrait:Teary-Eyed^.png'},
-                        {'emotion': 'Inspired^', 'locked': False, 'url': 'test-portrait:Inspired^.png'},
-                        {'emotion': 'Angry^', 'locked': False, 'url': 'test-portrait:Angry^.png'},
-                        {'emotion': 'Special0^', 'locked': False, 'url': 'test-portrait:Special0^.png'},
-                        {'emotion': 'Normal^', 'locked': False, 'url': 'test-portrait:Normal^.png'},
-                        {'emotion': 'Joyous^', 'locked': False, 'url': 'test-portrait:Joyous^.png'},
-                        {'emotion': 'Determined^', 'locked': False, 'url': 'test-portrait:Determined^.png'},
-                        {'emotion': 'Dizzy^', 'locked': False, 'url': 'test-portrait:Dizzy^.png'},
-                        {'emotion': 'Special2^', 'locked': False, 'url': 'test-portrait:Special2^.png'},
-                        {'emotion': 'Sad^', 'locked': False, 'url': 'test-portrait:Sad^.png'},
-                        {'emotion': 'Pain^', 'locked': False, 'url': 'test-portrait:Pain^.png'},
-                        {'emotion': 'Worried^', 'locked': False, 'url': 'test-portrait:Worried^.png'}
+                        {
+                            "emotion": "Special3^",
+                            "locked": False,
+                            "url": "test-portrait:Special3^.png",
+                        },
+                        {
+                            "emotion": "Special1^",
+                            "locked": False,
+                            "url": "test-portrait:Special1^.png",
+                        },
+                        {
+                            "emotion": "Shouting^",
+                            "locked": False,
+                            "url": "test-portrait:Shouting^.png",
+                        },
+                        {
+                            "emotion": "Stunned^",
+                            "locked": False,
+                            "url": "test-portrait:Stunned^.png",
+                        },
+                        {
+                            "emotion": "Happy^",
+                            "locked": False,
+                            "url": "test-portrait:Happy^.png",
+                        },
+                        {
+                            "emotion": "Surprised^",
+                            "locked": False,
+                            "url": "test-portrait:Surprised^.png",
+                        },
+                        {
+                            "emotion": "Crying^",
+                            "locked": False,
+                            "url": "test-portrait:Crying^.png",
+                        },
+                        {
+                            "emotion": "Sigh^",
+                            "locked": False,
+                            "url": "test-portrait:Sigh^.png",
+                        },
+                        {
+                            "emotion": "Teary-Eyed^",
+                            "locked": False,
+                            "url": "test-portrait:Teary-Eyed^.png",
+                        },
+                        {
+                            "emotion": "Inspired^",
+                            "locked": False,
+                            "url": "test-portrait:Inspired^.png",
+                        },
+                        {
+                            "emotion": "Angry^",
+                            "locked": False,
+                            "url": "test-portrait:Angry^.png",
+                        },
+                        {
+                            "emotion": "Special0^",
+                            "locked": False,
+                            "url": "test-portrait:Special0^.png",
+                        },
+                        {
+                            "emotion": "Normal^",
+                            "locked": False,
+                            "url": "test-portrait:Normal^.png",
+                        },
+                        {
+                            "emotion": "Joyous^",
+                            "locked": False,
+                            "url": "test-portrait:Joyous^.png",
+                        },
+                        {
+                            "emotion": "Determined^",
+                            "locked": False,
+                            "url": "test-portrait:Determined^.png",
+                        },
+                        {
+                            "emotion": "Dizzy^",
+                            "locked": False,
+                            "url": "test-portrait:Dizzy^.png",
+                        },
+                        {
+                            "emotion": "Special2^",
+                            "locked": False,
+                            "url": "test-portrait:Special2^.png",
+                        },
+                        {
+                            "emotion": "Sad^",
+                            "locked": False,
+                            "url": "test-portrait:Sad^.png",
+                        },
+                        {
+                            "emotion": "Pain^",
+                            "locked": False,
+                            "url": "test-portrait:Pain^.png",
+                        },
+                        {
+                            "emotion": "Worried^",
+                            "locked": False,
+                            "url": "test-portrait:Worried^.png",
+                        },
                     ],
-                    "previewEmotion": {'emotion': 'previewdummy', 'locked': False, 'url': 'test-portrait:Normal.png'},
+                    "previewEmotion": {
+                        "emotion": "previewdummy",
+                        "locked": False,
+                        "url": "test-portrait:Normal.png",
+                    },
                 },
                 "sprites": {
                     "required": True,
@@ -199,77 +390,89 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                     "zipUrl": "test-sprite-zip:1",
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "2021-03-01T05:11:03.000004+00:00",
-                    "actions": [{
-                        "action": "Charge",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Charge-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Charge-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Charge-Shadow.png",
-                    }, {
-                        "action": "Idle",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Idle-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Idle-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Idle-Shadow.png",
-                    }, {
-                        "action": "Rotate",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Rotate-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Rotate-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Rotate-Shadow.png",
-                    }, {
-                        "action": "Walk",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Walk-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Walk-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Walk-Shadow.png",
-                    }, {
-                        "action": "Double",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Double-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Double-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Double-Shadow.png",
-                    }, {
-                        "action": "Hurt",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Hurt-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Hurt-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Hurt-Shadow.png",
-                    }, {
-                        "action": "Swing",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Swing-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Swing-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Swing-Shadow.png",
-                    }, {
-                        "action": "Hop",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Hop-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Hop-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Hop-Shadow.png",
-                    }, {
-                        "action": "Sleep",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Sleep-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Sleep-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Sleep-Shadow.png",
-                    }, {
-                        "action": "Attack",
-                        "locked": False,
-                        "animUrl": "test-sprite:1:Attack-Anim.png",
-                        "offsetsUrl": "test-sprite:1:Attack-Offsets.png",
-                        "shadowsUrl": "test-sprite:1:Attack-Shadow.png",
-                    }, {
-                        "action": "Pose",
-                        "locked": False,
-                        "copyOf": "Idle",
-                    }, {
-                        "action": "EventSleep",
-                        "locked": False,
-                        "copyOf": "Sleep",
-                    },
-                    ]
-                }
+                    "actions": [
+                        {
+                            "action": "Charge",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Charge-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Charge-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Charge-Shadow.png",
+                        },
+                        {
+                            "action": "Idle",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Idle-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Idle-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Idle-Shadow.png",
+                        },
+                        {
+                            "action": "Rotate",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Rotate-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Rotate-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Rotate-Shadow.png",
+                        },
+                        {
+                            "action": "Walk",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Walk-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Walk-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Walk-Shadow.png",
+                        },
+                        {
+                            "action": "Double",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Double-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Double-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Double-Shadow.png",
+                        },
+                        {
+                            "action": "Hurt",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Hurt-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Hurt-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Hurt-Shadow.png",
+                        },
+                        {
+                            "action": "Swing",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Swing-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Swing-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Swing-Shadow.png",
+                        },
+                        {
+                            "action": "Hop",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Hop-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Hop-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Hop-Shadow.png",
+                        },
+                        {
+                            "action": "Sleep",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Sleep-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Sleep-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Sleep-Shadow.png",
+                        },
+                        {
+                            "action": "Attack",
+                            "locked": False,
+                            "animUrl": "test-sprite:1:Attack-Anim.png",
+                            "offsetsUrl": "test-sprite:1:Attack-Offsets.png",
+                            "shadowsUrl": "test-sprite:1:Attack-Shadow.png",
+                        },
+                        {
+                            "action": "Pose",
+                            "locked": False,
+                            "copyOf": "Idle",
+                        },
+                        {
+                            "action": "EventSleep",
+                            "locked": False,
+                            "copyOf": "Sleep",
+                        },
+                    ],
+                },
             },
             ("9999/9999", (9999, False, True)): {
                 "monsterId": 9999,
@@ -291,9 +494,21 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "1994-05-05T13:12:15.000010+00:00",
                     "emotions": [
-                        {'emotion': 'Special1', 'locked': False, 'url': 'test-portrait:Happy.png'},
-                        {'emotion': 'Happy', 'locked': False, 'url': 'test-portrait:Happy.png'},
-                        {'emotion': 'Angry', 'locked': False, 'url': 'test-portrait:Happy.png'},
+                        {
+                            "emotion": "Special1",
+                            "locked": False,
+                            "url": "test-portrait:Happy.png",
+                        },
+                        {
+                            "emotion": "Happy",
+                            "locked": False,
+                            "url": "test-portrait:Happy.png",
+                        },
+                        {
+                            "emotion": "Angry",
+                            "locked": False,
+                            "url": "test-portrait:Happy.png",
+                        },
                     ],
                     "emotionsFlipped": [],
                     "previewEmotion": None,
@@ -309,24 +524,30 @@ def mock_monster____all_forms(source: Monster_Metadata) -> Dict[Tuple[str, Tuple
                     "zipUrl": "test-sprite-zip:2",
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "2021-03-02T05:11:03.000004+00:00",
-                    "actions": [{
-                        "action": "Idle",
-                        "locked": False,
-                        "animUrl": "test-sprite:2:Idle-Anim.png",
-                        "offsetsUrl": "test-sprite:2:Idle-Offsets.png",
-                        "shadowsUrl": "test-sprite:2:Idle-Shadow.png",
-                    }]
-                }
+                    "actions": [
+                        {
+                            "action": "Idle",
+                            "locked": False,
+                            "animUrl": "test-sprite:2:Idle-Anim.png",
+                            "offsetsUrl": "test-sprite:2:Idle-Offsets.png",
+                            "shadowsUrl": "test-sprite:2:Idle-Shadow.png",
+                        }
+                    ],
+                },
             },
         }
-    raise NotImplementedError(f"This mock is not implemented for monster {source['id']}.")
+    raise NotImplementedError(
+        f"This mock is not implemented for monster {source['id']}."
+    )
 
 
 def mock_monster__forms(source: Monster_Metadata) -> List[MonsterForm]:
     return list(mock_monster____all_forms(source).values())
 
 
-def mock_monster__get(source: Monster_Metadata, form_id: int, shiny: bool, female: bool) -> Optional[MonsterForm]:
+def mock_monster__get(
+    source: Monster_Metadata, form_id: int, shiny: bool, female: bool
+) -> Optional[MonsterForm]:
     all_forms = mock_monster____all_forms(source)
     for (_, key_get), value in all_forms.items():
         if (form_id, shiny, female) == key_get:
@@ -344,16 +565,16 @@ def mock_monster__manual(source: Monster_Metadata, path: str) -> Optional[Monste
 
 def mock_emotion(source: MonsterFormPortraits_Emotions, emotion, flipped):
     if flipped:
-        emotion = emotion + '^'
-    for entry in source['emotions']:
-        if entry['emotion'] == emotion:
+        emotion = emotion + "^"
+    for entry in source["emotions"]:
+        if entry["emotion"] == emotion:
             return entry
     return None
 
 
 def mock_action(source: MonsterFormSprites_Actions, action):
-    for entry in source['actions']:
-        if entry['action'] == action:
+    for entry in source["actions"]:
+        if entry["action"] == action:
             return entry
     return None
 
@@ -409,11 +630,25 @@ config_type = GraphQLObjectType(
         "portraitSize": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "portraitTileX": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "portraitTileY": GraphQLField(GraphQLNonNull(GraphQLInt)),
-        "emotions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))),
-        "actions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))),
-        "completionEmotions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt)))))),
-        "completionActions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt)))))),
-        "actionMap": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(action_id_type))))
+        "emotions": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
+        ),
+        "actions": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
+        ),
+        "completionEmotions": GraphQLField(
+            GraphQLNonNull(
+                GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt))))
+            )
+        ),
+        "completionActions": GraphQLField(
+            GraphQLNonNull(
+                GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt))))
+            )
+        ),
+        "actionMap": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(action_id_type)))
+        ),
     },
 )
 
@@ -491,7 +726,7 @@ phase_type = GraphQLEnumType(
         "FULL": None,
         "UNKNOWN": None,
     },
-    names_as_values=True
+    names_as_values=True,
 )
 
 # """A single portrait for a single emotion."""
@@ -560,7 +795,9 @@ sprite_type = GraphQLObjectType(
 sprite_union_type = GraphQLUnionType(
     "SpriteUnion",
     [sprite_type, copy_of_type],
-    resolve_type=lambda value, _, __: "CopyOf" if "copyOf" in value.keys() else "Sprite",
+    resolve_type=lambda value, _, __: "CopyOf"
+    if "copyOf" in value.keys()
+    else "Sprite",
 )
 
 # """A bounty for a non-standard phase."""
@@ -603,7 +840,9 @@ monster_bounty_type = GraphQLObjectType(
         "incomplete": GraphQLField(GraphQLInt),
         "exists": GraphQLField(GraphQLInt),
         "full": GraphQLField(GraphQLInt),
-        "other": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(other_bounty_type)))),
+        "other": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(other_bounty_type)))
+        ),
     },
 )
 
@@ -655,10 +894,14 @@ monster_form_portraits_type = GraphQLObjectType(
         "phase": GraphQLField(GraphQLNonNull(phase_type)),
         "phaseRaw": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "creditPrimary": GraphQLField(credit_type),
-        "creditSecondary": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))),
+        "creditSecondary": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))
+        ),
         "sheetUrl": GraphQLField(GraphQLNonNull(GraphQLString)),
         "recolorSheetUrl": GraphQLField(GraphQLNonNull(GraphQLString)),
-        "emotions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))),
+        "emotions": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))
+        ),
         "emotion": GraphQLField(
             portrait_type,
             args={
@@ -666,7 +909,9 @@ monster_form_portraits_type = GraphQLObjectType(
             },
             resolve=lambda source, _info, emotion: mock_emotion(source, emotion, False),
         ),
-        "emotionsFlipped": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))),
+        "emotionsFlipped": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))
+        ),
         "emotionFlipped": GraphQLField(
             portrait_type,
             args={
@@ -724,11 +969,15 @@ monster_form_sprites_type = GraphQLObjectType(
         "phase": GraphQLField(GraphQLNonNull(phase_type)),
         "phaseRaw": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "creditPrimary": GraphQLField(credit_type),
-        "creditSecondary": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))),
+        "creditSecondary": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))
+        ),
         "animDataXml": GraphQLField(GraphQLString),
         "zipUrl": GraphQLField(GraphQLString),
         "recolorSheetUrl": GraphQLField(GraphQLString),
-        "actions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(sprite_union_type)))),
+        "actions": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(sprite_union_type)))
+        ),
         "action": GraphQLField(
             sprite_union_type,
             args={
@@ -791,7 +1040,7 @@ monster_form_type = GraphQLObjectType(
         "isFemale": GraphQLField(GraphQLNonNull(GraphQLBoolean)),
         "canon": GraphQLField(GraphQLNonNull(GraphQLBoolean)),
         "portraits": GraphQLField(GraphQLNonNull(monster_form_portraits_type)),
-        "sprites": GraphQLField(GraphQLNonNull(monster_form_sprites_type))
+        "sprites": GraphQLField(GraphQLNonNull(monster_form_sprites_type)),
     },
 )
 
@@ -837,7 +1086,9 @@ monster_type = GraphQLObjectType(
                 "shiny": GraphQLArgument(GraphQLNonNull(GraphQLBoolean)),
                 "female": GraphQLArgument(GraphQLNonNull(GraphQLBoolean)),
             },
-            resolve=lambda source, _info, form_id, shiny, female: mock_monster__get(source, form_id, shiny, female),
+            resolve=lambda source, _info, form_id, shiny, female: mock_monster__get(
+                source, form_id, shiny, female
+            ),
         ),
         "manual": GraphQLField(
             monster_form_type,
@@ -889,7 +1140,9 @@ query_type = GraphQLObjectType(
             args={
                 "monsterName": GraphQLArgument(GraphQLNonNull(GraphQLString)),
             },
-            resolve=lambda _source, _info, monsterName: mock_search_monster(monsterName),
+            resolve=lambda _source, _info, monsterName: mock_search_monster(
+                monsterName
+            ),
         ),
         "monster": GraphQLField(
             GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_type))),
@@ -919,10 +1172,21 @@ query_type = GraphQLObjectType(
 SprieCollabLocalSchema = GraphQLSchema(
     query=query_type,
     types=[
-        action_id_type, config_type, copy_of_type, credit_type,
-        date_time_utc_type, monster_type, monster_bounty_type,
-        monster_form_type, monster_form_portraits_type, monster_form_sprites_type,
-        other_bounty_type, phase_type, portrait_type,
-        sprite_type, sprite_union_type, query_type
+        action_id_type,
+        config_type,
+        copy_of_type,
+        credit_type,
+        date_time_utc_type,
+        monster_type,
+        monster_bounty_type,
+        monster_form_type,
+        monster_form_portraits_type,
+        monster_form_sprites_type,
+        other_bounty_type,
+        phase_type,
+        portrait_type,
+        sprite_type,
+        sprite_union_type,
+        query_type,
     ],
 )

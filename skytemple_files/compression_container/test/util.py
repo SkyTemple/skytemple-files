@@ -30,9 +30,11 @@ def load_dataset() -> Generator[Tuple[str, bytes], None, None]:
 
 
 def dataset_name_func(testcase_func, _, param):
-    return f'{testcase_func.__name__}/{param.args[0]}'
+    return f"{testcase_func.__name__}/{param.args[0]}"
 
 
 def _get_fixture_paths() -> Generator[str, None, None]:
-    for file in glob(os.path.join(os.path.realpath(os.path.dirname(__file__)), 'fixtures', '*.png')):
+    for file in glob(
+        os.path.join(os.path.realpath(os.path.dirname(__file__)), "fixtures", "*.png")
+    ):
         yield file

@@ -44,27 +44,37 @@ class Dbg:
         for pos in range(0, len(data), 2):
             self.mappings.append(read_u16(data, pos))
 
-    def to_pil(
-            self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]
-    ) -> Image.Image:
+    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]) -> Image.Image:
         width_and_height_map = DBG_WIDTH_AND_HEIGHT * DBG_CHUNK_WIDTH
 
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)
-        fimg = Image.new('P', (width_and_height_map, width_and_height_map))
+        fimg = Image.new("P", (width_and_height_map, width_and_height_map))
         fimg.putpalette(chunks.getpalette())  # type: ignore
 
         for i, mt_idx in enumerate(self.mappings):
             x = i % DBG_WIDTH_AND_HEIGHT
             y = math.floor(i / DBG_WIDTH_AND_HEIGHT)
             fimg.paste(
-                chunks.crop((0, mt_idx * DBG_CHUNK_WIDTH, DBG_CHUNK_WIDTH, mt_idx * DBG_CHUNK_WIDTH + DBG_CHUNK_WIDTH)),
-                (x * DBG_CHUNK_WIDTH, y * DBG_CHUNK_WIDTH)
+                chunks.crop(
+                    (
+                        0,
+                        mt_idx * DBG_CHUNK_WIDTH,
+                        DBG_CHUNK_WIDTH,
+                        mt_idx * DBG_CHUNK_WIDTH + DBG_CHUNK_WIDTH,
+                    )
+                ),
+                (x * DBG_CHUNK_WIDTH, y * DBG_CHUNK_WIDTH),
             )
 
         return fimg
 
     def from_pil(
-            self, dpc: Dpc, dpci: Dpci, dpl: Dpl, img: Image.Image, force_import: bool = False
+        self,
+        dpc: Dpc,
+        dpci: Dpci,
+        dpl: Dpl,
+        img: Image.Image,
+        force_import: bool = False,
     ) -> None:
         """
         Import an entire background from an image.
@@ -84,16 +94,35 @@ class Dbg:
         expected_width = DBG_TILING_DIM * DBG_WIDTH_AND_HEIGHT * DPCI_TILE_DIM
         expected_height = DBG_TILING_DIM * DBG_WIDTH_AND_HEIGHT * DPCI_TILE_DIM
         if img.width != expected_width:
-            raise UserValueError(f(_("Can not import map background: Width of image must match the expected width: "
-                                     "{expected_width}px")))
+            raise UserValueError(
+                f(
+                    _(
+                        "Can not import map background: Width of image must match the expected width: "
+                        "{expected_width}px"
+                    )
+                )
+            )
         if img.height != expected_height:
-            raise UserValueError(f(_("Can not import map background: Height of image must match the expected height: "
-                                     "{expected_height}px")))
+            raise UserValueError(
+                f(
+                    _(
+                        "Can not import map background: Height of image must match the expected height: "
+                        "{expected_height}px"
+                    )
+                )
+            )
 
         # Import tiles, tile mappings and chunks mappings
         tiles, all_possible_tile_mappings, palettes = from_pil(
-            img, DPL_PAL_LEN, 16, DPCI_TILE_DIM,
-            img.width, img.height, 3, 3, force_import
+            img,
+            DPL_PAL_LEN,
+            16,
+            DPCI_TILE_DIM,
+            img.width,
+            img.height,
+            3,
+            3,
+            force_import,
         )
         # Remove any extra colors
         palettes = palettes[:DPL_MAX_PAL]
@@ -106,11 +135,19 @@ class Dbg:
         chunk_mappings_counter = 1
         tile_mappings: List[TilemapEntryProtocol] = []
         tiles_in_chunk = DBG_TILING_DIM * DBG_TILING_DIM
-        for chk_fst_tile_idx in range(0, DBG_WIDTH_AND_HEIGHT * DBG_WIDTH_AND_HEIGHT * tiles_in_chunk, tiles_in_chunk):
-            chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]
+        for chk_fst_tile_idx in range(
+            0,
+            DBG_WIDTH_AND_HEIGHT * DBG_WIDTH_AND_HEIGHT * tiles_in_chunk,
+            tiles_in_chunk,
+        ):
+            chunk = all_possible_tile_mappings[
+                chk_fst_tile_idx : chk_fst_tile_idx + tiles_in_chunk
+            ]
             start_of_existing_chunk = search_for_chunk(chunk, tile_mappings)
             if start_of_existing_chunk is not None:
-                chunk_mappings.append(u16(int(start_of_existing_chunk / tiles_in_chunk) + 1))
+                chunk_mappings.append(
+                    u16(int(start_of_existing_chunk / tiles_in_chunk) + 1)
+                )
             else:
                 tile_mappings += chunk
                 chunk_mappings.append(u16(chunk_mappings_counter))

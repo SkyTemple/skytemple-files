@@ -68,9 +68,11 @@ class BpcImageDecompressor:
             self._process()
 
         if self.bytes_written != self.stop_when_size:
-            raise ValueError(f"BPC Image Decompressor: End result length unexpected. "
-                             f"Should be {self.stop_when_size}, is {self.bytes_written}. "
-                             f"Diff: {self.bytes_written - self.stop_when_size}")
+            raise ValueError(
+                f"BPC Image Decompressor: End result length unexpected. "
+                f"Should be {self.stop_when_size}, is {self.bytes_written}. "
+                f"Diff: {self.bytes_written - self.stop_when_size}"
+            )
 
         return self.decompressed_data, self.cursor - initial_cursor
 
@@ -139,7 +141,9 @@ class BpcImageDecompressor:
                 print(f"Writing pattern.")
             # Convert current stored pattern in a 2 byte repeating pattern
             pattern = self.pattern | (self.pattern << 8)
-            for count_of_copy in range(0, number_of_bytes_to_output, 2):  # step is 2 because we are wrt. words
+            for count_of_copy in range(
+                0, number_of_bytes_to_output, 2
+            ):  # step is 2 because we are wrt. words
                 self._write(pattern)
         else:
             # We are copying whatever comes next!
@@ -150,7 +154,9 @@ class BpcImageDecompressor:
                 self._write(pattern)
 
         if number_of_bytes_to_output > 0:
-            count_of_copy += 2  # python for+range does NOT increment at the end of loop!
+            count_of_copy += (
+                2  # python for+range does NOT increment at the end of loop!
+            )
 
         # If the amount copied was even, we setup the copy a leftover word on the next command byte
         if DEBUG:
@@ -209,16 +215,22 @@ class BpcImageDecompressor:
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""
-        self.decompressed_data[self.bytes_written:self.bytes_written+2] = pattern_to_write.to_bytes(2, 'little')
+        self.decompressed_data[
+            self.bytes_written : self.bytes_written + 2
+        ] = pattern_to_write.to_bytes(2, "little")
         self.bytes_written += 2
         pass
 
     def _read(self, bytes=1):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError("BPC Image Decompressor: Reached EOF while reading compressed data.")
+            raise ValueError(
+                "BPC Image Decompressor: Reached EOF while reading compressed data."
+            )
         if DEBUG:
             print("r", end="")
         oc = self.cursor
         self.cursor += bytes
-        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=False, signed=False)
+        return read_dynamic(
+            self.compressed_data, oc, length=bytes, big_endian=False, signed=False
+        )

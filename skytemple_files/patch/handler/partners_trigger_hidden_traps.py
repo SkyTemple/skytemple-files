@@ -21,52 +21,61 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import _, get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-ORIGINAL_BYTESEQ = bytes(b'\x20\x00\xD4\xE5')
+ORIGINAL_BYTESEQ = bytes(b"\x20\x00\xD4\xE5")
 OFFSET_EU = 0x023061C8 - 0x022DCB80
 OFFSET_US = 0x0230579C - 0x022DC240
 
 
 class PartnersTriggerHiddenTraps(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'PartnersTriggerHiddenTraps'
+        return "PartnersTriggerHiddenTraps"
 
     @property
     def description(self) -> str:
-        return _('Recommended for CTC. Without this patch, partners cannot trigger hidden traps - this balances the game, as making your partners dodge traps with manual movement is easy, but this patch is not recommended for mods which use pitfall traps, as they instakill partners which step on them.')
+        return _(
+            "Recommended for CTC. Without this patch, partners cannot trigger hidden traps - this balances the game, as making your partners dodge traps with manual movement is easy, but this patch is not recommended for mods which use pitfall traps, as they instakill partners which step on them."
+        )
 
     @property
     def author(self) -> str:
-        return 'Cipnit'
+        return "Cipnit"
 
     @property
     def version(self) -> str:
-        return '1'
+        return "1"
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

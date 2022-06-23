@@ -30,15 +30,15 @@ except ImportError:
 
 from ndspy.fnt import Folder
 
-SCRIPT_DIR = 'SCRIPT'
-COMMON_DIR = 'COMMON'
-SSE_EXT = '.sse'
-SSB_EXT = '.ssb'
-SSA_EXT = '.ssa'
-SSS_EXT = '.sss'
-LSD_EXT = '.lsd'
-ENTER_SSE = 'enter' + SSE_EXT
-UNIONALL_SSB = 'unionall' + SSB_EXT
+SCRIPT_DIR = "SCRIPT"
+COMMON_DIR = "COMMON"
+SSE_EXT = ".sse"
+SSB_EXT = ".ssb"
+SSA_EXT = ".ssa"
+SSS_EXT = ".sss"
+LSD_EXT = ".lsd"
+ENTER_SSE = "enter" + SSE_EXT
+UNIONALL_SSB = "unionall" + SSB_EXT
 ENTER_SSB_PATTERN = re.compile("^enter\\d{1,2}\\.ssb$")
 
 
@@ -59,57 +59,73 @@ class ScriptFiles(TypedDict):
     maps: Dict[str, MapEntry]
 
 
-def load_script_files(script_folder: Folder, level_list: LevelListBin = None) -> ScriptFiles:
+def load_script_files(
+    script_folder: Folder, level_list: LevelListBin = None
+) -> ScriptFiles:
     """Returns information about the files used by the script engine in an 'introspectable' way."""
     script_files = ScriptFiles(common=[], maps=OrderedDict())
     for map_or_common_name, folder in script_folder.folders:
         if map_or_common_name == COMMON_DIR:
             # Common script directory
             for filename in folder.files:
-                script_files['common'].append(filename)
+                script_files["common"].append(filename)
         else:
             # Map directory
-            map = MapEntry(name=map_or_common_name, enter_sse=None, enter_ssbs=[], subscripts=OrderedDict(), lsd=None, ssas=[])
+            map = MapEntry(
+                name=map_or_common_name,
+                enter_sse=None,
+                enter_ssbs=[],
+                subscripts=OrderedDict(),
+                lsd=None,
+                ssas=[],
+            )
             ssa_stems = []
             ssbs = []
-            script_files['maps'][map_or_common_name] = map
+            script_files["maps"][map_or_common_name] = map
             for filename in folder.files:
                 if filename == ENTER_SSE:
                     # Enter SSE
-                    map['enter_sse'] = filename
+                    map["enter_sse"] = filename
                 elif ENTER_SSB_PATTERN.match(filename):
                     # Enter SSB
-                    map['enter_ssbs'].append(filename)
+                    map["enter_ssbs"].append(filename)
                 elif filename == map_or_common_name.lower() + LSD_EXT:
                     # LSD file
-                    map['lsd'] = filename
+                    map["lsd"] = filename
                 elif filename.endswith(SSS_EXT):
                     # Subscript SSS
-                    map['subscripts'][filename] = []
+                    map["subscripts"][filename] = []
                 elif filename.endswith(SSA_EXT):
                     # Acting SSA file
-                    ssa_stems.append(filename[:-(len(SSA_EXT))])
+                    ssa_stems.append(filename[: -(len(SSA_EXT))])
                 elif filename.endswith(SSB_EXT):
                     # Acting or Subscript SSB:
                     ssbs.append(filename)
             # Process ssbs
             for ssb in ssbs:
-                ssb_stem = ssb[:-(len(SSB_EXT))]
+                ssb_stem = ssb[: -(len(SSB_EXT))]
                 if ssb_stem in ssa_stems:
                     # SSB is for SSA file:
-                    map['ssas'].append((ssb_stem + SSA_EXT, ssb))
-                for subscript_name, list_of_ssbs_for_subscript in map['subscripts'].items():
+                    map["ssas"].append((ssb_stem + SSA_EXT, ssb))
+                for subscript_name, list_of_ssbs_for_subscript in map[
+                    "subscripts"
+                ].items():
                     # SSB is for subscript
-                    if ssb_stem.startswith(subscript_name[:-len(SSS_EXT)]):
+                    if ssb_stem.startswith(subscript_name[: -len(SSS_EXT)]):
                         list_of_ssbs_for_subscript.append(ssb)
                         break
 
     if level_list:
         # Add all empty levels
         for level in level_list.list:
-            if level.name not in script_files['maps']:
-                script_files['maps'][level.name] = MapEntry(
-                    name=level.name, enter_sse=None, enter_ssbs=[], subscripts=OrderedDict(), lsd=None, ssas=[]
+            if level.name not in script_files["maps"]:
+                script_files["maps"][level.name] = MapEntry(
+                    name=level.name,
+                    enter_sse=None,
+                    enter_ssbs=[],
+                    subscripts=OrderedDict(),
+                    lsd=None,
+                    ssas=[],
                 )
 
     return script_files

@@ -40,7 +40,7 @@ class ColvecWriter:
                 j += 1
                 if i % 3 == 2:
                     # Insert the fourth color
-                    write_u8(palette_buffer, u8(0xff), j)
+                    write_u8(palette_buffer, u8(0xFF), j)
                     j += 1
             assert j == len(palette_buffer)
             buffer += palette_buffer

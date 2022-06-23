@@ -37,6 +37,7 @@ class Dpl:
     The model stores the colors as a stream of RGB values:
     [R, G, B, R, G, B...]
     """
+
     def __init__(self, data: bytes):
         self.palettes = []
         assert len(data) / 4 % 1 == 0
@@ -45,7 +46,9 @@ class Dpl:
             pal.append(r)
             pal.append(g)
             pal.append(b)
-            assert x == DPL_FOURTH_COLOR  # just in case it isn't... then we'd have a real alpha channel
+            assert (
+                x == DPL_FOURTH_COLOR
+            )  # just in case it isn't... then we'd have a real alpha channel
             if i % DPL_PAL_LEN == DPL_PAL_LEN - 1:
                 self.palettes.append(pal)
                 pal = []

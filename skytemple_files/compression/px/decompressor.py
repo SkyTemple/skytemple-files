@@ -142,14 +142,18 @@ class PxDecompressor:
         offset = (-0x1000 + (low_nibble << 8)) | self._read_next_byte()
         outcurbyte = len(self.uncompressed_data)
         if offset < -outcurbyte:
-            raise ValueError(f"Sequence to copy out of bound! Expected max. {-self.cursor} but got {offset}. "
-                             f"Either the data to decompress is not valid PX compressed data, or "
-                             f"something happened with our cursor that made us read the wrong bytes..")
+            raise ValueError(
+                f"Sequence to copy out of bound! Expected max. {-self.cursor} but got {offset}. "
+                f"Either the data to decompress is not valid PX compressed data, or "
+                f"something happened with our cursor that made us read the wrong bytes.."
+            )
 
         # Copy data sequence
         copy_pos = outcurbyte + offset
         bytes_to_copy = high_nibble + PX_MIN_MATCH_SEQLEN
         if DEBUG:
             print(f"> Copying {bytes_to_copy} from offset: {offset}")
-        self.uncompressed_data += read_bytes(self.uncompressed_data, copy_pos, bytes_to_copy)
+        self.uncompressed_data += read_bytes(
+            self.uncompressed_data, copy_pos, bytes_to_copy
+        )
         pass

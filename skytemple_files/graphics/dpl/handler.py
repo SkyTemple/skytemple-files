@@ -24,9 +24,9 @@ from skytemple_files.graphics.dpl.model import Dpl
 
 class DplHandler(DataHandler[Dpl]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'Dpl':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "Dpl":
         return Dpl(data)
 
     @classmethod
-    def serialize(cls, data: 'Dpl', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: "Dpl", **kwargs: OptionalKwargs) -> bytes:
         return data.to_bytes()

@@ -24,12 +24,12 @@ from skytemple_files.common.util import *
 
 
 class InterDEntryType(Enum):
-    ALWAYS = 0x00, _('Always')
-    FNSET  = 0x01, _('Flag Not Set')
-    FSET   = 0x02, _('Flag Set')
-    SCNEQ  = 0x03, _('Scenario Equals')
-    SCNBE  = 0x04, _('Scenario Below or Equal')
-    SCNGE  = 0x05, _('Scenario Greater or Equal')
+    ALWAYS = 0x00, _("Always")
+    FNSET = 0x01, _("Flag Not Set")
+    FSET = 0x02, _("Flag Set")
+    SCNEQ = 0x03, _("Scenario Equals")
+    SCNBE = 0x04, _("Scenario Below or Equal")
+    SCNGE = 0x05, _("Scenario Greater or Equal")
 
     def __new__(cls, *args, **kwargs):  # type: ignore
         obj = object.__new__(cls)
@@ -37,9 +37,7 @@ class InterDEntryType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: int, explanation: str
-    ):
+    def __init__(self, _: int, explanation: str):
         self.explanation = explanation
 
 
@@ -80,8 +78,8 @@ class InterD(AutoString):
         for x in range(6, limit, 2):
             cur = read_u16(data, x)
             self.list_dungeons.append([])
-            for y in range(limit+prev*6, limit+cur*6, 6):
-                self.list_dungeons[-1].append(InterDEntry(data[y:y+6]))
+            for y in range(limit + prev * 6, limit + cur * 6, 6):
+                self.list_dungeons[-1].append(InterDEntry(data[y : y + 6]))
             prev = cur
 
     def __eq__(self, other: object) -> bool:

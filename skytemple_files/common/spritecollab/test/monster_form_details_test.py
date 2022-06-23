@@ -21,11 +21,13 @@ from unittest import IsolatedAsyncioTestCase
 from PIL import Image
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptFaceName
-from skytemple_files.common.spritecollab.client import (MonsterFormDetails,
-                                                        SpriteUrls)
+from skytemple_files.common.spritecollab.client import MonsterFormDetails, SpriteUrls
 from skytemple_files.common.spritecollab.schema import PHASE_UNKNOWN
 from skytemple_files.common.spritecollab.test.requests_mock import (
-    FIX_TEST_FILES, FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock)
+    FIX_TEST_FILES,
+    FIX_TEST_FILES_WITH_NONE,
+    AioRequestAdapterMock,
+)
 
 
 class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
@@ -38,26 +40,38 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
         ]
 
         self.fixtures_actions = [
-            ("Idle", {
-                "anim": FIX_TEST_FILES_WITH_NONE[0],
-                "offsets": FIX_TEST_FILES_WITH_NONE[1],
-                "shadows": FIX_TEST_FILES_WITH_NONE[2],
-            }),
-            ("Happy", {
-                "anim": FIX_TEST_FILES_WITH_NONE[1],
-                "offsets": FIX_TEST_FILES_WITH_NONE[1],
-                "shadows": FIX_TEST_FILES_WITH_NONE[1],
-            }),
-            ("Foobar", {
-                "anim": FIX_TEST_FILES_WITH_NONE[1],
-                "offsets": FIX_TEST_FILES_WITH_NONE[2],
-                "shadows": FIX_TEST_FILES_WITH_NONE[0],
-            }),
-            ("Crying", {
-                "anim": FIX_TEST_FILES_WITH_NONE[-1],    # None, None
-                "offsets": FIX_TEST_FILES_WITH_NONE[-1], # None, None
-                "shadows": FIX_TEST_FILES_WITH_NONE[-1], # None, None
-            }),
+            (
+                "Idle",
+                {
+                    "anim": FIX_TEST_FILES_WITH_NONE[0],
+                    "offsets": FIX_TEST_FILES_WITH_NONE[1],
+                    "shadows": FIX_TEST_FILES_WITH_NONE[2],
+                },
+            ),
+            (
+                "Happy",
+                {
+                    "anim": FIX_TEST_FILES_WITH_NONE[1],
+                    "offsets": FIX_TEST_FILES_WITH_NONE[1],
+                    "shadows": FIX_TEST_FILES_WITH_NONE[1],
+                },
+            ),
+            (
+                "Foobar",
+                {
+                    "anim": FIX_TEST_FILES_WITH_NONE[1],
+                    "offsets": FIX_TEST_FILES_WITH_NONE[2],
+                    "shadows": FIX_TEST_FILES_WITH_NONE[0],
+                },
+            ),
+            (
+                "Crying",
+                {
+                    "anim": FIX_TEST_FILES_WITH_NONE[-1],  # None, None
+                    "offsets": FIX_TEST_FILES_WITH_NONE[-1],  # None, None
+                    "shadows": FIX_TEST_FILES_WITH_NONE[-1],  # None, None
+                },
+            ),
         ]
 
         self.obj = MonsterFormDetails(
@@ -105,18 +119,12 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
     async def test_fetch_portrait(self):
         for (emotion, (_, fpath)) in self.fixtures_emotions:
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_portrait(emotion)
-                )
+                self.assertEqual(None, await self.obj.fetch_portrait(emotion))
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_portrait(emotion)
-                )
+                self.assertEqual(data, await self.obj.fetch_portrait(emotion))
 
     async def test_fetch_portrait_via_face_name(self):
         emotion_map = {
@@ -140,7 +148,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
             "Stunned": "Stunned",
             "Special2": "Special2",
             "Special3": "Special3",
-            "Foo": "Foo"
+            "Foo": "Foo",
         }
         fixtures_emotions = [
             ("Normal", FIX_TEST_FILES_WITH_NONE[0]),
@@ -176,102 +184,70 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
             face_name = Pmd2ScriptFaceName(-1, renamed_emotion)
             if fpath is None:
                 self.assertEqual(
-                    None,
-                    await self.obj.fetch_portrait_via_face_name(face_name)
+                    None, await self.obj.fetch_portrait_via_face_name(face_name)
                 )
 
             else:
                 data = Image.open(fpath)
 
                 self.assertEqual(
-                    data,
-                    await self.obj.fetch_portrait_via_face_name(face_name)
+                    data, await self.obj.fetch_portrait_via_face_name(face_name)
                 )
 
     async def test_fetch_sprite_anim(self):
         for (action, fpaths) in self.fixtures_actions:
             fpath = fpaths["anim"][1]
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_sprite_anim(action)
-                )
+                self.assertEqual(None, await self.obj.fetch_sprite_anim(action))
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_sprite_anim(action)
-                )
+                self.assertEqual(data, await self.obj.fetch_sprite_anim(action))
 
     async def test_fetch_sprite_shadows(self):
         for (action, fpaths) in self.fixtures_actions:
             fpath = fpaths["shadows"][1]
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_sprite_shadows(action)
-                )
+                self.assertEqual(None, await self.obj.fetch_sprite_shadows(action))
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_sprite_shadows(action)
-                )
+                self.assertEqual(data, await self.obj.fetch_sprite_shadows(action))
 
     async def test_fetch_sprite_offsets(self):
         for (action, fpaths) in self.fixtures_actions:
             fpath = fpaths["offsets"][1]
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_sprite_offsets(action)
-                )
+                self.assertEqual(None, await self.obj.fetch_sprite_offsets(action))
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_sprite_offsets(action)
-                )
+                self.assertEqual(data, await self.obj.fetch_sprite_offsets(action))
 
     async def test_fetch_portrait_sheet(self):
         for (url, fpath) in FIX_TEST_FILES:
             self.obj.portrait_sheet = url
 
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_portrait_sheet()
-                )
+                self.assertEqual(None, await self.obj.fetch_portrait_sheet())
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_portrait_sheet()
-                )
+                self.assertEqual(data, await self.obj.fetch_portrait_sheet())
 
     async def test_fetch_sprite_zip(self):
         for (url, fpath) in FIX_TEST_FILES_WITH_NONE:
             self.obj.sprite_zip = url
 
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_sprite_zip()
-                )
+                self.assertEqual(None, await self.obj.fetch_sprite_zip())
 
             else:
-                with open(fpath, 'rb') as f:
+                with open(fpath, "rb") as f:
                     data = f.read()
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_sprite_zip()
-                )
+                self.assertEqual(data, await self.obj.fetch_sprite_zip())

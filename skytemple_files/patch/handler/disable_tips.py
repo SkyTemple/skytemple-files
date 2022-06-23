@@ -21,53 +21,62 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-ORIGINAL_BYTESEQ = bytes(b'8@-\xe9')
+ORIGINAL_BYTESEQ = bytes(b"8@-\xe9")
 OFFSET_EU = 0x70F70
 OFFSET_US = 0x70CB0
 
 
 class DisableTipsPatch(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'DisableTips'
+        return "DisableTips"
 
     @property
     def description(self) -> str:
-        return _("Disables the tip textboxes shown in dungeons at the beginning of the game.")
+        return _(
+            "Disables the tip textboxes shown in dungeons at the beginning of the game."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

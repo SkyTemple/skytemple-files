@@ -23,13 +23,19 @@ from range_typed_integers import u32_checked
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
-from skytemple_files.common.util import (read_i16, read_u16, read_u32,
-                                         read_var_length_string, write_i16,
-                                         write_u16, write_u32)
+from skytemple_files.common.util import (
+    read_i16,
+    read_u16,
+    read_u32,
+    read_var_length_string,
+    write_i16,
+    write_u16,
+    write_u32,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 LEN_LEVEL_ENTRY = 12
-PADDING_END = b'\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa'
+PADDING_END = b"\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa"
 
 
 class LevelListBin(Sir0Serializable):
@@ -44,16 +50,21 @@ class LevelListBin(Sir0Serializable):
         # number_entries = read_uintle(data, header_start + 4, 4)
         for i in range(0, len(data) - header_start):
             start = header_start + (i * LEN_LEVEL_ENTRY)
-            if data[start:start + 12] == b'\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa':
+            if (
+                data[start : start + 12]
+                == b"\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa"
+            ):
                 break
-            self.list.append(Pmd2ScriptLevel(
-                id=i,
-                mapty=read_u16(data, start + 0),
-                nameid=read_u16(data, start + 2),
-                mapid=read_u16(data, start + 4),
-                weather=read_i16(data, start + 6),
-                name=self._read_string(data, read_u32(data, start + 8))
-            ))
+            self.list.append(
+                Pmd2ScriptLevel(
+                    id=i,
+                    mapty=read_u16(data, start + 0),
+                    nameid=read_u16(data, start + 2),
+                    mapid=read_u16(data, start + 4),
+                    weather=read_i16(data, start + 6),
+                    name=self._read_string(data, read_u32(data, start + 8)),
+                )
+            )
 
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
@@ -66,7 +77,7 @@ class LevelListBin(Sir0Serializable):
         pointer_offsets = []
         for entry in self.list:
             pointer_offsets.append(u32_checked(len(out_data)))
-            out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b'\0'
+            out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b"\0"
 
         # Padding
         self._pad(out_data)
@@ -96,8 +107,12 @@ class LevelListBin(Sir0Serializable):
         return out_data, sir0_pointer_offsets, pointer_data_block
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
-                    static_data: Optional[Pmd2Data] = None) -> 'LevelListBin':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "LevelListBin":
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

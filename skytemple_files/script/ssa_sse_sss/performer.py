@@ -30,7 +30,15 @@ class SsaPerformer(AutoString, CheckedIntWrites):
     unk10: i16
     unk12: i16
 
-    def __init__(self, type: u16, hitbox_w: i16, hitbox_h: i16, pos: SsaPosition, unk10: i16, unk12: i16):
+    def __init__(
+        self,
+        type: u16,
+        hitbox_w: i16,
+        hitbox_h: i16,
+        pos: SsaPosition,
+        unk10: i16,
+        unk12: i16,
+    ):
         # TODO: This is an enum: An enum value from 0 to 5 that dictates what entity will be picked to be this performer.
         self.type: int = type
         self.hitbox_w = hitbox_w

@@ -22,8 +22,7 @@ from typing import Optional
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.container.sir0.sir0_util import \
-    encode_sir0_pointer_offsets
+from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 from skytemple_files.data.waza_p.model import WazaP
 
 
@@ -57,7 +56,9 @@ class WazaPWriter:
             c = encode_sir0_pointer_offsets(buff, learnset.egg_moves, False)
             data += buff[:c]
 
-            learnset_pointers.append((u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg)))
+            learnset_pointers.append(
+                (u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg))
+            )
         # Padding
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))

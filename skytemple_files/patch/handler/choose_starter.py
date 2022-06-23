@@ -22,11 +22,13 @@ from ndspy.code import loadOverlayTable, saveOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _, get_locales
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_JP,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_JP,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.patch.category import PatchCategory
@@ -54,23 +56,24 @@ _("Then, who would you like to be?")  # TRANSLATORS: Question in personality tes
 
 
 class ChooseStarterPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ChooseStarter'
+        return "ChooseStarter"
 
     @property
     def description(self) -> str:
-        return _("""Adds an extra menu during the personality test to choose the starter.
-Uses the supposedly unused string 2613 in the strings file. """)
+        return _(
+            """Adds an extra menu during the personality test to choose the starter.
+Uses the supposedly unused string 2613 in the strings file. """
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -79,20 +82,31 @@ Uses the supposedly unused string 2613 in the strings file. """)
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(
-                    rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_EU
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_JP:
-                return read_u32(
-                    rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_JP
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 string_id = STRING_ID_US
@@ -106,10 +120,12 @@ Uses the supposedly unused string 2613 in the strings file. """)
 
         # Change dialogue
         for lang in config.string_index_data.languages:
-            filename = 'MESSAGE/' + lang.filename
+            filename = "MESSAGE/" + lang.filename
             bin_before = rom.getFileByName(filename)
             strings = StrHandler.deserialize(bin_before)
-            strings.strings[string_id - 1] = get_locales().translate(MESSAGE, lang.locale.replace('-', '_'))
+            strings.strings[string_id - 1] = get_locales().translate(
+                MESSAGE, lang.locale.replace("-", "_")
+            )
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
 
@@ -124,5 +140,7 @@ Uses the supposedly unused string 2613 in the strings file. """)
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

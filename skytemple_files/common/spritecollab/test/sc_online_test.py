@@ -24,8 +24,11 @@ from unittest import IsolatedAsyncioTestCase, skipIf
 from gql.dsl import DSLQuery
 
 from skytemple_files.common.spritecollab.client import (
-    MonsterFormDetails, MonsterFormInfo, MonsterFormInfoWithPortrait,
-    SpriteCollabClient)
+    MonsterFormDetails,
+    MonsterFormInfo,
+    MonsterFormInfoWithPortrait,
+    SpriteCollabClient,
+)
 from skytemple_files.common.spritecollab.schema import Config
 
 
@@ -48,7 +51,7 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
             t = args[1]
             for vv in v.values():
                 self.check_type(vv, t)
-        elif hasattr(ftype, '__required_keys__'):
+        elif hasattr(ftype, "__required_keys__"):
             self.assertIsInstance(v, dict)
             type_hints = get_type_hints(ftype)
             for field, ftype in type_hints.items():
@@ -84,12 +87,7 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
 
     async def test_monster_form_details(self):
         async with self.client as session:
-            result = await session.monster_form_details(
-                [
-                    (0, ""),
-                    (0, "0002/0001")
-                ]
-            )
+            result = await session.monster_form_details([(0, ""), (0, "0002/0001")])
             self.assertIsInstance(result, list)
             self.assertEqual(2, len(result))
             self.assertEqual(0, result[0].monster_id)
@@ -101,9 +99,7 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
 
     async def test_execute_query(self):
         async with self.client as session:
-            result = await session.execute_query(DSLQuery(
-                session.ds.Query.apiVersion
-            ))
+            result = await session.execute_query(DSLQuery(session.ds.Query.apiVersion))
             self.assertIsInstance(result, dict)
-            self.assertIn('apiVersion', result)
-            self.assertIsInstance(result['apiVersion'], str)
+            self.assertIn("apiVersion", result)
+            self.assertIsInstance(result["apiVersion"], str)

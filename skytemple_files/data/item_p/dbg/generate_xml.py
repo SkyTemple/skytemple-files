@@ -23,13 +23,12 @@ from typing import Dict, List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.dungeon_data.mappa_bin._deprecated import \
-    MappaItemCategory
+from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-item_p_bin = rom.getFileByName('BALANCE/item_p.bin')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
+item_p_bin = rom.getFileByName("BALANCE/item_p.bin")
 item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
 cats: Dict[MappaItemCategory, List[int]] = {x: [] for x in MappaItemCategory}
@@ -40,7 +39,7 @@ for idx, entry in enumerate(item_p.item_list):
 for cat, items in cats.items():
     print(f'<Category id="{cat.value}" name="{cat.name_localized}">')
     for item in items:
-        print(f'  <Item>{item}</Item>')
-    print(f'</Category>')
+        print(f"  <Item>{item}</Item>")
+    print(f"</Category>")
 
 assert MappaItemCategory.UNKC == MappaItemCategory.UNKC

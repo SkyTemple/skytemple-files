@@ -30,12 +30,12 @@ class DataSTWriter:
 
     def write(self) -> bytes:
         nb_items = len(self.model.struct_ids)
-        
-        header = bytearray(4+2*nb_items)
-        write_u32(header, u32_checked(4+2*nb_items), 0)
-        
+
+        header = bytearray(4 + 2 * nb_items)
+        write_u32(header, u32_checked(4 + 2 * nb_items), 0)
+
         for i, x in enumerate(self.model.struct_ids):
-            write_i16(header, i16_checked(x), 4+2*i)
-        
+            write_i16(header, i16_checked(x), 4 + 2 * i)
+
         file_data = header + self.model.struct_data
         return bytes(file_data)

@@ -38,14 +38,16 @@ class ActorListBin(Sir0Serializable):
         number_entries = read_u32(data, header_start + 4)
         for i in range(0, number_entries):
             start = pointer_start + (i * LEN_ACTOR_ENTRY)
-            self.list.append(Pmd2ScriptEntity(
-                id=u16_checked(i),
-                type=read_u16(data, start + 0),
-                entid=read_u16(data, start + 2),
-                name=self._read_string(data, read_u32(data, start + 4)),
-                unk3=read_u16(data, start + 8),
-                unk4=read_u16(data, start + 10)
-            ))
+            self.list.append(
+                Pmd2ScriptEntity(
+                    id=u16_checked(i),
+                    type=read_u16(data, start + 0),
+                    entid=read_u16(data, start + 2),
+                    name=self._read_string(data, read_u32(data, start + 4)),
+                    unk3=read_u16(data, start + 8),
+                    unk4=read_u16(data, start + 10),
+                )
+            )
 
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
@@ -58,7 +60,7 @@ class ActorListBin(Sir0Serializable):
         pointer_offsets: List[u32] = []
         for entry in self.list:
             pointer_offsets.append(u32_checked(len(out_data)))
-            out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b'\0'
+            out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b"\0"
 
         # Padding
         self._pad(out_data)
@@ -82,13 +84,18 @@ class ActorListBin(Sir0Serializable):
         # 4. Write sub-header
         data_pointer = len(out_data)
         sir0_pointer_offsets.append(len(out_data))
-        out_data += pointer_data_block.to_bytes(4, byteorder='little', signed=False)
-        out_data += len(self.list).to_bytes(4, byteorder='little', signed=False)
+        out_data += pointer_data_block.to_bytes(4, byteorder="little", signed=False)
+        out_data += len(self.list).to_bytes(4, byteorder="little", signed=False)
 
         return out_data, sir0_pointer_offsets, data_pointer
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'ActorListBin':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "ActorListBin":
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

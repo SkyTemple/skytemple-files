@@ -28,16 +28,21 @@ class FixedBinHandler(DataHandler[FixedBin]):
     Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
-    @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs) -> 'FixedBin':  # type: ignore
-        from skytemple_files.common.types.file_types import FileType
-        return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FixedBin, static_data)
 
     @classmethod
-    def serialize(cls, data: 'FixedBin', **kwargs: OptionalKwargs) -> bytes:
+    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs) -> "FixedBin":  # type: ignore
         from skytemple_files.common.types.file_types import FileType
+
+        return FileType.SIR0.unwrap_obj(
+            FileType.SIR0.deserialize(data), FixedBin, static_data
+        )
+
+    @classmethod
+    def serialize(cls, data: "FixedBin", **kwargs: OptionalKwargs) -> bytes:
+        from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: 'FixedBin', **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: "FixedBin", **kwargs: OptionalKwargs) -> bytes:
         return FixedBinWriter(data).write()[0]

@@ -30,7 +30,11 @@ class ValList(AutoString):
     def get_list(self, value_size=2):
         lst = []
         for x in range(0, len(self.data), value_size):
-            lst.append(read_dynamic(self.data, x, length=value_size, signed=False, big_endian=False))
+            lst.append(
+                read_dynamic(
+                    self.data, x, length=value_size, signed=False, big_endian=False
+                )
+            )
         return lst
 
     def set_list(self, lst, value_size: Union[Literal[1], Literal[2], Literal[4]] = 2):
@@ -45,7 +49,7 @@ class ValList(AutoString):
             for i, x in enumerate(lst):
                 write_u32(self.data, x, i * value_size)
         else:
-            raise TypeError('Invalid value size')
+            raise TypeError("Invalid value size")
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ValList):

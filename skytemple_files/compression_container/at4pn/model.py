@@ -39,9 +39,7 @@ class At4pn(CommonAt):
 
     def to_bytes(self) -> bytes:
         """Converts the container back into bytes representation"""
-        return b'AT4PN'\
-               + len(self.data).to_bytes(2, 'little') \
-               + self.data
+        return b"AT4PN" + len(self.data).to_bytes(2, "little") + self.data
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
@@ -52,5 +50,5 @@ class At4pn(CommonAt):
         return self.get()
 
     @classmethod
-    def compress(cls, data: bytes) -> 'At4pn':
+    def compress(cls, data: bytes) -> "At4pn":
         return At4pn(data, new=True)

@@ -19,8 +19,9 @@ from __future__ import annotations
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.compression_container.common_at.handler import \
-    COMMON_AT_MUST_COMPRESS_4
+from skytemple_files.compression_container.common_at.handler import (
+    COMMON_AT_MUST_COMPRESS_4,
+)
 from skytemple_files.graphics.bgp.model import Bgp
 from skytemple_files.graphics.bgp.writer import BgpWriter
 
@@ -29,14 +30,15 @@ class BgpHandler(DataHandler[Bgp]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Bgp:
         from skytemple_files.common.types.file_types import FileType
+
         return Bgp(FileType.COMMON_AT.deserialize(data).decompress())
 
     @classmethod
     def serialize(cls, data: Bgp, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.COMMON_AT.serialize(
             FileType.COMMON_AT.compress(
-                BgpWriter(data).write(),
-                COMMON_AT_MUST_COMPRESS_4
+                BgpWriter(data).write(), COMMON_AT_MUST_COMPRESS_4
             )
         )

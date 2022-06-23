@@ -33,21 +33,25 @@ class GenericNrlCompressionContainer(CommonAt):
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
-        data, len_read = FileType.GENERIC_NRL.decompress(self.compressed_data, self.length_decompressed)
+        data, len_read = FileType.GENERIC_NRL.decompress(
+            self.compressed_data, self.length_decompressed
+        )
         assert len_read == len(self.compressed_data)
         return data
 
     def to_bytes(self) -> bytes:
-        return b'GENNRL'\
-               + self.length_decompressed.to_bytes(2, 'little') \
-               + self.compressed_data  # pylint: disable=no-member
+        return (
+            b"GENNRL"
+            + self.length_decompressed.to_bytes(2, "little")
+            + self.compressed_data
+        )  # pylint: disable=no-member
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         return len(data)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'GenericNrlCompressionContainer':
+    def compress(cls, data: bytes) -> "GenericNrlCompressionContainer":
         from skytemple_files.common.types.file_types import FileType
 
         new_container = cls()

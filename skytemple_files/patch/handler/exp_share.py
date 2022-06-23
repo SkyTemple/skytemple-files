@@ -18,15 +18,16 @@ from __future__ import annotations
 
 from typing import Callable
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.common.util import _
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 PATCH_CODE_START_US = 0x97DDC
 PATCH_CODE_END_US = 0x97EB8
@@ -40,27 +41,28 @@ PATCH_CHECK_INSTR_APPLIED_EU = 0xE0410000
 
 
 class ExpSharePatchHandler(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'AddExperienceShare'
+        return "AddExperienceShare"
 
     @property
     def description(self) -> str:
-        return _('Implements shared experience points between all members (GtI style). \n'
-                 'This is disabled during Special Episodes and dungeons with level 1 or no exp. restrictions. \n'
-                 'Needs the ExtractDungeonData patch to be applied to free some space used by this.')
+        return _(
+            "Implements shared experience points between all members (GtI style). \n"
+            "This is disabled during Special Episodes and dungeons with level 1 or no exp. restrictions. \n"
+            "Needs the ExtractDungeonData patch to be applied to free some space used by this."
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.2'
+        return "0.0.2"
 
     def depends_on(self) -> List[str]:
-        return ['ExtractDungeonData']
+        return ["ExtractDungeonData"]
 
     @property
     def category(self) -> PatchCategory:
@@ -69,16 +71,26 @@ class ExpSharePatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
+                    != PATCH_CHECK_INSTR_APPLIED_US
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED_EU
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

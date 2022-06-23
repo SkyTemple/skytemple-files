@@ -31,8 +31,12 @@ class MdEvoWriter:
 
     def write(self) -> bytes:
         file_data = bytearray(4)
-        write_u32(file_data, u32_checked(len(self.model.evo_entries)*MEVO_ENTRY_LENGTH+4), 0)
-        
+        write_u32(
+            file_data,
+            u32_checked(len(self.model.evo_entries) * MEVO_ENTRY_LENGTH + 4),
+            0,
+        )
+
         for x in self.model.evo_entries:
             file_data += x.to_bytes()
         for y in self.model.evo_stats:

@@ -27,6 +27,7 @@ INVALID_TRIGGER = 99999
 
 class SsaEvent(AutoString):
     """NOTE: This is called Trigger in SkyTemple. Event is the historic name from reverse engineering."""
+
     trigger_width: u16
     trigger_height: u16
     trigger_pointer: int
@@ -34,7 +35,15 @@ class SsaEvent(AutoString):
     pos: SsaPosition
     unkE: u16
 
-    def __init__(self, trigger_width: u16, trigger_height: u16, trigger_pointer: int, trigger_table_start: u16, pos: SsaPosition, unkE: u16):
+    def __init__(
+        self,
+        trigger_width: u16,
+        trigger_height: u16,
+        trigger_pointer: int,
+        trigger_table_start: u16,
+        pos: SsaPosition,
+        unkE: u16,
+    ):
         self.trigger_width = trigger_width
         self.trigger_height = trigger_height
         # If the table start is 0, switch to "set id mode"
@@ -42,7 +51,9 @@ class SsaEvent(AutoString):
             self.trigger_id = trigger_pointer
         else:
             try:
-                self.trigger_id = (trigger_pointer - trigger_table_start) // TRIGGER_ENTRY_LEN
+                self.trigger_id = (
+                    trigger_pointer - trigger_table_start
+                ) // TRIGGER_ENTRY_LEN
             except TypeError:
                 # If this fails, this event has somehow no trigger assigned.
                 self.trigger_id = INVALID_TRIGGER

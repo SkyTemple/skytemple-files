@@ -30,36 +30,37 @@ class AbstractFontEntry(ABC, AutoString):
     @classmethod
     def get_class_properties(cls) -> List[str]:
         """Returns a list of the properties of this class"""
+
     @abstractmethod
     def get_properties(self) -> Dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
+
     @abstractmethod
     def set_properties(self, properties: Dict[str, int]) -> None:
         """Sets a list of the properties of the entry"""
 
 
 class AbstractFont(ABC, AutoString):
-    
     @abstractmethod
     def get_entry_image_size(self) -> int:
         """Gets the size of image entries of this table"""
-    
+
     @abstractmethod
     def get_entry_properties(self) -> List[str]:
         """Gets the properties of entries of this table"""
-    
+
     @abstractmethod
     def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
         """Gets all entries of a specific table"""
-        
+
     @abstractmethod
     def delete_entry(self, entry: AbstractFontEntry) -> None:
         """Deletes the specified entry"""
-        
+
     @abstractmethod
     def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
         """Create an entry for a table"""
-    
+
     @abstractmethod
     def to_pil(self) -> Dict[int, Image.Image]:
         """Returns all tables as a dictionnary of images"""
@@ -67,7 +68,7 @@ class AbstractFont(ABC, AutoString):
     @abstractmethod
     def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
         """Exports all entries as xml with tables as a dictionnary of images"""
-    
+
     @abstractmethod
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]) -> None:
         """Imports all entries font xml with tables as a dictionnary of images"""

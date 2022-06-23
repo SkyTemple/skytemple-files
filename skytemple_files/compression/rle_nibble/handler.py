@@ -18,10 +18,8 @@
 
 from __future__ import annotations
 
-from skytemple_files.compression.rle_nibble.compressor import \
-    RleNibbleCompressor
-from skytemple_files.compression.rle_nibble.decompressor import \
-    RleNibbleDecompressor
+from skytemple_files.compression.rle_nibble.compressor import RleNibbleCompressor
+from skytemple_files.compression.rle_nibble.decompressor import RleNibbleDecompressor
 
 
 class RleNibbleHandler:
@@ -31,6 +29,7 @@ class RleNibbleHandler:
     Does not follow default DataHandler pattern,
     is more complex as it also needs the decompressed size.
     """
+
     @classmethod
     def decompress(cls, compressed_data: bytes, decompressed_size: int) -> bytes:
         """Decompresses data stored as RLE."""

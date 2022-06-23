@@ -29,7 +29,7 @@ class TblTalkWriter:
         self.model = model
 
     def write(self) -> bytes:
-        data = bytearray(len(self.model.groups)*TBL_TALK_PERSONALITY_LEN*2+2)
+        data = bytearray(len(self.model.groups) * TBL_TALK_PERSONALITY_LEN * 2 + 2)
         last_ptr = u16_checked(len(data))
         write_u16(data, last_ptr, 0)
         for g in range(len(self.model.groups)):
@@ -39,7 +39,9 @@ class TblTalkWriter:
                     write_u16(buffer, t, 0)
                     data += buffer
                     last_ptr += 2  # type: ignore
-                write_u16(data, last_ptr, 2+(i+g*TBL_TALK_PERSONALITY_LEN)*2)
+                write_u16(data, last_ptr, 2 + (i + g * TBL_TALK_PERSONALITY_LEN) * 2)
 
-        data += bytes(self.model.monster_personalities)+bytes(self.model.special_personalities)
+        data += bytes(self.model.monster_personalities) + bytes(
+            self.model.special_personalities
+        )
         return data

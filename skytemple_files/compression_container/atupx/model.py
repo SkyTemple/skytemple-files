@@ -26,7 +26,7 @@ class Atupx(CommonAt):
     length_compressed: u16
     length_decompressed: u32
 
-    def __init__(self, data: bytes=None):
+    def __init__(self, data: bytes = None):
         """
         Create a ATUPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
@@ -34,29 +34,34 @@ class Atupx(CommonAt):
         if data:
             self.length_compressed = self.cont_size(data)
             self.length_decompressed = read_u32(data, 7)
-            self.compressed_data = data[0xb:]
+            self.compressed_data = data[0xB:]
 
     def decompress(self) -> bytes:
         """Returns the uncompressed data stored in the container"""
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.CUSTOM_999.decompress(self.compressed_data[:self.length_compressed - 0xb], self.length_decompressed)
+        data = FileType.CUSTOM_999.decompress(
+            self.compressed_data[: self.length_compressed - 0xB],
+            self.length_decompressed,
+        )
         return data
 
     # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
-        return b'ATUPX'\
-               + self.length_compressed.to_bytes(2, 'little') \
-               + self.length_decompressed.to_bytes(4, 'little') \
-               + self.compressed_data
+        return (
+            b"ATUPX"
+            + self.length_compressed.to_bytes(2, "little")
+            + self.length_decompressed.to_bytes(4, "little")
+            + self.compressed_data
+        )
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         return read_u16(data, byte_offset + 5)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'Atupx':
+    def compress(cls, data: bytes) -> "Atupx":
         """Create a new ATUPX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 
@@ -65,5 +70,5 @@ class Atupx(CommonAt):
 
         new_container.compressed_data = compressed_data
         new_container.length_decompressed = u32_checked(len(data))
-        new_container.length_compressed = u16_checked(len(compressed_data) + 0xb)
+        new_container.length_compressed = u16_checked(len(compressed_data) + 0xB)
         return new_container

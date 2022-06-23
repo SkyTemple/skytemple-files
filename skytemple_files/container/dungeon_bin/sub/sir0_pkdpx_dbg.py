@@ -29,11 +29,15 @@ class DbinSir0PkdpxDbgHandler(DataHandler[Dbg]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dbg:
         from skytemple_files.common.types.file_types import FileType
+
         pkdpx = FileType.DBIN_SIR0_PKDPX.deserialize(data)
         return FileType.DBG.deserialize(pkdpx.decompress())
 
     @classmethod
     def serialize(cls, data: Dbg, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         serialized = FileType.DBG.serialize(data)
-        return FileType.DBIN_SIR0_PKDPX.serialize(FileType.DBIN_SIR0_PKDPX.compress(serialized))
+        return FileType.DBIN_SIR0_PKDPX.serialize(
+            FileType.DBIN_SIR0_PKDPX.compress(serialized)
+        )

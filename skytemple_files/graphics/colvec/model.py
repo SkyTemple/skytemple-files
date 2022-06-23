@@ -32,43 +32,51 @@ class Colvec(Sir0Serializable, AutoString):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.colormaps: List[List[int]] = []
-        for i in range(len(data)//COLVEC_DATA_LEN):
+        for i in range(len(data) // COLVEC_DATA_LEN):
             self.colormaps.append([])
-            colormap = data[i*COLVEC_DATA_LEN:(i+1)*COLVEC_DATA_LEN]
+            colormap = data[i * COLVEC_DATA_LEN : (i + 1) * COLVEC_DATA_LEN]
             for i, (r, g, b, x) in enumerate(iter_bytes(colormap, 4)):
                 self.colormaps[-1].append(r)
                 self.colormaps[-1].append(g)
                 self.colormaps[-1].append(b)
-                assert x == 0xff
+                assert x == 0xFF
+
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
-                    static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.colvec.writer import ColvecWriter
+
         return ColvecWriter(self).write()  # type: ignore
-    
+
     def nb_colormaps(self):
         return len(self.colormaps)
-    
+
     def apply_colormap(self, index, palette: List[int]) -> List[int]:
-        """ Transforms the palette using the colormap in index """
+        """Transforms the palette using the colormap in index"""
         new_palette = []
         for i, v in enumerate(palette):
-            comp = i%3
-            new_palette.append(self.colormaps[index][v*3+comp])
+            comp = i % 3
+            new_palette.append(self.colormaps[index][v * 3 + comp])
         return new_palette
-    
+
     def to_pil(self, index) -> Image.Image:
-        """ Returns the palette as an image where each pixel represents each color of the colormap. """
-        img = Image.frombytes(mode="RGB", data=bytes(self.colormaps[index]), size=(16,16))
+        """Returns the palette as an image where each pixel represents each color of the colormap."""
+        img = Image.frombytes(
+            mode="RGB", data=bytes(self.colormaps[index]), size=(16, 16)
+        )
         return img
-    
+
     def from_pil(self, index, img: Image.Image):
         img = img.convert("RGB")
         self.colormaps[index] = [x for x in memoryview(img.tobytes()[:768])]
-        self.colormaps[index] += [0]*(768-len(self.colormaps[index]))
+        self.colormaps[index] += [0] * (768 - len(self.colormaps[index]))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Colvec):

@@ -31,24 +31,24 @@ from skytemple_files.graphics.dpci.model import Dpci
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(os.path.join(output_dir), exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
 for i, file in enumerate(dungeon_bin):
     fn = dungeon_bin.get_filename(i)
-    if fn.endswith('.dbg'):
+    if fn.endswith(".dbg"):
         file: Dbg
-        pal_file: Dpl = dungeon_bin.get(fn.replace('.dbg', '.dpl'))
-        ani_pal_file: Dpla = dungeon_bin.get(fn.replace('.dbg', '.dpla'))
-        dpci: Dpci = dungeon_bin.get(fn.replace('.dbg', '.dpci'))
-        dpc: Dpc = dungeon_bin.get(fn.replace('.dbg', '.dpc'))
+        pal_file: Dpl = dungeon_bin.get(fn.replace(".dbg", ".dpl"))
+        ani_pal_file: Dpla = dungeon_bin.get(fn.replace(".dbg", ".dpla"))
+        dpci: Dpci = dungeon_bin.get(fn.replace(".dbg", ".dpci"))
+        dpc: Dpc = dungeon_bin.get(fn.replace(".dbg", ".dpc"))
         print(fn)
         images = []
         base_img = file.to_pil(dpc, dpci, pal_file.palettes)
@@ -56,7 +56,9 @@ for i, file in enumerate(dungeon_bin):
 
         # Pal ani
         number_frames = int(len(ani_pal_file.colors[0]) / 3)
-        has_a_second_palette = len(ani_pal_file.colors) > 16 and len(ani_pal_file.colors[16]) > 0
+        has_a_second_palette = (
+            len(ani_pal_file.colors) > 16 and len(ani_pal_file.colors[16]) > 0
+        )
 
         for fidx in range(0, number_frames):
             pal_copy = pal_file.palettes.copy()
@@ -70,10 +72,10 @@ for i, file in enumerate(dungeon_bin):
             images.append(img_copy)
 
         images[0].save(
-            os.path.join(output_dir, fn + '.gif'),
+            os.path.join(output_dir, fn + ".gif"),
             save_all=True,
             append_images=images[1:],
             duration=40,
             loop=0,
-            optimize=False
+            optimize=False,
         )

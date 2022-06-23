@@ -23,23 +23,22 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
-from skytemple_files.graphics.fonts.graphic_font.handler import \
-    GraphicFontHandler
+from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.graphics.pal.handler import PalHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
+out_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
 os.makedirs(out_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 config = get_ppmdu_config_for_rom(rom)
 
 for fn in ["FONT/staffont", "FONT/markfont"]:
-    font = GraphicFontHandler.deserialize(rom.getFileByName(fn+".dat"))
-    pal = PalHandler.deserialize(rom.getFileByName(fn+".pal"))
+    font = GraphicFontHandler.deserialize(rom.getFileByName(fn + ".dat"))
+    pal = PalHandler.deserialize(rom.getFileByName(fn + ".pal"))
     font.set_palette(pal)
     for i in range(font.get_nb_entries()):
         e = font.get_entry(i)
         if e:
-            e.save(os.path.join(out_dir, fn.replace('/', '_') + f'_{i:0>4}.png'))
-    assert rom.getFileByName(fn+".dat") == GraphicFontHandler.serialize(font)
+            e.save(os.path.join(out_dir, fn.replace("/", "_") + f"_{i:0>4}.png"))
+    assert rom.getFileByName(fn + ".dat") == GraphicFontHandler.serialize(font)

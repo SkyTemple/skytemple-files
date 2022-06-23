@@ -36,7 +36,9 @@ class Lsd:
         number_entries = read_u16(data, 0)
         self.entries = []
         for entry in iter_bytes(data, 8, 2, (2 + number_entries * 8)):
-            self.entries.append(read_bytes(bytes(entry), 0, 8).rstrip(b'\0').decode('ascii'))
+            self.entries.append(
+                read_bytes(bytes(entry), 0, 8).rstrip(b"\0").decode("ascii")
+            )
 
     def to_bytes(self):
         """Convert the LSD back to bytes"""
@@ -44,19 +46,22 @@ class Lsd:
         write_u16(data, u16_checked(len(self.entries)), 0)
         bytes_written = 2
         for e in self.entries:
-            data[bytes_written:bytes_written + MAX_LEN] = self._str_to_bytes(e)
+            data[bytes_written : bytes_written + MAX_LEN] = self._str_to_bytes(e)
             bytes_written += MAX_LEN
 
         return data[:bytes_written]
 
     def _str_to_bytes(self, string: str):
         if set(string) > ALLOWED_CHARS:
-            raise ValueError(f"The string '{string}' can not be used for lsd. Only "
-                             f"digits and uppercase characters are allowed.")
+            raise ValueError(
+                f"The string '{string}' can not be used for lsd. Only "
+                f"digits and uppercase characters are allowed."
+            )
         length = len(string)
         if length > MAX_LEN:
-            raise ValueError(f"The string '{string}' is too long for lsd. Max size "
-                             f"is {MAX_LEN}")
+            raise ValueError(
+                f"The string '{string}' is too long for lsd. Max size " f"is {MAX_LEN}"
+            )
         out = bytearray(MAX_LEN)
-        out[0:length] = bytearray(string, 'ascii')
+        out[0:length] = bytearray(string, "ascii")
         return out

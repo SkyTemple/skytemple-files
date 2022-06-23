@@ -30,7 +30,8 @@ from PIL import Image
 
 class AioRequestAdapter(ABC):
     @abstractmethod
-    async def fetch_bin(self, url: str) -> bytes: ...
+    async def fetch_bin(self, url: str) -> bytes:
+        ...
 
     @abstractmethod
     def graphql_transport(self, url: str) -> Union[AsyncTransport, GraphQLSchema]:
@@ -43,7 +44,9 @@ class AioRequestAdapter(ABC):
 
 class AioRequestAdapterImpl(AioRequestAdapter):
     async def fetch_bin(self, url: str) -> bytes:
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=60)) as session:
+        async with aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=60)
+        ) as session:
             async with session.get(url) as resp:
                 resp.raise_for_status()
                 return await resp.read()
@@ -68,13 +71,13 @@ class CachedRequestAdapter(AioRequestAdapter):
             self.cache[url] = await self._request_adapter.fetch_bin(url)
         return self.cache[url]
 
-    def graphql_transport(self, url: str) -> 'CachedAIOHTTPTransport':
+    def graphql_transport(self, url: str) -> "CachedAIOHTTPTransport":
         return CachedAIOHTTPTransport(url, self)
 
 
 class CachedAIOHTTPTransport(AsyncTransport):
     _transport: AsyncTransport
-    _cache: 'CachedRequestAdapter'
+    _cache: "CachedRequestAdapter"
 
     async def connect(self):
         return await self._transport.connect()
@@ -82,15 +85,15 @@ class CachedAIOHTTPTransport(AsyncTransport):
     async def close(self):
         return await self._transport.close()
 
-    def __init__(self, url: str, cache: 'CachedRequestAdapter'):
+    def __init__(self, url: str, cache: "CachedRequestAdapter"):
         self._transport = AIOHTTPTransport(url=url)
         self._cache = cache
 
     async def execute(
-            self,
-            document: DocumentNode,
-            variable_values: Optional[Dict[str, Any]] = None,
-            operation_name: Optional[str] = None
+        self,
+        document: DocumentNode,
+        variable_values: Optional[Dict[str, Any]] = None,
+        operation_name: Optional[str] = None,
     ) -> ExecutionResult:
         cache_key = (document, variable_values, operation_name)
         if cache_key not in self._cache.cache:
@@ -100,10 +103,10 @@ class CachedAIOHTTPTransport(AsyncTransport):
         return self._cache.cache[cache_key]
 
     def subscribe(
-            self,
-            document: DocumentNode,
-            variable_values: Optional[Dict[str, Any]] = None,
-            operation_name: Optional[str] = None
+        self,
+        document: DocumentNode,
+        variable_values: Optional[Dict[str, Any]] = None,
+        operation_name: Optional[str] = None,
     ) -> AsyncGenerator[ExecutionResult, None]:
         # We don't cache these.
         return self._transport.subscribe(document, variable_values, operation_name)

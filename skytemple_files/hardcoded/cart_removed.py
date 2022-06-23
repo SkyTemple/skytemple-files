@@ -24,7 +24,9 @@ from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import (
-    CommonAtHandler, CommonAtType)
+    CommonAtHandler,
+    CommonAtType,
+)
 
 IMG_WIDTH = 256
 IMG_HEIGHT = 96
@@ -36,8 +38,8 @@ class HardcodedCartRemoved:
         """
         Gets the cartridge removed data
         """
-        block = config.binaries['arm9.bin'].symbols['CartRemovedImgData']
-        data = arm9[block.begin:block.end]
+        block = config.binaries["arm9.bin"].symbols["CartRemovedImgData"]
+        data = arm9[block.begin : block.end]
         img_data = CommonAtHandler.deserialize(data).decompress()
         raw_data = []
         for l, h in iter_bytes(img_data, 2):
@@ -45,16 +47,22 @@ class HardcodedCartRemoved:
             raw_data.append((v % 32) * 8)
             raw_data.append(((v >> 5) % 32) * 8)
             raw_data.append(((v >> 10) % 32) * 8)
-        return Image.frombytes(mode="RGB", size=(IMG_WIDTH, IMG_HEIGHT), data=bytes(raw_data))
+        return Image.frombytes(
+            mode="RGB", size=(IMG_WIDTH, IMG_HEIGHT), data=bytes(raw_data)
+        )
 
     @staticmethod
-    def set_cart_removed_data(img: Image.Image, arm9: bytearray, config: Pmd2Data) -> None:
+    def set_cart_removed_data(
+        img: Image.Image, arm9: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the cartridge removed data
         """
         if img.width != IMG_WIDTH and img.height != IMG_HEIGHT:
-            raise AttributeError(f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}.")))
-        block = config.binaries['arm9.bin'].symbols['CartRemovedImgData']
+            raise AttributeError(
+                f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}."))
+            )
+        block = config.binaries["arm9.bin"].symbols["CartRemovedImgData"]
         img = img.convert("RGB")
         raw_data = img.tobytes()
         img_data = []
@@ -62,8 +70,17 @@ class HardcodedCartRemoved:
             v = (r // 8) + ((g // 8) << 5) + ((b // 8) << 10)
             img_data.append(v % 256)
             img_data.append(v // 256)
-        data = CommonAtHandler.serialize(CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX]))
+        data = CommonAtHandler.serialize(
+            CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX])
+        )
         if len(data) > block.end - block.begin:
             raise AttributeError(
-                f(_("This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.begin}).")))
-        arm9[block.begin:block.end] = data + bytes((block.end - block.begin) - len(data))
+                f(
+                    _(
+                        "This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.begin})."
+                    )
+                )
+            )
+        arm9[block.begin : block.end] = data + bytes(
+            (block.end - block.begin) - len(data)
+        )

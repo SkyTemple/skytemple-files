@@ -24,8 +24,7 @@ import warnings
 from enum import Enum, IntEnum
 from typing import Dict, List, Optional
 
-from explorerscript.ssb_converting.ssb_data_types import (SsbCoroutine,
-                                                          SsbOpCode)
+from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16
 
 from skytemple_files.common.i18n_util import _
@@ -33,15 +32,15 @@ from skytemple_files.common.util import AutoString
 
 
 class GameVariableType(IntEnum):
-    NULL = 0,
-    BIT = 1,
-    STRING = 2,  # Theory.
-    UINT8 = 3,
-    INT8 = 4,
-    UINT16 = 5,
-    INT16 = 6,
-    UINT32 = 7,
-    INT32 = 8,
+    NULL = (0,)
+    BIT = (1,)
+    STRING = (2,)  # Theory.
+    UINT8 = (3,)
+    INT8 = (4,)
+    UINT16 = (5,)
+    INT16 = (6,)
+    UINT32 = (7,)
+    INT32 = (8,)
     SPECIAL = 9
 
 
@@ -71,8 +70,18 @@ def game_variable_type_by_value(i: int) -> GameVariableType:
 
 
 class Pmd2ScriptGameVar(AutoString):
-    def __init__(self, id: int, type: int, unk1: int, memoffset: int, bitshift: int,
-                 nbvalues: int, unk4: int, name: str, is_local: bool):
+    def __init__(
+        self,
+        id: int,
+        type: int,
+        unk1: int,
+        memoffset: int,
+        bitshift: int,
+        nbvalues: int,
+        unk4: int,
+        name: str,
+        is_local: bool,
+    ):
         self.id: int = id
         self.type: GameVariableType = game_variable_type_by_value(type)
         self.unk1 = unk1
@@ -91,7 +100,7 @@ class Pmd2ScriptObject(AutoString):
         self.unk2 = unk2
         self.unk3 = unk3
         self.name = name
-        self.unique_name = f'{name}_{id}'
+        self.unique_name = f"{name}_{id}"
 
 
 class Pmd2ScriptRoutine(SsbCoroutine):
@@ -145,20 +154,20 @@ class Pmd2ScriptLevelMapType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: str, name_localized: Optional[str]
-    ):
+    def __init__(self, _: str, name_localized: Optional[str]):
         self.name_localized: str = name_localized  # type: ignore
 
     def __str__(self) -> str:
-        return f'Pmd2ScriptLevelMapType.{self.name}'
+        return f"Pmd2ScriptLevelMapType.{self.name}"
 
     def __repr__(self) -> str:
         return str(self)
 
 
 class Pmd2ScriptLevel(AutoString):
-    def __init__(self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: i16):
+    def __init__(
+        self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: i16
+    ):
         self.id = id
         self.mapid = mapid
         self.name = name
@@ -169,12 +178,12 @@ class Pmd2ScriptLevel(AutoString):
     @property
     def mapty_enum(self) -> Pmd2ScriptLevelMapType:
         return Pmd2ScriptLevelMapType(self.mapty)  # type: ignore
-        
+
     # Backwards compat:
     @property
     def unk2(self) -> u16:
         return self.nameid
-    
+
     @unk2.setter
     def unk2(self, value: u16) -> None:
         self.nameid = value
@@ -182,7 +191,7 @@ class Pmd2ScriptLevel(AutoString):
     @property
     def unk4(self) -> i16:
         return self.weather
-    
+
     @unk4.setter
     def unk4(self, value: i16) -> None:
         self.weather = value
@@ -190,9 +199,14 @@ class Pmd2ScriptLevel(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2ScriptLevel):
             return False
-        return self.id == other.id and self.mapid == other.mapid and \
-               self.name == other.name and self.mapty == other.mapty and \
-               self.nameid == other.nameid and self.weather == other.weather
+        return (
+            self.id == other.id
+            and self.mapid == other.mapid
+            and self.name == other.name
+            and self.mapty == other.mapty
+            and self.nameid == other.nameid
+            and self.weather == other.weather
+        )
 
 
 class Pmd2ScriptEntity(AutoString):
@@ -209,9 +223,14 @@ class Pmd2ScriptEntity(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Pmd2ScriptEntity):
             return False
-        return self.id == other.id and self.entid == other.entid and \
-               self.name == other.name and self.type == other.type and \
-               self.unk3 == other.unk3 and self.unk4 == other.unk4
+        return (
+            self.id == other.id
+            and self.entid == other.entid
+            and self.name == other.name
+            and self.type == other.type
+            and self.unk3 == other.unk3
+            and self.unk4 == other.unk4
+        )
 
 
 class Pmd2ScriptOpCodeArgument(AutoString):
@@ -231,19 +250,29 @@ class Pmd2ScriptOpCodeRepeatingArgumentGroup(AutoString):
 
 
 class Pmd2ScriptOpCode(SsbOpCode):
-    def __init__(self,
-                 id: int, name: str, params: int,
-                 stringidx: int, unk2: int, unk3: int,
-                 arguments: List[Pmd2ScriptOpCodeArgument],
-                 repeating_argument_group: Optional[Pmd2ScriptOpCodeRepeatingArgumentGroup]):
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        params: int,
+        stringidx: int,
+        unk2: int,
+        unk3: int,
+        arguments: List[Pmd2ScriptOpCodeArgument],
+        repeating_argument_group: Optional[Pmd2ScriptOpCodeRepeatingArgumentGroup],
+    ):
         super().__init__(id, name)
         self.params = params
         self.stringidx = stringidx
         self.unk2 = unk2
         self.unk3 = unk3
         self.arguments: List[Pmd2ScriptOpCodeArgument] = arguments
-        self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
-        self.repeating_argument_group: Optional[Pmd2ScriptOpCodeRepeatingArgumentGroup] = repeating_argument_group
+        self.arguments__by_id: Dict[int, Pmd2ScriptOpCodeArgument] = {
+            o.id: o for o in self.arguments
+        }
+        self.repeating_argument_group: Optional[
+            Pmd2ScriptOpCodeRepeatingArgumentGroup
+        ] = repeating_argument_group
         self.description = _("This function has no description.")  # todo
 
 
@@ -283,41 +312,44 @@ class Pmd2ScriptDirection(AutoString):
     @property
     def print_name(self) -> str:
         if self.ssa_id == 1:
-            return _('Down')  # TRANSLATORS: Direction
+            return _("Down")  # TRANSLATORS: Direction
         elif self.ssa_id == 2:
-            return _('Down Right')  # TRANSLATORS: Direction
+            return _("Down Right")  # TRANSLATORS: Direction
         elif self.ssa_id == 3:
-            return _('Right')  # TRANSLATORS: Direction
+            return _("Right")  # TRANSLATORS: Direction
         elif self.ssa_id == 4:
-            return _('Up Right')  # TRANSLATORS: Direction
+            return _("Up Right")  # TRANSLATORS: Direction
         elif self.ssa_id == 5:
-            return _('Up')  # TRANSLATORS: Direction
+            return _("Up")  # TRANSLATORS: Direction
         elif self.ssa_id == 6:
-            return _('Up Left')  # TRANSLATORS: Direction
+            return _("Up Left")  # TRANSLATORS: Direction
         elif self.ssa_id == 7:
-            return _('Left')  # TRANSLATORS: Direction
+            return _("Left")  # TRANSLATORS: Direction
         elif self.ssa_id == 8:
-            return _('Down Left')  # TRANSLATORS: Direction
+            return _("Down Left")  # TRANSLATORS: Direction
         return self.name
 
 
 class Pmd2ScriptData(AutoString):
     """TODO: Cache the __by_xyz properties."""
-    def __init__(self,
-                 game_variables_table: List[Pmd2ScriptGameVar],
-                 objects_list: List[Pmd2ScriptObject],
-                 face_names: List[Pmd2ScriptFaceName],
-                 face_position_modes: List[Pmd2ScriptFacePositionMode],
-                 directions: Dict[int, Pmd2ScriptDirection],
-                 common_routine_info: List[Pmd2ScriptRoutine],
-                 menu_ids: List[Pmd2ScriptMenu],
-                 process_special_ids: List[Pmd2ScriptSpecial],
-                 sprite_effect_ids: List[Pmd2ScriptSpriteEffect],
-                 bgms: List[Pmd2ScriptBgm],
-                 level_list: List[Pmd2ScriptLevel],
-                 level_entity_table: List[Pmd2ScriptEntity],
-                 op_codes: List[Pmd2ScriptOpCode],
-                 ground_state_structs: Dict[str, Pmd2ScriptGroundStateStruct]):
+
+    def __init__(
+        self,
+        game_variables_table: List[Pmd2ScriptGameVar],
+        objects_list: List[Pmd2ScriptObject],
+        face_names: List[Pmd2ScriptFaceName],
+        face_position_modes: List[Pmd2ScriptFacePositionMode],
+        directions: Dict[int, Pmd2ScriptDirection],
+        common_routine_info: List[Pmd2ScriptRoutine],
+        menu_ids: List[Pmd2ScriptMenu],
+        process_special_ids: List[Pmd2ScriptSpecial],
+        sprite_effect_ids: List[Pmd2ScriptSpriteEffect],
+        bgms: List[Pmd2ScriptBgm],
+        level_list: List[Pmd2ScriptLevel],
+        level_entity_table: List[Pmd2ScriptEntity],
+        op_codes: List[Pmd2ScriptOpCode],
+        ground_state_structs: Dict[str, Pmd2ScriptGroundStateStruct],
+    ):
         self._game_variables = game_variables_table
         self._objects = objects_list
         self._face_names = face_names

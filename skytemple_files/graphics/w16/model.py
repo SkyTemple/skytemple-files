@@ -33,7 +33,9 @@ TILE_DIM = 8
 
 
 class W16Image(ABC):
-    def __init__(self, entry_data: 'W16TocEntry', compressed_img_data: bytes, pal: List[int]):
+    def __init__(
+        self, entry_data: "W16TocEntry", compressed_img_data: bytes, pal: List[int]
+    ):
         self.entry_data = entry_data
         self.compressed_img_data = compressed_img_data
         self.pal = pal
@@ -55,29 +57,30 @@ class W16Image(ABC):
         # Create a virtual tilemap
         tilemap = []
         for i in range(int((w * h) / (TILE_DIM * TILE_DIM))):
-            tilemap.append(TilemapEntry(
-                idx=i,
-                pal_idx=0,
-                flip_x=False,
-                flip_y=False
-            ))
+            tilemap.append(TilemapEntry(idx=i, pal_idx=0, flip_x=False, flip_y=False))
 
         return to_pil(
-            tilemap, list(grouper(int(TILE_DIM * TILE_DIM / 2), decompressed_data)),
-            [self.pal], TILE_DIM, w, h
+            tilemap,
+            list(grouper(int(TILE_DIM * TILE_DIM / 2), decompressed_data)),
+            [self.pal],
+            TILE_DIM,
+            w,
+            h,
         )
 
-    def set(self, pil: Image.Image) -> 'W16Image':
+    def set(self, pil: Image.Image) -> "W16Image":
         """Sets the w16 image using a PIL image with 16-bit color palette as input"""
         self.entry_data.width = int(pil.width / TILE_DIM)
         self.entry_data.height = int(pil.height / TILE_DIM)
-        new_pal, new_img = self._read_in(pil, self.entry_data.width, self.entry_data.height)
+        new_pal, new_img = self._read_in(
+            pil, self.entry_data.width, self.entry_data.height
+        )
         self.pal = new_pal
         self.compressed_img_data = self.compress(new_img)
         return self
 
     @classmethod
-    def new(cls, entry_data: 'W16TocEntry', pil: Image.Image) -> 'W16Image':
+    def new(cls, entry_data: "W16TocEntry", pil: Image.Image) -> "W16Image":
         """Creates a new W16Image from a PIL image with 16-bit color palette as input"""
         entry_data.width = int(pil.width / TILE_DIM)
         entry_data.height = int(pil.height / TILE_DIM)
@@ -85,13 +88,13 @@ class W16Image(ABC):
         return cls(entry_data, cls.compress(new_img), new_pal)
 
     @classmethod
-    def _read_in(cls, pil: Image.Image, w_in_tiles, h_in_tiles) -> Tuple[List[int], bytes]:
+    def _read_in(
+        cls, pil: Image.Image, w_in_tiles, h_in_tiles
+    ) -> Tuple[List[int], bytes]:
         w = TILE_DIM * w_in_tiles
         h = TILE_DIM * h_in_tiles
         tiles, tile_mappings, pal = from_pil(
-            pil, 16, 1, TILE_DIM,
-            w, h, 1, 1,
-            force_import=True, optimize=False
+            pil, 16, 1, TILE_DIM, w, h, 1, 1, force_import=True, optimize=False
         )
         # todo: in theory the tiles could be out of order and we would need to check using the mappings,
         #       in practice they aren't.
@@ -103,11 +106,15 @@ class W16AtImage(W16Image):
     @classmethod
     def compress(cls, data: bytes) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(data))
 
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
-        return FileType.COMMON_AT.deserialize(bytes(self.compressed_img_data)).decompress()
+
+        return FileType.COMMON_AT.deserialize(
+            bytes(self.compressed_img_data)
+        ).decompress()
 
 
 class W16RawImage(W16Image):
@@ -130,6 +137,7 @@ class W16TocEntry:
 class W16:
     def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
@@ -148,10 +156,10 @@ class W16:
             assert null == 0
             entry_data = W16TocEntry(unk1, unk2, index, null)
             # Read palette
-            pal = self._read_pal(data[pointer:pointer + len_pal_bytes])
+            pal = self._read_pal(data[pointer : pointer + len_pal_bytes])
             # Read image
-            next_pointer = read_u32(data, (i+1) * 8)
-            img_data = data[pointer + len_pal_bytes:next_pointer]
+            next_pointer = read_u32(data, (i + 1) * 8)
+            img_data = data[pointer + len_pal_bytes : next_pointer]
             if FileType.COMMON_AT.matches(img_data):
                 self._files.append(W16AtImage(entry_data, img_data, pal))
             else:

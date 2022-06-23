@@ -20,9 +20,11 @@ from __future__ import annotations
 from typing import Tuple
 
 from skytemple_files.common.util import *
-from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
-                                                     CMD_FILL_OUT,
-                                                     CMD_ZERO_OUT)
+from skytemple_files.compression.generic_nrl import (
+    CMD_COPY_BYTES,
+    CMD_FILL_OUT,
+    CMD_ZERO_OUT,
+)
 
 DEBUG = False
 
@@ -51,11 +53,13 @@ class GenericNrlDecompressor:
             self._process()
 
         if self.bytes_written != self.stop_when_size:
-            raise ValueError(f"Generic NRL Decompressor: End result length unexpected. "
-                             f"Should be {self.stop_when_size}, is {self.bytes_written} "
-                             f"Diff: {self.bytes_written - self.stop_when_size}")
+            raise ValueError(
+                f"Generic NRL Decompressor: End result length unexpected. "
+                f"Should be {self.stop_when_size}, is {self.bytes_written} "
+                f"Diff: {self.bytes_written - self.stop_when_size}"
+            )
 
-        return self.decompressed_data[:self.bytes_written], self.cursor
+        return self.decompressed_data[: self.bytes_written], self.cursor
 
     def _process(self):
         if DEBUG:
@@ -76,23 +80,29 @@ class GenericNrlDecompressor:
             param = self._read()
             if DEBUG:
                 print(f"READ 1 - WRITE {cmd - (CMD_FILL_OUT-1)}")
-            for i in range(CMD_FILL_OUT-1, cmd):
+            for i in range(CMD_FILL_OUT - 1, cmd):
                 self._write(param)
         else:  # elif cmd > CMD_COPY_BYTES:
             # cmd - CMD_COPY_BYTES. Copy the next byte and repeat.
             if DEBUG:
-                print(f"READ {(cmd - (CMD_COPY_BYTES-1))} - WRITE {(cmd - (CMD_COPY_BYTES-1))}")
-            for i in range(CMD_COPY_BYTES-1, cmd):
+                print(
+                    f"READ {(cmd - (CMD_COPY_BYTES-1))} - WRITE {(cmd - (CMD_COPY_BYTES-1))}"
+                )
+            for i in range(CMD_COPY_BYTES - 1, cmd):
                 param = self._read()
                 self._write(param)
 
         if DEBUG:
-            print(f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}")
+            print(
+                f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}"
+            )
 
     def _read(self):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError("Generic NRL Decompressor: Reached EOF while reading compressed data.")
+            raise ValueError(
+                "Generic NRL Decompressor: Reached EOF while reading compressed data."
+            )
         oc = self.cursor
         self.cursor += 1
         return read_u8(self.compressed_data, oc)

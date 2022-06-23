@@ -22,7 +22,9 @@ from typing import Optional
 from range_typed_integers import u16
 
 from skytemple_files.common.ppmdu_config.script_data import (
-    Pmd2ScriptData, Pmd2ScriptDirection)
+    Pmd2ScriptData,
+    Pmd2ScriptDirection,
+)
 from skytemple_files.common.util import AutoString, CheckedIntWrites
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 
@@ -42,7 +44,15 @@ class SsaPosition(AutoString, CheckedIntWrites):
     y_offset: u16
     direction: Optional[Pmd2ScriptDirection]
 
-    def __init__(self, scriptdata: Pmd2ScriptData, x_pos: u16, y_pos: u16, x_offset: u16, y_offset: u16, direction: Optional[u16] = None):
+    def __init__(
+        self,
+        scriptdata: Pmd2ScriptData,
+        x_pos: u16,
+        y_pos: u16,
+        x_offset: u16,
+        y_offset: u16,
+        direction: Optional[u16] = None,
+    ):
         """
         Common SSA position specification. Direction is optional if not applicable.
         """
@@ -58,7 +68,7 @@ class SsaPosition(AutoString, CheckedIntWrites):
                 self.direction = scriptdata.directions__by_ssa_id[direction]
             except KeyError:
                 logger.warning(f"Unknown direction id: {direction}")
-                self.direction = Pmd2ScriptDirection(direction, 'UNKNOWN')
+                self.direction = Pmd2ScriptDirection(direction, "UNKNOWN")
 
     @property
     def x_absolute(self):

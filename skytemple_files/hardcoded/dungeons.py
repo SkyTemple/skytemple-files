@@ -37,7 +37,13 @@ class DungeonDefinition(AutoString, CheckedIntWrites):
     start_after: u8
     number_floors_in_group: u8
 
-    def __init__(self, number_floors: u8, mappa_index: u8, start_after: u8, number_floors_in_group: u8):
+    def __init__(
+        self,
+        number_floors: u8,
+        mappa_index: u8,
+        start_after: u8,
+        number_floors_in_group: u8,
+    ):
         self.number_floors = number_floors
         self.mappa_index = mappa_index
         self.start_after = start_after
@@ -46,10 +52,12 @@ class DungeonDefinition(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DungeonDefinition):
             return False
-        return self.number_floors == other.number_floors and \
-               self.mappa_index == other.mappa_index and \
-               self.start_after == other.start_after and \
-               self.number_floors_in_group == other.number_floors_in_group
+        return (
+            self.number_floors == other.number_floors
+            and self.mappa_index == other.mappa_index
+            and self.start_after == other.start_after
+            and self.number_floors_in_group == other.number_floors_in_group
+        )
 
 
 class DungeonRestrictionDirection(Enum):
@@ -78,11 +86,25 @@ class DungeonRestriction(AutoString, CheckedIntWrites):
     nullB: i8
 
     def __init__(
-            self, direction: DungeonRestrictionDirection, enemies_evolve_when_team_member_koed: bool, enemies_grant_exp: bool,
-            recruiting_allowed: bool, level_reset: bool, money_allowed: bool, leader_can_be_changed: bool,
-            dont_save_before_entering: bool, iq_skills_disabled: bool, traps_remain_invisible_on_attack: bool,
-            enemies_can_drop_chests: bool, max_rescue_attempts: i8, max_items_allowed: i8, max_party_members: i8,
-            null7: i8, turn_limit: i16, nullA: i8, nullB: i8
+        self,
+        direction: DungeonRestrictionDirection,
+        enemies_evolve_when_team_member_koed: bool,
+        enemies_grant_exp: bool,
+        recruiting_allowed: bool,
+        level_reset: bool,
+        money_allowed: bool,
+        leader_can_be_changed: bool,
+        dont_save_before_entering: bool,
+        iq_skills_disabled: bool,
+        traps_remain_invisible_on_attack: bool,
+        enemies_can_drop_chests: bool,
+        max_rescue_attempts: i8,
+        max_items_allowed: i8,
+        max_party_members: i8,
+        null7: i8,
+        turn_limit: i16,
+        nullA: i8,
+        nullB: i8,
     ):
         self.direction = direction
         self.enemies_evolve_when_team_member_koed = enemies_evolve_when_team_member_koed
@@ -104,31 +126,76 @@ class DungeonRestriction(AutoString, CheckedIntWrites):
         self.nullB = nullB
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> 'DungeonRestriction':
+    def from_bytes(cls, b: bytes) -> "DungeonRestriction":
         bitfield0 = read_u8(b, 0)
         bitfield1 = read_u8(b, 1)
-        dir_bool, enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed, \
-            level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering = \
-            (bool(bitfield0 >> i & 1) for i in range(8))
-        iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests = \
-            (bool(bitfield1 >> i & 1) for i in range(3))
+        (
+            dir_bool,
+            enemies_evolve_when_team_member_koed,
+            enemies_grant_exp,
+            recruiting_allowed,
+            level_reset,
+            money_allowed,
+            leader_can_be_changed,
+            dont_save_before_entering,
+        ) = (bool(bitfield0 >> i & 1) for i in range(8))
+        (
+            iq_skills_disabled,
+            traps_remain_invisible_on_attack,
+            enemies_can_drop_chests,
+        ) = (bool(bitfield1 >> i & 1) for i in range(3))
         assert read_u8(b, 2) == 0
         assert read_u8(b, 3) == 0
         return cls(
-            DungeonRestrictionDirection(int(dir_bool)), enemies_evolve_when_team_member_koed, enemies_grant_exp, recruiting_allowed,
-            level_reset, money_allowed, leader_can_be_changed, dont_save_before_entering,
-            iq_skills_disabled, traps_remain_invisible_on_attack, enemies_can_drop_chests,
-            read_i8(b, 4), read_i8(b, 5), read_i8(b, 6),
-            read_i8(b, 7), read_i16(b, 8), read_i8(b, 10), read_i8(b, 11),
+            DungeonRestrictionDirection(int(dir_bool)),
+            enemies_evolve_when_team_member_koed,
+            enemies_grant_exp,
+            recruiting_allowed,
+            level_reset,
+            money_allowed,
+            leader_can_be_changed,
+            dont_save_before_entering,
+            iq_skills_disabled,
+            traps_remain_invisible_on_attack,
+            enemies_can_drop_chests,
+            read_i8(b, 4),
+            read_i8(b, 5),
+            read_i8(b, 6),
+            read_i8(b, 7),
+            read_i16(b, 8),
+            read_i8(b, 10),
+            read_i8(b, 11),
         )
 
     def to_bytes(self) -> bytes:
-        bitfield0 = u8(generate_bitfield((self.dont_save_before_entering, self.leader_can_be_changed, self.money_allowed,
-                                          self.level_reset, self.recruiting_allowed, self.enemies_grant_exp,
-                                          self.enemies_evolve_when_team_member_koed, bool(self.direction.value))))
-        bitfield1 = u8(generate_bitfield((False, False, False, False, False,
-                                         self.enemies_can_drop_chests, self.traps_remain_invisible_on_attack,
-                                         self.iq_skills_disabled)))
+        bitfield0 = u8(
+            generate_bitfield(
+                (
+                    self.dont_save_before_entering,
+                    self.leader_can_be_changed,
+                    self.money_allowed,
+                    self.level_reset,
+                    self.recruiting_allowed,
+                    self.enemies_grant_exp,
+                    self.enemies_evolve_when_team_member_koed,
+                    bool(self.direction.value),
+                )
+            )
+        )
+        bitfield1 = u8(
+            generate_bitfield(
+                (
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    self.enemies_can_drop_chests,
+                    self.traps_remain_invisible_on_attack,
+                    self.iq_skills_disabled,
+                )
+            )
+        )
         bitfield2 = u8(0)
         bitfield3 = u8(0)
         buff = bytearray(DUNGEON_RESTRICTIONS_ENTRY_LEN)
@@ -148,24 +215,28 @@ class DungeonRestriction(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DungeonRestriction):
             return False
-        return self.direction == other.direction and \
-               self.enemies_evolve_when_team_member_koed == other.enemies_evolve_when_team_member_koed and \
-               self.enemies_grant_exp == other.enemies_grant_exp and \
-               self.recruiting_allowed == other.recruiting_allowed and \
-               self.level_reset == other.level_reset and \
-               self.money_allowed == other.money_allowed and \
-               self.leader_can_be_changed == other.leader_can_be_changed and \
-               self.dont_save_before_entering == other.dont_save_before_entering and \
-               self.iq_skills_disabled == other.iq_skills_disabled and \
-               self.traps_remain_invisible_on_attack == other.traps_remain_invisible_on_attack and \
-               self.enemies_can_drop_chests == other.enemies_can_drop_chests and \
-               self.max_rescue_attempts == other.max_rescue_attempts and \
-               self.max_items_allowed == other.max_items_allowed and \
-               self.max_party_members == other.max_party_members and \
-               self.null7 == other.null7 and \
-               self.turn_limit == other.turn_limit and \
-               self.nullA == other.nullA and \
-               self.nullB == other.nullB
+        return (
+            self.direction == other.direction
+            and self.enemies_evolve_when_team_member_koed
+            == other.enemies_evolve_when_team_member_koed
+            and self.enemies_grant_exp == other.enemies_grant_exp
+            and self.recruiting_allowed == other.recruiting_allowed
+            and self.level_reset == other.level_reset
+            and self.money_allowed == other.money_allowed
+            and self.leader_can_be_changed == other.leader_can_be_changed
+            and self.dont_save_before_entering == other.dont_save_before_entering
+            and self.iq_skills_disabled == other.iq_skills_disabled
+            and self.traps_remain_invisible_on_attack
+            == other.traps_remain_invisible_on_attack
+            and self.enemies_can_drop_chests == other.enemies_can_drop_chests
+            and self.max_rescue_attempts == other.max_rescue_attempts
+            and self.max_items_allowed == other.max_items_allowed
+            and self.max_party_members == other.max_party_members
+            and self.null7 == other.null7
+            and self.turn_limit == other.turn_limit
+            and self.nullA == other.nullA
+            and self.nullB == other.nullB
+        )
 
 
 class SecondaryTerrainTableEntry(Enum):
@@ -187,12 +258,9 @@ class MapMarkerPlacement(AutoString, CheckedIntWrites):
         self.y = y
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> 'MapMarkerPlacement':
+    def from_bytes(cls, b: bytes) -> "MapMarkerPlacement":
         return MapMarkerPlacement(
-            read_i16(b, 0),
-            read_i16(b, 2),
-            read_i16(b, 4),
-            read_i16(b, 6)
+            read_i16(b, 0), read_i16(b, 2), read_i16(b, 4), read_i16(b, 6)
         )
 
     def to_bytes(self) -> bytes:
@@ -206,10 +274,12 @@ class MapMarkerPlacement(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MapMarkerPlacement):
             return False
-        return self.level_id == other.level_id and \
-               self.reference_id == other.reference_id and \
-               self.x == other.x and \
-               self.y == other.y
+        return (
+            self.level_id == other.level_id
+            and self.reference_id == other.reference_id
+            and self.x == other.x
+            and self.y == other.y
+        )
 
 
 class TilesetBaseEnum(Enum):
@@ -219,9 +289,7 @@ class TilesetBaseEnum(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: int, name_localized: str
-    ):
+    def __init__(self, _: int, name_localized: str):
         self.name_localized = name_localized
 
     @property
@@ -253,10 +321,16 @@ class TilesetStirringEffect(TilesetBaseEnum):
 class TilesetSecretPowerEffect(TilesetBaseEnum):
     UNK_0 = 0, _("???") + " (0)"
     SLEEP = 1, _("Sleep")  # TRANSLATORS: Move name
-    SPEED_DOWN = 2, _("Speed -1")  # TRANSLATORS: Effect of a tileset's secret power move
-    ATTACK_DOWN = 3, _("Attack -1")  # TRANSLATORS: Effect of a tileset's secret power move
+    SPEED_DOWN = 2, _(
+        "Speed -1"
+    )  # TRANSLATORS: Effect of a tileset's secret power move
+    ATTACK_DOWN = 3, _(
+        "Attack -1"
+    )  # TRANSLATORS: Effect of a tileset's secret power move
     UNK_4 = 4, _("???") + " (4)"
-    ACCURACY_DOWN = 5, _("Accuracy -1")  # TRANSLATORS: Effect of a tileset's secret power move
+    ACCURACY_DOWN = 5, _(
+        "Accuracy -1"
+    )  # TRANSLATORS: Effect of a tileset's secret power move
     UNK_6 = 6, _("???") + " (6)"
     CRINGE = 7, _("Cringe")  # TRANSLATORS: Move name
     FREEZE = 8, _("Freeze")  # TRANSLATORS: Status
@@ -300,10 +374,16 @@ class TilesetProperties(AutoString):
     weather_effect: TilesetWeatherEffect
     full_water_floor: bool
 
-    def __init__(self, map_color: TilesetMapColor, stirring_effect: TilesetStirringEffect,
-                 secret_power_effect: TilesetSecretPowerEffect, camouflage_type: PokeType,
-                 nature_power_move_entry: TilesetNaturePowerMoveEntry, weather_effect: TilesetWeatherEffect,
-                 full_water_floor: bool):
+    def __init__(
+        self,
+        map_color: TilesetMapColor,
+        stirring_effect: TilesetStirringEffect,
+        secret_power_effect: TilesetSecretPowerEffect,
+        camouflage_type: PokeType,
+        nature_power_move_entry: TilesetNaturePowerMoveEntry,
+        weather_effect: TilesetWeatherEffect,
+        full_water_floor: bool,
+    ):
         self.map_color = map_color
         self.stirring_effect = stirring_effect
         self.secret_power_effect = secret_power_effect
@@ -314,7 +394,7 @@ class TilesetProperties(AutoString):
 
     @classmethod
     @typing.no_type_check
-    def from_bytes(cls, b: bytes) -> 'TilesetProperties':
+    def from_bytes(cls, b: bytes) -> "TilesetProperties":
         return TilesetProperties(
             TilesetMapColor(read_u32(b, 0)),
             TilesetStirringEffect(read_u8(b, 4)),
@@ -339,132 +419,195 @@ class TilesetProperties(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, TilesetProperties):
             return False
-        return self.map_color == other.map_color and \
-            self.stirring_effect == other.stirring_effect and \
-            self.secret_power_effect == other.secret_power_effect and \
-            self.camouflage_type == other.camouflage_type and \
-            self.nature_power_move_entry == other.nature_power_move_entry and \
-            self.weather_effect == other.weather_effect and \
-            self.full_water_floor == other.full_water_floor
+        return (
+            self.map_color == other.map_color
+            and self.stirring_effect == other.stirring_effect
+            and self.secret_power_effect == other.secret_power_effect
+            and self.camouflage_type == other.camouflage_type
+            and self.nature_power_move_entry == other.nature_power_move_entry
+            and self.weather_effect == other.weather_effect
+            and self.full_water_floor == other.full_water_floor
+        )
 
 
 class HardcodedDungeons:
     @staticmethod
     def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> List[DungeonDefinition]:
         """Returns the list of dungeon definitions."""
-        block = config.binaries['arm9.bin'].symbols['DungeonList']
+        block = config.binaries["arm9.bin"].symbols["DungeonList"]
         lst = []
         for i in range(block.begin, block.end, DUNGEON_LIST_ENTRY_LEN):
-            lst.append(DungeonDefinition(
-                read_u8(arm9bin, i),
-                read_u8(arm9bin, i + 1),
-                read_u8(arm9bin, i + 2),
-                read_u8(arm9bin, i + 3),
-            ))
+            lst.append(
+                DungeonDefinition(
+                    read_u8(arm9bin, i),
+                    read_u8(arm9bin, i + 1),
+                    read_u8(arm9bin, i + 2),
+                    read_u8(arm9bin, i + 3),
+                )
+            )
         return lst
 
     @staticmethod
-    def set_dungeon_list(value: List[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def set_dungeon_list(
+        value: List[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the dungeon definitions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
         """
-        block = config.binaries['arm9.bin'].symbols['DungeonList']
+        block = config.binaries["arm9.bin"].symbols["DungeonList"]
         expected_length = int((block.end - block.begin) / DUNGEON_LIST_ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
-            arm9bin[block.begin + i * DUNGEON_LIST_ENTRY_LEN:block.begin + (i + 1) * DUNGEON_LIST_ENTRY_LEN] = bytes([
-                entry.number_floors, entry.mappa_index, entry.start_after, entry.number_floors_in_group
-            ])
+            arm9bin[
+                block.begin
+                + i * DUNGEON_LIST_ENTRY_LEN : block.begin
+                + (i + 1) * DUNGEON_LIST_ENTRY_LEN
+            ] = bytes(
+                [
+                    entry.number_floors,
+                    entry.mappa_index,
+                    entry.start_after,
+                    entry.number_floors_in_group,
+                ]
+            )
 
     @staticmethod
-    def get_dungeon_restrictions(arm9bin: bytes, config: Pmd2Data) -> List[DungeonRestriction]:
+    def get_dungeon_restrictions(
+        arm9bin: bytes, config: Pmd2Data
+    ) -> List[DungeonRestriction]:
         """Returns the list of dungeon restrictions."""
-        block = config.binaries['arm9.bin'].symbols['DungeonRestrictions']
+        block = config.binaries["arm9.bin"].symbols["DungeonRestrictions"]
         lst = []
         for i in range(block.begin, block.end, DUNGEON_RESTRICTIONS_ENTRY_LEN):
-            lst.append(DungeonRestriction.from_bytes(arm9bin[i:i+DUNGEON_RESTRICTIONS_ENTRY_LEN]))
+            lst.append(
+                DungeonRestriction.from_bytes(
+                    arm9bin[i : i + DUNGEON_RESTRICTIONS_ENTRY_LEN]
+                )
+            )
         return lst
 
     @staticmethod
-    def set_dungeon_restrictions(value: List[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def set_dungeon_restrictions(
+        value: List[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the dungeon restrictions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_restrictions).
         """
-        block = config.binaries['arm9.bin'].symbols['DungeonRestrictions']
-        expected_length = int((block.end - block.begin) / DUNGEON_RESTRICTIONS_ENTRY_LEN)
+        block = config.binaries["arm9.bin"].symbols["DungeonRestrictions"]
+        expected_length = int(
+            (block.end - block.begin) / DUNGEON_RESTRICTIONS_ENTRY_LEN
+        )
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             start = block.begin + (i * DUNGEON_RESTRICTIONS_ENTRY_LEN)
-            arm9bin[start:start + DUNGEON_RESTRICTIONS_ENTRY_LEN] = entry.to_bytes()
+            arm9bin[start : start + DUNGEON_RESTRICTIONS_ENTRY_LEN] = entry.to_bytes()
 
     @staticmethod
-    def get_secondary_terrains(arm9bin: bytes, config: Pmd2Data) -> List[SecondaryTerrainTableEntry]:
+    def get_secondary_terrains(
+        arm9bin: bytes, config: Pmd2Data
+    ) -> List[SecondaryTerrainTableEntry]:
         """Returns the list of secondary terrains."""
-        block = config.binaries['arm9.bin'].symbols['SecondaryTerrains']
+        block = config.binaries["arm9.bin"].symbols["SecondaryTerrains"]
         lst = []
         for i in range(block.begin, block.end, SECONDARY_TERRAINS_ENTRY_LEN):
-            lst.append(SecondaryTerrainTableEntry(
-                int.from_bytes(arm9bin[i:i+ SECONDARY_TERRAINS_ENTRY_LEN], 'little',
-                               signed=False)
-            ))
+            lst.append(
+                SecondaryTerrainTableEntry(
+                    int.from_bytes(
+                        arm9bin[i : i + SECONDARY_TERRAINS_ENTRY_LEN],
+                        "little",
+                        signed=False,
+                    )
+                )
+            )
         return lst
 
     @staticmethod
-    def set_secondary_terrains(value: List[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def set_secondary_terrains(
+        value: List[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries['arm9.bin'].symbols['SecondaryTerrains']
+        block = config.binaries["arm9.bin"].symbols["SecondaryTerrains"]
         expected_length = int((block.end - block.begin) / SECONDARY_TERRAINS_ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             start = block.begin + (i * SECONDARY_TERRAINS_ENTRY_LEN)
-            arm9bin[start:start + SECONDARY_TERRAINS_ENTRY_LEN] = entry.value.to_bytes(SECONDARY_TERRAINS_ENTRY_LEN,
-                                                                                       'little', signed=False)
+            arm9bin[
+                start : start + SECONDARY_TERRAINS_ENTRY_LEN
+            ] = entry.value.to_bytes(
+                SECONDARY_TERRAINS_ENTRY_LEN, "little", signed=False
+            )
 
     @staticmethod
-    def get_marker_placements(arm9bin: bytes, config: Pmd2Data) -> List[MapMarkerPlacement]:
+    def get_marker_placements(
+        arm9bin: bytes, config: Pmd2Data
+    ) -> List[MapMarkerPlacement]:
         """Returns the list of secondary terrains."""
-        block = config.binaries['arm9.bin'].symbols['MapMarkerPlacements']
+        block = config.binaries["arm9.bin"].symbols["MapMarkerPlacements"]
         lst = []
         for i in range(block.begin, block.end, MAP_MARKER_PLACEMENTS_ENTRY_LEN):
-            lst.append(MapMarkerPlacement.from_bytes(arm9bin[i:i+MAP_MARKER_PLACEMENTS_ENTRY_LEN]))
+            lst.append(
+                MapMarkerPlacement.from_bytes(
+                    arm9bin[i : i + MAP_MARKER_PLACEMENTS_ENTRY_LEN]
+                )
+            )
         return lst
 
     @staticmethod
-    def set_marker_placements(value: List[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def set_marker_placements(
+        value: List[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data
+    ) -> None:
         """
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries['arm9.bin'].symbols['MapMarkerPlacements']
-        expected_length = int((block.end - block.begin) / MAP_MARKER_PLACEMENTS_ENTRY_LEN)
+        block = config.binaries["arm9.bin"].symbols["MapMarkerPlacements"]
+        expected_length = int(
+            (block.end - block.begin) / MAP_MARKER_PLACEMENTS_ENTRY_LEN
+        )
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             start = block.begin + (i * MAP_MARKER_PLACEMENTS_ENTRY_LEN)
-            arm9bin[start:start + MAP_MARKER_PLACEMENTS_ENTRY_LEN] = entry.to_bytes()
+            arm9bin[start : start + MAP_MARKER_PLACEMENTS_ENTRY_LEN] = entry.to_bytes()
 
     @staticmethod
-    def get_tileset_properties(ov10: bytes, config: Pmd2Data) -> List[TilesetProperties]:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['TilesetProperties']
+    def get_tileset_properties(
+        ov10: bytes, config: Pmd2Data
+    ) -> List[TilesetProperties]:
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["TilesetProperties"]
         lst = []
         for i in range(block.begin, block.end, TILESET_PROPERTIES_ENTRY_LEN):
-            lst.append(TilesetProperties.from_bytes(ov10[i:i+TILESET_PROPERTIES_ENTRY_LEN]))
+            lst.append(
+                TilesetProperties.from_bytes(ov10[i : i + TILESET_PROPERTIES_ENTRY_LEN])
+            )
         return lst
 
     @staticmethod
-    def set_tileset_properties(value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['overlay/overlay_0010.bin'].symbols['TilesetProperties']
+    def set_tileset_properties(
+        value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data
+    ) -> None:
+        block = config.binaries["overlay/overlay_0010.bin"].symbols["TilesetProperties"]
         expected_length = int((block.end - block.begin) / TILESET_PROPERTIES_ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             start = block.begin + (i * TILESET_PROPERTIES_ENTRY_LEN)
-            ov10[start:start + TILESET_PROPERTIES_ENTRY_LEN] = entry.to_bytes()
+            ov10[start : start + TILESET_PROPERTIES_ENTRY_LEN] = entry.to_bytes()

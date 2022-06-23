@@ -38,10 +38,10 @@ class DataST(AutoString):
 
     def set_item_struct_id(self, item_id: int, struct_id: i16):
         self.struct_ids[item_id] = struct_id
-        
+
     def add_item_struct_id(self, struct_id: i16):
         self.struct_ids.append(struct_id)
-        
+
     def get_all_of(self, struct_id: int) -> List[int]:
         ids = []
         for i, x in enumerate(self.struct_ids):
@@ -52,5 +52,7 @@ class DataST(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataST):
             return False
-        return self.struct_ids == other.struct_ids and \
-               self.struct_data == other.struct_data
+        return (
+            self.struct_ids == other.struct_ids
+            and self.struct_data == other.struct_data
+        )

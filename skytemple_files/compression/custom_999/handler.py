@@ -19,17 +19,14 @@
 #  the AT6P container compression format used in 999
 #  Changes made to the original algorithm are documented in the code
 #  As this is based on AT6P,
-#  the algorithm itself is based on this code (an AT6P decompressor): 
+#  the algorithm itself is based on this code (an AT6P decompressor):
 #  https://github.com/pleonex/tinke/blob/master/Plugins/999HRPERDOOR/999HRPERDOOR/AT6P.cs
-
 
 
 from __future__ import annotations
 
-from skytemple_files.compression.custom_999.compressor import \
-    Custom999Compressor
-from skytemple_files.compression.custom_999.decompressor import \
-    Custom999Decompressor
+from skytemple_files.compression.custom_999.compressor import Custom999Compressor
+from skytemple_files.compression.custom_999.decompressor import Custom999Decompressor
 
 
 class Custom999Handler:
@@ -38,6 +35,7 @@ class Custom999Handler:
     Does not follow default DataHandler pattern,
     is more complex as it also needs the decompressed size.
     """
+
     @classmethod
     def decompress(cls, compressed_data: bytes, decompressed_size: int) -> bytes:
         """Decompresses data stored."""

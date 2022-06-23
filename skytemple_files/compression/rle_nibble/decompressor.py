@@ -30,7 +30,8 @@ class RleNibbleDecompressor:
         copy_next = -1
         nb_keep = 0
         for b in self.compressed_data:
-            if len(out) >= self.decompressed_size: break
+            if len(out) >= self.decompressed_size:
+                break
             for i in range(2):
                 v = (b // (16 ** (1 - i))) % 16
                 if copy_next < 0 and not nb_keep:

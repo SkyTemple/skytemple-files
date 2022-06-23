@@ -18,24 +18,29 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class BmaLayerNrlHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'BMANRL'
+        return b"BMANRL"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_files.compression_container._prviate.bma_layer_nrl._pymodel import \
-            BmaLayerNrlCompressionContainer
+        from skytemple_files.compression_container._prviate.bma_layer_nrl._pymodel import (
+            BmaLayerNrlCompressionContainer,
+        )
+
         return BmaLayerNrlCompressionContainer
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bma_layer_nrl_compression import BmaLayerNrlCompressionContainer  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bma_layer_nrl_compression import (
+            BmaLayerNrlCompressionContainer,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BmaLayerNrlCompressionContainer

@@ -21,15 +21,23 @@ from typing import Dict, Optional
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (
-    SsbOperation, SsbOpParam, SsbOpParamConstString, SsbOpParamLanguageString,
-    SsbOpParamPositionMarker, SsbRoutineInfo, SsbRoutineType)
-from explorerscript.ssb_converting.ssb_decompiler import \
-    ExplorerScriptSsbDecompiler
-from explorerscript.ssb_script.ssb_converting.ssb_decompiler import \
-    SsbScriptSsbDecompiler
+    SsbOperation,
+    SsbOpParam,
+    SsbOpParamConstString,
+    SsbOpParamLanguageString,
+    SsbOpParamPositionMarker,
+    SsbRoutineInfo,
+    SsbRoutineType,
+)
+from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
+from explorerscript.ssb_script.ssb_converting.ssb_decompiler import (
+    SsbScriptSsbDecompiler,
+)
 
-from skytemple_files.common.ppmdu_config.script_data import (Pmd2ScriptData,
-                                                             Pmd2ScriptOpCode)
+from skytemple_files.common.ppmdu_config.script_data import (
+    Pmd2ScriptData,
+    Pmd2ScriptOpCode,
+)
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
@@ -42,19 +50,27 @@ SSB_PADDING_BEFORE_ROUTINE_INFO = 4
 
 
 class SkyTempleSsbOperation(SsbOperation):
-    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: List[SsbOpParam]):
+    def __init__(
+        self, offset: int, op_code: Pmd2ScriptOpCode, params: List[SsbOpParam]
+    ):
         super().__init__(offset, op_code, params)
 
 
 class Ssb:
     @classmethod
     def create_empty(cls, scriptdata: Pmd2ScriptData, supported_langs=None):
-        return cls(None, None, None, scriptdata, if_empty_supported_langs=supported_langs)
+        return cls(
+            None, None, None, scriptdata, if_empty_supported_langs=supported_langs
+        )
 
     def __init__(
-            self, data: Optional[bytes], header: Optional[AbstractSsbHeader],
-            begin_data_offset: Optional[int], scriptdata: Pmd2ScriptData, if_empty_supported_langs=None,
-            string_codec=string_codec.PMD2_STR_ENCODER
+        self,
+        data: Optional[bytes],
+        header: Optional[AbstractSsbHeader],
+        begin_data_offset: Optional[int],
+        scriptdata: Pmd2ScriptData,
+        if_empty_supported_langs=None,
+        string_codec=string_codec.PMD2_STR_ENCODER,
     ):
 
         self._scriptdata = scriptdata
@@ -68,7 +84,9 @@ class Ssb:
             self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []
             self.routine_ops: List[List[SkyTempleSsbOperation]] = []
             self.constants: List[str] = []
-            self.strings: Dict[str, List[str]] = {lang_name: [] for lang_name in if_empty_supported_langs}
+            self.strings: Dict[str, List[str]] = {
+                lang_name: [] for lang_name in if_empty_supported_langs
+            }
             return
         assert begin_data_offset is not None
         assert header is not None
@@ -81,7 +99,9 @@ class Ssb:
         # WARNING: This is NOT updated by this model. Only the writer can update it.
         self.original_binary_data = bytes(data)
 
-        start_of_const_table = begin_data_offset + (read_u16(data, begin_data_offset + 0x00) * 2)
+        start_of_const_table = begin_data_offset + (
+            read_u16(data, begin_data_offset + 0x00) * 2
+        )
         number_of_routines = read_u16(data, begin_data_offset + 0x02)
 
         self._header = header
@@ -111,7 +131,12 @@ class Ssb:
                             end_offset = start_of_const_table
                             break
                         end_offset = begin_data_offset + self.routine_info[alias_i][0]
-                read_ops, cursor = self._read_routine_op_codes(data, begin_data_offset + rtn_start_offset, end_offset, begin_data_offset)
+                read_ops, cursor = self._read_routine_op_codes(
+                    data,
+                    begin_data_offset + rtn_start_offset,
+                    end_offset,
+                    begin_data_offset,
+                )
             self.routine_ops.append(read_ops)
 
         # We read all the routines, the cursor should be at the beginning of the const_table
@@ -124,21 +149,27 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
+                start_of_const_table
+                + read_u16(data, i)
+                - (header.number_of_strings * 2)
             )
         self.constants = []
         cursor = start_of_constants
         # Read constants
         for const_string_offset in const_offset_table:
             assert cursor == const_string_offset
-            bytes_read, string = read_var_length_string(data, const_string_offset, self._string_codec)
+            bytes_read, string = read_var_length_string(
+                data, const_string_offset, self._string_codec
+            )
             self.constants.append(string)
             cursor += bytes_read
         # Padding if not even
         if cursor % 2 != 0:
             cursor += 1
         # The end of the script block must also match the data from the header
-        assert start_of_const_table + header.number_of_constants * 2 == start_of_constants
+        assert (
+            start_of_const_table + header.number_of_constants * 2 == start_of_constants
+        )
 
         # ### STRING OFFSETS AND STRING STRINGS
         # Read strings
@@ -153,13 +184,17 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
+                    start_of_const_table
+                    + read_u16(data, i)
+                    + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings
             for string_offset in string_offset_table_lang:
                 assert cursor == string_offset
-                bytes_read, string = read_var_length_string(data, string_offset, self._string_codec)
+                bytes_read, string = read_var_length_string(
+                    data, string_offset, self._string_codec
+                )
                 strings_lang.append(string)
                 cursor += bytes_read
             string_offset_table[language] = string_offset_table_lang
@@ -172,10 +207,15 @@ class Ssb:
 
     def _read_routine_info(self, data, number_of_routines, cursor):
         for i in range(0, number_of_routines):
-            self.routine_info.append((read_u16(data, cursor) * 2, SsbRoutineInfo(
-                type=SsbRoutineType(read_u16(data, cursor + 2)),
-                linked_to=read_u16(data, cursor + 4),
-            )))
+            self.routine_info.append(
+                (
+                    read_u16(data, cursor) * 2,
+                    SsbRoutineInfo(
+                        type=SsbRoutineType(read_u16(data, cursor + 2)),
+                        linked_to=read_u16(data, cursor + 4),
+                    ),
+                )
+            )
             cursor += SSB_LEN_ROUTINE_INFO_ENTRY
         return cursor
 
@@ -209,8 +249,10 @@ class Ssb:
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
             self._scriptdata.common_routine_info__by_id,
-            SsbConstant.create_for(self._scriptdata.game_variables__by_name['PERFORMANCE_PROGRESS_LIST']).name,
-            SsbConstant.get_dungeon_mode_constants()
+            SsbConstant.create_for(
+                self._scriptdata.game_variables__by_name["PERFORMANCE_PROGRESS_LIST"]
+            ).name,
+            SsbConstant.get_dungeon_mode_constants(),
         ).convert()
 
     def to_ssb_script(self) -> Tuple[str, SourceMap]:
@@ -218,16 +260,20 @@ class Ssb:
         return SsbScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
-            self._scriptdata.common_routine_info__by_id
+            self._scriptdata.common_routine_info__by_id,
         ).convert()
 
     def add_linked_to_names_to_routine_ops(self):
         for _, r in self.routine_info:
             try:
                 if r.type == SsbRoutineType.ACTOR:
-                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.level_entities__by_id[r.linked_to]).name
+                    r.linked_to_name = SsbConstant.create_for(
+                        self._scriptdata.level_entities__by_id[r.linked_to]
+                    ).name
                 elif r.type == SsbRoutineType.OBJECT:
-                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[r.linked_to]).name
+                    r.linked_to_name = SsbConstant.create_for(
+                        self._scriptdata.objects__by_id[r.linked_to]
+                    ).name
             except KeyError:
                 pass
 
@@ -247,10 +293,10 @@ class Ssb:
                         continue
                     argument_spec = self._get_argument_spec(op.op_code, i)
                     if argument_spec is not None:
-                        if argument_spec.type == 'uint':
+                        if argument_spec.type == "uint":
                             # TODO: Do unsigned parameters actually exist? If so are they also 14bit?
                             new_params.append(param)
-                        elif argument_spec.type == 'sint':
+                        elif argument_spec.type == "sint":
                             # 14 bit signed int.
                             if param >= 0x8000:
                                 # ??? This is bigger than 14bit.
@@ -258,69 +304,128 @@ class Ssb:
                             elif param & 0x4000:
                                 param = -0x8000 + param
                             new_params.append(param)
-                        elif argument_spec.type == 'sint16':
+                        elif argument_spec.type == "sint16":
                             # 16bit signed
                             if param & 0x8000:
                                 param = -0x10000 + param
                             new_params.append(param)
-                        elif argument_spec.type == 'Entity':
-                            new_params.append(SsbConstant.create_for(self._scriptdata.level_entities__by_id[param]))
-                        elif argument_spec.type == 'Object':
-                            new_params.append(SsbConstant.create_for(self._scriptdata.objects__by_id[param]))
-                        elif argument_spec.type == 'Routine':
-                            new_params.append(SsbConstant.create_for(self._scriptdata.common_routine_info__by_id[param]))
-                        elif argument_spec.type == 'Face':
+                        elif argument_spec.type == "Entity":
+                            new_params.append(
+                                SsbConstant.create_for(
+                                    self._scriptdata.level_entities__by_id[param]
+                                )
+                            )
+                        elif argument_spec.type == "Object":
+                            new_params.append(
+                                SsbConstant.create_for(
+                                    self._scriptdata.objects__by_id[param]
+                                )
+                            )
+                        elif argument_spec.type == "Routine":
+                            new_params.append(
+                                SsbConstant.create_for(
+                                    self._scriptdata.common_routine_info__by_id[param]
+                                )
+                            )
+                        elif argument_spec.type == "Face":
                             if param in self._scriptdata.face_names__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.face_names__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.face_names__by_id[param]
+                                    )
+                                )
                             else:
                                 logger.warning(f"Unknown face id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'FaceMode':
-                            new_params.append(SsbConstant.create_for(self._scriptdata.face_position_modes__by_id[param]))
-                        elif argument_spec.type == 'GameVar':
-                            new_params.append(SsbConstant.create_for(self._scriptdata.game_variables__by_id[param]))
-                        elif argument_spec.type == 'Level':
+                        elif argument_spec.type == "FaceMode":
+                            new_params.append(
+                                SsbConstant.create_for(
+                                    self._scriptdata.face_position_modes__by_id[param]
+                                )
+                            )
+                        elif argument_spec.type == "GameVar":
+                            new_params.append(
+                                SsbConstant.create_for(
+                                    self._scriptdata.game_variables__by_id[param]
+                                )
+                            )
+                        elif argument_spec.type == "Level":
                             if param in self._scriptdata.level_list__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.level_list__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.level_list__by_id[param]
+                                    )
+                                )
                             else:
                                 logger.warning(f"Unknown level id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'Menu':
+                        elif argument_spec.type == "Menu":
                             if param in self._scriptdata.menus__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.menus__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.menus__by_id[param]
+                                    )
+                                )
                             else:
                                 logger.warning(f"Unknown menu id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'ProcessSpecial':
+                        elif argument_spec.type == "ProcessSpecial":
                             if param in self._scriptdata.process_specials__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.process_specials__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.process_specials__by_id[param]
+                                    )
+                                )
                             else:
                                 new_params.append(param)
                                 logger.warning(f"Unknown special process id: {param}")
-                        elif argument_spec.type == 'Direction':
+                        elif argument_spec.type == "Direction":
                             if param in self._scriptdata.directions__by_ssb_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.directions__by_ssb_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.directions__by_ssb_id[param]
+                                    )
+                                )
                             else:
                                 new_params.append(param)
                                 logger.warning(f"Unknown direction id: {param}")
-                        elif argument_spec.type == 'Bgm':
+                        elif argument_spec.type == "Bgm":
                             if param in self._scriptdata.bgms__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.bgms__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.bgms__by_id[param]
+                                    )
+                                )
                             else:
                                 logger.warning(f"Unknown BGM id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'Effect':
+                        elif argument_spec.type == "Effect":
                             if param in self._scriptdata.sprite_effects__by_id:
-                                new_params.append(SsbConstant.create_for(self._scriptdata.sprite_effects__by_id[param]))
+                                new_params.append(
+                                    SsbConstant.create_for(
+                                        self._scriptdata.sprite_effects__by_id[param]
+                                    )
+                                )
                             else:
                                 logger.warning(f"Unknown effect id: {param}")
                                 new_params.append(param)
-                        elif argument_spec.type == 'String' or argument_spec.type == 'ConstString':
+                        elif (
+                            argument_spec.type == "String"
+                            or argument_spec.type == "ConstString"
+                        ):
                             if param >= len(self.constants):
-                                new_params.append(SsbOpParamLanguageString(self.get_single_string(param - len(self.constants))))
+                                new_params.append(
+                                    SsbOpParamLanguageString(
+                                        self.get_single_string(
+                                            param - len(self.constants)
+                                        )
+                                    )
+                                )
                             else:
-                                new_params.append(SsbOpParamConstString(self.constants[param]))
-                        elif argument_spec.type == 'PositionMark':
+                                new_params.append(
+                                    SsbOpParamConstString(self.constants[param])
+                                )
+                        elif argument_spec.type == "PositionMark":
                             x_offset = y_offset = x_relative = y_relative = 0
                             try:
                                 x_offset = param
@@ -328,16 +433,28 @@ class Ssb:
                                 x_relative = op.params[i + 2]
                                 y_relative = op.params[i + 3]
                             except IndexError:
-                                logger.warning("SSB had wrong number of arguments for building a position marker.")
-                            new_params.append(SsbOpParamPositionMarker(
-                                f'm{pos_marker_increment}', x_offset, y_offset, x_relative, y_relative
-                            ))
+                                logger.warning(
+                                    "SSB had wrong number of arguments for building a position marker."
+                                )
+                            new_params.append(
+                                SsbOpParamPositionMarker(
+                                    f"m{pos_marker_increment}",
+                                    x_offset,
+                                    y_offset,
+                                    x_relative,
+                                    y_relative,
+                                )
+                            )
                             pos_marker_increment += 1
                             skip_arguments = 3
                         else:
-                            raise RuntimeError(f"Unknown argument type '{argument_spec.type}'")
+                            raise RuntimeError(
+                                f"Unknown argument type '{argument_spec.type}'"
+                            )
                     else:
-                        raise RuntimeError(f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}")
+                        raise RuntimeError(
+                            f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}"
+                        )
                 new_op = SkyTempleSsbOperation(op.offset, op.op_code, new_params)
                 rtn_ops.append(new_op)
             rtns.append(rtn_ops)
@@ -356,7 +473,10 @@ class Ssb:
     def _get_argument_spec(op_code: Pmd2ScriptOpCode, i):
         """Returns the spec for an argument at a given index, if defined. Also checks repeating arguments."""
         # Maybe it's a repeating argument?
-        if op_code.repeating_argument_group is not None and op_code.repeating_argument_group.id <= i:
+        if (
+            op_code.repeating_argument_group is not None
+            and op_code.repeating_argument_group.id <= i
+        ):
             # Use repeating args
             repeat_i = i - op_code.repeating_argument_group.id
             index = repeat_i % len(op_code.repeating_argument_group.arguments)
@@ -366,8 +486,11 @@ class Ssb:
         return None
 
     @classmethod
-    def internal__get_all_raw_strings_from(cls, data: bytes, region: str) -> List[bytes]:
+    def internal__get_all_raw_strings_from(
+        cls, data: bytes, region: str
+    ) -> List[bytes]:
         """Returns all strings in this file, undecoded."""
+
         def _read_var_length_string_raw(stdata: bytes, start: int = 0):
             bytes_of_string = bytearray()
             current_byte = -1
@@ -380,12 +503,17 @@ class Ssb:
 
             return stcursor - start, bytes_of_string
 
-        from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                              GAME_REGION_JP,
-                                                              GAME_REGION_US)
-        from skytemple_files.script.ssb.header import (SsbHeaderEu,
-                                                       SsbHeaderJp,
-                                                       SsbHeaderUs)
+        from skytemple_files.common.ppmdu_config.data import (
+            GAME_REGION_EU,
+            GAME_REGION_JP,
+            GAME_REGION_US,
+        )
+        from skytemple_files.script.ssb.header import (
+            SsbHeaderEu,
+            SsbHeaderJp,
+            SsbHeaderUs,
+        )
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
@@ -399,7 +527,9 @@ class Ssb:
         else:
             raise ValueError(f"Unsupported game edition: {region}")
 
-        start_of_const_table = header.data_offset + (read_u16(data, header.data_offset + 0x00) * 2)
+        start_of_const_table = header.data_offset + (
+            read_u16(data, header.data_offset + 0x00) * 2
+        )
 
         # ### CONSTANT OFFSETS AND CONSTANT STRINGS
         # Read const offset table
@@ -408,7 +538,9 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
+                start_of_const_table
+                + read_u16(data, i)
+                - (header.number_of_strings * 2)
             )
         constants = []
         cursor = start_of_constants
@@ -422,7 +554,9 @@ class Ssb:
         if cursor % 2 != 0:
             cursor += 1
         # The end of the script block must also match the data from the header
-        assert start_of_const_table + header.number_of_constants * 2 == start_of_constants
+        assert (
+            start_of_const_table + header.number_of_constants * 2 == start_of_constants
+        )
 
         # ### STRING OFFSETS AND STRING STRINGS
         # Read strings
@@ -436,7 +570,9 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
+                    start_of_const_table
+                    + read_u16(data, i)
+                    + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings

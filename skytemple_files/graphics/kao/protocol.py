@@ -25,7 +25,7 @@ from PIL.Image import Image
 class KaoImageProtocol(Protocol):
     @classmethod
     @abstractmethod
-    def create_from_raw(cls, cimg: bytes, pal: bytes) -> 'KaoImageProtocol':
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> "KaoImageProtocol":
         """Create from raw compressed image and palette data"""
         ...
 
@@ -35,7 +35,7 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
-    def clone(self) -> 'KaoImageProtocol':
+    def clone(self) -> "KaoImageProtocol":
         ...
 
     @abstractmethod
@@ -43,7 +43,7 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
-    def set(self, pil: Image) -> 'KaoImageProtocol':
+    def set(self, pil: Image) -> "KaoImageProtocol":
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         ...
 
@@ -53,7 +53,7 @@ class KaoImageProtocol(Protocol):
         ...
 
 
-T = TypeVar('T', bound=KaoImageProtocol)
+T = TypeVar("T", bound=KaoImageProtocol)
 
 
 class KaoProtocol(Protocol[T]):

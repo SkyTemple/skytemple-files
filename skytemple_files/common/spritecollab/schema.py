@@ -40,12 +40,12 @@ class Credit(Credit_Basic, Credit_DiscordHandle):
     pass
 
 
-def credit_canonical_name(this: 'Credit') -> str:
-    if this['name'] is not None:
-        return this['name']
-    if this['discordHandle'] is not None:
-        return this['discordHandle']
-    return this['id']
+def credit_canonical_name(this: "Credit") -> str:
+    if this["name"] is not None:
+        return this["name"]
+    if this["discordHandle"] is not None:
+        return this["discordHandle"]
+    return this["id"]
 
 
 PHASE_INCOMPLETE: Literal["INCOMPLETE"] = "INCOMPLETE"
@@ -126,7 +126,9 @@ class MonsterFormSprites_Action(TypedDict):
     action: OptionalSpriteUnion
 
 
-class MonsterFormSprites(MonsterFormSprites_Metadata, MonsterFormSprites_Actions, MonsterFormSprites_Action):
+class MonsterFormSprites(
+    MonsterFormSprites_Metadata, MonsterFormSprites_Actions, MonsterFormSprites_Action
+):
     pass
 
 
@@ -160,7 +162,12 @@ class MonsterFormPortraits_Emotion(TypedDict):
     emotionFlipped: Optional[Portrait]
 
 
-class MonsterFormPortraits(MonsterFormPortraits_Metadata, MonsterFormPortraits_PreviewEmotion, MonsterFormPortraits_Emotions, MonsterFormPortraits_Emotion):
+class MonsterFormPortraits(
+    MonsterFormPortraits_Metadata,
+    MonsterFormPortraits_PreviewEmotion,
+    MonsterFormPortraits_Emotions,
+    MonsterFormPortraits_Emotion,
+):
     pass
 
 
@@ -257,5 +264,12 @@ class Query_Config(TypedDict):
     config: Config
 
 
-class Query(Query_ApiVersion, Query_SearchMonster, Query_Monster, Query_SearchCredit, Query_Credit, Query_Config):
+class Query(
+    Query_ApiVersion,
+    Query_SearchMonster,
+    Query_Monster,
+    Query_SearchCredit,
+    Query_Credit,
+    Query_Config,
+):
     pass

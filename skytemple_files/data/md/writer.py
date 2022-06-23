@@ -31,7 +31,7 @@ class MdWriter:
         # At max we will need 8 byte header + (number entries * 68):
         self.data = bytearray(8 + len(self.model.entries) * MD_ENTRY_LEN)
         self.bytes_written = 4
-        self.data[0:4] = b'MD\0\0'
+        self.data[0:4] = b"MD\0\0"
         self._write_u32(u32(len(self.model.entries)))
 
         for entry in self.model.entries:
@@ -52,9 +52,22 @@ class MdWriter:
             self._write_u8(entry.iq_group.value)
             self._write_u8(entry.ability_primary.value)
             self._write_u8(entry.ability_secondary.value)
-            self._write_u16(u16(generate_bitfield((
-                entry.item_required_for_spawning, entry.can_evolve, entry.bitfield1_5, entry.can_move,
-                entry.bitfield1_3, entry.bitfield1_2, entry.bitfield1_1, entry.bitfield1_0))))
+            self._write_u16(
+                u16(
+                    generate_bitfield(
+                        (
+                            entry.item_required_for_spawning,
+                            entry.can_evolve,
+                            entry.bitfield1_5,
+                            entry.can_move,
+                            entry.bitfield1_3,
+                            entry.bitfield1_2,
+                            entry.bitfield1_1,
+                            entry.bitfield1_0,
+                        )
+                    )
+                )
+            )
             self._write_u16(entry.exp_yield)
             self._write_i16(entry.recruit_rate1)
             self._write_u16(entry.base_hp)
@@ -68,7 +81,9 @@ class MdWriter:
             self._write_u8(entry.unk17)
             self._write_u8(entry.unk18)
             self._write_i8(entry.shadow_size.value)
-            self._write_i8(entry.chance_spawn_asleep,)
+            self._write_i8(
+                entry.chance_spawn_asleep,
+            )
             self._write_u8(entry.hp_regeneration)
             self._write_i8(entry.unk21_h)
             self._write_i16(entry.base_form_index)

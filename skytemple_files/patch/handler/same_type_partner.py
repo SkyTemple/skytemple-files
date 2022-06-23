@@ -21,50 +21,62 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-ORIGINAL_BYTESEQ = bytes(b'\x07\x00\x00\x1a')
+ORIGINAL_BYTESEQ = bytes(b"\x07\x00\x00\x1a")
 OFFSET = 0x180C
 
 
 class SameTypePartnerPatch(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'SameTypePartner'
+        return "SameTypePartner"
 
     @property
     def description(self) -> str:
-        return _("Allows the partner to be of the same type as the player in the personality test.")
+        return _(
+            "Allows the partner to be of the same type as the player in the personality test."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay13 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0013.bin'])
+        overlay13 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0013.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
-            if config.game_region == GAME_REGION_US or config.game_region == GAME_REGION_EU:
-                return overlay13[OFFSET:OFFSET+4] != ORIGINAL_BYTESEQ
+            if (
+                config.game_region == GAME_REGION_US
+                or config.game_region == GAME_REGION_EU
+            ):
+                return overlay13[OFFSET : OFFSET + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

@@ -20,10 +20,12 @@ from typing import Callable
 
 from range_typed_integers import u32_checked
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.common.util import _
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
@@ -49,30 +51,128 @@ FLOOR_FORBID_PATH = "BALANCE/fforbid.bin"
 FLOOR_RANKS_PATH = "BALANCE/f_ranks.bin"
 AVAILABLE_ITEMS_PATH = "BALANCE/a_items.bin"
 # TODO: move this somewhere else
-FLOORS_NB = [3, 5, 6, 10, 8, 12, 9, 5, 14, 5, 11, 5, 16, 20, 15, 21, 11, 14, 8, 15, 15, 8, 12, 20, 15, 24, 24, 14, 25,
-             25, 20, 18, 50, 20, 23, 30, 18, 30, 20, 8, 13, 20, 10, 15, 20, 20, 30, 6, 5, 10, 5, 50, 20, 99, 30, 19, 19,
-             17, 25, 75, 40, 40, 99, 1, 50, 99, 10, 5, 15, 20, 25, 30, 40, 17, 7, 10, 15, 11, 16, 20, 8, 10, 15, 10, 18,
-             10, 11, 5, 5, 11, 19, 16, 5, 6, 7, 6, 5, 5, 5, 5]
+FLOORS_NB = [
+    3,
+    5,
+    6,
+    10,
+    8,
+    12,
+    9,
+    5,
+    14,
+    5,
+    11,
+    5,
+    16,
+    20,
+    15,
+    21,
+    11,
+    14,
+    8,
+    15,
+    15,
+    8,
+    12,
+    20,
+    15,
+    24,
+    24,
+    14,
+    25,
+    25,
+    20,
+    18,
+    50,
+    20,
+    23,
+    30,
+    18,
+    30,
+    20,
+    8,
+    13,
+    20,
+    10,
+    15,
+    20,
+    20,
+    30,
+    6,
+    5,
+    10,
+    5,
+    50,
+    20,
+    99,
+    30,
+    19,
+    19,
+    17,
+    25,
+    75,
+    40,
+    40,
+    99,
+    1,
+    50,
+    99,
+    10,
+    5,
+    15,
+    20,
+    25,
+    30,
+    40,
+    17,
+    7,
+    10,
+    15,
+    11,
+    16,
+    20,
+    8,
+    10,
+    15,
+    10,
+    18,
+    10,
+    11,
+    5,
+    5,
+    11,
+    19,
+    16,
+    5,
+    6,
+    7,
+    6,
+    5,
+    5,
+    5,
+    5,
+]
 
 
 class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ExtractDungeonData'
+        return "ExtractDungeonData"
 
     @property
     def description(self) -> str:
         return _(
-            'Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system.')
+            "Extracts the floor ranks, forbidden mission floors, items available in dungeon tables and put them in files. Provides support for reading them from the rom file system."
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -81,12 +181,20 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
+                    != PATCH_CHECK_INSTR_APPLIED_US
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED_EU
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -114,7 +222,9 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
                     if rom.arm9[x] == i:
                         fdata[rom.arm9[x + 1]] = 1
                     x += 2
-                rom.arm9 = rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
+                rom.arm9 = (
+                    rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
+                )
                 write_u32(header, current_ptr, i * 4)
                 rank_data += bytearray(rdata)
                 forbid_data += bytearray(fdata)
@@ -151,5 +261,7 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

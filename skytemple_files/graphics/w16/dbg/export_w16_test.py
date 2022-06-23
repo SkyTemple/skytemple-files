@@ -24,17 +24,17 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.w16.model import W16Image
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
-filenames = ['rankmark', 'clrmark1', 'clrmark2']
+filenames = ["rankmark", "clrmark1", "clrmark2"]
 
 for fn in filenames:
-    bin = rom.getFileByName(f'FONT/{fn}.w16')
+    bin = rom.getFileByName(f"FONT/{fn}.w16")
     w16 = W16Handler.deserialize(bin)
     for i, img in enumerate(w16):
         img: W16Image
         im = img.get()
         print(fn, i, img.entry_data.width, img.entry_data.height)
-        im.save(f'/tmp/{fn}_{i:03}.png')
+        im.save(f"/tmp/{fn}_{i:03}.png")

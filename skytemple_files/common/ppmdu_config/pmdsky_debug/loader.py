@@ -33,10 +33,13 @@ import yaml
 
 from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import (
-    Pmd2Binary, Pmd2BinarySymbol, Pmd2BinarySymbolType)
+    Pmd2Binary,
+    Pmd2BinarySymbol,
+    Pmd2BinarySymbolType,
+)
 from skytemple_files.common.util import get_resources_dir, open_utf8
 
-SYMBOLS_DIR = os.path.join(get_resources_dir(), 'pmdsky-debug', 'symbols')
+SYMBOLS_DIR = os.path.join(get_resources_dir(), "pmdsky-debug", "symbols")
 OVERLAY_REGEX = re.compile(r"overlay(\d+)")
 # Aliase for backwards compatibility:
 ALIAS_MAP = {
@@ -136,22 +139,32 @@ ALIAS_MAP = {
     "NECTAR_IQ_BOOST": ["NECTAR_IQ_GAIN"],
     "FIXED_ROOM_TILE_SPAWN_TABLE": ["TILE_SPAWN_TABLE"],
     "TOP_MENU_MUSIC_ID": ["MAIN_MENU_SONG_ID"],
-    "TOP_MENU_RETURN_MUSIC_ID": ["MAIN_MENU_RETURN_SONG_ID"]
+    "TOP_MENU_RETURN_MUSIC_ID": ["MAIN_MENU_RETURN_SONG_ID"],
 }
 
 
 class DeprecatedPmd2BinarySymbol(Pmd2BinarySymbol):
     _DEPRECATION_WARNING = "The symbol {} is deprecated, use {} instead."
 
-    def __init__(self, name: str, begin: int, end: Optional[int], description: str,
-                 typ: Optional[Pmd2BinarySymbolType], new_name: str):
+    def __init__(
+        self,
+        name: str,
+        begin: int,
+        end: Optional[int],
+        description: str,
+        typ: Optional[Pmd2BinarySymbolType],
+        new_name: str,
+    ):
         self._begin: int = None  # type: ignore
         self.new_name: str = new_name
         super().__init__(name, begin, end, description, typ)
 
     @property  # type: ignore
     def begin(self):
-        warnings.warn(self.__class__._DEPRECATION_WARNING.format(self.name, self.new_name), DeprecationWarning)
+        warnings.warn(
+            self.__class__._DEPRECATION_WARNING.format(self.name, self.new_name),
+            DeprecationWarning,
+        )
         return self._begin
 
     @begin.setter
@@ -160,7 +173,10 @@ class DeprecatedPmd2BinarySymbol(Pmd2BinarySymbol):
 
     @property
     def end(self):
-        warnings.warn(self.__class__._DEPRECATION_WARNING.format(self.name, self.new_name), DeprecationWarning)
+        warnings.warn(
+            self.__class__._DEPRECATION_WARNING.format(self.name, self.new_name),
+            DeprecationWarning,
+        )
         return self._end
 
 
@@ -174,7 +190,9 @@ class _IncompleteBinary:
     _discard: bool = False
 
     @classmethod
-    def get(cls, pool: Dict[str, '_IncompleteBinary'], name: str) -> '_IncompleteBinary':
+    def get(
+        cls, pool: Dict[str, "_IncompleteBinary"], name: str
+    ) -> "_IncompleteBinary":
         if name in pool:
             return pool[name]
         newobj = _IncompleteBinary()
@@ -182,37 +200,35 @@ class _IncompleteBinary:
         return newobj
 
 
-def _read_symbol(loadaddr: int, symbol_def: dict, typ: Pmd2BinarySymbolType, region: str) -> Optional[Pmd2BinarySymbol]:
+def _read_symbol(
+    loadaddr: int, symbol_def: dict, typ: Pmd2BinarySymbolType, region: str
+) -> Optional[Pmd2BinarySymbol]:
     assert isinstance(loadaddr, int)
-    if 'name' in symbol_def:
-        name = symbol_def['name']
+    if "name" in symbol_def:
+        name = symbol_def["name"]
     else:
         raise ValueError("Symbol is missing its name.")
-    
-    if 'address' in symbol_def:
-        if region in symbol_def['address']:
-            if isinstance(symbol_def['address'][region], list):
-                begin = symbol_def['address'][region][0] - loadaddr
+
+    if "address" in symbol_def:
+        if region in symbol_def["address"]:
+            if isinstance(symbol_def["address"][region], list):
+                begin = symbol_def["address"][region][0] - loadaddr
             else:
-                begin = symbol_def['address'][region] - loadaddr
+                begin = symbol_def["address"][region] - loadaddr
         else:
             return None
     else:
         raise ValueError(f"Symbol {name} is missing an address.")
 
     end = None
-    if 'length' in symbol_def:
-        if region in symbol_def['length']:
-            end = begin + symbol_def['length'][region]
+    if "length" in symbol_def:
+        if region in symbol_def["length"]:
+            end = begin + symbol_def["length"][region]
 
-    description = symbol_def.get('description', "")
+    description = symbol_def.get("description", "")
 
     return Pmd2BinarySymbol(
-        name=name,
-        typ=typ,
-        begin=begin,
-        end=end,
-        description=description
+        name=name, typ=typ, begin=begin, end=end, description=description
     )
 
 
@@ -221,41 +237,48 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
     for bin_name, definition in yml.items():
         assert isinstance(bin_name, str)
         binary = _IncompleteBinary.get(binaries, bin_name)
-        if 'versions' in definition:
+        if "versions" in definition:
             # If it isn't we assume it's valid for all regions.
-            if region not in definition['versions']:
+            if region not in definition["versions"]:
                 binary._discard = True
                 continue
-        if 'address' in definition:
-            if region in definition['address']:
+        if "address" in definition:
+            if region in definition["address"]:
                 if binary.loadaddress is None:
-                    binary.loadaddress = int(definition['address'][region])
-        if 'length' in definition:
-            if region in definition['length']:
+                    binary.loadaddress = int(definition["address"][region])
+        if "length" in definition:
+            if region in definition["length"]:
                 if binary.length is None:
-                    binary.length = int(definition['length'][region])
-        if 'functions' in definition:
+                    binary.length = int(definition["length"][region])
+        if "functions" in definition:
             assert binary.loadaddress is not None
-            for symbol_def in definition['functions']:
-                sym = _read_symbol(binary.loadaddress, symbol_def, Pmd2BinarySymbolType.FUNCTION, region)
+            for symbol_def in definition["functions"]:
+                sym = _read_symbol(
+                    binary.loadaddress,
+                    symbol_def,
+                    Pmd2BinarySymbolType.FUNCTION,
+                    region,
+                )
                 if sym is not None:
                     binary.symbols.append(sym)
-        if 'data' in definition:
+        if "data" in definition:
             assert binary.loadaddress is not None
-            for symbol_def in definition['data']:
-                sym = _read_symbol(binary.loadaddress, symbol_def, Pmd2BinarySymbolType.DATA, region)
+            for symbol_def in definition["data"]:
+                sym = _read_symbol(
+                    binary.loadaddress, symbol_def, Pmd2BinarySymbolType.DATA, region
+                )
                 if sym is not None:
                     binary.symbols.append(sym)
-        if 'description' in definition:
+        if "description" in definition:
             if binary.description == "":
-                binary.description = definition['description']
+                binary.description = definition["description"]
 
 
 def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
     # Merge ram into arm9 blocks (for backwards compatibility RAM is treated as arm9 by SkyTemple):
-    if 'ram' in binaries and 'arm9' in binaries:
-        binaries['arm9'].symbols += binaries['ram'].symbols
-        del binaries['ram']
+    if "ram" in binaries and "arm9" in binaries:
+        binaries["arm9"].symbols += binaries["ram"].symbols
+        del binaries["ram"]
     out = []
     for bin_name, incl_bin in binaries.items():
         if incl_bin._discard:
@@ -267,23 +290,31 @@ def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
         translated_bin_name = f"{bin_name}.bin"
         overlay_match = OVERLAY_REGEX.match(bin_name)
         if overlay_match:
-            translated_bin_name = f"overlay/overlay_{int(overlay_match.group(1)):04}.bin"
+            translated_bin_name = (
+                f"overlay/overlay_{int(overlay_match.group(1)):04}.bin"
+            )
         alias_symbols: List[Pmd2BinarySymbol] = []
         for symbol in incl_bin.symbols:
             # Provide aliases for some symbols for backwards compatibility.
             if symbol.name in ALIAS_MAP:
                 for entry in ALIAS_MAP[symbol.name]:
                     # noinspection PyProtectedMember
-                    alias_symbols.append(DeprecatedPmd2BinarySymbol(
-                        name=entry, begin=symbol.begin, end=symbol._end, description=symbol.description, typ=symbol.type,
-                        new_name=symbol.name
-                    ))
+                    alias_symbols.append(
+                        DeprecatedPmd2BinarySymbol(
+                            name=entry,
+                            begin=symbol.begin,
+                            end=symbol._end,
+                            description=symbol.description,
+                            typ=symbol.type,
+                            new_name=symbol.name,
+                        )
+                    )
         binary = Pmd2Binary(
             filepath=translated_bin_name,
             loadaddress=incl_bin.loadaddress,
             length=incl_bin.length,
             symbols=incl_bin.symbols + alias_symbols,
-            description=incl_bin.description
+            description=incl_bin.description,
         )
         for symbol in binary.symbols.values():
             symbol.parent = binary
@@ -299,17 +330,21 @@ def load_binaries(edition: str) -> List[Pmd2Binary]:
 
     binaries: Dict[str, _IncompleteBinary] = {}
 
-    files = glob(os.path.join(SYMBOLS_DIR, '*.yml'))
+    files = glob(os.path.join(SYMBOLS_DIR, "*.yml"))
 
     # Make sure the arm and overlay files are read this: These are the main files.
     # They will contain the address, length and description.
-    files.sort(key=lambda key: -1 if key.startswith('arm') or key.startswith('overlay') else 1)
+    files.sort(
+        key=lambda key: -1 if key.startswith("arm") or key.startswith("overlay") else 1
+    )
 
     for yml_path in files:
-        with open_utf8(yml_path, 'r') as f:
+        with open_utf8(yml_path, "r") as f:
             _read(binaries, yaml.safe_load(f), region)
 
-    with open_utf8(os.path.join(get_resources_dir(), "skytemple_pmdsky_debug_symbols.yml"), 'r') as f:
+    with open_utf8(
+        os.path.join(get_resources_dir(), "skytemple_pmdsky_debug_symbols.yml"), "r"
+    ) as f:
         _read(binaries, yaml.safe_load(f), region)
 
     return _build(binaries)

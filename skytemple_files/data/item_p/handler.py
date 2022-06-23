@@ -28,20 +28,23 @@ class ItemPHandler(DataHandler[ItemP]):
     Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
+
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ItemP':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "ItemP":
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ItemP)
 
     @classmethod
-    def serialize(cls, data: 'ItemP', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: "ItemP", **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ItemP':
+    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> "ItemP":
         return ItemP(data, 0)
 
     @classmethod
-    def serialize_raw(cls, data: 'ItemP', **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: "ItemP", **kwargs: OptionalKwargs) -> bytes:
         return ItemPWriter(data).write()[0]

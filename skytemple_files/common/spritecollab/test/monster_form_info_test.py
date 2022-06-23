@@ -20,11 +20,12 @@ from unittest import IsolatedAsyncioTestCase
 
 from PIL import Image
 
-from skytemple_files.common.spritecollab.client import \
-    MonsterFormInfoWithPortrait
+from skytemple_files.common.spritecollab.client import MonsterFormInfoWithPortrait
 from skytemple_files.common.spritecollab.schema import PHASE_UNKNOWN
 from skytemple_files.common.spritecollab.test.requests_mock import (
-    FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock)
+    FIX_TEST_FILES_WITH_NONE,
+    AioRequestAdapterMock,
+)
 
 
 class MonsterFormInfoTestCase(IsolatedAsyncioTestCase):
@@ -50,15 +51,9 @@ class MonsterFormInfoTestCase(IsolatedAsyncioTestCase):
             self.obj.preview_portrait = url
 
             if fpath is None:
-                self.assertEqual(
-                    None,
-                    await self.obj.fetch_preview_portrait()
-                )
+                self.assertEqual(None, await self.obj.fetch_preview_portrait())
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data,
-                    await self.obj.fetch_preview_portrait()
-                )
+                self.assertEqual(data, await self.obj.fetch_preview_portrait())

@@ -19,9 +19,12 @@
 from __future__ import annotations
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpl import (BPL_COL_INDEX_ENTRY_LEN,
-                                          BPL_FOURTH_COLOR, BPL_PAL_ENTRY_LEN,
-                                          BPL_PAL_SIZE)
+from skytemple_files.graphics.bpl import (
+    BPL_COL_INDEX_ENTRY_LEN,
+    BPL_FOURTH_COLOR,
+    BPL_PAL_ENTRY_LEN,
+    BPL_PAL_SIZE,
+)
 from skytemple_files.graphics.bpl._model import Bpl
 
 
@@ -34,12 +37,12 @@ class BplWriter:
         animation_size = 0
         if model.has_palette_animation:
             animation_palette_size = len(model.animation_palette) * BPL_PAL_ENTRY_LEN
-            animation_size = model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
+            animation_size = (
+                model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
+            )
 
         # 4 byte header + palettes + animation
-        data = bytearray(
-            4 + (model.number_palettes * BPL_PAL_SIZE) + animation_size
-        )
+        data = bytearray(4 + (model.number_palettes * BPL_PAL_SIZE) + animation_size)
 
         # Header
         self._write_16uintle(data, model.number_palettes)

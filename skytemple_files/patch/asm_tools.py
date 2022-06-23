@@ -136,7 +136,7 @@ class AsmFunction:
     def _read_instr(self, i):
         code = 0
         for x in range(4):
-            code += self.data[i * 4 + x] * (256 ** x)
+            code += self.data[i * 4 + x] * (256**x)
         return code
 
     def process(self) -> Tuple[Set[int], Set[int]]:
@@ -150,8 +150,12 @@ class AsmFunction:
                 if baddr >= BRANCH_NEG:
                     baddr -= 2 * BRANCH_NEG
                 baddr = baddr * 0x4 + offset + 0x8
-                if not (self.old_start_address <= baddr < self.old_start_address + len(self.data)):
-                    self.external_calls[x] = (False, baddr, 'b')
+                if not (
+                    self.old_start_address
+                    <= baddr
+                    < self.old_start_address + len(self.data)
+                ):
+                    self.external_calls[x] = (False, baddr, "b")
                     calls.add(baddr)
             elif code & LDR_MASK == LDR_CODE:
                 offset = code & IMMEDIATE_FIELD
@@ -160,23 +164,31 @@ class AsmFunction:
                 offset += 0x8
                 datapos = x + offset // 4
                 baddr = datapos * 4 + self.old_start_address
-                if not (self.old_start_address <= datapos < self.old_start_address + len(self.data)):
-                    self.external_calls[x] = (False, baddr, 'ldrdata')
+                if not (
+                    self.old_start_address
+                    <= datapos
+                    < self.old_start_address + len(self.data)
+                ):
+                    self.external_calls[x] = (False, baddr, "ldrdata")
                     ext_data.add(baddr)
                 else:
-                    self.external_calls[datapos] = (False, self._read_instr(datapos), 'ldr')
+                    self.external_calls[datapos] = (
+                        False,
+                        self._read_instr(datapos),
+                        "ldr",
+                    )
         return (calls, ext_data)
 
     def add_instructions(self, instr: bytes):
         self.data += instr
 
-    def link_to_others(self, func_list: Dict[int, 'AsmFunction']) -> bool:
+    def link_to_others(self, func_list: Dict[int, "AsmFunction"]) -> bool:
         has_links = False
         for c in self.external_calls.keys():
             v = self.external_calls[c]
             baddr = v[1]
             if baddr in func_list:
-                if v[2] == 'ldr' or v[2] == 'b':
+                if v[2] == "ldr" or v[2] == "b":
                     self.external_calls[c] = (True, func_list[baddr], v[2])
                     has_links = True
         return has_links
@@ -187,7 +199,7 @@ class AsmFunction:
             v = self.external_calls[c]
             baddr = v[1]
             if baddr in data_list:
-                if v[2] == 'ldrdata':
+                if v[2] == "ldrdata":
                     self.external_calls[c] = (True, data_list[baddr], v[2])
                     has_links = True
         return has_links
@@ -197,10 +209,16 @@ class AsmFunction:
 
         for c, v in self.external_calls.items():
             if v[0]:
-                if v[2] == 'ldrdata':
+                if v[2] == "ldrdata":
                     new_baddr = new_start_address + len(new_data)
                     new_data += bytearray(
-                        [v[1] % 256, (v[1] // 256) % 256, (v[1] // 65536) % 256, (v[1] // 65536 // 256) % 256])
+                        [
+                            v[1] % 256,
+                            (v[1] // 256) % 256,
+                            (v[1] // 65536) % 256,
+                            (v[1] // 65536 // 256) % 256,
+                        ]
+                    )
                 else:
                     if self == v[1]:
                         new_baddr = new_start_address
@@ -210,32 +228,42 @@ class AsmFunction:
             else:
                 new_baddr = v[1]
             code = self._read_instr(c)
-            if v[2] == 'b':
+            if v[2] == "b":
                 offset = new_start_address + c * 4
                 new_baddr = (new_baddr - offset - 0x8) // 4
                 if new_baddr < 0:
                     new_baddr += 2 * BRANCH_NEG
                 code = (code & (ALL ^ BRANCH_ADDR)) | (new_baddr & BRANCH_ADDR)
-            elif v[2] == 'ldr':
+            elif v[2] == "ldr":
                 code = new_baddr
-            elif v[2] == 'ldrdata':
+            elif v[2] == "ldrdata":
                 offset = new_start_address + c * 4
                 new_baddr = new_baddr - offset - 0x8
-                code = (code & (ALL ^ (IMMEDIATE_FIELD | LDR_NEG)))
+                code = code & (ALL ^ (IMMEDIATE_FIELD | LDR_NEG))
                 if new_baddr < 0:
                     new_baddr -= new_baddr
                 else:
                     code |= LDR_NEG
                 if new_baddr > IMMEDIATE_FIELD:
                     raise Exception("Data too far from the current offset. ")
-                code = (code | (new_baddr & IMMEDIATE_FIELD))
-            new_data[c * 4:c * 4 + 4] = bytearray(
-                [code % 256, (code // 256) % 256, (code // 65536) % 256, (code // 65536 // 256) % 256])
+                code = code | (new_baddr & IMMEDIATE_FIELD)
+            new_data[c * 4 : c * 4 + 4] = bytearray(
+                [
+                    code % 256,
+                    (code // 256) % 256,
+                    (code // 65536) % 256,
+                    (code // 65536 // 256) % 256,
+                ]
+            )
         return bytes(new_data)
 
     def exec(self, reg_list: List[int]):
         flags = [False, False, False, False]
-        while self.old_start_address <= reg_list[15] - 0x8 < self.old_start_address + len(self.data):
+        while (
+            self.old_start_address
+            <= reg_list[15] - 0x8
+            < self.old_start_address + len(self.data)
+        ):
             offset = reg_list[15] - 0x8
             # print(hex(offset), flags)
             x = (offset - self.old_start_address) // 0x4
@@ -253,16 +281,26 @@ class AsmFunction:
                         offset = -offset
                     offset += 0x8
                     datapos = x + offset // 4
-                    if not (self.old_start_address <= datapos < self.old_start_address + len(self.data)):
+                    if not (
+                        self.old_start_address
+                        <= datapos
+                        < self.old_start_address + len(self.data)
+                    ):
                         if not self.external_calls[x][0]:
-                            raise Exception("Data not found at " + hex(reg_list[15] - 0x8))
+                            raise Exception(
+                                "Data not found at " + hex(reg_list[15] - 0x8)
+                            )
                         reg_list[(code & REG_DEST) >> 12] = self.external_calls[x][1]
                     else:
-                        reg_list[(code & REG_DEST) >> 12] = self.external_calls[datapos][1]
+                        reg_list[(code & REG_DEST) >> 12] = self.external_calls[
+                            datapos
+                        ][1]
                     reg_list[15] += 0x4
                 elif code & AL_OP_MASK == AL_OP_CODE:
                     opcode = code & OPCODE_MASK
-                    op2 = get_imm_value(reg_list, code & IMMEDIATE_FIELD, code & OPCODE_IMM)
+                    op2 = get_imm_value(
+                        reg_list, code & IMMEDIATE_FIELD, code & OPCODE_IMM
+                    )
                     dest = (code & REG_DEST) >> 12
                     reg_op = (code & REG_SRC) >> 16
                     op1 = reg_list[reg_op]
@@ -273,37 +311,47 @@ class AsmFunction:
                         res = op1 + op2
                         reg_list[dest] = (res) & ALL
                     elif code & OPCODE_MASK == OPCODE_SUB:
-                        op2 = ((-op2) & ALL)
+                        op2 = (-op2) & ALL
                         res = op1 + op2
                         reg_list[dest] = (res) & ALL
                     elif code & OPCODE_MASK == OPCODE_RSB:
-                        op1 = ((-op1) & ALL)
+                        op1 = (-op1) & ALL
                         res = op2 + op1
                         reg_list[dest] = (res) & ALL
                     elif code & OPCODE_MASK == OPCODE_CMP:
-                        op2 = ((-op2) & ALL)
+                        op2 = (-op2) & ALL
                         res = op1 + op2
                         set_flags = True
-                    elif code&OPCODE_MASK==OPCODE_MOV:
+                    elif code & OPCODE_MASK == OPCODE_MOV:
                         res = op2
-                        reg_list[dest] = (res)&ALL
+                        reg_list[dest] = (res) & ALL
                     else:
-                        raise Exception("Opcode not supported at " + hex(reg_list[15] - 0x8))
+                        raise Exception(
+                            "Opcode not supported at " + hex(reg_list[15] - 0x8)
+                        )
                     if set_flags:
-                        flags[0] = ((res) & ALL == 0)
-                        flags[1] = (res >= (2 ** 32) or res < -(2 ** 32))
-                        flags[2] = (((res) & ALL) & REG_NEG == ALL & REG_NEG)
-                        flags[3] = ((op1 & REG_NEG) == (op2 & REG_NEG) and (op1 & REG_NEG) != (res & REG_NEG))
+                        flags[0] = (res) & ALL == 0
+                        flags[1] = res >= (2**32) or res < -(2**32)
+                        flags[2] = ((res) & ALL) & REG_NEG == ALL & REG_NEG
+                        flags[3] = (op1 & REG_NEG) == (op2 & REG_NEG) and (
+                            op1 & REG_NEG
+                        ) != (res & REG_NEG)
                     if dest != 15:
                         reg_list[15] += 0x4
                 else:
-                    raise Exception("Instruction not supported at " + hex(reg_list[15] - 0x8))
+                    raise Exception(
+                        "Instruction not supported at " + hex(reg_list[15] - 0x8)
+                    )
             else:
                 reg_list[15] += 0x4
         return reg_list
 
-    def process_switch(self, register_search: int, range_search: Tuple[int, int], init_values: Dict[int, int] = {}) -> \
-    List[int]:
+    def process_switch(
+        self,
+        register_search: int,
+        range_search: Tuple[int, int],
+        init_values: Dict[int, int] = {},
+    ) -> List[int]:
         ends = []
         for x in range(range_search[0], range_search[1]):
             reg_list = [None] * 16

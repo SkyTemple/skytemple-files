@@ -20,8 +20,7 @@ from __future__ import annotations
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.floor_attribute.model import FloorAttribute
-from skytemple_files.dungeon_data.floor_attribute.writer import \
-    FloorAttributeWriter
+from skytemple_files.dungeon_data.floor_attribute.writer import FloorAttributeWriter
 
 
 class FloorAttributeHandler(DataHandler[FloorAttribute]):

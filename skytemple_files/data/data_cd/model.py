@@ -36,8 +36,8 @@ class DataCD(AutoString):
         last_ptr = read_u32(data, limit)
         for x in range(limit, last_ptr, 8):
             start = read_u32(data, x)
-            length = read_u32(data, x+4)
-            self.effects_code.append(data[start:start+length])
+            length = read_u32(data, x + 4)
+            self.effects_code.append(data[start : start + length])
 
     def nb_items(self) -> int:
         return len(self.items_effects)
@@ -47,43 +47,45 @@ class DataCD(AutoString):
 
     def set_item_effect_id(self, item_id: int, effect_id: u16) -> None:
         self.items_effects[item_id] = effect_id
-        
+
     def add_item_effect_id(self, effect_id: u16) -> None:
         self.items_effects.append(effect_id)
-        
+
     def get_all_of(self, effect_id: int) -> List[int]:
         item_ids = []
         for i, x in enumerate(self.items_effects):
             if x == effect_id:
                 item_ids.append(i)
         return item_ids
-    
+
     def nb_effects(self) -> int:
         return len(self.effects_code)
 
     def get_effect_code(self, effect_id: int) -> bytes:
         return self.effects_code[effect_id]
-    
+
     def del_effect_code(self, effect_id: int) -> None:
         if len(self.get_all_of(effect_id)) != 0:
             raise UserValueError(_("To delete this effect, no items must use it."))
         for i in range(len(self.items_effects)):
             if self.items_effects[i] > effect_id:
                 self.items_effects[i] -= 1  # type: ignore
-        
+
         del self.effects_code[effect_id]
-    
+
     def add_effect_code(self, data: bytes) -> None:
         self.effects_code.append(data)
 
     def import_armips_effect_code(self, effect_id: int, armips_asm: str) -> None:
         self.set_effect_code(effect_id, ArmipsImporter().assemble(armips_asm))
-        
+
     def set_effect_code(self, effect_id: int, data: bytes) -> None:
         self.effects_code[effect_id] = data
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataCD):
             return False
-        return self.items_effects == other.items_effects and \
-               self.effects_code == other.effects_code
+        return (
+            self.items_effects == other.items_effects
+            and self.effects_code == other.effects_code
+        )

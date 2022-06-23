@@ -68,7 +68,9 @@ class AbstractPatchHandler(ABC):
         """
 
     @abstractmethod
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         """
         Apply the patch. The apply parameter is a callable which applies the actual patch files using ARMIPS,
         as specified in the configuration file.
@@ -85,7 +87,9 @@ class AbstractPatchHandler(ABC):
         """
 
     @abstractmethod
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         """
         TODO: Not supported yet. For future implementation.
         See apply method for info on how it will work.
@@ -100,9 +104,13 @@ class AbstractPatchHandler(ABC):
         try:
             if name in self.__parameters:
                 return self.__parameters[name]
-            raise PatchNotConfiguredError("No configuration provided.", name, "No configuration provided.")
+            raise PatchNotConfiguredError(
+                "No configuration provided.", name, "No configuration provided."
+            )
         except AttributeError:
-            raise PatchNotConfiguredError("No configuration provided.", "*", "No configuration provided.")
+            raise PatchNotConfiguredError(
+                "No configuration provided.", "*", "No configuration provided."
+            )
 
     def get_parameters(self) -> Dict[str, Union[int, str]]:
         """

@@ -23,10 +23,12 @@ from ndspy.rom import NintendoDSRom
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.asm_tools import AsmFunction
 from skytemple_files.patch.category import PatchCategory
@@ -53,22 +55,21 @@ ITEM_CODE_PATH = "BALANCE/item_cd.bin"
 
 
 class ExtractItemCodePatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ExtractItemCode'
+        return "ExtractItemCode"
 
     @property
     def description(self) -> str:
-        return _('Extracts item effects code and put it in files.')
+        return _("Extracts item effects code and put it in files.")
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -77,16 +78,24 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED_US
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED_US
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(
-                    rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
-                ) != PATCH_CHECK_INSTR_APPLIED_EU
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED_EU
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -106,14 +115,17 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
 
             data = rom.loadArm9Overlays([29])[29].data
 
-            switch = AsmFunction(data[start_table - start_ov29:start_m_functions - start_ov29], start_table)
+            switch = AsmFunction(
+                data[start_table - start_ov29 : start_m_functions - start_ov29],
+                start_table,
+            )
             ext_data = switch.process()[1]
             lst_data = {}
             data_processed = set()
             for offset in ext_data:
                 code = 0
                 for x in range(4):
-                    code += data[offset - start_ov29 + x] * (256 ** x)
+                    code += data[offset - start_ov29 + x] * (256**x)
                 lst_data[offset] = code
                 data_processed.add(offset)
             switch.provide_data(lst_data)
@@ -128,20 +140,30 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                 if unique_main_calls[i] != data_seg:
                     start = unique_main_calls[i]
                     end = unique_main_calls[i + 1]
-                    func_data = data[start - start_ov29:end - start_ov29]
+                    func_data = data[start - start_ov29 : end - start_ov29]
                     main_func[start] = AsmFunction(func_data, start)
                     ext_data = main_func[start].process()[1]
                     if i >= len(unique_main_calls) - 3:
-                        new_baddr = (end_m_functions - len(func_data) - start_m_functions - 0x8) // 0x4
+                        new_baddr = (
+                            end_m_functions - len(func_data) - start_m_functions - 0x8
+                        ) // 0x4
                         if new_baddr < 0:
                             new_baddr += 2 * 0x800000
                         main_func[start].add_instructions(
-                            bytes([new_baddr % 256, (new_baddr // 256) % 256, (new_baddr // 65536) % 256, 0xEA]))
+                            bytes(
+                                [
+                                    new_baddr % 256,
+                                    (new_baddr // 256) % 256,
+                                    (new_baddr // 65536) % 256,
+                                    0xEA,
+                                ]
+                            )
+                        )
                     lst_data = {}
                     for offset in ext_data:
                         code = 0
                         for x in range(4):
-                            code += data[offset - start_ov29 + x] * (256 ** x)
+                            code += data[offset - start_ov29 + x] * (256**x)
                         lst_data[offset] = code
                         data_processed.add(offset)
                     main_func[start].provide_data(lst_data)
@@ -174,5 +196,7 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

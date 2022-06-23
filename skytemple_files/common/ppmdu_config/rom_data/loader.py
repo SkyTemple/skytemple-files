@@ -22,13 +22,12 @@ from ndspy.rom import NintendoDSRom
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
-    from skytemple_files.common.ppmdu_config.dungeon_data import \
-        Pmd2DungeonItemCategory
+    from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
 
 
-FILENAME_ACTOR_LIST = 'BALANCE/actor_list.bin'
-FILENAME_LEVEL_LIST = 'BALANCE/level_list.bin'
-FILENAME_OBJECT_LIST = 'BALANCE/objects.bin'
+FILENAME_ACTOR_LIST = "BALANCE/actor_list.bin"
+FILENAME_LEVEL_LIST = "BALANCE/level_list.bin"
+FILENAME_OBJECT_LIST = "BALANCE/objects.bin"
 
 
 class LoadNotSupportedError(RuntimeError):
@@ -37,16 +36,19 @@ class LoadNotSupportedError(RuntimeError):
 
 class RomDataLoader:
     """Loads supported data from the ROM into the ppmdu configuration."""
+
     def __init__(self, rom: NintendoDSRom):
         self.rom = rom
 
-    def load_into(self, config_load_into: 'Pmd2Data'):
+    def load_into(self, config_load_into: "Pmd2Data"):
         self.load_actor_list_into(config_load_into, ignore_not_supported=True)
         self.load_level_list_into(config_load_into, ignore_not_supported=True)
         self.load_object_list_into(config_load_into, ignore_not_supported=True)
         self.load_item_categories_into(config_load_into)
 
-    def load_actor_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
+    def load_actor_list_into(
+        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+    ):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_ACTOR_LIST in self.rom.filenames:
@@ -58,7 +60,9 @@ class RomDataLoader:
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")
 
-    def load_level_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
+    def load_level_list_into(
+        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+    ):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_LEVEL_LIST in self.rom.filenames:
@@ -70,7 +74,9 @@ class RomDataLoader:
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an level list.")
 
-    def load_object_list_into(self, config_load_into: 'Pmd2Data', ignore_not_supported=False):
+    def load_object_list_into(
+        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+    ):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_OBJECT_LIST in self.rom.filenames:
@@ -80,16 +86,20 @@ class RomDataLoader:
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an level list.")
 
-    def load_item_categories_into(self, config_load_into: 'Pmd2Data'):
+    def load_item_categories_into(self, config_load_into: "Pmd2Data"):
         from skytemple_files.common.types.file_types import FileType
 
-        item_p_bin = self.rom.getFileByName('BALANCE/item_p.bin')
+        item_p_bin = self.rom.getFileByName("BALANCE/item_p.bin")
         item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
-        cats: Dict["Pmd2DungeonItemCategory", List[int]] = {x: [] for x in config_load_into.dungeon_data.item_categories.values()}
+        cats: Dict["Pmd2DungeonItemCategory", List[int]] = {
+            x: [] for x in config_load_into.dungeon_data.item_categories.values()
+        }
 
         for idx, entry in enumerate(item_p.item_list):
-            cats[entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)].append(idx)
+            cats[
+                entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)
+            ].append(idx)
 
         for category in config_load_into.dungeon_data.item_categories.values():
             category.items = cats[category]

@@ -19,11 +19,16 @@ from __future__ import annotations
 
 from random import choice, randrange
 
-from skytemple_files.common.dungeon_floor_generator.generator import \
-    DungeonFloorGenerator
+from skytemple_files.common.dungeon_floor_generator.generator import (
+    DungeonFloorGenerator,
+)
 from skytemple_files.dungeon_data.mappa_bin.floor_layout import (
-    MappaFloorDarknessLevel, MappaFloorLayout, MappaFloorStructureType,
-    MappaFloorTerrainSettings, MappaFloorWeather)
+    MappaFloorDarknessLevel,
+    MappaFloorLayout,
+    MappaFloorStructureType,
+    MappaFloorTerrainSettings,
+    MappaFloorWeather,
+)
 
 layout = MappaFloorLayout(
     structure=MappaFloorStructureType.MEDIUM_LARGE,
@@ -57,12 +62,14 @@ layout = MappaFloorLayout(
     unk_hidden_stairs=choice((0, 255)),
     hidden_stairs_spawn_chance=randrange(0, 101),
     enemy_iq=randrange(1, 601),
-    iq_booster_allowed=choice((True, False))
+    iq_booster_allowed=choice((True, False)),
 )
 
-tiles = DungeonFloorGenerator(unknown_dungeon_chance_patch_applied=True).generate(layout)
+tiles = DungeonFloorGenerator(unknown_dungeon_chance_patch_applied=True).generate(
+    layout
+)
 
 for y in tiles:
     for c in y:
-        print(str(c), end='')
+        print(str(c), end="")
     print()

@@ -22,9 +22,11 @@ import sys
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
-from skytemple_files.hardcoded.guest_pokemon import (ExtraDungeonDataList,
-                                                     GuestPokemon,
-                                                     GuestPokemonList)
+from skytemple_files.hardcoded.guest_pokemon import (
+    ExtraDungeonDataList,
+    GuestPokemon,
+    GuestPokemonList,
+)
 
 
 def main():
@@ -32,7 +34,7 @@ def main():
     rom = NintendoDSRom.fromFile(rom_path)
     config = get_ppmdu_config_for_rom(rom)
     arm9 = rom.arm9
-    original_arm9 = arm9[0:len(arm9)]
+    original_arm9 = arm9[0 : len(arm9)]
 
     extra_dungeon_data = ExtraDungeonDataList.read(arm9, config)
     guest_pokemon_data = GuestPokemonList.read(arm9, config)
@@ -46,7 +48,9 @@ def main():
     assert extra_dungeon_data == extra_dungeon_data2
     assert guest_pokemon_data == guest_pokemon_data2
 
-    guest_pokemon_data.append(GuestPokemon(0, 64, 0, [1, 2, 3, 4], 901, 50, 255, 100, 102, 77, 88, 0, 0))
+    guest_pokemon_data.append(
+        GuestPokemon(0, 64, 0, [1, 2, 3, 4], 901, 50, 255, 100, 102, 77, 88, 0, 0)
+    )
     GuestPokemonList.write(guest_pokemon_data, arm9, config)
     guest_pokemon_data2 = GuestPokemonList.read(arm9, config)
     assert guest_pokemon_data == guest_pokemon_data2
@@ -56,5 +60,5 @@ def main():
     assert original_arm9 == arm9
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

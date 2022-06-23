@@ -25,14 +25,14 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.patch.errors import PatchNotConfiguredError
 from skytemple_files.patch.patches import Patcher
 
-if __name__ == '__main__':
-    out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
-    package = os.path.join(os.path.dirname(__file__), 'parameters_test')
+if __name__ == "__main__":
+    out_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
+    package = os.path.join(os.path.dirname(__file__), "parameters_test")
     os.makedirs(out_dir, exist_ok=True)
-    os.environ['SKYTEMPLE_DEBUG_ARMIPS_OUTPUT'] = 'YES'
+    os.environ["SKYTEMPLE_DEBUG_ARMIPS_OUTPUT"] = "YES"
 
-    in_rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    in_rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
     # Load PPMDU config, but remove all data about Patches and LooseBinFiles.
     config = get_ppmdu_config_for_rom(in_rom)
@@ -42,11 +42,11 @@ if __name__ == '__main__':
 
     # Load the package
     patcher.add_pkg(package, False)
-    assert not patcher.is_applied('ParametersTest')
+    assert not patcher.is_applied("ParametersTest")
 
     # Missing params
     try:
-        patcher.apply('ParametersTest')
+        patcher.apply("ParametersTest")
     except PatchNotConfiguredError:
         pass
     else:
@@ -54,35 +54,48 @@ if __name__ == '__main__':
 
     # Invalid params
     try:
-        patcher.apply('ParametersTest', config={
-            'int_param': -1,
-            'int_param2': 100,
-            'int_param3': 1234,
-            'select_param': 'HELLO',
-            'string_param': 'World'
-        })
+        patcher.apply(
+            "ParametersTest",
+            config={
+                "int_param": -1,
+                "int_param2": 100,
+                "int_param3": 1234,
+                "select_param": "HELLO",
+                "string_param": "World",
+            },
+        )
     except PatchNotConfiguredError as ex:
-        assert ex.config_parameter == 'int_param', "Must throw PatchNotConfiguredError for int_param, since it's out of range."
+        assert (
+            ex.config_parameter == "int_param"
+        ), "Must throw PatchNotConfiguredError for int_param, since it's out of range."
     else:
         assert False, "Must throw PatchNotConfiguredError for validation"
     try:
-        patcher.apply('ParametersTest', config={
-            'int_param': 1,
-            'int_param2': 100,
-            'int_param3': 1234,
-            'select_param': 'INVALID',
-            'string_param': 'World'
-        })
+        patcher.apply(
+            "ParametersTest",
+            config={
+                "int_param": 1,
+                "int_param2": 100,
+                "int_param3": 1234,
+                "select_param": "INVALID",
+                "string_param": "World",
+            },
+        )
     except PatchNotConfiguredError as ex:
-        assert ex.config_parameter == 'select_param', "Must throw PatchNotConfiguredError for select_param, since it's an invalid option."
+        assert (
+            ex.config_parameter == "select_param"
+        ), "Must throw PatchNotConfiguredError for select_param, since it's an invalid option."
     else:
         assert False, "Must throw PatchNotConfiguredError for validation"
 
     # Check output!:
-    patcher.apply('ParametersTest', config={
-        'int_param': 1,
-        'int_param2': 100,
-        'int_param3': 1234,
-        'select_param': 'HELLO',
-        'string_param': 'World'
-    })
+    patcher.apply(
+        "ParametersTest",
+        config={
+            "int_param": 1,
+            "int_param2": 100,
+            "int_param3": 1234,
+            "select_param": "HELLO",
+            "string_param": "World",
+        },
+    )

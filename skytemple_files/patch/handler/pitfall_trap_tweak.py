@@ -20,14 +20,15 @@ from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 ORIGINAL_INSTRUCTION = 0xE5C01006
 OFFSET_EU = 0x12738
@@ -35,10 +36,9 @@ OFFSET_US = 0x126C4
 
 
 class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'PitfallTrapTweak'
+        return "PitfallTrapTweak"
 
     @property
     def description(self) -> str:
@@ -46,21 +46,23 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def author(self) -> str:
-        return 'Adex'
+        return "Adex"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     def depends_on(self) -> List[str]:
-        return ['ExtraSpace']
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return read_u32(overlay29, OFFSET_US) != ORIGINAL_INSTRUCTION
@@ -68,9 +70,13 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_EU) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ):
         raise NotImplementedError()

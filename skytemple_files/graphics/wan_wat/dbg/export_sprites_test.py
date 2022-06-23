@@ -24,14 +24,14 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_files_from_rom_with_extension
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
 # Object sprites
-for path in get_files_from_rom_with_extension(rom, 'wan'):
-    if path.startswith('FONT'):
+for path in get_files_from_rom_with_extension(rom, "wan"):
+    if path.startswith("FONT"):
         continue
     print(path)
     basename = os.path.basename(path)
@@ -51,18 +51,18 @@ for path in get_files_from_rom_with_extension(rom, 'wan'):
             mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
             try:
                 img, (cx, cy) = wan_model.render_frame_group(mfg_id)
-                img.save(os.path.join(output_dir, basename, f'{ag_i}_{ani_i}.png'))
+                img.save(os.path.join(output_dir, basename, f"{ag_i}_{ani_i}.png"))
             except ValueError as e:
                 print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)
 
 # Actor Sprites
-pack_file = rom.getFileByName('MONSTER/monster.bin')
+pack_file = rom.getFileByName("MONSTER/monster.bin")
 bin_pack = FileType.BIN_PACK.deserialize(pack_file)
 for s_i, sprite in enumerate(bin_pack):
     print(f"Actor kind {s_i}")
     sprite_bin_decompressed = FileType.COMMON_AT.deserialize(sprite).decompress()
     wan_model = FileType.WAN.deserialize(sprite_bin_decompressed)
-    basename = f'actor_{s_i}'
+    basename = f"actor_{s_i}"
 
     os.makedirs(os.path.join(output_dir, basename), exist_ok=True)
     for ag_i, group in enumerate(wan_model.anim_groups):
@@ -72,6 +72,6 @@ for s_i, sprite in enumerate(bin_pack):
             mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
             try:
                 img, (cx, cy) = wan_model.render_frame_group(mfg_id)
-                img.save(os.path.join(output_dir, basename, f'{ag_i}_{ani_i}.png'))
+                img.save(os.path.join(output_dir, basename, f"{ag_i}_{ani_i}.png"))
             except ValueError as e:
                 print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)

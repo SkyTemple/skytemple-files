@@ -22,12 +22,15 @@ from __future__ import annotations
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bgp.model import (BGP_HEADER_LENGTH,
-                                                BGP_PAL_ENTRY_LEN,
-                                                BGP_PAL_NUMBER_COLORS,
-                                                BGP_PAL_UNKNOWN4_COLOR_VAL,
-                                                BGP_TILE_DIM,
-                                                BGP_TILEMAP_ENTRY_BYTELEN, Bgp)
+from skytemple_files.graphics.bgp.model import (
+    BGP_HEADER_LENGTH,
+    BGP_PAL_ENTRY_LEN,
+    BGP_PAL_NUMBER_COLORS,
+    BGP_PAL_UNKNOWN4_COLOR_VAL,
+    BGP_TILE_DIM,
+    BGP_TILEMAP_ENTRY_BYTELEN,
+    Bgp,
+)
 
 
 class BgpWriter:
@@ -39,14 +42,20 @@ class BgpWriter:
     def write(self) -> bytes:
         bytelen_single_tile = int(BGP_TILE_DIM * BGP_TILE_DIM / 2)
 
-        palette_length = u32_checked(len(self.model.palettes) * BGP_PAL_NUMBER_COLORS * BGP_PAL_ENTRY_LEN)
+        palette_length = u32_checked(
+            len(self.model.palettes) * BGP_PAL_NUMBER_COLORS * BGP_PAL_ENTRY_LEN
+        )
         tiles_length = u32_checked(len(self.model.tiles) * bytelen_single_tile)
-        tilemapping_length = u32_checked(len(self.model.tilemap) * BGP_TILEMAP_ENTRY_BYTELEN)
+        tilemapping_length = u32_checked(
+            len(self.model.tilemap) * BGP_TILEMAP_ENTRY_BYTELEN
+        )
         palette_begin = BGP_HEADER_LENGTH
         tilemapping_begin = u32_checked(palette_begin + palette_length)
         tiles_begin = u32_checked(tilemapping_begin + tilemapping_length)
         # 32 byte header + palette, tiles and tilemapping data
-        self.data = bytearray(BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length)
+        self.data = bytearray(
+            BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length
+        )
 
         # Header
         write_u32(self.data, u32(palette_begin), 0)
@@ -77,7 +86,9 @@ class BgpWriter:
         assert self.bytes_written == tiles_begin
         # Tiles
         for tile in self.model.tiles:
-            self.data[self.bytes_written:self.bytes_written+bytelen_single_tile] = tile
+            self.data[
+                self.bytes_written : self.bytes_written + bytelen_single_tile
+            ] = tile
             self.bytes_written += bytelen_single_tile
 
         return self.data

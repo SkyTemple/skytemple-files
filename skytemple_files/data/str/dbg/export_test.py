@@ -24,11 +24,11 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_files_from_rom_with_extension
 from skytemple_files.data.str.handler import StrHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
-for filename in get_files_from_rom_with_extension(rom, 'str'):
+for filename in get_files_from_rom_with_extension(rom, "str"):
     print("Processing " + filename)
 
     bin = rom.getFileByName(filename)

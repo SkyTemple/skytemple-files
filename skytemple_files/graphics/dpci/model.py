@@ -33,9 +33,13 @@ class Dpci:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.tiles: List[bytes] = list(iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2)))  # / 2 because 4bpp
+        self.tiles: List[bytes] = list(
+            iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))
+        )  # / 2 because 4bpp
 
-    def tiles_to_pil(self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
+    def tiles_to_pil(
+        self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0
+    ) -> Image.Image:
         """
         Convert all individual tiles of the DPCI into one PIL image.
         The image contains all tiles next to each other, the image width is tile_width tiles.
@@ -48,24 +52,25 @@ class Dpci:
         # create a dummy tile map containing all the tiles
         tilemap = []
         for i in range(0, len(self.tiles)):
-            tilemap.append(TilemapEntry(
-                i, False, False, palette_index, True
-            ))
+            tilemap.append(TilemapEntry(i, False, False, palette_index, True))
 
         width = width_in_tiles * DPCI_TILE_DIM
         height = math.ceil((len(self.tiles)) / width_in_tiles) * DPCI_TILE_DIM
 
-        return to_pil(
-            tilemap, self.tiles, palettes, DPCI_TILE_DIM, width, height
-        )
+        return to_pil(tilemap, self.tiles, palettes, DPCI_TILE_DIM, width, height)
 
     def pil_to_tiles(self, image: Image.Image):
         """
         Imports tiles that are in a format as described in the documentation for tiles_to_pil.
         """
         self.tiles, _, __ = from_pil(
-            image, DPL_PAL_LEN, 16, DPCI_TILE_DIM,
-            image.width, image.height, optimize=False
+            image,
+            DPL_PAL_LEN,
+            16,
+            DPCI_TILE_DIM,
+            image.width,
+            image.height,
+            optimize=False,
         )
 
     def to_bytes(self):

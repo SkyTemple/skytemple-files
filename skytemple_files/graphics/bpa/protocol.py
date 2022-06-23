@@ -29,10 +29,11 @@ class BpaFrameInfoProtocol(Protocol):
     unk2: u16
 
     @abstractmethod
-    def __init__(self, duration_per_frame: int, unk2: int): ...
+    def __init__(self, duration_per_frame: int, unk2: int):
+        ...
 
 
-T = TypeVar('T', bound=BpaFrameInfoProtocol)
+T = TypeVar("T", bound=BpaFrameInfoProtocol)
 
 
 @runtime_checkable
@@ -43,11 +44,12 @@ class BpaProtocol(Protocol[T]):
     frame_info: Sequence[T]
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @classmethod
     @abstractmethod
-    def new_empty(cls) -> 'BpaProtocol':
+    def new_empty(cls) -> "BpaProtocol":
         """Returns a new empty Bpa"""
         ...
 
@@ -64,7 +66,9 @@ class BpaProtocol(Protocol[T]):
         """
 
     @abstractmethod
-    def tiles_to_pil_separate(self, palette: Sequence[int], width_in_tiles: int = 20) -> List[Image.Image]:
+    def tiles_to_pil_separate(
+        self, palette: Sequence[int], width_in_tiles: int = 20
+    ) -> List[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.

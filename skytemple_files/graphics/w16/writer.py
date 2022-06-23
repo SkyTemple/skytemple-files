@@ -35,7 +35,9 @@ class W16Writer:
         for w16 in self.model:
             # TOC entry
             # Pointer
-            write_u32(toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor)
+            write_u32(
+                toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor
+            )
             # entry data
             write_u8(toc_buffer, w16.entry_data.width, toc_cursor + 4)
             write_u8(toc_buffer, w16.entry_data.height, toc_cursor + 5)
@@ -50,6 +52,8 @@ class W16Writer:
             image_buffer += w16.compressed_img_data
 
         # Null toc entry
-        write_u32(toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor)
+        write_u32(
+            toc_buffer, u32_checked(len(toc_buffer) + len(image_buffer)), toc_cursor
+        )
 
         return toc_buffer + image_buffer

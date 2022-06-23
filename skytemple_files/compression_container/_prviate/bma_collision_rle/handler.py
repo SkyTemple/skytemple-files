@@ -18,24 +18,29 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class BmaCollisionRleHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'BMARLE'
+        return b"BMARLE"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_files.compression_container._prviate.bma_collision_rle._pymodel import \
-            BmaCollisionRleCompressionContainer
+        from skytemple_files.compression_container._prviate.bma_collision_rle._pymodel import (
+            BmaCollisionRleCompressionContainer,
+        )
+
         return BmaCollisionRleCompressionContainer
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bma_collision_rle_compression import BmaCollisionRleCompressionContainer  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bma_collision_rle_compression import (
+            BmaCollisionRleCompressionContainer,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return BmaCollisionRleCompressionContainer

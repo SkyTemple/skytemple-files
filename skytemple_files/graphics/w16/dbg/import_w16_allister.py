@@ -23,17 +23,17 @@ from PIL import Image
 
 from skytemple_files.graphics.w16.handler import W16Handler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'allister/allister.nds'))
-bfn = 'FONT/clrmark1.w16'
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "allister/allister.nds"))
+bfn = "FONT/clrmark1.w16"
 
 bin = rom.getFileByName(bfn)
 w16 = W16Handler.deserialize(bin)
 for i, img in enumerate(w16):
-    fn = os.path.join(base_dir, f'allister/clrmarks/converted/clrmark1_{i:03}.png')
+    fn = os.path.join(base_dir, f"allister/clrmarks/converted/clrmark1_{i:03}.png")
     if os.path.exists(fn):
-        with open(fn, 'rb') as f:
+        with open(fn, "rb") as f:
             im = img.set(Image.open(f))
 
 rom.setFileByName(bfn, W16Handler.serialize(w16))
@@ -46,4 +46,4 @@ for i, img in enumerate(w16):
     print(bfn, i, img.entry_data.width, img.entry_data.height)
     im.save(f'/tmp/{bfn.replace("/","_")}_{i:03}.png')
 
-rom.saveToFile(os.path.join(base_dir, 'allister/allister.nds'))
+rom.saveToFile(os.path.join(base_dir, "allister/allister.nds"))

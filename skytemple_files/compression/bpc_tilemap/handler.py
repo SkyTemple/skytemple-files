@@ -17,16 +17,15 @@
 
 from __future__ import annotations
 
-from skytemple_files.compression.bpc_tilemap.compressor import \
-    BpcTilemapCompressor
-from skytemple_files.compression.bpc_tilemap.decompressor import \
-    BpcTilemapDecompressor
+from skytemple_files.compression.bpc_tilemap.compressor import BpcTilemapCompressor
+from skytemple_files.compression.bpc_tilemap.decompressor import BpcTilemapDecompressor
 
 
 class BpcTilemapHandler:
     """
     todo
     """
+
     @classmethod
     def decompress(cls, compressed_data: bytes, stop_when_size: int) -> bytes:
         """todo. Stops when stop_when_size bytes have been decompressed."""

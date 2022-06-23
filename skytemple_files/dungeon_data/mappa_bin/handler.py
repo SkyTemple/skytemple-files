@@ -29,18 +29,23 @@ class MappaBinHandler(DataHandler[MappaBin]):
     Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
     Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
     """
+
     @classmethod
-    def deserialize(cls, data: bytes, *, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> 'MappaBin':  # type: ignore
+    def deserialize(cls, data: bytes, *, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> "MappaBin":  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
         from skytemple_files.common.types.file_types import FileType
-        return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), MappaBin, static_data)
+
+        return FileType.SIR0.unwrap_obj(
+            FileType.SIR0.deserialize(data), MappaBin, static_data
+        )
 
     @classmethod
-    def serialize(cls, data: 'MappaBin', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: "MappaBin", **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: 'MappaBin', **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: "MappaBin", **kwargs: OptionalKwargs) -> bytes:
         return MappaBinWriter(data).write()[0]

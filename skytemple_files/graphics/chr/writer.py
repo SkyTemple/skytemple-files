@@ -31,5 +31,7 @@ class ChrWriter:
         buffer = bytearray((CHR_TILE_WIDTH**2) * len(self.model.tiles))
 
         for i, t in enumerate(self.model.tiles):
-            buffer[(CHR_TILE_WIDTH**2)*i:(CHR_TILE_WIDTH**2)*(i+1)] = t.tobytes()
+            buffer[
+                (CHR_TILE_WIDTH**2) * i : (CHR_TILE_WIDTH**2) * (i + 1)
+            ] = t.tobytes()
         return buffer

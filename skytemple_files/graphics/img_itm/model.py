@@ -25,8 +25,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.graphics.img_itm import (CHUNK_DIM, PAL_ENTRY_LEN,
-                                              PAL_LEN, TILE_DIM)
+from skytemple_files.graphics.img_itm import CHUNK_DIM, PAL_ENTRY_LEN, PAL_LEN, TILE_DIM
 
 
 class ImgItm(Sir0Serializable):
@@ -34,23 +33,26 @@ class ImgItm(Sir0Serializable):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         self.sprites: List[List[bytes]] = self._read_sprites(
-            data,
-            read_u32(data, header_pnt + 0x04),
-            read_u32(data, header_pnt + 0x00)
+            data, read_u32(data, header_pnt + 0x04), read_u32(data, header_pnt + 0x00)
         )
         self.palettes: List[List[int]] = self._read_palettes(
             data,
             read_u32(data, header_pnt + 0x0C) // PAL_LEN,
-            read_u32(data, header_pnt + 0x08)
+            read_u32(data, header_pnt + 0x08),
         )
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int,
-                    static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         from skytemple_files.graphics.img_itm.writer import ImgItmWriter
+
         return ImgItmWriter(self).write()
 
     def to_pil(self, index, palette_index=0) -> Image.Image:
@@ -63,29 +65,38 @@ class ImgItm(Sir0Serializable):
             self.sprites[index],
             self.palettes,
             TILE_DIM,
-            TILE_DIM * CHUNK_DIM, TILE_DIM * CHUNK_DIM,
-            CHUNK_DIM, CHUNK_DIM
+            TILE_DIM * CHUNK_DIM,
+            TILE_DIM * CHUNK_DIM,
+            CHUNK_DIM,
+            CHUNK_DIM,
         )
-    
+
     def from_pil(self, index, img: Image.Image, import_palettes=True):
         tiles, tilemaps, palettes = from_pil(
-            img, PAL_LEN, len(self.palettes), TILE_DIM, TILE_DIM * CHUNK_DIM, TILE_DIM * CHUNK_DIM
+            img,
+            PAL_LEN,
+            len(self.palettes),
+            TILE_DIM,
+            TILE_DIM * CHUNK_DIM,
+            TILE_DIM * CHUNK_DIM,
         )
         self.sprites[index] = tiles
         if import_palettes:
-            self.palettes = palettes[:len(self.palettes)]
+            self.palettes = palettes[: len(self.palettes)]
 
     def _read_sprites(self, data, count, data_pointer: u32):
         tiles = []
         T = TILE_DIM * TILE_DIM * CHUNK_DIM * CHUNK_DIM // 2
         for x in range(count):
-            xdata = data[data_pointer+(x*T):data_pointer+((x+1)*T)]
-            tiles.append(list(iter_bytes(xdata, int(TILE_DIM * TILE_DIM / 2))))  # / 2 because 4bpp
+            xdata = data[data_pointer + (x * T) : data_pointer + ((x + 1) * T)]
+            tiles.append(
+                list(iter_bytes(xdata, int(TILE_DIM * TILE_DIM / 2)))
+            )  # / 2 because 4bpp
         return tiles
 
     def _read_palettes(self, data, count, data_pointer: u32):
         palettes = []
-        data = data[data_pointer:data_pointer+PAL_ENTRY_LEN*PAL_LEN*count]
+        data = data[data_pointer : data_pointer + PAL_ENTRY_LEN * PAL_LEN * count]
         pal = []
         for i, (r, g, b, x) in enumerate(iter_bytes(data, PAL_ENTRY_LEN)):
             pal.append(r)

@@ -25,32 +25,31 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(os.path.join(output_dir), exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
-dungeon_bin.set('dungeon1.dpl', dungeon_bin.get('dungeon2.dpl'))
-dungeon_bin.set('dungeon1.dpla', dungeon_bin.get('dungeon2.dpla'))
-dungeon_bin.set('dungeon1.dpci', dungeon_bin.get('dungeon2.dpci'))
-dungeon_bin.set('dungeon1.dpc', dungeon_bin.get('dungeon2.dpc'))
-dungeon_bin.set('dungeon1.dma', dungeon_bin.get('dungeon2.dma'))
+dungeon_bin.set("dungeon1.dpl", dungeon_bin.get("dungeon2.dpl"))
+dungeon_bin.set("dungeon1.dpla", dungeon_bin.get("dungeon2.dpla"))
+dungeon_bin.set("dungeon1.dpci", dungeon_bin.get("dungeon2.dpci"))
+dungeon_bin.set("dungeon1.dpc", dungeon_bin.get("dungeon2.dpc"))
+dungeon_bin.set("dungeon1.dma", dungeon_bin.get("dungeon2.dma"))
 
 dungeon_bin_bin_after = DungeonBinHandler.serialize(dungeon_bin)
-rom.setFileByName('DUNGEON/dungeon.bin', dungeon_bin_bin_after)
+rom.setFileByName("DUNGEON/dungeon.bin", dungeon_bin_bin_after)
 
 # Check if we can open them again
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
-dungeon_bin.get('dungeon1.dpl')
-dungeon_bin.get('dungeon1.dpla')
-dungeon_bin.get('dungeon1.dpci')
-dungeon_bin.get('dungeon1.dpc')
-dungeon_bin.get('dungeon1.dma')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
+dungeon_bin.get("dungeon1.dpl")
+dungeon_bin.get("dungeon1.dpla")
+dungeon_bin.get("dungeon1.dpci")
+dungeon_bin.get("dungeon1.dpc")
+dungeon_bin.get("dungeon1.dma")
 
-rom.saveToFile(os.path.join(output_dir, 'changed.nds'))
-
+rom.saveToFile(os.path.join(output_dir, "changed.nds"))

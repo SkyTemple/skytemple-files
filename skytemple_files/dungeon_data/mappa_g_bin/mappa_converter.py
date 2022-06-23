@@ -20,9 +20,11 @@ from __future__ import annotations
 from typing import List
 
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
-from skytemple_files.dungeon_data.mappa_g_bin.model import (MappaGBin,
-                                                            MappaGFloor,
-                                                            MappaGFloorLayout)
+from skytemple_files.dungeon_data.mappa_g_bin.model import (
+    MappaGBin,
+    MappaGFloor,
+    MappaGFloorLayout,
+)
 
 
 def convert_mappa_to_mappag(mappa: MappaBin) -> MappaGBin:
@@ -31,8 +33,12 @@ def convert_mappa_to_mappag(mappa: MappaBin) -> MappaGBin:
         gfloor_list: List[MappaGFloor] = []
         mappag_floor_lists.append(gfloor_list)
         for floor in floor_list:
-            gfloor_list.append(MappaGFloor(MappaGFloorLayout(
-                floor.layout.tileset_id, floor.layout.fixed_floor_id
-            )))
+            gfloor_list.append(
+                MappaGFloor(
+                    MappaGFloorLayout(
+                        floor.layout.tileset_id, floor.layout.fixed_floor_id
+                    )
+                )
+            )
 
     return MappaGBin(mappag_floor_lists)

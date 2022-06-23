@@ -31,7 +31,7 @@ from skytemple_files.common.util import chunks, read_bytes, read_u16, write_u16
 def _utf16_encode_fixed(title: str) -> bytes:
     encoded = title.encode("UTF-16LE")
     assert len(encoded) < 0x100, "Title length must be less than 256 characters"
-    return encoded.ljust(0x100, b'\0')
+    return encoded.ljust(0x100, b"\0")
 
 
 ICON_BANNER_SIZE = 0x840
@@ -69,14 +69,18 @@ class Icon:
             tilemap.append(TilemapEntry(idx=i, pal_idx=0, flip_x=False, flip_y=False))
 
         return to_pil(
-            tilemap, list(chunks(self.bitmap, ICON_DIM_TILE * ICON_DIM_TILE // 2)),
-            [self._palette], ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, bpp=4,
+            tilemap,
+            list(chunks(self.bitmap, ICON_DIM_TILE * ICON_DIM_TILE // 2)),
+            [self._palette],
+            ICON_DIM_TILE,
+            ICON_DIM_IMG_PX,
+            ICON_DIM_IMG_PX,
+            bpp=4,
         )
 
     def from_pil(self, img: Image.Image) -> None:
         tiles, _, pals = from_pil(
-            img, 16, 1, ICON_DIM_TILE,
-            ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False
+            img, 16, 1, ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False
         )
         self.bitmap = bytes(itertools.chain.from_iterable(tiles))
         self._palette = pals[0]
@@ -96,27 +100,39 @@ class IconBanner:
 
         self.icon = Icon(read_bytes(data, 0x20, 0x200), read_bytes(data, 0x220, 0x20))
 
-        self.title_japanese = read_bytes(data, 0x240, 0x100).decode('UTF-16LE').rstrip('\x00')
-        self.title_english = read_bytes(data, 0x340, 0x100).decode('UTF-16LE').rstrip('\x00')
-        self.title_french = read_bytes(data, 0x440, 0x100).decode('UTF-16LE').rstrip('\x00')
-        self.title_german = read_bytes(data, 0x540, 0x100).decode('UTF-16LE').rstrip('\x00')
-        self.title_italian = read_bytes(data, 0x640, 0x100).decode('UTF-16LE').rstrip('\x00')
-        self.title_spanish = read_bytes(data, 0x740, 0x100).decode('UTF-16LE').rstrip('\x00')
+        self.title_japanese = (
+            read_bytes(data, 0x240, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
+        self.title_english = (
+            read_bytes(data, 0x340, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
+        self.title_french = (
+            read_bytes(data, 0x440, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
+        self.title_german = (
+            read_bytes(data, 0x540, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
+        self.title_italian = (
+            read_bytes(data, 0x640, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
+        self.title_spanish = (
+            read_bytes(data, 0x740, 0x100).decode("UTF-16LE").rstrip("\x00")
+        )
 
     def save_to_rom(self) -> None:
         data = bytearray(ICON_BANNER_SIZE)
 
         write_u16(data, self.version, 0x0)
 
-        data[0x20:0x20 + 0x200] = self.icon.bitmap
-        data[0x220:0x220 + 0x20] = self.icon.palette
+        data[0x20 : 0x20 + 0x200] = self.icon.bitmap
+        data[0x220 : 0x220 + 0x20] = self.icon.palette
 
-        data[0x240:0x240 + 0x100] = _utf16_encode_fixed(self.title_japanese)
-        data[0x340:0x340 + 0x100] = _utf16_encode_fixed(self.title_english)
-        data[0x440:0x440 + 0x100] = _utf16_encode_fixed(self.title_french)
-        data[0x540:0x540 + 0x100] = _utf16_encode_fixed(self.title_german)
-        data[0x640:0x640 + 0x100] = _utf16_encode_fixed(self.title_italian)
-        data[0x740:0x740 + 0x100] = _utf16_encode_fixed(self.title_spanish)
+        data[0x240 : 0x240 + 0x100] = _utf16_encode_fixed(self.title_japanese)
+        data[0x340 : 0x340 + 0x100] = _utf16_encode_fixed(self.title_english)
+        data[0x440 : 0x440 + 0x100] = _utf16_encode_fixed(self.title_french)
+        data[0x540 : 0x540 + 0x100] = _utf16_encode_fixed(self.title_german)
+        data[0x640 : 0x640 + 0x100] = _utf16_encode_fixed(self.title_italian)
+        data[0x740 : 0x740 + 0x100] = _utf16_encode_fixed(self.title_spanish)
 
         calculated_checksum = nds_crc16(data, 0x20, 0x820)
         write_u16(data, calculated_checksum, 0x2)

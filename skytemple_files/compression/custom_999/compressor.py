@@ -73,7 +73,7 @@ class Custom999Compressor:
                 code += diff << 1
 
                 len_code = len(bin(code + 1)) - 2 - 1
-                code = (code + 1) % (2 ** len_code)
+                code = (code + 1) % (2**len_code)
 
                 tmp = []
                 for i in range(len_code):
@@ -88,5 +88,5 @@ class Custom999Compressor:
             bit_list = bit_list[8:]
             compressed.append(0)
             for i, b in enumerate(currentl):
-                compressed[-1] += b * (2 ** i)
+                compressed[-1] += b * (2**i)
         return bytes(compressed)

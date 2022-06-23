@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import sys
 
-if not sys.platform.lower().startswith('darwin'):
+if not sys.platform.lower().startswith("darwin"):
     raise OSError("This module is only available under macOS.")
 
 from Foundation import NSUserDefaults  # pylint: disable=import-error
@@ -27,4 +27,7 @@ from Foundation import NSUserDefaults  # pylint: disable=import-error
 
 def macos_use_light_theme():
     """Function to check if the current macOS theme is the light theme or the dark theme"""
-    return NSUserDefaults.standardUserDefaults().stringForKey_('AppleInterfaceStyle') != 'Dark'
+    return (
+        NSUserDefaults.standardUserDefaults().stringForKey_("AppleInterfaceStyle")
+        != "Dark"
+    )

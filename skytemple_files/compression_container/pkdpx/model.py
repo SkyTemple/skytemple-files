@@ -26,7 +26,7 @@ class Pkdpx(CommonAt):
     length_compressed: u16
     length_decompressed: u32
 
-    def __init__(self, data: bytes=None):
+    def __init__(self, data: bytes = None):
         """
         Create a PKDPX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
@@ -41,7 +41,10 @@ class Pkdpx(CommonAt):
         """Returns the uncompressed data stored in the container"""
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x14], self.compression_flags)
+        data = FileType.PX.decompress(
+            self.compressed_data[: self.length_compressed - 0x14],
+            self.compression_flags,
+        )
         # Sanity assertion, if everything is implemented correctly this doesn't fail.
         assert len(data) == self.length_decompressed
         return data
@@ -49,18 +52,20 @@ class Pkdpx(CommonAt):
     # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
-        return b'PKDPX'\
-               + self.length_compressed.to_bytes(2, 'little') \
-               + self.compression_flags \
-               + self.length_decompressed.to_bytes(4, 'little') \
-               + self.compressed_data
+        return (
+            b"PKDPX"
+            + self.length_compressed.to_bytes(2, "little")
+            + self.compression_flags
+            + self.length_decompressed.to_bytes(4, "little")
+            + self.compressed_data
+        )
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         return read_u16(data, byte_offset + 5)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'Pkdpx':
+    def compress(cls, data: bytes) -> "Pkdpx":
         """Create a new PKDPX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

@@ -23,20 +23,27 @@ from typing import Callable, List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.waza_p.model import WazaMoveCategory
-from skytemple_files.graphics.fonts.graphic_font.handler import \
-    GraphicFontHandler
+from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-SRC_DIR = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'anonymous_asm_mods', 'move_growth', 'src')
+SRC_DIR = os.path.join(
+    get_resources_dir(),
+    "patches",
+    "asm_patches",
+    "anonymous_asm_mods",
+    "move_growth",
+    "src",
+)
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x14A74
 PATCH_CHECK_ADDR_APPLIED_EU = 0x14B1C
@@ -44,54 +51,131 @@ PATCH_CHECK_INSTR_APPLIED = 0xE2841004
 
 MGROW_PATH = "BALANCE/mgrowth.bin"
 
-MGROW_TABLE = [25, 0, 0, 0,
-               33, 1, 1, 0,
-               40, 1, 1, 0,
-               50, 1, 1, 1,
-               60, 1, 1, 0,
-               70, 1, 1, 1,
-               80, 1, 1, 0,
-               90, 1, 1, 1,
-               100, 1, 1, 1,
-               110, 1, 1, 0,
-               120, 1, 1, 0,
-               150, 1, 1, 1,
-               200, 3, 1, 0,
-               250, 1, 1, 1,
-               300, 1, 1, 0,
-               400, 1, 1, 1,
-               500, 1, 3, 1,
-               750, 1, 1, 0,
-               1000, 1, 1, 0,
-               1500, 1, 1, 1,
-               2000, 1, 1, 0,
-               2500, 1, 1, 1,
-               3000, 1, 1, 0,
-               5000, 1, 1, 1,
-               0, 5, 5, 1]
+MGROW_TABLE = [
+    25,
+    0,
+    0,
+    0,
+    33,
+    1,
+    1,
+    0,
+    40,
+    1,
+    1,
+    0,
+    50,
+    1,
+    1,
+    1,
+    60,
+    1,
+    1,
+    0,
+    70,
+    1,
+    1,
+    1,
+    80,
+    1,
+    1,
+    0,
+    90,
+    1,
+    1,
+    1,
+    100,
+    1,
+    1,
+    1,
+    110,
+    1,
+    1,
+    0,
+    120,
+    1,
+    1,
+    0,
+    150,
+    1,
+    1,
+    1,
+    200,
+    3,
+    1,
+    0,
+    250,
+    1,
+    1,
+    1,
+    300,
+    1,
+    1,
+    0,
+    400,
+    1,
+    1,
+    1,
+    500,
+    1,
+    3,
+    1,
+    750,
+    1,
+    1,
+    0,
+    1000,
+    1,
+    1,
+    0,
+    1500,
+    1,
+    1,
+    1,
+    2000,
+    1,
+    1,
+    0,
+    2500,
+    1,
+    1,
+    1,
+    3000,
+    1,
+    1,
+    0,
+    5000,
+    1,
+    1,
+    1,
+    0,
+    5,
+    5,
+    1,
+]
 
 
 class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'MoveGrowth'
+        return "MoveGrowth"
 
     @property
     def description(self) -> str:
         return _(
-            'Implements move growth (PoC/Unfinished). \nNeeds ActorAndLevelLoader, ExtractAnimData and ChangeMoveStatsDisplay patches. \nMoveGrowth patch must be (re-)applied after MoveShortcuts to combine both effects. \nThe last version of ChangeMoveStatsDisplay must be used with this.\nMay be incompatible if markfont.dat has been modified (except for ChangeMoveStatsDisplay)\nMakes all prior save files incompatible. ')
+            "Implements move growth (PoC/Unfinished). \nNeeds ActorAndLevelLoader, ExtractAnimData and ChangeMoveStatsDisplay patches. \nMoveGrowth patch must be (re-)applied after MoveShortcuts to combine both effects. \nThe last version of ChangeMoveStatsDisplay must be used with this.\nMay be incompatible if markfont.dat has been modified (except for ChangeMoveStatsDisplay)\nMakes all prior save files incompatible. "
+        )
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.0'
+        return "0.0.0"
 
     def depends_on(self) -> List[str]:
-        return ['ActorAndLevelLoader', 'ExtractAnimData', 'ChangeMoveStatsDisplay']
+        return ["ActorAndLevelLoader", "ExtractAnimData", "ChangeMoveStatsDisplay"]
 
     @property
     def category(self) -> PatchCategory:
@@ -100,22 +184,30 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
     def is_applied_ms(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         # Taken from patch handler
-        ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
+        ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
         OFFSET_EU = 0x158F0
         OFFSET_US = 0x1587C
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return overlay29[OFFSET_US:OFFSET_US + 4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return overlay29[OFFSET_EU:OFFSET_EU + 4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
     def is_applied_dv(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
@@ -124,12 +216,20 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         PATCH_DV_CHECK_INSTR_APPLIED = 0xE3A09001
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_US) == PATCH_DV_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_US)
+                    == PATCH_DV_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU) == PATCH_DV_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU)
+                    == PATCH_DV_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         param = self.get_parameters()
         if self.is_applied_ms(rom, config):
             param["MoveShortcuts"] = 1
@@ -152,13 +252,13 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         while len(entries) < max(START_LVL + 9, START_SUB + 4, START_EXT + 11):
             entries.append(None)
         for x in range(START_EXT, START_EXT + 11):
-            img = Image.open(os.path.join(SRC_DIR, "ext%d.png" % (x - START_EXT)), 'r')
+            img = Image.open(os.path.join(SRC_DIR, "ext%d.png" % (x - START_EXT)), "r")
             entries[x] = img
         for x in range(START_LVL, START_LVL + 9):
-            img = Image.open(os.path.join(SRC_DIR, "lvl%d.png" % (x - START_LVL)), 'r')
+            img = Image.open(os.path.join(SRC_DIR, "lvl%d.png" % (x - START_LVL)), "r")
             entries[x] = img
         for x in range(START_SUB, START_SUB + 4):
-            img = Image.open(os.path.join(SRC_DIR, "sub%d.png" % (x - START_SUB)), 'r')
+            img = Image.open(os.path.join(SRC_DIR, "sub%d.png" % (x - START_SUB)), "r")
             entries[x] = img
         model.set_entries(entries)
         bin_after = GraphicFontHandler.serialize(model)
@@ -190,5 +290,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

@@ -36,7 +36,12 @@ class Sir0Serializable(ABC):
 
     @classmethod
     @abstractmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "Sir0Serializable":
         """
         Builds the model from the unwrapped Sir0.
         static_data may be omitted if not needed for this type.

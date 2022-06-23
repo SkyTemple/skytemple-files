@@ -32,11 +32,18 @@ import skytemple_files.graphics.chara_wan.utils as exUtils
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
 from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
-from skytemple_files.graphics.chara_wan.model import (DEBUG_PRINT, DIM_TABLE,
-                                                      MINUS_FRAME, TEX_SIZE,
-                                                      AnimStat, FrameOffset,
-                                                      ImgPiece, MetaFramePiece,
-                                                      SequenceFrame, WanFile)
+from skytemple_files.graphics.chara_wan.model import (
+    DEBUG_PRINT,
+    DIM_TABLE,
+    MINUS_FRAME,
+    TEX_SIZE,
+    AnimStat,
+    FrameOffset,
+    ImgPiece,
+    MetaFramePiece,
+    SequenceFrame,
+    WanFile,
+)
 from skytemple_files.user_error import UserValueError
 
 DRAW_CENTER_X = 0
@@ -44,8 +51,52 @@ DRAW_CENTER_Y = -4
 
 MAX_ANIMS = 44
 
-ANIM_ORDER = [0, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 13, 14, 15, 16, 17, 18, 19, 20,
-              21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
+ANIM_ORDER = [
+    0,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    1,
+    2,
+    3,
+    4,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+]
 
 
 class FlipMode(Enum):
@@ -60,56 +111,64 @@ class FlipMode(Enum):
 def ImportSheets(inDir, strict=False):
 
     if DEBUG_PRINT:
-        if not os.path.isdir(os.path.join(inDir, '_pieces_in')):
-            os.makedirs(os.path.join(inDir, '_pieces_in'))
-        if not os.path.isdir(os.path.join(inDir, '_frames_in')):
-            os.makedirs(os.path.join(inDir, '_frames_in'))
+        if not os.path.isdir(os.path.join(inDir, "_pieces_in")):
+            os.makedirs(os.path.join(inDir, "_pieces_in"))
+        if not os.path.isdir(os.path.join(inDir, "_frames_in")):
+            os.makedirs(os.path.join(inDir, "_frames_in"))
 
     anim_stats = {}
     anim_names = {}
-    tree = ET.parse(os.path.join(inDir, 'AnimData.xml'))
+    tree = ET.parse(os.path.join(inDir, "AnimData.xml"))
     root = tree.getroot()
-    sdwSize = int(root.find('ShadowSize').text)
+    sdwSize = int(root.find("ShadowSize").text)
     if sdwSize < 0 or sdwSize > 2:
         raise ValueError("Invalid shadow size: {0}".format(sdwSize))
-    anims_node = root.find('Anims')
-    for anim_node in anims_node.iter('Anim'):
-        name = anim_node.find('Name').text
+    anims_node = root.find("Anims")
+    for anim_node in anims_node.iter("Anim"):
+        name = anim_node.find("Name").text
         index = -1
-        index_node = anim_node.find('Index')
+        index_node = anim_node.find("Index")
         if index_node is not None:
             index = int(index_node.text)
-        backref_node = anim_node.find('CopyOf')
+        backref_node = anim_node.find("CopyOf")
         if backref_node is not None:
             backref = backref_node.text
             anim_stat = AnimStat(index, name, None, backref)
         else:
-            frame_width = anim_node.find('FrameWidth')
-            frame_height = anim_node.find('FrameHeight')
-            anim_stat = AnimStat(index, name, (int(frame_width.text), int(frame_height.text)), None)
+            frame_width = anim_node.find("FrameWidth")
+            frame_height = anim_node.find("FrameHeight")
+            anim_stat = AnimStat(
+                index, name, (int(frame_width.text), int(frame_height.text)), None
+            )
 
-            rush_frame = anim_node.find('RushFrame')
+            rush_frame = anim_node.find("RushFrame")
             if rush_frame is not None:
                 anim_stat.rushFrame = int(rush_frame.text)
-            hit_frame = anim_node.find('HitFrame')
+            hit_frame = anim_node.find("HitFrame")
             if hit_frame is not None:
                 anim_stat.hitFrame = int(hit_frame.text)
-            return_frame = anim_node.find('ReturnFrame')
+            return_frame = anim_node.find("ReturnFrame")
             if return_frame is not None:
                 anim_stat.returnFrame = int(return_frame.text)
 
-            durations_node = anim_node.find('Durations')
-            for dur_node in durations_node.iter('Duration'):
+            durations_node = anim_node.find("Durations")
+            for dur_node in durations_node.iter("Duration"):
                 duration = int(dur_node.text)
                 anim_stat.durations.append(duration)
 
             anim_names[name.lower()] = index
             if index == -1 and strict:
-                raise UserValueError("{0} has its own sheet and does not have an index!".format(name))
+                raise UserValueError(
+                    "{0} has its own sheet and does not have an index!".format(name)
+                )
 
         if index > -1:
             if index in anim_stats:
-                raise UserValueError("{0} and {1} both have the an index of {2}!".format(anim_stats[index].name, name, index))
+                raise UserValueError(
+                    "{0} and {1} both have the an index of {2}!".format(
+                        anim_stats[index].name, name, index
+                    )
+                )
             anim_stats[index] = anim_stat
 
     copy_indices = {}
@@ -124,9 +183,9 @@ def ImportSheets(inDir, strict=False):
     # read all sheets
     extra_sheets = []
     anim_sheets = {}
-    for filepath in glob.glob(os.path.join(inDir, '*-Anim.png')):
+    for filepath in glob.glob(os.path.join(inDir, "*-Anim.png")):
         _, file = os.path.split(filepath)
-        anim_parts = file.split('-')
+        anim_parts = file.split("-")
         anim_name = anim_parts[0]
         if anim_name.lower() not in anim_names:
             extra_sheets.append(anim_name)
@@ -134,9 +193,15 @@ def ImportSheets(inDir, strict=False):
             index = anim_names[anim_name.lower()]
             del anim_names[anim_name.lower()]
 
-            anim_img = Image.open(os.path.join(inDir, anim_name + '-Anim.png')).convert("RGBA")
-            offset_img = Image.open(os.path.join(inDir, anim_name + '-Offsets.png')).convert("RGBA")
-            shadow_img = Image.open(os.path.join(inDir, anim_name + '-Shadow.png')).convert("RGBA")
+            anim_img = Image.open(os.path.join(inDir, anim_name + "-Anim.png")).convert(
+                "RGBA"
+            )
+            offset_img = Image.open(
+                os.path.join(inDir, anim_name + "-Offsets.png")
+            ).convert("RGBA")
+            shadow_img = Image.open(
+                os.path.join(inDir, anim_name + "-Shadow.png")
+            ).convert("RGBA")
 
             anim_sheets[index] = (anim_img, offset_img, shadow_img, anim_name)
 
@@ -145,9 +210,11 @@ def ImportSheets(inDir, strict=False):
         orphans = []
         for k in anim_names:
             orphans.append(k)
-        raise UserValueError("Xml found with no sheet: {0}".format(', '.join(orphans)))
+        raise UserValueError("Xml found with no sheet: {0}".format(", ".join(orphans)))
     if len(extra_sheets) > 0:
-        raise UserValueError("Sheet found with no xml: {0}".format(', '.join(extra_sheets)))
+        raise UserValueError(
+            "Sheet found with no xml: {0}".format(", ".join(extra_sheets))
+        )
 
     animGroupData = []
     frames = []
@@ -160,23 +227,53 @@ def ImportSheets(inDir, strict=False):
 
             # check against inconsistent sizing
             if anim_img.size != offset_img.size or anim_img.size != shadow_img.size:
-                raise UserValueError("Anim, Offset, and Shadow sheets for {0} must be the same size!".format(anim_name))
+                raise UserValueError(
+                    "Anim, Offset, and Shadow sheets for {0} must be the same size!".format(
+                        anim_name
+                    )
+                )
 
-            if anim_img.size[0] % tileSize[0] != 0 or anim_img.size[1] % tileSize[1] != 0:
-                raise UserValueError("Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
-                    anim_img.size[0], anim_img.size[1], tileSize[0], tileSize[1], anim_name))
+            if (
+                anim_img.size[0] % tileSize[0] != 0
+                or anim_img.size[1] % tileSize[1] != 0
+            ):
+                raise UserValueError(
+                    "Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
+                        anim_img.size[0],
+                        anim_img.size[1],
+                        tileSize[0],
+                        tileSize[1],
+                        anim_name,
+                    )
+                )
 
             total_frames = anim_img.size[0] // tileSize[0]
             # check against inconsistent duration counts
             if total_frames != len(durations):
-                raise UserValueError("Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(anim_name, len(durations)))
+                raise UserValueError(
+                    "Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(
+                        anim_name, len(durations)
+                    )
+                )
 
             if anim_stats[idx].rushFrame >= len(durations):
-                raise UserValueError("RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].rushFrame, len(durations), anim_name))
+                raise UserValueError(
+                    "RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                        anim_stats[idx].rushFrame, len(durations), anim_name
+                    )
+                )
             if anim_stats[idx].hitFrame >= len(durations):
-                raise UserValueError("HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].hitFrame, len(durations), anim_name))
+                raise UserValueError(
+                    "HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                        anim_stats[idx].hitFrame, len(durations), anim_name
+                    )
+                )
             if anim_stats[idx].returnFrame >= len(durations):
-                raise UserValueError("ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(anim_stats[idx].returnFrame, len(durations), anim_name))
+                raise UserValueError(
+                    "ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                        anim_stats[idx].returnFrame, len(durations), anim_name
+                    )
+                )
 
             group = []
             total_dirs = anim_img.size[1] // tileSize[1]
@@ -185,26 +282,61 @@ def ImportSheets(inDir, strict=False):
                     break
                 sequence = []
                 for jj in range(anim_img.size[0] // tileSize[0]):
-                    rel_center = (tileSize[0] // 2 - DRAW_CENTER_X, tileSize[1] // 2 - DRAW_CENTER_Y)
-                    tile_rect = (jj * tileSize[0], dir * tileSize[1], tileSize[0], tileSize[1])
-                    tile_bounds = (tile_rect[0], tile_rect[1], tile_rect[0] + tile_rect[2], tile_rect[1] + tile_rect[3])
+                    rel_center = (
+                        tileSize[0] // 2 - DRAW_CENTER_X,
+                        tileSize[1] // 2 - DRAW_CENTER_Y,
+                    )
+                    tile_rect = (
+                        jj * tileSize[0],
+                        dir * tileSize[1],
+                        tileSize[0],
+                        tileSize[1],
+                    )
+                    tile_bounds = (
+                        tile_rect[0],
+                        tile_rect[1],
+                        tile_rect[0] + tile_rect[2],
+                        tile_rect[1] + tile_rect[3],
+                    )
                     bounds = exUtils.getCoveredBounds(anim_img, tile_bounds)
                     emptyBounds = False
                     if bounds[0] >= bounds[2]:
-                        bounds = (rel_center[0], rel_center[1], rel_center[0]+1, rel_center[1]+1)
+                        bounds = (
+                            rel_center[0],
+                            rel_center[1],
+                            rel_center[0] + 1,
+                            rel_center[1] + 1,
+                        )
                         emptyBounds = True
-                    rect = (bounds[0], bounds[1], bounds[2] - bounds[0], bounds[3] - bounds[1])
-                    abs_bounds = exUtils.addToBounds(bounds, (tile_rect[0], tile_rect[1]))
+                    rect = (
+                        bounds[0],
+                        bounds[1],
+                        bounds[2] - bounds[0],
+                        bounds[3] - bounds[1],
+                    )
+                    abs_bounds = exUtils.addToBounds(
+                        bounds, (tile_rect[0], tile_rect[1])
+                    )
                     frame_tex = anim_img.crop(abs_bounds)
 
-                    shadow_offset = exUtils.getOffsetFromRGB(shadow_img, tile_bounds, False, False, False, False, True)
-                    frame_offset = exUtils.getOffsetFromRGB(offset_img, tile_bounds, True, True, True, True, False)
+                    shadow_offset = exUtils.getOffsetFromRGB(
+                        shadow_img, tile_bounds, False, False, False, False, True
+                    )
+                    frame_offset = exUtils.getOffsetFromRGB(
+                        offset_img, tile_bounds, True, True, True, True, False
+                    )
                     offsets = FrameOffset(None, None, None, None)
                     if frame_offset[2] is None:
                         # raise warning if there's missing shadow or offsets
                         if strict:
-                            raise UserValueError("No frame offset found in frame {0} for {1}".format((jj, dir), anim_name))
-                        offsets = FrameOffset(rel_center, rel_center, rel_center, rel_center)
+                            raise UserValueError(
+                                "No frame offset found in frame {0} for {1}".format(
+                                    (jj, dir), anim_name
+                                )
+                            )
+                        offsets = FrameOffset(
+                            rel_center, rel_center, rel_center, rel_center
+                        )
                     else:
                         offsets.center = frame_offset[2]
                         if frame_offset[0] is None:
@@ -219,11 +351,19 @@ def ImportSheets(inDir, strict=False):
                     if shadow_offset[4] is not None:
                         shadow = shadow_offset[4]
                     elif strict:
-                        raise UserValueError("No shadow offset found in frame {0} for {1}".format((jj, dir), anim_name))
+                        raise UserValueError(
+                            "No shadow offset found in frame {0} for {1}".format(
+                                (jj, dir), anim_name
+                            )
+                        )
                     shadow_diff = exUtils.addLoc(shadow, rect, True)
                     shadow = exUtils.addLoc(shadow, rel_center, True)
 
-                    if emptyBounds and shadow_offset[4] is None and frame_offset[2] is None:
+                    if (
+                        emptyBounds
+                        and shadow_offset[4] is None
+                        and frame_offset[2] is None
+                    ):
                         continue
 
                     frames.append((frame_tex, offsets, shadow_diff))
@@ -275,10 +415,19 @@ def ImportSheets(inDir, strict=False):
                 chosen_diff = diff
         # now that we have our chosen diff
         # set the frame in final_frames to the chosen diff
-        final_frames[key] = (final_frames[key][0], final_frames[key][1], chosen_diff, final_frames[key][3], final_frames[key][4])
+        final_frames[key] = (
+            final_frames[key][0],
+            final_frames[key][1],
+            chosen_diff,
+            final_frames[key][3],
+            final_frames[key][4],
+        )
         # and then set the diff mapping to their shadow diff - chosen diff
         for start in reverse_frame_map[key]:
-            frame_map[start] = (frame_map[start][0], exUtils.addLoc(chosen_diff, frames[start][2], True))
+            frame_map[start] = (
+                frame_map[start][0],
+                exUtils.addLoc(chosen_diff, frames[start][2], True),
+            )
         # now, the frame will treat chosenDiff as its center
         # and all diffs will be applied to the offsets of the currently created animGroups
 
@@ -300,7 +449,9 @@ def ImportSheets(inDir, strict=False):
     max_height = exUtils.roundUpToMult(max_height, 2)
 
     max_tiles = int(math.ceil(math.sqrt(len(final_frames))))
-    combinedImg = Image.new('RGBA', (max_tiles * max_width, max_tiles * max_height), (0, 0, 0, 0))
+    combinedImg = Image.new(
+        "RGBA", (max_tiles * max_width, max_tiles * max_height), (0, 0, 0, 0)
+    )
 
     crop_bounds = []
     for idx, frame in enumerate(final_frames):
@@ -308,17 +459,21 @@ def ImportSheets(inDir, strict=False):
         round_width = exUtils.roundUpToMult(frame_tex.size[0], 2)
         round_height = exUtils.roundUpToMult(frame_tex.size[1], 2)
         tile_pos = (idx % max_tiles * max_width, idx // max_tiles * max_height)
-        paste_bounds = (tile_pos[0] + (max_width - round_width) // 2,
-                        tile_pos[1] + (max_height - round_height) // 2,
-                        tile_pos[0] + (max_width - round_width) // 2 + frame_tex.size[0],
-                        tile_pos[1] + (max_height - round_height) // 2 + frame_tex.size[1])
+        paste_bounds = (
+            tile_pos[0] + (max_width - round_width) // 2,
+            tile_pos[1] + (max_height - round_height) // 2,
+            tile_pos[0] + (max_width - round_width) // 2 + frame_tex.size[0],
+            tile_pos[1] + (max_height - round_height) // 2 + frame_tex.size[1],
+        )
         crop_bounds.append(paste_bounds)
         combinedImg.paste(frame_tex, paste_bounds, frame_tex)
 
     colors = combinedImg.getcolors()
 
     if strict and len(colors) > 16:
-        raise UserValueError("Number of (nontransparent) colors over 15: {0}".format(len(colors)))
+        raise UserValueError(
+            "Number of (nontransparent) colors over 15: {0}".format(len(colors))
+        )
 
     transparent = (0, 127, 151, 255)
     foundTrans = True
@@ -389,20 +544,23 @@ def ImportSheets(inDir, strict=False):
     offsetData = []
     for idx, frame in enumerate(final_frames):
         if DEBUG_PRINT:
-            frame[0].save(os.path.join(inDir, '_frames_in', 'F-' + format(idx, '02d') + '.png'))
+            frame[0].save(
+                os.path.join(inDir, "_frames_in", "F-" + format(idx, "02d") + ".png")
+            )
 
         shadow_diff = frame[2]
         flip = frame[3]
         if flip > -1:
             flipped_frame = frameData[flip]
-            addFlippedImgData(frame[4], frameData, flipped_frame, final_frames[flip], frame)
+            addFlippedImgData(
+                frame[4], frameData, flipped_frame, final_frames[flip], frame
+            )
         else:
             # will append to imgData and frameData
             addImgData(imgData, frameData, palette_map, transparent, frame)
         offsets = frame[1]
         offsets.AddLoc((-shadow_diff[0], -shadow_diff[1]))
         offsetData.append(offsets)
-
 
     # apply the mappings to the animations, correcting the frame indices and shadow offsets
     for idx, frame in enumerate(frames):
@@ -433,7 +591,7 @@ def ImportSheets(inDir, strict=False):
 
 def ImportSheetsFromZip(zipFile, strict=False):
     with TemporaryDirectory() as tmp_dir:
-        with ZipFile(zipFile, 'r') as zipObj:
+        with ZipFile(zipFile, "r") as zipObj:
             zipObj.extractall(tmp_dir)
         wan = ImportSheets(tmp_dir, strict)
     return wan
@@ -441,15 +599,14 @@ def ImportSheetsFromZip(zipFile, strict=False):
 
 def ExportSheets(outDir, sdwImg, wan, anim_name_map):
 
-
     if not os.path.isdir(outDir):
         os.makedirs(outDir)
 
     if DEBUG_PRINT:
-        if not os.path.isdir(os.path.join(outDir, '_pieces')):
-            os.makedirs(os.path.join(outDir, '_pieces'))
-        if not os.path.isdir(os.path.join(outDir, '_frames')):
-            os.makedirs(os.path.join(outDir, '_frames'))
+        if not os.path.isdir(os.path.join(outDir, "_pieces")):
+            os.makedirs(os.path.join(outDir, "_pieces"))
+        if not os.path.isdir(os.path.join(outDir, "_frames")):
+            os.makedirs(os.path.join(outDir, "_frames"))
 
     anim_stats = []
     maxFrameBounds = (10000, 10000, -10000, -10000)
@@ -465,7 +622,9 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
         maxFrameBounds = exUtils.combineExtents(maxFrameBounds, offset.GetBounds())
 
     # round up to nearest x8
-    maxFrameBounds = exUtils.centerBounds(maxFrameBounds, (DRAW_CENTER_X, DRAW_CENTER_Y))
+    maxFrameBounds = exUtils.centerBounds(
+        maxFrameBounds, (DRAW_CENTER_X, DRAW_CENTER_Y)
+    )
     maxFrameBounds = exUtils.roundUpBox(maxFrameBounds)
 
     # create all frames, and visual representation of offsets tied to each frame
@@ -482,8 +641,10 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
             if metaFramePiece.imgIndex == MINUS_FRAME:
                 has_minus = True
                 prev_idx = mt_idx - 1
-                while metaFrame[prev_idx].imgIndex == MINUS_FRAME or metaFrame[
-                    prev_idx].getTileNum() != metaFramePiece.getTileNum():
+                while (
+                    metaFrame[prev_idx].imgIndex == MINUS_FRAME
+                    or metaFrame[prev_idx].getTileNum() != metaFramePiece.getTileNum()
+                ):
                     prev_idx = prev_idx - 1
                 parent_idx = metaFrame[prev_idx].imgIndex
             else:
@@ -492,27 +653,47 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
             if parent_idx in piece_imgs:
                 img = piece_imgs[parent_idx]
             else:
-                img = metaFramePiece.GeneratePiece(wan.imgData, wan.customPalette, parent_idx)
+                img = metaFramePiece.GeneratePiece(
+                    wan.imgData, wan.customPalette, parent_idx
+                )
                 piece_imgs[parent_idx] = img
             draw_queue.append((img, metaFramePiece))
 
         # create an image to represent the full metaFrameGroup
-        groupImg = Image.new('RGBA', (maxFrameBounds[2] - maxFrameBounds[0], maxFrameBounds[3] - maxFrameBounds[1]),
-                             (0, 0, 0, 0))
+        groupImg = Image.new(
+            "RGBA",
+            (
+                maxFrameBounds[2] - maxFrameBounds[0],
+                maxFrameBounds[3] - maxFrameBounds[1],
+            ),
+            (0, 0, 0, 0),
+        )
         while len(draw_queue) > 0:
             img, metaFramePiece = draw_queue.pop()
             metaFramePiece.DrawOn(groupImg, img, (maxFrameBounds[0], maxFrameBounds[1]))
         if DEBUG_PRINT:
-            groupImg.save(os.path.join(outDir, '_frames', 'F-' + format(idx, '02d') + '.png'))
+            groupImg.save(
+                os.path.join(outDir, "_frames", "F-" + format(idx, "02d") + ".png")
+            )
         frames.append(groupImg)
 
         # create an image for particle offsets
-        particleImg = Image.new('RGBA', (maxFrameBounds[2] - maxFrameBounds[0], maxFrameBounds[3] - maxFrameBounds[1]),
-                                (0, 0, 0, 0))
+        particleImg = Image.new(
+            "RGBA",
+            (
+                maxFrameBounds[2] - maxFrameBounds[0],
+                maxFrameBounds[3] - maxFrameBounds[1],
+            ),
+            (0, 0, 0, 0),
+        )
         offset = wan.offsetData[idx]
         offset.DrawOn(particleImg, (maxFrameBounds[0], maxFrameBounds[1]))
         if DEBUG_PRINT:
-            particleImg.save(os.path.join(outDir, '_frames', 'F-' + format(idx, '02d') + '-Offsets.png'))
+            particleImg.save(
+                os.path.join(
+                    outDir, "_frames", "F-" + format(idx, "02d") + "-Offsets.png"
+                )
+            )
         offsets.append(particleImg)
 
         # create a tighter bounds representation of the frame, down to the pixel
@@ -524,11 +705,20 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
     if DEBUG_PRINT:
         for piece_idx in piece_imgs:
             img = piece_imgs[piece_idx]
-            img.save(os.path.join(outDir, '_pieces', 'P-' + format(piece_idx, '03d') + '.png'))
+            img.save(
+                os.path.join(
+                    outDir, "_pieces", "P-" + format(piece_idx, "03d") + ".png"
+                )
+            )
 
     # get max bounds for all animations
     groupBounds = []
-    shadow_rect = (sdwImg.size[0] // -2, sdwImg.size[1] // -2, sdwImg.size[0] // 2, sdwImg.size[1] // 2)
+    shadow_rect = (
+        sdwImg.size[0] // -2,
+        sdwImg.size[1] // -2,
+        sdwImg.size[0] // 2,
+        sdwImg.size[1] // 2,
+    )
     shadow_rect_tight = exUtils.getCoveredBounds(sdwImg)
     shadow_rect_tight = exUtils.addToBounds(shadow_rect_tight, shadow_rect)
     for idx, animGroup in enumerate(wan.animGroupData):
@@ -553,7 +743,7 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
         if animsPerGroup == 0:
             continue
 
-        if idx >= len(anim_name_map) or anim_name_map[idx][0] == '':
+        if idx >= len(anim_name_map) or anim_name_map[idx][0] == "":
             raise UserValueError("Animation #{0} needs a name!".format(idx))
 
         dupe_idx = -1
@@ -566,9 +756,18 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
                 break
 
         if dupe_idx > -1:
-            anim_stats.append(AnimStat(idx, anim_name_map[idx][0], None, anim_name_map[dupe_idx][0]))
+            anim_stats.append(
+                AnimStat(idx, anim_name_map[idx][0], None, anim_name_map[dupe_idx][0])
+            )
             for extra_idx in range(1, len(anim_name_map[idx])):
-                anim_stats.append(AnimStat(-1, anim_name_map[idx][extra_idx], None, anim_name_map[dupe_idx][0]))
+                anim_stats.append(
+                    AnimStat(
+                        -1,
+                        anim_name_map[idx][extra_idx],
+                        None,
+                        anim_name_map[dupe_idx][0],
+                    )
+                )
             continue
 
         maxBounds = groupBounds[idx]
@@ -579,9 +778,21 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
         for g_idx, singleAnim in enumerate(animGroup):
             framesPerAnim = max(framesPerAnim, len(singleAnim))
 
-        animImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
-        particleImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
-        shadowImg = Image.new('RGBA', (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup), (0, 0, 0, 0))
+        animImg = Image.new(
+            "RGBA",
+            (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup),
+            (0, 0, 0, 0),
+        )
+        particleImg = Image.new(
+            "RGBA",
+            (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup),
+            (0, 0, 0, 0),
+        )
+        shadowImg = Image.new(
+            "RGBA",
+            (maxSize[0] * framesPerAnim, maxSize[1] * animsPerGroup),
+            (0, 0, 0, 0),
+        )
         for g_idx, singleAnim in enumerate(animGroup):
             for a_idx, animFrame in enumerate(singleAnim):
                 if a_idx >= len(new_stat.durations):
@@ -595,22 +806,28 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
 
                 frameImg = frames[animFrame.frameIndex]
                 tilePos = (a_idx * maxSize[0], g_idx * maxSize[1])
-                pastePos = (tilePos[0] - maxBounds[0] + maxFrameBounds[0] + animFrame.offset[0],
-                            tilePos[1] - maxBounds[1] + maxFrameBounds[1] + animFrame.offset[1])
+                pastePos = (
+                    tilePos[0] - maxBounds[0] + maxFrameBounds[0] + animFrame.offset[0],
+                    tilePos[1] - maxBounds[1] + maxFrameBounds[1] + animFrame.offset[1],
+                )
                 animImg.paste(frameImg, pastePos, frameImg)
                 offsetImg = offsets[animFrame.frameIndex]
                 particleImg.paste(offsetImg, pastePos, offsetImg)
 
                 shadowBounds = exUtils.addToBounds(shadow_rect, animFrame.shadow)
-                shadowPastePos = (tilePos[0] - maxBounds[0] + shadowBounds[0],
-                                  tilePos[1] - maxBounds[1] + shadowBounds[1])
+                shadowPastePos = (
+                    tilePos[0] - maxBounds[0] + shadowBounds[0],
+                    tilePos[1] - maxBounds[1] + shadowBounds[1],
+                )
                 shadowImg.paste(sdwImg, shadowPastePos, sdwImg)
-        animImg.save(os.path.join(outDir, new_stat.name + '-Anim.png'))
-        particleImg.save(os.path.join(outDir, new_stat.name + '-Offsets.png'))
-        shadowImg.save(os.path.join(outDir, new_stat.name + '-Shadow.png'))
+        animImg.save(os.path.join(outDir, new_stat.name + "-Anim.png"))
+        particleImg.save(os.path.join(outDir, new_stat.name + "-Offsets.png"))
+        shadowImg.save(os.path.join(outDir, new_stat.name + "-Shadow.png"))
 
         for extra_idx in range(1, len(anim_name_map[idx])):
-            anim_stats.append(AnimStat(-1, anim_name_map[idx][extra_idx], None, anim_name_map[idx][0]))
+            anim_stats.append(
+                AnimStat(-1, anim_name_map[idx][extra_idx], None, anim_name_map[idx][0])
+            )
         anim_stats.append(new_stat)
 
     # export the xml
@@ -648,20 +865,20 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
                 dur_node = ET.SubElement(durations_node, "Duration")
                 dur_node.text = str(duration)
 
-    with open(os.path.join(outDir, 'AnimData.xml'), 'w') as f:
+    with open(os.path.join(outDir, "AnimData.xml"), "w") as f:
         f.write(prettify(root))
 
 
 def ExportSheetsAsZip(zipFile, sdwImg, wan, anim_name_map):
     with TemporaryDirectory() as tmp_dir:
         ExportSheets(tmp_dir, sdwImg, wan, anim_name_map)
-        with ZipFile(zipFile, 'w') as ZipObj:
+        with ZipFile(zipFile, "w") as ZipObj:
             abs_src = os.path.abspath(tmp_dir)
             for dirname, subdirs, files in os.walk(tmp_dir):
                 for filename in files:
                     # Avoid absolute path creation
                     absname = os.path.abspath(os.path.join(dirname, filename))
-                    arcname = absname[len(abs_src) + 1:]
+                    arcname = absname[len(abs_src) + 1 :]
                     ZipObj.write(absname, arcname)
 
 
@@ -685,7 +902,9 @@ def mapDuplicateImportImgs(imgs, final_imgs, img_map):
             else:
                 imgs_flip = exUtils.imgsEqual(final_img[0], img[0], True)
                 if imgs_flip:
-                    imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
+                    imgs_flip = exUtils.offsetsEqual(
+                        final_img[1], img[1], img[0].size[0], True
+                    )
                 if imgs_flip:
                     flip_mode = FlipMode.FLIP
                     flip = final_idx
@@ -715,7 +934,10 @@ def addFlippedImgData(flipMode: FlipMode, frameData, metaFrame, old_frame, new_f
     point_diff = exUtils.addLoc(new_frame[2], old_frame[2], True)
     # add it to all metaframe components
     for piece in newMetaFrame:
-        new_offset = (piece.getXOffset() - point_diff[0], piece.getYOffset() - point_diff[1])
+        new_offset = (
+            piece.getXOffset() - point_diff[0],
+            piece.getYOffset() - point_diff[1],
+        )
         piece.setXOffset(new_offset[0])
         piece.setYOffset(new_offset[1])
     frameData.append(newMetaFrame)
@@ -763,6 +985,7 @@ def addImgData(imgData, frameData, palette_map, transparent, frame):
         imgStrip = convertPieceToImgStrip(piece, palette_map)
         imgData.append(imgStrip)
 
+
 def convertPieceToImgStrip(piece, palette_map):
     imgPx = []
     datas = piece.getdata()
@@ -794,7 +1017,7 @@ def convertPieceToImgStrip(piece, palette_map):
         if allZero != prevZero:
             strips.append(cur_strip)
             cur_strip = []
-        cur_strip.extend(imgPx4bpp[block:block + 32])
+        cur_strip.extend(imgPx4bpp[block : block + 32])
         prevZero = allZero
     # add the pending strip
     strips.append(cur_strip)
@@ -804,16 +1027,23 @@ def convertPieceToImgStrip(piece, palette_map):
     imgStrip.imgPx = strips
     return imgStrip
 
+
 def chopImgToPieceLocs(img, transparent):
     chopped_imgs = []
     smallest_dim = 3
     for idx, dim in enumerate(DIM_TABLE):
         if img.size[0] <= dim[0] * TEX_SIZE and img.size[1] <= dim[1] * TEX_SIZE:
-            if dim[0] * dim[1] < DIM_TABLE[smallest_dim][0] * DIM_TABLE[smallest_dim][1]:
+            if (
+                dim[0] * dim[1]
+                < DIM_TABLE[smallest_dim][0] * DIM_TABLE[smallest_dim][1]
+            ):
                 smallest_dim = idx
     if img.size[0] > 8 * TEX_SIZE or img.size[1] > 8 * TEX_SIZE:
-        roundUp = (exUtils.roundUpToMult(img.size[0], TEX_SIZE), exUtils.roundUpToMult(img.size[1], TEX_SIZE))
-        fullImg = Image.new('RGBA', roundUp, transparent)
+        roundUp = (
+            exUtils.roundUpToMult(img.size[0], TEX_SIZE),
+            exUtils.roundUpToMult(img.size[1], TEX_SIZE),
+        )
+        fullImg = Image.new("RGBA", roundUp, transparent)
         fullImg.paste(img, (0, 0), img)
 
         yy = 0
@@ -829,7 +1059,7 @@ def chopImgToPieceLocs(img, transparent):
                     addx //= 2
                 bounds = (xx, yy, xx + addx, yy + addy)
                 cutImg = fullImg.crop(bounds)
-                chopped_imgs.append((cutImg, (xx,yy)))
+                chopped_imgs.append((cutImg, (xx, yy)))
                 total_size += max(1, addx * addy // TEX_SIZE // TEX_SIZE // 4)
                 xx += addx
             yy += addy
@@ -838,8 +1068,7 @@ def chopImgToPieceLocs(img, transparent):
     else:
         newWidth = DIM_TABLE[smallest_dim][0] * TEX_SIZE
         newHeight = DIM_TABLE[smallest_dim][1] * TEX_SIZE
-        newImg = Image.new('RGBA', (newWidth, newHeight), transparent)
+        newImg = Image.new("RGBA", (newWidth, newHeight), transparent)
         newImg.paste(img, (0, 0), img)
         chopped_imgs.append((newImg, (0, 0)))
     return chopped_imgs
-

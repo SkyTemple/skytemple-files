@@ -34,13 +34,19 @@ class GraphicFont(AutoString):
 
         self.palette: Optional[Pal] = None
         self.entries: List[Optional[Image.Image]] = []
-        for i in range(0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN):
+        for i in range(
+            0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN
+        ):
             width = read_u8(data, i + 0x00)
             height = read_u8(data, i + 0x01)
             offset = read_u16(data, i + 0x02)
             if width > 0 or height > 0:
-                data_raw = data[offset:offset + width * height]
-                self.entries.append(Image.frombytes(mode='P', size=(width, height), data=bytes(data_raw)))
+                data_raw = data[offset : offset + width * height]
+                self.entries.append(
+                    Image.frombytes(
+                        mode="P", size=(width, height), data=bytes(data_raw)
+                    )
+                )
             else:
                 self.entries.append(None)
 
@@ -49,13 +55,15 @@ class GraphicFont(AutoString):
 
     def get_palette_raw(self) -> List[int]:
         if self.palette:
-            return [0, 0, 255] * 0x80 + self.palette.get_palette_4bpc()[:0x80 * 3]
+            return [0, 0, 255] * 0x80 + self.palette.get_palette_4bpc()[: 0x80 * 3]
         else:
-            return [0, 0, 255] * 0x80 + [(i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)]
+            return [0, 0, 255] * 0x80 + [
+                (i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)
+            ]
 
     def set_palette_raw(self, data: List[int]):
         if self.palette:
-            self.palette.set_palette_4bpc(data[0x80 * 3:])
+            self.palette.set_palette_4bpc(data[0x80 * 3 :])
 
     def get_nb_entries(self) -> int:
         return len(self.entries)
@@ -77,5 +85,4 @@ class GraphicFont(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, GraphicFont):
             return False
-        return self.entries == other.entries and \
-               self.palette == other.palette
+        return self.entries == other.entries and self.palette == other.palette

@@ -69,8 +69,8 @@ class Str:
         # Write string bytes
         offset_list.append(u32_checked(length_of_index + length_of_str_bytes))
         for i, s in enumerate(strings_bytes):
-            length = offset_list[i+1] - offset_list[i]
-            result[cursor:cursor+length] = s
+            length = offset_list[i + 1] - offset_list[i]
+            result[cursor : cursor + length] = s
             cursor += length
 
         return result

@@ -22,10 +22,12 @@ import hashlib
 import os
 import warnings
 
-from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import \
-    SsbGraphMinimizer
-from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import \
-    OpsLabelJumpToResolver
+from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import (
+    SsbGraphMinimizer,
+)
+from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import (
+    OpsLabelJumpToResolver,
+)
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_files_from_rom_with_extension
@@ -35,15 +37,15 @@ RENDER = True
 
 
 def main():
-    output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output', 'graphs')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+    output_dir = os.path.join(os.path.dirname(__file__), "dbg_output", "graphs")
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
     total_count_labels_before = 0
     total_count_labels_after = 0
 
-    for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
+    for file_name in get_files_from_rom_with_extension(rom, "ssb"):
         print(file_name)
 
         bin_before = rom.getFileByName(file_name)
@@ -56,28 +58,28 @@ def main():
 
         grapher = SsbGraphMinimizer(routine_ops)
         total_count_labels_before += grapher.count_labels()
-        draw_graphs(grapher, file_name, output_dir, 'before_optimize')
+        draw_graphs(grapher, file_name, output_dir, "before_optimize")
 
         grapher.optimize_paths()
-        draw_graphs(grapher, file_name, output_dir, 'after_optimize')
+        draw_graphs(grapher, file_name, output_dir, "after_optimize")
 
-        #grapher._graphs = [ grapher._graphs[86] ]
+        # grapher._graphs = [ grapher._graphs[86] ]
         grapher.build_branches()
-        draw_graphs(grapher, file_name, output_dir, 'after_branch_before_group')
+        draw_graphs(grapher, file_name, output_dir, "after_branch_before_group")
         grapher.group_branches()
         grapher.invert_branches()
-        draw_graphs(grapher, file_name, output_dir, 'after_branch')
+        draw_graphs(grapher, file_name, output_dir, "after_branch")
 
         grapher.build_and_group_switch_cases()
         grapher.group_switch_cases()
         grapher.build_switch_fallthroughs()
-        draw_graphs(grapher, file_name, output_dir, 'after_switch')
+        draw_graphs(grapher, file_name, output_dir, "after_switch")
 
         grapher.build_loops()
-        draw_graphs(grapher, file_name, output_dir, 'after_loops')
+        draw_graphs(grapher, file_name, output_dir, "after_loops")
 
         grapher.remove_label_markers()
-        draw_graphs(grapher, file_name, output_dir, 'done')
+        draw_graphs(grapher, file_name, output_dir, "done")
 
         total_count_labels_after += grapher.count_labels()
 
@@ -92,31 +94,35 @@ def draw_graphs(grapher, file_name, output_dir, run_name):
         return
     os.makedirs(local_output_dir, exist_ok=True)
     for i, graph in enumerate(grapher._graphs):
-        dot_name = os.path.join(local_output_dir, f'{i}.dot')
+        dot_name = os.path.join(local_output_dir, f"{i}.dot")
         hash_dotfile_before = None
         if os.path.exists(dot_name):
-            with open(dot_name, 'r') as f:
-                hash_dotfile_before = hashlib.md5(f.read().encode('utf-8')).hexdigest()
-        with open(dot_name, 'w') as f:
+            with open(dot_name, "r") as f:
+                hash_dotfile_before = hashlib.md5(f.read().encode("utf-8")).hexdigest()
+        with open(dot_name, "w") as f:
             graph.write_dot(f)
-        with open(dot_name, 'r') as f:
-            hash_dotfile_same = hashlib.md5(f.read().encode('utf-8')).hexdigest() == hash_dotfile_before
+        with open(dot_name, "r") as f:
+            hash_dotfile_same = (
+                hashlib.md5(f.read().encode("utf-8")).hexdigest() == hash_dotfile_before
+            )
         unconnected_vertices = []
         if not hash_dotfile_same:
             print("Writing svg for " + dot_name)
             try:
-                os.remove(os.path.join(local_output_dir, f'{i}.dot.svg'))
+                os.remove(os.path.join(local_output_dir, f"{i}.dot.svg"))
             except FileNotFoundError:
                 pass
             os.chdir(local_output_dir)
-            os.system(f'dot -Tsvg -O {i}.dot')
+            os.system(f"dot -Tsvg -O {i}.dot")
             print("done.")
         for v in graph.vs:
-            if len(list(v.all_edges())) < 1 and v['name'] != 0:
-                unconnected_vertices.append(v['label'])
+            if len(list(v.all_edges())) < 1 and v["name"] != 0:
+                unconnected_vertices.append(v["label"])
         if len(unconnected_vertices) > 0:
-            warnings.warn(f"[{file_name}] Routine {i} has unconnected ops: {unconnected_vertices}")
+            warnings.warn(
+                f"[{file_name}] Routine {i} has unconnected ops: {unconnected_vertices}"
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

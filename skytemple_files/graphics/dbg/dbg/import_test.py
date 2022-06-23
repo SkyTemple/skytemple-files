@@ -26,19 +26,19 @@ from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.graphics.dbg.model import Dbg
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(os.path.join(output_dir), exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
 for i, file in enumerate(dungeon_bin):
     fn = dungeon_bin.get_filename(i)
-    if fn.endswith('.dbg'):
+    if fn.endswith(".dbg"):
         file: Dbg
 
         assert file == FileType.DBG.deserialize(FileType.DBG.serialize(file))

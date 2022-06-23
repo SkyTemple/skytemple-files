@@ -29,13 +29,15 @@ from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bma import MASK_PAL
 from skytemple_files.graphics.bma.protocol import BmaProtocol
+
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpa._model import Bpa
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
+
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpc._model import Bpc
-from skytemple_files.graphics.bpl import (BPL_IMG_PAL_LEN, BPL_MAX_PAL,
-                                          BPL_PAL_LEN)
+from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
+
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpl._model import Bpl
 from skytemple_files.graphics.bpl.protocol import BplProtocol
@@ -44,6 +46,7 @@ from skytemple_files.graphics.bpl.protocol import BplProtocol
 class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
     def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
@@ -99,20 +102,23 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         number_of_bytes_per_layer = math.ceil(number_of_bytes_per_layer)
 
         # Read first layer
-        #print(f"r> layer 0x{0xC:02x}")
-        self.layer0, compressed_layer0_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
-            data[0xC:],
-            stop_when_size=number_of_bytes_per_layer
-        ))
+        # print(f"r> layer 0x{0xC:02x}")
+        self.layer0, compressed_layer0_size = self._read_layer(
+            FileType.BMA_LAYER_NRL.decompress(
+                data[0xC:], stop_when_size=number_of_bytes_per_layer
+            )
+        )
         self.layer1: Optional[List[int]] = None
         compressed_layer1_size = 0
         if self.number_of_layers > 1:
             # Read second layer
-            #print(f"r> layer 0x{0xC + compressed_layer0_size:02x}")
-            self.layer1, compressed_layer1_size = self._read_layer(FileType.BMA_LAYER_NRL.decompress(
-                data[0xC + compressed_layer0_size:],
-                stop_when_size=number_of_bytes_per_layer
-            ))
+            # print(f"r> layer 0x{0xC + compressed_layer0_size:02x}")
+            self.layer1, compressed_layer1_size = self._read_layer(
+                FileType.BMA_LAYER_NRL.decompress(
+                    data[0xC + compressed_layer0_size :],
+                    stop_when_size=number_of_bytes_per_layer,
+                )
+            )
 
         offset_begin_next = 0xC + compressed_layer0_size + compressed_layer1_size
         self.unknown_data_block: Optional[List[int]] = None
@@ -122,14 +128,16 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             # Theory from looking at the maps:
             # It seems that if the player tries interact on these blocks, the game checks the other blocks for NPCs
             # to interact with (as if the player were standing on them)
-            #print(f"r> unk   0x{offset_begin_next:02x}")
-            self.unknown_data_block, data_block_len = self._read_unknown_data_block(FileType.GENERIC_NRL.decompress(
-                data[offset_begin_next:],
-                # It is unknown what size calculation is actually used here in game, see notes below for collision
-                # (search for 'NOTE!!!')
-                # We assume it's the same as for the collision.
-                stop_when_size=self.map_width_camera * self.map_height_camera
-            ))
+            # print(f"r> unk   0x{offset_begin_next:02x}")
+            self.unknown_data_block, data_block_len = self._read_unknown_data_block(
+                FileType.GENERIC_NRL.decompress(
+                    data[offset_begin_next:],
+                    # It is unknown what size calculation is actually used here in game, see notes below for collision
+                    # (search for 'NOTE!!!')
+                    # We assume it's the same as for the collision.
+                    stop_when_size=self.map_width_camera * self.map_height_camera,
+                )
+            )
             offset_begin_next += data_block_len
         self.collision = None
         if self.number_of_collision_layers > 0:
@@ -149,29 +157,33 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             #
             # NOTE!!! Tests have shown, that the collision layers use map_width_camera and map_height_camera
             #         instead of map_width/height_chunks * tiling_width/height. The map that proves this is G01P08A!
-            #print(f"r> col   0x{offset_begin_next:02x}")
+            # print(f"r> col   0x{offset_begin_next:02x}")
             number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
-            self.collision, collision_size = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
-                data[offset_begin_next:],
-                stop_when_size=number_of_bytes_for_col
-            ))
+            self.collision, collision_size = self._read_collision(
+                FileType.BMA_COLLISION_RLE.decompress(
+                    data[offset_begin_next:], stop_when_size=number_of_bytes_for_col
+                )
+            )
             offset_begin_next += collision_size
         self.collision2 = None
         if self.number_of_collision_layers > 1:
             # A second collision layer...?
             number_of_bytes_for_col = self.map_width_camera * self.map_height_camera
-            self.collision2, collision_size2 = self._read_collision(FileType.BMA_COLLISION_RLE.decompress(
-                data[offset_begin_next:],
-                stop_when_size=number_of_bytes_for_col
-            ))
+            self.collision2, collision_size2 = self._read_collision(
+                FileType.BMA_COLLISION_RLE.decompress(
+                    data[offset_begin_next:], stop_when_size=number_of_bytes_for_col
+                )
+            )
 
     def __str__(self) -> str:
-        return f"M: {self.map_width_camera}x{self.map_height_camera}, " \
-               f"T: {self.tiling_width}x{self.tiling_height} - " \
-               f"MM: {self.map_width_chunks}x{self.map_height_chunks} - " \
-               f"L: {self.number_of_layers} - " \
-               f"Col: {self.number_of_collision_layers} - " \
-               f"unk6: 0x{self.unk6:04x}"
+        return (
+            f"M: {self.map_width_camera}x{self.map_height_camera}, "
+            f"T: {self.tiling_width}x{self.tiling_height} - "
+            f"MM: {self.map_width_chunks}x{self.map_height_chunks} - "
+            f"L: {self.number_of_layers} - "
+            f"Col: {self.number_of_collision_layers} - "
+            f"unk6: 0x{self.unk6:04x}"
+        )
 
     def _read_layer(self, data: Tuple[bytes, int]) -> Tuple[List[int], int]:
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
@@ -181,14 +193,18 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         i = 0
         skipped_on_prev = True
         for chunk in iter_bytes(data[0], 2):
-            chunk_i = int.from_bytes(chunk, 'little')
+            chunk_i = int.from_bytes(chunk, "little")
             if i >= max_tiles:
                 # this happens if there is a leftover 12bit word.
                 break
             index_in_row = i % self.map_width_chunks
             # If the map width is odd, there is one extra chunk at the end of every row,
             # we remove this chunk.
-            if not skipped_on_prev and index_in_row == 0 and self.map_width_chunks % 2 != 0:
+            if (
+                not skipped_on_prev
+                and index_in_row == 0
+                and self.map_width_chunks % 2 != 0
+            ):
                 skipped_on_prev = True
                 continue
             skipped_on_prev = False
@@ -218,7 +234,11 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         return unk, data[1]
 
     def to_pil_single_layer(
-            self, bpc: Bpc, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[Bpa]], layer: int
+        self,
+        bpc: Bpc,
+        palettes: Sequence[Sequence[int]],
+        bpas: Sequence[Optional[Bpa]],
+        layer: int,
     ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
@@ -250,22 +270,35 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             bpc_layer_id = 0
 
         chunks = bpc.chunks_animated_to_pil(bpc_layer_id, palettes, bpas, 1)[0]
-        fimg = Image.new('P', (width_map, height_map))
+        fimg = Image.new("P", (width_map, height_map))
         fimg.putpalette(chunks.getpalette())  # type: ignore
 
         for i, mt_idx in enumerate(bma_layer):
             x = i % self.map_width_chunks
             y = math.floor(i / self.map_width_chunks)
             fimg.paste(
-                chunks.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height)),
-                (x * chunk_width, y * chunk_height)
+                chunks.crop(
+                    (
+                        0,
+                        mt_idx * chunk_width,
+                        chunk_width,
+                        mt_idx * chunk_width + chunk_height,
+                    )
+                ),
+                (x * chunk_width, y * chunk_height),
             )
 
         return fimg
 
     def to_pil(
-            self, bpc: Bpc, bpl: BplProtocol, bpas: List[Optional[Bpa]],
-            include_collision: bool = True, include_unknown_data_block: bool = True, pal_ani: bool = True, single_frame: bool = False
+        self,
+        bpc: Bpc,
+        bpl: BplProtocol,
+        bpas: List[Optional[Bpa]],
+        include_collision: bool = True,
+        include_unknown_data_block: bool = True,
+        pal_ani: bool = True,
+        single_frame: bool = False,
     ) -> List[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
@@ -292,9 +325,11 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
 
         final_images = []
         lower_layer_bpc = 0 if bpc.number_of_layers == 1 else 1
-        chunks_lower = bpc.chunks_animated_to_pil(lower_layer_bpc, bpl.palettes, bpas, 1)
+        chunks_lower = bpc.chunks_animated_to_pil(
+            lower_layer_bpc, bpl.palettes, bpas, 1
+        )
         for img in chunks_lower:
-            fimg = Image.new('P', (width_map, height_map))
+            fimg = Image.new("P", (width_map, height_map))
             fimg.putpalette(img.getpalette())  # type: ignore
 
             # yes. self.layer0 is always the LOWER layer! It's the opposite from BPC
@@ -302,8 +337,15 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                 x = i % self.map_width_chunks
                 y = math.floor(i / self.map_width_chunks)
                 fimg.paste(
-                    img.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height)),
-                    (x * chunk_width, y * chunk_height)
+                    img.crop(
+                        (
+                            0,
+                            mt_idx * chunk_width,
+                            chunk_width,
+                            mt_idx * chunk_width + chunk_height,
+                        )
+                    ),
+                    (x * chunk_width, y * chunk_height),
                 )
 
             final_images.append(fimg)
@@ -330,13 +372,20 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                     x = i % self.map_width_chunks
                     y = math.floor(i / self.map_width_chunks)
 
-                    cropped_img = img.crop((0, mt_idx * chunk_width, chunk_width, mt_idx * chunk_width + chunk_height))
+                    cropped_img = img.crop(
+                        (
+                            0,
+                            mt_idx * chunk_width,
+                            chunk_width,
+                            mt_idx * chunk_width + chunk_height,
+                        )
+                    )
                     cropped_img_mask = cropped_img.copy()
                     cropped_img_mask.putpalette(MASK_PAL)
                     fimg.paste(
                         cropped_img,
                         (x * chunk_width, y * chunk_height),
-                        mask=cropped_img_mask.convert('1')
+                        mask=cropped_img_mask.convert("1"),
                     )
                 if single_frame:
                     break
@@ -346,18 +395,21 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             for i, img in enumerate(final_images):
                 final_images_were_rgb_converted = True
                 # time for some RGB action!
-                final_images[i] = img.convert('RGB')
+                final_images[i] = img.convert("RGB")
                 img = final_images[i]
-                draw = ImageDraw.Draw(img, 'RGBA')
+                draw = ImageDraw.Draw(img, "RGBA")
                 assert self.collision is not None
                 for j, col in enumerate(self.collision):
                     x = j % self.map_width_camera
                     y = math.floor(j / self.map_width_camera)
                     if col:
-                        draw.rectangle((
-                            (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
-                            ((x+1) * BPC_TILE_DIM, (y+1) * BPC_TILE_DIM)
-                        ), fill=(0xff, 0x00, 0x00, 0x40))
+                        draw.rectangle(
+                            (
+                                (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
+                                ((x + 1) * BPC_TILE_DIM, (y + 1) * BPC_TILE_DIM),
+                            ),
+                            fill=(0xFF, 0x00, 0x00, 0x40),
+                        )
                 # Second collision layer
                 if self.number_of_collision_layers > 1:
                     assert self.collision2 is not None
@@ -365,18 +417,21 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                         x = j % self.map_width_camera
                         y = math.floor(j / self.map_width_camera)
                         if col:
-                            draw.ellipse((
-                                (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
-                                ((x+1) * BPC_TILE_DIM, (y+1) * BPC_TILE_DIM)
-                            ), fill=(0x00, 0x00, 0xff, 0x40))
+                            draw.ellipse(
+                                (
+                                    (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
+                                    ((x + 1) * BPC_TILE_DIM, (y + 1) * BPC_TILE_DIM),
+                                ),
+                                fill=(0x00, 0x00, 0xFF, 0x40),
+                            )
 
         if include_unknown_data_block and self.unk6 > 0:
             fnt = ImageFont.load_default()
             for i, img in enumerate(final_images):
                 if not final_images_were_rgb_converted:
-                    final_images[i] = img.convert('RGB')
+                    final_images[i] = img.convert("RGB")
                     img = final_images[i]
-                draw = ImageDraw.Draw(img, 'RGBA')
+                draw = ImageDraw.Draw(img, "RGBA")
                 assert self.unknown_data_block is not None
                 for j, unk in enumerate(self.unknown_data_block):
                     x = j % self.map_width_camera
@@ -386,11 +441,16 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                             (x * BPC_TILE_DIM, y * BPC_TILE_DIM),
                             str(unk),
                             font=fnt,
-                            fill=(0x00, 0xff, 0x00)
+                            fill=(0x00, 0xFF, 0x00),
                         )
 
         # Apply palette animations
-        if pal_ani and bpl.has_palette_animation and len(bpl.animation_palette) > 0 and not single_frame:
+        if (
+            pal_ani
+            and bpl.has_palette_animation
+            and len(bpl.animation_palette) > 0
+            and not single_frame
+        ):
             old_images = final_images
             old_images_i = 0
             final_images = []
@@ -398,7 +458,9 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             for ppal_ani in range(0, len(bpl.animation_palette)):
                 current_img = old_images[old_images_i].copy()
                 # Switch out the palette with that from the palette animation
-                pal_for_frame = itertools.chain.from_iterable(bpl.apply_palette_animations(ppal_ani))
+                pal_for_frame = itertools.chain.from_iterable(
+                    bpl.apply_palette_animations(ppal_ani)
+                )
                 current_img.putpalette(pal_for_frame)
                 final_images.append(current_img)
                 old_images_i += 1
@@ -408,9 +470,13 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         return final_images
 
     def from_pil(
-            self, bpc: Bpc, bpl: BplProtocol, lower_img: Optional[Image.Image] = None,
-            upper_img: Optional[Image.Image] = None,
-            force_import: bool = False, how_many_palettes_lower_layer: int = 16
+        self,
+        bpc: Bpc,
+        bpl: BplProtocol,
+        lower_img: Optional[Image.Image] = None,
+        upper_img: Optional[Image.Image] = None,
+        force_import: bool = False,
+        how_many_palettes_lower_layer: int = 16,
     ) -> None:
         """
         Import an entire map from one or two images (for each layer).
@@ -438,19 +504,37 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         """
         expected_width = self.tiling_width * self.map_width_chunks * BPC_TILE_DIM
         expected_height = self.tiling_height * self.map_height_chunks * BPC_TILE_DIM
-        if (False if lower_img is None else lower_img.width != expected_width) \
-                or (False if upper_img is None else upper_img.width != expected_width):
-            raise ValueError(f(_("Can not import map background: Width of both images must match the current map width: "
-                                 "{expected_width}px")))
-        if (False if lower_img is None else lower_img.height != expected_height) \
-                or (False if upper_img is None else upper_img.height != expected_height):
-            raise ValueError(f(_("Can not import map background: Height of both images must match the current map height: "
-                                 "{expected_height}px")))
+        if (False if lower_img is None else lower_img.width != expected_width) or (
+            False if upper_img is None else upper_img.width != expected_width
+        ):
+            raise ValueError(
+                f(
+                    _(
+                        "Can not import map background: Width of both images must match the current map width: "
+                        "{expected_width}px"
+                    )
+                )
+            )
+        if (False if lower_img is None else lower_img.height != expected_height) or (
+            False if upper_img is None else upper_img.height != expected_height
+        ):
+            raise ValueError(
+                f(
+                    _(
+                        "Can not import map background: Height of both images must match the current map height: "
+                        "{expected_height}px"
+                    )
+                )
+            )
         upper_palette_palette_color_offset = 0
-        if upper_img is not None and lower_img is not None and how_many_palettes_lower_layer < BPL_MAX_PAL:
+        if (
+            upper_img is not None
+            and lower_img is not None
+            and how_many_palettes_lower_layer < BPL_MAX_PAL
+        ):
             # Combine palettes
-            lower_palette = lower_img.getpalette()[:how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]  # type: ignore
-            upper_palette = upper_img.getpalette()[:(BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]  # type: ignore
+            lower_palette = lower_img.getpalette()[: how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]  # type: ignore
+            upper_palette = upper_img.getpalette()[: (BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]  # type: ignore
             new_palette = lower_palette + upper_palette
             lower_img.putpalette(new_palette)
             upper_img.putpalette(new_palette)
@@ -476,8 +560,16 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                 palette_offset = upper_palette_palette_color_offset
 
             tiles, all_possible_tile_mappings, palettes = from_pil(
-                img, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPC_TILE_DIM,
-                img.width, img.height, 3, 3, force_import, palette_offset=palette_offset  # type: ignore
+                img,
+                BPL_IMG_PAL_LEN,
+                BPL_MAX_PAL,
+                BPC_TILE_DIM,
+                img.width,
+                img.height,
+                3,
+                3,
+                force_import,
+                palette_offset=palette_offset,  # type: ignore
             )
             bpc.import_tiles(bpc_layer_id, tiles)
 
@@ -487,11 +579,19 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             chunk_mappings_counter = 1
             tile_mappings: List[TilemapEntryProtocol] = []
             tiles_in_chunk = self.tiling_width * self.tiling_height
-            for chk_fst_tile_idx in range(0, self.map_width_chunks * self.map_height_chunks * tiles_in_chunk, tiles_in_chunk):
-                chunk = all_possible_tile_mappings[chk_fst_tile_idx:chk_fst_tile_idx+tiles_in_chunk]
+            for chk_fst_tile_idx in range(
+                0,
+                self.map_width_chunks * self.map_height_chunks * tiles_in_chunk,
+                tiles_in_chunk,
+            ):
+                chunk = all_possible_tile_mappings[
+                    chk_fst_tile_idx : chk_fst_tile_idx + tiles_in_chunk
+                ]
                 start_of_existing_chunk = search_for_chunk(chunk, tile_mappings)
                 if start_of_existing_chunk is not None:
-                    chunk_mappings.append(int(start_of_existing_chunk / tiles_in_chunk) + 1)
+                    chunk_mappings.append(
+                        int(start_of_existing_chunk / tiles_in_chunk) + 1
+                    )
                 else:
                     tile_mappings += chunk
                     chunk_mappings.append(chunk_mappings_counter)
@@ -518,42 +618,48 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
         if self.number_of_layers == 2:
             return
         self.number_of_layers = u16(2)
-        self.layer1 = [0 for _ in range(0, self.map_width_chunks * self.map_height_chunks)]
+        self.layer1 = [
+            0 for _ in range(0, self.map_width_chunks * self.map_height_chunks)
+        ]
 
-    def resize(self, new_width_chunks, new_height_chunks, new_width_camera, new_height_camera):
+    def resize(
+        self, new_width_chunks, new_height_chunks, new_width_camera, new_height_camera
+    ):
         """
         Change the dimensions of the map. Existing tiles and chunks will keep their position in the grid.
         If the size is reduced, all tiles and chunks that are moved out of the new dimension box are removed.
         """
         # Layer 0
         self.layer0 = self._if_not_none_resize(
-            self.layer0,
-            self.map_width_chunks, 0,
-            new_width_chunks, new_height_chunks
+            self.layer0, self.map_width_chunks, 0, new_width_chunks, new_height_chunks
         )
         # Layer 1
         self.layer1 = self._if_not_none_resize(
-            self.layer1,
-            self.map_width_chunks, 0,
-            new_width_chunks, new_height_chunks
+            self.layer1, self.map_width_chunks, 0, new_width_chunks, new_height_chunks
         )
         # Collision
         self.collision = self._if_not_none_resize(
             self.collision,
-            self.map_width_camera, 0,
-            new_width_camera, new_height_camera
+            self.map_width_camera,
+            0,
+            new_width_camera,
+            new_height_camera,
         )
         # Collision 2
         self.collision2 = self._if_not_none_resize(
             self.collision2,
-            self.map_width_camera, 0,
-            new_width_camera, new_height_camera
+            self.map_width_camera,
+            0,
+            new_width_camera,
+            new_height_camera,
         )
         # Data Layer
         self.unknown_data_block = self._if_not_none_resize(
             self.unknown_data_block,
-            self.map_width_camera, 0,
-            new_width_camera, new_height_camera
+            self.map_width_camera,
+            0,
+            new_width_camera,
+            new_height_camera,
         )
 
         self.map_width_chunks = new_width_chunks
@@ -571,7 +677,9 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
             assert self.layer1 is not None
             self.layer1[bma_index] = chunk_index
 
-    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
+    def place_collision(
+        self, collision_layer_id: int, x: int, y: int, is_solid: bool
+    ) -> None:
         """Set the collision at the X and Y position. No error checking is done."""
         bma_index = y * self.map_width_camera + x
         if collision_layer_id == 0:

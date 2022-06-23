@@ -18,24 +18,27 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import \
-    CompressionContainerHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import (
+    CompressionContainerHandler,
+)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 
 
 class PkdpxHandler(CompressionContainerHandler):
     @classmethod
     def magic_word(cls) -> bytes:
-        return b'PKDPX'
+        return b"PKDPX"
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.pkdpx.model import Pkdpx
+
         return Pkdpx
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust.st_pkdpx import \
-            Pkdpx  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_pkdpx import (
+            Pkdpx,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return Pkdpx

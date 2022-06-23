@@ -29,7 +29,7 @@ ENTRY_LEN = 2
 class HardcodedTactics:
     @staticmethod
     def get_unlock_levels(arm9: bytes, config: Pmd2Data) -> List[i16]:
-        block = config.binaries['arm9.bin'].symbols['TacticsUnlockLevel']
+        block = config.binaries["arm9.bin"].symbols["TacticsUnlockLevel"]
         lst = []
         for i in range(block.begin, block.end, ENTRY_LEN):
             lst.append(read_i16(arm9, i))
@@ -37,9 +37,11 @@ class HardcodedTactics:
 
     @staticmethod
     def set_unlock_levels(value: List[i16], arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].symbols['TacticsUnlockLevel']
+        block = config.binaries["arm9.bin"].symbols["TacticsUnlockLevel"]
         expected_length = int((block.end - block.begin) / ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+            raise ValueError(
+                f"The list must have exactly the length of {expected_length} entries."
+            )
         for i, entry in enumerate(value):
             write_i16(arm9, entry, block.begin + i * ENTRY_LEN)

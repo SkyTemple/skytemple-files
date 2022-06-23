@@ -28,11 +28,11 @@ from PIL import Image, ImageFilter
 
 from skytemple_files.common.types.file_types import FileType
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
 os.makedirs(output_dir, exist_ok=True)
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
 GROUP_WALK = 0
 GROUP_IDLE = 11
@@ -51,11 +51,11 @@ def get_dominant_color(img):
 
 
 def outline_sprite(img, color):
-    alpha_flat = img.getchannel('A')
+    alpha_flat = img.getchannel("A")
     im_outline = img.filter(ImageFilter.FIND_EDGES)
-    alpha_outline = im_outline.getchannel('A')
-    im_outline = Image.new('RGBA', im_outline.size, color=color)
-    im_flat = Image.new('RGBA', im_outline.size, color=(253, 247, 238, 255))
+    alpha_outline = im_outline.getchannel("A")
+    im_outline = Image.new("RGBA", im_outline.size, color=color)
+    im_flat = Image.new("RGBA", im_outline.size, color=(253, 247, 238, 255))
     im_flat.putalpha(alpha_flat)
     im_flat.paste(im_outline, (0, 0), alpha_outline)
     return im_flat
@@ -97,17 +97,20 @@ def render_group(wan_model, group_id, base_pil, x_offset, color=None):
             if color is None:
                 color = process_color(*get_dominant_color(img))
             oimg = outline_sprite(img, color)
-            base_pil.paste(oimg, (
-                x_offset + ani_i * max_size - cx + int(max_size / 2),
-                frame_i * max_size - cy + int(max_size / 2)
-            ))
+            base_pil.paste(
+                oimg,
+                (
+                    x_offset + ani_i * max_size - cx + int(max_size / 2),
+                    frame_i * max_size - cy + int(max_size / 2),
+                ),
+            )
     return group_meta_entry, color
 
 
 # Actor Sprites
-pack_file = rom.getFileByName('MONSTER/monster.bin')
+pack_file = rom.getFileByName("MONSTER/monster.bin")
 sprites = FileType.BIN_PACK.deserialize(pack_file)
-monster_md = FileType.MD.deserialize(rom.getFileByName('BALANCE/monster.md'))
+monster_md = FileType.MD.deserialize(rom.getFileByName("BALANCE/monster.md"))
 sprite_data = []
 
 for i, monster in enumerate(monster_md.entries):
@@ -118,7 +121,7 @@ for i, monster in enumerate(monster_md.entries):
     sprite_bin_decompressed = FileType.COMMON_AT.deserialize(sprite).decompress()
     wan_model = FileType.WAN.deserialize(sprite_bin_decompressed)
 
-    img = Image.new('RGBA', (WIDTH, HEIGHT), (0, 0, 0, 0))
+    img = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
 
     sprite_data_entry = []
     sprite_data.append(sprite_data_entry)
@@ -134,7 +137,9 @@ for i, monster in enumerate(monster_md.entries):
     dim_walk_y = entry[0] * max(len(dir) for dir in entry[1])
     sprite_data_entry.append(entry)
 
-    img.crop((0, 0, dim_idle_x + dim_walk_x, max(dim_idle_y, dim_walk_y))).save(os.path.join(output_dir, f'{i}.png'))
+    img.crop((0, 0, dim_idle_x + dim_walk_x, max(dim_idle_y, dim_walk_y))).save(
+        os.path.join(output_dir, f"{i}.png")
+    )
 
-with open(os.path.join(output_dir, 'sprites.json'), 'w') as f:
-    json.dump(sprite_data, f, separators=(',', ':'))
+with open(os.path.join(output_dir, "sprites.json"), "w") as f:
+    json.dump(sprite_data, f, separators=(",", ":"))

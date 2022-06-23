@@ -42,15 +42,36 @@ class BmaStub(BmaProtocol[P, C, L]):
         self.collision: Optional[List[bool]] = None
         self.collision2: Optional[List[bool]] = None
 
-    def to_pil_single_layer(self, bpc: C, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[P]], layer: int) -> Image.Image:
+    def to_pil_single_layer(
+        self,
+        bpc: C,
+        palettes: Sequence[Sequence[int]],
+        bpas: Sequence[Optional[P]],
+        layer: int,
+    ) -> Image.Image:
         raise NotImplementedError("Not implemented on mock.")
 
-    def to_pil(self, bpc: C, bpl: L, bpas: List[Optional[P]], include_collision: bool = True,
-               include_unknown_data_block: bool = True, pal_ani: bool = True, single_frame: bool = False) -> List[Image.Image]:
+    def to_pil(
+        self,
+        bpc: C,
+        bpl: L,
+        bpas: List[Optional[P]],
+        include_collision: bool = True,
+        include_unknown_data_block: bool = True,
+        pal_ani: bool = True,
+        single_frame: bool = False,
+    ) -> List[Image.Image]:
         raise NotImplementedError("Not implemented on mock.")
 
-    def from_pil(self, bpc: C, bpl: L, lower_img: Optional[Image.Image] = None, upper_img: Optional[Image.Image] = None,
-                 force_import: bool = False, how_many_palettes_lower_layer: int = 16) -> None:
+    def from_pil(
+        self,
+        bpc: C,
+        bpl: L,
+        lower_img: Optional[Image.Image] = None,
+        upper_img: Optional[Image.Image] = None,
+        force_import: bool = False,
+        how_many_palettes_lower_layer: int = 16,
+    ) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
     def remove_upper_layer(self) -> None:
@@ -59,14 +80,21 @@ class BmaStub(BmaProtocol[P, C, L]):
     def add_upper_layer(self) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
-    def resize(self, new_width_chunks: int, new_height_chunks: int, new_width_camera: int,
-               new_height_camera: int) -> None:
+    def resize(
+        self,
+        new_width_chunks: int,
+        new_height_chunks: int,
+        new_width_camera: int,
+        new_height_camera: int,
+    ) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
     def place_chunk(self, layer_id: int, x: int, y: int, chunk_index: int) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
-    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
+    def place_collision(
+        self, collision_layer_id: int, x: int, y: int, is_solid: bool
+    ) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
     def place_data(self, x: int, y: int, data: int) -> None:

@@ -37,6 +37,7 @@ class Dpla:
     This palette file contains sets of 16 colors and "frames" of animations for them. Each Sir0 poiinter
     points to one color entry and each of these color entries has 0-X frames of animation.
     """
+
     def __init__(self, data: bytes, pointer_to_pointers: int):
         toc_pointers = []
         for i in range(pointer_to_pointers, len(data), 4):
@@ -56,11 +57,15 @@ class Dpla:
             #     ...
             # ]
             frame_colors = []
-            for r, g, b, x in iter_bytes(data, 4, pnt + 4, pnt + 4 + (number_colors * 4)):
+            for r, g, b, x in iter_bytes(
+                data, 4, pnt + 4, pnt + 4 + (number_colors * 4)
+            ):
                 frame_colors.append(r)
                 frame_colors.append(g)
                 frame_colors.append(b)
-                assert x == 128  # just in case it isn't... then we'd have a real alpha channel
+                assert (
+                    x == 128
+                )  # just in case it isn't... then we'd have a real alpha channel
             self.colors.append(frame_colors)
 
     def get_palette_for_frame(self, pal_idx: int, frame_id: int):
@@ -69,13 +74,15 @@ class Dpla:
         Returned are always 16 colors. If the palette file has more than 16 colors, the pal_idx specifies what set
         of 16 colors to return.
         """
-        colors = self.colors[pal_idx * 16:(pal_idx + 1) * 16]
+        colors = self.colors[pal_idx * 16 : (pal_idx + 1) * 16]
         frame_pal = []
         for color in colors:
             color_len = int(len(color) / 3)
             if len(color) < 1:
                 color = [0, 0, 0]
-            frame_pal += color[(frame_id % color_len) * 3:((frame_id % color_len) * 3) + 3]
+            frame_pal += color[
+                (frame_id % color_len) * 3 : ((frame_id % color_len) * 3) + 3
+            ]
 
         return frame_pal
 
@@ -88,7 +95,9 @@ class Dpla:
         """
         :deprecated: Do not use this. Colors are animated separately. There is no speed for an entire palette.
         """
-        return self.durations_per_frame_for_colors[palette_idx * DPLA_COLORS_PER_PALETTE]
+        return self.durations_per_frame_for_colors[
+            palette_idx * DPLA_COLORS_PER_PALETTE
+        ]
 
     def get_frame_count_for_palette(self, palette_idx):
         if not self.has_for_palette(palette_idx):
@@ -98,18 +107,24 @@ class Dpla:
     def enable_for_palette(self, palid):
         if not self.has_for_palette(palid):
             # Add one entry, this enables it.
-            self.colors[palid * DPLA_COLORS_PER_PALETTE:(palid + 1) * DPLA_COLORS_PER_PALETTE] = [[0, 0, 0] for _ in range(0, 16)]
+            self.colors[
+                palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
+            ] = [[0, 0, 0] for _ in range(0, 16)]
 
     def disable_for_palette(self, palid):
         if self.has_for_palette(palid):
             # Remove all entries, this disables ist.
-            self.colors[palid * DPLA_COLORS_PER_PALETTE:(palid + 1) * DPLA_COLORS_PER_PALETTE] = [[] for _ in range(0, 16)]
+            self.colors[
+                palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
+            ] = [[] for _ in range(0, 16)]
 
     def set_duration_for_palette(self, palid, duration):
         """
         :deprecated: Do not use this. Colors are animated separately. There is no speed for an entire palette.
         """
-        self.durations_per_frame_for_colors[palid * DPLA_COLORS_PER_PALETTE:(palid + 1) * DPLA_COLORS_PER_PALETTE] = [duration] * 16
+        self.durations_per_frame_for_colors[
+            palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
+        ] = [duration] * 16
 
     def apply_palette_animations(self, palettes, frame_idx):
         """
@@ -142,7 +157,9 @@ class Dpla:
             # Number colors
             write_u8(buffer_entry, u8_checked(number_colors), 0)
             # Unk
-            write_u8(buffer_entry, u8_checked(self.durations_per_frame_for_colors[i]), 2)
+            write_u8(
+                buffer_entry, u8_checked(self.durations_per_frame_for_colors[i]), 2
+            )
             # Always one null color
             null_color = False
             if len(color_frames) == 0:
@@ -167,5 +184,5 @@ class Dpla:
         return data, pointer_offsets, data_offset
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> 'Dpla':
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> "Dpla":
         return cls(content_data, data_pointer)

@@ -27,10 +27,9 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 
 class PatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ParametersTest'
+        return "ParametersTest"
 
     @property
     def description(self) -> str:
@@ -38,16 +37,18 @@ class PatchHandler(AbstractPatchHandler):
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         return False
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         print("DEBUGGING PATCH PARAMETERS:")
         self._debug("int_param")
         self._debug("int_param2")
@@ -63,7 +64,9 @@ class PatchHandler(AbstractPatchHandler):
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()
 
     def _debug(self, name: str):

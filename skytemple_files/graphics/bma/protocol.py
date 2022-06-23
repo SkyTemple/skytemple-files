@@ -17,8 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import (List, Optional, Protocol, Sequence, TypeVar,
-                    runtime_checkable)
+from typing import List, Optional, Protocol, Sequence, TypeVar, runtime_checkable
 
 from PIL import Image
 from range_typed_integers import *
@@ -27,9 +26,9 @@ from skytemple_files.graphics.bpa.protocol import BpaProtocol
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
-P = TypeVar('P', bound=BpaProtocol)
-C = TypeVar('C', bound=BpcProtocol, contravariant=True)
-L = TypeVar('L', bound=BplProtocol, contravariant=True)
+P = TypeVar("P", bound=BpaProtocol)
+C = TypeVar("C", bound=BpcProtocol, contravariant=True)
+L = TypeVar("L", bound=BplProtocol, contravariant=True)
 
 
 @runtime_checkable
@@ -68,10 +67,17 @@ class BmaProtocol(Protocol[P, C, L]):
     collision2: Optional[Sequence[bool]]
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @abstractmethod
-    def to_pil_single_layer(self, bpc: C, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[P]], layer: int) -> Image.Image:
+    def to_pil_single_layer(
+        self,
+        bpc: C,
+        palettes: Sequence[Sequence[int]],
+        bpas: Sequence[Optional[P]],
+        layer: int,
+    ) -> Image.Image:
         """
         Converts one layer of the map into an image. The exported image has the same format as expected by from_pil.
         Exported is a single frame.
@@ -91,8 +97,14 @@ class BmaProtocol(Protocol[P, C, L]):
 
     @abstractmethod
     def to_pil(
-            self, bpc: C, bpl: L, bpas: List[Optional[P]],
-            include_collision: bool = True, include_unknown_data_block: bool = True, pal_ani: bool = True, single_frame: bool = False
+        self,
+        bpc: C,
+        bpl: L,
+        bpas: List[Optional[P]],
+        include_collision: bool = True,
+        include_unknown_data_block: bool = True,
+        pal_ani: bool = True,
+        single_frame: bool = False,
     ) -> List[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
@@ -112,8 +124,13 @@ class BmaProtocol(Protocol[P, C, L]):
 
     @abstractmethod
     def from_pil(
-            self, bpc: C, bpl: L, lower_img: Optional[Image.Image] = None, upper_img: Optional[Image.Image] = None,
-            force_import: bool = False, how_many_palettes_lower_layer: int = 16
+        self,
+        bpc: C,
+        bpl: L,
+        lower_img: Optional[Image.Image] = None,
+        upper_img: Optional[Image.Image] = None,
+        force_import: bool = False,
+        how_many_palettes_lower_layer: int = 16,
     ) -> None:
         """
         Import an entire map from one or two images (for each layer).
@@ -154,7 +171,13 @@ class BmaProtocol(Protocol[P, C, L]):
         ...
 
     @abstractmethod
-    def resize(self, new_width_chunks: int, new_height_chunks: int, new_width_camera: int, new_height_camera: int) -> None:
+    def resize(
+        self,
+        new_width_chunks: int,
+        new_height_chunks: int,
+        new_width_camera: int,
+        new_height_camera: int,
+    ) -> None:
         """
         Change the dimensions of the map. Existing tiles and chunks will keep their position in the grid.
         If the size is reduced, all tiles and chunks that are moved out of the new dimension box are removed.
@@ -167,7 +190,9 @@ class BmaProtocol(Protocol[P, C, L]):
         ...
 
     @abstractmethod
-    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
+    def place_collision(
+        self, collision_layer_id: int, x: int, y: int, is_solid: bool
+    ) -> None:
         """Set the collision at the X and Y position. No error checking is done."""
         ...
 
@@ -177,6 +202,6 @@ class BmaProtocol(Protocol[P, C, L]):
         ...
 
     @abstractmethod
-    def deepcopy(self) -> 'BmaProtocol':
+    def deepcopy(self) -> "BmaProtocol":
         """Perform a deep copy of self."""
         ...

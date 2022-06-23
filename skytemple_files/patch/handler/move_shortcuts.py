@@ -21,57 +21,65 @@ from typing import Callable, List
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
-                                                    DependantPatch)
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-ORIGINAL_BYTESEQ = bytes(b'\x01 \xa0\xe3')
+ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
 OFFSET_EU = 0x158F0
 OFFSET_US = 0x1587C
 
 
 class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'MoveShortcuts'
+        return "MoveShortcuts"
 
     @property
     def description(self) -> str:
-        return _("Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y). The ExtraSpace patch must be applied before this one.")
+        return _(
+            "Replaces the fixed move (L+A) with a move shortcut functionality like in GtI or Super (L+A/B/X/Y). The ExtraSpace patch must be applied before this one."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45, irdkwia'
+        return "End45, irdkwia"
 
     @property
     def version(self) -> str:
-        return '0.2.1'
+        return "0.2.1"
 
     def depends_on(self) -> List[str]:
-        return ['ExtraSpace']
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.NEW_MECHANIC
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
+        overlay29 = get_binary_from_rom_ppmdu(
+            rom, config.binaries["overlay/overlay_0029.bin"]
+        )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return overlay29[OFFSET_US:OFFSET_US+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
-                return overlay29[OFFSET_EU:OFFSET_EU+4] != ORIGINAL_BYTESEQ
+                return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

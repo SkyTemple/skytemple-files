@@ -21,17 +21,23 @@ import random
 from enum import Enum, auto
 from typing import List, Optional, Union
 
-from dungeon_eos.DungeonAlgorithm import (DungeonData, Properties, ReturnData,
-                                          StaticParam, generate_floor)
+from dungeon_eos.DungeonAlgorithm import (
+    DungeonData,
+    Properties,
+    ReturnData,
+    StaticParam,
+    generate_floor,
+)
 from dungeon_eos.RandomGen import RandomGenerator
 
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
-    MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.graphics.dma.model import DmaType
 
 
 class RandomGenProperties:
-    def __init__(self, gen_type, mul, count, seed_old_t0, seed_t0, add_t1, use_seed_t1, seeds_t1):
+    def __init__(
+        self, gen_type, mul, count, seed_old_t0, seed_t0, add_t1, use_seed_t1, seeds_t1
+    ):
         self.gen_type = gen_type
         self.mul = mul
         self.count = count
@@ -42,18 +48,18 @@ class RandomGenProperties:
         self.seeds_t1 = seeds_t1
 
     @classmethod
-    def default(cls, rng: random.Random = None) -> 'RandomGenProperties':
+    def default(cls, rng: random.Random = None) -> "RandomGenProperties":
         if rng is None:
             rng = random
         return cls(
             0,
-            0x5d588b65,
+            0x5D588B65,
             1,
             rng.randrange(1 << 32),
             rng.randrange(1 << 32),
-            0x269ec3,
+            0x269EC3,
             4,
-            [rng.randrange(1 << 32) for i in range(5)]
+            [rng.randrange(1 << 32) for i in range(5)],
         )
 
 
@@ -74,7 +80,13 @@ class RoomType(Enum):
 
 
 class Tile:
-    def __init__(self, terrain: DmaType, room_index: int, typ=TileType.GENERIC, room=RoomType.NORMAL):
+    def __init__(
+        self,
+        terrain: DmaType,
+        room_index: int,
+        typ=TileType.GENERIC,
+        room=RoomType.NORMAL,
+    ):
         self.terrain = terrain
         self.room_index = room_index
         self.typ = typ
@@ -82,27 +94,27 @@ class Tile:
 
     def __str__(self):
         if self.typ == TileType.PLAYER_SPAWN:
-            return '!'
+            return "!"
         if self.typ == TileType.STAIRS:
-            return '>'
+            return ">"
         if self.typ == TileType.ENEMY:
-            return 'Ö'
+            return "Ö"
         if self.typ == TileType.TRAP:
-            return '+'
+            return "+"
         if self.typ == TileType.BURIED_ITEM:
-            return 'i'
+            return "i"
         if self.typ == TileType.ITEM:
-            return 'I'
+            return "I"
         if self.terrain == DmaType.WALL:
-            return 'X'
+            return "X"
         if self.terrain == DmaType.WATER:
-            return '~'
+            return "~"
         if self.room_type == RoomType.KECLEON_SHOP:
-            return 'K'
+            return "K"
         if self.room_type == RoomType.MONSTER_HOUSE:
-            return 'M'
+            return "M"
         if self.room_index == 255:
-            return ' '
+            return " "
         return str(self.room_index)
 
 
@@ -111,10 +123,13 @@ SIZE_Y = 56
 
 
 class DungeonFloorGenerator:
-    def __init__(self,
-                 unknown_dungeon_chance_patch_applied=False, fix_dead_end_error=False, fix_outer_room_error=False,
-                 gen_properties: Optional[RandomGenProperties] = None
-                 ):
+    def __init__(
+        self,
+        unknown_dungeon_chance_patch_applied=False,
+        fix_dead_end_error=False,
+        fix_outer_room_error=False,
+        gen_properties: Optional[RandomGenProperties] = None,
+    ):
         self.unknown_dungeon_chance_patch_applied = unknown_dungeon_chance_patch_applied
         self.fix_dead_end_error = fix_dead_end_error
         self.fix_outer_room_error = fix_outer_room_error
@@ -122,7 +137,9 @@ class DungeonFloorGenerator:
         if self.gen_properties is None:
             self.gen_properties = RandomGenProperties.default()
 
-    def generate(self, floor_layout: MappaFloorLayout, max_retries=1, flat=False) -> Union[List[List[Tile]], List[Tile], None]:
+    def generate(
+        self, floor_layout: MappaFloorLayout, max_retries=1, flat=False
+    ) -> Union[List[List[Tile]], List[Tile], None]:
         """
         Returns a dungeon floor matrix (Tile matrix SIZE_Y x SIZE_X).
         Returns None if no valid floor could be generated after max_retries attempts.
@@ -184,7 +201,9 @@ class DungeonFloorGenerator:
                 tiles_row.append(tile)
                 if DungeonData.player_spawn_x == x and DungeonData.player_spawn_y == y:
                     tile.typ = TileType.PLAYER_SPAWN
-                elif DungeonData.stairs_spawn_x == x and DungeonData.stairs_spawn_y == y:
+                elif (
+                    DungeonData.stairs_spawn_x == x and DungeonData.stairs_spawn_y == y
+                ):
                     tile.typ = TileType.STAIRS
                 elif DungeonData.list_tiles[x][y].spawn_flags & 0x8:
                     tile.typ = TileType.ENEMY

@@ -22,10 +22,10 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
-m_level_bin = rom.getFileByName('BALANCE/m_level.bin')
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
+m_level_bin = rom.getFileByName("BALANCE/m_level.bin")
 m_level = FileType.BIN_PACK.deserialize(m_level_bin)
 
 all_level_ups = []
@@ -40,13 +40,15 @@ for entry_bin in m_level:
     entry = FileType.LEVEL_BIN_ENTRY.deserialize(entry_bin_decompressed)
     all_level_ups.append(entry)
 
-#print(all_level_ups)
+# print(all_level_ups)
 
 # Convert the entries back to bytes
 new_bytes_for_entries = []
 for i, entry in enumerate(all_level_ups):
     new_bytes_unpacked = FileType.LEVEL_BIN_ENTRY.serialize(entry)
-    new_bytes_at = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_bytes_unpacked))
+    new_bytes_at = FileType.COMMON_AT.serialize(
+        FileType.COMMON_AT.compress(new_bytes_unpacked)
+    )
     new_bytes = FileType.SIR0.wrap(new_bytes_at, [])
     # Compare!
     new_bytes_for_entries.append(new_bytes)

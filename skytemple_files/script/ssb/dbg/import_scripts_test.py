@@ -29,17 +29,17 @@ from skytemple_files.common.util import get_files_from_rom_with_extension
 def main(rom_file, directory):
     rom = NintendoDSRom.fromFile(rom_file)
 
-    for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
+    for file_name in get_files_from_rom_with_extension(rom, "ssb"):
         if os.path.exists(os.path.join(directory, file_name)):
             print(file_name)
 
-            with open(os.path.join(directory, file_name), 'rb') as f:
+            with open(os.path.join(directory, file_name), "rb") as f:
                 rom.setFileByName(file_name, f.read())
 
     rom.saveToFile(rom_file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     rom_file = sys.argv[1]
     directory = sys.argv[2]
     main(rom_file, directory)

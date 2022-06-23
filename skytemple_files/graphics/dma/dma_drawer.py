@@ -22,9 +22,12 @@ from typing import Iterable, List, Optional, Sequence, Union
 
 from PIL import Image
 
-from skytemple_files.dungeon_data.fixed_bin.model import (FixedFloor,
-                                                          FloorType, TileRule,
-                                                          TileRuleType)
+from skytemple_files.dungeon_data.fixed_bin.model import (
+    FixedFloor,
+    FloorType,
+    TileRule,
+    TileRuleType,
+)
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.dma.model import Dma, DmaType
 from skytemple_files.graphics.dpc.model import DPC_TILING_DIM, Dpc
@@ -35,10 +38,13 @@ from skytemple_files.graphics.dpla.model import Dpla
 
 class DmaDrawer:
     """Class to render DMAs as PIL images (or to just get the BPC tile indices for rules)."""
+
     def __init__(self, dma: Dma):
         self.dma = dma
 
-    def rules_from_bma(self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None) -> List[List[DmaType]]:
+    def rules_from_bma(
+        self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None
+    ) -> List[List[DmaType]]:
         rules = []
         active_row = None
         layer: Sequence[int] = bma  # type: ignore
@@ -62,8 +68,11 @@ class DmaDrawer:
 
     def rules_from_fixed_room(self, fixed_floor: FixedFloor):
         # Iterate over floor and render it
-        draw_outside_as_second_terrain = any(action.tr_type == TileRuleType.SECONDARY_HALLWAY_VOID_ALL
-                                             for action in fixed_floor.actions if isinstance(action, TileRule))
+        draw_outside_as_second_terrain = any(
+            action.tr_type == TileRuleType.SECONDARY_HALLWAY_VOID_ALL
+            for action in fixed_floor.actions
+            if isinstance(action, TileRule)
+        )
         outside = DmaType.WATER if draw_outside_as_second_terrain else DmaType.WALL
         rules = []
         rules.append([outside] * (fixed_floor.width + 10))
@@ -97,8 +106,12 @@ class DmaDrawer:
         rules.append([outside] * (fixed_floor.width + 10))
         return rules
 
-    def get_mappings_for_rules(self, rules: List[List[DmaType]], variation_index=None,
-                               treat_outside_as_wall=False) -> List[List[int]]:
+    def get_mappings_for_rules(
+        self,
+        rules: List[List[DmaType]],
+        variation_index=None,
+        treat_outside_as_wall=False,
+    ) -> List[List[int]]:
         """
         Return the DPC mappings for this DMA configuration and the given rules. If variation_index is given,
         this image variation is used for all tiles, otherwise one of the three variation is chosen at random.
@@ -127,8 +140,11 @@ class DmaDrawer:
             mappings.append(active_row)
             for rx, rule_cell in enumerate(rule_row):
                 solid_neighbors = self.dma.get_tile_neighbors(
-                    water_matrix if rule_cell == DmaType.WATER else wall_matrix, rx, ry,  # type: ignore
-                    rule_cell != DmaType.FLOOR, treat_outside_as_wall
+                    water_matrix if rule_cell == DmaType.WATER else wall_matrix,
+                    rx,
+                    ry,  # type: ignore
+                    rule_cell != DmaType.FLOOR,
+                    treat_outside_as_wall,
                 )
                 variations = self.dma.get(rule_cell, solid_neighbors)
                 if variation_index is not None:
@@ -138,18 +154,32 @@ class DmaDrawer:
                 active_row.append(variation)
         return mappings
 
-    def draw(self, mappings: List[List[int]], dpci: Dpci, dpc: Dpc, dpl: Dpl, dpla: Optional[Dpla]) -> List[Image.Image]:
+    def draw(
+        self,
+        mappings: List[List[int]],
+        dpci: Dpci,
+        dpc: Dpc,
+        dpl: Dpl,
+        dpla: Optional[Dpla],
+    ) -> List[Image.Image]:
         chunks = dpc.chunks_to_pil(dpci, dpl.palettes, 1)
 
         chunk_dim = DPCI_TILE_DIM * DPC_TILING_DIM
 
-        fimg = Image.new('P', (len(mappings[0]) * chunk_dim, len(mappings) * chunk_dim))
+        fimg = Image.new("P", (len(mappings[0]) * chunk_dim, len(mappings) * chunk_dim))
         fimg.putpalette(chunks.getpalette())  # type: ignore
 
         def paste(chunk_index, x, y):
             fimg.paste(
-                chunks.crop((0, chunk_index * chunk_dim, chunk_dim, chunk_index * chunk_dim + chunk_dim)),
-                (x * chunk_dim, y * chunk_dim)
+                chunks.crop(
+                    (
+                        0,
+                        chunk_index * chunk_dim,
+                        chunk_dim,
+                        chunk_index * chunk_dim + chunk_dim,
+                    )
+                ),
+                (x * chunk_dim, y * chunk_dim),
             )
 
         for y, row in enumerate(mappings):

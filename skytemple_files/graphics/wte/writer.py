@@ -42,7 +42,9 @@ class WteWriter:
 
         # Palette
         palette_pointer = len(buffer)
-        palette_buffer = bytearray(len(self.model.palette) + int(len(self.model.palette) / 3))
+        palette_buffer = bytearray(
+            len(self.model.palette) + int(len(self.model.palette) / 3)
+        )
         j = 0
         for i, p in enumerate(self.model.palette):
             write_u8(palette_buffer, u8(p), j)

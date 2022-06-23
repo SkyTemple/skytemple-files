@@ -36,6 +36,7 @@ class MappaGBinReadContainer(CheckedIntWrites):
 
 class StubMappaGFloor(CheckedIntWrites):
     """A mappa_g floor that only references an index for all of it's data."""
+
     layout_idx: u16
 
     def __init__(self, layout_idx: u16):
@@ -48,14 +49,18 @@ class StubMappaGFloor(CheckedIntWrites):
 
 
 class MappaGFloor(AutoString):
-    def __init__(self, layout: 'MappaGFloorLayout'):
+    def __init__(self, layout: "MappaGFloorLayout"):
         self.layout: MappaGFloorLayout = layout
 
     @classmethod
-    def from_mappa(cls, read: 'MappaGBinReadContainer', floor_data: bytes) -> 'MappaGFloor':
-        return cls(MappaGFloorLayout.from_mappa(
-            read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)
-        ))
+    def from_mappa(
+        cls, read: "MappaGBinReadContainer", floor_data: bytes
+    ) -> "MappaGFloor":
+        return cls(
+            MappaGFloorLayout.from_mappa(
+                read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)
+            )
+        )
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
@@ -76,7 +81,7 @@ class MappaGFloorLayout(AutoString, CheckedIntWrites):
         self.fixed_floor_id = fixed_floor_id
 
     @classmethod
-    def from_mappa(cls, read: 'MappaGBinReadContainer', pointer: int):
+    def from_mappa(cls, read: "MappaGBinReadContainer", pointer: int):
         return cls(
             tileset_id=read_u8(read.data, pointer + 0x00),
             fixed_floor_id=read_u8(read.data, pointer + 0x01),
@@ -91,7 +96,10 @@ class MappaGFloorLayout(AutoString, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGFloorLayout):
             return False
-        return self.tileset_id == other.tileset_id and self.fixed_floor_id == other.fixed_floor_id
+        return (
+            self.tileset_id == other.tileset_id
+            and self.fixed_floor_id == other.fixed_floor_id
+        )
 
 
 class MappaGBin(Sir0Serializable):
@@ -99,15 +107,17 @@ class MappaGBin(Sir0Serializable):
         self.floor_lists = floor_lists
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        from skytemple_files.dungeon_data.mappa_g_bin.writer import \
-            MappaGBinWriter
+        from skytemple_files.dungeon_data.mappa_g_bin.writer import MappaGBinWriter
+
         return MappaGBinWriter(self).write()
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data=None) -> 'MappaGBin':
-        return cls(cls._read_floor_list(MappaGBinReadContainer(
-            content_data, data_pointer
-        )))
+    def sir0_unwrap(
+        cls, content_data: bytes, data_pointer: int, static_data=None
+    ) -> "MappaGBin":
+        return cls(
+            cls._read_floor_list(MappaGBinReadContainer(content_data, data_pointer))
+        )
 
     @classmethod
     def _read_floor_list(cls, read: MappaGBinReadContainer):
@@ -119,9 +129,7 @@ class MappaGBin(Sir0Serializable):
                 end_pnt = start
             else:
                 end_pnt = read_u32(read.data, i + 4)
-            dungeons.append(cls._read_floors(
-                read, read_u32(read.data, i), end_pnt
-            ))
+            dungeons.append(cls._read_floors(read, read_u32(read.data, i), end_pnt))
         return dungeons
 
     @classmethod
@@ -129,20 +137,19 @@ class MappaGBin(Sir0Serializable):
         assert pointer_end > pointer_beg
         # The zeroth floor is just nulls, we omit it.
         empty = bytes(G_FLOOR_IDX_ENTRY_LEN)
-        assert read.data[pointer_beg:pointer_beg + G_FLOOR_IDX_ENTRY_LEN] == empty, \
-            "The first floor of a dungeon must be a null floor."
+        assert (
+            read.data[pointer_beg : pointer_beg + G_FLOOR_IDX_ENTRY_LEN] == empty
+        ), "The first floor of a dungeon must be a null floor."
         floors = []
         pointer_beg += 4
         for i in range(pointer_beg, pointer_end, 4):
-            floor_data = read.data[i:i + G_FLOOR_IDX_ENTRY_LEN]
+            floor_data = read.data[i : i + G_FLOOR_IDX_ENTRY_LEN]
             floors.append(MappaGFloor.from_mappa(read, floor_data))
             if i >= read.dungeon_list_index_start:
                 break
         return floors
 
-    def minimize(self) -> Tuple[
-        List[List[StubMappaGFloor]], List[MappaGFloorLayout]
-    ]:
+    def minimize(self) -> Tuple[List[List[StubMappaGFloor]], List[MappaGFloorLayout]]:
         """
         Collects a list of floors, that references indices in other lists, like stored in the mappa_g files.
         If two floors use the same exact data for something, they will be pointing to the same index in the lists,
@@ -155,7 +162,9 @@ class MappaGBin(Sir0Serializable):
             stub_floor_list = []
             for floor in floor_list:
                 # Layout
-                layout_idx = self._find_if_not_exists_insert(floor_layouts, floor.layout)
+                layout_idx = self._find_if_not_exists_insert(
+                    floor_layouts, floor.layout
+                )
 
                 stub_floor_list.append(StubMappaGFloor(layout_idx))
 

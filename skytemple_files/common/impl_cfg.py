@@ -30,12 +30,12 @@ from __future__ import annotations
 import os
 from enum import Enum
 
-ENV_SKYTEMPLE_USE_NATIVE = 'SKYTEMPLE_USE_NATIVE'
+ENV_SKYTEMPLE_USE_NATIVE = "SKYTEMPLE_USE_NATIVE"
 
 
 class ImplementationType(Enum):
-    PYTHON = 'PYTHON'
-    NATIVE = 'RUST'
+    PYTHON = "PYTHON"
+    NATIVE = "RUST"
 
 
 def env_use_native() -> bool:

@@ -55,7 +55,12 @@ def addToBounds(bounds: Bounds, add: PointLike, sub: bool = False) -> Bounds:
     mult = 1
     if sub:
         mult = -1
-    return (bounds[0] + add[0] * mult, bounds[1] + add[1] * mult, bounds[2] + add[0] * mult, bounds[3] + add[1] * mult)
+    return (
+        bounds[0] + add[0] * mult,
+        bounds[1] + add[1] * mult,
+        bounds[2] + add[0] * mult,
+        bounds[3] + add[1] * mult,
+    )
 
 
 def addLoc(loc1: Bounds, loc2: Bounds, sub: bool = False) -> Point:
@@ -132,14 +137,19 @@ def getOffsetFromRGB(img, bounds, black, r, g, b, white):
 
 
 def combineExtents(extent1: Bounds, extent2: Bounds) -> Bounds:
-    return min(extent1[0], extent2[0]), min(extent1[1], extent2[1]), \
-           max(extent1[2], extent2[2]), max(extent1[3], extent2[3])
+    return (
+        min(extent1[0], extent2[0]),
+        min(extent1[1], extent2[1]),
+        max(extent1[2], extent2[2]),
+        max(extent1[3], extent2[3]),
+    )
 
 
 def roundUpToMult(inInt: int, inMult: int) -> int:
     subInt = inInt - 1
     div = subInt // inMult
     return (div + 1) * inMult
+
 
 def imgsEqual(img1: Image.Image, img2: Image.Image, flip: bool = False) -> bool:
     if img1.size[0] != img2.size[0] or img1.size[1] != img2.size[1]:

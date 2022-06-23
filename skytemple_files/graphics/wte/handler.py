@@ -32,25 +32,29 @@ class WteHandler(DataHandler[Wte]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'Wte':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "Wte":
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), Wte)
 
     @classmethod
-    def serialize(cls, data: 'Wte', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: "Wte", **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def new(cls, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> Wte:
+    def new(
+        cls, img: Image.Image, img_type: WteImageType, discard_palette: bool
+    ) -> Wte:
         wte = Wte(None, 0)
         wte.from_pil(img, img_type, discard_palette)
         return wte
 
     @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs) -> 'Wte':
+    def deserialize_raw(cls, data: bytes, **kwargs) -> "Wte":
         return Wte(data, 0)
 
     @classmethod
-    def serialize_raw(cls, data: 'Wte', **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: "Wte", **kwargs: OptionalKwargs) -> bytes:
         return WteWriter(data).write()[0]

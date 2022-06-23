@@ -25,7 +25,7 @@ from skytemple_files.container.sir0.model import Sir0
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.writer import Sir0Writer
 
-T = TypeVar('T', bound=Sir0Serializable)
+T = TypeVar("T", bound=Sir0Serializable)
 
 
 class Sir0Handler(DataHandler[Sir0]):
@@ -42,10 +42,12 @@ class Sir0Handler(DataHandler[Sir0]):
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
         """Check if the given data stream is a Sir0 container"""
-        return read_bytes(data, byte_offset, 4) == b'SIR0'
+        return read_bytes(data, byte_offset, 4) == b"SIR0"
 
     @classmethod
-    def wrap(cls, content: bytes, pointer_offsets: List[int], data_pointer: int = None) -> Sir0:
+    def wrap(
+        cls, content: bytes, pointer_offsets: List[int], data_pointer: int = None
+    ) -> Sir0:
         """Wraps existing data in Sir0."""
         return Sir0(content, pointer_offsets, data_pointer)
 
@@ -54,5 +56,7 @@ class Sir0Handler(DataHandler[Sir0]):
         return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
-    def unwrap_obj(cls, data: Sir0, spec: Type[T], static_data: Optional[Pmd2Data] = None) -> T:
+    def unwrap_obj(
+        cls, data: Sir0, spec: Type[T], static_data: Optional[Pmd2Data] = None
+    ) -> T:
         return spec.sir0_unwrap(data.content, data.data_pointer, static_data)  # type: ignore

@@ -18,9 +18,11 @@
 from __future__ import annotations
 
 from skytemple_files.common.util import read_u8
-from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
-                                                     CMD_FILL_OUT,
-                                                     CMD_ZERO_OUT)
+from skytemple_files.compression.generic_nrl import (
+    CMD_COPY_BYTES,
+    CMD_FILL_OUT,
+    CMD_ZERO_OUT,
+)
 
 # How much bytes we look ahead for at most
 NRL_LOOKAHEAD_ZERO_MAX_BYTES = 127
@@ -54,7 +56,7 @@ class GenericNrlCompressor:
         while self.cursor < self.length_input:
             self._process()
 
-        return self.compressed_data[:self.bytes_written]
+        return self.compressed_data[: self.bytes_written]
 
     def _process(self, cursor_process_multiplier=1):
         """
@@ -110,7 +112,9 @@ class GenericNrlCompressor:
                     self._write(current_byte)
 
         if DEBUG:
-            print(f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}")
+            print(
+                f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}"
+            )
 
     def _read(self, cursor_process_multiplier):
         """Read a single byte and increase cursor"""
@@ -131,9 +135,11 @@ class GenericNrlCompressor:
         """Look how often the byte in the input data repeats, up to NRL_LOOKAHEAD_MAX_BYTES"""
         nc = self.cursor
         repeats = 0
-        while nc < self.length_input and \
-                read_u8(self.uncompressed_data, nc) == data and \
-                repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES:
+        while (
+            nc < self.length_input
+            and read_u8(self.uncompressed_data, nc) == data
+            and repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES
+        ):
             repeats += 1
             nc += cursor_process_multiplier
         return repeats
@@ -160,7 +166,10 @@ class GenericNrlCompressor:
                 seq_len -= NRL_MIN_SEQ_LEN
                 break
 
-            if seq_len+1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES or nc >= self.length_input:
+            if (
+                seq_len + 1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES
+                or nc >= self.length_input
+            ):
                 break
 
             seq_len += 1

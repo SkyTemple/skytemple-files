@@ -53,7 +53,9 @@ class SsaWriter:
             trigger_bytes += self.uint16(trigger.unk2)
             trigger_bytes += self.uint16(trigger.unk3)
             if trigger.script_id < 0:
-                raise ValueError(_("Can not save a scene event without a defined triggered script."))
+                raise ValueError(
+                    _("Can not save a scene event without a defined triggered script.")
+                )
             trigger_bytes += self.uint16(trigger.script_id)
 
         # Collect all the data that is referenced by layers
@@ -115,7 +117,9 @@ class SsaWriter:
                 event_bytes += self.uint16(evt.pos.y_relative)
                 event_bytes += self.uint16(evt.pos.x_offset)
                 event_bytes += self.uint16(evt.pos.y_offset)
-                event_bytes += self.uint16(trigger_start + evt.trigger_id * int(TRIGGER_LEN / 2))
+                event_bytes += self.uint16(
+                    trigger_start + evt.trigger_id * int(TRIGGER_LEN / 2)
+                )
                 event_bytes += self.uint16(evt.unkE)
 
             # unk10
@@ -189,18 +193,47 @@ class SsaWriter:
 
         # Add the offsets to the lists to the layer list offsets
         for i, layer in enumerate(self.model.layer_list):
-            write_u16(layer_bytes, u16(actor_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x02)), (i * 0x14) + 0x02)
-            write_u16(layer_bytes, u16(object_list_start    + read_i16(layer_bytes, (i * 0x14) + 0x06)), (i * 0x14) + 0x06)
-            write_u16(layer_bytes, u16(performer_list_start + read_i16(layer_bytes, (i * 0x14) + 0x0A)), (i * 0x14) + 0x0A)
-            write_u16(layer_bytes, u16(event_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x0E)), (i * 0x14) + 0x0E)
-            write_u16(layer_bytes, u16(unk10_list_start     + read_i16(layer_bytes, (i * 0x14) + 0x12)), (i * 0x14) + 0x12)
+            write_u16(
+                layer_bytes,
+                u16(actor_list_start + read_i16(layer_bytes, (i * 0x14) + 0x02)),
+                (i * 0x14) + 0x02,
+            )
+            write_u16(
+                layer_bytes,
+                u16(object_list_start + read_i16(layer_bytes, (i * 0x14) + 0x06)),
+                (i * 0x14) + 0x06,
+            )
+            write_u16(
+                layer_bytes,
+                u16(performer_list_start + read_i16(layer_bytes, (i * 0x14) + 0x0A)),
+                (i * 0x14) + 0x0A,
+            )
+            write_u16(
+                layer_bytes,
+                u16(event_list_start + read_i16(layer_bytes, (i * 0x14) + 0x0E)),
+                (i * 0x14) + 0x0E,
+            )
+            write_u16(
+                layer_bytes,
+                u16(unk10_list_start + read_i16(layer_bytes, (i * 0x14) + 0x12)),
+                (i * 0x14) + 0x12,
+            )
 
         # Build everything together and return
-        return header + trigger_bytes + actor_bytes + object_bytes + performer_bytes + \
-               event_bytes + pos_mark_bytes + unk10_bytes + layer_bytes
+        return (
+            header
+            + trigger_bytes
+            + actor_bytes
+            + object_bytes
+            + performer_bytes
+            + event_bytes
+            + pos_mark_bytes
+            + unk10_bytes
+            + layer_bytes
+        )
 
     def uint16(self, i: int) -> bytes:
-        return i.to_bytes(2, byteorder='little', signed=False)
+        return i.to_bytes(2, byteorder="little", signed=False)
 
     def sint16(self, i: int) -> bytes:
-        return i.to_bytes(2, byteorder='little', signed=True)
+        return i.to_bytes(2, byteorder="little", signed=True)

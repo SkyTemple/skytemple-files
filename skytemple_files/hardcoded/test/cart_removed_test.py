@@ -35,11 +35,11 @@ class CartRemovedTestCase(unittest.TestCase):
         HardcodedCartRemoved.set_cart_removed_data(
             Image.open(self._fix_path()),
             bytearray(0xFFFFFFF),
-            Pmd2XmlReader.load_default()
+            Pmd2XmlReader.load_default(),
         )
 
     @typing.no_type_check
     @classmethod
     @fixpath
     def _fix_path(cls):
-        return 'fixtures', 'default.png'
+        return "fixtures", "default.png"

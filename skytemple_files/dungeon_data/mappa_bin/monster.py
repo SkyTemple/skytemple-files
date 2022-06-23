@@ -22,16 +22,21 @@ from xml.etree.ElementTree import Element
 
 from range_typed_integers import u8, u8_checked, u16, u16_checked
 
-from skytemple_files.common.util import (AutoString, CheckedIntWrites,
-                                         read_u16, write_u16)
-from skytemple_files.common.xml_util import (XmlSerializable,
-                                             validate_xml_attribs,
-                                             validate_xml_tag)
+from skytemple_files.common.util import (
+    AutoString,
+    CheckedIntWrites,
+    read_u16,
+    write_u16,
+)
+from skytemple_files.common.xml_util import (
+    XmlSerializable,
+    validate_xml_attribs,
+    validate_xml_tag,
+)
 from skytemple_files.dungeon_data.mappa_bin import *
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import \
-        MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
 DUMMY_MD_INDEX = 0x229
 LEVEL_MULTIPLIER = 512
 
@@ -49,15 +54,19 @@ class MappaMonster(AutoString, XmlSerializable, CheckedIntWrites):
         self.md_index = md_index
 
     @classmethod
-    def list_from_mappa(cls, read: 'MappaBinReadContainer', pointer: int) -> List['MappaMonster']:
+    def list_from_mappa(
+        cls, read: "MappaBinReadContainer", pointer: int
+    ) -> List["MappaMonster"]:
         monsters = []
         while not cls._is_end_of_entries(read.data, pointer):
-            monsters.append(MappaMonster(
-                u8(read_u16(read.data, pointer + 0) // LEVEL_MULTIPLIER),
-                read_u16(read.data, pointer + 2),
-                read_u16(read.data, pointer + 4),
-                read_u16(read.data, pointer + 6),
-            ))
+            monsters.append(
+                MappaMonster(
+                    u8(read_u16(read.data, pointer + 0) // LEVEL_MULTIPLIER),
+                    read_u16(read.data, pointer + 2),
+                    read_u16(read.data, pointer + 4),
+                    read_u16(read.data, pointer + 6),
+                )
+            )
             pointer += 8
         return monsters
 
@@ -74,20 +83,29 @@ class MappaMonster(AutoString, XmlSerializable, CheckedIntWrites):
         return read_u16(data, pointer + 6) == 0
 
     def to_xml(self) -> Element:
-        return Element(XML_MONSTER, {
-            XML_MONSTER__LEVEL: str(self.level),
-            XML_MONSTER__WEIGHT: str(self.weight),
-            XML_MONSTER__WEIGHT2: str(self.weight2),
-            XML_MONSTER__MD_INDEX: str(self.md_index),
-        })
+        return Element(
+            XML_MONSTER,
+            {
+                XML_MONSTER__LEVEL: str(self.level),
+                XML_MONSTER__WEIGHT: str(self.weight),
+                XML_MONSTER__WEIGHT2: str(self.weight2),
+                XML_MONSTER__MD_INDEX: str(self.md_index),
+            },
+        )
 
     @classmethod
     @typing.no_type_check
-    def from_xml(cls, ele: Element) -> 'MappaMonster':
+    def from_xml(cls, ele: Element) -> "MappaMonster":
         validate_xml_tag(ele, XML_MONSTER)
-        validate_xml_attribs(ele, [
-            XML_MONSTER__LEVEL, XML_MONSTER__WEIGHT, XML_MONSTER__WEIGHT2, XML_MONSTER__MD_INDEX
-        ])
+        validate_xml_attribs(
+            ele,
+            [
+                XML_MONSTER__LEVEL,
+                XML_MONSTER__WEIGHT,
+                XML_MONSTER__WEIGHT2,
+                XML_MONSTER__MD_INDEX,
+            ],
+        )
         return cls(
             u8_checked(int(ele.get(XML_MONSTER__LEVEL))),
             u16_checked(int(ele.get(XML_MONSTER__WEIGHT))),
@@ -98,7 +116,9 @@ class MappaMonster(AutoString, XmlSerializable, CheckedIntWrites):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaMonster):
             return False
-        return self.md_index == other.md_index \
-               and self.level == other.level \
-               and self.weight == other.weight \
-               and self.weight2 == other.weight2
+        return (
+            self.md_index == other.md_index
+            and self.level == other.level
+            and self.weight == other.weight
+            and self.weight2 == other.weight2
+        )

@@ -22,7 +22,7 @@ from typing import Generic, TypeVar
 
 from skytemple_files.common.util import OptionalKwargs
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class DataHandler(Generic[T], abc.ABC):

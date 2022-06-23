@@ -24,14 +24,17 @@ from typing import List, Optional
 
 from skytemple_files.common.i18n_util import _
 
-_WARNMSG = "MappaItemCategory is deprecated. Use Pmd2DungeonData's item_categories attribute instead. " \
-           "This deprecated class will provide dynamically generated values from the default " \
-           "EU XML configuration."
+_WARNMSG = (
+    "MappaItemCategory is deprecated. Use Pmd2DungeonData's item_categories attribute instead. "
+    "This deprecated class will provide dynamically generated values from the default "
+    "EU XML configuration."
+)
 _defconf = None
 
 
 def _gdefconf():
     from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
+
     global _defconf
     if _defconf is None:
         _defconf = Pmd2XmlReader.load_default().dungeon_data.item_categories
@@ -43,11 +46,19 @@ logger = logging.getLogger(__name__)
 
 class MappaItemCategory(Enum):
     """:deprecated: Use Pmd2DungeonData's item_categories attribute instead."""
+
     warnings.warn(_WARNMSG, category=DeprecationWarning, stacklevel=2)
     logger.warning(_WARNMSG)
     THROWN_PIERCE = 0, -1, 0, list(_gdefconf()[0].items), [], _(_gdefconf()[0].name)
     THROWN_ROCK = 1, -1, 0, list(_gdefconf()[1].items), [], _(_gdefconf()[1].name)
-    BERRIES_SEEDS_VITAMINS = 2, -1, 0, list(_gdefconf()[2].items), [], _(_gdefconf()[2].name)
+    BERRIES_SEEDS_VITAMINS = (
+        2,
+        -1,
+        0,
+        list(_gdefconf()[2].items),
+        [],
+        _(_gdefconf()[2].name),
+    )
     FOODS_GUMMIES = 3, -1, 0, list(_gdefconf()[3].items), [], _(_gdefconf()[3].name)
     HOLD = 4, -1, 0, list(_gdefconf()[4].items), [], _(_gdefconf()[4].name)
     TMS = 5, -1, 0, list(_gdefconf()[5].items), [], _(_gdefconf()[5].name)
@@ -69,8 +80,13 @@ class MappaItemCategory(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-            self, _: int, first_item_id: Optional[int], number_of_items: Optional[int],
-            excluded_item_ids: List[int], extra_item_ids: List[int], name_localized: str
+        self,
+        _: int,
+        first_item_id: Optional[int],
+        number_of_items: Optional[int],
+        excluded_item_ids: List[int],
+        extra_item_ids: List[int],
+        name_localized: str,
     ):
         self.first_item_id = first_item_id
         self.number_of_items = number_of_items
@@ -80,15 +96,18 @@ class MappaItemCategory(Enum):
 
     def is_item_in_cat(self, item_id: int):
         return item_id in self.extra_item_ids or (
-                self.first_item_id <= item_id < self.first_item_id + self.number_of_items
-                and item_id not in self.excluded_item_ids
+            self.first_item_id <= item_id < self.first_item_id + self.number_of_items
+            and item_id not in self.excluded_item_ids
         )
 
     def item_ids(self):
         return [
-                   x for x in range(self.first_item_id, self.first_item_id + self.number_of_items)
-                   if x not in self.excluded_item_ids
-               ] + self.extra_item_ids
+            x
+            for x in range(
+                self.first_item_id, self.first_item_id + self.number_of_items
+            )
+            if x not in self.excluded_item_ids
+        ] + self.extra_item_ids
 
     @property
     def print_name(self):

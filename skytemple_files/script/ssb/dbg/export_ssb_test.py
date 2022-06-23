@@ -27,23 +27,23 @@ from skytemple_files.script.ssb.handler import SsbHandler
 
 
 def main():
-    output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+    output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
     os.makedirs(output_dir, exist_ok=True)
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
-    for file_name in get_files_from_rom_with_extension(rom, 'ssb'):
-        if 'm03a1310' not in file_name:
+    for file_name in get_files_from_rom_with_extension(rom, "ssb"):
+        if "m03a1310" not in file_name:
             continue
         print(file_name)
 
-        out_file_name = os.path.join(output_dir, file_name.replace('/', '_') + '.txt')
+        out_file_name = os.path.join(output_dir, file_name.replace("/", "_") + ".txt")
 
         bin_before = rom.getFileByName(file_name)
         ssb = SsbHandler.deserialize(bin_before)
 
-        with open(out_file_name, 'w') as f:
+        with open(out_file_name, "w") as f:
             f.write(export_ssb_as_txt(ssb))
 
 
@@ -58,10 +58,12 @@ def export_ssb_as_txt(ssb) -> str:
         lines.append(f">>> Routine {i}:")
         op_cursor = 0
         for op in ops:
-            lines.append(f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}")
+            lines.append(
+                f"{op.offset:10x}: ({op.op_code.id:3}) {op.op_code.name:45} - {op.params}"
+            )
             op_cursor += 2 + len(op.params) * 2
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

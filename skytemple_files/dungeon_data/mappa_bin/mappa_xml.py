@@ -5,6 +5,7 @@ This can also handle partial data in the XML!
 from __future__ import annotations
 
 import typing
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -26,27 +27,49 @@ from xml.etree.ElementTree import Element
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.xml_util import XmlValidateError
 from skytemple_files.dungeon_data.mappa_bin import (
-    XML_FLOOR_LAYOUT, XML_ITEM_LIST, XML_ITEM_LIST__TYPE,
-    XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__FLOOR,
-    XML_ITEM_LIST__TYPE__MONSTER_HOUSE, XML_ITEM_LIST__TYPE__SHOP,
-    XML_ITEM_LIST__TYPE__UNK1, XML_ITEM_LIST__TYPE__UNK2, XML_MONSTER_LIST,
-    XML_TRAP_LIST)
+    XML_FLOOR_LAYOUT,
+    XML_ITEM_LIST,
+    XML_ITEM_LIST__TYPE,
+    XML_ITEM_LIST__TYPE__BURIED,
+    XML_ITEM_LIST__TYPE__FLOOR,
+    XML_ITEM_LIST__TYPE__MONSTER_HOUSE,
+    XML_ITEM_LIST__TYPE__SHOP,
+    XML_ITEM_LIST__TYPE__UNK1,
+    XML_ITEM_LIST__TYPE__UNK2,
+    XML_MONSTER_LIST,
+    XML_TRAP_LIST,
+)
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
-    MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
 
 
-def mappa_floor_xml_export(floor: MappaFloor, export_layout=True, export_monsters=True, export_traps=True,
-                           export_floor_items=True, export_shop_items=True, export_monster_house_items=True,
-                           export_buried_items=True, export_unk1_items=True, export_unk2_items=True) -> Element:
+def mappa_floor_xml_export(
+    floor: MappaFloor,
+    export_layout=True,
+    export_monsters=True,
+    export_traps=True,
+    export_floor_items=True,
+    export_shop_items=True,
+    export_monster_house_items=True,
+    export_buried_items=True,
+    export_unk1_items=True,
+    export_unk2_items=True,
+) -> Element:
     """Exports the requested data of the mappa floor as XML."""
-    return floor.to_xml(export_layout=export_layout, export_monsters=export_monsters, export_traps=export_traps,
-                        export_floor_items=export_floor_items, export_shop_items=export_shop_items,
-                        export_monster_house_items=export_monster_house_items, export_buried_items=export_buried_items,
-                        export_unk1_items=export_unk1_items, export_unk2_items=export_unk2_items)
+    return floor.to_xml(
+        export_layout=export_layout,
+        export_monsters=export_monsters,
+        export_traps=export_traps,
+        export_floor_items=export_floor_items,
+        export_shop_items=export_shop_items,
+        export_monster_house_items=export_monster_house_items,
+        export_buried_items=export_buried_items,
+        export_unk1_items=export_unk1_items,
+        export_unk2_items=export_unk2_items,
+    )
 
 
 @typing.no_type_check
@@ -64,18 +87,35 @@ def mappa_floor_xml_import(xml: Element, floor: MappaFloor):
             floor.monsters = monsters
         elif child.tag == XML_TRAP_LIST:
             floor.traps = MappaTrapList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__FLOOR:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__FLOOR
+        ):
             floor.floor_items = MappaItemList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__SHOP:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__SHOP
+        ):
             floor.shop_items = MappaItemList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__MONSTER_HOUSE:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__MONSTER_HOUSE
+        ):
             floor.monster_house_items = MappaItemList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__BURIED:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__BURIED
+        ):
             floor.buried_items = MappaItemList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK1:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK1
+        ):
             floor.unk_items1 = MappaItemList.from_xml(child)
-        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2:
+        elif (
+            child.tag == XML_ITEM_LIST
+            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2
+        ):
             floor.unk_items2 = MappaItemList.from_xml(child)
         else:
-            raise XmlValidateError(f(_('Floor parsing: Unexpected {child.tag}')))
-
+            raise XmlValidateError(f(_("Floor parsing: Unexpected {child.tag}")))

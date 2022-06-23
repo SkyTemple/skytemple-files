@@ -22,10 +22,11 @@ from typing import Type
 from parameterized import parameterized
 
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
-from skytemple_files.compression_container.protocol import \
-    CompressionContainerProtocol
-from skytemple_files.compression_container.test.util import (dataset_name_func,
-                                                             load_dataset)
+from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container.test.util import (
+    dataset_name_func,
+    load_dataset,
+)
 from skytemple_files.test.case import SkyTempleFilesTestCase
 
 
@@ -38,6 +39,9 @@ class At4pnTestCase(SkyTempleFilesTestCase[At4pnHandler, CompressionContainerPro
     def test_container(self, _, in_bytes):
         model = self.handler().compress(in_bytes)
         self.assertEqual(len(model.to_bytes()) - 7, model.cont_size(model.to_bytes()))
-        self.assertTrue(model.to_bytes().startswith(b'AT4PN'))
-        self.assertEqual(model.to_bytes(), self.handler().serialize(self.handler().deserialize(model.to_bytes())))
+        self.assertTrue(model.to_bytes().startswith(b"AT4PN"))
+        self.assertEqual(
+            model.to_bytes(),
+            self.handler().serialize(self.handler().deserialize(model.to_bytes())),
+        )
         self.assertEqual(in_bytes, model.decompress())

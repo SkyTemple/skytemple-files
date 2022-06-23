@@ -22,17 +22,18 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
-from skytemple_files.dungeon_data.mappa_g_bin.mappa_converter import \
-    convert_mappa_to_mappag
+from skytemple_files.dungeon_data.mappa_g_bin.mappa_converter import (
+    convert_mappa_to_mappag,
+)
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-mappag_bin = rom.getFileByName('BALANCE/mappa_gs.bin')
+mappag_bin = rom.getFileByName("BALANCE/mappa_gs.bin")
 mappa_g = MappaGBinHandler.deserialize(mappag_bin)
 
-mappa_bin = rom.getFileByName('BALANCE/mappa_s.bin')
+mappa_bin = rom.getFileByName("BALANCE/mappa_s.bin")
 mappa = MappaBinHandler.deserialize(mappa_bin)
 
 assert mappa_g == convert_mappa_to_mappag(mappa)

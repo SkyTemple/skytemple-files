@@ -35,15 +35,21 @@ class MappaBinWriter:
     def write(self) -> Tuple[bytes, List[int], Optional[int]]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
         pointer_offsets = []
-        
-        floor_lists, floor_layouts, monster_lists, trap_lists, item_lists = self.model.minimize()
+
+        (
+            floor_lists,
+            floor_layouts,
+            monster_lists,
+            trap_lists,
+            item_lists,
+        ) = self.model.minimize()
         # Floor list data
         data = bytearray(sum((len(floor_list) + 1) * 18 for floor_list in floor_lists))
         cursor = 0
         for floor_list in floor_lists:
             cursor += 18  # null floor
             for floor in floor_list:
-                data[cursor:cursor+18] = floor.to_mappa()
+                data[cursor : cursor + 18] = floor.to_mappa()
                 cursor += 18
         # Padding
         if len(data) % 16 != 0:
@@ -55,7 +61,9 @@ class MappaBinWriter:
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(start_floor_list_lut + i * 4)
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
-            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 18)
+            cursor_floor_data = u32_checked(
+                cursor_floor_data + (len(floor_list) + 1) * 18
+            )
         data += floor_list_lut
         # Padding
         if len(data) % 4 != 0:
@@ -64,22 +72,30 @@ class MappaBinWriter:
         start_floor_layout_data = u32_checked(len(data))
         layout_data = bytearray(32 * len(floor_layouts))
         for i, layout in enumerate(floor_layouts):
-            layout_data[i * 32: (i + 1) * 32] = layout.to_mappa()
+            layout_data[i * 32 : (i + 1) * 32] = layout.to_mappa()
         data += layout_data
         # Padding
         if len(data) % 4 != 0:
             data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Monster spawn data
         monster_data_start = len(data)
-        monster_data = bytearray(sum((len(monsters) + 1) * 8 for monsters in monster_lists))
+        monster_data = bytearray(
+            sum((len(monsters) + 1) * 8 for monsters in monster_lists)
+        )
         monster_data_cursor = 0
         monster_data_pointer = []
         for i, monster_list in enumerate(monster_lists):
-            monster_data_pointer.append(u32_checked(monster_data_start + monster_data_cursor))
+            monster_data_pointer.append(
+                u32_checked(monster_data_start + monster_data_cursor)
+            )
 
-            single_monster_list_data = bytes(chain.from_iterable(monster.to_mappa() for monster in monster_list)) + bytes(8)
+            single_monster_list_data = bytes(
+                chain.from_iterable(monster.to_mappa() for monster in monster_list)
+            ) + bytes(8)
             len_single = len(single_monster_list_data)
-            monster_data[monster_data_cursor:monster_data_cursor+len_single] = single_monster_list_data
+            monster_data[
+                monster_data_cursor : monster_data_cursor + len_single
+            ] = single_monster_list_data
             monster_data_cursor += len_single
         data += monster_data
         # Padding
@@ -106,7 +122,9 @@ class MappaBinWriter:
 
             len_single = len(single_trap_list_data)
             assert len_single == 50
-            trap_data[trap_data_cursor:trap_data_cursor+len_single] = single_trap_list_data
+            trap_data[
+                trap_data_cursor : trap_data_cursor + len_single
+            ] = single_trap_list_data
             trap_data_cursor += len_single
         assert trap_data_cursor == len(trap_lists) * 50
         data += trap_data
@@ -132,7 +150,9 @@ class MappaBinWriter:
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
             assert item_data_cursor + len_single < len(item_data)
-            item_data[item_data_cursor:item_data_cursor+len_single] = single_item_list_data
+            item_data[
+                item_data_cursor : item_data_cursor + len_single
+            ] = single_item_list_data
             item_data_cursor += len_single
         data += item_data[:item_data_cursor]
         # Padding

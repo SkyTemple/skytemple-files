@@ -29,6 +29,7 @@ class PxHandler:
     Does not follow default DataHandler pattern,
     is more complex as it also needs control flags.
     """
+
     @classmethod
     def decompress(cls, compressed_data: bytes, flags: bytes) -> bytes:
         """Decompresses data stored as PX."""

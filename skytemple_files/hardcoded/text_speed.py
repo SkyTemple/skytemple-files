@@ -25,10 +25,10 @@ from skytemple_files.common.util import read_u8, write_u8
 class HardcodedTextSpeed:
     @staticmethod
     def get_text_speed(arm9: bytes, config: Pmd2Data) -> u8:
-        block = config.binaries['arm9.bin'].symbols['TextSpeedConstant']
+        block = config.binaries["arm9.bin"].symbols["TextSpeedConstant"]
         return read_u8(arm9, block.begin)
 
     @staticmethod
     def set_text_speed(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries['arm9.bin'].symbols['TextSpeedConstant']
+        block = config.binaries["arm9.bin"].symbols["TextSpeedConstant"]
         write_u8(arm9, value, block.begin)

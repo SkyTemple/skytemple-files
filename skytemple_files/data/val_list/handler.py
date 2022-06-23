@@ -25,10 +25,9 @@ from skytemple_files.data.val_list.writer import ValListWriter
 
 class ValListHandler(DataHandler[ValList]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> 'ValList':
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "ValList":
         return ValList(data)
 
     @classmethod
-    def serialize(cls, data: 'ValList', **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: "ValList", **kwargs: OptionalKwargs) -> bytes:
         return ValListWriter(data).write()
-

@@ -17,8 +17,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.compression.generic_nrl.compressor import \
-    GenericNrlCompressor
+from skytemple_files.compression.generic_nrl.compressor import GenericNrlCompressor
 
 DEBUG = False
 
@@ -49,4 +48,4 @@ class BpcTilemapCompressor(GenericNrlCompressor):
         while self.cursor < self.length_input:
             self._process(2)
 
-        return self.compressed_data[:self.bytes_written]
+        return self.compressed_data[: self.bytes_written]

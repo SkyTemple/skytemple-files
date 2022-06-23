@@ -77,7 +77,7 @@ class Dma:
         elif get_type == DmaType.FLOOR:
             high_two = 0x200
         idx = high_two + neighbors_same
-        return self.chunk_mappings[(idx * 3):(idx * 3) + 3]
+        return self.chunk_mappings[(idx * 3) : (idx * 3) + 3]
 
     def get_extra(self, extra_type: DmaExtraType) -> List[int]:
         """
@@ -91,7 +91,9 @@ class Dma:
                 cms.append(self.chunk_mappings[i])
         return cms
 
-    def set(self, get_type: DmaType, neighbors_same: int, variation_index: int, value: int):
+    def set(
+        self, get_type: DmaType, neighbors_same: int, variation_index: int, value: int
+    ):
         """
         Sets the mapping for the given configuration and the given variation of it.
         """
@@ -110,9 +112,7 @@ class Dma:
         """
         self.chunk_mappings[(0x300 * 3) + extra_type.value + (3 * index)] = value
 
-    def to_pil(
-            self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]
-    ) -> Image.Image:
+    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: List[List[int]]) -> Image.Image:
         """
         For debugging only, the output image contains some labels, etc. Use get(...) instead to
         get a chunk mapping and then render that chunk by extracting it from the image returned by
@@ -123,27 +123,13 @@ class Dma:
         """
 
         # We don't render all possibilities of course...
-        possibilities_to_render = [[
-            [1, 1, 1],
-            [1, 1, 1],
-            [1, 1, 1]
-        ], [
-            [1, 1, 1],
-            [1, 0, 1],
-            [1, 1, 1]
-        ], [
-            [0, 0, 0],
-            [0, 1, 0],
-            [0, 0, 0]
-        ], [
-            [0, 1, 0],
-            [1, 1, 1],
-            [0, 1, 0]
-        ], [
-            [1, 0, 1],
-            [0, 1, 0],
-            [1, 0, 1]
-        ]]
+        possibilities_to_render = [
+            [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+            [[1, 1, 1], [1, 0, 1], [1, 1, 1]],
+            [[0, 0, 0], [0, 1, 0], [0, 0, 0]],
+            [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
+            [[1, 0, 1], [0, 1, 0], [1, 0, 1]],
+        ]
         # For each possibility we need 11x4 chunks (incl. 1 space line and three variations, with spacing)
         # This means for all two types we need 24x4 (incl. 2 spacing) per possibility
         # Possibilities are rendered down
@@ -155,13 +141,20 @@ class Dma:
 
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)
 
-        fimg = Image.new('P', (width, height))
+        fimg = Image.new("P", (width, height))
         fimg.putpalette(chunks.getpalette())  # type: ignore
 
         def paste(chunk_index, x, y):
             fimg.paste(
-                chunks.crop((0, chunk_index * chunk_dim, chunk_dim, chunk_index * chunk_dim + chunk_dim)),
-                (x * chunk_dim, y * chunk_dim)
+                chunks.crop(
+                    (
+                        0,
+                        chunk_index * chunk_dim,
+                        chunk_dim,
+                        chunk_index * chunk_dim + chunk_dim,
+                    )
+                ),
+                (x * chunk_dim, y * chunk_dim),
             )
 
         x_cursor = 0
@@ -172,13 +165,21 @@ class Dma:
                 for y, row in enumerate(possibility):
                     for x, solid in enumerate(row):
                         ctype = solid_type if solid else DmaType.FLOOR
-                        solid_neighbors = self.get_tile_neighbors(possibility, x, y, bool(solid))
-                        for iv, variation in enumerate(self.get(ctype, solid_neighbors)):
+                        solid_neighbors = self.get_tile_neighbors(
+                            possibility, x, y, bool(solid)
+                        )
+                        for iv, variation in enumerate(
+                            self.get(ctype, solid_neighbors)
+                        ):
                             paste(variation, x_cursor + (4 * iv) + x, y_cursor + y)
                 y_cursor += 4
             x_cursor += 13
 
-        for extra_type in (DmaExtraType.FLOOR1, DmaExtraType.WALL_OR_VOID, DmaExtraType.FLOOR2):
+        for extra_type in (
+            DmaExtraType.FLOOR1,
+            DmaExtraType.WALL_OR_VOID,
+            DmaExtraType.FLOOR2,
+        ):
             for x, variation in enumerate(self.get_extra(extra_type)):
                 paste(variation, x, y_cursor)
             y_cursor += 2
@@ -186,7 +187,13 @@ class Dma:
         return fimg
 
     @staticmethod
-    def get_tile_neighbors(wall_matrix: List[List[Union[int, bool]]], x, y, self_is_wall_or_water: bool, treat_outside_as_wall=False):
+    def get_tile_neighbors(
+        wall_matrix: List[List[Union[int, bool]]],
+        x,
+        y,
+        self_is_wall_or_water: bool,
+        treat_outside_as_wall=False,
+    ):
         """Return the neighbor bit map for the given 3x3 matrix.
         1 means there is a wall / water. Out of bounds is read as floor, unless treat_outside_as_wall,
         then it's water/wall."""
@@ -195,14 +202,20 @@ class Dma:
             # we enlarge the matrix and add a 1 chunk-sized border
             x += 1
             y += 1
-            wall_matrix =   [[1] * (len(wall_matrix[0]) + 2)] + \
-                            [[1] + l + [1] for l in wall_matrix] + \
-                            [[1] * (len(wall_matrix[0]) + 2)]
+            wall_matrix = (
+                [[1] * (len(wall_matrix[0]) + 2)]
+                + [[1] + l + [1] for l in wall_matrix]
+                + [[1] * (len(wall_matrix[0]) + 2)]
+            )
         # SOUTH
         if y + 1 < len(wall_matrix) and wall_matrix[y + 1][x]:
             ns += DmaNeighbor.SOUTH
         # SOUTH_EAST
-        if y + 1 < len(wall_matrix) and x + 1 < len(wall_matrix[y + 1]) and wall_matrix[y + 1][x + 1]:
+        if (
+            y + 1 < len(wall_matrix)
+            and x + 1 < len(wall_matrix[y + 1])
+            and wall_matrix[y + 1][x + 1]
+        ):
             ns += DmaNeighbor.SOUTH_EAST
         # EAST
         if x + 1 < len(wall_matrix[y]) and wall_matrix[y][x + 1]:

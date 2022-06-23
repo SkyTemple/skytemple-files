@@ -24,10 +24,9 @@ from skytemple_files.list.object.writer import ObjectListBinWriter
 
 class ObjectListBinHandler(DataHandler[ObjectListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs) -> 'ObjectListBin':
+    def deserialize(cls, data: bytes, **kwargs) -> "ObjectListBin":
         return ObjectListBin(data)
 
     @classmethod
-    def serialize(cls, data: 'ObjectListBin', **kwargs) -> bytes:
+    def serialize(cls, data: "ObjectListBin", **kwargs) -> bytes:
         return ObjectListBinWriter(data).write()
-

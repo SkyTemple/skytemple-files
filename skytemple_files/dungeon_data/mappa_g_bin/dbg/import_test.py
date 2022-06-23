@@ -22,26 +22,28 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
 
-output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 os.makedirs(output_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-mappa_bin = rom.getFileByName('BALANCE/mappa_gs.bin')
+mappa_bin = rom.getFileByName("BALANCE/mappa_gs.bin")
 mappa = MappaGBinHandler.deserialize(mappa_bin)
 
 mappa_after_bin = MappaGBinHandler.serialize(mappa)
 
-with open('/tmp/before.bin', 'wb') as f:
+with open("/tmp/before.bin", "wb") as f:
     f.write(mappa_bin)
 
-with open('/tmp/after.bin', 'wb') as f:
+with open("/tmp/after.bin", "wb") as f:
     f.write(mappa_after_bin)
 
 mappa_after = MappaGBinHandler.deserialize(mappa_after_bin)
 for i_fl in range(0, len(mappa.floor_lists)):
     assert len(mappa.floor_lists[i_fl]) == len(mappa_after.floor_lists[i_fl])
     for i in range(0, len(mappa.floor_lists[i_fl])):
-        assert mappa.floor_lists[i_fl][i].layout == mappa_after.floor_lists[i_fl][i].layout
+        assert (
+            mappa.floor_lists[i_fl][i].layout == mappa_after.floor_lists[i_fl][i].layout
+        )
 assert mappa == mappa_after

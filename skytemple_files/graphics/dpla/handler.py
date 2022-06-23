@@ -28,6 +28,7 @@ class DplaHandler(DataHandler[Dpla]):
     see skytemple_files.container.dungeon_bin.sub.sir0_dpla.DbinSir0DbplaHandler.
     If used directly, we assume the file starts with the pointers to the palette.
     """
+
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpla:
         return Dpla(data, 0)

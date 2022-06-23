@@ -28,6 +28,7 @@ class SsaHeader(AutoString, CheckedIntWrites):
     The header of a read SSA file.
     Only contains information used during read-in of the data. Not used for saving.
     """
+
     layer_count: u16
     layer_list_pointer: Optional[int]
     trigger_pointer: Optional[int]
@@ -38,16 +39,28 @@ class SsaHeader(AutoString, CheckedIntWrites):
     position_marker_pointer: Optional[int]
     unk10_pointer: Optional[int]
 
-    def __init__(self, layer_count: u16, layer_list_pointer: int,
-                 trigger_pointer: int, actor_pointer: int,
-                 object_pointer: int, performer_pointer: int,
-                 events_pointer: int, position_marker_pointer: int, unk10_pointer: int):
+    def __init__(
+        self,
+        layer_count: u16,
+        layer_list_pointer: int,
+        trigger_pointer: int,
+        actor_pointer: int,
+        object_pointer: int,
+        performer_pointer: int,
+        events_pointer: int,
+        position_marker_pointer: int,
+        unk10_pointer: int,
+    ):
 
         # If the pointer of the following entry is the same, then this layer doesn't actually exist.
         self.layer_count = layer_count
-        self.layer_list_pointer = layer_list_pointer if layer_list_pointer != trigger_pointer else None
+        self.layer_list_pointer = (
+            layer_list_pointer if layer_list_pointer != trigger_pointer else None
+        )
 
-        self.trigger_pointer = trigger_pointer if trigger_pointer != actor_pointer else None
+        self.trigger_pointer = (
+            trigger_pointer if trigger_pointer != actor_pointer else None
+        )
         if self.layer_list_pointer is not None:
             self.trigger_end_pointer = actor_pointer
 
@@ -55,22 +68,34 @@ class SsaHeader(AutoString, CheckedIntWrites):
         if self.actor_pointer is not None:
             self.actor_end_pointer = object_pointer
 
-        self.object_pointer = object_pointer if object_pointer != performer_pointer else None
+        self.object_pointer = (
+            object_pointer if object_pointer != performer_pointer else None
+        )
         if self.object_pointer is not None:
             self.object_end_pointer = performer_pointer
 
-        self.performer_pointer = performer_pointer if performer_pointer != events_pointer else None
+        self.performer_pointer = (
+            performer_pointer if performer_pointer != events_pointer else None
+        )
         if self.performer_pointer is not None:
             self.performer_end_pointer = events_pointer
 
-        self.events_pointer = events_pointer if events_pointer != position_marker_pointer else None
+        self.events_pointer = (
+            events_pointer if events_pointer != position_marker_pointer else None
+        )
         if self.events_pointer is not None:
             self.events_end_pointer = position_marker_pointer
 
-        self.position_marker_pointer = position_marker_pointer if position_marker_pointer != unk10_pointer else None
+        self.position_marker_pointer = (
+            position_marker_pointer
+            if position_marker_pointer != unk10_pointer
+            else None
+        )
         if self.position_marker_pointer is not None:
             self.position_marker_end_pointer = unk10_pointer
 
-        self.unk10_pointer = unk10_pointer if unk10_pointer != layer_list_pointer else None
+        self.unk10_pointer = (
+            unk10_pointer if unk10_pointer != layer_list_pointer else None
+        )
         if self.unk10_pointer is not None:
             self.unk10_end_pointer = layer_list_pointer

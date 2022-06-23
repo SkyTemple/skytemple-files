@@ -17,10 +17,8 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import (iter_bytes, read_bytes, read_u16,
-                                         read_u32)
-from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
-                                                     CMD_FILL_OUT)
+from skytemple_files.common.util import iter_bytes, read_bytes, read_u16, read_u32
+from skytemple_files.compression.generic_nrl import CMD_COPY_BYTES, CMD_FILL_OUT
 
 # How much pair24 we look ahead for at most
 # 127 not possible because LA also use for fill and 2*63=126
@@ -55,7 +53,7 @@ class BmaLayerNrlCompressor:
         while self.cursor < self.length_input:
             self._process()
 
-        return self.compressed_data[:self.bytes_written]
+        return self.compressed_data[: self.bytes_written]
 
     def _process(self):
         len_seq, sequence = self._look_ahead_two_int_sequence()
@@ -103,12 +101,16 @@ class BmaLayerNrlCompressor:
                     self._write_pair24(current_int_pair)
 
         if DEBUG:
-            print(f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}")
+            print(
+                f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}"
+            )
 
     def _read(self) -> bytes:
         """Reads 4 bytes and increases cursor"""
         if self.cursor + 4 > self.length_input:
-            raise ValueError("BMA Layer NRL Compressor: Reached EOF while reading data.")
+            raise ValueError(
+                "BMA Layer NRL Compressor: Reached EOF while reading data."
+            )
         oc = self.cursor
         self.cursor += 4
         return read_bytes(self.uncompressed_data, oc, 4)
@@ -125,19 +127,28 @@ class BmaLayerNrlCompressor:
         assert len(data) == 4
         int1 = read_u16(data, 0)
         int2 = read_u16(data, 2)
-        pair24 = ((int1 & 0xff) << 16) + ((int2 & 0xf) << 12) + (int1 & 0xf00) + ((int2 & 0xff0) >> 4)
+        pair24 = (
+            ((int1 & 0xFF) << 16)
+            + ((int2 & 0xF) << 12)
+            + (int1 & 0xF00)
+            + ((int2 & 0xFF0) >> 4)
+        )
         if DEBUG:
             print(f"W {int1:02x} and {int2:02x} as {pair24:06x}")
-        self.compressed_data[self.bytes_written:self.bytes_written+3] = pair24.to_bytes(3, 'big')
+        self.compressed_data[
+            self.bytes_written : self.bytes_written + 3
+        ] = pair24.to_bytes(3, "big")
         self.bytes_written += 3
 
     def _look_ahead_repeats(self, data: bytes):
         """Look how often the 4 byte pattern in the input data repeats, up to NRL_LOOKAHEAD_MAX_BYTES"""
         nc = self.cursor
         repeats = 0
-        while read_bytes(self.uncompressed_data, nc, 4) == data and \
-                repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES and \
-                nc < self.length_input:
+        while (
+            read_bytes(self.uncompressed_data, nc, 4) == data
+            and repeats < NRL_LOOKAHEAD_ZERO_MAX_BYTES
+            and nc < self.length_input
+        ):
             repeats += 1
             nc += 4
         return repeats
@@ -157,16 +168,19 @@ class BmaLayerNrlCompressor:
                 repeat_counter = 0
             previous_ints_at_pos = ints_at_pos  # type: ignore
 
-            seq[seq_len*4:(seq_len*4)+4] = ints_at_pos
+            seq[seq_len * 4 : (seq_len * 4) + 4] = ints_at_pos
 
             if repeat_counter > NRL_MIN_SEQ_LEN:
                 seq_len -= NRL_MIN_SEQ_LEN
                 break
 
-            if seq_len + 1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES or nc >= self.length_input:
+            if (
+                seq_len + 1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES
+                or nc >= self.length_input
+            ):
                 break
 
             seq_len += 1
             nc += 4
 
-        return seq_len, seq[:seq_len * 4]
+        return seq_len, seq[: seq_len * 4]

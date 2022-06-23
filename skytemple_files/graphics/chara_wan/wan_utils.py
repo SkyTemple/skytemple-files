@@ -12,9 +12,12 @@
 
 from __future__ import annotations
 
-from skytemple_files.graphics.chara_wan.model import (FrameOffset, ImgPiece,
-                                                      MetaFramePiece,
-                                                      SequenceFrame)
+from skytemple_files.graphics.chara_wan.model import (
+    FrameOffset,
+    ImgPiece,
+    MetaFramePiece,
+    SequenceFrame,
+)
 
 
 def animGroupsEqual(anim1, anim2):
@@ -32,8 +35,12 @@ def animGroupsEqual(anim1, anim2):
             frame1 = anim1[anim_idx][frame_idx]
             frame2 = anim2[anim_idx][frame_idx]
 
-            if frame1.frameIndex != frame2.frameIndex or frame1.duration != frame2.duration \
-                    or frame1.offset != frame2.offset or frame1.shadow != frame2.shadow:
+            if (
+                frame1.frameIndex != frame2.frameIndex
+                or frame1.duration != frame2.duration
+                or frame1.offset != frame2.offset
+                or frame1.shadow != frame2.shadow
+            ):
                 anims_equal = False
                 break
         if not anims_equal:
@@ -46,22 +53,28 @@ def duplicateAnimGroup(anim):
     for anim_seq in anim:
         new_seq = []
         for frame in anim_seq:
-            new_frame = SequenceFrame(frame.frameIndex, frame.duration, frame.flag, frame.offset, frame.shadow)
+            new_frame = SequenceFrame(
+                frame.frameIndex, frame.duration, frame.flag, frame.offset, frame.shadow
+            )
             new_frame.SetRushPoint(frame.IsRushPoint())
             new_seq.append(new_frame)
         new_group.append(new_seq)
     return new_group
 
+
 def duplicateMetaFrame(frame):
     new_frame = []
     for piece in frame:
-        new_piece = MetaFramePiece(piece.imgIndex, piece.attr0, piece.attr1, piece.attr2)
+        new_piece = MetaFramePiece(
+            piece.imgIndex, piece.attr0, piece.attr1, piece.attr2
+        )
         new_frame.append(new_piece)
     return new_frame
 
 
 def duplicateOffset(offset):
     return FrameOffset(offset.head, offset.lhand, offset.rhand, offset.center)
+
 
 def duplicateImgData(imgStrip):
     new_img = ImgPiece()

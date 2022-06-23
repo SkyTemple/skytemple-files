@@ -21,24 +21,27 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 
 class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
         return "DisarmOneRoomMonsterHouses"
 
     @property
     def description(self) -> str:
-        return _("Disarms one-room Monster House floors, which can appear in cases like a layout generation failure. These floors will still be one giant room, but will no longer be Monster Houses.")
+        return _(
+            "Disarms one-room Monster House floors, which can appear in cases like a layout generation failure. These floors will still be one giant room, but will no longer be Monster Houses."
+        )
 
     @property
     def author(self) -> str:
@@ -61,12 +64,20 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
             }
             offset = OFFSETS.get(config.game_region)
             if offset is not None:
-                overlay29 = get_binary_from_rom_ppmdu(rom, config.binaries["overlay/overlay_0029.bin"])
-                return overlay29[offset:offset+len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
+                overlay29 = get_binary_from_rom_ppmdu(
+                    rom, config.binaries["overlay/overlay_0029.bin"]
+                )
+                return (
+                    overlay29[offset : offset + len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

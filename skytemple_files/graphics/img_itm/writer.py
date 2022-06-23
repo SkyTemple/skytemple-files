@@ -52,7 +52,7 @@ class ImgItmWriter:
         buffer += data
 
         # Header
-        header = bytearray(4*4)
+        header = bytearray(4 * 4)
         write_u32(header, u32_checked(spr_pointer), 0x00)
         write_u32(header, u32_checked(len(self.model.sprites)), 0x04)
         write_u32(header, u32_checked(pal_pointer), 0x08)

@@ -23,10 +23,12 @@ from ndspy.rom import NintendoDSRom
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.asm_tools import AsmFunction
 from skytemple_files.patch.category import PatchCategory
@@ -50,22 +52,21 @@ SP_CODE_PATH = "BALANCE/process.bin"
 
 
 class ExtractSPCodePatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'ExtractSPCode'
+        return "ExtractSPCode"
 
     @property
     def description(self) -> str:
-        return _('Extracts special processes code and put it in files.')
+        return _("Extracts special processes code and put it in files.")
 
     @property
     def author(self) -> str:
-        return 'Anonymous'
+        return "Anonymous"
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return "0.0.1"
 
     @property
     def category(self) -> PatchCategory:
@@ -74,16 +75,24 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(
-                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
             if config.game_region == GAME_REGION_EU:
-                return read_u32(
-                    rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
-                ) != PATCH_CHECK_INSTR_APPLIED
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -101,7 +110,10 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
 
             data = rom.loadArm9Overlays([11])[11].data
 
-            switch = AsmFunction(data[start_table - start_ov11:start_m_functions - start_ov11], start_table)
+            switch = AsmFunction(
+                data[start_table - start_ov11 : start_m_functions - start_ov11],
+                start_table,
+            )
             switch.process()
             main_calls = switch.process_switch(5, (0, 64), {})
 
@@ -112,7 +124,7 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
             for i in range(len(unique_main_calls) - 1):
                 start = unique_main_calls[i]
                 end = unique_main_calls[i + 1]
-                func_data = data[start - start_ov11:end - start_ov11]
+                func_data = data[start - start_ov11 : end - start_ov11]
                 main_func[start] = AsmFunction(func_data, start)
                 main_func[start].process()
                 last_call = start
@@ -146,5 +158,7 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

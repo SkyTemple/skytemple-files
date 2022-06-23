@@ -25,7 +25,7 @@ from skytemple_files.compression_container.common_at.model import CommonAt
 class At3px(CommonAt):
     length_decompressed: u16
 
-    def __init__(self, data: bytes=None):
+    def __init__(self, data: bytes = None):
         """
         Create a AT3PX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
@@ -39,23 +39,28 @@ class At3px(CommonAt):
         """Returns the uncompressed data stored in the container"""
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.PX.decompress(self.compressed_data[:self.length_compressed - 0x10], self.compression_flags)
+        data = FileType.PX.decompress(
+            self.compressed_data[: self.length_compressed - 0x10],
+            self.compression_flags,
+        )
         return data
 
     # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
-        return b'AT3PX'\
-               + self.length_compressed.to_bytes(2, 'little') \
-               + self.compression_flags \
-               + self.compressed_data
+        return (
+            b"AT3PX"
+            + self.length_compressed.to_bytes(2, "little")
+            + self.compression_flags
+            + self.compressed_data
+        )
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):
         return read_u16(data, byte_offset + 5)
 
     @classmethod
-    def compress(cls, data: bytes) -> 'At3px':
+    def compress(cls, data: bytes) -> "At3px":
         """Create a new AT3PX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

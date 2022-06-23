@@ -25,16 +25,21 @@ from range_typed_integers import u16, u16_checked
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import AutoString, read_u16, write_u16
-from skytemple_files.common.xml_util import (XmlSerializable, XmlValidateError,
-                                             validate_xml_attribs,
-                                             validate_xml_tag)
-from skytemple_files.dungeon_data.mappa_bin import (XML_TRAP, XML_TRAP__NAME,
-                                                    XML_TRAP__WEIGHT,
-                                                    XML_TRAP_LIST)
+from skytemple_files.common.xml_util import (
+    XmlSerializable,
+    XmlValidateError,
+    validate_xml_attribs,
+    validate_xml_tag,
+)
+from skytemple_files.dungeon_data.mappa_bin import (
+    XML_TRAP,
+    XML_TRAP__NAME,
+    XML_TRAP__WEIGHT,
+    XML_TRAP_LIST,
+)
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import \
-        MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
 
 
 class MappaTrapType(Enum):
@@ -81,7 +86,7 @@ class MappaTrapType(Enum):
         return self._print_name_
 
     def __repr__(self):
-        return f'MappaTrapType.{self.name}'
+        return f"MappaTrapType.{self.name}"
 
 
 class MappaTrapList(AutoString, XmlSerializable):
@@ -90,19 +95,23 @@ class MappaTrapList(AutoString, XmlSerializable):
     def __init__(self, weights: Union[List[u16], Dict[MappaTrapType, u16]]):
         if isinstance(weights, list):
             if len(weights) != 25:
-                raise ValueError("MappaTrapList constructor needs a weight value for all of the 25 traps.")
+                raise ValueError(
+                    "MappaTrapList constructor needs a weight value for all of the 25 traps."
+                )
             self.weights = {}
             for i, value in enumerate(weights):
                 self.weights[MappaTrapType(i)] = value
         elif isinstance(weights, dict):
             self.weights = weights
             if set((x.value for x in self.weights.keys())) != set(range(0, 25)):
-                raise ValueError("MappaTrapList constructor needs a weight value for all of the 25 traps.")
+                raise ValueError(
+                    "MappaTrapList constructor needs a weight value for all of the 25 traps."
+                )
         else:
             raise ValueError(f"Invalid type for MappaTrapList {type(weights)}")
 
     @classmethod
-    def from_mappa(cls, read: 'MappaBinReadContainer', pointer: int) -> 'MappaTrapList':
+    def from_mappa(cls, read: "MappaBinReadContainer", pointer: int) -> "MappaTrapList":
         weights = []
         for i in range(pointer, pointer + 50, 2):
             weights.append(read_u16(read.data, i))
@@ -117,15 +126,17 @@ class MappaTrapList(AutoString, XmlSerializable):
     def to_xml(self) -> Element:
         xml_trap_list = Element(XML_TRAP_LIST)
         for trap, weight in self.weights.items():
-            xml_trap_list.append(Element(XML_TRAP, {
-                XML_TRAP__NAME: str(trap.name),
-                XML_TRAP__WEIGHT: str(weight)
-            }))
+            xml_trap_list.append(
+                Element(
+                    XML_TRAP,
+                    {XML_TRAP__NAME: str(trap.name), XML_TRAP__WEIGHT: str(weight)},
+                )
+            )
         return xml_trap_list
 
     @classmethod
     @typing.no_type_check
-    def from_xml(cls, ele: Element) -> 'XmlSerializable':
+    def from_xml(cls, ele: Element) -> "XmlSerializable":
         validate_xml_tag(ele, XML_TRAP_LIST)
         weights = {}
         for child in ele:
@@ -134,11 +145,15 @@ class MappaTrapList(AutoString, XmlSerializable):
             name = child.get(XML_TRAP__NAME)
             if not hasattr(MappaTrapType, name):
                 raise XmlValidateError(f(_("Unknown trap {name}.")))
-            weights[getattr(MappaTrapType, name)] = u16_checked(int(child.get(XML_TRAP__WEIGHT)))
+            weights[getattr(MappaTrapType, name)] = u16_checked(
+                int(child.get(XML_TRAP__WEIGHT))
+            )
         try:
             return cls(weights)
         except ValueError as ex:
-            raise XmlValidateError(_("Trap lists need an entry for all of the 25 traps")) from ex
+            raise XmlValidateError(
+                _("Trap lists need an entry for all of the 25 traps")
+            ) from ex
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaTrapList):

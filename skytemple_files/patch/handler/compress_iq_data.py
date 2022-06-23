@@ -21,10 +21,12 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.hardcoded.iq import IqGroupsSkills
 from skytemple_files.patch.category import PatchCategory
@@ -36,23 +38,24 @@ OFFSET_US = 0x58E68
 
 
 class CompressIQDataPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'CompressIQData'
+        return "CompressIQData"
 
     @property
     def description(self) -> str:
-        return _("Optimizes the way the list of IQ skills learnt by each IQ group is stored, removing the limit of " \
-                 "max 25 skills per group.")
+        return _(
+            "Optimizes the way the list of IQ skills learnt by each IQ group is stored, removing the limit of "
+            "max 25 skills per group."
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
@@ -66,7 +69,9 @@ class CompressIQDataPatchHandler(AbstractPatchHandler):
                 return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Copy the list of skills per group and rewrite it after applying the patch to avoid overwriting
         # it with the default data included in the patch
         if self.is_applied(rom, config):
@@ -74,9 +79,11 @@ class CompressIQDataPatchHandler(AbstractPatchHandler):
         else:
             group_data = IqGroupsSkills.read_uncompressed(rom.arm9, config)
         apply()
-        arm9 = bytearray(get_binary_from_rom_ppmdu(rom, config.binaries['arm9.bin']))
+        arm9 = bytearray(get_binary_from_rom_ppmdu(rom, config.binaries["arm9.bin"]))
         IqGroupsSkills.write_compressed(arm9, group_data, config)
-        set_binary_in_rom_ppmdu(rom, config.binaries['arm9.bin'], arm9)
+        set_binary_in_rom_ppmdu(rom, config.binaries["arm9.bin"], arm9)
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

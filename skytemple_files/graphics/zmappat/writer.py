@@ -40,15 +40,17 @@ class ZMappaTWriter:
             tile_table.append(u32_checked(len(buffer)))
             current_mask = self.model.masks[i]
             current_tile = self.model.tiles[i]
-            for x in range(ZMAPPAT_TILE_SIZE//8):
-                buffer += current_mask[x*4:x*4+4]+current_tile[x*4:x*4+4]
+            for x in range(ZMAPPAT_TILE_SIZE // 8):
+                buffer += (
+                    current_mask[x * 4 : x * 4 + 4] + current_tile[x * 4 : x * 4 + 4]
+                )
 
         # Insert the tile pointers table
-        table = bytearray(len(tile_table)*4)
+        table = bytearray(len(tile_table) * 4)
         table_pointer = u32_checked(len(buffer))
         for i, x in enumerate(tile_table):
-            pointer_offsets.append(len(buffer)+i*4)
-            write_u32(table, x, i*4)
+            pointer_offsets.append(len(buffer) + i * 4)
+            write_u32(table, x, i * 4)
         buffer += table
 
         # The palette
@@ -69,9 +71,9 @@ class ZMappaTWriter:
         header_pointer = len(buffer)
         header = bytearray(0x8)
         pointer_offsets.append(len(buffer))
-        pointer_offsets.append(len(buffer)+4)
+        pointer_offsets.append(len(buffer) + 4)
         write_u32(header, table_pointer, 0)
         write_u32(header, palette_pointer, 4)
-        
+
         buffer += header
         return buffer, pointer_offsets, header_pointer

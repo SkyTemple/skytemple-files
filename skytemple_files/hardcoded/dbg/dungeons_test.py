@@ -23,23 +23,29 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
-                                         get_ppmdu_config_for_rom)
+from skytemple_files.common.util import (
+    get_binary_from_rom_ppmdu,
+    get_ppmdu_config_for_rom,
+)
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
-rom_us = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_unpatched.nds'))
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..")
+rom_us = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us_unpatched.nds"))
 ppmdu_us = get_ppmdu_config_for_rom(rom_us)
-arm9_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['arm9.bin'])
-ov10_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries['overlay/overlay_0010.bin'])
-rom_eu = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_edit.nds'))
+arm9_us = get_binary_from_rom_ppmdu(rom_us, ppmdu_us.binaries["arm9.bin"])
+ov10_us = get_binary_from_rom_ppmdu(
+    rom_us, ppmdu_us.binaries["overlay/overlay_0010.bin"]
+)
+rom_eu = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_edit.nds"))
 ppmdu_eu = get_ppmdu_config_for_rom(rom_eu)
-ov10_eu = get_binary_from_rom_ppmdu(rom_eu, ppmdu_eu.binaries['overlay/overlay_0010.bin'])
+ov10_eu = get_binary_from_rom_ppmdu(
+    rom_eu, ppmdu_eu.binaries["overlay/overlay_0010.bin"]
+)
 
 # TilesetProperties
 lst = HardcodedDungeons.get_tileset_properties(ov10_us, ppmdu_us)
 for i, e in enumerate(lst):
-    print(i, ': ', e)
+    print(i, ": ", e)
 HardcodedDungeons.set_tileset_properties(lst, ov10_us, ppmdu_us)
 assert lst == HardcodedDungeons.get_tileset_properties(ov10_us, ppmdu_us)
 assert lst == HardcodedDungeons.get_tileset_properties(ov10_eu, ppmdu_eu)
@@ -215,13 +221,15 @@ Dragon Maze,Rock Slide,Rock,Cringe
 Ghost Maze,Tri Attack,Normal,Paralysis"""
 
 dungeon_name_map = {}
-str_blk = ppmdu_us.string_index_data.string_blocks['Dungeon Names (Main)']
-string = FileType.STR.deserialize(rom_us.getFileByName('MESSAGE/text_e.str'))
-mappa = FileType.MAPPA_BIN.deserialize(rom_us.getFileByName('BALANCE/mappa_s.bin'))
+str_blk = ppmdu_us.string_index_data.string_blocks["Dungeon Names (Main)"]
+string = FileType.STR.deserialize(rom_us.getFileByName("MESSAGE/text_e.str"))
+mappa = FileType.MAPPA_BIN.deserialize(rom_us.getFileByName("BALANCE/mappa_s.bin"))
 dungeons = HardcodedDungeons.get_dungeon_list(arm9_us, ppmdu_us)
 for i, idx in enumerate(range(str_blk.begin, str_blk.end)):
     dungeon_name_map[string.strings[idx]] = i
-for dungeon_name, nature_power, camouflage, secret_power in csv.reader(info.splitlines()):
+for dungeon_name, nature_power, camouflage, secret_power in csv.reader(
+    info.splitlines()
+):
     try:
         dungeon_idx = dungeon_name_map[dungeon_name]
     except KeyError:
@@ -230,9 +238,17 @@ for dungeon_name, nature_power, camouflage, secret_power in csv.reader(info.spli
     if dungeon_idx > 179:
         continue
     dungeon = dungeons[dungeon_idx]
-    tileset_id = mappa.floor_lists[dungeon.mappa_index][dungeon.start_after].layout.tileset_id
+    tileset_id = mappa.floor_lists[dungeon.mappa_index][
+        dungeon.start_after
+    ].layout.tileset_id
     entry = lst[tileset_id]
-    assert entry.camouflage_type.print_name == camouflage, f"{dungeon_name}, {tileset_id}: Camouflage ({entry.camouflage_type}) must be {camouflage}"
+    assert (
+        entry.camouflage_type.print_name == camouflage
+    ), f"{dungeon_name}, {tileset_id}: Camouflage ({entry.camouflage_type}) must be {camouflage}"
     if tileset_id != 133:
-        assert entry.secret_power_effect.print_name == secret_power, f"{dungeon_name}, {tileset_id}: Secret Power ({entry.secret_power_effect}) must be {secret_power}"
-    assert entry.nature_power_move_entry.print_name == nature_power, f"{dungeon_name}, {tileset_id}: Nature Power ({entry.nature_power_move_entry}) must be {nature_power}"
+        assert (
+            entry.secret_power_effect.print_name == secret_power
+        ), f"{dungeon_name}, {tileset_id}: Secret Power ({entry.secret_power_effect}) must be {secret_power}"
+    assert (
+        entry.nature_power_move_entry.print_name == nature_power
+    ), f"{dungeon_name}, {tileset_id}: Nature Power ({entry.nature_power_move_entry}) must be {nature_power}"

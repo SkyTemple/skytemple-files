@@ -21,10 +21,12 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
-                                                      GAME_REGION_US,
-                                                      GAME_VERSION_EOS,
-                                                      Pmd2Data)
+from skytemple_files.common.ppmdu_config.data import (
+    GAME_REGION_EU,
+    GAME_REGION_US,
+    GAME_VERSION_EOS,
+    Pmd2Data,
+)
 from skytemple_files.common.util import *
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
@@ -35,22 +37,23 @@ OFFSET_US = 0x4EBC8
 
 
 class EditExtraPokemonPatchHandler(AbstractPatchHandler):
-
     @property
     def name(self) -> str:
-        return 'EditExtraPokemon'
+        return "EditExtraPokemon"
 
     @property
     def description(self) -> str:
-        return _("Changes the way the game determines when to add additional pokémon to the team so it can be edited more easily")
+        return _(
+            "Changes the way the game determines when to add additional pokémon to the team so it can be edited more easily"
+        )
 
     @property
     def author(self) -> str:
-        return 'End45'
+        return "End45"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     @property
     def category(self) -> PatchCategory:
@@ -64,9 +67,13 @@ class EditExtraPokemonPatchHandler(AbstractPatchHandler):
                 return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         # Apply the patch
         apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
         raise NotImplementedError()

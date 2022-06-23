@@ -24,40 +24,47 @@ from abc import ABC, abstractmethod
 from tempfile import TemporaryFile
 from typing import Any, Generic, Mapping, Optional, Protocol, Type, TypeVar
 
-from skytemple_files.common.util import (OptionalKwargs,
-                                         get_files_from_rom_with_extension,
-                                         get_ppmdu_config_for_rom)
+from skytemple_files.common.util import (
+    OptionalKwargs,
+    get_files_from_rom_with_extension,
+    get_ppmdu_config_for_rom,
+)
 from skytemple_files.test.image import ImageTestCaseAbc
 
-U = TypeVar('U')
+U = TypeVar("U")
 
 
 class BoundDataHandler(Protocol[U]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> U: ...
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> U:
+        ...
 
     @classmethod
-    def serialize(cls, data: U, **kwargs: OptionalKwargs) -> bytes: ...
+    def serialize(cls, data: U, **kwargs: OptionalKwargs) -> bytes:
+        ...
 
 
-T = TypeVar('T', bound=BoundDataHandler)  # type: ignore
+T = TypeVar("T", bound=BoundDataHandler)  # type: ignore
 
 
 class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
     @classmethod
     @property
     @abstractmethod
-    def handler(cls) -> Type[T]: pass  # type: ignore
+    def handler(cls) -> Type[T]:
+        pass  # type: ignore
 
     @classmethod
     def _load_main_fixture(cls, path: str, **kwargs: OptionalKwargs) -> U:  # type: ignore
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             return cls.handler.deserialize(f.read(), **kwargs)  # type: ignore
 
     @classmethod
     def _save_and_reload_main_fixture(  # type: ignore
-            cls, model: U, ser_kwargs: Optional[Mapping[str, Any]] = None,
-            deser_kwargs: Optional[Mapping[str, Any]] = None
+        cls,
+        model: U,
+        ser_kwargs: Optional[Mapping[str, Any]] = None,
+        deser_kwargs: Optional[Mapping[str, Any]] = None,
     ) -> U:
         if deser_kwargs is None:
             deser_kwargs = {}
@@ -66,11 +73,11 @@ class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
 
     @classmethod
     def _save_and_reload_main_fixture_raw(  # type: ignore
-            cls, model: U, ser_kwargs: Optional[Mapping[str, Any]] = None
+        cls, model: U, ser_kwargs: Optional[Mapping[str, Any]] = None
     ) -> bytes:
         if ser_kwargs is None:
             ser_kwargs = {}
-        with TemporaryFile(mode='rb+') as f:
+        with TemporaryFile(mode="rb+") as f:
             f.write(cls.handler.serialize(model, **ser_kwargs))  # type: ignore
             f.seek(0)
             return f.read()  # type: ignore
@@ -80,7 +87,11 @@ class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
 def fixpath(func):
     @functools.wraps(func)
     def ffunc(cls, *args, **kwargs):
-        return os.path.join(os.path.dirname(sys.modules[cls.__module__].__file__), *func(cls, *args, **kwargs))
+        return os.path.join(
+            os.path.dirname(sys.modules[cls.__module__].__file__),
+            *func(cls, *args, **kwargs),
+        )
+
     return ffunc
 
 
@@ -91,6 +102,7 @@ def romtest(*, file_ext, path):
     The env var SKYTEMPLE_TEST_ROM must contain the path to the ROM otherwise the test is skipped.
     Tests are marked with the pytest mark "romtest".
     """
+
     def _outer_wrapper(wrapped_function):
         import inspect
         from unittest import SkipTest
@@ -98,16 +110,27 @@ def romtest(*, file_ext, path):
         import pytest
         from ndspy.rom import NintendoDSRom
         from parameterized import parameterized
+
         rom = None
-        if 'SKYTEMPLE_TEST_ROM' in os.environ and os.environ['SKYTEMPLE_TEST_ROM'] != '':
-            rom = NintendoDSRom.fromFile(os.environ['SKYTEMPLE_TEST_ROM'])
+        if (
+            "SKYTEMPLE_TEST_ROM" in os.environ
+            and os.environ["SKYTEMPLE_TEST_ROM"] != ""
+        ):
+            rom = NintendoDSRom.fromFile(os.environ["SKYTEMPLE_TEST_ROM"])
 
         if rom:
+
             def dataset_name_func(testcase_func, _, param):
-                return f'{testcase_func.__name__}/{param.args[0]}'
-            files = [(x, rom.getFileByName(x)) for x in get_files_from_rom_with_extension(rom, file_ext) if x.startswith(path)]
+                return f"{testcase_func.__name__}/{param.args[0]}"
+
+            files = [
+                (x, rom.getFileByName(x))
+                for x in get_files_from_rom_with_extension(rom, file_ext)
+                if x.startswith(path)
+            ]
 
             if len(files) < 1:
+
                 def no_files(*args, **kwargs):
                     raise SkipTest("No matching files were found in the ROM.")
 
@@ -119,23 +142,28 @@ def romtest(*, file_ext, path):
 
                     def pmd2datawrapper(*args, **kwargs):
                         return wrapped_function(*args, **kwargs, pmd2_data=pmd2_data)
+
                     pmd2datawrapper.__name__ = wrapped_function.__name__
 
-                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(pmd2datawrapper))
+                    parameterized.expand(files, name_func=dataset_name_func)(
+                        pytest.mark.romtest(pmd2datawrapper)
+                    )
                 else:
-                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
+                    parameterized.expand(files, name_func=dataset_name_func)(
+                        pytest.mark.romtest(wrapped_function)
+                    )
                 # since expands now adds the tests to our locals, we need to pass them back...
                 # this isn't hacky at all wdym??????ßßß
                 frame_locals = inspect.currentframe().f_back.f_locals  # type: ignore
                 for local_name, local in inspect.currentframe().f_locals.items():  # type: ignore
-                    if local_name.startswith('test_'):
+                    if local_name.startswith("test_"):
                         frame_locals[local_name] = local
 
         else:
+
             def no_tests(*args, **kwargs):
                 raise SkipTest("No ROM file provided or ROM not found.")
 
             return pytest.mark.romtest(no_tests)
+
     return _outer_wrapper
-
-

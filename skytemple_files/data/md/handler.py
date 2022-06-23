@@ -33,7 +33,7 @@ class MdHandler(DataHandler[Md]):
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
         """Check if the given data stream has the magic string for MD files."""
-        return read_bytes(data, byte_offset, 4) == b'MD\0\0'
+        return read_bytes(data, byte_offset, 4) == b"MD\0\0"
 
     @classmethod
     def serialize(cls, data: Md, **kwargs: OptionalKwargs) -> bytes:

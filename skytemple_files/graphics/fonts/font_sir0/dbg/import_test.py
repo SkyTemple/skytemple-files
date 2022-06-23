@@ -25,22 +25,22 @@ from PIL import Image
 
 from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
+out_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
 os.makedirs(out_dir, exist_ok=True)
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
 for fn in ["FONT/kanji.dat", "FONT/kanji_b.dat", "FONT/unknown.dat"]:
     font_ref = rom.getFileByName(fn)
     font = FontSir0Handler.deserialize(font_ref)
     tree = ElementTree()
-    xml = tree.parse(os.path.join(out_dir, fn.replace('/', '_') + f'.xml'))
+    xml = tree.parse(os.path.join(out_dir, fn.replace("/", "_") + f".xml"))
     tables = dict()
     for i in range(256):
-        path = os.path.join(out_dir, fn.replace('/', '_') + f'.{i}.png')
+        path = os.path.join(out_dir, fn.replace("/", "_") + f".{i}.png")
         if os.path.exists(path):
-            tables[i] = Image.open(path, 'r')
-            
+            tables[i] = Image.open(path, "r")
+
     font.import_from_xml(xml, tables)
-    assert FontSir0Handler.serialize(font)==font_ref
+    assert FontSir0Handler.serialize(font) == font_ref

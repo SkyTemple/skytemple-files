@@ -31,9 +31,14 @@ class LevelEntry(AutoString, CheckedIntWrites):
     null: u16
 
     def __init__(
-            self, experience_required: i32, hp_growth: u16,
-            attack_growth: u8, special_attack_growth: u8,
-            defense_growth: u8, special_defense_growth: u8, null: u16
+        self,
+        experience_required: i32,
+        hp_growth: u16,
+        attack_growth: u8,
+        special_attack_growth: u8,
+        defense_growth: u8,
+        special_defense_growth: u8,
+        null: u16,
     ):
         self.experience_required = experience_required
         self.hp_growth = hp_growth
@@ -53,15 +58,17 @@ class LevelBinEntry(AutoString):
         self.levels = []
 
         for chunk in chunks(data, LEVEL_BIN_ENTRY_LEVEL_LEN):
-            self.levels.append(LevelEntry(
-                read_i32(chunk, 0),
-                read_u16(chunk, 4),
-                read_u8(chunk, 6),
-                read_u8(chunk, 7),
-                read_u8(chunk, 8),
-                read_u8(chunk, 9),
-                read_u16(chunk, 10)
-            ))
+            self.levels.append(
+                LevelEntry(
+                    read_i32(chunk, 0),
+                    read_u16(chunk, 4),
+                    read_u8(chunk, 6),
+                    read_u8(chunk, 7),
+                    read_u8(chunk, 8),
+                    read_u8(chunk, 9),
+                    read_u16(chunk, 10),
+                )
+            )
 
     def __len__(self):
         return len(self.levels)

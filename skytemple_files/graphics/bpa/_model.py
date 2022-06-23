@@ -25,8 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
-from skytemple_files.graphics.bpa.protocol import (BpaFrameInfoProtocol,
-                                                   BpaProtocol)
+from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
@@ -58,15 +57,25 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
 
         # Read image header
         for i in range(0, self.number_of_frames):
-            self.frame_info.append(BpaFrameInfo(
-                read_u16(data, 4 + i*4),
-                read_u16(data, 4 + i*4 + 2),
-            ))
+            self.frame_info.append(
+                BpaFrameInfo(
+                    read_u16(data, 4 + i * 4),
+                    read_u16(data, 4 + i * 4 + 2),
+                )
+            )
         end_header = 4 + self.number_of_frames * 4
 
         self.tiles = []
         slice_size = int(BPA_TILE_DIM * BPA_TILE_DIM / 2)
-        for i, tile in enumerate(iter_bytes(data, slice_size, end_header, end_header + (slice_size * self.number_of_frames * self.number_of_tiles))):
+        for i, tile in enumerate(
+            iter_bytes(
+                data,
+                slice_size,
+                end_header,
+                end_header
+                + (slice_size * self.number_of_frames * self.number_of_tiles),
+            )
+        ):
             self.tiles.append(bytearray(tile))
 
     @classmethod
@@ -74,8 +83,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         return cls(None)
 
     def __str__(self) -> str:
-        return f"Idx: {self.number_of_tiles}, " \
-               f"#c: {self.number_of_frames}"
+        return f"Idx: {self.number_of_tiles}, " f"#c: {self.number_of_frames}"
 
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
@@ -95,13 +103,15 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         # to each other. So the second frame of the first tile is at self.number_of_images + 1.
         for tile_idx in range(0, self.number_of_tiles):
             for frame_idx in range(0, self.number_of_frames):
-                dummy_tile_map.append(TilemapEntry(
-                    idx=frame_idx * self.number_of_tiles + tile_idx,
-                    pal_idx=0,
-                    flip_x=False,
-                    flip_y=False,
-                    ignore_too_large=True
-                ))
+                dummy_tile_map.append(
+                    TilemapEntry(
+                        idx=frame_idx * self.number_of_tiles + tile_idx,
+                        pal_idx=0,
+                        flip_x=False,
+                        flip_y=False,
+                        ignore_too_large=True,
+                    )
+                )
         width = width_in_tiles * BPA_TILE_DIM
         height = math.ceil(etr / width_in_tiles) * BPA_TILE_DIM
 
@@ -109,7 +119,9 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
             dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
         )
 
-    def tiles_to_pil_separate(self, palette: Sequence[int], width_in_tiles: int = 20) -> List[Image.Image]:
+    def tiles_to_pil_separate(
+        self, palette: Sequence[int], width_in_tiles: int = 20
+    ) -> List[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -118,21 +130,32 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
 
         # create a dummy tile map containing all the tiles
         for tile_idx in range(0, self.number_of_tiles * self.number_of_frames):
-            dummy_tile_map.append(TilemapEntry(
-                idx=tile_idx,
-                pal_idx=0,
-                flip_x=False,
-                flip_y=False,
-                ignore_too_large=True
-            ))
+            dummy_tile_map.append(
+                TilemapEntry(
+                    idx=tile_idx,
+                    pal_idx=0,
+                    flip_x=False,
+                    flip_y=False,
+                    ignore_too_large=True,
+                )
+            )
         width = width_in_tiles * BPA_TILE_DIM
         height = math.ceil(self.number_of_tiles / width_in_tiles) * BPA_TILE_DIM
 
         images = []
-        for frame_start in range(0, self.number_of_tiles * self.number_of_frames, self.number_of_tiles):
-            images.append(to_pil(
-                dummy_tile_map[frame_start:frame_start+self.number_of_tiles], self.tiles, [palette], BPA_TILE_DIM, width, height
-            ))
+        for frame_start in range(
+            0, self.number_of_tiles * self.number_of_frames, self.number_of_tiles
+        ):
+            images.append(
+                to_pil(
+                    dummy_tile_map[frame_start : frame_start + self.number_of_tiles],
+                    self.tiles,
+                    [palette],
+                    BPA_TILE_DIM,
+                    width,
+                    height,
+                )
+            )
         return images
 
     def pil_to_tiles(self, image: Image.Image) -> None:
@@ -142,8 +165,13 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         each rows of tiles is one image set and each column is one frame.
         """
         tiles, _, __ = from_pil(
-            image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPA_TILE_DIM,
-            image.width, image.height, optimize=False
+            image,
+            BPL_IMG_PAL_LEN,
+            BPL_MAX_PAL,
+            BPA_TILE_DIM,
+            image.width,
+            image.height,
+            optimize=False,
         )
         self.tiles = []
         self.number_of_frames = u16_checked(int(image.width / BPA_TILE_DIM))
@@ -160,17 +188,26 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         frames = []
         first_image_dims = None
         for image in images:
-            frames.append(from_pil(
-                image, BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPA_TILE_DIM,
-                image.width, image.height, optimize=False
-            )[0])
+            frames.append(
+                from_pil(
+                    image,
+                    BPL_IMG_PAL_LEN,
+                    BPL_MAX_PAL,
+                    BPA_TILE_DIM,
+                    image.width,
+                    image.height,
+                    optimize=False,
+                )[0]
+            )
             if first_image_dims is None:
                 first_image_dims = (image.width, image.height)
             if (image.width, image.height) != first_image_dims:
                 raise ValueError(_("The dimensions of all images must be the same."))
         self.tiles = []
         self.number_of_frames = u16_checked(len(frames))
-        self.number_of_tiles = u16_checked(int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM)))
+        self.number_of_tiles = u16_checked(
+            int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM))
+        )
 
         for tile in frames:
             self.tiles += tile
@@ -181,16 +218,18 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
         # Correct frame info size
         len_finfo = len(self.frame_info)
         if len_finfo > self.number_of_frames:
-            self.frame_info = self.frame_info[:self.number_of_frames]
+            self.frame_info = self.frame_info[: self.number_of_frames]
         elif len_finfo < self.number_of_frames:
             for i in range(len_finfo, self.number_of_frames):
                 # If the length is shorter, we just copy the last entry
                 if len(self.frame_info) > 0:
-                    self.frame_info.append(self.frame_info[len_finfo-1])
+                    self.frame_info.append(self.frame_info[len_finfo - 1])
                 else:
                     # ... or we default to 10.
                     self.frame_info.append(BpaFrameInfo(u16(10), u16(0)))
 
     def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
-        return self.tiles[frame * self.number_of_tiles:(frame + 1) * self.number_of_tiles]
+        return self.tiles[
+            frame * self.number_of_tiles : (frame + 1) * self.number_of_tiles
+        ]

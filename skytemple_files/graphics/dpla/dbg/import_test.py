@@ -23,25 +23,24 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_dpla import \
-    DbinSir0DplaHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_dpla import DbinSir0DplaHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us.nds"))
 
-dungeon_bin_bin = rom.getFileByName('DUNGEON/dungeon.bin')
+dungeon_bin_bin = rom.getFileByName("DUNGEON/dungeon.bin")
 static_data = get_ppmdu_config_for_rom(rom)
 dungeon_bin = DungeonBinHandler.deserialize(dungeon_bin_bin, static_data)
 
 for i, m in enumerate(dungeon_bin):
-    if dungeon_bin.get_filename(i).endswith('.dpla'):
+    if dungeon_bin.get_filename(i).endswith(".dpla"):
         before = dungeon_bin.get_files_bytes()[i]
         after = DbinSir0DplaHandler.serialize(m)
         print(i)
-        with open('/tmp/before.bin', 'wb') as f:
+        with open("/tmp/before.bin", "wb") as f:
             f.write(before)
-        with open('/tmp/after.bin', 'wb') as f:
+        with open("/tmp/after.bin", "wb") as f:
             f.write(after)
         if i == 81:
             continue  # this one is a bit weird for some reason, but should be ok.

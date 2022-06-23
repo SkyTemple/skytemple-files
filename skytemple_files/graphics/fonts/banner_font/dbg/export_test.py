@@ -24,24 +24,25 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.common.xml_util import prettify
-from skytemple_files.graphics.fonts.banner_font.handler import \
-    BannerFontHandler
+from skytemple_files.graphics.fonts.banner_font.handler import BannerFontHandler
 
-#base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
-out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
+# base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+out_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
 os.makedirs(out_dir, exist_ok=True)
 
-#rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
-rom = NintendoDSRom.fromFile("/media/disk/Documents/Common/Games/Nintendo DS/Hack/Pokemon Mystery Dungeon - Explorers of Sky (4273) (US).nds")
-#rom = NintendoDSRom.fromFile("/media/disk/Documents/Common/Games/Nintendo DS/3656 - Pokemon Fushigi no Dungeon - Sora no Tankentai (Japan).nds")
+# rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us.nds'))
+rom = NintendoDSRom.fromFile(
+    "/media/disk/Documents/Common/Games/Nintendo DS/Hack/Pokemon Mystery Dungeon - Explorers of Sky (4273) (US).nds"
+)
+# rom = NintendoDSRom.fromFile("/media/disk/Documents/Common/Games/Nintendo DS/3656 - Pokemon Fushigi no Dungeon - Sora no Tankentai (Japan).nds")
 config = get_ppmdu_config_for_rom(rom)
 
 for fn in ["FONT/banner.bin", "FONT/banner_c.bin", "FONT/banner_s.bin"]:
     font = BannerFontHandler.deserialize(rom.getFileByName(fn))
     xml, tables = font.export_to_xml()
-    with open(os.path.join(out_dir, fn.replace('/', '_') + f'.xml'), 'w') as f:
+    with open(os.path.join(out_dir, fn.replace("/", "_") + f".xml"), "w") as f:
         f.write(prettify(xml))
     for i, table in tables.items():
-        table.save(os.path.join(out_dir, fn.replace('/', '_') + f'.{i}.png'))
+        table.save(os.path.join(out_dir, fn.replace("/", "_") + f".{i}.png"))
     font = BannerFontHandler.deserialize(BannerFontHandler.serialize(font))
     assert font == BannerFontHandler.deserialize(BannerFontHandler.serialize(font))

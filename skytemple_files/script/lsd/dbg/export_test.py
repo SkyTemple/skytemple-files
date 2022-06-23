@@ -25,15 +25,15 @@ from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
 from skytemple_files.common.util import get_rom_folder
 from skytemple_files.script.lsd.handler import LsdHandler
 
-base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy.nds'))
+rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
 
 script_info = load_script_files(get_rom_folder(rom, SCRIPT_DIR))
 
-for map_name, map in script_info['maps'].items():
-    if map['lsd'] is not None:
-        lsd_name = SCRIPT_DIR + '/' + map_name + '/' + map['lsd']
+for map_name, map in script_info["maps"].items():
+    if map["lsd"] is not None:
+        lsd_name = SCRIPT_DIR + "/" + map_name + "/" + map["lsd"]
 
         bin_before = rom.getFileByName(lsd_name)
         lsd = LsdHandler.deserialize(bin_before)

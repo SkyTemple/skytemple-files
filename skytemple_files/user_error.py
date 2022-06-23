@@ -10,7 +10,7 @@ from typing import Type, TypeVar
 
 USER_ERROR_MARK = "_skytemple__user_error"
 
-T = TypeVar('T', bound=BaseException)
+T = TypeVar("T", bound=BaseException)
 
 
 class UserValueError(ValueError):
@@ -32,9 +32,6 @@ def mark_as_user_err(exc: BaseException):
 
 def make_user_err(base_type: Type[T], *args, **kwargs) -> T:
     """Dynamically creates a new subclass of base_type which is marked as a user error and constructs it."""
-    cls = type(base_type.__name__ + "User", (base_type,), {
-        USER_ERROR_MARK: True
-    })
+    cls = type(base_type.__name__ + "User", (base_type,), {USER_ERROR_MARK: True})
 
     return cls(*args, **kwargs)
-

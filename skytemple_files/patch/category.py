@@ -22,8 +22,12 @@ from skytemple_files.common.i18n_util import _
 
 
 class PatchCategory(Enum):
-    IMPROVEMENT_TWEAK = auto(), _("Improvements and Tweaks")  # TRANSLATORS: Name for the category of ASM patch
-    NEW_MECHANIC = auto(), _("New Mechanics")  # TRANSLATORS: Name for the category of ASM patch
+    IMPROVEMENT_TWEAK = auto(), _(
+        "Improvements and Tweaks"
+    )  # TRANSLATORS: Name for the category of ASM patch
+    NEW_MECHANIC = auto(), _(
+        "New Mechanics"
+    )  # TRANSLATORS: Name for the category of ASM patch
     BUGFIXES = auto(), _("Bugfixes")  # TRANSLATORS: Name for the category of ASM patch
     UTILITY = auto(), _("Utility")  # TRANSLATORS: Name for the category of ASM patch
     OTHER = auto(), _("Others")
@@ -34,13 +38,11 @@ class PatchCategory(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-            self, _: str, name_localized: str
-    ):
+    def __init__(self, _: str, name_localized: str):
         self.name_localized = name_localized
 
     def __str__(self):
-        return f'PatchCategory.{self.name}'
+        return f"PatchCategory.{self.name}"
 
     def __repr__(self):
         return str(self)

@@ -22,19 +22,19 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.container.sir0.handler import Sir0Handler
 
-if __name__ == '__main__':
-    base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
+if __name__ == "__main__":
+    base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
 
-    rom = NintendoDSRom.fromFile(os.path.join(base_dir, 'skyworkcopy_us_patched.nds'))
+    rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy_us_patched.nds"))
 
-    bin_before = rom.getFileByName('BALANCE/actor_list.bin')
+    bin_before = rom.getFileByName("BALANCE/actor_list.bin")
     sir0_before = Sir0Handler.deserialize(bin_before)
     bin_after = Sir0Handler.serialize(sir0_before)
 
-    with open('/tmp/before.bin', 'wb') as f:
+    with open("/tmp/before.bin", "wb") as f:
         f.write(bin_before)
 
-    with open('/tmp/after.bin', 'wb') as f:
+    with open("/tmp/after.bin", "wb") as f:
         f.write(bin_after)
 
     assert bin_before == bin_after

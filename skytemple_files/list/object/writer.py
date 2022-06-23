@@ -37,10 +37,12 @@ class ObjectListBinWriter:
                 count = 0
                 for c in o.name:
                     if count >= 10:
-                        raise ValueError("Invalid string length (more than 10 characters)")
+                        raise ValueError(
+                            "Invalid string length (more than 10 characters)"
+                        )
                     if ord(c) >= 256:
                         raise ValueError("Invalid string (non-ASCII characters)")
                     obj_data[5 + count] = ord(c)
                     count += 1
             object_list.append(obj_data)
-        return b''.join(object_list)
+        return b"".join(object_list)

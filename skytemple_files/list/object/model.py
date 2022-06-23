@@ -39,13 +39,15 @@ class ObjectListBin(AutoString):
                 char += 1
             if obj_name == "":
                 obj_name = "NULL"
-            self.list.append(Pmd2ScriptObject(
-                id=u16_checked(i),
-                unk1=read_u16(data, offset + 0),
-                unk2=read_u16(data, offset + 2),
-                unk3=read_u8(data, offset + 4),
-                name=obj_name
-            ))
+            self.list.append(
+                Pmd2ScriptObject(
+                    id=u16_checked(i),
+                    unk1=read_u16(data, offset + 0),
+                    unk2=read_u16(data, offset + 2),
+                    unk3=read_u8(data, offset + 4),
+                    name=obj_name,
+                )
+            )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ObjectListBin):

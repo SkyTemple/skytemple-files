@@ -59,6 +59,12 @@ class KaoProtocol(Protocol[T]):
     def __init__(self, data: bytes):
         ...
 
+    @classmethod
+    @abstractmethod
+    def create_new(cls, number_entries: int):
+        """Creates a new empty KAO with the specified number of entries."""
+        ...
+
     @abstractmethod
     def n_entries(self) -> int:
         """Returns the number of entries."""

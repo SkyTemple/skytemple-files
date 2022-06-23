@@ -1,5 +1,5 @@
 # mypy: ignore-errors
-__version__ = '1.4.0'
+__version__ = '1.4.0a1'
 import os
 
 from setuptools import setup, find_packages
@@ -36,7 +36,7 @@ setup(
     install_requires=[
         'ndspy >= 3.0.0',
         'pyyaml >= 6.0.0',
-        'range-typed-integers >= 1.0.0',
+        'range-typed-integers >= 1.0.1',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
         'explorerscript >= 0.1.1',
@@ -46,6 +46,14 @@ setup(
         'dungeon-eos==0.0.5',
         'typing_extensions >= 3.9; python_version < "3.9"'
     ],
+    extras_require={
+        'spritecollab': [
+            "gql[aiohttp] >= 3.3.0",
+            "graphql-core >= 3.2.0",
+            "aiohttp[speedups] >= 3.8.0",
+            "lru-dict >= 1.1.0"
+        ]
+    },
     entry_points='''
         [console_scripts]
         skytemple_export_maps=skytemple_files.export_maps:main

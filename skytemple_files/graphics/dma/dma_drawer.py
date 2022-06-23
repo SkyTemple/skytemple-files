@@ -140,9 +140,9 @@ class DmaDrawer:
             mappings.append(active_row)
             for rx, rule_cell in enumerate(rule_row):
                 solid_neighbors = self.dma.get_tile_neighbors(
-                    water_matrix if rule_cell == DmaType.WATER else wall_matrix,
+                    water_matrix if rule_cell == DmaType.WATER else wall_matrix,  # type: ignore
                     rx,
-                    ry,  # type: ignore
+                    ry,
                     rule_cell != DmaType.FLOOR,
                     treat_outside_as_wall,
                 )

@@ -132,9 +132,9 @@ class Wan:
                 (
                     frame.final_relative_x,
                     frame.final_relative_y,
-                    frame.final_relative_x + frame.width,
-                    frame.final_relative_y + frame.height,
-                ),  # type: ignore
+                    frame.final_relative_x + frame.width,  # type: ignore
+                    frame.final_relative_y + frame.height,  # type: ignore
+                ),
                 frame.img,
             )
 

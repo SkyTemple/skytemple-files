@@ -564,12 +564,12 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
                 BPL_IMG_PAL_LEN,
                 BPL_MAX_PAL,
                 BPC_TILE_DIM,
-                img.width,
-                img.height,
+                img.width,  # type: ignore
+                img.height,  # type: ignore
                 3,
                 3,
                 force_import,
-                palette_offset=palette_offset,  # type: ignore
+                palette_offset=palette_offset,
             )
             bpc.import_tiles(bpc_layer_id, tiles)
 

@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # Operations are encoded in command bytes (CMD):
 # PHASE 1
 CMD_1_ZERO_OUT      = 0x80  # All values below

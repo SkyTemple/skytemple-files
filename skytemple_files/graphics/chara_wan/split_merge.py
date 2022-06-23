@@ -9,8 +9,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
-from skytemple_files.graphics.chara_wan.model import WanFile, MINUS_FRAME
+from skytemple_files.graphics.chara_wan.model import MINUS_FRAME, WanFile
 
 
 def MergeWan(wan_files):

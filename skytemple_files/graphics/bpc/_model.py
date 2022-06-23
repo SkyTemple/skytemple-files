@@ -15,15 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import math
 
 from range_typed_integers import u16_checked
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
-
 from skytemple_files.graphics.bpc import BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
 from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL

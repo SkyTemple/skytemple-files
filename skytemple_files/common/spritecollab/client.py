@@ -10,6 +10,8 @@ documentation at the server.
 
 Use `SpriteCollabClient` to get started.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -32,22 +34,26 @@ import tempfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from io import BytesIO
-from typing import Optional, cast, List, Dict, overload, Literal, Tuple, Iterable, Callable, Union, Coroutine, TypeVar, \
-    Any
+from typing import (Any, Callable, Coroutine, Dict, Iterable, List, Literal,
+                    Optional, Tuple, TypeVar, Union, cast, overload)
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from zipfile import ZipFile
 
-from PIL import Image
 from gql import Client
 from gql.client import AsyncClientSession
-from gql.dsl import DSLSchema, dsl_gql, DSLQuery, DSLFragment, DSLField
+from gql.dsl import DSLField, DSLFragment, DSLQuery, DSLSchema, dsl_gql
 from gql.transport import AsyncTransport
-from skytemple_files.common.ppmdu_config.data import Pmd2Sprite, Pmd2Index
+from PIL import Image
+
+from skytemple_files.common.ppmdu_config.data import Pmd2Index, Pmd2Sprite
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptFaceName
-from skytemple_files.common.spritecollab.requests import CachedRequestAdapter, AioRequestAdapter, AioRequestAdapterImpl
-from skytemple_files.common.spritecollab.schema import Config, Query, Phase, Credit, MonsterForm, Monster_Metadata, \
-    CopyOf, Sprite
+from skytemple_files.common.spritecollab.requests import (
+    AioRequestAdapter, AioRequestAdapterImpl, CachedRequestAdapter)
+from skytemple_files.common.spritecollab.schema import (Config, CopyOf, Credit,
+                                                        Monster_Metadata,
+                                                        MonsterForm, Phase,
+                                                        Query, Sprite)
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.graphics.chara_wan.handler import CharaWanHandler

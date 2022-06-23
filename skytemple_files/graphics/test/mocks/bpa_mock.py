@@ -14,14 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 import typing
-from typing import Sequence, List, Optional
+from typing import List, Optional, Sequence
 
 from PIL import Image
 
-from skytemple_files.graphics.bpa.protocol import BpaProtocol, BpaFrameInfoProtocol
-
+from skytemple_files.graphics.bpa.protocol import (BpaFrameInfoProtocol,
+                                                   BpaProtocol)
 
 thisdir = os.path.dirname(__file__)
 

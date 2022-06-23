@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from abc import ABC, abstractmethod
+from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from typing import Type, TypeVar
 
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
-from skytemple_files.common.util import read_bytes, OptionalKwargs
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
+from skytemple_files.common.util import OptionalKwargs, read_bytes
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 
 T = TypeVar('T', bound=CompressionContainerProtocol)
 

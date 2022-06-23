@@ -15,15 +15,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import itertools
 
-from PIL import Image
 from ndspy.rom import NintendoDSRom
+from PIL import Image
 from range_typed_integers import u16
 
 from skytemple_files.common.nds_hashing import nds_crc16
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
-from skytemple_files.common.util import read_u16, read_bytes, write_u16, chunks
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
+from skytemple_files.common.util import chunks, read_bytes, read_u16, write_u16
 
 
 def _utf16_encode_fixed(title: str) -> bytes:

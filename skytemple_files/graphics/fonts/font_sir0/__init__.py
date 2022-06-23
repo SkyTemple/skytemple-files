@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 FONT_SIR0_DATA_LEN = 72
 FONT_SIR0_ENTRY_LEN = 0xC
 FONT_SIR0_SIZE = 12

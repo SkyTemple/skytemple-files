@@ -14,15 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Type, TypeVar, Optional
+from __future__ import annotations
+
+from typing import List, Optional, Type, TypeVar
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes, OptionalKwargs
+from skytemple_files.common.util import OptionalKwargs, read_bytes
 from skytemple_files.container.sir0.model import Sir0
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.writer import Sir0Writer
-
 
 T = TypeVar('T', bound=Sir0Serializable)
 

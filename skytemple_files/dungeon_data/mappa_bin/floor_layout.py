@@ -14,19 +14,24 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from xml.etree.ElementTree import Element
+from __future__ import annotations
 
 import typing
+from xml.etree.ElementTree import Element
 
-from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked
+from range_typed_integers import (i8_checked, i16_checked, u8_checked,
+                                  u16_checked)
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
+from skytemple_files.common.xml_util import (XmlSerializable, XmlValidateError,
+                                             validate_xml_attribs,
+                                             validate_xml_tag)
 from skytemple_files.dungeon_data.mappa_bin import *
-from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import \
+        MappaBinReadContainer
 
 
 class MappaFloorStructureType(Enum):

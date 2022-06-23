@@ -15,14 +15,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 from typing import Type
 
 from parameterized import parameterized
 
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
-from skytemple_files.compression_container.test.util import load_dataset, dataset_name_func
-
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
+from skytemple_files.compression_container.test.util import (dataset_name_func,
+                                                             load_dataset)
 from skytemple_files.test.case import SkyTempleFilesTestCase
 
 

@@ -14,12 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
 
 from range_typed_integers import u16
 
 from skytemple_files.graphics.bpa.handler import BpaHandler
-from skytemple_files.graphics.bpa.protocol import BpaProtocol, BpaFrameInfoProtocol
+from skytemple_files.graphics.bpa.protocol import (BpaFrameInfoProtocol,
+                                                   BpaProtocol)
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 

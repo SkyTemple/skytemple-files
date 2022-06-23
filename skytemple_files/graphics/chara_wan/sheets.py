@@ -16,22 +16,27 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 
+from __future__ import annotations
+
+import glob
 import math
 import os
-import glob
+import xml.etree.ElementTree as ET
 from enum import Enum
+from tempfile import TemporaryDirectory
+from zipfile import ZipFile
 
 from PIL import Image
-import xml.etree.ElementTree as ET
-from zipfile import ZipFile
-from tempfile import TemporaryDirectory
 
-from skytemple_files.common.util import simple_quant
-from skytemple_files.common.xml_util import prettify
-from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, FrameOffset, AnimStat, ImgPiece, \
-    MetaFramePiece, MINUS_FRAME, DEBUG_PRINT, DIM_TABLE, TEX_SIZE
 import skytemple_files.graphics.chara_wan.utils as exUtils
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
+from skytemple_files.common.util import simple_quant
+from skytemple_files.common.xml_util import prettify
+from skytemple_files.graphics.chara_wan.model import (DEBUG_PRINT, DIM_TABLE,
+                                                      MINUS_FRAME, TEX_SIZE,
+                                                      AnimStat, FrameOffset,
+                                                      ImgPiece, MetaFramePiece,
+                                                      SequenceFrame, WanFile)
 from skytemple_files.user_error import UserValueError
 
 DRAW_CENTER_X = 0

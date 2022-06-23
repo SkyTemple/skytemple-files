@@ -14,9 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import abstractmethod
-from typing import Protocol
-from typing import runtime_checkable
+from typing import Protocol, runtime_checkable
 
 from range_typed_integers import u16
 

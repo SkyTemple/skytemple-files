@@ -14,15 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_US,
+                                                      GAME_VERSION_EOS,
+                                                      Pmd2Data)
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US
+from skytemple_files.common.util import _
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.util import _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x2B48
 PATCH_CHECK_INSTR_APPLIED_US = 0xEBF2611C

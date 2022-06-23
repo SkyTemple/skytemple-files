@@ -14,8 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Dict, TypeVar, Generic
+from __future__ import annotations
+
 import re
+from typing import Dict, Generic, TypeVar
 
 V = TypeVar('V')
 PASCAL_REGEX = re.compile(r'(?<!^)(?=[A-Z])')

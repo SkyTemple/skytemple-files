@@ -4,6 +4,8 @@ This module constructs Pmd2Binary lists from the pmdsky-debug repository.
 It is not as advanced as resymgen and does way less error checking. We assume
 pmdsky-debug has good data.  Check with resymgen if you are unsure.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -25,12 +27,13 @@ import re
 import warnings
 from dataclasses import dataclass, field
 from glob import glob
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 import yaml
 
 from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary, Pmd2BinarySymbol, Pmd2BinarySymbolType
+from skytemple_files.common.ppmdu_config.pmdsky_debug.data import (
+    Pmd2Binary, Pmd2BinarySymbol, Pmd2BinarySymbolType)
 from skytemple_files.common.util import get_resources_dir, open_utf8
 
 SYMBOLS_DIR = os.path.join(get_resources_dir(), 'pmdsky-debug', 'symbols')

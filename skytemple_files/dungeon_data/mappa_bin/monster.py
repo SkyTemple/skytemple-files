@@ -14,19 +14,24 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
+import typing
 from typing import TYPE_CHECKING, List
 from xml.etree.ElementTree import Element
 
-import typing
+from range_typed_integers import u8, u8_checked, u16, u16_checked
 
-from range_typed_integers import u16, u8, u8_checked, u16_checked
-
-from skytemple_files.common.util import AutoString, read_u16, CheckedIntWrites, write_u16
-from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, validate_xml_attribs
+from skytemple_files.common.util import (AutoString, CheckedIntWrites,
+                                         read_u16, write_u16)
+from skytemple_files.common.xml_util import (XmlSerializable,
+                                             validate_xml_attribs,
+                                             validate_xml_tag)
 from skytemple_files.dungeon_data.mappa_bin import *
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import \
+        MappaBinReadContainer
 DUMMY_MD_INDEX = 0x229
 LEVEL_MULTIPLIER = 512
 

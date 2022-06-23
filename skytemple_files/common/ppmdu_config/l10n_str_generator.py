@@ -15,7 +15,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, Pmd2Data
+from __future__ import annotations
+
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                      GAME_REGION_US,
+                                                      GAME_VERSION_EOS,
+                                                      Pmd2Data)
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 
 

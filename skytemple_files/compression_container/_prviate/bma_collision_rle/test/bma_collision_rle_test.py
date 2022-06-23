@@ -15,15 +15,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 from typing import Type
 
 from parameterized import parameterized
 
 from skytemple_files.common.impl_cfg import env_use_native
-from skytemple_files.compression_container._prviate.bma_collision_rle.handler import BmaCollisionRleHandler
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container._prviate.bma_collision_rle.handler import \
+    BmaCollisionRleHandler
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 from skytemple_files.compression_container.test.util import dataset_name_func
-
 from skytemple_files.test.case import SkyTempleFilesTestCase
 
 

@@ -15,13 +15,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Generator, Tuple, Optional, Callable, List
+from __future__ import annotations
+
+from typing import Callable, Generator, List, Optional, Tuple
 
 from PIL import Image
 
-from skytemple_files.graphics.kao import SUBENTRIES, KAO_IMG_METAPIXELS_DIM, KAO_IMG_IMG_DIM
-from skytemple_files.common.i18n_util import f, _
-from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.graphics.kao import (KAO_IMG_IMG_DIM,
+                                          KAO_IMG_METAPIXELS_DIM, SUBENTRIES)
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 from skytemple_files.user_error import UserValueError
 
 PORTRAIT_SIZE = KAO_IMG_IMG_DIM * KAO_IMG_METAPIXELS_DIM

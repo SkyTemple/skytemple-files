@@ -15,8 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.compression.bpc_tilemap.compressor import BpcTilemapCompressor
-from skytemple_files.compression.bpc_tilemap.decompressor import BpcTilemapDecompressor
+from __future__ import annotations
+
+from skytemple_files.compression.bpc_tilemap.compressor import \
+    BpcTilemapCompressor
+from skytemple_files.compression.bpc_tilemap.decompressor import \
+    BpcTilemapDecompressor
 
 
 class BpcTilemapHandler:

@@ -14,10 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import *
-from skytemple_files.script.ssa_sse_sss import LEN_LAYER_ENTRY, TRIGGER_ENTRY_LEN, ACTOR_ENTRY_LEN, OBJECT_ENTRY_LEN, \
-    PERFORMERS_ENTRY_LEN, EVENTS_ENTRY_LEN, POS_MARKER_ENTRY_LEN, UNK10_ENTRY_LEN
+from skytemple_files.script.ssa_sse_sss import (ACTOR_ENTRY_LEN,
+                                                EVENTS_ENTRY_LEN,
+                                                LEN_LAYER_ENTRY,
+                                                OBJECT_ENTRY_LEN,
+                                                PERFORMERS_ENTRY_LEN,
+                                                POS_MARKER_ENTRY_LEN,
+                                                TRIGGER_ENTRY_LEN,
+                                                UNK10_ENTRY_LEN)
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.event import SsaEvent
 from skytemple_files.script.ssa_sse_sss.header import SsaHeader
@@ -25,7 +33,8 @@ from skytemple_files.script.ssa_sse_sss.layer import SsaLayer
 from skytemple_files.script.ssa_sse_sss.object import SsaObject
 from skytemple_files.script.ssa_sse_sss.performer import SsaPerformer
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
-from skytemple_files.script.ssa_sse_sss.position_marker import SsaPositionMarker
+from skytemple_files.script.ssa_sse_sss.position_marker import \
+    SsaPositionMarker
 from skytemple_files.script.ssa_sse_sss.trigger import SsaTrigger
 from skytemple_files.script.ssa_sse_sss.unk10 import SsaUnk10
 

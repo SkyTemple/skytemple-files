@@ -15,13 +15,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # Creates BitStreams from KAO models.
 # file is 16-bytes aligned!
 from sys import maxsize
 
 from skytemple_files.common.util import *
+from skytemple_files.graphics.kao import (KAO_FILE_BYTE_ALIGNMENT,
+                                          KAO_IMG_PAL_B_SIZE, SUBENTRIES,
+                                          SUBENTRY_LEN)
 from skytemple_files.graphics.kao._model import Kao
-from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_FILE_BYTE_ALIGNMENT
 
 DEBUG = False
 

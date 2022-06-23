@@ -16,8 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from skytemple_files.compression.rle_nibble.compressor import RleNibbleCompressor
-from skytemple_files.compression.rle_nibble.decompressor import RleNibbleDecompressor
+from __future__ import annotations
+
+from skytemple_files.compression.rle_nibble.compressor import \
+    RleNibbleCompressor
+from skytemple_files.compression.rle_nibble.decompressor import \
+    RleNibbleDecompressor
 
 
 class RleNibbleHandler:

@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.list.object.model import ObjectListBin
 from skytemple_files.list.object.writer import ObjectListBinWriter

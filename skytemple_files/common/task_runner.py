@@ -2,6 +2,8 @@
 Utility class for multi threaded/asynchronous tasks:
 Manages asyncio event loop in a separate loop handler thread.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -18,7 +20,6 @@ Manages asyncio event loop in a separate loop handler thread.
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
 import asyncio
 import logging
 from threading import Thread

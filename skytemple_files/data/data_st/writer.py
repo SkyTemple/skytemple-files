@@ -16,7 +16,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from range_typed_integers import u32_checked, i16_checked
+from __future__ import annotations
+
+from range_typed_integers import i16_checked, u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.data.data_st.model import DataST

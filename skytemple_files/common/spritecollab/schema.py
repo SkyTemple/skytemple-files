@@ -3,6 +3,8 @@ Types of the GraphQL schema represented as python types.
 
 Types with expensive fields are split-off into partial types..
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -19,7 +21,7 @@ Types with expensive fields are split-off into partial types..
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import TypedDict, Optional, Union, Literal, List
+from typing import List, Literal, Optional, TypedDict, Union
 
 
 # noinspection PyPep8Naming

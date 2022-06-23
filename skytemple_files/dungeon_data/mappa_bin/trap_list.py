@@ -14,21 +14,27 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from enum import Enum
-from typing import TYPE_CHECKING, List, Dict, Union
-from xml.etree.ElementTree import Element
+from __future__ import annotations
 
 import typing
+from enum import Enum
+from typing import TYPE_CHECKING, Dict, List, Union
+from xml.etree.ElementTree import Element
 
 from range_typed_integers import u16, u16_checked
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import AutoString, read_u16, write_u16
-from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
-from skytemple_files.dungeon_data.mappa_bin import XML_TRAP_LIST, XML_TRAP, XML_TRAP__NAME, XML_TRAP__WEIGHT
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.xml_util import (XmlSerializable, XmlValidateError,
+                                             validate_xml_attribs,
+                                             validate_xml_tag)
+from skytemple_files.dungeon_data.mappa_bin import (XML_TRAP, XML_TRAP__NAME,
+                                                    XML_TRAP__WEIGHT,
+                                                    XML_TRAP_LIST)
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import \
+        MappaBinReadContainer
 
 
 class MappaTrapType(Enum):

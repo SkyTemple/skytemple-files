@@ -14,16 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Optional, Dict, Any, AsyncGenerator, Union
+from typing import Any, AsyncGenerator, Dict, Optional, Union
 
 import aiohttp
-from PIL import Image
 from gql.transport import AsyncTransport
 from gql.transport.aiohttp import AIOHTTPTransport
 from graphql import DocumentNode, ExecutionResult, GraphQLSchema
 from lru import LRU
+from PIL import Image
 
 
 class AioRequestAdapter(ABC):

@@ -14,12 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type, TYPE_CHECKING
+from __future__ import annotations
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from typing import TYPE_CHECKING, Type
+
+from skytemple_files.common.impl_cfg import (ImplementationType,
+                                             get_implementation_type)
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpa.protocol import BpaProtocol, BpaFrameInfoProtocol
+from skytemple_files.graphics.bpa.protocol import (BpaFrameInfoProtocol,
+                                                   BpaProtocol)
 
 if TYPE_CHECKING:
     pass
@@ -33,7 +38,8 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BpaProtocol]:
-        from skytemple_rust.st_bpa import Bpa  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpa import \
+            Bpa  # pylint: disable=no-name-in-module,no-member,import-error
         return Bpa
 
     @classmethod
@@ -43,13 +49,16 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpa']]:  # type: ignore
-        from skytemple_rust.st_bpa import BpaWriter  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpa import \
+            BpaWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BpaWriter
 
     @classmethod
     def get_frame_info_model_cls(cls) -> Type[BpaFrameInfoProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bpa import BpaFrameInfo as BpaFrameInfoNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_bpa import \
+                BpaFrameInfo as \
+                BpaFrameInfoNative  # pylint: disable=no-name-in-module,no-member,import-error
             return BpaFrameInfoNative
         from skytemple_files.graphics.bpa._model import BpaFrameInfo
         return BpaFrameInfo

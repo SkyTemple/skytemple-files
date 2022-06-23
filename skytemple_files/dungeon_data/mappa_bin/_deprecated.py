@@ -15,10 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import logging
 import warnings
 from enum import Enum
-from typing import Optional, List
+from typing import List, Optional
 
 from skytemple_files.common.i18n_util import _
 

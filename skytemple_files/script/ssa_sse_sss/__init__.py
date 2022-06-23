@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 LEN_LAYER_ENTRY = 20
 ACTOR_ENTRY_LEN = 16
 OBJECT_ENTRY_LEN = 20

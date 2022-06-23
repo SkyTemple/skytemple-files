@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from itertools import islice
 from typing import Optional
 
 from range_typed_integers import u8_checked, u32_checked
 
-from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
+from skytemple_files.common.util import *
+
 DPLA_COLORS_PER_PALETTE = 16
 
 

@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import logging
 import os
 import shutil
@@ -24,10 +26,13 @@ from typing import Dict, Union
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2SimplePatch
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
-from skytemple_files.common.util import get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu, open_utf8, get_resources_dir, set_rw_permission_folder
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
+                                         get_resources_dir, open_utf8,
+                                         set_binary_in_rom_ppmdu,
+                                         set_rw_permission_folder)
 from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = '__main.asm'

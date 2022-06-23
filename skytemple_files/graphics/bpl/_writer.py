@@ -16,9 +16,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bpl import (BPL_COL_INDEX_ENTRY_LEN,
+                                          BPL_FOURTH_COLOR, BPL_PAL_ENTRY_LEN,
+                                          BPL_PAL_SIZE)
 from skytemple_files.graphics.bpl._model import Bpl
-from skytemple_files.graphics.bpl import BPL_PAL_ENTRY_LEN, BPL_PAL_SIZE, BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
 
 
 class BplWriter:

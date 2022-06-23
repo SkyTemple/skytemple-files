@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 HEADER_SIZE = 0x14
 TRAP_DATA_SIZE = 0x2
 ITEM_DATA_SIZE = 0x4

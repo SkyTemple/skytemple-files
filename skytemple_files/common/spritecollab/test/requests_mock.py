@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 import zipfile
 from io import BytesIO
@@ -22,6 +24,7 @@ from typing import Optional
 from graphql import GraphQLSchema
 
 from skytemple_files.common.spritecollab.requests import AioRequestAdapter
+
 FIXTURES_DIR = os.path.join(os.path.dirname(__file__), 'fixtures')
 
 # A list of tuples of URLs for this mock and files on disks containing the content, for testing.
@@ -93,5 +96,6 @@ class AioRequestAdapterMock(AioRequestAdapter):
         return r
 
     def graphql_transport(self, url: str) -> GraphQLSchema:
-        from skytemple_files.common.spritecollab.test.schema_mock import SprieCollabLocalSchema
+        from skytemple_files.common.spritecollab.test.schema_mock import \
+            SprieCollabLocalSchema
         return SprieCollabLocalSchema

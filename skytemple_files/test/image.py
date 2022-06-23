@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import os
 import unittest
 from abc import ABC
 from tempfile import mkstemp
-from typing import Union, Optional, Callable, Sequence
+from typing import Callable, Optional, Sequence, Union
 
-from PIL import Image, ImageDraw, ImageChops
+from PIL import Image, ImageChops, ImageDraw
 
 
 class ImageTestCaseAbc(unittest.TestCase, ABC):

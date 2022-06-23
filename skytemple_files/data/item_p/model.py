@@ -14,17 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional, Dict
+from __future__ import annotations
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
-from skytemple_files.common.util import *
+from typing import Dict, Optional
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.ppmdu_config.dungeon_data import \
+    Pmd2DungeonItemCategory
+from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
+from skytemple_files.container.sir0.sir0_util import \
+    decode_sir0_pointer_offsets
 from skytemple_files.data.item_p import *
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+    from skytemple_files.dungeon_data.mappa_bin._deprecated import \
+        MappaItemCategory
 
 
 class ItemPEntry(AutoString, CheckedIntWrites):
@@ -64,7 +69,8 @@ class ItemPEntry(AutoString, CheckedIntWrites):
 
     def category_enum(self) -> 'MappaItemCategory':
         """:deprecated: Use category_pmd2obj"""
-        from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+        from skytemple_files.dungeon_data.mappa_bin._deprecated import \
+            MappaItemCategory
         return MappaItemCategory(self.category)  # type: ignore
 
     def category_pmd2obj(self, item_categories: Dict[int, Pmd2DungeonItemCategory]) -> Pmd2DungeonItemCategory:

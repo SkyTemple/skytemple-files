@@ -14,12 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
-
 from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
 
 

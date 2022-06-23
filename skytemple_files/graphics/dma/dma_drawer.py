@@ -14,17 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import itertools
 from random import choice
-from typing import List, Optional, Union, Iterable, Sequence
+from typing import Iterable, List, Optional, Sequence, Union
 
 from PIL import Image
 
-from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, TileRuleType, TileRule, FloorType
+from skytemple_files.dungeon_data.fixed_bin.model import (FixedFloor,
+                                                          FloorType, TileRule,
+                                                          TileRuleType)
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.dma.model import Dma, DmaType
-from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
-from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
+from skytemple_files.graphics.dpc.model import DPC_TILING_DIM, Dpc
+from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
 

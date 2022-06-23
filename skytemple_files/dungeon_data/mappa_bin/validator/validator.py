@@ -14,14 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Tuple, Set, Dict, Optional
+from __future__ import annotations
+
+from typing import Dict, List, Optional, Set, Tuple
 
 from range_typed_integers import u8, u8_checked
 
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
-from skytemple_files.dungeon_data.mappa_bin.validator.exception import DungeonValidatorError, \
-    InvalidFloorListReferencedError, InvalidFloorReferencedError, FloorReusedError, DungeonTotalFloorCountInvalidError, \
-    DungeonMissingFloorError
+from skytemple_files.dungeon_data.mappa_bin.validator.exception import (
+    DungeonMissingFloorError, DungeonTotalFloorCountInvalidError,
+    DungeonValidatorError, FloorReusedError, InvalidFloorListReferencedError,
+    InvalidFloorReferencedError)
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 

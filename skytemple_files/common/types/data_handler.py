@@ -15,8 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import abc
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from skytemple_files.common.util import OptionalKwargs
 

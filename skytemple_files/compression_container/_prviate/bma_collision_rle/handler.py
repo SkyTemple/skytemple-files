@@ -14,10 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import CompressionContainerHandler
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import \
+    CompressionContainerHandler
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 
 
 class BmaCollisionRleHandler(CompressionContainerHandler):
@@ -27,10 +31,12 @@ class BmaCollisionRleHandler(CompressionContainerHandler):
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_files.compression_container._prviate.bma_collision_rle._pymodel import BmaCollisionRleCompressionContainer
+        from skytemple_files.compression_container._prviate.bma_collision_rle._pymodel import \
+            BmaCollisionRleCompressionContainer
         return BmaCollisionRleCompressionContainer
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bma_collision_rle_compression import BmaCollisionRleCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bma_collision_rle_compression import \
+            BmaCollisionRleCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
         return BmaCollisionRleCompressionContainer

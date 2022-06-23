@@ -15,9 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List, cast, Sequence
-from range_typed_integers import u32
+from __future__ import annotations
 
+from typing import List, Sequence, cast
+
+from range_typed_integers import u32
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/

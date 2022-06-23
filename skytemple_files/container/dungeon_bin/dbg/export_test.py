@@ -16,18 +16,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
-
-from PIL import Image
-from ndspy.rom import NintendoDSRom
-
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry
-from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes
-from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.compression_container.common_at.model import CommonAt
-
 from itertools import islice
 
+from ndspy.rom import NintendoDSRom
+from PIL import Image
+
+from skytemple_files.common.tiled_image import TilemapEntry, to_pil
+from skytemple_files.common.util import get_ppmdu_config_for_rom, iter_bytes
+from skytemple_files.compression_container.common_at.model import CommonAt
+from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla

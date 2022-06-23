@@ -15,10 +15,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Tuple
 
 from skytemple_files.common.util import *
-from skytemple_files.compression.generic_nrl import CMD_ZERO_OUT, CMD_COPY_BYTES, CMD_FILL_OUT
+from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
+                                                     CMD_FILL_OUT,
+                                                     CMD_ZERO_OUT)
 
 DEBUG = False
 

@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.dungeon_data.mappa_g_bin.handler import MappaGBinHandler
-from skytemple_files.dungeon_data.mappa_g_bin.mappa_converter import convert_mappa_to_mappag
+from skytemple_files.dungeon_data.mappa_g_bin.mappa_converter import \
+    convert_mappa_to_mappag
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 

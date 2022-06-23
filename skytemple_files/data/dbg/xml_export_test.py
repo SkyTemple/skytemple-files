@@ -15,8 +15,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-import os
+from __future__ import annotations
 
+import os
 from xml.etree import ElementTree
 
 from ndspy.rom import NintendoDSRom
@@ -25,12 +26,14 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.container.bin_pack.model import BinPack
-from skytemple_files.data.md.model import MdProperties, Md
-from skytemple_files.data.monster_xml import monster_xml_export, monster_xml_import, GenderedConvertEntry
+from skytemple_files.data.md.model import Md, MdProperties
+from skytemple_files.data.monster_xml import (GenderedConvertEntry,
+                                              monster_xml_export,
+                                              monster_xml_import)
 from skytemple_files.data.tbl_talk.model import TblTalk
 from skytemple_files.data.waza_p.model import WazaP
-from skytemple_files.graphics.kao._model import Kao
 from skytemple_files.graphics.kao import SUBENTRIES
+from skytemple_files.graphics.kao._model import Kao
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')

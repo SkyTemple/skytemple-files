@@ -14,7 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from enum import Enum, auto
+
 from skytemple_files.common.i18n_util import _
 
 

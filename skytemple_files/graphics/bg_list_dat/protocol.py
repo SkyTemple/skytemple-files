@@ -14,15 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import abstractmethod
-from typing import Protocol, Optional, TypeVar, Union, List, Sequence
+from typing import List, Optional, Protocol, Sequence, TypeVar, Union
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 from skytemple_files.graphics.bpl.protocol import BplProtocol
-
 
 M = TypeVar('M', bound=BmaProtocol, covariant=True)
 P = TypeVar('P', bound=BpaProtocol)

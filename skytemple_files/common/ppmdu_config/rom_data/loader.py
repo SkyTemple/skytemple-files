@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import TYPE_CHECKING, Dict, List
 
 from ndspy.rom import NintendoDSRom
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
-    from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
+    from skytemple_files.common.ppmdu_config.dungeon_data import \
+        Pmd2DungeonItemCategory
 
 
 FILENAME_ACTOR_LIST = 'BALANCE/actor_list.bin'

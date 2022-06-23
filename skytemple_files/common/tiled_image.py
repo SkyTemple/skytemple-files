@@ -15,22 +15,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import logging
 import math
-from itertools import chain
-from typing import List, Tuple, Union, Sequence, Optional
-
 import typing
-
-from range_typed_integers import u16
-
-from skytemple_files.common.i18n_util import f, _
-from skytemple_files.user_error import UserValueError
+from itertools import chain
+from typing import List, Optional, Sequence, Tuple, Union
 
 from PIL import Image
+from range_typed_integers import u16
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.protocol import TilemapEntryProtocol
-from skytemple_files.common.util import iter_bytes_4bit_le, ByteReadable
+from skytemple_files.common.util import ByteReadable, iter_bytes_4bit_le
+from skytemple_files.user_error import UserValueError
 
 logger = logging.getLogger(__name__)
 

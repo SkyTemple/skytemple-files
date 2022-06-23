@@ -10,7 +10,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 
-from skytemple_files.graphics.chara_wan.model import SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece
+from __future__ import annotations
+
+from skytemple_files.graphics.chara_wan.model import (FrameOffset, ImgPiece,
+                                                      MetaFramePiece,
+                                                      SequenceFrame)
 
 
 def animGroupsEqual(anim1, anim2):

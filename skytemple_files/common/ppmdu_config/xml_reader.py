@@ -16,18 +16,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
 import re
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import *
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonItem, \
-    Pmd2DungeonDungeon, Pmd2DungeonItemCategory
-from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import load_binaries
+from skytemple_files.common.ppmdu_config.dungeon_data import (
+    Pmd2BinPackFile, Pmd2DungeonBinFiles, Pmd2DungeonDungeon, Pmd2DungeonItem,
+    Pmd2DungeonItemCategory)
+from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import \
+    load_binaries
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
-from skytemple_files.common.i18n_util import _
 
 
 def id_matches_edition(e_game, edition):

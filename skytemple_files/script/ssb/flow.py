@@ -15,15 +15,23 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
 from typing import TYPE_CHECKING, List
 
-from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import SsbGraphMinimizer
-from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import OpsLabelJumpToResolver
-from explorerscript.ssb_converting.ssb_data_types import SsbOperation, SsbOpCode, SsbCalcOperator
-from explorerscript.ssb_converting.ssb_special_ops import OP_BRANCH_VARIATION, \
-    OPS_THAT_END_CONTROL_FLOW, OP_RETURN, OPS_FLAG__CALC_VALUE, OPS_FLAG__SET, OP_BRANCH_BIT, \
-    OP_BRANCH_PERFORMANCE, SsbForeignLabel
+from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import \
+    SsbGraphMinimizer
+from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import \
+    OpsLabelJumpToResolver
+from explorerscript.ssb_converting.ssb_data_types import (SsbCalcOperator,
+                                                          SsbOpCode,
+                                                          SsbOperation)
+from explorerscript.ssb_converting.ssb_special_ops import (
+    OP_BRANCH_BIT, OP_BRANCH_PERFORMANCE, OP_BRANCH_VARIATION, OP_RETURN,
+    OPS_FLAG__CALC_VALUE, OPS_FLAG__SET, OPS_THAT_END_CONTROL_FLOW,
+    SsbForeignLabel)
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.model import Ssb

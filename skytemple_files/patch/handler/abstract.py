@@ -14,8 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Callable, List, Dict, Union
+from typing import Callable, Dict, List, Union
 
 from ndspy.rom import NintendoDSRom
 

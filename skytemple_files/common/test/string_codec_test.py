@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import abstractmethod
 from typing import Protocol, Type
 
 from parameterized import parameterized
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.compression_container.test.util import dataset_name_func
 from skytemple_files.test.case import SkyTempleFilesTestCase, romtest
@@ -62,7 +65,7 @@ class _TstStringHandler(HybridDataHandler[_TstStringProtocol]):
 
 class _TstPy(_TstStringProtocol):
     def __init__(self, data: bytes):
-        from skytemple_files.common.string_codec import init, PMD2_STR_ENCODER
+        from skytemple_files.common.string_codec import PMD2_STR_ENCODER, init
         init()
         self.str: str = str(data, PMD2_STR_ENCODER)
 
@@ -72,7 +75,7 @@ class _TstPy(_TstStringProtocol):
 
 class _TstPyWriter(WriterProtocol[_TstPy]):
     def write(self, model: _TstPy) -> bytes:
-        from skytemple_files.common.string_codec import init, PMD2_STR_ENCODER
+        from skytemple_files.common.string_codec import PMD2_STR_ENCODER, init
         init()
         return bytes(model.str, PMD2_STR_ENCODER)
 

@@ -14,24 +14,30 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from xml.etree.ElementTree import Element
+from __future__ import annotations
 
 import typing
+from xml.etree.ElementTree import Element
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError
-from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR_LAYOUT, XML_FLOOR, XML_TRAP_LIST, XML_MONSTER, \
-    XML_MONSTER_LIST, XML_ITEM_LIST, XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR, XML_ITEM_LIST__TYPE__SHOP, \
-    XML_ITEM_LIST__TYPE__MONSTER_HOUSE, XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__UNK1, \
-    XML_ITEM_LIST__TYPE__UNK2
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.common.xml_util import (XmlSerializable, XmlValidateError,
+                                             validate_xml_tag)
+from skytemple_files.dungeon_data.mappa_bin import (
+    XML_FLOOR, XML_FLOOR_LAYOUT, XML_ITEM_LIST, XML_ITEM_LIST__TYPE,
+    XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__FLOOR,
+    XML_ITEM_LIST__TYPE__MONSTER_HOUSE, XML_ITEM_LIST__TYPE__SHOP,
+    XML_ITEM_LIST__TYPE__UNK1, XML_ITEM_LIST__TYPE__UNK2, XML_MONSTER,
+    XML_MONSTER_LIST, XML_TRAP_LIST)
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
+    MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
-from skytemple_files.common.i18n_util import f, _
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import \
+        MappaBinReadContainer
 
 
 class StubMappaFloor:

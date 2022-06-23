@@ -14,19 +14,23 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 from enum import Enum, auto
-from typing import Optional, List
+from typing import List, Optional
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes, OptionalKwargs
-from skytemple_files.compression_container.base_handler import CompressionContainerHandler
-from skytemple_files.compression_container.atupx.handler import AtupxHandler
-from skytemple_files.compression_container.at4px.handler import At4pxHandler
+from skytemple_files.common.util import OptionalKwargs, read_bytes
 from skytemple_files.compression_container.at3px.handler import At3pxHandler
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler
+from skytemple_files.compression_container.at4px.handler import At4pxHandler
+from skytemple_files.compression_container.atupx.handler import AtupxHandler
+from skytemple_files.compression_container.base_handler import \
+    CompressionContainerHandler
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 
 
 class CommonAtType(Enum):

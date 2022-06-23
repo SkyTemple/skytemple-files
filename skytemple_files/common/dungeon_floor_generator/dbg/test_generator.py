@@ -15,11 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-from random import randrange, choice
+from __future__ import annotations
 
-from skytemple_files.common.dungeon_floor_generator.generator import DungeonFloorGenerator
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout, MappaFloorStructureType, \
-    MappaFloorWeather, MappaFloorTerrainSettings, MappaFloorDarknessLevel
+from random import choice, randrange
+
+from skytemple_files.common.dungeon_floor_generator.generator import \
+    DungeonFloorGenerator
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import (
+    MappaFloorDarknessLevel, MappaFloorLayout, MappaFloorStructureType,
+    MappaFloorTerrainSettings, MappaFloorWeather)
 
 layout = MappaFloorLayout(
     structure=MappaFloorStructureType.MEDIUM_LARGE,

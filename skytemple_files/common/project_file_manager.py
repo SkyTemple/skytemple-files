@@ -15,14 +15,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import json
 import os
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 from appdirs import user_config_dir
-
 from explorerscript import EXPLORERSCRIPT_EXT
 from explorerscript.source_map import SourceMap
+
 from skytemple_files.common.util import open_utf8
 
 DIRECTORY_NAME_SUFFIX = '.skytemple'

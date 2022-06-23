@@ -14,18 +14,20 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import math
 
+from PIL import Image
+
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dpc.model import Dpc, DPC_TILING_DIM
-from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
-from skytemple_files.graphics.dpl.model import Dpl, DPL_PAL_LEN, DPL_MAX_PAL
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.graphics.dpc.model import DPC_TILING_DIM, Dpc
+from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
+from skytemple_files.graphics.dpl.model import DPL_MAX_PAL, DPL_PAL_LEN, Dpl
 from skytemple_files.user_error import UserValueError
-
-from PIL import Image
 
 DBG_TILING_DIM = 3
 DBG_CHUNK_WIDTH = 24

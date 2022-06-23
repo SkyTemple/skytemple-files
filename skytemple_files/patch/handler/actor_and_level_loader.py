@@ -14,16 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
+from skytemple_files.common.i18n_util import _
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                      GAME_REGION_US,
+                                                      GAME_VERSION_EOS,
+                                                      Pmd2Data)
 from skytemple_files.list.actor.model import LEN_ACTOR_ENTRY
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import _
+from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.user_error import make_user_err
 
 EXTRACT_LOOSE_BIN_SRCDATA__ACTORS = 'Entities'

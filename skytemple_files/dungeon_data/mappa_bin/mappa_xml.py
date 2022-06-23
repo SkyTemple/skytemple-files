@@ -2,6 +2,9 @@
 Imports and exports data from/to XML and mappa floor models.
 This can also handle partial data in the XML!
 """
+from __future__ import annotations
+
+import typing
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -20,18 +23,20 @@ This can also handle partial data in the XML!
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from xml.etree.ElementTree import Element
 
-import typing
-
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.xml_util import XmlValidateError
-from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR_LAYOUT, XML_MONSTER_LIST, XML_TRAP_LIST, XML_ITEM_LIST, \
-    XML_ITEM_LIST__TYPE__FLOOR, XML_ITEM_LIST__TYPE__SHOP, XML_ITEM_LIST__TYPE__MONSTER_HOUSE, \
-    XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__UNK1, XML_ITEM_LIST__TYPE__UNK2, XML_ITEM_LIST__TYPE
+from skytemple_files.dungeon_data.mappa_bin import (
+    XML_FLOOR_LAYOUT, XML_ITEM_LIST, XML_ITEM_LIST__TYPE,
+    XML_ITEM_LIST__TYPE__BURIED, XML_ITEM_LIST__TYPE__FLOOR,
+    XML_ITEM_LIST__TYPE__MONSTER_HOUSE, XML_ITEM_LIST__TYPE__SHOP,
+    XML_ITEM_LIST__TYPE__UNK1, XML_ITEM_LIST__TYPE__UNK2, XML_MONSTER_LIST,
+    XML_TRAP_LIST)
 from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
+    MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
-from skytemple_files.common.i18n_util import f, _
 
 
 def mappa_floor_xml_export(floor: MappaFloor, export_layout=True, export_monsters=True, export_traps=True,

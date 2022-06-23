@@ -16,12 +16,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.compression_container.common_at.handler import CommonAtHandler, CommonAtType
-from skytemple_files.common.i18n_util import f, _
+from __future__ import annotations
 
 from PIL import Image
+
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.util import *
+from skytemple_files.compression_container.common_at.handler import (
+    CommonAtHandler, CommonAtType)
 
 IMG_WIDTH = 256
 IMG_HEIGHT = 96

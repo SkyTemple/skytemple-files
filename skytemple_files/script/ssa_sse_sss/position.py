@@ -14,12 +14,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import logging
 from typing import Optional
 
 from range_typed_integers import u16
 
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptDirection
+from skytemple_files.common.ppmdu_config.script_data import (
+    Pmd2ScriptData, Pmd2ScriptDirection)
 from skytemple_files.common.util import AutoString, CheckedIntWrites
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 

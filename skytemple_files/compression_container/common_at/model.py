@@ -15,10 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from abc import ABC
 
 from skytemple_files.common.util import CheckedIntWrites
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 
 
 class CommonAt(CompressionContainerProtocol, CheckedIntWrites, ABC):

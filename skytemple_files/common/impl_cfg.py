@@ -9,6 +9,8 @@ otherwise the behaviour could be unexpected.
 This defaults to use the Python implementations if SKYTEMPLE_USE_NATIVE is not set.
 If it is set, it defaults to the native implementations.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -27,6 +29,7 @@ If it is set, it defaults to the native implementations.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 from enum import Enum
+
 ENV_SKYTEMPLE_USE_NATIVE = 'SKYTEMPLE_USE_NATIVE'
 
 

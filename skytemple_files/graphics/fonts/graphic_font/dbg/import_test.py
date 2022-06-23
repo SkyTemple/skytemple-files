@@ -16,14 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 
+from __future__ import annotations
+
 import os
 
 from ndspy.rom import NintendoDSRom
-
-from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
-from skytemple_files.graphics.pal.handler import PalHandler
-
 from PIL import Image
+
+from skytemple_files.graphics.fonts.graphic_font.handler import \
+    GraphicFontHandler
+from skytemple_files.graphics.pal.handler import PalHandler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

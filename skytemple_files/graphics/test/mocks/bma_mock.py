@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional, List, Sequence
+from __future__ import annotations
+
+from typing import List, Optional, Sequence
 
 from PIL import Image
 from range_typed_integers import *
 
-from skytemple_files.graphics.bma.protocol import BmaProtocol, P, C, L
+from skytemple_files.graphics.bma.protocol import BmaProtocol, C, L, P
 
 
 class BmaStub(BmaProtocol[P, C, L]):

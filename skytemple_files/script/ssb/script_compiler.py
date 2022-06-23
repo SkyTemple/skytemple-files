@@ -14,23 +14,33 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import logging
-from typing import Tuple, Dict, Callable, Type, Optional
+from __future__ import annotations
 
-from explorerscript.error import SsbCompilerError, ParseError
+import logging
+from typing import Callable, Dict, Optional, Tuple, Type
+
+from explorerscript.error import ParseError, SsbCompilerError
 from explorerscript.source_map import SourceMap
-from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
-    SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
-from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
-from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbScriptSsbCompiler
-from explorerscript.ssb_converting.ssb_compiler import ExplorerScriptSsbCompiler
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_REGION_EU
+from explorerscript.ssb_converting.ssb_compiler import \
+    ExplorerScriptSsbCompiler
+from explorerscript.ssb_converting.ssb_data_types import (
+    SsbOperation, SsbOpParam, SsbOpParamConstant, SsbOpParamConstString,
+    SsbOpParamLanguageString, SsbOpParamPositionMarker, SsbRoutineInfo,
+    SsbRoutineType)
+from explorerscript.ssb_converting.ssb_special_ops import \
+    OPS_WITH_JUMP_TO_MEM_OFFSET
+from explorerscript.ssb_script.ssb_converting.ssb_compiler import \
+    SsbScriptSsbCompiler
+
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptOpCode
 from skytemple_files.script.ssb.constants import SsbConstant
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, AbstractSsbHeader
-from skytemple_files.script.ssb.model import Ssb, List, SkyTempleSsbOperation, SSB_LEN_ROUTINE_INFO_ENTRY, \
-    SSB_PADDING_BEFORE_ROUTINE_INFO
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.script.ssb.header import (AbstractSsbHeader, SsbHeaderEu,
+                                               SsbHeaderUs)
+from skytemple_files.script.ssb.model import (SSB_LEN_ROUTINE_INFO_ENTRY,
+                                              SSB_PADDING_BEFORE_ROUTINE_INFO,
+                                              List, SkyTempleSsbOperation, Ssb)
 from skytemple_files.user_error import USER_ERROR_MARK
 
 logger = logging.getLogger(__name__)

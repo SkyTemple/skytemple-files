@@ -14,17 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Optional
 from xml.etree.ElementTree import Element
 
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.dungeon_data.mappa_bin import XML_MAPPA, XML_FLOOR_LIST, XML_FLOOR
-from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor, StubMappaFloor
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin import (XML_FLOOR, XML_FLOOR_LIST,
+                                                    XML_MAPPA)
+from skytemple_files.dungeon_data.mappa_bin.floor import (MappaFloor,
+                                                          StubMappaFloor)
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
+    MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapList
@@ -56,7 +61,8 @@ class MappaBin(Sir0Serializable, XmlSerializable):
         self.floor_lists = floor_lists
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
+        from skytemple_files.dungeon_data.mappa_bin.writer import \
+            MappaBinWriter
         return MappaBinWriter(self).write()  # type: ignore
 
     @classmethod

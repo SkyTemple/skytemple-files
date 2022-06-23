@@ -15,9 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from PIL import Image
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry, to_pil_tiled, from_pil
+from skytemple_files.common.tiled_image import (TilemapEntry, from_pil, to_pil,
+                                                to_pil_tiled)
 from skytemple_files.common.util import *
 
 BGP_RES_WIDTH = 256

@@ -16,10 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 
+from __future__ import annotations
+
 import os
 
-from PIL import Image
 from ndspy.rom import NintendoDSRom
+from PIL import Image
 
 from skytemple_files.graphics.bgp.handler import BgpHandler
 

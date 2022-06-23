@@ -3,6 +3,8 @@ Debugging an issue with a certain ssb script decompilation.
 First string is decompiled incorrectly at the time of writing.
 See: https://canary.discord.com/channels/710190644152369162/712343169399914518/861731221432303676
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

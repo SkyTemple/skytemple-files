@@ -15,12 +15,15 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from typing import List
 from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
-from skytemple_files.common.i18n_util import f, _
+
+from skytemple_files.common.i18n_util import _, f
 
 
 class XmlValidateError(ValueError):

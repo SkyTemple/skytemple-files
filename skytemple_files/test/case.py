@@ -14,16 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import functools
 import os
 import sys
 import typing
 from abc import ABC, abstractmethod
 from tempfile import TemporaryFile
-from typing import Generic, TypeVar, Protocol, Optional, Mapping, Any, Type
+from typing import Any, Generic, Mapping, Optional, Protocol, Type, TypeVar
 
-
-from skytemple_files.common.util import OptionalKwargs, get_files_from_rom_with_extension, get_ppmdu_config_for_rom
+from skytemple_files.common.util import (OptionalKwargs,
+                                         get_files_from_rom_with_extension,
+                                         get_ppmdu_config_for_rom)
 from skytemple_files.test.image import ImageTestCaseAbc
 
 U = TypeVar('U')
@@ -90,9 +93,10 @@ def romtest(*, file_ext, path):
     """
     def _outer_wrapper(wrapped_function):
         import inspect
+        from unittest import SkipTest
+
         import pytest
         from ndspy.rom import NintendoDSRom
-        from unittest import SkipTest
         from parameterized import parameterized
         rom = None
         if 'SKYTEMPLE_TEST_ROM' in os.environ and os.environ['SKYTEMPLE_TEST_ROM'] != '':

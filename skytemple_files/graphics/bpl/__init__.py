@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # Length of a palette in colors. Color 0 is auto-generated (transparent)
 BPL_PAL_LEN = 15
 # Actual colors in an image, (including the color 0)

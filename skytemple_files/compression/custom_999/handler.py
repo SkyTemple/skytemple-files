@@ -24,8 +24,12 @@
 
 
 
-from skytemple_files.compression.custom_999.compressor import Custom999Compressor
-from skytemple_files.compression.custom_999.decompressor import Custom999Decompressor
+from __future__ import annotations
+
+from skytemple_files.compression.custom_999.compressor import \
+    Custom999Compressor
+from skytemple_files.compression.custom_999.decompressor import \
+    Custom999Decompressor
 
 
 class Custom999Handler:

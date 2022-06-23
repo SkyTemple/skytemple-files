@@ -15,9 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # Normal spawn delay (0x24): [EU]overlay_0010:0x7A74 / [US]overlay_0010:0x7A5C
 # Spawn delay after stealing from a shop (3): [EU]overlay_0010:0x7BD8 / [US]overlay_0010:0x7BC0
-from typing import Union, Tuple, Optional
+from typing import Optional, Tuple, Union
 
 from range_typed_integers import u8
 

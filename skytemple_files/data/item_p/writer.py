@@ -15,11 +15,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Optional
 
 from skytemple_files.common.util import *
-from skytemple_files.data.item_p.model import ItemP
 from skytemple_files.data.item_p import *
+from skytemple_files.data.item_p.model import ItemP
+
 
 class ItemPWriter:
     def __init__(self, model: ItemP):

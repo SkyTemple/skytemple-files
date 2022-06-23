@@ -14,11 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import warnings
 from enum import Enum, auto
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
-from skytemple_files.common.ppmdu_config.pmdsky_debug.util import MultiCasingDict
+from skytemple_files.common.ppmdu_config.pmdsky_debug.util import \
+    MultiCasingDict
 from skytemple_files.common.util import AutoString
 
 _DEPRECATION_WARNING = "Binary symbols are no longer distinguished by type, " \

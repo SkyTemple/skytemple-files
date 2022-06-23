@@ -15,13 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 
-from skytemple_files.common.util import *
-from skytemple_files.graphics.colvec import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from PIL import Image
+
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.util import *
+from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.graphics.colvec import *
 
 
 class Colvec(Sir0Serializable, AutoString):

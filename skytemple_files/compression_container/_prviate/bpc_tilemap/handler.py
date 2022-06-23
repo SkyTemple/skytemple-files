@@ -14,10 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Type
 
-from skytemple_files.compression_container.base_handler import CompressionContainerHandler
-from skytemple_files.compression_container.protocol import CompressionContainerProtocol
+from skytemple_files.compression_container.base_handler import \
+    CompressionContainerHandler
+from skytemple_files.compression_container.protocol import \
+    CompressionContainerProtocol
 
 
 class BpcTilemapHandler(CompressionContainerHandler):
@@ -27,10 +31,12 @@ class BpcTilemapHandler(CompressionContainerHandler):
 
     @classmethod
     def load_python_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_files.compression_container._prviate.bpc_tilemap._pymodel import BpcTilemapCompressionContainer
+        from skytemple_files.compression_container._prviate.bpc_tilemap._pymodel import \
+            BpcTilemapCompressionContainer
         return BpcTilemapCompressionContainer
 
     @classmethod
     def load_native_model(cls) -> Type[CompressionContainerProtocol]:
-        from skytemple_rust._st_bpc_tilemap_compression import BpcTilemapCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust._st_bpc_tilemap_compression import \
+            BpcTilemapCompressionContainer  # type: ignore  # pylint: disable=no-name-in-module,no-member,import-error
         return BpcTilemapCompressionContainer

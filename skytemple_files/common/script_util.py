@@ -15,9 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import re
 from collections import OrderedDict
-from typing import List, Union, Tuple, Dict
+from typing import Dict, List, Tuple, Union
 
 from skytemple_files.list.level.model import LevelListBin
 
@@ -27,7 +29,6 @@ except ImportError:
     from typing_extensions import TypedDict
 
 from ndspy.fnt import Folder
-
 
 SCRIPT_DIR = 'SCRIPT'
 COMMON_DIR = 'COMMON'

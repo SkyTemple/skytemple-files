@@ -14,11 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import List, Optional
 
 from skytemple_files.common.util import AutoString
-from skytemple_files.script.ssa_sse_sss import ACTOR_ENTRY_LEN, OBJECT_ENTRY_LEN, PERFORMERS_ENTRY_LEN, \
-    EVENTS_ENTRY_LEN, UNK10_ENTRY_LEN
+from skytemple_files.script.ssa_sse_sss import (ACTOR_ENTRY_LEN,
+                                                EVENTS_ENTRY_LEN,
+                                                OBJECT_ENTRY_LEN,
+                                                PERFORMERS_ENTRY_LEN,
+                                                UNK10_ENTRY_LEN)
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.event import SsaEvent
 from skytemple_files.script.ssa_sse_sss.header import SsaHeader

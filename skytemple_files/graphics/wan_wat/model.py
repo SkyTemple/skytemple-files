@@ -14,14 +14,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import List, Tuple
 
 from PIL import Image, ImageOps
-from skytemple_rust.pmd_wan import (
-    WanImage,
-    MetaFrameGroup,
-    ImageBytes
-) # pylint: disable=no-name-in-module,no-member,import-error
+from skytemple_rust.pmd_wan import (  # pylint: disable=no-name-in-module,no-member,import-error
+    ImageBytes, MetaFrameGroup, WanImage)
 
 
 class MetaFramePositioningSpecs:

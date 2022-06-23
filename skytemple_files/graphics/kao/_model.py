@@ -15,17 +15,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-import math
+from __future__ import annotations
 
+import math
 from collections.abc import Iterator
 
-from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_IMG_METAPIXELS_DIM, \
-    KAO_IMG_IMG_DIM
-from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
-
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
-from skytemple_files.compression_container.common_at.handler import COMMON_AT_MUST_COMPRESS_3, CommonAtType
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.compression_container.common_at.handler import (
+    COMMON_AT_MUST_COMPRESS_3, CommonAtType)
+from skytemple_files.graphics.kao import (KAO_IMG_IMG_DIM,
+                                          KAO_IMG_METAPIXELS_DIM,
+                                          KAO_IMG_PAL_B_SIZE, SUBENTRIES,
+                                          SUBENTRY_LEN)
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 
 
 class KaoImage(KaoImageProtocol):

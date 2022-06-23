@@ -15,13 +15,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import cast
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel, Pmd2ScriptLevelMapType
+from skytemple_files.common.ppmdu_config.script_data import (
+    Pmd2ScriptLevel, Pmd2ScriptLevelMapType)
 from skytemple_files.common.util import *
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
-from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, FixedBin
+from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
 from skytemple_files.graphics.dma.model import Dma
 from skytemple_files.graphics.dpc.model import Dpc

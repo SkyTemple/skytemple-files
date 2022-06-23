@@ -16,5 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 
+from __future__ import annotations
+
 # TODO
 DbinSir0Image1033Handler = None

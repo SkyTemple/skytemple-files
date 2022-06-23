@@ -16,6 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 
+from __future__ import annotations
+
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dbg.model import Dbg

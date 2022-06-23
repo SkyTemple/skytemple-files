@@ -15,35 +15,42 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked
 
+from skytemple_files.common.i18n_util import _
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                      GAME_REGION_US,
+                                                      GAME_VERSION_EOS,
+                                                      Pmd2Data)
 from skytemple_files.common.util import *
-from skytemple_files.data.str.handler import StrHandler
-
-from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
-from skytemple_files.hardcoded.dungeons import HardcodedDungeons, DungeonDefinition
-from skytemple_files.data.level_bin_entry.model import LEVEL_BIN_ENTRY_LEVEL_LEN
+from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
+from skytemple_files.container.bin_pack.handler import BinPackHandler
+from skytemple_files.container.sir0.handler import Sir0Handler
+from skytemple_files.data.level_bin_entry.model import \
+    LEVEL_BIN_ENTRY_LEVEL_LEN
+from skytemple_files.data.md.handler import MdHandler
+from skytemple_files.data.md.model import Gender, MdEntry
+from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.md_evo.model import MdEvoEntry, MdEvoStats
-from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
-from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
-from skytemple_files.container.sir0.handler import Sir0Handler
-from skytemple_files.container.bin_pack.handler import BinPackHandler
-from skytemple_files.data.val_list.handler import ValListHandler
-from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
-from skytemple_files.data.waza_p.handler import WazaPHandler
-from skytemple_files.data.md.handler import MdHandler
-from skytemple_files.data.md.model import MdEntry, Gender
-from skytemple_files.graphics.kao.handler import KaoHandler
-from skytemple_files.graphics.kao import SUBENTRIES
+from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
+from skytemple_files.data.val_list.handler import ValListHandler
+from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
+from skytemple_files.graphics.kao import SUBENTRIES
+from skytemple_files.graphics.kao.handler import KaoHandler
+from skytemple_files.hardcoded.dungeons import (DungeonDefinition,
+                                                HardcodedDungeons)
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.common.i18n_util import _
+from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
+                                                    DependantPatch)
 
 NUM_PREVIOUS_ENTRIES = 600
 NUM_PREVIOUS_MD_MAX = 1155

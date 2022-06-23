@@ -15,10 +15,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import List
 
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
-from skytemple_files.dungeon_data.mappa_g_bin.model import MappaGBin, MappaGFloor, MappaGFloorLayout
+from skytemple_files.dungeon_data.mappa_g_bin.model import (MappaGBin,
+                                                            MappaGFloor,
+                                                            MappaGFloorLayout)
 
 
 def convert_mappa_to_mappag(mappa: MappaBin) -> MappaGBin:

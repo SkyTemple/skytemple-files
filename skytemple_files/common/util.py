@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import bisect
 import contextlib
 import logging
@@ -25,8 +27,8 @@ import warnings
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
-from typing import List, Tuple, TypeVar, TYPE_CHECKING, Iterable, Optional, Callable, Protocol, Union, Dict, \
-    Any, Sequence, Generator
+from typing import (TYPE_CHECKING, Any, Callable, Dict, Generator, Iterable,
+                    List, Optional, Protocol, Sequence, Tuple, TypeVar, Union)
 
 try:
     # We prefer this version since it has include_extras for sure.
@@ -35,20 +37,22 @@ except ImportError:
     from typing import get_type_hints  # type: ignore
 
 import pkg_resources
-from PIL import Image
-from PIL.Image import NONE
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u8, i8, u16, i16, u32, i32, check_int, get_range, IntegerBoundError
+from PIL import Image
+from PIL.Image import NONE
+from range_typed_integers import (IntegerBoundError, check_int, get_range, i8,
+                                  i16, i32, u8, u16, u32)
 
 from skytemple_files.common import string_codec
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.user_error import UserValueError
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
-    from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
+    from skytemple_files.common.ppmdu_config.pmdsky_debug.data import \
+        Pmd2Binary
 
 # Useful type consts
 OptionalKwargs = Optional[Dict[str, Any]]

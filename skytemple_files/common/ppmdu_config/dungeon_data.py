@@ -14,7 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Optional, Dict
+from __future__ import annotations
+
+from typing import Dict, List, Optional
 
 from skytemple_files.common.util import AutoString
 
@@ -70,7 +72,8 @@ class Pmd2DungeonItemCategory(AutoString):
 
     def item_ids(self, only_if_valid_in_mappa=True):
         if only_if_valid_in_mappa:
-            from skytemple_files.dungeon_data.mappa_bin.item_list import MAX_ITEM_ID
+            from skytemple_files.dungeon_data.mappa_bin.item_list import \
+                MAX_ITEM_ID
             return [x for x in self.items if x < MAX_ITEM_ID]
         return self.items
 

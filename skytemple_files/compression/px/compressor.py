@@ -15,16 +15,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # directly based off https://github.com/PsyCommando/ppmdu/blob/master/src/ppmdu/fmts/px_compression.cpp
 from collections import deque
-
 from enum import Enum
-from typing import Tuple, Deque
+from typing import Deque, Tuple
 
 from skytemple_files.common.util import *
-from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN, PX_LOOKBACK_BUFFER_SIZE, PX_MAX_MATCH_SEQLEN, \
-    PX_NB_POSSIBLE_SEQUENCES_LEN, PX_NB_POSSIBLE_SEQ_LEN
-
+from skytemple_files.compression.px import (PX_LOOKBACK_BUFFER_SIZE,
+                                            PX_MAX_MATCH_SEQLEN,
+                                            PX_MIN_MATCH_SEQLEN,
+                                            PX_NB_POSSIBLE_SEQ_LEN,
+                                            PX_NB_POSSIBLE_SEQUENCES_LEN)
 
 DEBUG = False
 

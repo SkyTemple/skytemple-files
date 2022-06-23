@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
 from enum import Enum
 from typing import Dict, Iterator
 
-from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
+from skytemple_files.common.util import *
 
 
 # Honestly, I don't know a better way to do that

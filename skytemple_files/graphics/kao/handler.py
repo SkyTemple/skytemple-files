@@ -14,12 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type, TYPE_CHECKING
+from __future__ import annotations
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from typing import TYPE_CHECKING, Type
+
+from skytemple_files.common.impl_cfg import (ImplementationType,
+                                             get_implementation_type)
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
+
 if TYPE_CHECKING:
     pass
 
@@ -32,7 +37,8 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[KaoProtocol]:
-        from skytemple_rust.st_kao import Kao  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_kao import \
+            Kao  # pylint: disable=no-name-in-module,no-member,import-error
         return Kao
 
     @classmethod
@@ -42,13 +48,16 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeKao']]:  # type: ignore
-        from skytemple_rust.st_kao import KaoWriter  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_kao import \
+            KaoWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return KaoWriter
 
     @classmethod
     def get_image_model_cls(cls) -> Type[KaoImageProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_kao import KaoImage as KaoImageNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_kao import \
+                KaoImage as \
+                KaoImageNative  # pylint: disable=no-name-in-module,no-member,import-error
             return KaoImageNative
         from skytemple_files.graphics.kao._model import KaoImage
         return KaoImage

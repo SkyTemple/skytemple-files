@@ -15,13 +15,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import Optional, Dict
+from typing import Dict, Optional
 
-from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE
+from skytemple_files.common.ppmdu_config.data import (LANG_DE, LANG_EN,
+                                                      LANG_FR, LANG_IT,
+                                                      LANG_SP)
 from skytemple_files.common.util import *
-
 
 SSB_HEADER_US_LENGTH = 0x0C
 SSB_HEADER_EU_LENGTH = 0x12

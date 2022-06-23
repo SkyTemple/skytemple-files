@@ -15,9 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import List
 
-from range_typed_integers import u16, u8
+from range_typed_integers import u8, u16
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_u16, write_u16

@@ -15,10 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-from typing import Optional, Tuple, List
+from __future__ import annotations
+
+from io import BytesIO
+from typing import List, Optional, Tuple
 
 from PIL import Image
-from io import BytesIO
+
 import skytemple_files.graphics.chara_wan.utils as exUtils
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 

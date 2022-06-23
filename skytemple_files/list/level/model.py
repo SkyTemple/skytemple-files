@@ -14,15 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Tuple, List, Optional
+from __future__ import annotations
+
+from typing import List, Optional, Tuple
 
 from range_typed_integers import u32_checked
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
-from skytemple_files.common.util import read_var_length_string, read_u32, read_u16, write_u16, write_i16, write_u32, \
-    read_i16
+from skytemple_files.common.util import (read_i16, read_u16, read_u32,
+                                         read_var_length_string, write_i16,
+                                         write_u16, write_u32)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 LEN_LEVEL_ENTRY = 12

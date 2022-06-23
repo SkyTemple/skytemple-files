@@ -15,14 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import os
+from xml.etree.ElementTree import ElementTree
 
 from ndspy.rom import NintendoDSRom
-
-from xml.etree.ElementTree import ElementTree
-from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
-
 from PIL import Image
+
+from skytemple_files.graphics.fonts.font_sir0.handler import FontSir0Handler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

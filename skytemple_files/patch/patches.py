@@ -14,68 +14,111 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
+import importlib.util
 import os
 import shutil
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Dict, List, Generator, Optional, Any
+from typing import Any, Dict, Generator, List, Optional
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
-import importlib.util
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, Pmd2AsmPatchesConstants, Pmd2PatchParameterType
-from skytemple_files.common.ppmdu_config.xml_reader import Pmd2AsmPatchesConstantsXmlReader
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.ppmdu_config.data import (Pmd2AsmPatchesConstants,
+                                                      Pmd2Data,
+                                                      Pmd2PatchParameterType)
+from skytemple_files.common.ppmdu_config.xml_reader import \
+    Pmd2AsmPatchesConstantsXmlReader
 from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.arm_patcher import ArmPatcher
-from skytemple_files.patch.errors import PatchPackageError, PatchDependencyError, PatchNotConfiguredError
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.patch.handler.actor_and_level_loader import ActorAndLevelListLoaderPatchHandler
-from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
-from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
-from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
-from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
-from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
-from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
-from skytemple_files.patch.handler.extract_item_lists import ExtractItemListsPatchHandler
-from skytemple_files.patch.handler.extract_dungeon_data import ExtractDungeonDataPatchHandler
-from skytemple_files.patch.handler.extract_anims import ExtractAnimDataPatchHandler
-from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
+from skytemple_files.patch.errors import (PatchDependencyError,
+                                          PatchNotConfiguredError,
+                                          PatchPackageError)
+from skytemple_files.patch.handler.abstract import (AbstractPatchHandler,
+                                                    DependantPatch)
+from skytemple_files.patch.handler.actor_and_level_loader import \
+    ActorAndLevelListLoaderPatchHandler
 from skytemple_files.patch.handler.add_type import AddTypePatchHandler
-from skytemple_files.patch.handler.fairy_gummies import ImplementFairyGummiesPatchHandler
-from skytemple_files.patch.handler.extract_bar_list import ExtractBarItemListPatchHandler
+from skytemple_files.patch.handler.allow_unrecruitable_mons import \
+    AllowUnrecruitableMonsPatchHandler
+from skytemple_files.patch.handler.change_evo import \
+    ChangeEvoSystemPatchHandler
+from skytemple_files.patch.handler.change_ff_prop import \
+    ChangeFixedFloorPropertiesPatchHandler
+from skytemple_files.patch.handler.change_tbbg import \
+    ChangeTextBoxColorPatchHandler
+from skytemple_files.patch.handler.choose_starter import \
+    ChooseStarterPatchHandler
+from skytemple_files.patch.handler.complete_team_control import \
+    CompleteTeamControl
+from skytemple_files.patch.handler.compress_iq_data import \
+    CompressIQDataPatchHandler
+from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
+from skytemple_files.patch.handler.disarm_one_room_mh import \
+    DisarmOneRoomMHPatchHandler
+from skytemple_files.patch.handler.dungeon_interrupt import \
+    DungeonInterruptPatchHandler
+from skytemple_files.patch.handler.dynamic_bosses_everywhere import \
+    DynamicBossesEverywherePatchHandler
+from skytemple_files.patch.handler.edit_extra_pokemon import \
+    EditExtraPokemonPatchHandler
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
-from skytemple_files.patch.handler.choose_starter import ChooseStarterPatchHandler
-from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
-from skytemple_files.patch.handler.dungeon_interrupt import DungeonInterruptPatchHandler
-from skytemple_files.patch.handler.change_ff_prop import ChangeFixedFloorPropertiesPatchHandler
-from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
-from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
-from skytemple_files.patch.handler.partners_trigger_hidden_traps import PartnersTriggerHiddenTraps
-from skytemple_files.patch.handler.reduce_jumpcut_pause_time import ReduceJumpcutPauseTime
-from skytemple_files.patch.handler.externalize_waza import ExternalizeWazaPatchHandler
-from skytemple_files.patch.handler.extract_move_code import ExtractMoveCodePatchHandler
-from skytemple_files.patch.handler.extract_item_code import ExtractItemCodePatchHandler
-from skytemple_files.patch.handler.extract_sp_code import ExtractSPCodePatchHandler
-from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandler
+from skytemple_files.patch.handler.expand_poke_list import \
+    ExpandPokeListPatchHandler
+from skytemple_files.patch.handler.externalize_mappa import \
+    ExternalizeMappaPatchHandler
+from skytemple_files.patch.handler.externalize_waza import \
+    ExternalizeWazaPatchHandler
+from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
+from skytemple_files.patch.handler.extract_anims import \
+    ExtractAnimDataPatchHandler
+from skytemple_files.patch.handler.extract_bar_list import \
+    ExtractBarItemListPatchHandler
+from skytemple_files.patch.handler.extract_dungeon_data import \
+    ExtractDungeonDataPatchHandler
+from skytemple_files.patch.handler.extract_item_code import \
+    ExtractItemCodePatchHandler
+from skytemple_files.patch.handler.extract_item_lists import \
+    ExtractItemListsPatchHandler
+from skytemple_files.patch.handler.extract_move_code import \
+    ExtractMoveCodePatchHandler
+from skytemple_files.patch.handler.extract_sp_code import \
+    ExtractSPCodePatchHandler
+from skytemple_files.patch.handler.fairy_gummies import \
+    ImplementFairyGummiesPatchHandler
+from skytemple_files.patch.handler.far_off_pal_overdrive import \
+    FarOffPalOverdrive
+from skytemple_files.patch.handler.fix_evolution import \
+    FixEvolutionPatchHandler
+from skytemple_files.patch.handler.fix_memory_softlock import \
+    FixMemorySoftlockPatchHandler
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
-from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
-from skytemple_files.patch.handler.pkmn_ground_anim import PkmnGroundAnimPatchHandler
-from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
-from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
-from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
-from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
-from skytemple_files.patch.handler.allow_unrecruitable_mons import AllowUnrecruitableMonsPatchHandler
-from skytemple_files.patch.handler.edit_extra_pokemon import EditExtraPokemonPatchHandler
-from skytemple_files.patch.handler.fix_memory_softlock import FixMemorySoftlockPatchHandler
-from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
-from skytemple_files.patch.handler.disarm_one_room_mh import DisarmOneRoomMHPatchHandler
-from skytemple_files.patch.handler.dynamic_bosses_everywhere import DynamicBossesEverywherePatchHandler
-from skytemple_files.patch.handler.pitfall_trap_tweak import PitfallTrapTweakPatchHandler
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
+from skytemple_files.patch.handler.obj_table import \
+    ExtractObjectTablePatchHandler
+from skytemple_files.patch.handler.partners_trigger_hidden_traps import \
+    PartnersTriggerHiddenTraps
+from skytemple_files.patch.handler.pitfall_trap_tweak import \
+    PitfallTrapTweakPatchHandler
+from skytemple_files.patch.handler.pkmn_ground_anim import \
+    PkmnGroundAnimPatchHandler
+from skytemple_files.patch.handler.reduce_jumpcut_pause_time import \
+    ReduceJumpcutPauseTime
+from skytemple_files.patch.handler.same_type_partner import \
+    SameTypePartnerPatch
+from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
+from skytemple_files.patch.handler.stat_disp import \
+    ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.support_atupx import \
+    AtupxSupportPatchHandler
+from skytemple_files.patch.handler.unused_dungeon_chance import \
+    UnusedDungeonChancePatch
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), 'patches')
 

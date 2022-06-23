@@ -2,6 +2,8 @@
 Main static configuration for SkyTemple itself and a ROM.
 For now, the documentation of fields is in the pmd2data.xml.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -19,16 +21,14 @@ For now, the documentation of fields is in the pmd2data.xml.
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from enum import Enum
-from typing import List, Dict, Union, Pattern, Optional, Any
+from typing import Any, Dict, List, Optional, Pattern, Union
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
-from skytemple_files.common.util import AutoString
-
 # noinspection PyUnresolvedReferences
 # Re-exported for backwards compatibility
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
-
+from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
+from skytemple_files.common.util import AutoString
 
 GAME_VERSION_EOT = 'EoT'
 GAME_VERSION_EOD = 'EoD'

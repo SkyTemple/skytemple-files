@@ -15,9 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_u8
-from skytemple_files.compression.generic_nrl import CMD_ZERO_OUT, CMD_COPY_BYTES, CMD_FILL_OUT
+from __future__ import annotations
 
+from skytemple_files.common.util import read_u8
+from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
+                                                     CMD_FILL_OUT,
+                                                     CMD_ZERO_OUT)
 
 # How much bytes we look ahead for at most
 NRL_LOOKAHEAD_ZERO_MAX_BYTES = 127

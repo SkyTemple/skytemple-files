@@ -15,13 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Dict
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Dict
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.util import *
 from PIL import Image
+
+from skytemple_files.common.util import *
 
 
 class AbstractFontEntry(ABC, AutoString):

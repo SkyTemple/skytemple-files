@@ -14,15 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import logging
 from typing import Dict, Optional
 
 from explorerscript.source_map import SourceMap
-from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecompiler
-from explorerscript.ssb_converting.ssb_data_types import SsbRoutineType, SsbRoutineInfo, \
-    SsbOpParamConstString, SsbOpParamLanguageString, SsbOperation, SsbOpParam, SsbOpParamPositionMarker
-from explorerscript.ssb_script.ssb_converting.ssb_decompiler import SsbScriptSsbDecompiler
-from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData, Pmd2ScriptOpCode
+from explorerscript.ssb_converting.ssb_data_types import (
+    SsbOperation, SsbOpParam, SsbOpParamConstString, SsbOpParamLanguageString,
+    SsbOpParamPositionMarker, SsbRoutineInfo, SsbRoutineType)
+from explorerscript.ssb_converting.ssb_decompiler import \
+    ExplorerScriptSsbDecompiler
+from explorerscript.ssb_script.ssb_converting.ssb_decompiler import \
+    SsbScriptSsbDecompiler
+
+from skytemple_files.common.ppmdu_config.script_data import (Pmd2ScriptData,
+                                                             Pmd2ScriptOpCode)
 from skytemple_files.common.util import *
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
@@ -373,8 +380,12 @@ class Ssb:
 
             return stcursor - start, bytes_of_string
 
-        from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, GAME_REGION_JP
-        from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp
+        from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                              GAME_REGION_JP,
+                                                              GAME_REGION_US)
+        from skytemple_files.script.ssb.header import (SsbHeaderEu,
+                                                       SsbHeaderJp,
+                                                       SsbHeaderUs)
         if not isinstance(data, memoryview):
             data = memoryview(data)
 

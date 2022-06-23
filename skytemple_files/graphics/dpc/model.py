@@ -14,16 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import itertools
 import math
-from skytemple_files.common.i18n_util import f, _
 
 from PIL import Image
 
-from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dpci.model import Dpci, DPCI_TILE_DIM
-from skytemple_files.graphics.dpl.model import DPL_PAL_LEN, DPL_MAX_PAL
+from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
+from skytemple_files.graphics.dpl.model import DPL_MAX_PAL, DPL_PAL_LEN
 
 DPC_TILING_DIM = 3
 

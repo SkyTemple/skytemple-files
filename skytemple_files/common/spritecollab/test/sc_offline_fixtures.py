@@ -14,13 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import datetime
 from typing import List
 
-from skytemple_files.common.spritecollab.client import MonsterFormInfo, MonsterFormInfoWithPortrait, MonsterFormDetails, \
-    SpriteUrls
-from skytemple_files.common.spritecollab.schema import Config, PHASE_EXISTS, PHASE_UNKNOWN, PHASE_FULL
-from skytemple_files.common.spritecollab.test.requests_mock import AioRequestAdapterMock
+from skytemple_files.common.spritecollab.client import (
+    MonsterFormDetails, MonsterFormInfo, MonsterFormInfoWithPortrait,
+    SpriteUrls)
+from skytemple_files.common.spritecollab.schema import (PHASE_EXISTS,
+                                                        PHASE_FULL,
+                                                        PHASE_UNKNOWN, Config)
+from skytemple_files.common.spritecollab.test.requests_mock import \
+    AioRequestAdapterMock
 
 CONFIG_FIX: Config = {
     "portraitSize": 40,

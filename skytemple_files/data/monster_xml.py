@@ -2,6 +2,8 @@
 XML export / import for MD, WAZA_P and LEVEL_BIN_ENTRY.
 Theoretically compatible with ppmdu, but contains some new field names for some things.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -20,20 +22,23 @@ Theoretically compatible with ppmdu, but contains some new field names for some 
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 from abc import ABC, abstractmethod
-from base64 import b64encode, b64decode
-from typing import Optional, List, Tuple, Dict, Generic, TypeVar
+from base64 import b64decode, b64encode
+from typing import Dict, Generic, List, Optional, Tuple, TypeVar
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
 from range_typed_integers import u8
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError
-from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
-from skytemple_files.data.md.model import MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
-    AdditionalRequirement, MovementType, IQGroup
-from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.xml_util import XmlValidateError, validate_xml_tag
+from skytemple_files.data.level_bin_entry.model import (LevelBinEntry,
+                                                        LevelEntry)
+from skytemple_files.data.md.model import (Ability, AdditionalRequirement,
+                                           EvolutionMethod, Gender, IQGroup,
+                                           MdEntry, MovementType, PokeType,
+                                           ShadowSize)
+from skytemple_files.data.waza_p.model import LevelUpMove, MoveLearnset
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 from skytemple_files.hardcoded.monster_sprite_data_table import IdleAnimType
 

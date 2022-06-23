@@ -14,12 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from range_typed_integers import u16_checked
 
-from skytemple_files.graphics.bpl import BPL_PAL_LEN, BPL_MAX_PAL, BPL_PAL_ENTRY_LEN, BPL_PAL_SIZE, \
-    BPL_COL_INDEX_ENTRY_LEN, BPL_FOURTH_COLOR
-from skytemple_files.graphics.bpl.protocol import BplAnimationSpecProtocol, BplProtocol
 from skytemple_files.common.util import *
+from skytemple_files.graphics.bpl import (BPL_COL_INDEX_ENTRY_LEN,
+                                          BPL_FOURTH_COLOR, BPL_MAX_PAL,
+                                          BPL_PAL_ENTRY_LEN, BPL_PAL_LEN,
+                                          BPL_PAL_SIZE)
+from skytemple_files.graphics.bpl.protocol import (BplAnimationSpecProtocol,
+                                                   BplProtocol)
 
 
 class BplAnimationSpec(BplAnimationSpecProtocol):

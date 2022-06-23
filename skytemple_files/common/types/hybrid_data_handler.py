@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Protocol, Type
+from typing import Generic, Protocol, Type, TypeVar
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.impl_cfg import (ImplementationType,
+                                             get_implementation_type)
 from skytemple_files.common.types.data_handler import DataHandler
-
 
 U = TypeVar('U', contravariant=True)
 

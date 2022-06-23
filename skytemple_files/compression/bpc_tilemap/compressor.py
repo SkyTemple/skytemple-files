@@ -15,7 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.compression.generic_nrl.compressor import GenericNrlCompressor
+from __future__ import annotations
+
+from skytemple_files.compression.generic_nrl.compressor import \
+    GenericNrlCompressor
 
 DEBUG = False
 

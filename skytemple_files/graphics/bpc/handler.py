@@ -14,9 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type, TYPE_CHECKING
+from __future__ import annotations
 
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from typing import TYPE_CHECKING, Type
+
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 
@@ -32,7 +35,8 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BpcProtocol]:
-        from skytemple_rust.st_bpc import Bpc  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpc import \
+            Bpc  # pylint: disable=no-name-in-module,no-member,import-error
         return Bpc
 
     @classmethod
@@ -42,7 +46,8 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpc']]:  # type: ignore
-        from skytemple_rust.st_bpc import BpcWriter  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpc import \
+            BpcWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BpcWriter
 
     @classmethod

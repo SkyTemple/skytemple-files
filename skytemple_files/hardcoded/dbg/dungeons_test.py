@@ -15,13 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import csv
 import os
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
+from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
+                                         get_ppmdu_config_for_rom)
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')

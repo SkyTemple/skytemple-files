@@ -15,9 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 from io import BytesIO
 
-from skytemple_files.graphics.chara_wan.model import MINUS_FRAME, DIM_TABLE
+from skytemple_files.graphics.chara_wan.model import DIM_TABLE, MINUS_FRAME
 
 
 def ExportWan(wan):

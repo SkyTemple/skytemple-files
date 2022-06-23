@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 # Length of the default lookback buffer. The "sliding window" so to speak!
 # Used to determine how far back the compressor looks for matching sequences!
 PX_LOOKBACK_BUFFER_SIZE = 4096

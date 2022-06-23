@@ -14,8 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 

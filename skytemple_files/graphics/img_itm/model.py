@@ -15,15 +15,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
-from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.graphics.img_itm import TILE_DIM, CHUNK_DIM, PAL_ENTRY_LEN, PAL_LEN
-
 from PIL import Image
+
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
+from skytemple_files.common.util import *
+from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.graphics.img_itm import (CHUNK_DIM, PAL_ENTRY_LEN,
+                                              PAL_LEN, TILE_DIM)
 
 
 class ImgItm(Sir0Serializable):

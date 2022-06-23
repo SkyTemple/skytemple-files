@@ -15,10 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Tuple
 
 from skytemple_files.compression.bpc_image.compressor import BpcImageCompressor
-from skytemple_files.compression.bpc_image.decompressor import BpcImageDecompressor
+from skytemple_files.compression.bpc_image.decompressor import \
+    BpcImageDecompressor
 
 
 class BpcImageHandler:

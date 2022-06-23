@@ -14,12 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Optional
 
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.img_itm import PAL_LEN, PAL_ENTRY_LEN
+from skytemple_files.graphics.img_itm import PAL_ENTRY_LEN, PAL_LEN
 from skytemple_files.graphics.img_itm.model import ImgItm
 
 

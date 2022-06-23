@@ -14,8 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
-from typing import Tuple, Optional, Union
+from typing import Optional, Tuple, Union
 
 from PIL import Image
 

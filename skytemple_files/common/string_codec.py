@@ -16,10 +16,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import codecs
 import string
-
-from typing import Tuple, Any, List, Optional
+from typing import Any, List, Optional, Tuple
 
 # prepare encoding map - First fill with ascii printable
 _encode_table = {

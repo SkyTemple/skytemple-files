@@ -15,10 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from enum import Enum
 
-from skytemple_files.common.util import *
 from skytemple_files.common.i18n_util import _
+from skytemple_files.common.util import *
 
 
 class InterDEntryType(Enum):

@@ -4,6 +4,9 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
   Pokémon's sprite will take up.
 - The second is unknown, but also related to the sprite size?
 """
+from __future__ import annotations
+
+from skytemple_files.common.i18n_util import _
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -22,7 +25,6 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import _
 
 ENTRY_LEN = 2
 

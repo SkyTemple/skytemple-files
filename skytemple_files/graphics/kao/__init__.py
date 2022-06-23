@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
 KAO_IMG_PAL_B_SIZE = 48  # Size of KaoImage palette block in bytes (16*3)

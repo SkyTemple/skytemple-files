@@ -3,6 +3,8 @@ This module provides utilities to mark exceptions as 'User errors'. These errors
 but not be treated or reported as bugs.
 """
 
+from __future__ import annotations
+
 # User errors have this attribute defined.
 from typing import Type, TypeVar
 

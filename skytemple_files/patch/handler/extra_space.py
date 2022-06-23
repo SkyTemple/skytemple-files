@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 from typing import Callable
 
@@ -21,10 +23,10 @@ from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import get_resources_dir
+from skytemple_files.common.util import _, get_resources_dir
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.util import _
+
 OV_FILE_IDX = 36
 OV_FILE_PATH = os.path.join(get_resources_dir(), 'patches', 'asm_patches', 'end_asm_mods', 'src', 'overlay_0036.bin')
 

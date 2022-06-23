@@ -15,6 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 ZMAPPAT_TILE_SIZE = 0x80
 ZMAPPAT_PALETTE_COLORS = 0x10
 ZMAPPAT_NB_TILES_PER_VARIATION = 256

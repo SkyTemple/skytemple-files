@@ -15,16 +15,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import math
 
 from range_typed_integers import u16_checked
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
+from skytemple_files.common.i18n_util import _
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
-from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
+from skytemple_files.graphics.bpa.protocol import (BpaFrameInfoProtocol,
+                                                   BpaProtocol)
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
-from skytemple_files.common.i18n_util import _
 
 
 class BpaFrameInfo(BpaFrameInfoProtocol, CheckedIntWrites):

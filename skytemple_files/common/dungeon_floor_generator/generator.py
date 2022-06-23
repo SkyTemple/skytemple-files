@@ -15,13 +15,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import random
 from enum import Enum, auto
 from typing import List, Optional, Union
 
-from dungeon_eos.DungeonAlgorithm import Properties, StaticParam, ReturnData, DungeonData, generate_floor
+from dungeon_eos.DungeonAlgorithm import (DungeonData, Properties, ReturnData,
+                                          StaticParam, generate_floor)
 from dungeon_eos.RandomGen import RandomGenerator
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+
+from skytemple_files.dungeon_data.mappa_bin.floor_layout import \
+    MappaFloorLayout
 from skytemple_files.graphics.dma.model import DmaType
 
 

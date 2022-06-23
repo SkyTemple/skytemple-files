@@ -15,5 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 MEVO_ENTRY_LENGTH = 0x20
 MEVO_STATS_LENGTH = 0xA

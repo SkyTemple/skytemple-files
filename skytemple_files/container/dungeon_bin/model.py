@@ -14,12 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import logging
-from typing import Dict, Optional, Any, TypeVar
+from __future__ import annotations
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonBinFiles, Pmd2BinPackFile
+import logging
+from typing import Any, Dict, Optional, TypeVar
+
+from skytemple_files.common.ppmdu_config.dungeon_data import (
+    Pmd2BinPackFile, Pmd2DungeonBinFiles)
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.container.bin_pack.model import BinPack
+
 logger = logging.getLogger(__name__)
 
 T = TypeVar('T')

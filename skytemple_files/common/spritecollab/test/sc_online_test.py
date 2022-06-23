@@ -15,14 +15,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import sys
-from typing import get_args, Any, get_origin, get_type_hints
+from typing import Any, get_args, get_origin, get_type_hints
 from unittest import IsolatedAsyncioTestCase, skipIf
 
 from gql.dsl import DSLQuery
 
-from skytemple_files.common.spritecollab.client import SpriteCollabClient, MonsterFormInfo, MonsterFormInfoWithPortrait, \
-    MonsterFormDetails
+from skytemple_files.common.spritecollab.client import (
+    MonsterFormDetails, MonsterFormInfo, MonsterFormInfoWithPortrait,
+    SpriteCollabClient)
 from skytemple_files.common.spritecollab.schema import Config
 
 

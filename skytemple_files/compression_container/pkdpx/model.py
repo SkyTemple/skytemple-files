@@ -14,7 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u32_checked, u16_checked
+from __future__ import annotations
+
+from range_typed_integers import u16_checked, u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.model import CommonAt

@@ -15,13 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from pathlib import PurePosixPath
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
-
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bg_list_dat import DIR, BPC_EXT, BPL_EXT, BMA_EXT, BPA_EXT
-from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
+from skytemple_files.graphics.bg_list_dat import (BMA_EXT, BPA_EXT, BPC_EXT,
+                                                  BPL_EXT, DIR)
+from skytemple_files.graphics.bg_list_dat.protocol import (BgListEntryProtocol,
+                                                           BgListProtocol)
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bma._model import Bma
 # noinspection PyProtectedMember

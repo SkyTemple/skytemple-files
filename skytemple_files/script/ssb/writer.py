@@ -15,18 +15,27 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import logging
 import math
 from typing import Dict, Type
 
 from range_typed_integers import u16_checked
 
-from skytemple_files.common.ppmdu_config.data import GAME_REGION_US, GAME_REGION_EU, Pmd2Data, GAME_REGION_JP
-from skytemple_files.common.util import *
-from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu, \
-    SSB_HEADER_JP_LENGTH, SsbHeaderJp, AbstractSsbHeader
-from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
 from skytemple_files.common.i18n_util import _
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                      GAME_REGION_JP,
+                                                      GAME_REGION_US, Pmd2Data)
+from skytemple_files.common.util import *
+from skytemple_files.script.ssb.header import (SSB_HEADER_EU_LENGTH,
+                                               SSB_HEADER_JP_LENGTH,
+                                               SSB_HEADER_US_LENGTH,
+                                               AbstractSsbHeader, SsbHeaderEu,
+                                               SsbHeaderJp, SsbHeaderUs)
+from skytemple_files.script.ssb.model import (SSB_PADDING_BEFORE_ROUTINE_INFO,
+                                              Ssb)
+
 logger = logging.getLogger(__name__)
 
 

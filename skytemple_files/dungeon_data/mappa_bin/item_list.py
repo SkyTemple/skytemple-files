@@ -14,20 +14,30 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
+import typing
 from typing import Dict, Union
 from xml.etree.ElementTree import Element
 
-import typing
-
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem, Pmd2DungeonItemCategory
+from skytemple_files.common.ppmdu_config.dungeon_data import (
+    Pmd2DungeonItem, Pmd2DungeonItemCategory)
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag, XmlValidateError, validate_xml_attribs
-from skytemple_files.dungeon_data.mappa_bin import XML_ITEM_LIST, XML_CATEGORY, XML_CATEGORY__NAME, \
-    XML_CATEGORY__WEIGHT, XML_ITEM__ID, XML_ITEM__WEIGHT, XML_ITEM
-from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+from skytemple_files.common.xml_util import (XmlSerializable, XmlValidateError,
+                                             validate_xml_attribs,
+                                             validate_xml_tag)
+from skytemple_files.dungeon_data.mappa_bin import (XML_CATEGORY,
+                                                    XML_CATEGORY__NAME,
+                                                    XML_CATEGORY__WEIGHT,
+                                                    XML_ITEM, XML_ITEM__ID,
+                                                    XML_ITEM__WEIGHT,
+                                                    XML_ITEM_LIST)
+from skytemple_files.dungeon_data.mappa_bin._deprecated import \
+    MappaItemCategory
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin.model import \
+        MappaBinReadContainer
 logger = logging.getLogger(__name__)
 
 

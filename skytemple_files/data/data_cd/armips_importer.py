@@ -14,15 +14,19 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
 
-from skytemple_files.common.util import open_utf8, get_resources_dir, set_rw_permission_folder
-from skytemple_files.common.i18n_util import f, _
-from skytemple_files.patch.arm_patcher import PatchError, ArmipsNotInstalledError
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.util import (get_resources_dir, open_utf8,
+                                         set_rw_permission_folder)
+from skytemple_files.patch.arm_patcher import (ArmipsNotInstalledError,
+                                               PatchError)
 from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = '__main.asm'

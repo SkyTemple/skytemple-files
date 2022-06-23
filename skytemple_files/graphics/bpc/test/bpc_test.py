@@ -14,6 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
 
 from range_typed_integers import u16
@@ -22,7 +24,7 @@ from skytemple_files.common.tiled_image import TilemapEntry
 from skytemple_files.common.util import chunks
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.bpc.handler import BpcHandler
-from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol
+from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
 from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock, bpa_lists_eq
 from skytemple_files.graphics.test.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
 from skytemple_files.graphics.test.util import assert_tilemap_lists_equal

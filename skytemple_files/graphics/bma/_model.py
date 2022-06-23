@@ -14,13 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import copy
 import itertools
 import math
-from typing import Tuple, List, Sequence
+from typing import List, Sequence, Tuple
 
 from PIL import Image, ImageDraw, ImageFont
 
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
@@ -28,13 +31,13 @@ from skytemple_files.graphics.bma import MASK_PAL
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpa._model import Bpa
+from skytemple_files.graphics.bpc import BPC_TILE_DIM
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpc._model import Bpc
+from skytemple_files.graphics.bpl import (BPL_IMG_PAL_LEN, BPL_MAX_PAL,
+                                          BPL_PAL_LEN)
 # noinspection PyProtectedMember
 from skytemple_files.graphics.bpl._model import Bpl
-from skytemple_files.graphics.bpc import BPC_TILE_DIM
-from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL, BPL_PAL_LEN
-from skytemple_files.common.i18n_util import f, _
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
 

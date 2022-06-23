@@ -1,6 +1,8 @@
 """
 All modules in this package require the ``spritecollab`` extra.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

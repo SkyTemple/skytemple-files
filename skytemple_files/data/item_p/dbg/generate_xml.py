@@ -15,13 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-import os
+from __future__ import annotations
 
-from ndspy.rom import NintendoDSRom
+import os
 from typing import Dict, List
 
+from ndspy.rom import NintendoDSRom
+
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+from skytemple_files.dungeon_data.mappa_bin._deprecated import \
+    MappaItemCategory
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 

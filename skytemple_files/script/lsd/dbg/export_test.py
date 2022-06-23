@@ -15,11 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
+from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
 from skytemple_files.common.util import get_rom_folder
 from skytemple_files.script.lsd.handler import LsdHandler
 

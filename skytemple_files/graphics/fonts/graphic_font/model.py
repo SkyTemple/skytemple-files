@@ -15,13 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from typing import Optional
+
+from PIL import Image
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts.graphic_font import *
 from skytemple_files.graphics.pal.model import Pal
-
-from PIL import Image
 
 
 class GraphicFont(AutoString):

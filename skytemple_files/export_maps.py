@@ -18,6 +18,8 @@ This is also an example on how to use the following file handlers:
 - (Compressions)
 - (Hardcoded Lists)
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -41,15 +43,17 @@ import os
 import sys
 import traceback
 import warnings
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
 
-from PIL import Image, ImageDraw
 from ndspy.rom import NintendoDSRom
+from PIL import Image, ImageDraw
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
-from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
+from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_ppmdu_config_for_rom, get_rom_folder, get_binary_from_rom_ppmdu
+from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
+                                         get_ppmdu_config_for_rom,
+                                         get_rom_folder)
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.model import Md
 from skytemple_files.graphics.bma.protocol import BmaProtocol
@@ -61,7 +65,8 @@ from skytemple_files.graphics.dpci.model import Dpci
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
-from skytemple_files.hardcoded.ground_dungeon_tilesets import HardcodedGroundDungeonTilesets
+from skytemple_files.hardcoded.ground_dungeon_tilesets import \
+    HardcodedGroundDungeonTilesets
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.layer import SsaLayer
 from skytemple_files.script.ssa_sse_sss.object import SsaObject

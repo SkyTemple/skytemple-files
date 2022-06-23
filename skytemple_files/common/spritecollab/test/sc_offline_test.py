@@ -15,28 +15,30 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
 import tempfile
 from filecmp import dircmp
 from typing import Optional
 from unittest import IsolatedAsyncioTestCase
 
-from PIL import Image
 from gql.dsl import DSLQuery
+from PIL import Image
 from xmldiff import main
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Sprite
-
 from skytemple_files.common.spritecollab.client import SpriteCollabClient
-from skytemple_files.common.spritecollab.test.requests_mock import AioRequestAdapterMock, FIXTURES_DIR
-from skytemple_files.common.spritecollab.test.sc_offline_fixtures import CONFIG_FIX, \
-    LIST_MONSTER_FORMS_NO_PORTRAITS_FIX, LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX, MONSTER_FORM_DETAILS_FIX, \
-    QUERY_API_VERSION_FIX, MONSTER_FORM_DETAILS_FIX_MULTI_MON
+from skytemple_files.common.spritecollab.test.requests_mock import (
+    FIXTURES_DIR, AioRequestAdapterMock)
+from skytemple_files.common.spritecollab.test.sc_offline_fixtures import (
+    CONFIG_FIX, LIST_MONSTER_FORMS_NO_PORTRAITS_FIX,
+    LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX, MONSTER_FORM_DETAILS_FIX,
+    MONSTER_FORM_DETAILS_FIX_MULTI_MON, QUERY_API_VERSION_FIX)
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.graphics.chara_wan.model import WanFile
 from skytemple_files.graphics.kao.sprite_bot_sheet import SpriteBotSheet
 from skytemple_files.test.image import ImageTestCaseAbc
-
 
 EXPECTED_DIR = os.path.join(os.path.dirname(__file__), 'expected')
 

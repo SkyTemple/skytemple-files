@@ -16,6 +16,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import asyncio
 import logging
 import os
@@ -29,8 +31,9 @@ from typing import List, Tuple
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
-from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
-from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
+from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
+from skytemple_files.common.util import (get_files_from_rom_with_extension,
+                                         get_rom_folder)
 from skytemple_files.script.ssb.flow import SsbFlow
 from skytemple_files.script.ssb.handler import SsbHandler
 from skytemple_files.script.ssb.script_compiler import ScriptCompiler

@@ -15,11 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.hardcoded.icon_banner import IconBanner, Icon
+from skytemple_files.hardcoded.icon_banner import Icon, IconBanner
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')
 out_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

@@ -16,9 +16,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bpa._model import Bpa
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
+from skytemple_files.graphics.bpa._model import Bpa
 
 
 class BpaWriter:

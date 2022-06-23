@@ -14,17 +14,20 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import List
 
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u32_checked, u32
+from range_typed_integers import u32, u32_checked
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2LooseBinFile
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import create_file_in_rom, get_binary_from_rom_ppmdu, read_var_length_string, \
-    read_u32, write_u32
+from skytemple_files.common.util import (create_file_in_rom,
+                                         get_binary_from_rom_ppmdu, read_u32,
+                                         read_var_length_string, write_u32)
 
 
 class ListExtractor:

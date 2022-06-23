@@ -14,20 +14,26 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
 from typing import Dict, Optional
-
-from skytemple_files.common.util import *
-from skytemple_files.graphics.pal.model import Pal
-from skytemple_files.graphics.fonts import *
-from skytemple_files.graphics.fonts.banner_font import *
-from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
-from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.common.i18n_util import f, _
+
 from PIL import Image
+
+from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.util import *
+from skytemple_files.common.xml_util import (XmlValidateError,
+                                             validate_xml_attribs,
+                                             validate_xml_tag)
+from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts.abstract import (AbstractFont,
+                                                     AbstractFontEntry)
+from skytemple_files.graphics.fonts.banner_font import *
+from skytemple_files.graphics.pal.model import Pal
 
 
 class BannerFontEntry(AbstractFontEntry, CheckedIntWrites):
@@ -113,7 +119,8 @@ class BannerFont(Sir0Serializable, AbstractFont, CheckedIntWrites):
         return cls(content_data, data_pointer)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        from skytemple_files.graphics.fonts.banner_font.writer import BannerFontWriter
+        from skytemple_files.graphics.fonts.banner_font.writer import \
+            BannerFontWriter
         return BannerFontWriter(self).write()  # type: ignore
 
     def set_palette(self, palette: Pal):

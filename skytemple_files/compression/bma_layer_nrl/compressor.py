@@ -15,9 +15,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from skytemple_files.common.util import read_bytes, iter_bytes, read_u32, read_u16
-from skytemple_files.compression.generic_nrl import CMD_COPY_BYTES, CMD_FILL_OUT
+from __future__ import annotations
 
+from skytemple_files.common.util import (iter_bytes, read_bytes, read_u16,
+                                         read_u32)
+from skytemple_files.compression.generic_nrl import (CMD_COPY_BYTES,
+                                                     CMD_FILL_OUT)
 
 # How much pair24 we look ahead for at most
 # 127 not possible because LA also use for fill and 2*63=126

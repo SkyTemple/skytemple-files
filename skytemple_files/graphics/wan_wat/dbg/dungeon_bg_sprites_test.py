@@ -15,16 +15,18 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import colorsys
 import json
 import os
 from math import floor
 
-from PIL import ImageFilter, Image
+from colorthief import ColorThief
 from ndspy.rom import NintendoDSRom
+from PIL import Image, ImageFilter
 
 from skytemple_files.common.types.file_types import FileType
-from colorthief import ColorThief
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 os.makedirs(output_dir, exist_ok=True)

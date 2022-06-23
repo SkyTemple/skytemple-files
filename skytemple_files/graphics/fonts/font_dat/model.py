@@ -14,17 +14,22 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
 from typing import Dict
-
-from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts import *
-from skytemple_files.graphics.fonts.font_dat import *
-from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
-from skytemple_files.common.xml_util import validate_xml_tag, validate_xml_attribs
-from skytemple_files.common.i18n_util import _
+
 from PIL import Image
+
+from skytemple_files.common.i18n_util import _
+from skytemple_files.common.util import *
+from skytemple_files.common.xml_util import (validate_xml_attribs,
+                                             validate_xml_tag)
+from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts.abstract import (AbstractFont,
+                                                     AbstractFontEntry)
+from skytemple_files.graphics.fonts.font_dat import *
 
 
 class FontDatEntry(AbstractFontEntry, CheckedIntWrites):

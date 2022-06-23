@@ -14,13 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from unittest import IsolatedAsyncioTestCase
 
 from PIL import Image
 
-from skytemple_files.common.spritecollab.client import MonsterFormInfoWithPortrait
+from skytemple_files.common.spritecollab.client import \
+    MonsterFormInfoWithPortrait
 from skytemple_files.common.spritecollab.schema import PHASE_UNKNOWN
-from skytemple_files.common.spritecollab.test.requests_mock import FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock
+from skytemple_files.common.spritecollab.test.requests_mock import (
+    FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock)
 
 
 class MonsterFormInfoTestCase(IsolatedAsyncioTestCase):

@@ -16,17 +16,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import hashlib
 import os
 import warnings
 
+from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import \
+    SsbGraphMinimizer
+from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import \
+    OpsLabelJumpToResolver
 from ndspy.rom import NintendoDSRom
 
-from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import SsbGraphMinimizer
-from explorerscript.ssb_converting.decompiler.label_jump_to_resolver import OpsLabelJumpToResolver
 from skytemple_files.common.util import get_files_from_rom_with_extension
 from skytemple_files.script.ssb.handler import SsbHandler
-
 
 RENDER = True
 

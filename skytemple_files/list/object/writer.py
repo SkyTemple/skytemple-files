@@ -16,8 +16,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from skytemple_files.common.util import *
-from skytemple_files.list.object.model import ObjectListBin, LEN_OBJECT_ENTRY
+from skytemple_files.list.object.model import LEN_OBJECT_ENTRY, ObjectListBin
 
 
 class ObjectListBinWriter:

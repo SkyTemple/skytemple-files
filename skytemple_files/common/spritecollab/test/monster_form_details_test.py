@@ -14,15 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from unittest import IsolatedAsyncioTestCase
 
 from PIL import Image
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptFaceName
-from skytemple_files.common.spritecollab.client import MonsterFormDetails, SpriteUrls
+from skytemple_files.common.spritecollab.client import (MonsterFormDetails,
+                                                        SpriteUrls)
 from skytemple_files.common.spritecollab.schema import PHASE_UNKNOWN
-from skytemple_files.common.spritecollab.test.requests_mock import FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock, \
-    FIX_TEST_FILES
+from skytemple_files.common.spritecollab.test.requests_mock import (
+    FIX_TEST_FILES, FIX_TEST_FILES_WITH_NONE, AioRequestAdapterMock)
 
 
 class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):

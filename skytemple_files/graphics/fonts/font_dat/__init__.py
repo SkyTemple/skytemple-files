@@ -15,5 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 FONT_DAT_ENTRY_LEN = 0x1C
 FONT_DAT_SIZE = 12

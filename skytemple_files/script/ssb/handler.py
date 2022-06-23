@@ -14,13 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Type
 
-from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, GAME_REGION_US, Pmd2Data, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import (GAME_REGION_EU,
+                                                      GAME_REGION_JP,
+                                                      GAME_REGION_US, Pmd2Data)
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.script.ssb.header import SsbHeaderEu, SsbHeaderUs, SsbHeaderJp, AbstractSsbHeader
+from skytemple_files.script.ssb.header import (AbstractSsbHeader, SsbHeaderEu,
+                                               SsbHeaderJp, SsbHeaderUs)
 from skytemple_files.script.ssb.model import Ssb
 from skytemple_files.script.ssb.writer import SsbWriter
 

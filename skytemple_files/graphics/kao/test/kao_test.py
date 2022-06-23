@@ -15,12 +15,14 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import typing
-from typing import List, Dict
+from typing import Dict, List
 
 from skytemple_files.common.util import read_i32
 from skytemple_files.graphics.kao.handler import KaoHandler
-from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
+from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 FIX_IN_TEST_MAP: Dict[int, List[int]] = {

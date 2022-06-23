@@ -15,12 +15,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from typing import Optional
 
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.wte.model import Wte, MAGIC_NUMBER
+from skytemple_files.graphics.wte.model import MAGIC_NUMBER, Wte
 
 
 class WteWriter:

@@ -15,12 +15,16 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import sys
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
-from skytemple_files.hardcoded.guest_pokemon import ExtraDungeonDataList, GuestPokemonList, GuestPokemon
+from skytemple_files.hardcoded.guest_pokemon import (ExtraDungeonDataList,
+                                                     GuestPokemon,
+                                                     GuestPokemonList)
 
 
 def main():

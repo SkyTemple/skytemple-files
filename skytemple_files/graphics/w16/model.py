@@ -14,14 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import itertools
 from abc import ABC, abstractmethod
 from itertools import zip_longest
 
 from PIL import Image
 
-from skytemple_files.common.tiled_image import to_pil, TilemapEntry, from_pil
+from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
+
 TOC_ENTRY_LEN = 4 + 4
 NUM_CHANNELS = 3
 NUM_COLORS_IN_PAL = 16

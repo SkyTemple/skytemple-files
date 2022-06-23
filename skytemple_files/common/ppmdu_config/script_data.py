@@ -2,6 +2,8 @@
 The script_data section of the main static configuration.
 For now, the documentation of fields is in the pmd2scriptdata.xml.
 """
+from __future__ import annotations
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -20,13 +22,14 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import warnings
 from enum import Enum, IntEnum
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
-from range_typed_integers import u8, u16, i16
+from explorerscript.ssb_converting.ssb_data_types import (SsbCoroutine,
+                                                          SsbOpCode)
+from range_typed_integers import i16, u8, u16
 
-from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
-from skytemple_files.common.util import AutoString
 from skytemple_files.common.i18n_util import _
+from skytemple_files.common.util import AutoString
 
 
 class GameVariableType(IntEnum):

@@ -17,11 +17,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 
+from __future__ import annotations
+
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bgp.model import Bgp, BGP_PAL_NUMBER_COLORS, BGP_PAL_ENTRY_LEN, BGP_TILEMAP_ENTRY_BYTELEN, \
-    BGP_HEADER_LENGTH, BGP_TILE_DIM, BGP_PAL_UNKNOWN4_COLOR_VAL
+from skytemple_files.graphics.bgp.model import (BGP_HEADER_LENGTH,
+                                                BGP_PAL_ENTRY_LEN,
+                                                BGP_PAL_NUMBER_COLORS,
+                                                BGP_PAL_UNKNOWN4_COLOR_VAL,
+                                                BGP_TILE_DIM,
+                                                BGP_TILEMAP_ENTRY_BYTELEN, Bgp)
 
 
 class BgpWriter:

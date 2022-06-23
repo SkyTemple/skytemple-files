@@ -14,8 +14,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from skytemple_files.common.util import *
+from __future__ import annotations
 
+from skytemple_files.common.util import *
 
 LEVEL_BIN_ENTRY_LEVEL_LEN = 12
 

@@ -14,12 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Type, TYPE_CHECKING
+from __future__ import annotations
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from typing import TYPE_CHECKING, Type
+
+from skytemple_files.common.impl_cfg import (ImplementationType,
+                                             get_implementation_type)
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler, WriterProtocol)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.bpl.protocol import BplProtocol, BplAnimationSpecProtocol
+from skytemple_files.graphics.bpl.protocol import (BplAnimationSpecProtocol,
+                                                   BplProtocol)
 
 if TYPE_CHECKING:
     pass
@@ -33,7 +38,8 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_native_model(cls) -> Type[BplProtocol]:
-        from skytemple_rust.st_bpl import Bpl  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpl import \
+            Bpl  # pylint: disable=no-name-in-module,no-member,import-error
         return Bpl
 
     @classmethod
@@ -43,13 +49,16 @@ class BplHandler(HybridDataHandler[BplProtocol]):
 
     @classmethod
     def load_native_writer(cls) -> Type[WriterProtocol['NativeBpl']]:  # type: ignore
-        from skytemple_rust.st_bpl import BplWriter  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_bpl import \
+            BplWriter  # pylint: disable=no-name-in-module,no-member,import-error
         return BplWriter
 
     @classmethod
     def get_animation_spec_model_cls(cls) -> Type[BplAnimationSpecProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
-            from skytemple_rust.st_bpl import BplAnimationSpec as BplAnimationSpecNative  # pylint: disable=no-name-in-module,no-member,import-error
+            from skytemple_rust.st_bpl import \
+                BplAnimationSpec as \
+                BplAnimationSpecNative  # pylint: disable=no-name-in-module,no-member,import-error
             return BplAnimationSpecNative
         from skytemple_files.graphics.bpl._model import BplAnimationSpec
         return BplAnimationSpec

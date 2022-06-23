@@ -15,16 +15,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+from __future__ import annotations
+
 import os
 from typing import Tuple
 
-from PIL import Image, ImageDraw, ImageFont
 from ndspy.rom import NintendoDSRom
+from PIL import Image, ImageDraw, ImageFont
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
-from skytemple_files.dungeon_data.fixed_bin.model import TileRule, FloorType, TileRuleType
+from skytemple_files.common.util import (get_binary_from_rom_ppmdu,
+                                         get_ppmdu_config_for_rom)
+from skytemple_files.dungeon_data.fixed_bin.model import (FloorType, TileRule,
+                                                          TileRuleType)
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
 from skytemple_files.graphics.dma.model import Dma, DmaType
 from skytemple_files.graphics.dpc.model import Dpc

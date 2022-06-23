@@ -14,16 +14,18 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import os
-from typing import List, Sequence, Optional
+from typing import List, Optional, Sequence
 
 from PIL import Image
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry
+from skytemple_files.graphics.bpc.protocol import (BpcLayerProtocol,
+                                                   BpcProtocol, P)
 from skytemple_files.graphics.test.mocks.bpa_mock import bpa_lists_eq
-from skytemple_files.graphics.bpc.protocol import BpcProtocol, BpcLayerProtocol, P
-
 
 thisdir = os.path.dirname(__file__)
 
@@ -126,8 +128,8 @@ class BpcMock(BpcProtocol[BpcLayerMock, P]):
 
     def chunks_animated_to_pil(self, layer: int, palettes: Sequence[Sequence[int]], bpas: Sequence[Optional[P]],
                                width_in_mtiles: int = 20) -> List[Image.Image]:
-        from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
         from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
+        from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
         if self.number_of_layers == 2:
             if layer == 0 and width_in_mtiles == 1 and (self._writing_allowed or palettes == BplMock(bytes()).palettes) and bpa_lists_eq(bpas, [None, BpaMock(bytes()), None, None, None, None, None, None]):
                 return [
@@ -221,8 +223,8 @@ class BpcMock(BpcProtocol[BpcLayerMock, P]):
 def _generate_mock_data():
     """Generate mock data using the assumed working implementation."""
     from skytemple_files.common.types.file_types import FileType
-    from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
     from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
+    from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
     with open('../fixtures/MAP_BG/coco.bpc', 'rb') as f:
         bpc = FileType.BPC.deserialize(f.read())
 

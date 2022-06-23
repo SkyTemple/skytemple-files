@@ -14,12 +14,16 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import re
-from typing import Union, TypeVar, Iterable
+from __future__ import annotations
 
+import re
+from typing import Iterable, TypeVar, Union
+
+from explorerscript.ssb_converting.ssb_data_types import (DungeonModeConstants,
+                                                          SsbOpParamConstant)
+
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.script_data import *
-from explorerscript.ssb_converting.ssb_data_types import SsbOpParamConstant, DungeonModeConstants
-from skytemple_files.common.i18n_util import f, _
 from skytemple_files.user_error import UserValueError
 
 PREFIX_DIRECTION = 'DIR_'

@@ -14,24 +14,21 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 import typing
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
-from graphql import (
-    GraphQLArgument,
-    GraphQLEnumType,
-    GraphQLField,
-    GraphQLInt,
-    GraphQLList,
-    GraphQLNonNull,
-    GraphQLObjectType,
-    GraphQLSchema,
-    GraphQLString, GraphQLBoolean, GraphQLScalarType, GraphQLUnionType,
-)
+from graphql import (GraphQLArgument, GraphQLBoolean, GraphQLEnumType,
+                     GraphQLField, GraphQLInt, GraphQLList, GraphQLNonNull,
+                     GraphQLObjectType, GraphQLScalarType, GraphQLSchema,
+                     GraphQLString, GraphQLUnionType)
 
-from skytemple_files.common.spritecollab.schema import Config, Credit, Monster_Metadata, MonsterForm, PHASE_EXISTS, \
-    PHASE_UNKNOWN, PHASE_FULL, MonsterFormPortraits_Emotions, MonsterFormSprites_Actions
-from skytemple_files.common.spritecollab.test.sc_offline_fixtures import CONFIG_FIX
+from skytemple_files.common.spritecollab.schema import (
+    PHASE_EXISTS, PHASE_FULL, PHASE_UNKNOWN, Config, Credit, Monster_Metadata,
+    MonsterForm, MonsterFormPortraits_Emotions, MonsterFormSprites_Actions)
+from skytemple_files.common.spritecollab.test.sc_offline_fixtures import \
+    CONFIG_FIX
 
 
 def mock_search_monster(_monster_name: str) -> List[Monster_Metadata]:

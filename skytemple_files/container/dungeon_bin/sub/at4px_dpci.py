@@ -14,10 +14,14 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.compression_container.common_at.handler import \
+    COMMON_AT_BEST_3
 from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
+
 
 class DbinAt4pxDpciHandler(DataHandler[Dpci]):
 

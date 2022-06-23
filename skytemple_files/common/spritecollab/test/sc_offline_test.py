@@ -26,6 +26,7 @@ from PIL import Image
 from gql.dsl import DSLQuery
 from xmldiff import main, formatting
 
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.ppmdu_config.data import Pmd2Sprite, Pmd2Index
 
 from skytemple_files.common.spritecollab.client import SpriteCollabClient

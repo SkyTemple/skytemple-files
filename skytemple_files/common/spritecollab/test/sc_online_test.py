@@ -15,8 +15,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+import sys
 from typing import get_args, Any, get_origin, get_type_hints
-from unittest import IsolatedAsyncioTestCase
+from unittest import IsolatedAsyncioTestCase, skipIf
 
 from gql.dsl import DSLQuery
 
@@ -53,6 +54,7 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
         else:
             self.assertIsInstance(v, ftype)
 
+    @skipIf(sys.version_info < (3, 9, 0), "type checks incompatibilities in python 3.8")
     async def test_fetch_config(self):
         async with self.client as session:
             result = await session.fetch_config()

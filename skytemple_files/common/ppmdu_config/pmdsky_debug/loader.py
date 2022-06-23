@@ -249,6 +249,10 @@ def _read(binaries: Dict[str, _IncompleteBinary], yml: dict, region: str):
 
 
 def _build(binaries: Dict[str, _IncompleteBinary]) -> List[Pmd2Binary]:
+    # Merge ram into arm9 blocks (for backwards compatibility RAM is treated as arm9 by SkyTemple):
+    if 'ram' in binaries and 'arm9' in binaries:
+        binaries['arm9'].symbols += binaries['ram'].symbols
+        del binaries['ram']
     out = []
     for bin_name, incl_bin in binaries.items():
         if incl_bin._discard:

@@ -53,7 +53,6 @@ import pkg_resources
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 from PIL import Image
-from PIL.Image import NONE
 from range_typed_integers import (
     IntegerBoundError,
     check_int,
@@ -769,7 +768,7 @@ def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.
         if img.mode != "RGB":
             img = img.convert("RGB")
         transparency_map = [False for px in img.getdata()]
-    qimg = img.quantize(15, dither=NONE)
+    qimg = img.quantize(15, dither=0)
     # Get the original palette and add the transparent color
     qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])  # type: ignore
     # Shift up all pixel values by 1 and add the transparent pixels

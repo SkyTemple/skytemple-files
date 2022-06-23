@@ -16,14 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bma._model import Bma as PyBma
-    from skytemple_rust.st_bma import Bma as NativeBma
+    pass
 
 
 class BmaHandler(HybridDataHandler[BmaProtocol]):

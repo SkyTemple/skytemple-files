@@ -18,7 +18,6 @@
 import math
 
 from collections.abc import Iterator
-from typing import cast
 
 from skytemple_files.graphics.kao import SUBENTRIES, SUBENTRY_LEN, KAO_IMG_PAL_B_SIZE, KAO_IMG_METAPIXELS_DIM, \
     KAO_IMG_IMG_DIM

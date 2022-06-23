@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import read_bytes, OptionalKwargs
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.tbl_talk.model import TblTalk
 from skytemple_files.data.tbl_talk.writer import TblTalkWriter
 

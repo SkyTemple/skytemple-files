@@ -20,7 +20,6 @@ from typing import Optional
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.banner_font import *
 from skytemple_files.graphics.fonts.banner_font.model import BannerFont
 

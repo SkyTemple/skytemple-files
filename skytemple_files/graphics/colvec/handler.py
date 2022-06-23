@@ -18,7 +18,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.colvec.model import Colvec
-from skytemple_files.graphics.colvec.writer import ColvecWriter
 
 
 class ColvecHandler(DataHandler[Colvec]):

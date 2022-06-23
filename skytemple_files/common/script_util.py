@@ -28,7 +28,6 @@ except ImportError:
 
 from ndspy.fnt import Folder
 
-from skytemple_files.common.types.file_types import FileType
 
 SCRIPT_DIR = 'SCRIPT'
 COMMON_DIR = 'COMMON'

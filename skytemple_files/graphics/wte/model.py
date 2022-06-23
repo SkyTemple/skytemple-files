@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-from enum import Enum, auto
+from enum import Enum
 from typing import Optional
 
 from PIL import Image
@@ -24,7 +24,7 @@ from range_typed_integers import u16_checked, u8_checked
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 MAGIC_NUMBER = b'WTE\0'
 logger = logging.getLogger(__name__)

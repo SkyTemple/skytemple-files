@@ -19,15 +19,9 @@ import unittest
 
 from PIL import Image
 
-from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
-from skytemple_files.graphics.bma.handler import BmaHandler
-from skytemple_files.graphics.bma.protocol import BmaProtocol
-from skytemple_files.graphics.test.mocks.bpa_mock import BpaMock
-from skytemple_files.graphics.test.mocks.bpc_mock import BpcMock
-from skytemple_files.graphics.test.mocks.bpl_mock import BplMock
 from skytemple_files.hardcoded.cart_removed import HardcodedCartRemoved
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+from skytemple_files.test.case import fixpath
 
 
 class CartRemovedTestCase(unittest.TestCase):

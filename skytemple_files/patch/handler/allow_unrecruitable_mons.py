@@ -22,7 +22,7 @@ from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 ORIGINAL_INSTRUCTION = 0xE59F1060
 OFFSET_EU = 0x31A58

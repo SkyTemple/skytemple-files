@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 import os
-from typing import Callable, Dict, List, Set
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 

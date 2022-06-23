@@ -23,7 +23,6 @@
 #  https://github.com/pleonex/tinke/blob/master/Plugins/999HRPERDOOR/999HRPERDOOR/AT6P.cs
 
 
-from typing import Tuple
 
 from skytemple_files.compression.custom_999.compressor import Custom999Compressor
 from skytemple_files.compression.custom_999.decompressor import Custom999Decompressor

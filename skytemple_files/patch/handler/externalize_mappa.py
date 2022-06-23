@@ -14,9 +14,8 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Callable, Dict, List, Set
+from typing import Callable
 
-from ndspy.code import loadOverlayTable, saveOverlayTable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
@@ -24,7 +23,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS,
     GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import _, get_locales
+from skytemple_files.common.i18n_util import _
 
 PATCH_CHECK_ADDR_APPLIED_US = 0xAD80
 PATCH_CHECK_ADDR_APPLIED_EU = 0xADF0

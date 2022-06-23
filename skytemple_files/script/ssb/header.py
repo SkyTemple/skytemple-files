@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 from collections import OrderedDict
 from typing import Optional, Dict
 
-from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE, LANG_JP
+from skytemple_files.common.ppmdu_config.data import LANG_EN, LANG_FR, LANG_IT, LANG_SP, LANG_DE
 from skytemple_files.common.util import *
 
 

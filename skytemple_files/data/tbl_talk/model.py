@@ -18,7 +18,7 @@ from enum import Enum
 
 from skytemple_files.data.tbl_talk import *
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 
 class TalkType(Enum):

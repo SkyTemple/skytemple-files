@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import typing
-from dataclasses import dataclass
 from typing import Sequence, List, Optional
 
 from PIL import Image

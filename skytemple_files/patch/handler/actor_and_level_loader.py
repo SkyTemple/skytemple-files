@@ -23,7 +23,7 @@ from skytemple_files.list.actor.model import LEN_ACTOR_ENTRY
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.list_extractor import ListExtractor
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 from skytemple_files.user_error import make_user_err
 
 EXTRACT_LOOSE_BIN_SRCDATA__ACTORS = 'Entities'

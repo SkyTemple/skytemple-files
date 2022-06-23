@@ -22,8 +22,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bg_list_dat.protocol import BgListProtocol, BgListEntryProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bg_list_dat._model import BgList as PyBgList
-    from skytemple_rust.st_bg_list_dat import BgList as NativeBgList
+    pass
 
 
 class BgListDatHandler(HybridDataHandler[BgListProtocol]):

@@ -24,10 +24,10 @@ from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_sir0 import *
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
-from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
+from skytemple_files.common.xml_util import validate_xml_tag, validate_xml_attribs
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 from PIL import Image
 
 
@@ -196,7 +196,6 @@ class FontSir0(Sir0Serializable, AbstractFont, CheckedIntWrites):
                     self.entries.append(
                         FontSir0Entry.from_pil(tables[t].crop(box=[x, y, x + FONT_SIR0_SIZE, y + FONT_SIR0_SIZE]),
                                                charid, t, width, cat, padding))
-        pass
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontSir0):

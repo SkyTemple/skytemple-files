@@ -18,7 +18,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.banner_font.model import BannerFont
-from skytemple_files.graphics.fonts.banner_font.writer import BannerFontWriter
 
 
 class BannerFontHandler(DataHandler[BannerFont]):

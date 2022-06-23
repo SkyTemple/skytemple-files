@@ -20,7 +20,7 @@ from typing import Optional
 from range_typed_integers import u8_checked, u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 DPLA_COLORS_PER_PALETTE = 16
 
 

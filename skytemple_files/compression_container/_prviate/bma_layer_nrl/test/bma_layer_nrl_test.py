@@ -17,7 +17,6 @@
 # mypy: ignore-errors
 from typing import Type
 
-import pytest
 from parameterized import parameterized
 
 from skytemple_files.common.impl_cfg import env_use_native
@@ -190,6 +189,5 @@ if __name__ == '__main__':
                 by += randrange(max12bit).to_bytes(2, 'little', signed=False)
             assert len(by) % 4 == 0
             print(f'("{i:02}", {repr(bytes(by))}),')
-        pass
 
     main()

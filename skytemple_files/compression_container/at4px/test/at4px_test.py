@@ -15,13 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-import os
 from typing import Type
 
-import pytest
 from parameterized import parameterized
 
-from skytemple_files.common.impl_cfg import ENV_SKYTEMPLE_USE_NATIVE, env_use_native
+from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.compression_container.at4px.handler import At4pxHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 from skytemple_files.compression_container.test.util import load_dataset, dataset_name_func

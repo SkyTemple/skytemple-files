@@ -21,7 +21,6 @@ from ndspy.rom import NintendoDSRom
 from typing import Dict, List
 
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.data.item_p.writer import ItemPWriter
 from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')

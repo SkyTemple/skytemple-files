@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from typing import Optional, List, Tuple
-from skytemple_files.dungeon_data.floor_attribute import *
 from skytemple_files.common.util import *
 
 

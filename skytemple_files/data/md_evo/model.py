@@ -17,7 +17,6 @@
 from range_typed_integers import u16_checked, u8_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import _
 from skytemple_files.data.md_evo import *
 
 

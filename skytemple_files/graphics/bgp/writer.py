@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-import string
 
 from range_typed_integers import u32_checked
 

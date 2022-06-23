@@ -17,13 +17,12 @@
 # mypy: ignore-errors
 from typing import Type
 
-import pytest
 from parameterized import parameterized
 
 from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.compression_container._prviate.bma_collision_rle.handler import BmaCollisionRleHandler
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
-from skytemple_files.compression_container.test.util import load_dataset, dataset_name_func
+from skytemple_files.compression_container.test.util import dataset_name_func
 
 from skytemple_files.test.case import SkyTempleFilesTestCase
 

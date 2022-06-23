@@ -15,8 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-import warnings
-from typing import Union, Tuple, Optional
+from typing import Optional
 
 from range_typed_integers import u16
 

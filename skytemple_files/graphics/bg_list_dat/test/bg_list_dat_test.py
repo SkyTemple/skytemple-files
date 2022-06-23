@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os.path
-from typing import Dict, List, no_type_check, Any, Optional, Union, Sequence
+from typing import Dict, List, no_type_check, Optional, Union, Sequence
 
 from skytemple_files.common.util import mutate_sequence
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler

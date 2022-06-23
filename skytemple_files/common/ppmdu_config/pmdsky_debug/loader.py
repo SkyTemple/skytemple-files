@@ -29,7 +29,7 @@ from typing import List, Dict, Optional
 
 import yaml
 
-from skytemple_files.common.ppmdu_config.data import Pmd2GameEdition, GAME_VERSION_EOS
+from skytemple_files.common.ppmdu_config.data import GAME_VERSION_EOS
 from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary, Pmd2BinarySymbol, Pmd2BinarySymbolType
 from skytemple_files.common.util import get_resources_dir, open_utf8
 

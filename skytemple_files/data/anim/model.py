@@ -14,13 +14,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional
-from enum import Enum, auto
+from enum import Enum
 
-import typing
 
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 from skytemple_files.data.anim import *
 

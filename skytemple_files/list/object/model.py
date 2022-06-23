@@ -18,7 +18,6 @@ from range_typed_integers import u16_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptObject
-from skytemple_files.common.i18n_util import _
 
 LEN_OBJECT_ENTRY = 16
 

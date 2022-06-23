@@ -30,7 +30,7 @@ from range_typed_integers import u8
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
-from skytemple_files.data.md.model import Md, MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
+from skytemple_files.data.md.model import MdEntry, EvolutionMethod, Gender, Ability, ShadowSize, PokeType, \
     AdditionalRequirement, MovementType, IQGroup
 from skytemple_files.data.waza_p.model import MoveLearnset, LevelUpMove
 from skytemple_files.common.i18n_util import f, _

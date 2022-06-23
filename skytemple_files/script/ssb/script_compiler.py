@@ -18,8 +18,7 @@ import logging
 from typing import Tuple, Dict, Callable, Type, Optional
 
 from explorerscript.error import SsbCompilerError, ParseError
-from explorerscript.macro import ExplorerScriptMacro
-from explorerscript.source_map import SourceMap, SourceMapBuilder
+from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import SsbRoutineInfo, SsbOperation, SsbRoutineType, \
     SsbOpParam, SsbOpParamConstString, SsbOpParamConstant, SsbOpParamLanguageString, SsbOpParamPositionMarker
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
@@ -199,7 +198,6 @@ class ScriptCompiler:
                             # ... nothing to do here! Writing the first "meta-argument" for the number of arguments
                             # is the job of the writer later!
                             op_len += 2
-                            pass
                         elif self._correct_param_list_len(in_op.params) != op_code.params:
                             # TODO: This might be a confusing count for end users in the case of position markers.
                             raise SsbCompilerError(f(_("The number of parameters for {op_code.name} "

@@ -17,7 +17,7 @@
 from typing import Optional
 from xml.etree.ElementTree import Element
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem, Pmd2DungeonData
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
 from skytemple_files.common.util import *
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.xml_util import XmlSerializable, validate_xml_tag

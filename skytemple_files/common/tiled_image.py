@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import math
-import warnings
 from itertools import chain
 from typing import List, Tuple, Union, Sequence, Optional
 
@@ -31,7 +30,7 @@ from skytemple_files.user_error import UserValueError
 from PIL import Image
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
-from skytemple_files.common.util import iter_bytes_4bit_le, iter_bytes, ByteReadable
+from skytemple_files.common.util import iter_bytes_4bit_le, ByteReadable
 
 logger = logging.getLogger(__name__)
 

@@ -22,7 +22,7 @@ from typing import Tuple, List, Sequence
 from PIL import Image, ImageDraw, ImageFont
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
-from skytemple_files.common.tiled_image import from_pil, search_for_chunk, TilemapEntry
+from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bma import MASK_PAL
 from skytemple_files.graphics.bma.protocol import BmaProtocol

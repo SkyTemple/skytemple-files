@@ -21,8 +21,7 @@ from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, 
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.kao.protocol import KaoProtocol, KaoImageProtocol
 if TYPE_CHECKING:
-    from skytemple_files.graphics.kao._model import Kao as PyKao
-    from skytemple_rust.st_kao import Kao as NativeKao
+    pass
 
 
 class KaoHandler(HybridDataHandler[KaoProtocol]):

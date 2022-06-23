@@ -16,11 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 
-from PIL import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.graphics.w16.handler import W16Handler
-from skytemple_files.graphics.w16.model import W16Image
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')
 

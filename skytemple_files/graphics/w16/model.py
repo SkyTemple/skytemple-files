@@ -17,7 +17,6 @@
 import itertools
 from abc import ABC, abstractmethod
 from itertools import zip_longest
-from typing import Union
 
 from PIL import Image
 

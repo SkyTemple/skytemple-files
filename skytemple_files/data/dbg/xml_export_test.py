@@ -16,8 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 import os
-from xml.dom import minidom
-from xml.etree.ElementTree import Element
 
 from xml.etree import ElementTree
 

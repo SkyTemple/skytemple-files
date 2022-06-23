@@ -21,7 +21,6 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.graphics.dbg.model import Dbg

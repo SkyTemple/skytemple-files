@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
-from typing import List, Dict, IO, Union
+from typing import List, IO, Union
 
 from PIL import Image
 

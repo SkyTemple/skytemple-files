@@ -18,7 +18,7 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import get_ppmdu_config_for_rom, create_file_in_rom, set_binary_in_rom_ppmdu
+from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.patch.patches import Patcher
 
 if __name__ == '__main__':

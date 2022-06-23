@@ -23,7 +23,7 @@ from enum import Enum
 
 from PIL import Image
 import xml.etree.ElementTree as ET
-from zipfile import ZipFile, ZIP_DEFLATED
+from zipfile import ZipFile
 from tempfile import TemporaryDirectory
 
 from skytemple_files.common.util import simple_quant

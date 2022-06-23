@@ -18,7 +18,6 @@ import logging
 import os
 import shutil
 import subprocess
-import stat
 import sys
 import tempfile
 from typing import Dict, Union

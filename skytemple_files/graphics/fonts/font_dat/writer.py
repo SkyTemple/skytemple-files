@@ -18,10 +18,9 @@
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_dat import *
 from skytemple_files.graphics.fonts.font_dat.model import FontDat
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 
 class FontDatWriter:

@@ -15,7 +15,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional, Dict
 
 from range_typed_integers import u16_checked, u32_checked
 

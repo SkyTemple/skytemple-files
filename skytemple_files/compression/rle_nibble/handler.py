@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Tuple
 
 from skytemple_files.compression.rle_nibble.compressor import RleNibbleCompressor
 from skytemple_files.compression.rle_nibble.decompressor import RleNibbleDecompressor

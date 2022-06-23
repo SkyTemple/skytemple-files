@@ -18,7 +18,6 @@ import os
 import sys
 
 from ndspy.rom import NintendoDSRom
-from skytemple_rust.pmd_wan import AnimationFrame
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_files_from_rom_with_extension

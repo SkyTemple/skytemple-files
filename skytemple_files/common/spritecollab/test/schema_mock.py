@@ -30,7 +30,7 @@ from graphql import (
 )
 
 from skytemple_files.common.spritecollab.schema import Config, Credit, Monster_Metadata, MonsterForm, PHASE_EXISTS, \
-    PHASE_UNKNOWN, PHASE_FULL, PHASE_INCOMPLETE, MonsterFormPortraits_Emotions, MonsterFormSprites_Actions
+    PHASE_UNKNOWN, PHASE_FULL, MonsterFormPortraits_Emotions, MonsterFormSprites_Actions
 from skytemple_files.common.spritecollab.test.sc_offline_fixtures import CONFIG_FIX
 
 

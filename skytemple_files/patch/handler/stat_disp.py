@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-from typing import Callable, Dict, List, Set
+from typing import Callable
 
 import os
 
@@ -26,8 +26,7 @@ from PIL import Image
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import *
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
-    GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler

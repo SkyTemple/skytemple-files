@@ -21,9 +21,7 @@ from typing import Optional
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.dungeon_data.mappa_bin.item_list import GUARANTEED
 from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
-from skytemple_files.dungeon_data.mappa_bin.trap_list import MappaTrapType
 
 HIGHEST_MAX_WEIGHT = 10000
 

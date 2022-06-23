@@ -18,7 +18,7 @@ from abc import ABC, abstractmethod
 
 from typing import Type, TypeVar
 
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol, U
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
 from skytemple_files.common.util import read_bytes, OptionalKwargs
 from skytemple_files.compression_container.protocol import CompressionContainerProtocol
 

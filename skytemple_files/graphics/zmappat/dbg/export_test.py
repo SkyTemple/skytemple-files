@@ -22,7 +22,6 @@ from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_ppmdu_config_for_rom
-from skytemple_files.graphics.zmappat import *
 from skytemple_files.graphics.zmappat.handler import ZMappaTHandler
 from skytemple_files.graphics.zmappat.model import ZMappaTVariation
 

@@ -26,7 +26,7 @@ If it is set, it defaults to the native implementations.
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
-from enum import Enum, auto
+from enum import Enum
 ENV_SKYTEMPLE_USE_NATIVE = 'SKYTEMPLE_USE_NATIVE'
 
 

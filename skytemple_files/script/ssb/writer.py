@@ -26,7 +26,7 @@ from skytemple_files.common.util import *
 from skytemple_files.script.ssb.header import SSB_HEADER_US_LENGTH, SsbHeaderUs, SSB_HEADER_EU_LENGTH, SsbHeaderEu, \
     SSB_HEADER_JP_LENGTH, SsbHeaderJp, AbstractSsbHeader
 from skytemple_files.script.ssb.model import Ssb, SSB_PADDING_BEFORE_ROUTINE_INFO
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 logger = logging.getLogger(__name__)
 
 
@@ -181,7 +181,6 @@ class SsbWriter:
                 write_u16(data, u16(length // 2), 0x08)
             # Unknown - TODO: what is the value here actually?
             write_u16(data, u16(0), 0x0A)
-            pass
         elif header_cls == SsbHeaderEu:
             # Number of constants
             write_u16(data, u16_checked(len(self.model.constants)), 0x00)

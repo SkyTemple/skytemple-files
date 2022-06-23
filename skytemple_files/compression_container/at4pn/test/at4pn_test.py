@@ -17,7 +17,6 @@
 # mypy: ignore-errors
 from typing import Type
 
-import pytest
 from parameterized import parameterized
 
 from skytemple_files.compression_container.at4pn.handler import At4pnHandler

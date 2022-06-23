@@ -35,14 +35,12 @@ from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.data.val_list.handler import ValListHandler
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.data.waza_p.handler import WazaPHandler
-from skytemple_files.data.waza_p.model import MoveLearnset
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md.model import MdEntry, Gender
 from skytemple_files.graphics.kao.handler import KaoHandler
 from skytemple_files.graphics.kao import SUBENTRIES
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, \
-    GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 from skytemple_files.common.i18n_util import _

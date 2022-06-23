@@ -20,14 +20,12 @@ import tempfile
 from filecmp import dircmp
 from typing import Optional
 from unittest import IsolatedAsyncioTestCase
-from xml.etree import ElementTree
 
 from PIL import Image
 from gql.dsl import DSLQuery
-from xmldiff import main, formatting
+from xmldiff import main
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.ppmdu_config.data import Pmd2Sprite, Pmd2Index
+from skytemple_files.common.ppmdu_config.data import Pmd2Sprite
 
 from skytemple_files.common.spritecollab.client import SpriteCollabClient
 from skytemple_files.common.spritecollab.test.requests_mock import AioRequestAdapterMock, FIXTURES_DIR

@@ -18,7 +18,6 @@
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
-from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
 
 
 class FontSir0Handler(DataHandler[FontSir0]):

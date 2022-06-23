@@ -22,8 +22,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpl.protocol import BplProtocol, BplAnimationSpecProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bpl._model import Bpl as PyBpl
-    from skytemple_rust.st_bpl import Bpl as NativeBpl
+    pass
 
 
 class BplHandler(HybridDataHandler[BplProtocol]):

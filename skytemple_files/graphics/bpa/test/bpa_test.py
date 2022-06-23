@@ -14,7 +14,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import os
 import typing
 
 from range_typed_integers import u16

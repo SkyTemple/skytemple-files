@@ -61,7 +61,7 @@ from skytemple_files.graphics.dpci.model import Dpci
 from skytemple_files.graphics.dpl.model import Dpl
 from skytemple_files.graphics.dpla.model import Dpla
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
-from skytemple_files.hardcoded.ground_dungeon_tilesets import HardcodedGroundDungeonTilesets, GroundTilesetMapping
+from skytemple_files.hardcoded.ground_dungeon_tilesets import HardcodedGroundDungeonTilesets
 from skytemple_files.script.ssa_sse_sss.actor import SsaActor
 from skytemple_files.script.ssa_sse_sss.layer import SsaLayer
 from skytemple_files.script.ssa_sse_sss.object import SsaObject
@@ -380,7 +380,6 @@ def draw_scenes_for(rom, i, count, dir_name, map_name, scene_name, file_name, sc
         # -> .png
         png_name_perftrgs = os.path.join(dir_name, 'PERF_TRIGGER', f'layer_{layer_id}.png')
         imgs.append(draw_scene_for__rest(rom, png_name_perftrgs, dim_w, dim_h, layer))
-        pass
 
     # {map_name}_{scene_name}_all_merged.webp
     draw_scene__merged(map_bg, map_bg_durations[map_name], 

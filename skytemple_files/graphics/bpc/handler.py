@@ -21,8 +21,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.bpc._model import Bpc as PyBpc
-    from skytemple_rust.st_bpc import Bpc as NativeBpc
+    pass
 
 
 class BpcHandler(HybridDataHandler[BpcProtocol]):

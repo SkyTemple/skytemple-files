@@ -17,8 +17,7 @@
 # mypy: ignore-errors
 from io import BytesIO
 
-from skytemple_files.graphics.chara_wan.model import WanFile, SequenceFrame, MetaFramePiece, FrameOffset, ImgPiece, \
-    MINUS_FRAME, DIM_TABLE, DEBUG_PRINT
+from skytemple_files.graphics.chara_wan.model import MINUS_FRAME, DIM_TABLE
 
 
 def ExportWan(wan):

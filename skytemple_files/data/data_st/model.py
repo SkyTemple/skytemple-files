@@ -16,8 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import _
-from skytemple_files.data.data_cd.armips_importer import ArmipsImporter
 
 
 class DataST(AutoString):

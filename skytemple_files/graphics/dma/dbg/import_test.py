@@ -16,18 +16,12 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
-import itertools
 import os
 
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
-from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')

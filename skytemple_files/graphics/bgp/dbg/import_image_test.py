@@ -16,17 +16,12 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
 
-import math
 import os
-from time import time
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_files_from_rom_with_extension
-from skytemple_files.compression_container.common_at.handler import CommonAtHandler
 from skytemple_files.graphics.bgp.handler import BgpHandler
-from skytemple_files.graphics.bgp.model import BGP_RES_WIDTH_IN_TILES
 
 os.makedirs(os.path.join(os.path.dirname(__file__), 'dbg_output'), exist_ok=True)
 

@@ -23,7 +23,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu, set_binary_in_rom_ppmdu
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 from skytemple_files.dungeon_data.fixed_bin.model import TileRule, TileRuleType, EntityRule
-from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables, EntitySpawnEntry, ItemSpawn, \
+from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables, ItemSpawn, \
     MonsterSpawn, TileSpawn
 
 output_dir = os.path.join(os.path.dirname(__file__), 'dbg_output')

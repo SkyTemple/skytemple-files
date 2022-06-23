@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import logging
-import warnings
 
 from range_typed_integers import u16, u8, i16
 

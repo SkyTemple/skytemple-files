@@ -19,8 +19,6 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import get_ppmdu_config_for_rom, get_binary_from_rom_ppmdu
-from skytemple_files.hardcoded.fixed_floor import HardcodedFixedFloorTables
 from skytemple_files.hardcoded.icon_banner import IconBanner, Icon
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..')

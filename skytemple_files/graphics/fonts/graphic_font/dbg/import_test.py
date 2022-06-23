@@ -20,8 +20,6 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import get_files_from_rom_with_extension, get_ppmdu_config_for_rom
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.graphics.pal.handler import PalHandler
 

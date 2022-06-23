@@ -15,15 +15,15 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import typing
-from typing import Dict, Type
+from typing import Dict
 
 from skytemple_files.common.util import *
 from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_dat import *
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from xml.etree.ElementTree import Element
-from skytemple_files.common.xml_util import validate_xml_tag, XmlValidateError, validate_xml_attribs
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.xml_util import validate_xml_tag, validate_xml_attribs
+from skytemple_files.common.i18n_util import _
 from PIL import Image
 
 
@@ -189,7 +189,6 @@ class FontDat(AbstractFont, CheckedIntWrites):
                     self.entries.append(
                         FontDatEntry.from_pil(tables[t].crop(box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]), charid,
                                               t, width, bprow))
-        pass
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, FontDat):

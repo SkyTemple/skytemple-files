@@ -22,7 +22,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS,
 from skytemple_files.common.util import get_binary_from_rom_ppmdu
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 ORIGINAL_BYTESEQ = bytes(b'w\x00\x00\xaa')
 OFFSET_EU = 0x642C8

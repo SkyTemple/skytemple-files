@@ -20,7 +20,6 @@ from PIL import Image
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.zmappat import *
 from skytemple_files.graphics.zmappat.model import ZMappaT
 from skytemple_files.graphics.zmappat.writer import ZMappaTWriter
 

@@ -19,7 +19,6 @@
 import asyncio
 import logging
 import os
-import signal
 import sys
 import time
 import traceback
@@ -29,11 +28,9 @@ from typing import List, Tuple
 
 from ndspy.rom import NintendoDSRom
 
-from explorerscript.source_map_visualizer import SourceMapVisualizer
 from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
-from skytemple_files.script.ssb.dbg.export_ssb_test import export_ssb_as_txt
 from skytemple_files.script.ssb.flow import SsbFlow
 from skytemple_files.script.ssb.handler import SsbHandler
 from skytemple_files.script.ssb.script_compiler import ScriptCompiler

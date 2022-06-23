@@ -21,7 +21,6 @@ Manages asyncio event loop in a separate loop handler thread.
 
 import asyncio
 import logging
-import traceback
 from threading import Thread
 from time import sleep
 

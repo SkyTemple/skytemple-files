@@ -23,7 +23,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS,
 from skytemple_files.hardcoded.iq import IqGroupsSkills
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 ORIGINAL_INSTRUCTION = 0xE92D4010
 OFFSET_EU = 0x591E4

@@ -19,7 +19,6 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.types.file_types import FileType
 from skytemple_files.data.md.handler import MdHandler
 
 base_dir = os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..')

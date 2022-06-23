@@ -22,7 +22,6 @@ from abc import ABC, abstractmethod
 from tempfile import TemporaryFile
 from typing import Generic, TypeVar, Protocol, Optional, Mapping, Any, Type
 
-from PIL import Image
 
 from skytemple_files.common.util import OptionalKwargs, get_files_from_rom_with_extension, get_ppmdu_config_for_rom
 from skytemple_files.test.image import ImageTestCaseAbc

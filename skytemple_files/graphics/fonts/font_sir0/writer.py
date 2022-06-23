@@ -18,7 +18,6 @@
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.font_sir0 import *
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
 from skytemple_files.common.i18n_util import f, _

@@ -19,7 +19,7 @@ from enum import Enum
 from typing import Dict, Iterator
 
 from skytemple_files.common.util import *
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 
 # Honestly, I don't know a better way to do that

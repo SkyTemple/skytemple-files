@@ -21,9 +21,7 @@ import sys
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
-from skytemple_files.common.util import get_rom_folder, get_files_from_rom_with_extension
-from skytemple_files.script.ssb.handler import SsbHandler
+from skytemple_files.common.util import get_files_from_rom_with_extension
 
 
 def main(rom_file, directory):

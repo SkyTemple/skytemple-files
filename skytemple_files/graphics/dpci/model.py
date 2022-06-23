@@ -21,7 +21,7 @@ from PIL import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, to_pil, from_pil
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dpl.model import DPL_PAL_LEN, DPL_MAX_PAL
+from skytemple_files.graphics.dpl.model import DPL_PAL_LEN
 
 DPCI_TILE_DIM = 8
 

@@ -27,8 +27,7 @@ from skytemple_files.common.util import AutoString
 
 # noinspection PyUnresolvedReferences
 # Re-exported for backwards compatibility
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary, Pmd2BinaryBlock, \
-    Pmd2BinaryFunction, Pmd2BinaryPointer
+from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 
 
 GAME_VERSION_EOT = 'EoT'

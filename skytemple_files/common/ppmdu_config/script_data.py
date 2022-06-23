@@ -26,7 +26,7 @@ from range_typed_integers import u8, u16, i16
 
 from explorerscript.ssb_converting.ssb_data_types import SsbOpCode, SsbCoroutine
 from skytemple_files.common.util import AutoString
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.common.i18n_util import _
 
 
 class GameVariableType(IntEnum):

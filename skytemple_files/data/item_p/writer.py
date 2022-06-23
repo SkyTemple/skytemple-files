@@ -15,10 +15,9 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import Optional, Dict
+from typing import Optional
 
 from skytemple_files.common.util import *
-from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 from skytemple_files.data.item_p.model import ItemP
 from skytemple_files.data.item_p import *
 

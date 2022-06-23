@@ -18,7 +18,6 @@
 from range_typed_integers import u8_checked, u16_checked
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts import *
 from skytemple_files.graphics.fonts.graphic_font import *
 from skytemple_files.graphics.fonts.graphic_font.model import GraphicFont
 

@@ -17,7 +17,6 @@
 # mypy: ignore-errors
 from typing import Type
 
-import pytest
 from parameterized import parameterized
 
 from skytemple_files.common.impl_cfg import env_use_native

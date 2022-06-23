@@ -32,6 +32,22 @@ jobs:
         with:
           options: "-t py38 --extend-exclude _resources/pmdsky-debug skytemple_files"
 
+  import-check:
+    runs-on: ubuntu-latest
+    name: Check unused imports
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v1
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Analysing the code with pyclen
+      run: pycln skytemple_files -c -a
+
   typechecks:
     runs-on: ubuntu-latest
     name: Type checks

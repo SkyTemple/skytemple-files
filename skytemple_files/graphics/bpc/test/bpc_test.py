@@ -330,8 +330,8 @@ class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtoco
         pil = self._load_image(self._fix_path_pil_to_chunks())
         palettes = list(chunks(pil.getpalette(), 16 * 3))  # type: ignore
 
-        self.two_layers1.pil_to_chunks(0, pil)
-        self.two_layers1.pil_to_chunks(1, pil)
+        self.assertEqual(palettes, self.two_layers1.pil_to_chunks(0, pil))
+        self.assertEqual(palettes, self.two_layers1.pil_to_chunks(1, pil))
         self.assertImagesEqual(pil, self.two_layers1.chunks_to_pil(0, palettes, 1))
         self.assertImagesEqual(pil, self.two_layers1.chunks_to_pil(1, palettes, 1))
         saved = self._save_and_reload_main_fixture(self.two_layers1)

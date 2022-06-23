@@ -30,7 +30,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
         with:
-          options: "--check -t py38 --extend-exclude _resources/pmdsky-debug skytemple_files"
+          options: "--check -t py38 --extend-exclude _resources/pmdsky-debug"
+          src: "skytemple_files"
 
   import-check:
     runs-on: ubuntu-latest

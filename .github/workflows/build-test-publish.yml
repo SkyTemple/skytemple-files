@@ -29,6 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
+        with:
+          options: "-t py38 --extend-exclude _resources/pmdsky-debug skytemple_files"
 
   typechecks:
     runs-on: ubuntu-latest
@@ -42,7 +44,7 @@ jobs:
     - uses: theCapypara/mypy-check@rust-support
       name: Run type checks
       with:
-        mypy_flags: '--config-file mypy.ini --junit-xml mypy.xml'
+        mypy_flags: 'skytemple_files --config-file mypy.ini --junit-xml mypy.xml'
         requirements: '-r requirements.txt'
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results

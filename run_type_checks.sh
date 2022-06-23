@@ -10,7 +10,7 @@
 
 echo "skytemple-files"
 echo "==============="
-mypy --config-file mypy.ini
+mypy skytemple_files --config-file mypy.ini
 
 cd ../explorerscript
 echo "explorerscript"

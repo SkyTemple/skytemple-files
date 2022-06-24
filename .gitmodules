@@ -8,6 +8,3 @@
 [submodule "skytemple_files/_resources/patches/asm_patches/eos_move_effects"]
 	path = skytemple_files/_resources/patches/asm_patches/eos_move_effects
 	url = https://github.com/SkyTemple/eos-move-effects.git
-[submodule "skytemple_files/_resources/pmdsky-debug"]
-	path = skytemple_files/_resources/pmdsky-debug
-	url = https://github.com/UsernameFodder/pmdsky-debug.git

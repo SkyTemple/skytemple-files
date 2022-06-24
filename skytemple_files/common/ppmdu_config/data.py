@@ -2,8 +2,6 @@
 Main static configuration for SkyTemple itself and a ROM.
 For now, the documentation of fields is in the pmd2data.xml.
 """
-from __future__ import annotations
-
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -20,14 +18,18 @@ from __future__ import annotations
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
 from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Union
 
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
+import pmdsky_debug_py
 
-# noinspection PyUnresolvedReferences
-# Re-exported for backwards compatibility
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
+from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
+from skytemple_files.common.ppmdu_config.pmdsky_debug.extras import ExtraAllSymbolsProtocol, ExtraNaSections, \
+    ExtraEuSections, ExtraJpSections
+
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString
 
@@ -264,7 +266,6 @@ class Pmd2Data(AutoString):
         game_edition: Pmd2GameEdition,
         game_editions: List[Pmd2GameEdition],
         game_constants: Dict[str, int],
-        binaries: List[Pmd2Binary],
         string_index_data: Pmd2StringIndexData,
         asm_patches_constants: Pmd2AsmPatchesConstants,
         script_data: Pmd2ScriptData,
@@ -279,7 +280,6 @@ class Pmd2Data(AutoString):
             edi.id: edi for edi in game_editions
         }
         self.game_constants = game_constants
-        self.binaries: Dict[str, Pmd2Binary] = {x.filepath: x for x in binaries}
         self.string_index_data = string_index_data
         self.asm_patches_constants = asm_patches_constants
         self.script_data = script_data
@@ -288,6 +288,23 @@ class Pmd2Data(AutoString):
         self.animation_names: Dict[int, Pmd2Sprite] = {
             k: animation_names[k] for k in sorted(animation_names)
         }
+        self.bin_sections: pmdsky_debug_py.AllSymbolsProtocol
+        if self.game_region == GAME_REGION_US:
+            self.bin_sections = pmdsky_debug_py.na
+        if self.game_region == GAME_REGION_EU:
+            self.bin_sections = pmdsky_debug_py.eu
+        if self.game_region == GAME_REGION_JP:
+            self.bin_sections = pmdsky_debug_py.jp
+
+        # SkyTemple specific / non pmdsky-debug symbols
+        self.extra_bin_sections: ExtraAllSymbolsProtocol
+        # regarding the type ignores, see: https://github.com/python/mypy/issues/5018#issuecomment-1165828654
+        if self.game_region == GAME_REGION_US:
+            self.extra_bin_sections = ExtraNaSections  # type: ignore
+        if self.game_region == GAME_REGION_EU:
+            self.extra_bin_sections = ExtraEuSections  # type: ignore
+        if self.game_region == GAME_REGION_JP:
+            self.extra_bin_sections = ExtraJpSections  # type: ignore
 
     @staticmethod
     def get_region_constant_for_region_name(region: str) -> str:

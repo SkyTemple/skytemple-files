@@ -32,7 +32,6 @@ from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2DungeonItem,
     Pmd2DungeonItemCategory,
 )
-from skytemple_files.common.ppmdu_config.pmdsky_debug.loader import load_binaries
 from skytemple_files.common.ppmdu_config.script_data import *
 from skytemple_files.common.util import get_resources_dir
 
@@ -225,7 +224,6 @@ class Pmd2XmlReader:
             game_edition_for_this_rom,
             game_editions,
             game_constants,
-            load_binaries(game_edition_for_this_rom.id),
             string_index_data,  # type: ignore
             asm_patches_constants,  # type: ignore
             script_data,  # type: ignore

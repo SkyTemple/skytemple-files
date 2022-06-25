@@ -84,6 +84,8 @@ MONSTER_MD = "BALANCE/monster.md"
 MONSTER_BIN = "MONSTER/monster.bin"
 DUNGEON_BIN = "DUNGEON/dungeon.bin"
 
+OVERLAY_RE = re.compile(r"overlay(\d+)", re.IGNORECASE)
+
 DEBUG = False
 _READ_WRITE_DEPRECATION_WARNING = (
     "The functions read_{s|u}int{be|le} and write_{s|u}int{be|le} are deprecated. "
@@ -687,8 +689,7 @@ def get_binary_from_rom(rom: NintendoDSRom, binary: SectionProtocol) -> bytearra
     if binary.name == "arm7":
         return bytearray(rom.arm7)
     if binary.name.startswith("overlay"):
-        r = re.compile(r"overlay(\d+)", re.IGNORECASE)
-        match = r.match(binary.name)
+        match = OVERLAY_RE.match(binary.name)
         if match is not None:
             ov_id = int(match.group(1))
             overlays = rom.loadArm9Overlays([ov_id])
@@ -699,15 +700,14 @@ def get_binary_from_rom(rom: NintendoDSRom, binary: SectionProtocol) -> bytearra
 
 def set_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol, data: bytes) -> None:
     """Sets the correct binary in the rom, using the binary block specifications."""
-    if binary.name == "arm9.bin":
+    if binary.name == "arm9":
         rom.arm9 = bytes(data)
         return
-    if binary.name == "arm7.bin":
+    if binary.name == "arm7":
         rom.arm7 = bytes(data)
         return
-    if binary.name == "overlay":
-        r = re.compile(r"overlay(\d+)", re.IGNORECASE)
-        match = r.match(binary.name)
+    if binary.name.startswith("overlay"):
+        match = OVERLAY_RE.match(binary.name)
         if match is not None:
             ov_id = int(match.group(1))
             overlays = rom.loadArm9Overlays([ov_id])

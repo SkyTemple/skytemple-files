@@ -143,7 +143,7 @@ class ExtraEuOverlay11Functions:
 
 class ExtraEuOverlay11Data:
     MONSTER_GROUND_IDLE_ANIM = Symbol(
-        [0x22F66F4 - EuArm9Section.loadaddress],
+        [0x22F66F4 - EuOverlay11Section.loadaddress],
         [0x22F66F4],
         0x800,
         MONSTER_GROUND_IDLE_ANIM_DESC,
@@ -229,7 +229,7 @@ class ExtraNaOverlay11Functions:
 
 class ExtraNaOverlay11Data:
     MONSTER_GROUND_IDLE_ANIM = Symbol(
-        [0x22F5D54 - NaArm9Section.loadaddress],
+        [0x22F5D54 - NaOverlay11Section.loadaddress],
         [0x22F5D54],
         0x800,
         MONSTER_GROUND_IDLE_ANIM_DESC,

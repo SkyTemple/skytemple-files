@@ -18,8 +18,6 @@ This is also an example on how to use the following file handlers:
 - (Compressions)
 - (Hardcoded Lists)
 """
-from __future__ import annotations
-
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -37,6 +35,9 @@ from __future__ import annotations
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 # mypy: ignore-errors
+
+from __future__ import annotations
+
 import argparse
 import json
 import os
@@ -52,7 +53,7 @@ from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import (
-    get_binary_from_rom_ppmdu,
+    get_binary_from_rom,
     get_ppmdu_config_for_rom,
     get_rom_folder,
 )
@@ -159,12 +160,12 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
 
     ground_dungeon_tilesets = (
         HardcodedGroundDungeonTilesets.get_ground_dungeon_tilesets(
-            get_binary_from_rom_ppmdu(rom, config.binaries["overlay/overlay_0011.bin"]),
+            get_binary_from_rom(rom, config.bin_sections.overlay11),
             config,
         )
     )
     dungeons = HardcodedDungeons.get_dungeon_list(
-        get_binary_from_rom_ppmdu(rom, config.binaries["arm9.bin"]), config
+        get_binary_from_rom(rom, config.bin_sections.arm9), config
     )
     mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName("BALANCE/mappa_s.bin"))
 

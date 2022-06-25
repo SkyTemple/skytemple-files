@@ -200,9 +200,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
         OFFSET_EU = 0x158F0
         OFFSET_US = 0x1587C
-        overlay29 = get_binary_from_rom_ppmdu(
-            rom, config.binaries["overlay/overlay_0029.bin"]
-        )
+        overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ

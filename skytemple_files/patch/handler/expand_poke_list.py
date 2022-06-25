@@ -154,8 +154,8 @@ and to save a backup of your ROM before applying this."""
                 table_mf = EU_TABLE_MF
                 table_sp = EU_TABLE_SP
         if not self.is_applied(rom, config):
-            bincfg = config.binaries["arm9.bin"]
-            binary = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
+            bincfg = config.bin_sections.arm9
+            binary = bytearray(get_binary_from_rom(rom, bincfg))
 
             # Apply the patch
             for filename in get_files_from_rom_with_extension(rom, "str"):
@@ -420,8 +420,8 @@ and to save a backup of your ROM before applying this."""
             rom.setFileByName("BALANCE/md_evo.bin", MdEvoHandler.serialize(evo_model))
 
             # Fixed floors
-            ov29 = config.binaries["overlay/overlay_0029.bin"]
-            ov29bin = bytearray(get_binary_from_rom_ppmdu(rom, ov29))
+            ov29 = config.bin_sections.overlay29
+            ov29bin = bytearray(get_binary_from_rom(rom, ov29))
             monster_list = HardcodedFixedFloorTables.get_monster_spawn_list(
                 ov29bin, config
             )
@@ -431,7 +431,7 @@ and to save a backup of your ROM before applying this."""
             HardcodedFixedFloorTables.set_monster_spawn_list(
                 ov29bin, monster_list, config
             )
-            set_binary_in_rom_ppmdu(rom, ov29, bytes(ov29bin))
+            set_binary_in_rom(rom, ov29, bytes(ov29bin))
         try:
             apply()
         except RuntimeError as ex:

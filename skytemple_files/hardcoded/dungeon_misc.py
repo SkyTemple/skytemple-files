@@ -27,82 +27,78 @@ from skytemple_files.common.util import *
 class HardcodedDungeonMisc:
     @staticmethod
     def get_burn_damage_delay(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["BurnDamageDelay"]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.BURN_DAMAGE_COOLDOWN
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_burn_damage_delay(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["BurnDamageDelay"]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.BURN_DAMAGE_COOLDOWN
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_poison_damage_delay(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["PoisonDamageDelay"]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.POISON_DAMAGE_COOLDOWN
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_poison_damage_delay(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["PoisonDamageDelay"]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.POISON_DAMAGE_COOLDOWN
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_bad_poison_damage_delay(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "BadPoisonDamageDelay"
-        ]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.BAD_POISON_DAMAGE_COOLDOWN
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_bad_poison_damage_delay(
         value: u16, ov10: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "BadPoisonDamageDelay"
-        ]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.BAD_POISON_DAMAGE_COOLDOWN
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_ginseng_increase_by_3_chance(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["GinsengChance3"]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.GINSENG_CHANCE_3
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_ginseng_increase_by_3_chance(
         value: u16, ov10: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["GinsengChance3"]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.GINSENG_CHANCE_3
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_belly_loss_turn(ov29: bytes, config: Pmd2Data) -> float:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostTurn"]
-        return read_u32(ov29, block.begin) / 0x10000
+        block = config.bin_sections.overlay29.data.BELLY_LOST_PER_TURN
+        return read_u32(ov29, block.address) / 0x10000
 
     @staticmethod
     def set_belly_loss_turn(value: float, ov29: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostTurn"]
-        write_u32(ov29, u32_checked(ceil(value * 0x10000)), block.begin)
+        block = config.bin_sections.overlay29.data.BELLY_LOST_PER_TURN
+        write_u32(ov29, u32_checked(ceil(value * 0x10000)), block.address)
 
     @staticmethod
     def get_belly_loss_walk_through_walls(ov29: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostWtw"]
-        return read_u16(ov29, block.begin)
+        block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_INT
+        return read_u16(ov29, block.address)
 
     @staticmethod
     def set_belly_loss_walk_through_walls(
         value: u16, ov29: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostWtw"]
-        write_u16(ov29, value, block.begin)
+        block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_INT
+        write_u16(ov29, value, block.address)
 
     @staticmethod
     def get_belly_loss_1000ile_walk_through_walls(ov29: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostWtw1000"]
-        return read_u16(ov29, block.begin)
+        block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_THOUSANDTHS
+        return read_u16(ov29, block.address)
 
     @staticmethod
     def set_belly_loss_1000ile_walk_through_walls(
         value: u16, ov29: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["BellyLostWtw1000"]
-        write_u16(ov29, value, block.begin)
+        block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_THOUSANDTHS
+        write_u16(ov29, value, block.address)

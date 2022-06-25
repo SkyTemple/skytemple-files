@@ -19,6 +19,8 @@ from __future__ import annotations
 
 from typing import cast
 
+from pmdsky_debug_py.protocol import Symbol
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 
@@ -31,7 +33,7 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon species from the recruitment table."""
         return cast(
             List[u16],
-            cls._get_generic(overlay11bin, config, "RecruitmentTableSpecies", 2),
+            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES, 2),
         )
 
     @classmethod
@@ -42,7 +44,7 @@ class HardcodedRecruitmentTables:
         Sets the recruitment species list.
         The length of the list must exactly match the original ROM's length (see get_monster_species_list).
         """
-        cls._set_generic(overlay11bin, config, "RecruitmentTableSpecies", 2, value)
+        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES, 2, value)
 
     @classmethod
     def get_monster_levels_list(
@@ -51,7 +53,7 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon levels from the recruitment table."""
         return cast(
             List[u16],
-            cls._get_generic(overlay11bin, config, "RecruitmentTableLevels", 2),
+            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS, 2),
         )
 
     @classmethod
@@ -62,7 +64,7 @@ class HardcodedRecruitmentTables:
         Sets the recruitment levels list.
         The length of the list must exactly match the original ROM's length (see get_monster_levels_list).
         """
-        cls._set_generic(overlay11bin, config, "RecruitmentTableLevels", 2, value)
+        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS, 2, value)
 
     @classmethod
     def get_monster_locations_list(
@@ -71,7 +73,7 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon locations from the recruitment table."""
         return cast(
             List[u8],
-            cls._get_generic(overlay11bin, config, "RecruitmentTableLocations", 1),
+            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS, 1),
         )
 
     @classmethod
@@ -82,15 +84,14 @@ class HardcodedRecruitmentTables:
         Sets the recruitment locations list.
         The length of the list must exactly match the original ROM's length (see get_monster_locations_list).
         """
-        cls._set_generic(overlay11bin, config, "RecruitmentTableLocations", 1, value)
+        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS, 1, value)
 
     @staticmethod
     def _get_generic(
-        ov11: bytes, config: Pmd2Data, block_name: str, bytelen: int
+        ov11: bytes, block: Symbol, bytelen: int
     ) -> List[int]:
-        block = config.binaries["overlay/overlay_0011.bin"].symbols[block_name]
         lst = []
-        for i in range(block.begin, block.end, bytelen):
+        for i in range(block.address, block.address + block.length, bytelen):
             lst.append(
                 read_dynamic(ov11, i, length=bytelen, big_endian=False, signed=False)
             )
@@ -99,21 +100,19 @@ class HardcodedRecruitmentTables:
     @staticmethod
     def _set_generic(
         ov11: bytearray,
-        config: Pmd2Data,
-        block_name: str,
+        block: Symbol,
         bytelen: int,
         value: Sequence[int],
     ) -> None:
-        block = config.binaries["overlay/overlay_0011.bin"].symbols[block_name]
-        expected_length = int((block.end - block.begin) / bytelen)
+        expected_length = int(block.length / bytelen)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             if bytelen == 1:
-                write_u8(ov11, u8(entry), block.begin + i * bytelen)
+                write_u8(ov11, u8(entry), block.address + i * bytelen)
             elif bytelen == 2:
-                write_u16(ov11, u16(entry), block.begin + i * bytelen)
+                write_u16(ov11, u16(entry), block.address + i * bytelen)
             else:
                 raise ValueError("Unsupported byte length.")

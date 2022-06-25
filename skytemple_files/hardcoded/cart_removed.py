@@ -38,8 +38,8 @@ class HardcodedCartRemoved:
         """
         Gets the cartridge removed data
         """
-        block = config.binaries["arm9.bin"].symbols["CartRemovedImgData"]
-        data = arm9[block.begin : block.end]
+        block = config.bin_sections.arm9.data.CART_REMOVED_IMG_DATA
+        data = arm9[block.address : block.address + block.length]
         img_data = CommonAtHandler.deserialize(data).decompress()
         raw_data = []
         for l, h in iter_bytes(img_data, 2):
@@ -62,7 +62,7 @@ class HardcodedCartRemoved:
             raise AttributeError(
                 f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}."))
             )
-        block = config.binaries["arm9.bin"].symbols["CartRemovedImgData"]
+        block = config.bin_sections.arm9.data.CART_REMOVED_IMG_DATA
         img = img.convert("RGB")
         raw_data = img.tobytes()
         img_data = []
@@ -73,14 +73,15 @@ class HardcodedCartRemoved:
         data = CommonAtHandler.serialize(
             CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX])
         )
-        if len(data) > block.end - block.begin:
+        assert block.length is not None
+        if len(data) > block.length:
             raise AttributeError(
                 f(
                     _(
-                        "This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.begin})."
+                        "This image must be compressed better to fit in the arm9 ({len(data)} > {block.end-block.address})."
                     )
                 )
             )
-        arm9[block.begin : block.end] = data + bytes(
-            (block.end - block.begin) - len(data)
+        arm9[block.address : block.address + block.length] = data + bytes(
+            block.length - len(data)
         )

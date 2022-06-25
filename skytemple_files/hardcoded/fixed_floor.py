@@ -385,10 +385,10 @@ class HardcodedFixedFloorTables:
         Returns the list of entity spawns. Each entry has three references, one to each of
         the other three tables (item spawn, monster spawn, tile type).
         """
-        binary = config.binaries["overlay/overlay_0029.bin"]
-        block = binary.symbols["EntitySpawnTable"]
+        binary = config.bin_sections.overlay29
+        block = binary.data.FIXED_ROOM_ENTITY_SPAWN_TABLE
         lst = []
-        for i in range(block.begin, block.end, 12):
+        for i in range(block.address, block.address + block.length, 12):
             lst.append(
                 EntitySpawnEntry(
                     binary,
@@ -411,7 +411,7 @@ class HardcodedFixedFloorTables:
             overlay29,
             values,
             config,
-            config.binaries["overlay/overlay_0029.bin"].symbols["EntitySpawnTable"],
+            config.bin_sections.overlay29.data.FIXED_ROOM_ENTITY_SPAWN_TABLE,
             12,
         )
 
@@ -420,9 +420,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of items that can be spawned in fixed floors.
         """
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["ItemSpawnTable"]
+        block = config.bin_sections.overlay29.data.FIXED_ROOM_ITEM_SPAWN_TABLE
         lst = []
-        for i in range(block.begin, block.end, 8):
+        for i in range(block.address, block.address + block.length, 8):
             lst.append(
                 ItemSpawn(
                     read_u16(overlay29, i + 0x00),
@@ -445,7 +445,7 @@ class HardcodedFixedFloorTables:
             overlay29,
             values,
             config,
-            config.binaries["overlay/overlay_0029.bin"].symbols["ItemSpawnTable"],
+            config.bin_sections.overlay29.data.FIXED_ROOM_ITEM_SPAWN_TABLE,
             8,
         )
 
@@ -456,9 +456,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["MonsterSpawnTable"]
+        block = config.bin_sections.overlay29.data.FIXED_ROOM_MONSTER_SPAWN_TABLE
         lst = []
-        for i in range(block.begin, block.end, 4):
+        for i in range(block.address, block.address + block.length, 4):
             lst.append(
                 MonsterSpawn(
                     read_u16(overlay29, i + 0x00),
@@ -480,7 +480,7 @@ class HardcodedFixedFloorTables:
             overlay29,
             values,
             config,
-            config.binaries["overlay/overlay_0029.bin"].symbols["MonsterSpawnTable"],
+            config.bin_sections.overlay29.data.FIXED_ROOM_MONSTER_SPAWN_TABLE,
             4,
         )
 
@@ -489,9 +489,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of tiles that can be spawned in fixed floors.
         """
-        block = config.binaries["overlay/overlay_0029.bin"].symbols["TileSpawnTable"]
+        block = config.bin_sections.overlay29.data.FIXED_ROOM_TILE_SPAWN_TABLE
         lst = []
-        for i in range(block.begin, block.end, 4):
+        for i in range(block.address, block.address + block.length, 4):
             lst.append(
                 TileSpawn(
                     read_u8(overlay29, i + 0x00),
@@ -514,7 +514,7 @@ class HardcodedFixedFloorTables:
             overlay29,
             values,
             config,
-            config.binaries["overlay/overlay_0029.bin"].symbols["TileSpawnTable"],
+            config.bin_sections.overlay29.data.FIXED_ROOM_TILE_SPAWN_TABLE,
             4,
         )
 
@@ -525,11 +525,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "MonsterSpawnStatsTable"
-        ]
+        block = config.bin_sections.overlay10.data.FIXED_ROOM_MONSTER_SPAWN_STATS_TABLE
         lst = []
-        for i in range(block.begin, block.end, 12):
+        for i in range(block.address, block.address + block.length, 12):
             lst.append(
                 MonsterSpawnStats(
                     read_u16(overlay10, i + 0x00),
@@ -556,9 +554,7 @@ class HardcodedFixedFloorTables:
             overlay10,
             values,
             config,
-            config.binaries["overlay/overlay_0010.bin"].symbols[
-                "MonsterSpawnStatsTable"
-            ],
+            config.bin_sections.overlay10.data.FIXED_ROOM_MONSTER_SPAWN_STATS_TABLE,
             12,
         )
 
@@ -569,11 +565,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of properties for fixed floors.
         """
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "FixedFloorProperties"
-        ]
+        block = config.bin_sections.overlay10.data.FIXED_ROOM_PROPERTIES_TABLE
         lst = []
-        for i in range(block.begin, block.end, 12):
+        for i in range(block.address, block.address + block.length, 12):
             lst.append(
                 FixedFloorProperties(
                     read_u32(overlay10, i + 0x00),
@@ -601,7 +595,7 @@ class HardcodedFixedFloorTables:
             overlay10,
             values,
             config,
-            config.binaries["overlay/overlay_0010.bin"].symbols["FixedFloorProperties"],
+            config.bin_sections.overlay10.data.FIXED_ROOM_PROPERTIES_TABLE,
             12,
         )
 
@@ -610,11 +604,9 @@ class HardcodedFixedFloorTables:
         """
         Returns the list of overrides for fixed floors.
         """
-        block = config.binaries["overlay/overlay_0029.bin"].symbols[
-            "FixedFloorOverrides"
-        ]
+        block = config.bin_sections.overlay29.data.FIXED_ROOM_REVISIT_OVERRIDES
         lst = []
-        for i in range(block.begin, block.end):
+        for i in range(block.address, block.address + block.length):
             lst.append(read_u8(overlay29, i))
         return lst
 
@@ -626,25 +618,23 @@ class HardcodedFixedFloorTables:
         Sets the list of overrides for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_overrides).
         """
-        block = config.binaries["overlay/overlay_0029.bin"].symbols[
-            "FixedFloorOverrides"
-        ]
-        expected_length = block.end - block.begin
+        block = config.bin_sections.overlay29.data.FIXED_ROOM_REVISIT_OVERRIDES
+        expected_length = block.length
         if len(values) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
-        for entry, i in zip(values, range(block.begin, block.end)):
+        for entry, i in zip(values, range(block.address, block.address + block.length)):
             overlay29[i] = entry
 
     @classmethod
     def _set(cls, binary: bytearray, values: List[Any], config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int) -> None:  # type: ignore
-        expected_length = int((block.end - block.begin) / entry_len)
+        expected_length = int(block.length / entry_len)
         if len(values) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(values):
             binary[
-                block.begin + (i * entry_len) : block.begin + ((i + 1) * entry_len)
+                block.address + (i * entry_len) : block.address + ((i + 1) * entry_len)
             ] = entry.to_bytes()

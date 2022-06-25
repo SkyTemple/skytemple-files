@@ -84,13 +84,13 @@ class ExtraOverlay36DataProtocol(Protocol):
 
 
 class ExtraAllSymbolsProtocol(Protocol):
-    arm9: SectionProtocol[ExtraArm9FunctionsProtocol, ExtraArm9DataProtocol, int, int]
-    ov11: SectionProtocol[
-        ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int, int
+    arm9: SectionProtocol[ExtraArm9FunctionsProtocol, ExtraArm9DataProtocol, int]
+    overlay11: SectionProtocol[
+        ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int
     ]
-    ov36: Optional[
+    overlay36: Optional[
         SectionProtocol[
-            ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int, int
+            ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int
         ]
     ]
 
@@ -178,8 +178,8 @@ class ExtraEuOverlay36Section:
 
 class ExtraEuSections:
     arm9 = ExtraEuArm9Section
-    ov11 = ExtraEuOverlay11Section
-    ov36 = ExtraEuOverlay36Section
+    overlay11 = ExtraEuOverlay11Section
+    overlay36 = ExtraEuOverlay36Section
 
 
 # ------------------------------
@@ -264,8 +264,8 @@ class ExtraNaOverlay36Section:
 
 class ExtraNaSections:
     arm9 = ExtraNaArm9Section
-    ov11 = ExtraNaOverlay11Section
-    ov36 = ExtraNaOverlay36Section
+    overlay11 = ExtraNaOverlay11Section
+    overlay36 = ExtraNaOverlay36Section
 
 
 # ------------------------------
@@ -313,5 +313,5 @@ class ExtraJpOverlay11Section:
 
 class ExtraJpSections:
     arm9 = ExtraJpArm9Section
-    ov11 = ExtraJpOverlay11Section
-    ov36 = None
+    overlay11 = ExtraJpOverlay11Section
+    overlay36 = None

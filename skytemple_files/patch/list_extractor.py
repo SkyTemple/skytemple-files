@@ -19,15 +19,15 @@ from __future__ import annotations
 from typing import List
 
 from ndspy.rom import NintendoDSRom
+from pmdsky_debug_py.protocol import SectionProtocol
 from range_typed_integers import u32, u32_checked
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.data import Pmd2LooseBinFile
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import (
     create_file_in_rom,
-    get_binary_from_rom_ppmdu,
+    get_binary_from_rom,
     read_u32,
     read_var_length_string,
     write_u32,
@@ -37,23 +37,25 @@ from skytemple_files.common.util import (
 class ListExtractor:
     """Extracts binary data from the ROM's arm9 binary or overlays into a new file inside the ROM"""
 
-    def __init__(self, rom: NintendoDSRom, binary: Pmd2Binary, spec: Pmd2LooseBinFile):
+    def __init__(
+        self, rom: NintendoDSRom, binary: SectionProtocol, spec: Pmd2LooseBinFile
+    ):
         self._rom = rom
         self._out_path = spec.filepath
         self._key = spec.srcdata
         self._binary = binary
-        if self._key not in self._binary.symbols:
+        if not hasattr(self._binary.data, self._key):
             raise ValueError(
                 "The source data block for the patch was not found in the configuration."
             )
-        self._block = binary.symbols[self._key]
+        self._block = getattr(self._binary.data, self._key)
 
     def extract(
         self, entry_len: int, string_offs_per_entry: List[int], write_subheader=True
     ):
         """Performs the extraction. Raises a RuntimeError on error."""
         try:
-            binary = get_binary_from_rom_ppmdu(self._rom, self._binary)
+            binary = get_binary_from_rom(self._rom, self._binary)
             data = self._wrap_sir0(
                 binary,
                 binary[self._block.begin : self._block.end],

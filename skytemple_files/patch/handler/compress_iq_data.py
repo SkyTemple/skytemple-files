@@ -79,9 +79,9 @@ class CompressIQDataPatchHandler(AbstractPatchHandler):
         else:
             group_data = IqGroupsSkills.read_uncompressed(rom.arm9, config)
         apply()
-        arm9 = bytearray(get_binary_from_rom_ppmdu(rom, config.binaries["arm9.bin"]))
+        arm9 = bytearray(get_binary_from_rom(rom, config.bin_sections.arm9))
         IqGroupsSkills.write_compressed(arm9, group_data, config)
-        set_binary_in_rom_ppmdu(rom, config.binaries["arm9.bin"], arm9)
+        set_binary_in_rom(rom, config.bin_sections.arm9, arm9)
 
     def unapply(
         self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data

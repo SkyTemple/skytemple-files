@@ -27,7 +27,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import _, get_binary_from_rom_ppmdu
+from skytemple_files.common.util import _, get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
@@ -60,8 +60,8 @@ class ReduceJumpcutPauseTime(AbstractPatchHandler):
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom_ppmdu(
-            rom, config.binaries["overlay/overlay_0029.bin"]
+        overlay29 = get_binary_from_rom(
+            rom, config.bin_sections.overlay29
         )
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:

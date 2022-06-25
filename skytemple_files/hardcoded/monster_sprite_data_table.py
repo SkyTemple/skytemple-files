@@ -54,9 +54,9 @@ class HardcodedMonsterSpriteDataTable:
     @classmethod
     def get(cls, arm9bin: bytes, config: Pmd2Data) -> List[MonsterSpriteDataTableEntry]:
         """Returns the list."""
-        block = config.binaries["arm9.bin"].symbols["MonsterSpriteData"]
+        block = config.bin_sections.arm9.data.MONSTER_SPRITE_DATA
         lst = []
-        for i in range(block.begin, block.end, ENTRY_LEN):
+        for i in range(block.address, block.address + block.length, ENTRY_LEN):
             lst.append(
                 MonsterSpriteDataTableEntry(
                     read_u8(arm9bin, i + 0x00), read_u8(arm9bin, i + 0x01)
@@ -75,15 +75,16 @@ class HardcodedMonsterSpriteDataTable:
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
         """
-        block = config.binaries["arm9.bin"].symbols["MonsterSpriteData"]
-        expected_length = int((block.end - block.begin) / ENTRY_LEN)
+        block = config.bin_sections.arm9.data.MONSTER_SPRITE_DATA
+        assert block.length is not None
+        expected_length = int(block.length / ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             arm9bin[
-                block.begin + (i * ENTRY_LEN) : block.begin + ((i + 1) * ENTRY_LEN)
+                block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)
             ] = entry.to_bytes()
 
 
@@ -107,10 +108,8 @@ class HardcodedMonsterGroundIdleAnimTable:
     @classmethod
     def get(cls, ov11bin: bytes, config: Pmd2Data) -> List[IdleAnimType]:
         """Returns the list."""
-        block = config.binaries["overlay/overlay_0011.bin"].symbols[
-            "MonsterGroundIdleAnim"
-        ]
-        lst_i = list(ov11bin[block.begin : block.end])
+        block = config.extra_bin_sections.overlay11.data.MONSTER_GROUND_IDLE_ANIM
+        lst_i = list(ov11bin[block.address : block.address + block.length])
         lst = [IdleAnimType(x) for x in lst_i]  # type: ignore
         return lst
 
@@ -122,12 +121,13 @@ class HardcodedMonsterGroundIdleAnimTable:
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
         """
-        block = config.binaries["overlay/overlay_0011.bin"].symbols[
-            "MonsterGroundIdleAnim"
-        ]
-        expected_length = block.end - block.begin
+        block = config.extra_bin_sections.overlay11.data.MONSTER_GROUND_IDLE_ANIM
+        assert block.length is not None
+        expected_length = block.length
         if len(values) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
-        ov11bin[block.begin : block.end] = bytes([x.value for x in values])
+        ov11bin[block.address : block.address + block.length] = bytes(
+            [x.value for x in values]
+        )

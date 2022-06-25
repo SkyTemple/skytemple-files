@@ -25,15 +25,15 @@ import tempfile
 from typing import Dict, Union
 
 from ndspy.rom import NintendoDSRom
+from pmdsky_debug_py.protocol import SectionProtocol
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import Pmd2Patch, Pmd2SimplePatch
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 from skytemple_files.common.util import (
-    get_binary_from_rom_ppmdu,
+    get_binary_from_rom,
     get_resources_dir,
     open_utf8,
-    set_binary_in_rom_ppmdu,
+    set_binary_in_rom,
     set_rw_permission_folder,
 )
 from skytemple_files.user_error import make_user_err
@@ -64,7 +64,7 @@ class ArmPatcher:
     def apply(
         self,
         patch: Union[Pmd2Patch, Pmd2SimplePatch],
-        binaries: Dict[str, Pmd2Binary],
+        binaries: Dict[str, SectionProtocol],
         patch_file_dir: str,
         stub_path: str,
         game_id: str,
@@ -100,13 +100,13 @@ class ArmPatcher:
 
                     # If it's a simple patch just output and re-import all binaries.
                     for binary_name, binary in binaries.items():
-                        binary_path = os.path.join(tmp, binary_name.split("/")[-1])
+                        binary_path = binary_name_to_path(tmp, binary_name)
                         # Write binary to tmp dir
                         with open(binary_path, "wb") as fib:
                             try:
-                                fib.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                                fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
-                                if binary_name.split("/")[-1] == "overlay_0036.bin":
+                                if binary_name == "overlay36":
                                     continue  # We ignore if End's extra overlay is missing.
                                 raise err
                     # For simple patches we also output the overlay table as y9.bin:
@@ -125,13 +125,11 @@ class ArmPatcher:
                 if isinstance(patch, Pmd2Patch):
                     for open_bin in patch.open_bins:
                         binary = binaries[open_bin.filepath]
-                        binary_path = os.path.join(
-                            tmp, open_bin.filepath.split("/")[-1]
-                        )
+                        binary_path = binary_name_to_path(tmp, binary_name)
                         os.makedirs(os.path.dirname(binary_path), exist_ok=True)
                         # Write binary to tmp dir
                         with open(binary_path, "wb") as fib:
-                            fib.write(get_binary_from_rom_ppmdu(self.rom, binary))
+                            fib.write(get_binary_from_rom(self.rom, binary))
                         asm_entrypoint += (
                             f'.open "{binary_path}", 0x{binary.loadaddress:0x}\n'
                         )
@@ -215,12 +213,12 @@ class ArmPatcher:
                     for open_bin in patch.open_bins:
                         opened_binaries[open_bin.filepath] = binaries[open_bin.filepath]
                 for binary_name, binary in opened_binaries.items():
-                    binary_path = os.path.join(tmp, binary_name.split("/")[-1])
+                    binary_path = binary_name_to_path(tmp, binary_name)
                     with open(binary_path, "rb") as fib:
                         try:
-                            set_binary_in_rom_ppmdu(self.rom, binary, fib.read())
+                            set_binary_in_rom(self.rom, binary, fib.read())
                         except ValueError as err:
-                            if binary_name.split("/")[-1] == "overlay_0036.bin":
+                            if binary_name == "overlay36":
                                 continue  # We ignore if End's extra overlay is missing.
                             raise err
 
@@ -228,3 +226,10 @@ class ArmPatcher:
                 raise
             except BaseException as ex:
                 raise RuntimeError(f(_("Error while applying the patch: {ex}"))) from ex
+
+
+def binary_name_to_path(tmp_path: str, binary_name: str) -> str:
+    """For compatibility with ppmdu binary names (prior SkyTemple 1.4)"""
+    if binary_name.startswith("overlay"):
+        binary_name = "overlay_" + f"{int(binary_name[7:]):04}"
+    return os.path.join(tmp_path, binary_name + ".bin")

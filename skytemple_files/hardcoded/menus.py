@@ -19,10 +19,25 @@ from __future__ import annotations
 
 from enum import Enum, auto
 
-from pmdsky_debug_py.protocol import Overlay1DataProtocol, Overlay13DataProtocol, Overlay14DataProtocol, \
-    Overlay15DataProtocol, Overlay16DataProtocol, Overlay17DataProtocol, Overlay18DataProtocol, Overlay19DataProtocol, \
-    Overlay20DataProtocol, Overlay21DataProtocol, Overlay22DataProtocol, Overlay23DataProtocol, Overlay24DataProtocol, \
-    Overlay25DataProtocol, Overlay27DataProtocol, Overlay31DataProtocol, Overlay34DataProtocol
+from pmdsky_debug_py.protocol import (
+    Overlay1DataProtocol,
+    Overlay13DataProtocol,
+    Overlay14DataProtocol,
+    Overlay15DataProtocol,
+    Overlay16DataProtocol,
+    Overlay17DataProtocol,
+    Overlay18DataProtocol,
+    Overlay19DataProtocol,
+    Overlay20DataProtocol,
+    Overlay21DataProtocol,
+    Overlay22DataProtocol,
+    Overlay23DataProtocol,
+    Overlay24DataProtocol,
+    Overlay25DataProtocol,
+    Overlay27DataProtocol,
+    Overlay31DataProtocol,
+    Overlay34DataProtocol,
+)
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -647,7 +662,13 @@ class MenuType(Enum):
 
     # ignore the first param since it's already set by __new__
     def __init__(
-        self, _: int, data_type: MenuDataType, binary: str, block: str, _static_block: Any, menu_name: str
+        self,
+        _: int,
+        data_type: MenuDataType,
+        binary: str,
+        block: str,
+        _static_block: Any,
+        menu_name: str,
     ):
         self.data_type = data_type
         self.binary = binary

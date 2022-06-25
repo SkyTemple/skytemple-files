@@ -60,9 +60,7 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom(
-            rom, config.bin_sections.overlay29
-        )
+        overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return read_u32(overlay29, OFFSET_US) != ORIGINAL_INSTRUCTION

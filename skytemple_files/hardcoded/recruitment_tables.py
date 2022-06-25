@@ -33,7 +33,11 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon species from the recruitment table."""
         return cast(
             List[u16],
-            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES, 2),
+            cls._get_generic(
+                overlay11bin,
+                config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES,
+                2,
+            ),
         )
 
     @classmethod
@@ -44,7 +48,12 @@ class HardcodedRecruitmentTables:
         Sets the recruitment species list.
         The length of the list must exactly match the original ROM's length (see get_monster_species_list).
         """
-        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES, 2, value)
+        cls._set_generic(
+            overlay11bin,
+            config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES,
+            2,
+            value,
+        )
 
     @classmethod
     def get_monster_levels_list(
@@ -53,7 +62,11 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon levels from the recruitment table."""
         return cast(
             List[u16],
-            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS, 2),
+            cls._get_generic(
+                overlay11bin,
+                config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS,
+                2,
+            ),
         )
 
     @classmethod
@@ -64,7 +77,12 @@ class HardcodedRecruitmentTables:
         Sets the recruitment levels list.
         The length of the list must exactly match the original ROM's length (see get_monster_levels_list).
         """
-        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS, 2, value)
+        cls._set_generic(
+            overlay11bin,
+            config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS,
+            2,
+            value,
+        )
 
     @classmethod
     def get_monster_locations_list(
@@ -73,7 +91,11 @@ class HardcodedRecruitmentTables:
         """Returns the list of Pokémon locations from the recruitment table."""
         return cast(
             List[u8],
-            cls._get_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS, 1),
+            cls._get_generic(
+                overlay11bin,
+                config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS,
+                1,
+            ),
         )
 
     @classmethod
@@ -84,12 +106,15 @@ class HardcodedRecruitmentTables:
         Sets the recruitment locations list.
         The length of the list must exactly match the original ROM's length (see get_monster_locations_list).
         """
-        cls._set_generic(overlay11bin, config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS, 1, value)
+        cls._set_generic(
+            overlay11bin,
+            config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS,
+            1,
+            value,
+        )
 
     @staticmethod
-    def _get_generic(
-        ov11: bytes, block: Symbol, bytelen: int
-    ) -> List[int]:
+    def _get_generic(ov11: bytes, block: Symbol, bytelen: int) -> List[int]:
         lst = []
         for i in range(block.address, block.address + block.length, bytelen):
             lst.append(

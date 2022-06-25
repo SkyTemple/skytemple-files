@@ -63,9 +63,7 @@ class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
         return PatchCategory.NEW_MECHANIC
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay29 = get_binary_from_rom(
-            rom, config.bin_sections.overlay29
-        )
+        overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ

@@ -202,7 +202,10 @@ class HardcodedIq:
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
         assert block_restr.length is not None
-        assert block.length // IQ_SKILL_ENTRY_LEN == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
+        assert (
+            block.length // IQ_SKILL_ENTRY_LEN
+            == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
+        )
         lst = []
         for i in range(0, block.length // IQ_SKILL_ENTRY_LEN):
             lst.append(
@@ -223,7 +226,10 @@ class HardcodedIq:
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
         assert block_restr.length is not None
-        assert block.length // IQ_SKILL_ENTRY_LEN == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
+        assert (
+            block.length // IQ_SKILL_ENTRY_LEN
+            == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
+        )
         expected_length = int(block.length / IQ_SKILL_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(

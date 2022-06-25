@@ -278,7 +278,10 @@ class GuestPokemonList:
         assert block1.length is not None
         assert block2.length is not None
 
-        return block1.length // GUEST_DATA_ENTRY_SIZE + block2.length // GUEST_DATA_ENTRY_SIZE
+        return (
+            block1.length // GUEST_DATA_ENTRY_SIZE
+            + block2.length // GUEST_DATA_ENTRY_SIZE
+        )
 
     @staticmethod
     def read(arm9bin: bytes, config: Pmd2Data) -> List[GuestPokemon]:

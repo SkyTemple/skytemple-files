@@ -56,11 +56,7 @@ if __name__ == "__main__":
 
     patcher.apply("ExamplePatch")
     with open(os.path.join(out_dir, "example_patch_ov11.bin"), "wb") as f:
-        f.write(
-            get_binary_from_rom(
-                in_rom, config.bin_sections.overlay11
-            )
-        )
+        f.write(get_binary_from_rom(in_rom, config.bin_sections.overlay11))
 
     assert patcher.is_applied("ExamplePatch")
     in_rom.saveToFile(os.path.join(out_dir, "patched.nds"))

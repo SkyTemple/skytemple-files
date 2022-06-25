@@ -59,9 +59,7 @@ class SameTypePartnerPatch(AbstractPatchHandler):
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-        overlay13 = get_binary_from_rom(
-            rom, config.bin_sections.overlay13
-        )
+        overlay13 = get_binary_from_rom(rom, config.bin_sections.overlay13)
         if config.game_version == GAME_VERSION_EOS:
             if (
                 config.game_region == GAME_REGION_US

@@ -64,9 +64,7 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
             }
             offset = OFFSETS.get(config.game_region)
             if offset is not None:
-                overlay29 = get_binary_from_rom(
-                    rom, config.bin_sections.overlay29
-                )
+                overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
                 return (
                     overlay29[offset : offset + len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
                 )

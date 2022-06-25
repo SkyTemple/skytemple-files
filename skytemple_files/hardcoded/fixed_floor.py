@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from pmdsky_debug_py.protocol import Overlay29Protocol
+from pmdsky_debug_py.protocol import Overlay29Protocol, Symbol
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.i18n_util import _
@@ -628,7 +628,7 @@ class HardcodedFixedFloorTables:
             overlay29[i] = entry
 
     @classmethod
-    def _set(cls, binary: bytearray, values: List[Any], config: Pmd2Data, block: Pmd2BinaryBlock, entry_len: int) -> None:  # type: ignore
+    def _set(cls, binary: bytearray, values: List[Any], config: Pmd2Data, block: Symbol, entry_len: int) -> None:  # type: ignore
         expected_length = int(block.length / entry_len)
         if len(values) != expected_length:
             raise ValueError(

@@ -20,7 +20,6 @@ import bisect
 import contextlib
 import logging
 import os
-import re
 import stat
 import unicodedata
 import warnings
@@ -72,7 +71,6 @@ from skytemple_files.user_error import UserValueError
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
-    from skytemple_files.common.ppmdu_config.pmdsky_debug.data import Pmd2Binary
 
 # Useful type consts
 OptionalKwargs = Optional[Dict[str, Any]]
@@ -632,47 +630,82 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> "Pmd2Data":
     return config
 
 
-def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: "Pmd2Binary") -> bytearray:
+class Binary(Enum):
+    arm9 = "arm9"
+    arm7 = "arm7"
+    overlay0 = "overlay0"
+    overlay1 = "overlay1"
+    overlay2 = "overlay2"
+    overlay3 = "overlay3"
+    overlay4 = "overlay4"
+    overlay5 = "overlay5"
+    overlay6 = "overlay6"
+    overlay7 = "overlay7"
+    overlay8 = "overlay8"
+    overlay9 = "overlay9"
+    overlay10 = "overlay10"
+    overlay11 = "overlay11"
+    overlay12 = "overlay12"
+    overlay13 = "overlay13"
+    overlay14 = "overlay14"
+    overlay15 = "overlay15"
+    overlay16 = "overlay16"
+    overlay17 = "overlay17"
+    overlay18 = "overlay18"
+    overlay19 = "overlay19"
+    overlay20 = "overlay20"
+    overlay21 = "overlay21"
+    overlay22 = "overlay22"
+    overlay23 = "overlay23"
+    overlay24 = "overlay24"
+    overlay25 = "overlay25"
+    overlay26 = "overlay26"
+    overlay27 = "overlay27"
+    overlay28 = "overlay28"
+    overlay29 = "overlay29"
+    overlay30 = "overlay30"
+    overlay31 = "overlay31"
+    overlay32 = "overlay32"
+    overlay33 = "overlay33"
+    overlay34 = "overlay34"
+    overlay35 = "overlay35"
+    overlay36 = "overlay36"
+
+    def get_overlay_id(self):
+        if self == Binary.arm9 or self == Binary.arm7:
+            raise ValueError("Can only be called for overlays")
+        return int(self.value[7:])
+
+
+def get_binary_from_rom(rom: NintendoDSRom, binary: Binary) -> bytearray:
     """Returns the correct binary from the rom, using the binary block specifications."""
-    parts = binary.filepath.split("/")
-    if parts[0] == "arm9.bin":
+    if binary == Binary.arm9:
         return bytearray(rom.arm9 + rom.arm9PostData)
-    if parts[0] == "arm7.bin":
+    if binary == Binary.arm7:
         return bytearray(rom.arm7)
-    if parts[0] == "overlay":
-        if len(parts) > 1:
-            r = re.compile(r"overlay_(\d+).bin", re.IGNORECASE)
-            match = r.match(parts[1])
-            if match is not None:
-                ov_id = int(match.group(1))
-                overlays = rom.loadArm9Overlays([ov_id])
-                if len(overlays) > 0:
-                    return bytearray(overlays[ov_id].data)
-    raise ValueError(f(_("Binary {binary.filepath} not found.")))
+    else:
+        ov_id = binary.get_overlay_id()
+        overlays = rom.loadArm9Overlays([ov_id])
+        if len(overlays) > 0:
+            return bytearray(overlays[ov_id].data)
+    raise ValueError(f(_("Binary {binary} not found.")))
 
 
-def set_binary_in_rom_ppmdu(
-    rom: NintendoDSRom, binary: "Pmd2Binary", data: bytes
-) -> None:
+def set_binary_in_rom(rom: NintendoDSRom, binary: Binary, data: bytes) -> None:
     """Sets the correct binary in the rom, using the binary block specifications."""
-    parts = binary.filepath.split("/")
-    if parts[0] == "arm9.bin":
+    if binary == Binary.arm9:
         rom.arm9 = bytes(data)
         return
-    if parts[0] == "arm7.bin":
+    if binary == Binary.arm7:
         rom.arm7 = bytes(data)
         return
-    if parts[0] == "overlay":
-        if len(parts) > 1:
-            r = re.compile(r"overlay_(\d+).bin", re.IGNORECASE)
-            match = r.match(parts[1])
-            if match is not None:
-                ov_id = int(match.group(1))
-                overlays = rom.loadArm9Overlays([ov_id])
-                if len(overlays) > 0:
-                    rom.files[overlays[ov_id].fileID] = data
-                    return
-    raise ValueError(f(_("Binary {binary.filepath} not found.")))
+    else:
+        ov_id = binary.get_overlay_id()
+        overlays = rom.loadArm9Overlays([ov_id])
+        if len(overlays) > 0:
+            rom.files[overlays[ov_id].fileID] = data
+            return
+    raise ValueError(f(_("Binary {binary} not found.")))
 
 
 def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:

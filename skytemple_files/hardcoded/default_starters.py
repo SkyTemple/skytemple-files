@@ -97,64 +97,64 @@ class HardcodedDefaultStarters:
         """
         Gets the monster.md index of the default partner starter
         """
-        block = config.binaries["arm9.bin"].symbols["DefaultPartnerId"]
-        return read_u16(arm9, block.begin)
+        block = config.bin_sections.arm9.data.DEFAULT_PARTNER_ID
+        return read_u16(arm9, block.address)
 
     @staticmethod
     def set_partner_md_id(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default partner starter
         """
-        block = config.binaries["arm9.bin"].symbols["DefaultPartnerId"]
-        write_u16(arm9, value, block.begin)
+        block = config.bin_sections.arm9.data.DEFAULT_PARTNER_ID
+        write_u16(arm9, value, block.address)
 
     @staticmethod
     def get_player_md_id(arm9: bytes, config: Pmd2Data) -> u16:
         """
         Gets the monster.md index of the default player starter
         """
-        block = config.binaries["arm9.bin"].symbols["DefaultHeroId"]
-        return read_u16(arm9, block.begin)
+        block = config.bin_sections.arm9.data.DEFAULT_HERO_ID
+        return read_u16(arm9, block.address)
 
     @staticmethod
     def set_player_md_id(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md index of the default player starter
         """
-        block = config.binaries["arm9.bin"].symbols["DefaultHeroId"]
-        write_u16(arm9, value, block.begin)
+        block = config.bin_sections.arm9.data.DEFAULT_HERO_ID
+        write_u16(arm9, value, block.address)
 
     @staticmethod
     def get_partner_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the partner starter
         """
-        block = config.binaries["arm9.bin"].symbols["PartnerStartLevel"]
-        return read_u8(arm9, block.begin)
+        block = config.bin_sections.arm9.data.PARTNER_START_LEVEL
+        return read_u8(arm9, block.address)
 
     @staticmethod
     def set_partner_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the partner starter
         """
-        block = config.binaries["arm9.bin"].symbols["PartnerStartLevel"]
-        write_u8(arm9, value, block.begin)
+        block = config.bin_sections.arm9.data.PARTNER_START_LEVEL
+        write_u8(arm9, value, block.address)
 
     @staticmethod
     def get_player_level(arm9: bytes, config: Pmd2Data) -> u8:
         """
         Gets the level of the player starter
         """
-        block = config.binaries["arm9.bin"].symbols["HeroStartLevel"]
-        return read_u8(arm9, block.begin)
+        block = config.bin_sections.arm9.data.HERO_START_LEVEL
+        return read_u8(arm9, block.address)
 
     @staticmethod
     def set_player_level(value: u8, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the level of the player starter
         """
-        block = config.binaries["arm9.bin"].symbols["HeroStartLevel"]
-        write_u8(arm9, value, block.begin)
+        block = config.bin_sections.arm9.data.HERO_START_LEVEL
+        write_u8(arm9, value, block.address)
 
     @staticmethod
     def get_special_episode_pcs(
@@ -163,9 +163,10 @@ class HardcodedDefaultStarters:
         """
         Gets the special episode player characters
         """
-        block = config.binaries["arm9.bin"].symbols["SPECIAL_EPISODE_MAIN_CHARACTERS"]
+        block = config.bin_sections.arm9.data.SPECIAL_EPISODE_MAIN_CHARACTERS
+        assert block.length is not None
         lst = []
-        for i in range(block.begin, block.end, SE_PC_LNTRY_LEN):
+        for i in range(block.address, block.address + block.length, SE_PC_LNTRY_LEN):
             lst.append(
                 SpecialEpisodePc(
                     read_u16(arm9, i + 0),
@@ -189,15 +190,16 @@ class HardcodedDefaultStarters:
         """
         Sets the special episode player characters
         """
-        block = config.binaries["arm9.bin"].symbols["SPECIAL_EPISODE_MAIN_CHARACTERS"]
-        expected_length = int((block.end - block.begin) / SE_PC_LNTRY_LEN)
+        block = config.bin_sections.arm9.data.SPECIAL_EPISODE_MAIN_CHARACTERS
+        assert block.length is not None
+        expected_length = int(block.length / SE_PC_LNTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             arm9[
-                block.begin
-                + i * SE_PC_LNTRY_LEN : block.begin
+                block.address
+                + i * SE_PC_LNTRY_LEN : block.address
                 + (i + 1) * SE_PC_LNTRY_LEN
             ] = entry.to_bytes()

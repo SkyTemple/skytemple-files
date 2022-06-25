@@ -291,7 +291,7 @@ class Patcher:
 
         self._arm_patcher.apply(
             patch,
-            self._config.binaries,
+            {s.name: s for s in self._config.bin_sections.__dict__.values()},
             os.path.join(self._patch_dirs[name], patch_dir_for_version),
             stub_path_for_version,
             self._config.game_edition,

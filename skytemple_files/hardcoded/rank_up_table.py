@@ -72,9 +72,9 @@ class HardcodedRankUpTable:
     @classmethod
     def get_rank_up_table(cls, arm9bin: bytes, config: Pmd2Data) -> List[Rank]:
         """Returns the list of ranks in the game."""
-        block = config.binaries["arm9.bin"].symbols["RankUpTable"]
+        block = config.bin_sections.arm9.data.RANK_UP_TABLE
         lst = []
-        for i in range(block.begin, block.end, ENTRY_LEN):
+        for i in range(block.address, block.address + block.length, ENTRY_LEN):
             lst.append(
                 Rank(
                     read_u32(arm9bin, i + 0x00),
@@ -93,13 +93,14 @@ class HardcodedRankUpTable:
         Sets the list of ranks in the game.
         The length of the list must exactly match the original ROM's length (see get_rank_up_table).
         """
-        block = config.binaries["arm9.bin"].symbols["RankUpTable"]
-        expected_length = int((block.end - block.begin) / ENTRY_LEN)
+        block = config.bin_sections.arm9.data.RANK_UP_TABLE
+        assert block.length is not None
+        expected_length = int(block.length / ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             arm9bin[
-                block.begin + (i * ENTRY_LEN) : block.begin + ((i + 1) * ENTRY_LEN)
+                block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)
             ] = entry.to_bytes()

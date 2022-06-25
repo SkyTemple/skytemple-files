@@ -110,7 +110,7 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
             EXTRACT_LOOSE_BIN_SRCDATA__ACTORS
         ]
         if loose_bin_spec.filepath not in rom.filenames:
-            ListExtractor(rom, config.binaries["arm9.bin"], loose_bin_spec).extract(
+            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(
                 LEN_ACTOR_ENTRY, [4]
             )
             extracted_a_list = True
@@ -127,7 +127,7 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
             EXTRACT_LOOSE_BIN_SRCDATA__LEVELS
         ]
         if loose_bin_spec.filepath not in rom.filenames:
-            ListExtractor(rom, config.binaries["arm9.bin"], loose_bin_spec).extract(
+            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(
                 12, [8], write_subheader=False
             )
             extracted_a_list = True

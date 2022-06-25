@@ -22,7 +22,7 @@ import os
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import (
-    get_binary_from_rom_ppmdu,
+    get_binary_from_rom,
     get_ppmdu_config_for_rom,
 )
 from skytemple_files.patch.patches import Patcher
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     patcher.apply("ExamplePatch")
     with open(os.path.join(out_dir, "example_patch_ov11.bin"), "wb") as f:
         f.write(
-            get_binary_from_rom_ppmdu(
-                in_rom, config.binaries["overlay/overlay_0011.bin"]
+            get_binary_from_rom(
+                in_rom, config.bin_sections.overlay11
             )
         )
 

@@ -20,6 +20,7 @@ import bisect
 import contextlib
 import logging
 import os
+import re
 import stat
 import unicodedata
 import warnings
@@ -41,6 +42,8 @@ from typing import (
     TypeVar,
     Union,
 )
+
+from pmdsky_debug_py.protocol import SectionProtocol
 
 try:
     # We prefer this version since it has include_extras for sure.
@@ -677,35 +680,41 @@ class Binary(Enum):
         return int(self.value[7:])
 
 
-def get_binary_from_rom(rom: NintendoDSRom, binary: Binary) -> bytearray:
+def get_binary_from_rom(rom: NintendoDSRom, binary: SectionProtocol) -> bytearray:
     """Returns the correct binary from the rom, using the binary block specifications."""
-    if binary == Binary.arm9:
+    if binary.name == "arm9":
         return bytearray(rom.arm9 + rom.arm9PostData)
-    if binary == Binary.arm7:
+    if binary.name == "arm7":
         return bytearray(rom.arm7)
-    else:
-        ov_id = binary.get_overlay_id()
-        overlays = rom.loadArm9Overlays([ov_id])
-        if len(overlays) > 0:
-            return bytearray(overlays[ov_id].data)
-    raise ValueError(f(_("Binary {binary} not found.")))
+    if binary.name.startswith("overlay"):
+        r = re.compile(r"overlay(\d+)", re.IGNORECASE)
+        match = r.match(binary.name)
+        if match is not None:
+            ov_id = int(match.group(1))
+            overlays = rom.loadArm9Overlays([ov_id])
+            if len(overlays) > 0:
+                return bytearray(overlays[ov_id].data)
+    raise ValueError(f(_("Binary {binary.name} not found.")))
 
 
-def set_binary_in_rom(rom: NintendoDSRom, binary: Binary, data: bytes) -> None:
+def set_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol, data: bytes) -> None:
     """Sets the correct binary in the rom, using the binary block specifications."""
-    if binary == Binary.arm9:
+    if binary.name == "arm9.bin":
         rom.arm9 = bytes(data)
         return
-    if binary == Binary.arm7:
+    if binary.name == "arm7.bin":
         rom.arm7 = bytes(data)
         return
-    else:
-        ov_id = binary.get_overlay_id()
-        overlays = rom.loadArm9Overlays([ov_id])
-        if len(overlays) > 0:
-            rom.files[overlays[ov_id].fileID] = data
-            return
-    raise ValueError(f(_("Binary {binary} not found.")))
+    if binary.name == "overlay":
+        r = re.compile(r"overlay(\d+)", re.IGNORECASE)
+        match = r.match(binary.name)
+        if match is not None:
+            ov_id = int(match.group(1))
+            overlays = rom.loadArm9Overlays([ov_id])
+            if len(overlays) > 0:
+                rom.files[overlays[ov_id].fileID] = data
+                return
+    raise ValueError(f(_("Binary {binary.name} not found.")))
 
 
 def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:

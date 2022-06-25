@@ -82,9 +82,9 @@ class HardcodedGroundDungeonTilesets:
         overlay11bin: bytes, config: Pmd2Data
     ) -> List[GroundTilesetMapping]:
         """Returns the list."""
-        block = config.binaries["overlay/overlay_0011.bin"].symbols["LevelTilemapList"]
+        block = config.bin_sections.overlay11.data.LEVEL_TILEMAP_LIST
         lst = []
-        for i in range(block.begin, block.end, 8):
+        for i in range(block.address, block.address + block.length, 8):
             lst.append(
                 GroundTilesetMapping(
                     read_i16(overlay11bin, i),
@@ -103,15 +103,16 @@ class HardcodedGroundDungeonTilesets:
         Sets the  list.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
         """
-        block = config.binaries["overlay/overlay_0011.bin"].symbols["LevelTilemapList"]
-        expected_length = int((block.end - block.begin) / 8)
+        block = config.bin_sections.overlay11.data.LEVEL_TILEMAP_LIST
+        assert block.length is not None
+        expected_length = int(block.length / 8)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             overlay11bin[
-                block.begin + i * 8 : block.begin + (i + 1) * 8
+                block.address + i * 8 : block.address + (i + 1) * 8
             ] = entry.to_bytes()
 
 

@@ -27,7 +27,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import get_binary_from_rom_ppmdu
+from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
@@ -64,8 +64,8 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
             }
             offset = OFFSETS.get(config.game_region)
             if offset is not None:
-                overlay29 = get_binary_from_rom_ppmdu(
-                    rom, config.binaries["overlay/overlay_0029.bin"]
+                overlay29 = get_binary_from_rom(
+                    rom, config.bin_sections.overlay29
                 )
                 return (
                     overlay29[offset : offset + len(ORIGINAL_BYTES)] != ORIGINAL_BYTES

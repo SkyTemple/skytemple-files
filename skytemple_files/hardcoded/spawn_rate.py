@@ -28,24 +28,20 @@ from skytemple_files.common.util import read_u16, write_u16
 class HardcodedSpawnRate:
     @staticmethod
     def get_normal_spawn_rate(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["SpawnDelayNormal"]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.SPAWN_COOLDOWN
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_normal_spawn_rate(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["SpawnDelayNormal"]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.SPAWN_COOLDOWN
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_stolen_spawn_rate(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "SpawnDelayStealing"
-        ]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.SPAWN_COOLDOWN_THIEF_ALERT
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_stolen_spawn_rate(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "SpawnDelayStealing"
-        ]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.SPAWN_COOLDOWN_THIEF_ALERT
+        write_u16(ov10, value, block.address)

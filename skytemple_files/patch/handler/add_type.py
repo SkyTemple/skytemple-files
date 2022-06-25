@@ -1431,10 +1431,10 @@ class AddTypePatchHandler(AbstractPatchHandler):
                 gummi_iq_table = GUMMI_IQ_TABLE_JP
                 gummi_belly_table = GUMMI_BELLY_TABLE_JP
 
-        bincfg = config.binaries["overlay/overlay_0010.bin"]
-        data = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
+        bincfg = config.bin_sections.overlay10
+        data = bytearray(get_binary_from_rom(rom, bincfg))
         data[type_table : type_table + TABLE_LEN] = bytearray(NEW_TYPES)
-        set_binary_in_rom_ppmdu(rom, bincfg, bytes(data))
+        set_binary_in_rom(rom, bincfg, bytes(data))
 
         # Change Fairy's type name
         for filename in get_files_from_rom_with_extension(rom, "str"):
@@ -1445,13 +1445,13 @@ class AddTypePatchHandler(AbstractPatchHandler):
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
 
-        bincfg = config.binaries["arm9.bin"]
-        data = bytearray(get_binary_from_rom_ppmdu(rom, bincfg))
+        bincfg2 = config.bin_sections.arm9
+        data = bytearray(get_binary_from_rom(rom, bincfg2))
         data[gummi_iq_table : gummi_iq_table + TABLE_LEN] = bytearray(NEW_IQ_GUMMI)
         data[gummi_belly_table : gummi_belly_table + TABLE_LEN] = bytearray(
             NEW_BELLY_GUMMI
         )
-        set_binary_in_rom_ppmdu(rom, bincfg, bytes(data))
+        set_binary_in_rom(rom, bincfg2, bytes(data))
 
         try:
             apply()

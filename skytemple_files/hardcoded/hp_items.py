@@ -25,42 +25,30 @@ from skytemple_files.common.util import read_u16, write_u16
 class HardcodedHpItems:
     @staticmethod
     def get_life_seed_hp(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "LIFE_SEED_HP_BOOST"
-        ]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.LIFE_SEED_HP_BOOST
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_life_seed_hp(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "LIFE_SEED_HP_BOOST"
-        ]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.LIFE_SEED_HP_BOOST
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_sitrus_berry_hp(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "SITRUS_BERRY_HP_RESTORATION"
-        ]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.SITRUS_BERRY_HP_RESTORATION
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_sitrus_berry_hp(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "SITRUS_BERRY_HP_RESTORATION"
-        ]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.SITRUS_BERRY_HP_RESTORATION
+        write_u16(ov10, value, block.address)
 
     @staticmethod
     def get_oran_berry_hp(ov10: bytes, config: Pmd2Data) -> u16:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "ORAN_BERRY_HP_RESTORATION"
-        ]
-        return read_u16(ov10, block.begin)
+        block = config.bin_sections.overlay10.data.ORAN_BERRY_HP_RESTORATION
+        return read_u16(ov10, block.address)
 
     @staticmethod
     def set_oran_berry_hp(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols[
-            "ORAN_BERRY_HP_RESTORATION"
-        ]
-        write_u16(ov10, value, block.begin)
+        block = config.bin_sections.overlay10.data.ORAN_BERRY_HP_RESTORATION
+        write_u16(ov10, value, block.address)

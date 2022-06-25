@@ -238,9 +238,11 @@ class ExtraDungeonDataList:
     @staticmethod
     def read(arm9bin: bytes, config: Pmd2Data) -> List[ExtraDungeonDataEntry]:
         """Returns the list of extra dungeon data"""
-        block = config.binaries["arm9.bin"].symbols["ExtraDungeonData"]
+        block = config.extra_bin_sections.arm9.data.EXTRA_DUNGEON_DATA
         lst = []
-        for i in range(block.begin, block.end, EXTRA_DUNGEON_DATA_ENTRY_SIZE):
+        for i in range(
+            block.address, block.address + block.length, EXTRA_DUNGEON_DATA_ENTRY_SIZE
+        ):
             lst.append(
                 ExtraDungeonDataEntry.from_bytes(
                     read_bytes(arm9bin, i, EXTRA_DUNGEON_DATA_ENTRY_SIZE)
@@ -261,9 +263,9 @@ class ExtraDungeonDataList:
                 f"The extra dungeon data list must have exactly {EXTRA_DUNGEON_DATA_ENTRIES} entries."
             )
 
-        block = config.binaries["arm9.bin"].symbols["ExtraDungeonData"]
+        block = config.extra_bin_sections.arm9.data.EXTRA_DUNGEON_DATA
         for i, entry in enumerate(lst):
-            offset = block.begin + i * EXTRA_DUNGEON_DATA_ENTRY_SIZE
+            offset = block.address + i * EXTRA_DUNGEON_DATA_ENTRY_SIZE
             arm9bin[offset : offset + 2] = entry.to_bytes()[0:2]
 
 
@@ -271,21 +273,23 @@ class GuestPokemonList:
     @staticmethod
     def get_max_entries(config: Pmd2Data) -> int:
         """Returns the maximum amount of entries that can fit in the binary"""
-        block1 = config.binaries["arm9.bin"].symbols["GuestPokemonData"]
-        block2 = config.binaries["arm9.bin"].symbols["GuestPokemonData2"]
+        block1 = config.bin_sections.arm9.data.GUEST_MONSTER_DATA
+        block2 = config.extra_bin_sections.arm9.data.GUEST_MONSTER_DATA2
+        assert block1.length is not None
+        assert block2.length is not None
 
-        return (block1.end - block1.begin) // GUEST_DATA_ENTRY_SIZE + (
-            block2.end - block2.begin
-        ) // GUEST_DATA_ENTRY_SIZE
+        return block1.length // GUEST_DATA_ENTRY_SIZE + block2.length // GUEST_DATA_ENTRY_SIZE
 
     @staticmethod
     def read(arm9bin: bytes, config: Pmd2Data) -> List[GuestPokemon]:
         """Returns the list of guest pokémon data"""
-        block = config.binaries["arm9.bin"].symbols["GuestPokemonData"]
+        block = config.bin_sections.arm9.data.GUEST_MONSTER_DATA
         lst = []
         done = False
         # Read the first list
-        for i in range(block.begin, block.end, GUEST_DATA_ENTRY_SIZE):
+        for i in range(
+            block.address, block.address + block.length, GUEST_DATA_ENTRY_SIZE
+        ):
             read_entry = GuestPokemon.from_bytes(
                 read_bytes(arm9bin, i, GUEST_DATA_ENTRY_SIZE)
             )
@@ -295,12 +299,12 @@ class GuestPokemonList:
             lst.append(read_entry)
         if not done:
             # Read the list added by the EditExtraPokemon patch
-            block = config.binaries["arm9.bin"].symbols["GuestPokemonData2"]
+            block = config.extra_bin_sections.arm9.data.GUEST_MONSTER_DATA2
             # Make sure we don't keep reading if there's no space for one more entry, since if we did that
             # we would read out of bounds
             for i in range(
-                block.begin,
-                block.end - GUEST_DATA_ENTRY_SIZE + 1,
+                block.address,
+                (block.address + block.length) - GUEST_DATA_ENTRY_SIZE + 1,
                 GUEST_DATA_ENTRY_SIZE,
             ):
                 read_entry = GuestPokemon.from_bytes(
@@ -324,17 +328,17 @@ class GuestPokemonList:
             raise ValueError(
                 f"The guest pokémon data list can't have more than {max_entries} entries."
             )
-        block1 = config.binaries["arm9.bin"].symbols["GuestPokemonData"]
-        block2 = config.binaries["arm9.bin"].symbols["GuestPokemonData2"]
+        block1 = config.bin_sections.arm9.data.GUEST_MONSTER_DATA
+        block2 = config.extra_bin_sections.arm9.data.GUEST_MONSTER_DATA2
 
         for i, value in enumerate(lst):
             if i < 18:
-                offset = block1.begin + i * GUEST_DATA_ENTRY_SIZE
+                offset = block1.address + i * GUEST_DATA_ENTRY_SIZE
                 arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[
                     0:GUEST_DATA_ENTRY_SIZE
                 ]
             else:
-                offset = block2.begin + (i - 18) * GUEST_DATA_ENTRY_SIZE
+                offset = block2.address + (i - 18) * GUEST_DATA_ENTRY_SIZE
                 arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[
                     0:GUEST_DATA_ENTRY_SIZE
                 ]
@@ -342,12 +346,12 @@ class GuestPokemonList:
         # Null the rest of the table
         for i in range(len(lst), max_entries):
             if i < 18:
-                offset = block1.begin + i * GUEST_DATA_ENTRY_SIZE
+                offset = block1.address + i * GUEST_DATA_ENTRY_SIZE
                 arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [
                     0
                 ] * GUEST_DATA_ENTRY_SIZE
             else:
-                offset = block2.begin + (i - 18) * GUEST_DATA_ENTRY_SIZE
+                offset = block2.address + (i - 18) * GUEST_DATA_ENTRY_SIZE
                 arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [
                     0
                 ] * GUEST_DATA_ENTRY_SIZE

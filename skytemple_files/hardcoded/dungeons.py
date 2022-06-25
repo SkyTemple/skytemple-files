@@ -434,9 +434,11 @@ class HardcodedDungeons:
     @staticmethod
     def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> List[DungeonDefinition]:
         """Returns the list of dungeon definitions."""
-        block = config.binaries["arm9.bin"].symbols["DungeonList"]
+        block = config.bin_sections.arm9.data.DUNGEON_DATA_LIST
         lst = []
-        for i in range(block.begin, block.end, DUNGEON_LIST_ENTRY_LEN):
+        for i in range(
+            block.address, block.address + block.length, DUNGEON_LIST_ENTRY_LEN
+        ):
             lst.append(
                 DungeonDefinition(
                     read_u8(arm9bin, i),
@@ -455,16 +457,17 @@ class HardcodedDungeons:
         Sets the dungeon definitions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_list).
         """
-        block = config.binaries["arm9.bin"].symbols["DungeonList"]
-        expected_length = int((block.end - block.begin) / DUNGEON_LIST_ENTRY_LEN)
+        block = config.bin_sections.arm9.data.DUNGEON_DATA_LIST
+        assert block.length is not None
+        expected_length = int(block.length / DUNGEON_LIST_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
             arm9bin[
-                block.begin
-                + i * DUNGEON_LIST_ENTRY_LEN : block.begin
+                block.address
+                + i * DUNGEON_LIST_ENTRY_LEN : block.address
                 + (i + 1) * DUNGEON_LIST_ENTRY_LEN
             ] = bytes(
                 [
@@ -480,9 +483,11 @@ class HardcodedDungeons:
         arm9bin: bytes, config: Pmd2Data
     ) -> List[DungeonRestriction]:
         """Returns the list of dungeon restrictions."""
-        block = config.binaries["arm9.bin"].symbols["DungeonRestrictions"]
+        block = config.bin_sections.arm9.data.DUNGEON_RESTRICTIONS
         lst = []
-        for i in range(block.begin, block.end, DUNGEON_RESTRICTIONS_ENTRY_LEN):
+        for i in range(
+            block.address, block.address + block.length, DUNGEON_RESTRICTIONS_ENTRY_LEN
+        ):
             lst.append(
                 DungeonRestriction.from_bytes(
                     arm9bin[i : i + DUNGEON_RESTRICTIONS_ENTRY_LEN]
@@ -498,16 +503,15 @@ class HardcodedDungeons:
         Sets the dungeon restrictions.
         The length of the list must exactly match the original ROM's length (see get_dungeon_restrictions).
         """
-        block = config.binaries["arm9.bin"].symbols["DungeonRestrictions"]
-        expected_length = int(
-            (block.end - block.begin) / DUNGEON_RESTRICTIONS_ENTRY_LEN
-        )
+        block = config.bin_sections.arm9.data.DUNGEON_RESTRICTIONS
+        assert block.length is not None
+        expected_length = int(block.length / DUNGEON_RESTRICTIONS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
-            start = block.begin + (i * DUNGEON_RESTRICTIONS_ENTRY_LEN)
+            start = block.address + (i * DUNGEON_RESTRICTIONS_ENTRY_LEN)
             arm9bin[start : start + DUNGEON_RESTRICTIONS_ENTRY_LEN] = entry.to_bytes()
 
     @staticmethod
@@ -515,9 +519,11 @@ class HardcodedDungeons:
         arm9bin: bytes, config: Pmd2Data
     ) -> List[SecondaryTerrainTableEntry]:
         """Returns the list of secondary terrains."""
-        block = config.binaries["arm9.bin"].symbols["SecondaryTerrains"]
+        block = config.bin_sections.arm9.data.SECONDARY_TERRAIN_TYPES
         lst = []
-        for i in range(block.begin, block.end, SECONDARY_TERRAINS_ENTRY_LEN):
+        for i in range(
+            block.address, block.address + block.length, SECONDARY_TERRAINS_ENTRY_LEN
+        ):
             lst.append(
                 SecondaryTerrainTableEntry(
                     int.from_bytes(
@@ -537,14 +543,15 @@ class HardcodedDungeons:
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries["arm9.bin"].symbols["SecondaryTerrains"]
-        expected_length = int((block.end - block.begin) / SECONDARY_TERRAINS_ENTRY_LEN)
+        block = config.bin_sections.arm9.data.SECONDARY_TERRAIN_TYPES
+        assert block.length is not None
+        expected_length = int(block.length / SECONDARY_TERRAINS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
-            start = block.begin + (i * SECONDARY_TERRAINS_ENTRY_LEN)
+            start = block.address + (i * SECONDARY_TERRAINS_ENTRY_LEN)
             arm9bin[
                 start : start + SECONDARY_TERRAINS_ENTRY_LEN
             ] = entry.value.to_bytes(
@@ -556,9 +563,11 @@ class HardcodedDungeons:
         arm9bin: bytes, config: Pmd2Data
     ) -> List[MapMarkerPlacement]:
         """Returns the list of secondary terrains."""
-        block = config.binaries["arm9.bin"].symbols["MapMarkerPlacements"]
+        block = config.bin_sections.arm9.data.MAP_MARKER_PLACEMENTS
         lst = []
-        for i in range(block.begin, block.end, MAP_MARKER_PLACEMENTS_ENTRY_LEN):
+        for i in range(
+            block.address, block.address + block.length, MAP_MARKER_PLACEMENTS_ENTRY_LEN
+        ):
             lst.append(
                 MapMarkerPlacement.from_bytes(
                     arm9bin[i : i + MAP_MARKER_PLACEMENTS_ENTRY_LEN]
@@ -574,25 +583,26 @@ class HardcodedDungeons:
         Sets the secondary terrains.
         The length of the list must exactly match the original ROM's length (see get_secondary_terrains).
         """
-        block = config.binaries["arm9.bin"].symbols["MapMarkerPlacements"]
-        expected_length = int(
-            (block.end - block.begin) / MAP_MARKER_PLACEMENTS_ENTRY_LEN
-        )
+        block = config.bin_sections.arm9.data.MAP_MARKER_PLACEMENTS
+        assert block.length is not None
+        expected_length = int(block.length / MAP_MARKER_PLACEMENTS_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
-            start = block.begin + (i * MAP_MARKER_PLACEMENTS_ENTRY_LEN)
+            start = block.address + (i * MAP_MARKER_PLACEMENTS_ENTRY_LEN)
             arm9bin[start : start + MAP_MARKER_PLACEMENTS_ENTRY_LEN] = entry.to_bytes()
 
     @staticmethod
     def get_tileset_properties(
         ov10: bytes, config: Pmd2Data
     ) -> List[TilesetProperties]:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["TilesetProperties"]
+        block = config.bin_sections.overlay10.data.TILESET_PROPERTIES
         lst = []
-        for i in range(block.begin, block.end, TILESET_PROPERTIES_ENTRY_LEN):
+        for i in range(
+            block.address, block.address + block.length, TILESET_PROPERTIES_ENTRY_LEN
+        ):
             lst.append(
                 TilesetProperties.from_bytes(ov10[i : i + TILESET_PROPERTIES_ENTRY_LEN])
             )
@@ -602,12 +612,13 @@ class HardcodedDungeons:
     def set_tileset_properties(
         value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.binaries["overlay/overlay_0010.bin"].symbols["TilesetProperties"]
-        expected_length = int((block.end - block.begin) / TILESET_PROPERTIES_ENTRY_LEN)
+        block = config.bin_sections.overlay10.data.TILESET_PROPERTIES
+        assert block.length is not None
+        expected_length = int(block.length / TILESET_PROPERTIES_ENTRY_LEN)
         if len(value) != expected_length:
             raise ValueError(
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
-            start = block.begin + (i * TILESET_PROPERTIES_ENTRY_LEN)
+            start = block.address + (i * TILESET_PROPERTIES_ENTRY_LEN)
             ov10[start : start + TILESET_PROPERTIES_ENTRY_LEN] = entry.to_bytes()

@@ -27,8 +27,12 @@ from typing import Any, Dict, List, Optional, Pattern, Union
 import pmdsky_debug_py
 
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
-from skytemple_files.common.ppmdu_config.pmdsky_debug.extras import ExtraAllSymbolsProtocol, ExtraNaSections, \
-    ExtraEuSections, ExtraJpSections
+from skytemple_files.common.ppmdu_config.pmdsky_debug.extras import (
+    ExtraAllSymbolsProtocol,
+    ExtraNaSections,
+    ExtraEuSections,
+    ExtraJpSections,
+)
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import AutoString

@@ -16,21 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from pmdsky_debug_py.protocol import Overlay29Protocol
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.ppmdu_config.pmdsky_debug.data import (
-    Pmd2Binary,
-    Pmd2BinaryBlock,
-)
 from skytemple_files.common.util import *
 
 
 class EntitySpawnEntry(AutoString):
     def __init__(
         self,
-        overlay29bin: Pmd2Binary,
+        overlay29bin: Overlay29Protocol,
         item_spawn_pointer: u32,
         monster_spawn_pointer: u32,
         tile_spawn_pointer: u32,
@@ -38,15 +34,15 @@ class EntitySpawnEntry(AutoString):
         self._overlay29bin = overlay29bin
         self.item_id = (
             item_spawn_pointer
-            - self._overlay29bin.symbols["ItemSpawnTable"].begin_absolute
+            - self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address
         ) // 8
         self.monster_id = (
             monster_spawn_pointer
-            - self._overlay29bin.symbols["MonsterSpawnTable"].begin_absolute
+            - self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address
         ) // 4
         self.tile_id = (
             tile_spawn_pointer
-            - self._overlay29bin.symbols["TileSpawnTable"].begin_absolute
+            - self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address
         ) // 4
 
     def to_bytes(self) -> bytes:
@@ -55,7 +51,7 @@ class EntitySpawnEntry(AutoString):
             buffer,
             u32_checked(
                 self.item_id * 8
-                + self._overlay29bin.symbols["ItemSpawnTable"].begin_absolute
+                + self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address
             ),
             0,
         )
@@ -63,7 +59,7 @@ class EntitySpawnEntry(AutoString):
             buffer,
             u32_checked(
                 self.monster_id * 4
-                + self._overlay29bin.symbols["MonsterSpawnTable"].begin_absolute
+                + self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address
             ),
             4,
         )
@@ -71,7 +67,7 @@ class EntitySpawnEntry(AutoString):
             buffer,
             u32_checked(
                 self.tile_id * 4
-                + self._overlay29bin.symbols["TileSpawnTable"].begin_absolute
+                + self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address
             ),
             8,
         )

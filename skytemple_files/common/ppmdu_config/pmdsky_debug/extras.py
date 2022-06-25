@@ -25,12 +25,18 @@ from pmdsky_debug_py.na import NaArm9Section, NaOverlay11Section
 from pmdsky_debug_py.protocol import Symbol, SectionProtocol
 
 
-DEBUG_PRINT2_DESC = "Would log a printf format string in the debug binary. A no-op in the final binary."
-COMPRESSED_IQ_GROUP_SKILLS_DESC = "Replaces IQ_GROUPS_SKILLS when the patch 'CompressIQData' is applied."
+DEBUG_PRINT2_DESC = (
+    "Would log a printf format string in the debug binary. A no-op in the final binary."
+)
+COMPRESSED_IQ_GROUP_SKILLS_DESC = (
+    "Replaces IQ_GROUPS_SKILLS when the patch 'CompressIQData' is applied."
+)
 GUEST_MONSTER_DATA2_DESC = "Requires EditExtraPokemon patch."
 EXTRA_DUNGEON_DATA_DESC = "Requires EditExtraPokemon patch."
-MONSTER_GROUND_IDLE_ANIM_DESC = "This table is added by the 'ChangePokemonGroundAnim' patch. " \
-                                "See the patch description for details."
+MONSTER_GROUND_IDLE_ANIM_DESC = (
+    "This table is added by the 'ChangePokemonGroundAnim' patch. "
+    "See the patch description for details."
+)
 OV36_DESC = "This is End45's 'extra space' overlay. It requires the 'ExtraSpace' patch."
 
 
@@ -46,12 +52,12 @@ class ExtraArm9DataProtocol(Protocol):
         Optional[List[int]],
         Optional[int],
     ]
-    
+
     GUEST_MONSTER_DATA2: Symbol[
         Optional[List[int]],
         Optional[int],
     ]
-    
+
     EXTRA_DUNGEON_DATA: Symbol[
         Optional[List[int]],
         Optional[int],
@@ -79,8 +85,14 @@ class ExtraOverlay36DataProtocol(Protocol):
 
 class ExtraAllSymbolsProtocol(Protocol):
     arm9: SectionProtocol[ExtraArm9FunctionsProtocol, ExtraArm9DataProtocol, int, int]
-    ov11: SectionProtocol[ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int, int]
-    ov36: Optional[SectionProtocol[ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int, int]]
+    ov11: SectionProtocol[
+        ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int, int
+    ]
+    ov36: Optional[
+        SectionProtocol[
+            ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int, int
+        ]
+    ]
 
 
 # ------------------------------
@@ -90,13 +102,30 @@ class ExtraAllSymbolsProtocol(Protocol):
 
 class ExtraEuArm9Functions:
     # TODO: Is this really the same as DebugPrint0 for EU???
-    DebugPrint2 = Symbol([0x200C284], None, DEBUG_PRINT2_DESC)
+    DebugPrint2 = Symbol(
+        [0x200C284 - EuArm9Section.loadaddress], [0x200C284], None, DEBUG_PRINT2_DESC
+    )
 
 
 class ExtraEuArm9Data:
-    COMPRESSED_IQ_GROUP_SKILLS = Symbol([0x20A2314], 0x90, COMPRESSED_IQ_GROUP_SKILLS_DESC)
-    GUEST_MONSTER_DATA2 = Symbol([0x204F148], 0x1D0, GUEST_MONSTER_DATA2_DESC)
-    EXTRA_DUNGEON_DATA = Symbol([0x204EFE0], 0x168, EXTRA_DUNGEON_DATA_DESC)
+    COMPRESSED_IQ_GROUP_SKILLS = Symbol(
+        [0x20A2314 - EuArm9Section.loadaddress],
+        [0x20A2314],
+        0x90,
+        COMPRESSED_IQ_GROUP_SKILLS_DESC,
+    )
+    GUEST_MONSTER_DATA2 = Symbol(
+        [0x204F148 - EuArm9Section.loadaddress],
+        [0x204F148],
+        0x1D0,
+        GUEST_MONSTER_DATA2_DESC,
+    )
+    EXTRA_DUNGEON_DATA = Symbol(
+        [0x204EFE0 - EuArm9Section.loadaddress],
+        [0x204EFE0],
+        0x168,
+        EXTRA_DUNGEON_DATA_DESC,
+    )
 
 
 class ExtraEuArm9Section:
@@ -113,7 +142,12 @@ class ExtraEuOverlay11Functions:
 
 
 class ExtraEuOverlay11Data:
-    MONSTER_GROUND_IDLE_ANIM = Symbol([0x22F66F4], 0x800, MONSTER_GROUND_IDLE_ANIM_DESC)
+    MONSTER_GROUND_IDLE_ANIM = Symbol(
+        [0x22F66F4 - EuArm9Section.loadaddress],
+        [0x22F66F4],
+        0x800,
+        MONSTER_GROUND_IDLE_ANIM_DESC,
+    )
 
 
 class ExtraEuOverlay11Section:
@@ -154,13 +188,30 @@ class ExtraEuSections:
 
 
 class ExtraNaArm9Functions:
-    DebugPrint2 = Symbol([0x200C30C], None, DEBUG_PRINT2_DESC)
+    DebugPrint2 = Symbol(
+        [0x200C30C - NaArm9Section.loadaddress], [0x200C30C], None, DEBUG_PRINT2_DESC
+    )
 
 
 class ExtraNaArm9Data:
-    COMPRESSED_IQ_GROUP_SKILLS = Symbol([0x20A1D90], 0x90, COMPRESSED_IQ_GROUP_SKILLS_DESC)
-    GUEST_MONSTER_DATA2 = Symbol([0x204EE10], 0x1D0, GUEST_MONSTER_DATA2_DESC)
-    EXTRA_DUNGEON_DATA = Symbol([0x204ECA8], 0x168, EXTRA_DUNGEON_DATA_DESC)
+    COMPRESSED_IQ_GROUP_SKILLS = Symbol(
+        [0x20A1D90 - NaArm9Section.loadaddress],
+        [0x20A1D90],
+        0x90,
+        COMPRESSED_IQ_GROUP_SKILLS_DESC,
+    )
+    GUEST_MONSTER_DATA2 = Symbol(
+        [0x204EE10 - NaArm9Section.loadaddress],
+        [0x204EE10],
+        0x1D0,
+        GUEST_MONSTER_DATA2_DESC,
+    )
+    EXTRA_DUNGEON_DATA = Symbol(
+        [0x204ECA8 - NaArm9Section.loadaddress],
+        [0x204ECA8],
+        0x168,
+        EXTRA_DUNGEON_DATA_DESC,
+    )
 
 
 class ExtraNaArm9Section:
@@ -177,7 +228,12 @@ class ExtraNaOverlay11Functions:
 
 
 class ExtraNaOverlay11Data:
-    MONSTER_GROUND_IDLE_ANIM = Symbol([0x22F5D54], 0x800, MONSTER_GROUND_IDLE_ANIM_DESC)
+    MONSTER_GROUND_IDLE_ANIM = Symbol(
+        [0x22F5D54 - NaArm9Section.loadaddress],
+        [0x22F5D54],
+        0x800,
+        MONSTER_GROUND_IDLE_ANIM_DESC,
+    )
 
 
 class ExtraNaOverlay11Section:
@@ -218,13 +274,15 @@ class ExtraNaSections:
 
 
 class ExtraJpArm9Functions:
-    DebugPrint2 = Symbol(None, None, DEBUG_PRINT2_DESC)
+    DebugPrint2 = Symbol(None, None, None, DEBUG_PRINT2_DESC)
 
 
 class ExtraJpArm9Data:
-    COMPRESSED_IQ_GROUP_SKILLS = Symbol(None, None, COMPRESSED_IQ_GROUP_SKILLS_DESC)
-    GUEST_MONSTER_DATA2 = Symbol(None, None, GUEST_MONSTER_DATA2_DESC)
-    EXTRA_DUNGEON_DATA = Symbol(None, None, EXTRA_DUNGEON_DATA_DESC)
+    COMPRESSED_IQ_GROUP_SKILLS = Symbol(
+        None, None, None, COMPRESSED_IQ_GROUP_SKILLS_DESC
+    )
+    GUEST_MONSTER_DATA2 = Symbol(None, None, None, GUEST_MONSTER_DATA2_DESC)
+    EXTRA_DUNGEON_DATA = Symbol(None, None, None, EXTRA_DUNGEON_DATA_DESC)
 
 
 class ExtraJpArm9Section:
@@ -241,7 +299,7 @@ class ExtraJpOverlay11Functions:
 
 
 class ExtraJpOverlay11Data:
-    MONSTER_GROUND_IDLE_ANIM = Symbol(None, None, MONSTER_GROUND_IDLE_ANIM_DESC)
+    MONSTER_GROUND_IDLE_ANIM = Symbol(None, None, None, MONSTER_GROUND_IDLE_ANIM_DESC)
 
 
 class ExtraJpOverlay11Section:
@@ -257,4 +315,3 @@ class ExtraJpSections:
     arm9 = ExtraJpArm9Section
     ov11 = ExtraJpOverlay11Section
     ov36 = None
-

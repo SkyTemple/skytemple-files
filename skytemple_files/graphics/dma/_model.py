@@ -73,9 +73,7 @@ class Dma(DmaProtocol):
                 cms.append(self.chunk_mappings[i])
         return cms
 
-    def set(
-        self, get_type: int, neighbors_same: int, variation_index: int, value: int
-    ):
+    def set(self, get_type: int, neighbors_same: int, variation_index: int, value: int):
         """
         Sets the mapping for the given configuration and the given variation of it.
         """
@@ -94,7 +92,9 @@ class Dma(DmaProtocol):
         """
         self.chunk_mappings[(0x300 * 3) + extra_type + (3 * index)] = value
 
-    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]) -> Image.Image:
+    def to_pil(
+        self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]
+    ) -> Image.Image:
         """
         For debugging only, the output image contains some labels, etc. Use get(...) instead to
         get a chunk mapping and then render that chunk by extracting it from the image returned by

@@ -21,7 +21,11 @@ from typing import List
 from range_typed_integers import u8
 
 from skytemple_files.common.util import iter_bytes, write_u8
-from skytemple_files.graphics.dpl import DPL_PAL_LEN, DPL_PAL_ENTRY_LEN, DPL_FOURTH_COLOR
+from skytemple_files.graphics.dpl import (
+    DPL_PAL_LEN,
+    DPL_PAL_ENTRY_LEN,
+    DPL_FOURTH_COLOR,
+)
 from skytemple_files.graphics.dpl.protocol import DplProtocol
 
 

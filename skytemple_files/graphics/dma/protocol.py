@@ -14,10 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from __future__ import annotations
+
 from abc import abstractmethod
-from typing import Protocol
-from PIL import Image
-from skytemple_files.common.util import *
+from typing import Protocol, Sequence
 
 _DmaType = int
 _DmaExtraType = int
@@ -50,7 +50,8 @@ class DmaProtocol(Protocol):
     chunk_mappings: Sequence[int]
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @abstractmethod
     def get(self, get_type: _DmaType, neighbors_same: int) -> Sequence[int]:
@@ -72,7 +73,9 @@ class DmaProtocol(Protocol):
         ...
 
     @abstractmethod
-    def set(self, get_type: _DmaType, neighbors_same: int, variation_index: int, value: int):
+    def set(
+        self, get_type: _DmaType, neighbors_same: int, variation_index: int, value: int
+    ):
         """
         Sets the mapping for the given configuration and the given variation of it.
         """

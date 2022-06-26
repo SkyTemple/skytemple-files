@@ -32,9 +32,18 @@ from skytemple_files.common.util import (
     iter_bytes,
     read_u32
 )
-from skytemple_files.graphics.bgp import BGP_RES_WIDTH, BGP_RES_HEIGHT, BGP_HEADER_LENGTH, BGP_PAL_ENTRY_LEN, \
-    BGP_PAL_NUMBER_COLORS, BGP_MAX_PAL, BGP_TILEMAP_ENTRY_BYTELEN, BGP_TILE_DIM, BGP_TOTAL_NUMBER_TILES, \
-    BGP_TOTAL_NUMBER_TILES_ACTUALLY
+from skytemple_files.graphics.bgp import (
+    BGP_RES_WIDTH,
+    BGP_RES_HEIGHT,
+    BGP_HEADER_LENGTH,
+    BGP_PAL_ENTRY_LEN,
+    BGP_PAL_NUMBER_COLORS,
+    BGP_MAX_PAL,
+    BGP_TILEMAP_ENTRY_BYTELEN,
+    BGP_TILE_DIM,
+    BGP_TOTAL_NUMBER_TILES,
+    BGP_TOTAL_NUMBER_TILES_ACTUALLY,
+)
 
 
 from skytemple_files.graphics.bgp.protocol import BgpProtocol

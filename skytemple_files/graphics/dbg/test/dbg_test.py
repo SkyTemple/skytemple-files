@@ -14,11 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import typing
 
 from skytemple_files.graphics.dbg.handler import DbgHandler
 from skytemple_files.graphics.dbg.protocol import DbgProtocol
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+from skytemple_files.test.case import SkyTempleFilesTestCase
 
 
 class DbgTestCase(SkyTempleFilesTestCase[DbgHandler, DbgProtocol]):

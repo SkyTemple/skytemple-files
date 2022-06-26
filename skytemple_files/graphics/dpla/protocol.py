@@ -26,7 +26,8 @@ class DplaProtocol(Sir0Serializable, Protocol):
     durations_per_frame_for_colors: Sequence[int]
 
     @abstractmethod
-    def __init__(self, data: bytes, pointer_to_pointers: int): ...
+    def __init__(self, data: bytes, pointer_to_pointers: int):
+        ...
 
     @abstractmethod
     def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> List[int]:
@@ -38,16 +39,20 @@ class DplaProtocol(Sir0Serializable, Protocol):
         ...
 
     @abstractmethod
-    def has_for_palette(self, palette_idx: int) -> bool: ...
+    def has_for_palette(self, palette_idx: int) -> bool:
+        ...
 
     @abstractmethod
-    def get_frame_count_for_palette(self, palette_idx: int) -> int: ...
+    def get_frame_count_for_palette(self, palette_idx: int) -> int:
+        ...
 
     @abstractmethod
-    def enable_for_palette(self, palid: int) -> None: ...
+    def enable_for_palette(self, palid: int) -> None:
+        ...
 
     @abstractmethod
-    def disable_for_palette(self, palid: int) -> None: ...
+    def disable_for_palette(self, palid: int) -> None:
+        ...
 
     @abstractmethod
     def get_duration_for_palette(self, palette_idx: int) -> int:
@@ -68,7 +73,9 @@ class DplaProtocol(Sir0Serializable, Protocol):
         ...
 
     @abstractmethod
-    def apply_palette_animations(self, palettes: Sequence[Sequence[int]], frame_idx: int) -> List[List[int]]:
+    def apply_palette_animations(
+        self, palettes: Sequence[Sequence[int]], frame_idx: int
+    ) -> List[List[int]]:
         """
         Returns a modified copy of `palettes`.
 

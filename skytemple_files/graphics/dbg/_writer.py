@@ -20,6 +20,7 @@ from __future__ import annotations
 from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 from skytemple_files.graphics.dbg._model import Dbg
 
+
 class DbgWriter(WriterProtocol[Dbg]):
     def write(self, model: Dbg) -> bytes:
         return model.to_bytes()

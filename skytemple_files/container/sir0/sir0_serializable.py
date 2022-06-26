@@ -38,7 +38,12 @@ class Sir0Serializable(Protocol):
 
     @classmethod
     @abstractmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32, static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: u32,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "Sir0Serializable":
         """
         Builds the model from the unwrapped Sir0.
         """

@@ -124,7 +124,9 @@ class Dpla(DplaProtocol):
         We are asuming there's one speed for the entire palette.
         This could be inaccurate.
         """
-        return self.durations_per_frame_for_colors[palette_idx * DPLA_COLORS_PER_PALETTE]
+        return self.durations_per_frame_for_colors[
+            palette_idx * DPLA_COLORS_PER_PALETTE
+        ]
 
     def set_duration_for_palette(self, palid: int, duration: int) -> None:
         """
@@ -136,7 +138,9 @@ class Dpla(DplaProtocol):
             palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
         ] = [duration] * 16
 
-    def apply_palette_animations(self, palettes: Sequence[Sequence[int]], frame_idx: int) -> List[List[int]]:
+    def apply_palette_animations(
+        self, palettes: Sequence[Sequence[int]], frame_idx: int
+    ) -> List[List[int]]:
         """
         Returns a modified copy of `palettes`.
 

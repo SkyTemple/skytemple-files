@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, Sequence, List
+from typing import Protocol, Sequence
 
 from PIL import Image
 
@@ -28,7 +28,8 @@ class BgpProtocol(Protocol):
     tilemap: Sequence[TilemapEntryProtocol] = []
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @abstractmethod
     def to_pil(self, ignore_flip_bits=False) -> Image.Image:

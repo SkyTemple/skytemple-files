@@ -19,35 +19,44 @@ from __future__ import annotations
 
 from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpci.protocol import DpciProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.dpci._model import Dpci as PyDpci
-    from skytemple_rust.st_dpci import Dpci as NativeDpci
+    pass
 
 
 class DpciHandler(HybridDataHandler[DpciProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[DpciProtocol]:
         from skytemple_files.graphics.dpci._model import Dpci
+
         return Dpci
 
     @classmethod
     def load_native_model(cls) -> Type[DpciProtocol]:
-        from skytemple_rust.st_dpci import Dpci  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_dpci import (
+            Dpci,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return Dpci
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyDpci']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyDpci"]]:  # type: ignore
         from skytemple_files.graphics.dpci._writer import DpciWriter
+
         return DpciWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeDpci']]:  # type: ignore
-        from skytemple_rust.st_dpci import DpciWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpci"]]:  # type: ignore
+        from skytemple_rust.st_dpci import (
+            DpciWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return DpciWriter
 
     @classmethod

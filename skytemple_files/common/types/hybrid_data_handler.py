@@ -18,14 +18,14 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Protocol, Type, Optional
+from typing import TypeVar, Generic, Protocol, Type
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
-U = TypeVar('U', contravariant=True)
+U = TypeVar("U", contravariant=True)
 
 
 class WriterProtocol(Protocol[U]):
@@ -34,8 +34,8 @@ class WriterProtocol(Protocol[U]):
         pass
 
 
-P = TypeVar('P')
-PS = TypeVar('PS', bound=Sir0Serializable)
+P = TypeVar("P")
+PS = TypeVar("PS", bound=Sir0Serializable)
 PS = TypeVar("PS", bound=Sir0Serializable)
 
 
@@ -47,6 +47,7 @@ class HybridDataHandler(Generic[P], DataHandler[P], ABC):
 
     The load methods should import on-demand.
     """
+
     @classmethod
     @abstractmethod
     def load_python_model(cls) -> Type[P]:
@@ -89,6 +90,7 @@ class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
 
     The load methods should import on-demand.
     """
+
     @classmethod
     @abstractmethod
     def load_python_model(cls) -> Type[PS]:
@@ -108,15 +110,17 @@ class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> PS:
         from skytemple_files.common.types.file_types import FileType
+
         sir0 = FileType.SIR0.deserialize(data)
         static_data = None
-        if kwargs is not None and 'static_data' in kwargs:
-            static_data = kwargs['static_data']
+        if kwargs is not None and "static_data" in kwargs:
+            static_data = kwargs["static_data"]
         return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls(), static_data)
 
     @classmethod
     def serialize(cls, data: PS, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
+
         sir0 = FileType.SIR0.wrap_obj(data)
         return FileType.SIR0.serialize(sir0)
 

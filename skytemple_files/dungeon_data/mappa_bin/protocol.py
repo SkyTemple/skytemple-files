@@ -197,10 +197,12 @@ class MappaTrapListProtocol(Protocol):
     weights: Dict[_MappaTrapType, u16]
 
     @abstractmethod
-    def __init__(self, weights: Union[List[u16], Dict[_MappaTrapType, u16]]): ...
+    def __init__(self, weights: Union[List[u16], Dict[_MappaTrapType, u16]]):
+        ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
 class MappaMonsterProtocol(Protocol):
@@ -217,7 +219,8 @@ class MappaMonsterProtocol(Protocol):
         self.md_index = md_index
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
 class MappaItemListProtocol(Protocol):
@@ -227,22 +230,25 @@ class MappaItemListProtocol(Protocol):
     @abstractmethod
     def __init__(
         self,
-        categories: Dict[
-            _MappaItemCategory, Probability
-        ],
+        categories: Dict[_MappaItemCategory, Probability],
         items: Dict[_MappaItem, Probability],
     ):
         ...
 
     @classmethod
     @abstractmethod
-    def from_bytes(cls, data: bytes, item_list: List[_MappaItem], pointer: int) -> MappaItemListProtocol: ...
+    def from_bytes(
+        cls, data: bytes, item_list: List[_MappaItem], pointer: int
+    ) -> MappaItemListProtocol:
+        ...
 
     @abstractmethod
-    def to_bytes(self) -> bytes: ...
+    def to_bytes(self) -> bytes:
+        ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
 class MappaFloorTerrainSettingsProtocol(Protocol):
@@ -270,10 +276,11 @@ class MappaFloorTerrainSettingsProtocol(Protocol):
         ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
-TS = TypeVar('TS', bound=MappaFloorTerrainSettingsProtocol)
+TS = TypeVar("TS", bound=MappaFloorTerrainSettingsProtocol)
 
 
 class MappaFloorLayoutProtocol(Protocol[TS]):
@@ -346,13 +353,14 @@ class MappaFloorLayoutProtocol(Protocol[TS]):
         ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
-L = TypeVar('L', bound=MappaFloorLayoutProtocol)
-M = TypeVar('M', bound=MappaMonsterProtocol)
-TL = TypeVar('TL', bound=MappaTrapListProtocol)
-IL = TypeVar('IL', bound=MappaItemListProtocol)
+L = TypeVar("L", bound=MappaFloorLayoutProtocol)
+M = TypeVar("M", bound=MappaMonsterProtocol)
+TL = TypeVar("TL", bound=MappaTrapListProtocol)
+IL = TypeVar("IL", bound=MappaItemListProtocol)
 
 
 class MappaFloorProtocol(Protocol[L, M, TL, IL]):
@@ -382,17 +390,20 @@ class MappaFloorProtocol(Protocol[L, M, TL, IL]):
         ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...
 
 
-F = TypeVar('F', bound=MappaFloorProtocol)
+F = TypeVar("F", bound=MappaFloorProtocol)
 
 
 class MappaBinProtocol(Sir0Serializable, Protocol[F]):
     floor_lists: Sequence[Sequence[F]]
 
     @abstractmethod
-    def __init__(self, floor_lists: List[List[F]]): ...
+    def __init__(self, floor_lists: List[List[F]]):
+        ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool: ...
+    def __eq__(self, other: object) -> bool:
+        ...

@@ -16,30 +16,20 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
-from enum import Enum
 from typing import TYPE_CHECKING, Dict, List, Union
-from xml.etree.ElementTree import Element
 
-from range_typed_integers import u16, u16_checked, u8
+from range_typed_integers import u16, u8
 
-from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import AutoString, read_u16, write_u16
-from skytemple_files.common.xml_util import (
-    XmlValidateError,
-    validate_xml_attribs,
-    validate_xml_tag,
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaTrapListProtocol,
+    _MappaTrapType,
 )
-from skytemple_files.dungeon_data.mappa_bin import (
-    XML_TRAP,
-    XML_TRAP__NAME,
-    XML_TRAP__WEIGHT,
-    XML_TRAP_LIST,
-)
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaTrapListProtocol, _MappaTrapType
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (
+        MappaBinReadContainer,
+    )
 
 
 class MappaTrapList(MappaTrapListProtocol, AutoString):

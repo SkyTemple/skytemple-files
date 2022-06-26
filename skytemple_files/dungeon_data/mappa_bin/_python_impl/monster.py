@@ -16,26 +16,24 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
 from typing import TYPE_CHECKING, List
-from xml.etree.ElementTree import Element
 
-from range_typed_integers import u8, u8_checked, u16, u16_checked
+from range_typed_integers import u8, u16
 
 from skytemple_files.common.util import (
     AutoString,
     read_u16,
     write_u16,
 )
-from skytemple_files.common.xml_util import (
-    validate_xml_attribs,
-    validate_xml_tag,
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaMonsterProtocol,
+    LEVEL_MULTIPLIER,
 )
-from skytemple_files.dungeon_data.mappa_bin import *
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaMonsterProtocol, LEVEL_MULTIPLIER
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (
+        MappaBinReadContainer,
+    )
 
 
 class MappaMonster(MappaMonsterProtocol, AutoString):

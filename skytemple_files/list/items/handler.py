@@ -26,7 +26,9 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import MappaItemListProtoco
 class ItemListHandler(HybridDataHandler[MappaItemListProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[MappaItemListProtocol]:
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import (
+            MappaItemList,
+        )
 
         return MappaItemList
 

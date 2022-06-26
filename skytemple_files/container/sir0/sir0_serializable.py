@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import List, Optional, Tuple, runtime_checkable, Protocol
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data

@@ -19,7 +19,8 @@ from __future__ import annotations
 from typing import Type
 
 from skytemple_files.common.types.hybrid_data_handler import (
-    WriterProtocol, HybridSir0DataHandler,
+    WriterProtocol,
+    HybridSir0DataHandler,
 )
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.item_p.protocol import ItemPProtocol

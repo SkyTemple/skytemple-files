@@ -20,12 +20,19 @@ from typing import Type
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
-    WriterProtocol, HybridSir0DataHandler,
+    WriterProtocol,
+    HybridSir0DataHandler,
 )
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol, MappaFloorProtocol, \
-    MappaFloorLayoutProtocol, MappaMonsterProtocol, MappaItemListProtocol, MappaTrapListProtocol, \
-    MappaFloorTerrainSettingsProtocol
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaBinProtocol,
+    MappaFloorProtocol,
+    MappaFloorLayoutProtocol,
+    MappaMonsterProtocol,
+    MappaItemListProtocol,
+    MappaTrapListProtocol,
+    MappaFloorTerrainSettingsProtocol,
+)
 
 
 class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
@@ -45,7 +52,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
 
     @classmethod
     def load_python_writer(cls) -> Type[WriterProtocol["PyMappaBin"]]:  # type: ignore
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.writer import MappaBinWriter
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.writer import (
+            MappaBinWriter,
+        )
 
         return MappaBinWriter
 
@@ -77,7 +86,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
             )  # pylint: disable=no-name-in-module,no-member,import-error
 
             return MappaFloorLayoutNative
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import MappaFloorLayout
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+            MappaFloorLayout,
+        )
 
         return MappaFloorLayout
 
@@ -89,7 +100,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
             )  # pylint: disable=no-name-in-module,no-member,import-error
 
             return MappaMonsterNative
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import MappaMonster
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import (
+            MappaMonster,
+        )
 
         return MappaMonster
 
@@ -101,7 +114,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
             )  # pylint: disable=no-name-in-module,no-member,import-error
 
             return MappaItemListNative
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import (
+            MappaItemList,
+        )
 
         return MappaItemList
 
@@ -113,7 +128,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
             )  # pylint: disable=no-name-in-module,no-member,import-error
 
             return MappaTrapListNative
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import MappaTrapList
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import (
+            MappaTrapList,
+        )
 
         return MappaTrapList
 
@@ -125,7 +142,9 @@ class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
             )  # pylint: disable=no-name-in-module,no-member,import-error
 
             return MappaFloorTerrainSettingsNative
-        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import MappaFloorTerrainSettings
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+            MappaFloorTerrainSettings,
+        )
 
         return MappaFloorTerrainSettings
 

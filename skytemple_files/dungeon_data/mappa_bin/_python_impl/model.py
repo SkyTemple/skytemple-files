@@ -18,18 +18,19 @@ from __future__ import annotations
 
 from itertools import chain
 from typing import Optional
-from xml.etree.ElementTree import Element
 
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItem
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import validate_xml_tag
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.dungeon_data.mappa_bin import XML_FLOOR, XML_FLOOR_LIST, XML_MAPPA
-from skytemple_files.dungeon_data.mappa_bin._python_impl.floor import MappaFloor, StubMappaFloor
-from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin._python_impl.floor import (
+    MappaFloor,
+    StubMappaFloor,
+)
+from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+    MappaFloorLayout,
+)
 from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import MappaTrapList
@@ -226,7 +227,9 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         return cls(
             cls._read_floor_list(
                 MappaBinReadContainer(
-                    content_data, data_pointer, [x.id for x in static_data.dungeon_data.items]
+                    content_data,
+                    data_pointer,
+                    [x.id for x in static_data.dungeon_data.items],
                 )
             )
         )

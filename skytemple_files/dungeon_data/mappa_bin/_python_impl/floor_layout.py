@@ -16,26 +16,21 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
-from xml.etree.ElementTree import Element
 
-from range_typed_integers import i8_checked, i16_checked, u8_checked, u16_checked
 
-from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import (
-    XmlValidateError,
-    validate_xml_attribs,
-    validate_xml_tag,
-)
-from skytemple_files.dungeon_data.mappa_bin import *
 from skytemple_files.dungeon_data.mappa_bin.protocol import (
-    _MappaFloorWeather, _MappaFloorDarknessLevel, _MappaFloorStructureType, MappaFloorTerrainSettingsProtocol,
-    MappaFloorLayoutProtocol, MappaFloorStructureType
+    _MappaFloorWeather,
+    _MappaFloorDarknessLevel,
+    _MappaFloorStructureType,
+    MappaFloorTerrainSettingsProtocol,
+    MappaFloorLayoutProtocol,
 )
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (
+        MappaBinReadContainer,
+    )
 
 
 class MappaFloorTerrainSettings(MappaFloorTerrainSettingsProtocol):
@@ -92,7 +87,9 @@ class MappaFloorTerrainSettings(MappaFloorTerrainSettingsProtocol):
         )
 
 
-class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], AutoString):
+class MappaFloorLayout(
+    MappaFloorLayoutProtocol[MappaFloorTerrainSettings], AutoString
+):
     structure: _MappaFloorStructureType
     room_density: i8
     tileset_id: u8

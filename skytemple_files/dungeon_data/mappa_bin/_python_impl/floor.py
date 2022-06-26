@@ -16,38 +16,21 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
-from xml.etree.ElementTree import Element
 
-from skytemple_files.common.i18n_util import _, f
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import *
-from skytemple_files.common.xml_util import (
-    XmlValidateError,
-    validate_xml_tag,
+from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+    MappaFloorLayout,
 )
-from skytemple_files.dungeon_data.mappa_bin import (
-    XML_FLOOR,
-    XML_FLOOR_LAYOUT,
-    XML_ITEM_LIST,
-    XML_ITEM_LIST__TYPE,
-    XML_ITEM_LIST__TYPE__BURIED,
-    XML_ITEM_LIST__TYPE__FLOOR,
-    XML_ITEM_LIST__TYPE__MONSTER_HOUSE,
-    XML_ITEM_LIST__TYPE__SHOP,
-    XML_ITEM_LIST__TYPE__UNK1,
-    XML_ITEM_LIST__TYPE__UNK2,
-    XML_MONSTER,
-    XML_MONSTER_LIST,
-    XML_TRAP_LIST,
-)
-from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import MappaFloorLayout
 from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import MappaTrapList
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBinReadContainer
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (
+        MappaBinReadContainer,
+    )
 
 
 class StubMappaFloor:
@@ -107,7 +90,10 @@ class StubMappaFloor:
         return data
 
 
-class MappaFloor(MappaFloorProtocol[MappaFloorLayout, MappaMonster, MappaTrapList, MappaItemList], AutoString):
+class MappaFloor(
+    MappaFloorProtocol[MappaFloorLayout, MappaMonster, MappaTrapList, MappaItemList],
+    AutoString,
+):
     def __init__(
         self,
         layout: MappaFloorLayout,

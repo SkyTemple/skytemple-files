@@ -20,9 +20,28 @@ import typing
 from typing import Iterator
 
 from skytemple_files.common.util import *
-from skytemple_files.data.md.protocol import MdProtocol, MdEntryProtocol, _EvolutionMethod, _AdditionalRequirement, \
-    _Gender, _PokeType, _MovementType, _IQGroup, _Ability, _ShadowSize, EvolutionMethod, AdditionalRequirement, Gender, \
-    PokeType, MovementType, IQGroup, Ability, ShadowSize, MdProperties, MD_ENTRY_LEN
+from skytemple_files.data.md.protocol import (
+    MdProtocol,
+    MdEntryProtocol,
+    _EvolutionMethod,
+    _AdditionalRequirement,
+    _Gender,
+    _PokeType,
+    _MovementType,
+    _IQGroup,
+    _Ability,
+    _ShadowSize,
+    EvolutionMethod,
+    AdditionalRequirement,
+    Gender,
+    PokeType,
+    MovementType,
+    IQGroup,
+    Ability,
+    ShadowSize,
+    MdProperties,
+    MD_ENTRY_LEN,
+)
 
 
 class MdEntry(MdEntryProtocol, AutoString):

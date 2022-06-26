@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import List, Tuple, Optional, Protocol, runtime_checkable
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -37,7 +37,12 @@ class Sir0Serializable(Protocol):
 
     @classmethod
     @abstractmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, static_data: Optional[Pmd2Data] = None) -> 'Sir0Serializable':
+    def sir0_unwrap(
+        cls,
+        content_data: bytes,
+        data_pointer: int,
+        static_data: Optional[Pmd2Data] = None,
+    ) -> "Sir0Serializable":
         """
         Builds the model from the unwrapped Sir0.
         static_data may be omitted if not needed for this type.

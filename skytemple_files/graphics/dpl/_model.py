@@ -17,7 +17,11 @@
 from __future__ import annotations
 
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dpl import DPL_PAL_LEN, DPL_PAL_ENTRY_LEN, DPL_FOURTH_COLOR
+from skytemple_files.graphics.dpl import (
+    DPL_PAL_LEN,
+    DPL_PAL_ENTRY_LEN,
+    DPL_FOURTH_COLOR,
+)
 from skytemple_files.graphics.dpl.protocol import DplProtocol
 
 

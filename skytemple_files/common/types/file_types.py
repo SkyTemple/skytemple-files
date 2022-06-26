@@ -28,11 +28,19 @@ from skytemple_files.container.dungeon_bin.handler import DungeonBinHandler
 from skytemple_files.container.dungeon_bin.sub.at4px_dpc import DbinAt4pxDpcHandler
 from skytemple_files.container.dungeon_bin.sub.at4px_dpci import DbinAt4pxDpciHandler
 from skytemple_files.container.dungeon_bin.sub.sir0_at4px import DbinSir0At4pxHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import DbinSir0At4pxDmaHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_at4px_dma import (
+    DbinSir0At4pxDmaHandler,
+)
 from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx import DbinSir0PkdpxHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import DbinSir0Image1033Handler
-from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import DbinSir0PkdpxDbgHandler
-from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import DbinSir0WeirdDataFileHandler
+from skytemple_files.container.dungeon_bin.sub.sir0_image_1033 import (
+    DbinSir0Image1033Handler,
+)
+from skytemple_files.container.dungeon_bin.sub.sir0_pkdpx_dbg import (
+    DbinSir0PkdpxDbgHandler,
+)
+from skytemple_files.container.dungeon_bin.sub.sir0_weird_data_file import (
+    DbinSir0WeirdDataFileHandler,
+)
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.item_s_p.handler import ItemSPHandler
 from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler

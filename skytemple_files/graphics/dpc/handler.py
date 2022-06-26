@@ -19,36 +19,45 @@ from __future__ import annotations
 
 from typing import Type, TYPE_CHECKING
 
-from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler, WriterProtocol
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpc.protocol import DpcProtocol
 
 if TYPE_CHECKING:
-    from skytemple_files.graphics.dpc._model import Dpc as PyDpc
-    from skytemple_rust.st_dpc import Dpc as NativeDpc
+    pass
 
 
 class DpcHandler(HybridDataHandler[DpcProtocol]):
     @classmethod
     def load_python_model(cls) -> Type[DpcProtocol]:
         from skytemple_files.graphics.dpc._model import Dpc
+
         return Dpc
 
     @classmethod
     def load_native_model(cls) -> Type[DpcProtocol]:
-        from skytemple_rust.st_dpc import Dpc  # pylint: disable=no-name-in-module,no-member,import-error
+        from skytemple_rust.st_dpc import (
+            Dpc,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         # Tilemap protocol issue:
         return Dpc  # type: ignore
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol['PyDpc']]:  # type: ignore
+    def load_python_writer(cls) -> Type[WriterProtocol["PyDpc"]]:  # type: ignore
         from skytemple_files.graphics.dpc._writer import DpcWriter
+
         return DpcWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol['NativeDpc']]:  # type: ignore
-        from skytemple_rust.st_dpc import DpcWriter  # pylint: disable=no-name-in-module,no-member,import-error
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpc"]]:  # type: ignore
+        from skytemple_rust.st_dpc import (
+            DpcWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
         return DpcWriter
 
     @classmethod

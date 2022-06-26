@@ -22,7 +22,12 @@ from typing import List, Optional, Union, Iterable, Sequence
 
 from PIL import Image
 
-from skytemple_files.dungeon_data.fixed_bin.model import FixedFloor, TileRuleType, TileRule, FloorType
+from skytemple_files.dungeon_data.fixed_bin.model import (
+    FixedFloor,
+    TileRuleType,
+    TileRule,
+    FloorType,
+)
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.dma.protocol import DmaProtocol, DmaType, _DmaType
 from skytemple_files.graphics.dma.util import get_tile_neighbors

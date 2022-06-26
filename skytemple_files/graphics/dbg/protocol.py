@@ -23,9 +23,9 @@ from skytemple_files.graphics.dpc.protocol import DpcProtocol
 from skytemple_files.graphics.dpci.protocol import DpciProtocol
 from skytemple_files.graphics.dpl.protocol import DplProtocol
 
-C = TypeVar('C', bound=DpcProtocol, contravariant=True)
-CI = TypeVar('CI', bound=DpciProtocol, contravariant=True)
-L = TypeVar('L', bound=DplProtocol, contravariant=True)
+C = TypeVar("C", bound=DpcProtocol, contravariant=True)
+CI = TypeVar("CI", bound=DpciProtocol, contravariant=True)
+L = TypeVar("L", bound=DplProtocol, contravariant=True)
 
 
 @runtime_checkable
@@ -33,17 +33,18 @@ class DbgProtocol(Protocol[C, CI, L]):
     mappings: Sequence[int]
 
     @abstractmethod
-    def __init__(self, data: bytes): ...
+    def __init__(self, data: bytes):
+        ...
 
     @abstractmethod
     def to_pil(
-            self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
+        self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
     ) -> Image.Image:
         ...
 
     @abstractmethod
     def from_pil(
-            self, dpc: C, dpci: CI, dpl: L, img: Image.Image, force_import: bool = False
+        self, dpc: C, dpci: CI, dpl: L, img: Image.Image, force_import: bool = False
     ) -> None:
         """
         Import an entire background from an image.

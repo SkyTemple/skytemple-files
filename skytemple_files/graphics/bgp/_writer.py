@@ -20,8 +20,14 @@ from range_typed_integers import u32_checked
 from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 from skytemple_files.common.util import *
 from skytemple_files.graphics.bgp._model import Bgp
-from skytemple_files.graphics.bgp import BGP_HEADER_LENGTH, BGP_PAL_ENTRY_LEN, BGP_PAL_UNKNOWN4_COLOR_VAL, \
-    BGP_PAL_NUMBER_COLORS, BGP_TILEMAP_ENTRY_BYTELEN, BGP_TILE_DIM
+from skytemple_files.graphics.bgp import (
+    BGP_HEADER_LENGTH,
+    BGP_PAL_ENTRY_LEN,
+    BGP_PAL_UNKNOWN4_COLOR_VAL,
+    BGP_PAL_NUMBER_COLORS,
+    BGP_TILEMAP_ENTRY_BYTELEN,
+    BGP_TILE_DIM,
+)
 
 
 class BgpWriter(WriterProtocol[Bgp]):
@@ -35,7 +41,9 @@ class BgpWriter(WriterProtocol[Bgp]):
         tilemapping_begin = palette_begin + palette_length
         tiles_begin = tilemapping_begin + tilemapping_length
         # 32 byte header + palette, tiles and tilemapping data
-        data = bytearray(BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length)
+        data = bytearray(
+            BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length
+        )
 
         # Header
         write_u32(data, u32(palette_begin), 0)
@@ -68,7 +76,7 @@ class BgpWriter(WriterProtocol[Bgp]):
         assert bytes_written == tiles_begin
         # Tiles
         for tile in model.tiles:
-            data[bytes_written:bytes_written+bytelen_single_tile] = tile
+            data[bytes_written : bytes_written + bytelen_single_tile] = tile
             bytes_written += bytelen_single_tile
 
         return data

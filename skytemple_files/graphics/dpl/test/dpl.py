@@ -14,11 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import typing
 
 from skytemple_files.graphics.dpl.handler import DplHandler
 from skytemple_files.graphics.dpl.protocol import DplProtocol
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+from skytemple_files.test.case import SkyTempleFilesTestCase
 
 
 class DplTestCase(SkyTempleFilesTestCase[DplHandler, DplProtocol]):

@@ -24,9 +24,18 @@ from skytemple_files.common.tiled_image import (
     to_pil_tiled,
 )
 from skytemple_files.common.util import *
-from skytemple_files.graphics.bgp import BGP_RES_WIDTH, BGP_RES_HEIGHT, BGP_HEADER_LENGTH, BGP_PAL_ENTRY_LEN, \
-    BGP_PAL_NUMBER_COLORS, BGP_MAX_PAL, BGP_TILEMAP_ENTRY_BYTELEN, BGP_TILE_DIM, BGP_TOTAL_NUMBER_TILES, \
-    BGP_TOTAL_NUMBER_TILES_ACTUALLY
+from skytemple_files.graphics.bgp import (
+    BGP_RES_WIDTH,
+    BGP_RES_HEIGHT,
+    BGP_HEADER_LENGTH,
+    BGP_PAL_ENTRY_LEN,
+    BGP_PAL_NUMBER_COLORS,
+    BGP_MAX_PAL,
+    BGP_TILEMAP_ENTRY_BYTELEN,
+    BGP_TILE_DIM,
+    BGP_TOTAL_NUMBER_TILES,
+    BGP_TOTAL_NUMBER_TILES_ACTUALLY,
+)
 
 
 from skytemple_files.graphics.bgp.protocol import BgpProtocol

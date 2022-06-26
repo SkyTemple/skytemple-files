@@ -122,7 +122,16 @@ def resolve_mapping_for_level(
     fixed: FixedBin,
     dungeon_bin: DungeonBinPack,
     dungeons: List[DungeonDefinition],
-) -> Optional[Tuple[DmaProtocol, DpcProtocol, DpciProtocol, DplProtocol, DplaProtocol, Optional[FixedFloor]]]:
+) -> Optional[
+    Tuple[
+        DmaProtocol,
+        DpcProtocol,
+        DpciProtocol,
+        DplProtocol,
+        DplaProtocol,
+        Optional[FixedFloor],
+    ]
+]:
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
     if (
         level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM

@@ -22,7 +22,11 @@ from typing import List
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk
 from skytemple_files.common.util import *
-from skytemple_files.graphics.dbg import DBG_TILING_DIM, DBG_CHUNK_WIDTH, DBG_WIDTH_AND_HEIGHT
+from skytemple_files.graphics.dbg import (
+    DBG_TILING_DIM,
+    DBG_CHUNK_WIDTH,
+    DBG_WIDTH_AND_HEIGHT,
+)
 from skytemple_files.graphics.dbg.protocol import DbgProtocol
 from skytemple_files.graphics.dpc._model import Dpc
 from skytemple_files.graphics.dpc import DPC_TILING_DIM
@@ -36,6 +40,7 @@ from skytemple_files.user_error import UserValueError
 
 class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
     mappings: List[u16]
+
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -43,7 +48,9 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
         for pos in range(0, len(data), 2):
             self.mappings.append(read_u16(data, pos))
 
-    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]) -> Image.Image:
+    def to_pil(
+        self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]
+    ) -> Image.Image:
         width_and_height_map = DBG_WIDTH_AND_HEIGHT * DBG_CHUNK_WIDTH
 
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)

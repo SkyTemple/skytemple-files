@@ -14,27 +14,56 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type
+
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs, read_bytes
-from skytemple_files.data.md.model import Md
-from skytemple_files.data.md.writer import MdWriter
+from skytemple_files.data.md.protocol import MdProtocol
 
 
-class MdHandler(DataHandler[Md]):
+class MdHandler(HybridDataHandler[MdProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Md:
-        if not cls.matches(data):
-            raise ValueError("The provided data is not an MD file.")
-        return Md(data)
+    def load_python_model(cls) -> Type[MdProtocol]:
+        from skytemple_files.data.md._model import Md
+
+        return Md
+
+    @classmethod
+    def load_native_model(cls) -> Type[MdProtocol]:
+        from skytemple_rust.st_md import (
+            Md,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Md
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol["PyMd"]]:  # type: ignore
+        from skytemple_files.data.md._writer import MdWriter
+
+        return MdWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeMd"]]:  # type: ignore
+        from skytemple_rust.st_md import (
+            MdWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return MdWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> MdProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: MdProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)
 
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
         """Check if the given data stream has the magic string for MD files."""
         return read_bytes(data, byte_offset, 4) == b"MD\0\0"
-
-    @classmethod
-    def serialize(cls, data: Md, **kwargs: OptionalKwargs) -> bytes:
-        return MdWriter(data).write()

@@ -30,17 +30,6 @@ class XmlValidateError(ValueError):
     pass
 
 
-class XmlSerializable(ABC):
-    @abstractmethod
-    def to_xml(self) -> Element:
-        """Returns an XML element for this object."""
-
-    @classmethod
-    @abstractmethod
-    def from_xml(cls, ele: Element) -> "XmlSerializable":
-        """Turns an XML element into an instance this object"""
-
-
 def validate_xml_tag(ele: Element, tag: str):
     if ele.tag != tag:
         raise XmlValidateError(

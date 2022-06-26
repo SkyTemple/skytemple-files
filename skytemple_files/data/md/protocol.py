@@ -16,25 +16,31 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
+from abc import abstractmethod
 from enum import Enum
-from typing import Dict, Iterator
+from typing import Protocol, TypeVar, Sequence, List, Tuple, Iterator, Optional
+
+from range_typed_integers import *
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
 
 
-# Honestly, I don't know a better way to do that
 class MdProperties:
     NUM_ENTITIES = 600
     MAX_POSSIBLE = 554
 
 
-# This is only for compatibility issues
-# The one that should be used is in MdProperties
-NUM_ENTITIES = 600
-
 MD_ENTRY_LEN = 68
+
+
+_EvolutionMethod = u16
+_AdditionalRequirement = u16
+_Gender = u8
+_PokeType = u8
+_MovementType = u8
+_IQGroup = u8
+_Ability = u8
+_ShadowSize = i8
 
 
 class Gender(Enum):
@@ -408,25 +414,25 @@ class ShadowSize(Enum):
         return self._print_name_
 
 
-class MdEntry(AutoString):
+class MdEntryProtocol(Protocol):
     md_index: u32
     entid: u16
     unk31: u16
     national_pokedex_number: u16
     base_movement_speed: u16
     pre_evo_index: u16
-    evo_method: EvolutionMethod
+    evo_method: _EvolutionMethod
     evo_param1: u16
-    evo_param2: AdditionalRequirement
+    evo_param2: _AdditionalRequirement
     sprite_index: i16
-    gender: Gender
+    gender: _Gender
     body_size: u8
-    type_primary: PokeType
-    type_secondary: PokeType
-    movement_type: MovementType
-    iq_group: IQGroup
-    ability_primary: Ability
-    ability_secondary: Ability
+    type_primary: _PokeType
+    type_secondary: _PokeType
+    movement_type: _MovementType
+    iq_group: _IQGroup
+    ability_primary: _Ability
+    ability_secondary: _Ability
     exp_yield: u16
     recruit_rate1: i16
     base_hp: u16
@@ -439,7 +445,7 @@ class MdEntry(AutoString):
     size: i16
     unk17: u8
     unk18: u8
-    shadow_size: ShadowSize
+    shadow_size: _ShadowSize
     chance_spawn_asleep: i8
     # @End:
     # The % of HP that this pokémon species regenerates at the end of each turn is equal to 1/(value * 2)
@@ -465,244 +471,41 @@ class MdEntry(AutoString):
     can_evolve: bool
     item_required_for_spawning: bool
 
-    def __init__(
-        self,
-        *,
-        md_index: u32,
-        entid: u16,
-        unk31: u16,
-        national_pokedex_number: u16,
-        base_movement_speed: u16,
-        pre_evo_index: u16,
-        evo_method: EvolutionMethod,
-        evo_param1: u16,
-        evo_param2: AdditionalRequirement,
-        sprite_index: i16,
-        gender: Gender,
-        body_size: u8,
-        type_primary: PokeType,
-        type_secondary: PokeType,
-        movement_type: MovementType,
-        iq_group: IQGroup,
-        ability_primary: Ability,
-        ability_secondary: Ability,
-        exp_yield: u16,
-        recruit_rate1: i16,
-        base_hp: u16,
-        recruit_rate2: i16,
-        base_atk: u8,
-        base_sp_atk: u8,
-        base_def: u8,
-        base_sp_def: u8,
-        weight: i16,
-        size: i16,
-        unk17: u8,
-        unk18: u8,
-        shadow_size: ShadowSize,
-        chance_spawn_asleep: i8,
-        hp_regeneration: u8,
-        unk21_h: i8,
-        base_form_index: i16,
-        exclusive_item1: i16,
-        exclusive_item2: i16,
-        exclusive_item3: i16,
-        exclusive_item4: i16,
-        unk27: i16,
-        unk28: i16,
-        unk29: i16,
-        unk30: i16,
-        bitflag1: u16,
-    ):
-        (
-            self.bitfield1_0,
-            self.bitfield1_1,
-            self.bitfield1_2,
-            self.bitfield1_3,
-            self.can_move,
-            self.bitfield1_5,
-            self.can_evolve,
-            self.item_required_for_spawning,
-        ) = (bool(bitflag1 >> i & 1) for i in range(8))
-
-        self.md_index = md_index
-        self.entid = entid
-        self.unk31 = unk31
-        self.national_pokedex_number = national_pokedex_number
-        self.base_movement_speed = base_movement_speed
-        self.pre_evo_index = pre_evo_index
-        self.evo_method = evo_method
-        self.evo_param1 = evo_param1
-        self.evo_param2 = evo_param2
-        self.sprite_index = sprite_index
-        self.gender = gender
-        self.body_size = body_size
-        self.type_primary = type_primary
-        self.type_secondary = type_secondary
-        self.movement_type = movement_type
-        self.iq_group = iq_group
-        self.ability_primary = ability_primary
-        self.ability_secondary = ability_secondary
-        self.exp_yield = exp_yield
-        self.recruit_rate1 = recruit_rate1
-        self.base_hp = base_hp
-        self.recruit_rate2 = recruit_rate2
-        self.base_atk = base_atk
-        self.base_sp_atk = base_sp_atk
-        self.base_def = base_def
-        self.base_sp_def = base_sp_def
-        self.weight = weight
-        self.size = size
-        self.unk17 = unk17
-        self.unk18 = unk18
-        self.shadow_size = shadow_size
-        self.chance_spawn_asleep = chance_spawn_asleep
-        self.hp_regeneration = hp_regeneration
-        self.unk21_h = unk21_h
-        self.base_form_index = base_form_index
-        self.exclusive_item1 = exclusive_item1
-        self.exclusive_item2 = exclusive_item2
-        self.exclusive_item3 = exclusive_item3
-        self.exclusive_item4 = exclusive_item4
-        self.unk27 = unk27
-        self.unk28 = unk28
-        self.unk29 = unk29
-        self.unk30 = unk30
-
     @classmethod
-    def new_empty(cls, entid: u16) -> "MdEntry":
-        return MdEntry(
-            md_index=u32(0),
-            entid=entid,
-            unk31=u16(0),
-            national_pokedex_number=u16(0),
-            base_movement_speed=u16(0),
-            pre_evo_index=u16(0),
-            evo_method=EvolutionMethod.NONE,
-            evo_param1=u16(0),
-            evo_param2=AdditionalRequirement.NONE,
-            sprite_index=i16(0),
-            gender=Gender.INVALID,
-            body_size=u8(0),
-            type_primary=PokeType.NONE,
-            type_secondary=PokeType.NONE,
-            movement_type=MovementType.UNKNOWN1,
-            iq_group=IQGroup.INVALID,
-            ability_primary=Ability.NONE,
-            ability_secondary=Ability.NONE,
-            bitflag1=u16(0),
-            exp_yield=u16(0),
-            recruit_rate1=i16(0),
-            base_hp=u16(0),
-            recruit_rate2=i16(0),
-            base_atk=u8(0),
-            base_sp_atk=u8(0),
-            base_def=u8(0),
-            base_sp_def=u8(0),
-            weight=i16(0),
-            size=i16(0),
-            unk17=u8(0),
-            unk18=u8(0),
-            shadow_size=ShadowSize.SMALL,
-            chance_spawn_asleep=i8(0),
-            hp_regeneration=u8(0),
-            unk21_h=i8(0),
-            base_form_index=i16(0),
-            exclusive_item1=i16(0),
-            exclusive_item2=i16(0),
-            exclusive_item3=i16(0),
-            exclusive_item4=i16(0),
-            unk27=i16(0),
-            unk28=i16(0),
-            unk29=i16(0),
-            unk30=i16(0),
-        )
+    @abstractmethod
+    def new_empty(cls, entid: u16) -> MdEntryProtocol: ...
 
     @property
-    def md_index_base(self) -> int:
-        return self.md_index % MdProperties.NUM_ENTITIES
+    @abstractmethod
+    def md_index_base(self) -> int: ...
 
 
-class Md:
-    @typing.no_type_check
-    def __init__(self, data: bytes):
-        if not isinstance(data, memoryview):
-            data = memoryview(data)
+E = TypeVar("E", bound=MdEntryProtocol)
 
-        number_entries = read_u32(data, 4)
 
-        self.entries: List[MdEntry] = []
-        self._entries_by_entid: Dict[int, List[Tuple[int, MdEntry]]] = {}
-        for i in range(0, number_entries):
-            start = 8 + (i * MD_ENTRY_LEN)
-            entry = MdEntry(
-                md_index=u32(i),
-                entid=read_u16(data, start + 0x00),
-                unk31=read_u16(data, start + 0x02),
-                national_pokedex_number=read_u16(data, start + 0x04),
-                base_movement_speed=read_u16(data, start + 0x06),
-                pre_evo_index=read_u16(data, start + 0x08),
-                evo_method=EvolutionMethod(read_u16(data, start + 0x0A)),
-                evo_param1=read_u16(data, start + 0x0C),
-                evo_param2=AdditionalRequirement(read_u16(data, start + 0x0E)),
-                sprite_index=read_i16(data, start + 0x10),
-                gender=Gender(read_u8(data, start + 0x12)),
-                body_size=read_u8(data, start + 0x13),
-                type_primary=PokeType(read_u8(data, start + 0x14)),
-                type_secondary=PokeType(read_u8(data, start + 0x15)),
-                movement_type=MovementType(read_u8(data, start + 0x16)),
-                iq_group=IQGroup(read_u8(data, start + 0x17)),
-                ability_primary=Ability(read_u8(data, start + 0x18)),
-                ability_secondary=Ability(read_u8(data, start + 0x19)),
-                bitflag1=read_u16(data, start + 0x1A),
-                exp_yield=read_u16(data, start + 0x1C),
-                recruit_rate1=read_i16(data, start + 0x1E),
-                base_hp=read_u16(data, start + 0x20),
-                recruit_rate2=read_i16(data, start + 0x22),
-                base_atk=read_u8(data, start + 0x24),
-                base_sp_atk=read_u8(data, start + 0x25),
-                base_def=read_u8(data, start + 0x26),
-                base_sp_def=read_u8(data, start + 0x27),
-                weight=read_i16(data, start + 0x28),
-                size=read_i16(data, start + 0x2A),
-                unk17=read_u8(data, start + 0x2C),
-                unk18=read_u8(data, start + 0x2D),
-                shadow_size=ShadowSize(read_i8(data, start + 0x2E)),
-                chance_spawn_asleep=read_i8(data, start + 0x2F),
-                hp_regeneration=read_u8(data, start + 0x30),
-                unk21_h=read_i8(data, start + 0x31),
-                base_form_index=read_i16(data, start + 0x32),
-                exclusive_item1=read_i16(data, start + 0x34),
-                exclusive_item2=read_i16(data, start + 0x36),
-                exclusive_item3=read_i16(data, start + 0x38),
-                exclusive_item4=read_i16(data, start + 0x3A),
-                unk27=read_i16(data, start + 0x3C),
-                unk28=read_i16(data, start + 0x3E),
-                unk29=read_i16(data, start + 0x40),
-                unk30=read_i16(data, start + 0x42),
-            )
+class MdProtocol(Protocol[E]):
+    entries: Sequence[E]
 
-            self.entries.append(entry)
-            if entry.entid not in self._entries_by_entid:
-                self._entries_by_entid[entry.entid] = []
-            self._entries_by_entid[entry.entid].append((i, entry))
+    @abstractmethod
+    def __init__(self, data: bytes): ...
 
-    def get_by_index(self, index: int) -> MdEntry:
-        return self.entries[index]
+    @abstractmethod
+    def get_by_index(self, index: int) -> E: ...
 
-    def get_by_entity_id(self, index: int) -> List[Tuple[int, MdEntry]]:
-        return self._entries_by_entid[index]
+    @abstractmethod
+    def get_by_entity_id(self, index: int) -> List[Tuple[int, E]]: ...
 
-    def __len__(self) -> int:
-        return len(self.entries)
+    @abstractmethod
+    def __len__(self) -> int: ...
 
-    def __getitem__(self, key: int) -> MdEntry:
-        return self.get_by_index(key)
+    @abstractmethod
+    def __getitem__(self, key: int) -> E: ...
 
-    def __setitem__(self, key: int, value: MdEntry) -> None:
-        self.entries[key] = value
+    @abstractmethod
+    def __setitem__(self, key: int, value: E) -> None: ...
 
-    def __delitem__(self, key: int) -> None:
-        del self.entries[key]
+    @abstractmethod
+    def __delitem__(self, key: int) -> None: ...
 
-    def __iter__(self) -> Iterator[MdEntry]:
-        return iter(self.entries)
+    @abstractmethod
+    def __iter__(self) -> Iterator[E]: ...

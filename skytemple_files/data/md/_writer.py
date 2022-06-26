@@ -18,40 +18,39 @@
 from __future__ import annotations
 
 from skytemple_files.common.util import *
-from skytemple_files.data.md.model import MD_ENTRY_LEN, Md
+from skytemple_files.data.md._model import MD_ENTRY_LEN, Md
 
 
 class MdWriter:
-    def __init__(self, model: Md):
-        self.model = model
+    def __init__(self):
         self.data: bytearray = bytearray()
         self.bytes_written = 0
 
-    def write(self) -> bytes:
+    def write(self, model: Md) -> bytes:
         # At max we will need 8 byte header + (number entries * 68):
-        self.data = bytearray(8 + len(self.model.entries) * MD_ENTRY_LEN)
+        self.data = bytearray(8 + len(model.entries) * MD_ENTRY_LEN)
         self.bytes_written = 4
         self.data[0:4] = b"MD\0\0"
-        self._write_u32(u32(len(self.model.entries)))
+        self._write_u32(u32(len(model.entries)))
 
-        for entry in self.model.entries:
+        for entry in model.entries:
             self._write_u16(entry.entid)
             self._write_u16(entry.unk31)
             self._write_u16(entry.national_pokedex_number)
             self._write_u16(entry.base_movement_speed)
             self._write_u16(entry.pre_evo_index)
-            self._write_u16(entry.evo_method.value)
+            self._write_u16(entry.evo_method)
             self._write_u16(entry.evo_param1)
-            self._write_u16(entry.evo_param2.value)
+            self._write_u16(entry.evo_param2)
             self._write_i16(entry.sprite_index)
-            self._write_u8(entry.gender.value)
+            self._write_u8(entry.gender)
             self._write_u8(entry.body_size)
-            self._write_u8(entry.type_primary.value)
-            self._write_u8(entry.type_secondary.value)
-            self._write_u8(entry.movement_type.value)
-            self._write_u8(entry.iq_group.value)
-            self._write_u8(entry.ability_primary.value)
-            self._write_u8(entry.ability_secondary.value)
+            self._write_u8(entry.type_primary)
+            self._write_u8(entry.type_secondary)
+            self._write_u8(entry.movement_type)
+            self._write_u8(entry.iq_group)
+            self._write_u8(entry.ability_primary)
+            self._write_u8(entry.ability_secondary)
             self._write_u16(
                 u16(
                     generate_bitfield(
@@ -80,7 +79,7 @@ class MdWriter:
             self._write_i16(entry.size)
             self._write_u8(entry.unk17)
             self._write_u8(entry.unk18)
-            self._write_i8(entry.shadow_size.value)
+            self._write_i8(entry.shadow_size)
             self._write_i8(
                 entry.chance_spawn_asleep,
             )

@@ -18,20 +18,38 @@ from __future__ import annotations
 
 from typing import Type
 
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.dungeon_data.mappa_bin.item_list import MappaItemList
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaItemListProtocol
 
 
-class ItemListHandler(DataHandler[MappaItemList]):
+class ItemListHandler(HybridDataHandler[MappaItemListProtocol]):
+    @classmethod
+    def load_python_model(cls) -> Type[MappaItemListProtocol]:
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
+
+        return MappaItemList
+
+    @classmethod
+    def load_native_model(cls) -> Type[MappaItemListProtocol]:
+        from skytemple_rust.st_mappa_bin import (
+            MappaItemList,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return MappaItemList
+
+    @classmethod
+    def load_python_writer(cls):  # type: ignore
+        raise NotImplementedError("Not applicable.")
+
+    @classmethod
+    def load_native_writer(cls):  # type: ignore
+        raise NotImplementedError("Not applicable.")
+
     @classmethod
     def deserialize(cls, data: bytes, items, **kwargs: OptionalKwargs) -> MappaItemList:  # type: ignore
-        return MappaItemList.from_bytes(data, items, 0)
+        return cls.get_model_cls().from_bytes(data, items, 0)
 
     @classmethod
-    def serialize(cls, data: MappaItemList, **kwargs: OptionalKwargs) -> bytes:
-        return data.to_mappa()
-
-    @classmethod
-    def type(cls) -> Type[MappaItemList]:
-        return MappaItemList
+    def serialize(cls, data: MappaItemListProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return data.to_bytes()

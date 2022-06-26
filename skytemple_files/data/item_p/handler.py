@@ -14,37 +14,50 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type
+
+from skytemple_files.common.types.hybrid_data_handler import (
+    WriterProtocol, HybridSir0DataHandler,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.data.item_p.model import ItemP
-from skytemple_files.data.item_p.writer import ItemPWriter
+from skytemple_files.data.item_p.protocol import ItemPProtocol
 
 
-class ItemPHandler(DataHandler[ItemP]):
-    """
-    Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
-    Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
-    """
+class ItemPHandler(HybridSir0DataHandler[ItemPProtocol]):
+    @classmethod
+    def load_python_model(cls) -> Type[ItemPProtocol]:
+        from skytemple_files.data.item_p._model import ItemP
+
+        return ItemP
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "ItemP":
-        from skytemple_files.common.types.file_types import FileType
+    def load_native_model(cls) -> Type[ItemPProtocol]:
+        from skytemple_rust.st_item_p import (
+            ItemP,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
 
-        return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ItemP)
-
-    @classmethod
-    def serialize(cls, data: "ItemP", **kwargs: OptionalKwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-
-        return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
+        return ItemP
 
     @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> "ItemP":
-        return ItemP(data, 0)
+    def load_python_writer(cls) -> Type[WriterProtocol["PyItemP"]]:  # type: ignore
+        from skytemple_files.data.item_p._writer import ItemPWriter
+
+        return ItemPWriter
 
     @classmethod
-    def serialize_raw(cls, data: "ItemP", **kwargs: OptionalKwargs) -> bytes:
-        return ItemPWriter(data).write()[0]
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeItemP"]]:  # type: ignore
+        from skytemple_rust.st_item_p import (
+            ItemPWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return ItemPWriter
+
+    @classmethod
+    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> ItemPProtocol:
+        return cls.get_model_cls()(data, 0)
+
+    @classmethod
+    def serialize_raw(cls, data: ItemPProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return data.sir0_serialize_parts()[0]

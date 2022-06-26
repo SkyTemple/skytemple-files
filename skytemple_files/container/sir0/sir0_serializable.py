@@ -17,12 +17,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, runtime_checkable, Protocol
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 
-class Sir0Serializable(ABC):
+@runtime_checkable
+class Sir0Serializable(Protocol):
     @abstractmethod
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
         """

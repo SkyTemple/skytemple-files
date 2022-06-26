@@ -1,3 +1,4 @@
+"""Converts ItemP models back into the binary format used by the game"""
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -14,20 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
-import os
+from skytemple_files.data.item_p._model import ItemP
 
-from ndspy.rom import NintendoDSRom
 
-from skytemple_files.data.md.handler import MdHandler
-
-base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
-
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
-md_bin = rom.getFileByName("BALANCE/monster.md")
-md_model = MdHandler.deserialize(md_bin)
-
-for md in md_model:
-    print(md)
+class ItemPWriter:
+    def write(self, model: ItemP) -> bytes:
+        return model.sir0_serialize_parts()[0]

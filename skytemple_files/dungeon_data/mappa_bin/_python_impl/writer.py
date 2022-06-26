@@ -1,3 +1,4 @@
+"""Converts MappaBin models back into the binary format used by the game"""
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -14,20 +15,11 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
-import os
+from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBin
 
-from ndspy.rom import NintendoDSRom
 
-from skytemple_files.data.md.handler import MdHandler
-
-base_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..")
-
-rom = NintendoDSRom.fromFile(os.path.join(base_dir, "skyworkcopy.nds"))
-md_bin = rom.getFileByName("BALANCE/monster.md")
-md_model = MdHandler.deserialize(md_bin)
-
-bin_after = MdHandler.serialize(md_model)
-assert md_bin == bin_after
+class MappaBinWriter:
+    def write(self, model: MappaBin) -> bytes:
+        return model.sir0_serialize_parts()[0]

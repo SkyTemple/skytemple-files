@@ -24,12 +24,10 @@ from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 from skytemple_files.data.item_p import *
-
-if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
+from skytemple_files.data.item_p.protocol import ItemPProtocol, ItemPEntryProtocol
 
 
-class ItemPEntry(AutoString):
+class ItemPEntry(ItemPEntryProtocol, AutoString):
     buy_price: u16
     sell_price: u16
     category: u8
@@ -69,12 +67,6 @@ class ItemPEntry(AutoString):
         self.ai_flag_1 = (bitfield & 0x20) != 0  # Flag 1 for the AI?
         self.ai_flag_2 = (bitfield & 0x40) != 0  # Flag 2 for the AI?
         self.ai_flag_3 = (bitfield & 0x80) != 0  # Flag 3 for the AI?
-
-    def category_enum(self) -> "MappaItemCategory":
-        """:deprecated: Use category_pmd2obj"""
-        from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
-
-        return MappaItemCategory(self.category)  # type: ignore
 
     def category_pmd2obj(
         self, item_categories: Dict[int, Pmd2DungeonItemCategory]
@@ -129,11 +121,11 @@ class ItemPEntry(AutoString):
         )
 
 
-class ItemP(Sir0Serializable, AutoString):
-    def __init__(self, data: bytes, header_pointer: int):
+class ItemP(ItemPProtocol[ItemPEntry], Sir0Serializable, AutoString):
+    def __init__(self, data: bytes, pointer_to_pointers: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.item_list = []
+        self.item_list: List[ItemPEntry] = []
         for x in range(0, len(data), ITEM_P_ENTRY_SIZE):
             self.item_list.append(ItemPEntry(data[x : x + ITEM_P_ENTRY_SIZE]))
 
@@ -147,9 +139,12 @@ class ItemP(Sir0Serializable, AutoString):
         return cls(content_data, data_pointer)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        from skytemple_files.data.item_p.writer import ItemPWriter
-
-        return ItemPWriter(self).write()  # type: ignore
+        pointer_offsets: List[int] = []
+        header_offset = 0
+        data = bytearray(0)
+        for i in self.item_list:
+            data += i.to_bytes()
+        return bytes(data), pointer_offsets, header_offset
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ItemP):

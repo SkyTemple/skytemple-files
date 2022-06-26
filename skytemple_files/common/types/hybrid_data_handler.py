@@ -14,13 +14,17 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, Protocol, Type, TypeVar
+from typing import TypeVar, Generic, Protocol, Type, Optional
 
-from skytemple_files.common.impl_cfg import ImplementationType, get_implementation_type
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 U = TypeVar("U", contravariant=True)
 
@@ -32,6 +36,7 @@ class WriterProtocol(Protocol[U]):
 
 
 P = TypeVar("P")
+PS = TypeVar("PS", bound=Sir0Serializable)
 
 
 class HybridDataHandler(Generic[P], DataHandler[P], ABC):
@@ -74,3 +79,57 @@ class HybridDataHandler(Generic[P], DataHandler[P], ABC):
         if get_implementation_type() == ImplementationType.NATIVE:
             return cls.load_native_writer()
         return cls.load_python_writer()
+
+
+class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
+    """
+    Handler that supports both a Python and a native implementation
+    for its file type. Which one is used is controlled by the implementation
+    configuration module.
+    This is a special variant for Sir0 wrapped models.
+
+    The load methods should import on-demand.
+    """
+
+    @classmethod
+    @abstractmethod
+    def load_python_model(cls) -> Type[PS]:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def load_native_model(cls) -> Type[PS]:
+        pass
+
+    @classmethod
+    def get_model_cls(cls) -> Type[PS]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            return cls.load_native_model()
+        return cls.load_python_model()
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> PS:
+        from skytemple_files.common.types.file_types import FileType
+
+        sir0 = FileType.SIR0.deserialize(data)
+        static_data: Optional[Pmd2Data] = None
+        if kwargs is not None and "static_data" in kwargs:
+            static_data = kwargs["static_data"]  # type: ignore
+        return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls(), static_data)
+
+    @classmethod
+    def serialize(cls, data: PS, **kwargs: OptionalKwargs) -> bytes:
+        from skytemple_files.common.types.file_types import FileType
+
+        sir0 = FileType.SIR0.wrap_obj(data)
+        return FileType.SIR0.serialize(sir0)
+
+    @classmethod
+    @abstractmethod
+    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> PS:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def serialize_raw(cls, data: PS, **kwargs: OptionalKwargs) -> bytes:
+        pass

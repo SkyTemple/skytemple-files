@@ -28,19 +28,17 @@ from skytemple_files.common.util import (
     write_u16,
 )
 from skytemple_files.common.xml_util import (
-    XmlSerializable,
     validate_xml_attribs,
     validate_xml_tag,
 )
 from skytemple_files.dungeon_data.mappa_bin import *
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaMonsterProtocol, LEVEL_MULTIPLIER
 
 if TYPE_CHECKING:
-    from skytemple_files.dungeon_data.mappa_bin.model import MappaBinReadContainer
-DUMMY_MD_INDEX = 0x229
-LEVEL_MULTIPLIER = 512
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBinReadContainer
 
 
-class MappaMonster(AutoString, XmlSerializable):
+class MappaMonster(MappaMonsterProtocol, AutoString):
     level: u8
     weight: u16
     weight2: u16
@@ -80,37 +78,6 @@ class MappaMonster(AutoString, XmlSerializable):
     @classmethod
     def _is_end_of_entries(cls, data: bytes, pointer):
         return read_u16(data, pointer + 6) == 0
-
-    def to_xml(self) -> Element:
-        return Element(
-            XML_MONSTER,
-            {
-                XML_MONSTER__LEVEL: str(self.level),
-                XML_MONSTER__WEIGHT: str(self.weight),
-                XML_MONSTER__WEIGHT2: str(self.weight2),
-                XML_MONSTER__MD_INDEX: str(self.md_index),
-            },
-        )
-
-    @classmethod
-    @typing.no_type_check
-    def from_xml(cls, ele: Element) -> "MappaMonster":
-        validate_xml_tag(ele, XML_MONSTER)
-        validate_xml_attribs(
-            ele,
-            [
-                XML_MONSTER__LEVEL,
-                XML_MONSTER__WEIGHT,
-                XML_MONSTER__WEIGHT2,
-                XML_MONSTER__MD_INDEX,
-            ],
-        )
-        return cls(
-            u8_checked(int(ele.get(XML_MONSTER__LEVEL))),
-            u16_checked(int(ele.get(XML_MONSTER__WEIGHT))),
-            u16_checked(int(ele.get(XML_MONSTER__WEIGHT2))),
-            u16_checked(int(ele.get(XML_MONSTER__MD_INDEX))),
-        )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaMonster):

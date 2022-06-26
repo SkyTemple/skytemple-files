@@ -24,7 +24,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
-from skytemple_files.data.md.model import PokeType
+from skytemple_files.data.md.protocol import PokeType
 from skytemple_files.data.waza_p import WAZA_MOVE_ENTRY_LEN
 
 # TODO: Consider actually reading until the header later, in case modded games

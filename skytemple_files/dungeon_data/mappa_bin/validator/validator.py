@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from range_typed_integers import u8, u8_checked
 
-from skytemple_files.dungeon_data.mappa_bin.floor import MappaFloor
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol
 from skytemple_files.dungeon_data.mappa_bin.validator.exception import (
     DungeonMissingFloorError,
     DungeonTotalFloorCountInvalidError,
@@ -33,7 +33,7 @@ from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
 class DungeonValidator:
-    def __init__(self, floors: List[List[MappaFloor]]):
+    def __init__(self, floors: List[List[MappaFloorProtocol]]):
         self.dungeons: Optional[List[DungeonDefinition]] = None
         self.floors = floors
 

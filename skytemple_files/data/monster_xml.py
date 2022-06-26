@@ -20,10 +20,18 @@ from __future__ import annotations
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from abc import ABC, abstractmethod
 from base64 import b64decode, b64encode
-from typing import Dict, Generic, List, Optional, Tuple, TypeVar
+from typing import (
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+    no_type_check,
+    Sequence,
+)
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -33,16 +41,8 @@ from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import XmlValidateError, validate_xml_tag
 from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
-from skytemple_files.data.md.model import (
-    Ability,
-    AdditionalRequirement,
-    EvolutionMethod,
-    Gender,
-    IQGroup,
-    MdEntry,
-    MovementType,
-    PokeType,
-    ShadowSize,
+from skytemple_files.data.md.protocol import (
+    MdEntryProtocol,
 )
 from skytemple_files.data.waza_p.model import LevelUpMove, MoveLearnset
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol
@@ -164,17 +164,6 @@ XML_GENENT__MAP__SIMPLE = {
     XML_GENENT_UNK29: "unk29",
     XML_GENENT_UNK30: "unk30",
 }
-XML_GENENT__MAP__ENUMS = {
-    "evo_method": EvolutionMethod,
-    "gender": Gender,
-    "type_primary": PokeType,
-    "type_secondary": PokeType,
-    "movement_type": MovementType,
-    "iq_group": IQGroup,
-    "ability_primary": Ability,
-    "ability_secondary": Ability,
-    "shadow_size": ShadowSize,
-}
 
 T = TypeVar("T")
 
@@ -199,7 +188,7 @@ class XmlConverter(Generic[T], ABC):
 
 class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
     @classmethod
-    def to_xml(cls, values: T) -> Element:
+    def to_xml(cls, values: Dict[str, Tuple[str, str]]) -> Element:
         xml = Element(XML_STRINGS)
         for language, (name, category) in values.items():
             lang = Element(language)
@@ -244,7 +233,10 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
 
 class GenderedConvertEntry:
     def __init__(
-        self, md_entry: MdEntry, personality: Optional[u8], idle_anim: Optional[u8]
+        self,
+        md_entry: MdEntryProtocol,
+        personality: Optional[u8],
+        idle_anim: Optional[u8],
     ):
         self.md_entry = md_entry
         self.personality = personality
@@ -277,17 +269,13 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
             )
         )
         evo.append(
-            create_elem_w_text(
-                XML_GENENT_EVOLUTION_REQ__EVO_METHOD, value.evo_method.value
-            )
+            create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_METHOD, value.evo_method)
         )
         evo.append(
             create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM1, value.evo_param1)
         )
         evo.append(
-            create_elem_w_text(
-                XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2.value
-            )
+            create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2)
         )
         xml.append(evo)
         # Base stats
@@ -355,21 +343,13 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
         return xml
 
     @classmethod
+    @no_type_check
     def from_xml(cls, xml: Element, base_value_to_update: GenderedConvertEntry):
         value_to_update = base_value_to_update.md_entry
         for sub_xml in xml:
             if sub_xml.tag in XML_GENENT__MAP__SIMPLE.keys():
                 attr_name = XML_GENENT__MAP__SIMPLE[sub_xml.tag]
-                if attr_name in XML_GENENT__MAP__ENUMS.keys():
-                    # Enum
-                    setattr(
-                        value_to_update,
-                        attr_name,
-                        XML_GENENT__MAP__ENUMS[attr_name](int(sub_xml.text)),
-                    )
-                else:
-                    # Simple value
-                    setattr(value_to_update, attr_name, int(sub_xml.text))
+                setattr(value_to_update, attr_name, int(sub_xml.text))
             if sub_xml.tag == XML_GENENT_PERSONALITY:
                 base_value_to_update.personality = int(sub_xml.text)
             if sub_xml.tag == XML_GENENT_IDLE_ANIM:
@@ -383,11 +363,11 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
                     if value_xml.tag == XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX:
                         pre_evo_index = int(value_xml.text)
                     elif value_xml.tag == XML_GENENT_EVOLUTION_REQ__EVO_METHOD:
-                        method = EvolutionMethod(int(value_xml.text))
+                        method = int(value_xml.text)
                     elif value_xml.tag == XML_GENENT_EVOLUTION_REQ__EVO_PRAM1:
                         param1 = int(value_xml.text)
                     elif value_xml.tag == XML_GENENT_EVOLUTION_REQ__EVO_PRAM2:
-                        param2 = AdditionalRequirement(int(value_xml.text))
+                        param2 = int(value_xml.text)
                 if pre_evo_index is None:
                     raise XmlValidateError(
                         cls._missing_err(
@@ -606,6 +586,7 @@ class MovesetXml(XmlConverter[MoveLearnset]):
         return xml
 
     @classmethod
+    @no_type_check
     def from_xml(cls, xml: Element, value_to_update: MoveLearnset):
         for xml_type in xml:
             if xml_type.tag == XML_MOVESET_LEVEL_UP:
@@ -688,6 +669,7 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
 
     # noinspection PyUnusedLocal
     @classmethod
+    @no_type_check
     def from_xml(cls, xml: Element, value_to_update: LevelBinEntry):
         if len(xml) != 100:
             raise XmlValidateError(
@@ -751,7 +733,7 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
 
 class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
     @classmethod
-    def to_xml(cls, values: List[Optional[KaoImageProtocol]]) -> Element:
+    def to_xml(cls, values: Sequence[Optional[KaoImageProtocol]]) -> Element:
         xml = Element(XML_PORTRAITS)
         for kao in values:
             kao_xml = Element(XML_PORTRAITS_PORTRAIT)
@@ -765,7 +747,9 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
         return xml
 
     @classmethod
-    def from_xml(cls, xml: Element, value_to_update: List[Optional[KaoImageProtocol]]):
+    def from_xml(
+        cls, xml: Element, value_to_update: Sequence[Optional[KaoImageProtocol]]
+    ):
         if len(value_to_update) != len(xml):
             raise XmlValidateError(
                 f(
@@ -801,7 +785,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
                         )
                     )
                 try:
-                    value_to_update[
+                    value_to_update[  # type: ignore
                         i
                     ] = FileType.KAO.get_image_model_cls().create_from_raw(
                         b64decode(image.encode("ascii")),
@@ -816,24 +800,24 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
                         )
                     ) from err
             else:
-                value_to_update[i] = None
+                value_to_update[i] = None  # type: ignore
 
 
 def monster_xml_export(
     game_version: str,
-    md_gender1: Optional[MdEntry],
-    md_gender2: Optional[MdEntry],
+    md_gender1: Optional[MdEntryProtocol],
+    md_gender2: Optional[MdEntryProtocol],
     names: Optional[Dict[str, Tuple[str, str]]],
     moveset: Optional[MoveLearnset],
     moveset2: Optional[MoveLearnset],
     stats: Optional[LevelBinEntry],
-    portraits: Optional[List[KaoImageProtocol]],
-    portraits2: Optional[List[KaoImageProtocol]],
-    personality1: Optional[int] = None,
-    personality2: Optional[int] = None,
+    portraits: Optional[Sequence[KaoImageProtocol]],
+    portraits2: Optional[Sequence[KaoImageProtocol]],
+    personality1: Optional[u8] = None,
+    personality2: Optional[u8] = None,
     idle_anim1: Optional[IdleAnimType] = None,
     idle_anim2: Optional[IdleAnimType] = None,
-) -> ElementTree:
+) -> ElementTree.Element:
     """
     Exports properties of all given things as an XML file. If a second Md entry is given,
     the first must also be given.
@@ -872,7 +856,7 @@ def monster_xml_export(
 
 
 def monster_xml_import(
-    xml: ElementTree,
+    xml: ElementTree.Element,
     md_gender1: Optional[GenderedConvertEntry],
     md_gender2: Optional[GenderedConvertEntry],
     names: Optional[Dict[str, Tuple[str, str]]],

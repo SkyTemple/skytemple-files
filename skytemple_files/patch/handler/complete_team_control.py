@@ -14,11 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable, List, Any
 
 from ndspy.rom import NintendoDSRom
 
@@ -36,10 +35,10 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 ov29EU = 0x022DCB80
 ov29US = 0x022DC240
 totaloverlay29checks = 6
-CHECK_EU = [None] * 7
-CHECK_US = [None] * 7
-BYTES_EU = [None] * 7
-BYTES_US = [None] * 7
+CHECK_EU: List[Any] = [None] * 7
+CHECK_US: List[Any] = [None] * 7
+BYTES_EU: List[Any] = [None] * 7
+BYTES_US: List[Any] = [None] * 7
 
 CHECK_EU[0] = 0x022F2894 - ov29EU  # where the game checks if you're pressing start
 CHECK_US[0] = 0x022F1EE0 - ov29US

@@ -14,7 +14,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 from typing import Callable
@@ -35,7 +34,7 @@ from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.level_bin_entry.model import LEVEL_BIN_ENTRY_LEVEL_LEN
 from skytemple_files.data.md.handler import MdHandler
-from skytemple_files.data.md.model import Gender, MdEntry
+from skytemple_files.data.md.protocol import Gender, MdEntryProtocol
 from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.md_evo.model import MdEvoEntry, MdEvoStats
@@ -203,8 +202,10 @@ and to save a backup of your ROM before applying this."""
                     )
                 )
                 sorted_list.sort(key=lambda x: normalize_string(x[1]))
-                sorted_list = [x[0] for x in sorted_list]
-                inv_sorted_list = [sorted_list.index(i) for i in range(NUM_NEW_ENTRIES)]
+                sorted_list2 = [x[0] for x in sorted_list]
+                inv_sorted_list = [
+                    sorted_list2.index(i) for i in range(NUM_NEW_ENTRIES)
+                ]
                 m2n_model = ValListHandler.deserialize(
                     rom.getFileByName(file_assoc[filename][0])
                 )
@@ -215,7 +216,7 @@ and to save a backup of your ROM before applying this."""
                 n2m_model = ValListHandler.deserialize(
                     rom.getFileByName(file_assoc[filename][1])
                 )
-                n2m_model.set_list(sorted_list)
+                n2m_model.set_list(sorted_list2)
                 rom.setFileByName(
                     file_assoc[filename][1], ValListHandler.serialize(n2m_model)
                 )
@@ -228,7 +229,7 @@ and to save a backup of your ROM before applying this."""
                 for j in range(SUBENTRIES):
                     a = kao_model.get(i, j)
                     b = kao_model.get(i + NUM_PREVIOUS_ENTRIES, j)
-                    if b == None and a != None:
+                    if b is None and a is not None:
                         kao_model.set(i + NUM_PREVIOUS_ENTRIES, j, a)
             rom.setFileByName("FONT/kaomado.kao", KaoHandler.serialize(kao_model))
 
@@ -244,69 +245,68 @@ and to save a backup of your ROM before applying this."""
             # Add monsters
             md_bin = rom.getFileByName("BALANCE/monster.md")
             md_model = MdHandler.deserialize(md_bin)
+            new_entries = list(md_model.entries)
             while len(md_model.entries) < NUM_NEW_ENTRIES:
-                md_model.entries.append(
-                    MdEntry.new_empty(u16_checked(len(md_model.entries)))
+                new_entries.append(
+                    MdEntryProtocol.new_empty(u16_checked(len(new_entries)))
                 )
             for i in range(NUM_PREVIOUS_ENTRIES):
-                md_model.entries[i].entid = i
-                if md_model.entries[NUM_PREVIOUS_ENTRIES + i].gender == Gender.INVALID:
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + i].entid = (
+                new_entries[i].entid = i
+                if new_entries[NUM_PREVIOUS_ENTRIES + i].gender == Gender.INVALID.value:
+                    new_entries[NUM_PREVIOUS_ENTRIES + i].entid = (
                         NUM_PREVIOUS_ENTRIES + i
                     )
                 else:
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + i].entid = i
-            block = bincfg.symbols["MonsterSpriteData"]
-            data = binary[block.begin : block.end] + binary[block.begin : block.end]
+                    new_entries[NUM_PREVIOUS_ENTRIES + i].entid = i
+            block2 = bincfg.symbols["MonsterSpriteData"]
+            data = binary[block2.begin : block2.end] + binary[block2.begin : block2.end]
             data += b"\x00\x00" * (NUM_NEW_ENTRIES - (len(data) // 2))
             for i in range(0, len(data), 2):
-                md_model.entries[i // 2].unk17 = data[i]
-                md_model.entries[i // 2].unk18 = data[i + 1]
-                md_model.entries[i // 2].bitfield1_0 = False
-                md_model.entries[i // 2].bitfield1_1 = False
-                md_model.entries[i // 2].bitfield1_2 = False
-                md_model.entries[i // 2].bitfield1_3 = False
+                new_entries[i // 2].unk17 = data[i]
+                new_entries[i // 2].unk18 = data[i + 1]
+                new_entries[i // 2].bitfield1_0 = False
+                new_entries[i // 2].bitfield1_1 = False
+                new_entries[i // 2].bitfield1_2 = False
+                new_entries[i // 2].bitfield1_3 = False
 
             x = table_sf
             while read_u16(rom.arm9, x) != 0:
                 pkmn_id = read_u16(rom.arm9, x)
-                md_model.entries[
+                new_entries[
                     pkmn_id
                 ].bitfield1_3 = True  # pylint: disable=invalid-sequence-index
                 if (
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
-                    != Gender.INVALID
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
+                    != Gender.INVALID.value
                 ):
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_3 = True
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_3 = True
                 x += 2
             x = table_mf
             while read_u16(rom.arm9, x) != 0:
                 pkmn_id = read_u16(rom.arm9, x)
-                md_model.entries[
+                new_entries[
                     pkmn_id
                 ].bitfield1_2 = True  # pylint: disable=invalid-sequence-index
                 if (
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
-                    != Gender.INVALID
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
+                    != Gender.INVALID.value
                 ):
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_2 = True
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_2 = True
                 x += 2
             ov19 = rom.loadArm9Overlays([19])[19].data
             for x in range(table_sp, table_sp + TABLE_SP_SIZE, 2):
                 pkmn_id = read_u16(ov19, x)
-                md_model.entries[
+                new_entries[
                     pkmn_id
                 ].bitfield1_1 = True  # pylint: disable=invalid-sequence-index
-                md_model.entries[
+                new_entries[
                     pkmn_id
                 ].bitfield1_0 = True  # pylint: disable=invalid-sequence-index
-                if (
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
-                    != Gender.INVALID
-                ):
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_1 = True
-                    md_model.entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_0 = True
+                if new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender != Gender.INVALID:
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_1 = True
+                    new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_0 = True
 
+            md_model.entries = new_entries
             rom.setFileByName("BALANCE/monster.md", MdHandler.serialize(md_model))
 
             # Edit Mappa bin
@@ -346,7 +346,7 @@ and to save a backup of your ROM before applying this."""
                                 and md_model.entries[
                                     entry.md_index + NUM_PREVIOUS_ENTRIES
                                 ].gender
-                                != Gender.INVALID
+                                != Gender.INVALID.value
                             ):
                                 entry.md_index += NUM_PREVIOUS_ENTRIES
                     except:
@@ -427,7 +427,7 @@ and to save a backup of your ROM before applying this."""
             )
             for m in monster_list:
                 if m.md_idx >= NUM_PREVIOUS_MD_MAX:
-                    m.md_idx += NUM_NEW_ENTRIES - NUM_PREVIOUS_MD_MAX
+                    m.md_idx += NUM_NEW_ENTRIES - NUM_PREVIOUS_MD_MAX  # type: ignore
             HardcodedFixedFloorTables.set_monster_spawn_list(
                 ov29bin, monster_list, config
             )

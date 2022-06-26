@@ -75,7 +75,7 @@ class MappaItemList(MappaItemListProtocol, AutoString):
                     weight = val
                 if processing_categories:
                     # TODO: Switch to Pmd2DungeonItemCategory
-                    categories[MappaItemCategory(item_or_cat_id)] = weight  # type: ignore
+                    categories[item_or_cat_id] = weight
                 else:
                     items[item_list[item_or_cat_id]] = weight
                 item_or_cat_id += 1
@@ -84,9 +84,12 @@ class MappaItemList(MappaItemListProtocol, AutoString):
                 item_or_cat_id -= 0x10
             pointer += 2
 
-        assert data[orig_pointer : orig_pointer + len_read] == MappaItemList(categories, items).to_mappa()  # type: ignore
+        assert (
+            data[orig_pointer : orig_pointer + len_read]
+            == MappaItemList(categories, items).to_mappa()
+        )
 
-        return MappaItemList(categories, items)  # type: ignore
+        return MappaItemList(categories, items)
 
     def to_mappa(self) -> bytes:
         data = bytearray()

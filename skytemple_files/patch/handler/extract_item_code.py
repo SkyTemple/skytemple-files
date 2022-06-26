@@ -14,7 +14,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 from typing import Callable
@@ -124,16 +123,16 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
             data_processed = set()
             for offset in ext_data:
                 code = 0
-                for x in range(4):
-                    code += data[offset - start_ov29 + x] * (256**x)
+                for xx in range(4):
+                    code += data[offset - start_ov29 + xx] * (256**xx)
                 lst_data[offset] = code
                 data_processed.add(offset)
             switch.provide_data(lst_data)
             main_calls = switch.process_switch(0, (0, 1400), {})
 
-            unique_main_calls = set(main_calls)
-            unique_main_calls.add(data_seg)
-            unique_main_calls = list(sorted(unique_main_calls))
+            unique_main_calls_p = set(main_calls)
+            unique_main_calls_p.add(data_seg)
+            unique_main_calls = list(sorted(unique_main_calls_p))
             unique_main_calls.append(end_m_functions)
 
             for i in range(len(unique_main_calls) - 1):
@@ -176,16 +175,16 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
             id_codes = dict()
             for i, t in enumerate(main_func.items()):
                 k = t[0]
-                x = t[1]
+                xfn = t[1]
                 id_codes[k] = i
-                fdata = bytearray(x.compile(start_m_functions))
+                fdata = bytearray(xfn.compile(start_m_functions))
                 write_u32(header, u32_checked(current_ptr), 4 + 2 * nb_items + i * 8)
                 write_u32(header, u32_checked(len(fdata)), 4 + 2 * nb_items + i * 8 + 4)
                 code_data += fdata
 
                 current_ptr += len(fdata)
-            for i, x in enumerate(main_calls):
-                write_u16(header, u16(id_codes[x]), 4 + 2 * i)
+            for i, xy in enumerate(main_calls):
+                write_u16(header, u16(id_codes[xy]), 4 + 2 * i)
             file_data = header + code_data
             if ITEM_CODE_PATH not in rom.filenames:
                 create_file_in_rom(rom, ITEM_CODE_PATH, file_data)

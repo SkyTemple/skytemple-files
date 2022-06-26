@@ -14,11 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 import os
-from typing import Callable, List
+from typing import Callable, List, cast
 
 from ndspy.rom import NintendoDSRom
 
@@ -239,12 +238,12 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         else:
             param["DisplayVal"] = 0
 
-        START_EXT = param["StartGraphicPos"]
+        START_EXT = cast(int, param["StartGraphicPos"])
         START_LVL = START_EXT + 11
         START_SUB = START_LVL + 9
         bin_before = rom.getFileByName("FONT/markfont.dat")
         model = GraphicFontHandler.deserialize(bin_before)
-        entries = []
+        entries: List[Optional[Image.Image]] = []
         for x in range(model.get_nb_entries()):
             entries.append(model.get_entry(x))
         while len(entries) < max(START_LVL + 9, START_SUB + 4, START_EXT + 11):
@@ -275,9 +274,9 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
                 write_u8(mgrow_data_dama, u8(pp), x * 6 + 4)
                 write_u8(mgrow_data_dama, u8(acc), x * 6 + 5)
             bin_before = rom.getFileByName("BALANCE/waza_p.bin")
-            model = WazaPHandler.deserialize(bin_before)
+            modelwp = WazaPHandler.deserialize(bin_before)
             total = bytearray(0)
-            for m in model.moves:
+            for m in modelwp.moves:
                 if m.category != WazaMoveCategory.STATUS and m.max_upgrade_level == 99:
                     total += mgrow_data_dama
                 else:

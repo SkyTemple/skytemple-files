@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 
-
 from skytemple_files.common.util import *
 from skytemple_files.dungeon_data.mappa_bin.protocol import (
     _MappaFloorWeather,

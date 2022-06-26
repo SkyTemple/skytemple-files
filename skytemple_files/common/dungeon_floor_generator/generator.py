@@ -30,7 +30,7 @@ from dungeon_eos.DungeonAlgorithm import (
 )
 from dungeon_eos.RandomGen import RandomGenerator
 
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorLayoutProtocol
 from skytemple_files.graphics.dma.model import DmaType
 
 
@@ -138,7 +138,7 @@ class DungeonFloorGenerator:
             self.gen_properties = RandomGenProperties.default()
 
     def generate(
-        self, floor_layout: MappaFloorLayout, max_retries=1, flat=False
+        self, floor_layout: MappaFloorLayoutProtocol, max_retries=1, flat=False
     ) -> Union[List[List[Tile]], List[Tile], None]:
         """
         Returns a dungeon floor matrix (Tile matrix SIZE_Y x SIZE_X).
@@ -153,7 +153,7 @@ class DungeonFloorGenerator:
         RandomGenerator.use_seed_t1 = self.gen_properties.use_seed_t1
         RandomGenerator.seeds_t1 = self.gen_properties.seeds_t1
 
-        Properties.layout = floor_layout.structure.value
+        Properties.layout = floor_layout.structure
         Properties.mh_chance = floor_layout.monster_house_chance
         Properties.kecleon_chance = floor_layout.kecleon_shop_chance
         Properties.middle_room_secondary = floor_layout.secondary_terrain

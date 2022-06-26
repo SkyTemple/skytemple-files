@@ -77,6 +77,7 @@ def mappa_from_xml(
 
 def mappa_floor_to_xml(
     floor: MappaFloorProtocol,
+    items_desc: Dict[int, Pmd2DungeonItemCategory],
     export_layout=True,
     export_monsters=True,
     export_traps=True,
@@ -108,19 +109,21 @@ def mappa_floor_to_xml(
         floor_xml.append(traps_xml)
 
     if export_floor_items:
-        floor_items_xml = mappa_item_list_to_xml(floor.floor_items)
+        floor_items_xml = mappa_item_list_to_xml(floor.floor_items, items_desc)
         validate_xml_tag(floor_items_xml, XML_ITEM_LIST)
         floor_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__FLOOR)
         floor_xml.append(floor_items_xml)
 
     if export_shop_items:
-        shop_items_xml = mappa_item_list_to_xml(floor.shop_items)
+        shop_items_xml = mappa_item_list_to_xml(floor.shop_items, items_desc)
         validate_xml_tag(shop_items_xml, XML_ITEM_LIST)
         shop_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__SHOP)
         floor_xml.append(shop_items_xml)
 
     if export_monster_house_items:
-        monster_house_items_xml = mappa_item_list_to_xml(floor.monster_house_items)
+        monster_house_items_xml = mappa_item_list_to_xml(
+            floor.monster_house_items, items_desc
+        )
         validate_xml_tag(monster_house_items_xml, XML_ITEM_LIST)
         monster_house_items_xml.set(
             XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE
@@ -128,19 +131,19 @@ def mappa_floor_to_xml(
         floor_xml.append(monster_house_items_xml)
 
     if export_buried_items:
-        buried_items_xml = mappa_item_list_to_xml(floor.buried_items)
+        buried_items_xml = mappa_item_list_to_xml(floor.buried_items, items_desc)
         validate_xml_tag(buried_items_xml, XML_ITEM_LIST)
         buried_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__BURIED)
         floor_xml.append(buried_items_xml)
 
     if export_unk1_items:
-        unk_items1_xml = mappa_item_list_to_xml(floor.unk_items1)
+        unk_items1_xml = mappa_item_list_to_xml(floor.unk_items1, items_desc)
         validate_xml_tag(unk_items1_xml, XML_ITEM_LIST)
         unk_items1_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK1)
         floor_xml.append(unk_items1_xml)
 
     if export_unk2_items:
-        unk_items2_xml = mappa_item_list_to_xml(floor.unk_items2)
+        unk_items2_xml = mappa_item_list_to_xml(floor.unk_items2, items_desc)
         validate_xml_tag(unk_items2_xml, XML_ITEM_LIST)
         unk_items2_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__UNK2)
         floor_xml.append(unk_items2_xml)
@@ -629,14 +632,16 @@ def mappa_trap_list_from_xml(ele: Element) -> MappaTrapListProtocol:
         ) from ex
 
 
-def mappa_item_list_to_xml(item_list: MappaItemListProtocol) -> Element:
+def mappa_item_list_to_xml(
+    item_list: MappaItemListProtocol, items_desc: Dict[int, Pmd2DungeonItemCategory]
+) -> Element:
     xml_item_list = Element(XML_ITEM_LIST)
     for category, probability in item_list.categories.items():
         weight = "GUARANTEED" if probability == GUARANTEED else str(probability)
         xml_category = Element(
             XML_CATEGORY,
             {
-                XML_CATEGORY__NAME: MappaItemCategory(category.value).name,  # type: ignore
+                XML_CATEGORY__NAME: items_desc[category].name,
                 XML_CATEGORY__WEIGHT: str(weight),
             },
         )

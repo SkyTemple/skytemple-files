@@ -14,9 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u8
 
 from __future__ import annotations
+
+from range_typed_integers import u8
 
 BGP_RES_WIDTH = 256
 BGP_RES_HEIGHT = 192

@@ -18,26 +18,55 @@ from __future__ import annotations
 
 from typing import List, Optional, Type, TypeVar
 
+from range_typed_integers import u32
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler
 from skytemple_files.common.util import OptionalKwargs, read_bytes
-from skytemple_files.container.sir0.model import Sir0
+from skytemple_files.container.sir0.protocol import Sir0Protocol
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.container.sir0.writer import Sir0Writer
 
 T = TypeVar("T", bound=Sir0Serializable)
 
 
-class Sir0Handler(DataHandler[Sir0]):
+class Sir0Handler(HybridDataHandler[Sir0Protocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Sir0:
-        if not cls.matches(data):
-            raise ValueError("This is not valid Sir0.")
-        return Sir0.from_bin(data)
+    def load_python_model(cls) -> Type[Sir0Protocol]:
+        from skytemple_files.container.sir0._model import Sir0
+
+        return Sir0
 
     @classmethod
-    def serialize(cls, data: Sir0, **kwargs: OptionalKwargs) -> bytes:
-        return Sir0Writer(data).write()
+    def load_native_model(cls) -> Type[Sir0Protocol]:
+        from skytemple_rust.st_sir0 import (
+            Sir0,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Sir0
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol["PySir0"]]:  # type: ignore
+        from skytemple_files.container.sir0._writer import Sir0Writer
+
+        return Sir0Writer
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeSir0"]]:  # type: ignore
+        from skytemple_rust.st_sir0 import (
+            Sir0Writer,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Sir0Writer
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Sir0Protocol:
+        if not cls.matches(data):
+            raise ValueError("This is not valid Sir0.")
+        return cls.get_model_cls().from_bin(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: Sir0Protocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)
 
     @classmethod
     def matches(cls, data: bytes, byte_offset=0):
@@ -46,17 +75,17 @@ class Sir0Handler(DataHandler[Sir0]):
 
     @classmethod
     def wrap(
-        cls, content: bytes, pointer_offsets: List[int], data_pointer: int = None
-    ) -> Sir0:
+        cls, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
+    ) -> Sir0Protocol:
         """Wraps existing data in Sir0."""
-        return Sir0(content, pointer_offsets, data_pointer)
+        return cls.get_model_cls()(content, pointer_offsets, data_pointer)
 
     @classmethod
-    def wrap_obj(cls, obj: Sir0Serializable) -> Sir0:
+    def wrap_obj(cls, obj: Sir0Serializable) -> Sir0Protocol:
         return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
     def unwrap_obj(
-        cls, data: Sir0, spec: Type[T], static_data: Optional[Pmd2Data] = None
+        cls, data: Sir0Protocol, spec: Type[T], static_data: Optional[Pmd2Data] = None
     ) -> T:
         return spec.sir0_unwrap(data.content, data.data_pointer, static_data)  # type: ignore

@@ -30,7 +30,7 @@ class BannerFontWriter:
     def __init__(self, model: BannerFont):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         from skytemple_files.common.types.file_types import FileType
 
         pointer_offsets = []
@@ -55,7 +55,7 @@ class BannerFontWriter:
                     "Character {e.char} in table {e.table} is be defined multiple times in a font file!"
                 )
             last = (e.char, e.table)
-            pointer_offsets.append(len(buffer) + i * BANNER_FONT_ENTRY_LEN)
+            pointer_offsets.append(u32(len(buffer) + i * BANNER_FONT_ENTRY_LEN))
             write_u32(char_pointer, char_offsets[i], i * BANNER_FONT_ENTRY_LEN)
             write_u8(char_pointer, e.char, i * BANNER_FONT_ENTRY_LEN + 0x4)
             write_u8(char_pointer, e.table, i * BANNER_FONT_ENTRY_LEN + 0x5)
@@ -64,12 +64,12 @@ class BannerFontWriter:
 
         # Header
         header = bytearray(0xC)
-        pointer_offsets.append(len(buffer))
+        pointer_offsets.append(u32(len(buffer)))
         write_u32(header, char_pointer_offset, 0)
         write_u32(header, u32_checked(len(self.model.entries)), 0x4)
         write_u32(header, self.model.unknown, 0x8)
 
-        header_pointer = len(buffer)
+        header_pointer = u32(len(buffer))
         buffer += header
 
         return buffer, pointer_offsets, header_pointer

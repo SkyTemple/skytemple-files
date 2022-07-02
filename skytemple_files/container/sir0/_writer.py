@@ -21,51 +21,51 @@ from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
-from skytemple_files.container.sir0.model import Sir0
+from skytemple_files.container.sir0._model import Sir0
 from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets
 
 
 class Sir0Writer:
-    def __init__(self, model: Sir0):
-        self.model = model
+    def __init__(self):
         self.data: bytearray = None  # type: ignore
         self.bytes_written = 0
 
-    def write(self) -> bytes:
+    def write(self, model: Sir0) -> bytes:
         # Correct all pointers in content by HEADER_LEN
-        if not isinstance(self.model.content, bytearray):
-            self.model.content = bytearray(self.model.content)
-        for i, pnt_off in enumerate(self.model.content_pointer_offsets):
-            self.model.content_pointer_offsets[i] = pnt_off + HEADER_LEN
+        model = Sir0(bytearray(model.content), list(model.content_pointer_offsets), model.data_pointer)
+        if not isinstance(model.content, bytearray):
+            model.content = bytearray(model.content)
+        for i, pnt_off in enumerate(model.content_pointer_offsets):
+            model.content_pointer_offsets[i] = u32_checked(pnt_off + HEADER_LEN)
             write_u32(
-                self.model.content,
-                u32(read_u32(self.model.content, pnt_off) + HEADER_LEN),
+                model.content,
+                u32(read_u32(model.content, pnt_off) + HEADER_LEN),
                 pnt_off,
             )
 
         # Also add the two header pointers
-        pointer_offsets = [4, 8] + self.model.content_pointer_offsets
+        pointer_offsets = [u32(4), u32(8)] + model.content_pointer_offsets
 
         # Pointer offsets list
         pol = bytearray(4 * len(pointer_offsets))
         pol_cursor = self._encode_pointer_offsets(pol, pointer_offsets)
         pol = pol[:pol_cursor]
 
-        len_content_padding = self._len_pad(len(self.model.content))
+        len_content_padding = self._len_pad(len(model.content))
         len_eof_padding = self._len_pad(len(pol))
 
-        pointer_pol = HEADER_LEN + len(self.model.content) + len_content_padding
+        pointer_pol = HEADER_LEN + len(model.content) + len_content_padding
         self.bytes_written = 0
         self.data = bytearray(pointer_pol + len(pol) + len_eof_padding)
 
         # Header
         self._append(b"SIR0")
-        self._write_u32(u32_checked(self.model.data_pointer + HEADER_LEN))
+        self._write_u32(u32_checked(model.data_pointer + HEADER_LEN))
         self._write_u32(u32_checked(pointer_pol))
         self._write_u32(u32(0))
 
         assert self.bytes_written == HEADER_LEN
-        self._append(self.model.content)
+        self._append(model.content)
         self._pad(len_content_padding)
 
         assert self.bytes_written == pointer_pol
@@ -94,6 +94,6 @@ class Sir0Writer:
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     def _encode_pointer_offsets(
-        self, buffer: bytearray, pointer_offsets: List[int]
+        self, buffer: bytearray, pointer_offsets: Sequence[int]
     ) -> u32:
         return encode_sir0_pointer_offsets(buffer, pointer_offsets)

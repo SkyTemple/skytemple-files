@@ -19,13 +19,15 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import List, Optional, Tuple, runtime_checkable, Protocol
 
+from range_typed_integers import u32
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 
 @runtime_checkable
 class Sir0Serializable(Protocol):
     @abstractmethod
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         """
         Prepares this object to be wrapped in Sir0.
         Returns:
@@ -40,7 +42,7 @@ class Sir0Serializable(Protocol):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
+        data_pointer: u32,
         static_data: Optional[Pmd2Data] = None,
     ) -> "Sir0Serializable":
         """

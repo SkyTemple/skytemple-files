@@ -20,14 +20,17 @@ from range_typed_integers import u32_checked
 
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0 import HEADER_LEN
+from skytemple_files.container.sir0.protocol import Sir0Protocol
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 
 
-class Sir0:
+class Sir0(Sir0Protocol):
     data_pointer: u32
+    content: bytes
+    content_pointer_offsets: List[u32]
 
     def __init__(
-        self, content: bytes, pointer_offsets: List[int], data_pointer: int = None
+        self, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
     ):
         self.content = content
         self.content_pointer_offsets = pointer_offsets
@@ -36,7 +39,7 @@ class Sir0:
         self.data_pointer = u32(data_pointer)
 
     @classmethod
-    def from_bin(cls, data: bytes):
+    def from_bin(cls, data: bytes) -> Sir0:
         data = memoryview(bytearray(data))
         data_pointer = read_u32(data, 0x04)
         pointer_offset_list_pointer = read_u32(data, 0x08)
@@ -53,7 +56,9 @@ class Sir0:
 
         # The first two are for the pointers in the header, we remove them now, they are not
         # part of the content pointers
-        content_pointer_offsets = [pnt - HEADER_LEN for pnt in pointer_offsets][2:]
+        content_pointer_offsets: List[u32] = [
+            u32_checked(pnt - HEADER_LEN) for pnt in pointer_offsets[2:]
+        ]
 
         return cls(
             bytes(data[HEADER_LEN:pointer_offset_list_pointer]),

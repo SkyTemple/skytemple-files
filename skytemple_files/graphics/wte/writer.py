@@ -29,7 +29,7 @@ class WteWriter:
     def __init__(self, model: Wte):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         pointer_offsets = []
         buffer = bytearray()
 
@@ -60,7 +60,7 @@ class WteWriter:
         # We don't really know how many 0s the game wants but better to many than too few...
         header = bytearray(0x34)
         header[0:4] = MAGIC_NUMBER
-        pointer_offsets.append(len(buffer) + 0x04)
+        pointer_offsets.append(u32(len(buffer) + 0x04))
         write_u32(header, u32_checked(image_pointer), 0x04)
         write_u32(header, u32_checked(len(self.model.image_data)), 0x08)
         write_u8(header, self.model.actual_dim, 0x0C)
@@ -68,11 +68,11 @@ class WteWriter:
         write_u32(header, self.model.unk10, 0x10)
         write_u16(header, self.model.width, 0x14)
         write_u16(header, self.model.height, 0x16)
-        pointer_offsets.append(len(buffer) + 0x18)
+        pointer_offsets.append(u32(len(buffer) + 0x18))
         write_u32(header, u32_checked(palette_pointer), 0x18)
         write_u32(header, u32_checked(len(self.model.palette) // 3), 0x1C)
 
-        header_pointer = len(buffer)
+        header_pointer = u32(len(buffer))
         buffer += header
 
         return buffer, pointer_offsets, header_pointer

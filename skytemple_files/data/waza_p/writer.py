@@ -30,8 +30,8 @@ class WazaPWriter:
     def __init__(self, model: WazaP):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
-        pointer_offsets: List[int] = []
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+        pointer_offsets: List[u32] = []
         data = bytearray(3)
         # Learnset
         learnset_pointers: List[Tuple[u32, u32, u32]] = []
@@ -73,9 +73,9 @@ class WazaPWriter:
         learnset_pointer_table_pnt = len(data)
         learnset_pointer_table = bytearray(len(learnset_pointers) * 12)
         for i, (lvlup, tm_hm, egg) in enumerate(learnset_pointers):
-            pointer_offsets.append(len(data) + i * 12)
-            pointer_offsets.append(len(data) + i * 12 + 4)
-            pointer_offsets.append(len(data) + i * 12 + 8)
+            pointer_offsets.append(u32(len(data) + i * 12))
+            pointer_offsets.append(u32(len(data) + i * 12 + 4))
+            pointer_offsets.append(u32(len(data) + i * 12 + 8))
             write_u32(learnset_pointer_table, lvlup, i * 12)
             write_u32(learnset_pointer_table, tm_hm, i * 12 + 4)
             write_u32(learnset_pointer_table, egg, i * 12 + 8)
@@ -85,10 +85,10 @@ class WazaPWriter:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Waza Header (<- content pointer)
         header = bytearray(8)
-        waza_header_start = len(data)
+        waza_header_start = u32(len(data))
         pointer_offsets.append(waza_header_start)
         write_u32(header, u32_checked(move_pointer), 0)
-        pointer_offsets.append(waza_header_start + 4)
+        pointer_offsets.append(u32(waza_header_start + 4))
         write_u32(header, u32_checked(learnset_pointer_table_pnt), 4)
         data += header
         # Padding

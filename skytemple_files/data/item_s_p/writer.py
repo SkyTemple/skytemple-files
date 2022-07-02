@@ -27,9 +27,9 @@ class ItemSPWriter:
     def __init__(self, model: ItemSP):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
-        pointer_offsets: List[int] = []
-        header_offset = 0
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+        pointer_offsets: List[u32] = []
+        header_offset = u32(0)
         data = bytearray(0)
         for i in self.model.item_list:
             data += i.to_bytes()

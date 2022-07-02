@@ -14,6 +14,26 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
-
 from __future__ import annotations
+
+from abc import abstractmethod
+from typing import Protocol, List
+
+from range_typed_integers import u32
+
+
+class Sir0Protocol(Protocol):
+    data_pointer: u32
+    content: bytes
+    content_pointer_offsets: List[u32]
+
+    @abstractmethod
+    def __init__(
+        self, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
+    ):
+        ...
+
+    @classmethod
+    @abstractmethod
+    def from_bin(cls, data: bytes) -> Sir0Protocol:
+        ...

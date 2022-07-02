@@ -93,14 +93,14 @@ class ListExtractor:
                         read_u32(table_data, i + string_off) - self._binary.loadaddress
                     ),
                 )
-                pointer_offsets.append(i + string_off)
+                pointer_offsets.append(u32(i + string_off))
                 write_u32(table_data, new_pointer, i + string_off)
             number_entries += 1
         # Padding
         self._pad(out_data)
 
         # 2. Correct string pointer offsets
-        pointer_offsets = [off + len(out_data) for off in pointer_offsets]
+        pointer_offsets = [u32(off + len(out_data)) for off in pointer_offsets]
 
         # 3. Append table
         pointer_data_block = len(out_data)
@@ -111,7 +111,7 @@ class ListExtractor:
         # 4. Write sub-header
         if write_subheader:
             data_pointer = len(out_data)
-            pointer_offsets.append(len(out_data))
+            pointer_offsets.append(u32(len(out_data)))
             out_data += pointer_data_block.to_bytes(4, byteorder="little", signed=False)
             out_data += number_entries.to_bytes(4, byteorder="little", signed=False)
         else:

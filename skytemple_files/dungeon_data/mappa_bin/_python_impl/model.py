@@ -62,7 +62,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
     def __init__(self, floor_lists: List[List[MappaFloor]]):
         self.floor_lists = floor_lists
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
         pointer_offsets = []
 
@@ -89,7 +89,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         floor_list_lut = bytearray(4 * len(floor_lists))
         cursor_floor_data = u32(0)
         for i, floor_list in enumerate(floor_lists):
-            pointer_offsets.append(start_floor_list_lut + i * 4)
+            pointer_offsets.append(u32_checked(start_floor_list_lut + i * 4))
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
             cursor_floor_data = u32_checked(
                 cursor_floor_data + (len(floor_list) + 1) * 18
@@ -135,7 +135,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         start_monster_lut = u32_checked(len(data))
         monster_lut = bytearray(4 * len(monster_data_pointer))
         for i, pnt in enumerate(monster_data_pointer):
-            pointer_offsets.append(start_monster_lut + i * 4)
+            pointer_offsets.append(u32_checked(start_monster_lut + i * 4))
             write_u32(monster_lut, pnt, i * 4)
         data += monster_lut
         # Padding
@@ -165,7 +165,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         start_traps_lut = u32_checked(len(data))
         trap_lut = bytearray(4 * len(trap_data_pointer))
         for i, pnt in enumerate(trap_data_pointer):
-            pointer_offsets.append(start_traps_lut + i * 4)
+            pointer_offsets.append(u32_checked(start_traps_lut + i * 4))
             write_u32(trap_lut, pnt, i * 4)
         data += trap_lut
         # Item spawn lists data
@@ -192,24 +192,24 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         start_items_lut = u32_checked(len(data))
         item_list_lut = bytearray(4 * len(item_data_pointer))
         for i, pnt in enumerate(item_data_pointer):
-            pointer_offsets.append(start_items_lut + i * 4)
+            pointer_offsets.append(u32_checked(start_items_lut + i * 4))
             write_u32(item_list_lut, pnt, i * 4)
         data += item_list_lut
         # Padding
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
         # Sub-header
-        data_pointer = len(data)
+        data_pointer = u32_checked(len(data))
         subheader = bytearray(4 * 5)
-        pointer_offsets.append(data_pointer + 0x00)
+        pointer_offsets.append(u32_checked(data_pointer + 0x00))
         write_u32(subheader, start_floor_list_lut, 0x00)
-        pointer_offsets.append(data_pointer + 0x04)
+        pointer_offsets.append(u32_checked(data_pointer + 0x04))
         write_u32(subheader, start_floor_layout_data, 0x04)
-        pointer_offsets.append(data_pointer + 0x08)
+        pointer_offsets.append(u32_checked(data_pointer + 0x08))
         write_u32(subheader, start_items_lut, 0x08)
-        pointer_offsets.append(data_pointer + 0x0C)
+        pointer_offsets.append(u32_checked(data_pointer + 0x0C))
         write_u32(subheader, start_monster_lut, 0x0C)
-        pointer_offsets.append(data_pointer + 0x10)
+        pointer_offsets.append(u32_checked(data_pointer + 0x10))
         write_u32(subheader, start_traps_lut, 0x10)
         data += subheader
 
@@ -219,7 +219,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
+        data_pointer: u32,
         static_data: Optional[Pmd2Data] = None,
     ) -> "MappaBin":
         if static_data is None:

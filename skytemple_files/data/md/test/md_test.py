@@ -146,17 +146,13 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
 
         self.assertEqual(len(self.fixture), len(cpy_expected))
 
-        for entry_fixture, entry_expected in zip(
-            self.fixture.entries, cpy_expected
-        ):
+        for entry_fixture, entry_expected in zip(self.fixture.entries, cpy_expected):
             self.assertMdEntriesEqual(entry_expected, entry_fixture)
 
     def test_md___iter__(self) -> None:
         self.assertEqual(len(self.fixture), len(EXPECTED_MD_ENTRIES))
 
-        for entry_fixture, entry_expected in zip(
-            self.fixture, EXPECTED_MD_ENTRIES
-        ):
+        for entry_fixture, entry_expected in zip(self.fixture, EXPECTED_MD_ENTRIES):
             self.assertMdEntriesEqual(entry_expected, entry_fixture)
 
     @romtest(file_ext="md", path="BALANCE/")
@@ -169,14 +165,23 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
         for entry_before, entry_after in zip(md_before.entries, md_after.entries):
             self.assertMdEntriesEqual(entry_before, entry_after)
 
-    def assertMdIndexTuplesEqual(self, a: Sequence[Tuple[int, MdEntryProtocol]], b: Sequence[Tuple[int, MdEntryProtocol]]):
+    def assertMdIndexTuplesEqual(
+        self,
+        a: Sequence[Tuple[int, MdEntryProtocol]],
+        b: Sequence[Tuple[int, MdEntryProtocol]],
+    ):
         self.assertEqual(len(a), len(b))
         for i, (aa, bb) in enumerate(zip(a, b)):
             self.assertEqual(aa[0], bb[0], f"The md_index must match in iteration {i}")
-            self.assertMdEntriesEqual(aa[1], bb[1], "The md entry must match in iteration {i}")
+            self.assertMdEntriesEqual(
+                aa[1], bb[1], "The md entry must match in iteration {i}"
+            )
 
     def assertMdEntriesEqual(
-        self, entry_before: MdEntryProtocol, entry_after: MdEntryProtocol, msg: Optional[str] = None
+        self,
+        entry_before: MdEntryProtocol,
+        entry_after: MdEntryProtocol,
+        msg: Optional[str] = None,
     ):
         if msg is None:
             msg = ""

@@ -99,12 +99,12 @@ class Wte(Sir0Serializable, AutoString):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
+        data_pointer: u32,
         static_data: Optional[Pmd2Data] = None,
     ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         from skytemple_files.graphics.wte.writer import WteWriter
 
         return WteWriter(self).write()  # type: ignore

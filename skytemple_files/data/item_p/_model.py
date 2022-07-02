@@ -133,14 +133,14 @@ class ItemP(ItemPProtocol[ItemPEntry], Sir0Serializable, AutoString):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
+        data_pointer: u32,
         static_data: Optional[Pmd2Data] = None,
     ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
-        pointer_offsets: List[int] = []
-        header_offset = 0
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+        pointer_offsets: List[u32] = []
+        header_offset = u32(0)
         data = bytearray(0)
         for i in self.item_list:
             data += i.to_bytes()
@@ -152,5 +152,5 @@ class ItemP(ItemPProtocol[ItemPEntry], Sir0Serializable, AutoString):
         return self.item_list == other.item_list
 
     @staticmethod
-    def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[int]:
+    def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pnt_start, False)

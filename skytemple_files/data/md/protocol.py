@@ -25,9 +25,28 @@ from range_typed_integers import *
 from skytemple_files.common.i18n_util import _
 
 
-class MdProperties:
-    NUM_ENTITIES = 600
-    MAX_POSSIBLE = 554
+DEFAULT_NUM_ENTITIES = 600
+DEFAULT_MAX_POSSIBLE = 554
+
+
+class _MdPropertiesProtocol(Protocol):
+    """
+    Implementations must provide an implementation of this.
+    This keeps track of "changeable" constants.
+
+    The values must default to the values below, users may
+    change it via the MdHandler, if for example a patch to expand
+    the monster list is applied.
+    """
+
+    num_entities: int  # Must default to DEFAULT_NUM_ENTITIES.
+    max_possible: int  # Must default to DEFAULT_MAX_POSSIBLE.
+
+    @classmethod
+    @abstractmethod
+    def instance(cls) -> "_MdPropertiesProtocol":
+        """This is a singleton."""
+        ...
 
 
 MD_ENTRY_LEN = 68

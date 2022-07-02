@@ -18,12 +18,17 @@ from __future__ import annotations
 
 from typing import Type
 
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
     HybridDataHandler,
     WriterProtocol,
 )
 from skytemple_files.common.util import OptionalKwargs, read_bytes
-from skytemple_files.data.md.protocol import MdProtocol
+from skytemple_files.data.md.protocol import (
+    MdProtocol,
+    _MdPropertiesProtocol,
+    MdEntryProtocol,
+)
 
 
 class MdHandler(HybridDataHandler[MdProtocol]):
@@ -54,6 +59,31 @@ class MdHandler(HybridDataHandler[MdProtocol]):
         )  # pylint: disable=no-name-in-module,no-member,import-error
 
         return MdWriter
+
+    @classmethod
+    def properties(cls) -> _MdPropertiesProtocol:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_md import (
+                MdPropertiesState as MdPropertiesNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MdPropertiesNative.instance()
+
+        from skytemple_files.data.md._model import MdPropertiesState
+
+        return MdPropertiesState.instance()
+
+    @classmethod
+    def get_entry_model_cls(cls) -> Type[MdEntryProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_md import (
+                MdEntry as MdEntryNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MdEntryNative
+        from skytemple_files.data.md._model import MdEntry
+
+        return MdEntry
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> MdProtocol:

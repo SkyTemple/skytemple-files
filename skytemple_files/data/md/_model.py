@@ -39,9 +39,29 @@ from skytemple_files.data.md.protocol import (
     IQGroup,
     Ability,
     ShadowSize,
-    MdProperties,
     MD_ENTRY_LEN,
+    _MdPropertiesProtocol,
+    DEFAULT_NUM_ENTITIES,
+    DEFAULT_MAX_POSSIBLE,
 )
+
+
+class MdPropertiesState(_MdPropertiesProtocol):
+    _instance: Optional[MdPropertiesState] = None
+    num_entities: int
+    max_possible: int
+
+    def __init__(self, num_entities: int, max_possible: int):
+        self.num_entities = num_entities
+        self.max_possible = max_possible
+
+    @classmethod
+    def instance(cls) -> MdPropertiesState:
+        if cls._instance is None:
+            cls._instance = MdPropertiesState(
+                DEFAULT_NUM_ENTITIES, DEFAULT_MAX_POSSIBLE
+            )
+        return cls._instance
 
 
 class MdEntry(MdEntryProtocol, AutoString):
@@ -255,7 +275,7 @@ class MdEntry(MdEntryProtocol, AutoString):
 
     @property
     def md_index_base(self) -> int:
-        return self.md_index % MdProperties.NUM_ENTITIES
+        return self.md_index % MdPropertiesState.instance().num_entities
 
 
 class Md(MdProtocol[MdEntry]):

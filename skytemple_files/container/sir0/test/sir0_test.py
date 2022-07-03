@@ -19,13 +19,15 @@ from __future__ import annotations
 import typing
 
 from parameterized import parameterized
-from range_typed_integers import u8, u16
 
 from skytemple_files.common.util import read_bytes, read_u32
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.container.sir0.protocol import Sir0Protocol
-from skytemple_files.container.sir0.test.fixture import DUMMY_FIXTURES, DummySir0Serializable
+from skytemple_files.container.sir0.test.fixture import (
+    DUMMY_FIXTURES,
+    DummySir0Serializable,
+)
 from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
 
 
@@ -40,43 +42,140 @@ class Sir0TestCase(SkyTempleFilesTestCase[Sir0Handler, Sir0Protocol]):
 
     def test_read(self):
         EXPECTED_DATA = [
-            { 'content': pad([1, 2, 3, 4]), 'data_pointer': 0, 'content_pointer_offsets': [] },
-            { 'content': pad([32, 32, 32, 32, 34, 34, 34, 34]), 'data_pointer': 0, 'content_pointer_offsets': [0, 4] },
-            {'content': pad([1, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 21, 0, 0, 0, 3, 4, 3, 4, 5, 6]), 'data_pointer': 2, 'content_pointer_offsets': [4, 8, 12, 16]},
-            {'content': pad([12, 34, 0xD2, 0x04, 0, 0, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 21, 0, 0, 0, 56, 78, 3, 4, 5, 6]), 'data_pointer': 2, 'content_pointer_offsets': [4, 8, 12, 16]},
-
+            {
+                "content": pad([1, 2, 3, 4]),
+                "data_pointer": 0,
+                "content_pointer_offsets": [],
+            },
+            {
+                "content": pad([32, 32, 32, 32, 34, 34, 34, 34]),
+                "data_pointer": 0,
+                "content_pointer_offsets": [0, 4],
+            },
+            {
+                "content": pad(
+                    [
+                        1,
+                        2,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        20,
+                        0,
+                        0,
+                        0,
+                        21,
+                        0,
+                        0,
+                        0,
+                        3,
+                        4,
+                        3,
+                        4,
+                        5,
+                        6,
+                    ]
+                ),
+                "data_pointer": 2,
+                "content_pointer_offsets": [4, 8, 12, 16],
+            },
+            {
+                "content": pad(
+                    [
+                        12,
+                        34,
+                        0xD2,
+                        0x04,
+                        0,
+                        0,
+                        0,
+                        0,
+                        1,
+                        0,
+                        0,
+                        0,
+                        20,
+                        0,
+                        0,
+                        0,
+                        21,
+                        0,
+                        0,
+                        0,
+                        56,
+                        78,
+                        3,
+                        4,
+                        5,
+                        6,
+                    ]
+                ),
+                "data_pointer": 2,
+                "content_pointer_offsets": [4, 8, 12, 16],
+            },
         ]
 
-        self.assertEqual(EXPECTED_DATA[0]['content'], self.fixture1.content)
-        self.assertEqual(EXPECTED_DATA[0]['data_pointer'], self.fixture1.data_pointer)
-        self.assertEqual(EXPECTED_DATA[0]['content_pointer_offsets'], self.fixture1.content_pointer_offsets)
-        self.assertEqual(EXPECTED_DATA[1]['content'], self.fixture2.content)
-        self.assertEqual(EXPECTED_DATA[1]['data_pointer'], self.fixture2.data_pointer)
-        self.assertEqual(EXPECTED_DATA[1]['content_pointer_offsets'], self.fixture2.content_pointer_offsets)
-        self.assertEqual(EXPECTED_DATA[2]['content'], self.fixture3.content)
-        self.assertEqual(EXPECTED_DATA[2]['data_pointer'], self.fixture3.data_pointer)
-        self.assertEqual(EXPECTED_DATA[2]['content_pointer_offsets'], self.fixture3.content_pointer_offsets)
-        self.assertEqual(EXPECTED_DATA[3]['content'], self.fixture4.content)
-        self.assertEqual(EXPECTED_DATA[3]['data_pointer'], self.fixture4.data_pointer)
-        self.assertEqual(EXPECTED_DATA[3]['content_pointer_offsets'], self.fixture4.content_pointer_offsets)
+        self.assertEqual(EXPECTED_DATA[0]["content"], self.fixture1.content)
+        self.assertEqual(EXPECTED_DATA[0]["data_pointer"], self.fixture1.data_pointer)
+        self.assertEqual(
+            EXPECTED_DATA[0]["content_pointer_offsets"],
+            self.fixture1.content_pointer_offsets,
+        )
+        self.assertEqual(EXPECTED_DATA[1]["content"], self.fixture2.content)
+        self.assertEqual(EXPECTED_DATA[1]["data_pointer"], self.fixture2.data_pointer)
+        self.assertEqual(
+            EXPECTED_DATA[1]["content_pointer_offsets"],
+            self.fixture2.content_pointer_offsets,
+        )
+        self.assertEqual(EXPECTED_DATA[2]["content"], self.fixture3.content)
+        self.assertEqual(EXPECTED_DATA[2]["data_pointer"], self.fixture3.data_pointer)
+        self.assertEqual(
+            EXPECTED_DATA[2]["content_pointer_offsets"],
+            self.fixture3.content_pointer_offsets,
+        )
+        self.assertEqual(EXPECTED_DATA[3]["content"], self.fixture4.content)
+        self.assertEqual(EXPECTED_DATA[3]["data_pointer"], self.fixture4.data_pointer)
+        self.assertEqual(
+            EXPECTED_DATA[3]["content_pointer_offsets"],
+            self.fixture4.content_pointer_offsets,
+        )
 
     def test_write(self):
         fixture1reloaded = self._save_and_reload_main_fixture(self.fixture1)
         self.assertEqual(self.fixture1.data_pointer, fixture1reloaded.data_pointer)
         self.assertEqual(self.fixture1.content, fixture1reloaded.content)
-        self.assertEqual(self.fixture1.content_pointer_offsets, fixture1reloaded.content_pointer_offsets)
+        self.assertEqual(
+            self.fixture1.content_pointer_offsets,
+            fixture1reloaded.content_pointer_offsets,
+        )
         fixture2reloaded = self._save_and_reload_main_fixture(self.fixture2)
         self.assertEqual(self.fixture2.data_pointer, fixture2reloaded.data_pointer)
         self.assertEqual(self.fixture2.content, fixture2reloaded.content)
-        self.assertEqual(self.fixture2.content_pointer_offsets, fixture2reloaded.content_pointer_offsets)
+        self.assertEqual(
+            self.fixture2.content_pointer_offsets,
+            fixture2reloaded.content_pointer_offsets,
+        )
         fixture3reloaded = self._save_and_reload_main_fixture(self.fixture3)
         self.assertEqual(self.fixture3.data_pointer, fixture3reloaded.data_pointer)
         self.assertEqual(self.fixture3.content, fixture3reloaded.content)
-        self.assertEqual(self.fixture3.content_pointer_offsets, fixture3reloaded.content_pointer_offsets)
+        self.assertEqual(
+            self.fixture3.content_pointer_offsets,
+            fixture3reloaded.content_pointer_offsets,
+        )
         fixture4reloaded = self._save_and_reload_main_fixture(self.fixture4)
         self.assertEqual(self.fixture4.data_pointer, fixture4reloaded.data_pointer)
         self.assertEqual(self.fixture4.content, fixture4reloaded.content)
-        self.assertEqual(self.fixture4.content_pointer_offsets, fixture4reloaded.content_pointer_offsets)
+        self.assertEqual(
+            self.fixture4.content_pointer_offsets,
+            fixture4reloaded.content_pointer_offsets,
+        )
 
     @parameterized.expand(DUMMY_FIXTURES)
     def test_wrap(self, _idx, dummy: DummySir0Serializable):
@@ -112,18 +211,29 @@ class Sir0TestCase(SkyTempleFilesTestCase[Sir0Handler, Sir0Protocol]):
         data_ptr = read_u32(dummy_as_sir0_bytes, 4)
         self.assertEqual(data_ptr, 2 + HEADER_LEN)
         ptr_start = read_u32(dummy_as_sir0_bytes, 8)
-        expected_encoded_pointers = b'\x04\x04\x0c\x04\x04\x04\x00'
-        self.assertEqual(expected_encoded_pointers, dummy_as_sir0_bytes[ptr_start:ptr_start+len(expected_encoded_pointers)])
+        expected_encoded_pointers = b"\x04\x04\x0c\x04\x04\x04\x00"
+        self.assertEqual(
+            expected_encoded_pointers,
+            dummy_as_sir0_bytes[ptr_start : ptr_start + len(expected_encoded_pointers)],
+        )
 
     def assertPointersInSir0Valid(self, dummy_as_sir0_bytes: bytes):
         """
         This asserts that the sir0+bytes-encoded representation of DummySir0Serializable has valid sir0
         encoded pointer offsets.
         """
-        self.assertEqual(16, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 4:HEADER_LEN + 8]))
-        self.assertEqual(17, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 8:HEADER_LEN + 12]))
-        self.assertEqual(36, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 12:HEADER_LEN + 16]))
-        self.assertEqual(37, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 16:HEADER_LEN + 20]))
+        self.assertEqual(
+            16, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 4 : HEADER_LEN + 8])
+        )
+        self.assertEqual(
+            17, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 8 : HEADER_LEN + 12])
+        )
+        self.assertEqual(
+            36, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 12 : HEADER_LEN + 16])
+        )
+        self.assertEqual(
+            37, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 16 : HEADER_LEN + 20])
+        )
 
     @typing.no_type_check
     @classmethod
@@ -137,4 +247,4 @@ def pad(inp: typing.List[int]) -> bytes:
     val = bytes(inp)
     if len(val) % 16 == 0:
         return val
-    return val + bytes([0xaa] * (16 - (len(val) % 16)))
+    return val + bytes([0xAA] * (16 - (len(val) % 16)))

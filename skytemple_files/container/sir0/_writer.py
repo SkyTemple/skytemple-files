@@ -31,8 +31,12 @@ class Sir0Writer:
         self.bytes_written = 0
 
     def write(self, model: Sir0) -> bytes:
+        model = Sir0(
+            bytearray(model.content),
+            list(model.content_pointer_offsets),
+            model.data_pointer,
+        )
         # Correct all pointers in content by HEADER_LEN
-        model = Sir0(bytearray(model.content), list(model.content_pointer_offsets), model.data_pointer)
         if not isinstance(model.content, bytearray):
             model.content = bytearray(model.content)
         for i, pnt_off in enumerate(model.content_pointer_offsets):

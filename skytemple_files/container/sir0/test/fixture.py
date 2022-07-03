@@ -19,7 +19,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Tuple, List
 
-from range_typed_integers import u32, u8, u16, u16_checked, u8_checked
+from range_typed_integers import u32, u8, u16, u8_checked
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_u32, read_u16
@@ -107,12 +107,12 @@ class DummySir0Serializable(Sir0Serializable):
                     read_u32(content_data[data_pointer + 14 : data_pointer + 18])
                 ]
             ),
-            header_val=read_u16(content_data[data_pointer : data_pointer + 2])
+            header_val=read_u16(content_data[data_pointer : data_pointer + 2]),
         )
 
 
 DUMMY_FIXTURES = [
-        (0, DummySir0Serializable(u8(1), u8(2), u8(3), u8(4), u16(0))),
+    (0, DummySir0Serializable(u8(1), u8(2), u8(3), u8(4), u16(0))),
     (1, DummySir0Serializable(u8(12), u8(34), u8(56), u8(78), u16(1234))),
-    (2, DummySir0Serializable(u8(99), u8(32), u8(14), u8(45), u16(12345)))
+    (2, DummySir0Serializable(u8(99), u8(32), u8(14), u8(45), u16(12345))),
 ]

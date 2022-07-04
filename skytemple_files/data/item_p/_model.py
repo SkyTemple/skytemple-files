@@ -16,10 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, Optional
+from typing import Optional
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
@@ -67,11 +66,6 @@ class ItemPEntry(ItemPEntryProtocol, AutoString):
         self.ai_flag_1 = (bitfield & 0x20) != 0  # Flag 1 for the AI?
         self.ai_flag_2 = (bitfield & 0x40) != 0  # Flag 2 for the AI?
         self.ai_flag_3 = (bitfield & 0x80) != 0  # Flag 3 for the AI?
-
-    def category_pmd2obj(
-        self, item_categories: Dict[int, Pmd2DungeonItemCategory]
-    ) -> Pmd2DungeonItemCategory:
-        return item_categories[self.category]
 
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_P_ENTRY_SIZE)

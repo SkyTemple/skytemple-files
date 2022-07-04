@@ -97,9 +97,9 @@ class RomDataLoader:
         }
 
         for idx, entry in enumerate(item_p.item_list):
-            cats[
-                entry.category_pmd2obj(config_load_into.dungeon_data.item_categories)
-            ].append(idx)
+            cats[config_load_into.dungeon_data.item_categories[entry.category]].append(
+                idx
+            )
 
         for category in config_load_into.dungeon_data.item_categories.values():
             category.items = cats[category]

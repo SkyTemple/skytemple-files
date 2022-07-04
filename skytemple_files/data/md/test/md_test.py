@@ -55,6 +55,11 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
         for entry_before, entry_after in zip(self.fixture.entries, md_after.entries):
             self.assertMdEntriesEqual(entry_before, entry_after)
 
+    def test_write_bin(self) -> None:
+        md_after = self._save_and_reload_main_fixture(self.fixture)
+        with open(self._fix_path(), "rb") as f:
+            self.assertEqual(f.read(), self.handler.serialize(md_after))
+
     def test_md_entry_md_index_base_and_properties(self) -> None:
         self.assertEqual(len(self.fixture.entries), len(EXPECTED_BASE_INDICES))
         self.handler.properties().num_entities = 123456

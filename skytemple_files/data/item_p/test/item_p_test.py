@@ -45,14 +45,19 @@ class ItemPTestCase(
             self.assertItemPEntriesEqual(entry_expected, entry_fixture)
 
     def test_entries_write(self) -> None:
-        md_after = self._save_and_reload_main_fixture(self.fixture)
+        item_p_after = self._save_and_reload_main_fixture(self.fixture)
 
-        self.assertEqual(len(self.fixture.item_list), len(md_after.item_list))
+        self.assertEqual(len(self.fixture.item_list), len(item_p_after.item_list))
 
         for entry_before, entry_after in zip(
-            self.fixture.item_list, md_after.item_list
+            self.fixture.item_list, item_p_after.item_list
         ):
             self.assertItemPEntriesEqual(entry_before, entry_after)
+
+    def test_write_bin(self) -> None:
+        item_p_after = self._save_and_reload_main_fixture(self.fixture)
+        with open(self._fix_path(), "rb") as f:
+            self.assertEqual(f.read(), self.handler.serialize(item_p_after))
 
     def test_entries_eq(self) -> None:
         for entry_fixture, entry_fixture_plus_1 in zip(
@@ -63,12 +68,14 @@ class ItemPTestCase(
 
     @romtest(file_names=["item_p.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):
-        md_before = self.handler.deserialize(file)
-        md_after = self._save_and_reload_main_fixture(md_before)
+        item_p_before = self.handler.deserialize(file)
+        item_p_after = self._save_and_reload_main_fixture(item_p_before)
 
-        self.assertEqual(len(md_before.item_list), len(md_after.item_list))
+        self.assertEqual(len(item_p_before.item_list), len(item_p_after.item_list))
 
-        for entry_before, entry_after in zip(md_before.item_list, md_after.item_list):
+        for entry_before, entry_after in zip(
+            item_p_before.item_list, item_p_after.item_list
+        ):
             self.assertItemPEntriesEqual(entry_before, entry_after)
 
     def assertItemPEntriesEqual(

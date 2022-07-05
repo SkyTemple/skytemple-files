@@ -21,7 +21,6 @@ from typing import Optional
 
 from range_typed_integers import u32_checked
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.dungeon_data.mappa_bin._python_impl.floor import (
@@ -34,13 +33,13 @@ from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
 from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import MappaTrapList
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol, _MappaItem
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
 
 FLOOR_IDX_ENTRY_LEN = 18
 
 
 class MappaBinReadContainer:
-    def __init__(self, data: bytes, header_start: int, items: List[_MappaItem]):
+    def __init__(self, data: bytes, header_start: int):
         self.data = data
         self.dungeon_list_index_start = read_u32(data, header_start + 0x00)
         self.floor_layout_data_start = read_u32(data, header_start + 0x04)
@@ -54,13 +53,26 @@ class MappaBinReadContainer:
         # assert self.monster_spawn_list_index_start % 4 == 0
         # assert self.trap_spawn_list_index_start % 4 == 0
 
-        self.items = items
         self.read_cache = {}  # type: ignore
 
 
 class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
+    floor_lists: List[List[MappaFloor]]
+
     def __init__(self, floor_lists: List[List[MappaFloor]]):
         self.floor_lists = floor_lists
+
+    def add_floor_list(self, floor_list: List[MappaFloor]):
+        self.floor_lists.append(floor_list)
+
+    def remove_floor_list(self, index: int):
+        del self.floor_lists[index]
+
+    def add_floor_to_floor_list(self, floor_list_index: int, floor: MappaFloor):
+        self.floor_lists[floor_list_index].append(floor)
+
+    def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
+        del self.floor_lists[floor_list_index][floor_index]
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
@@ -220,16 +232,12 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> "MappaBin":
-        if static_data is None:
-            raise ValueError("MappaBin needs Pmd2Data to initialize.")
         return cls(
             cls._read_floor_list(
                 MappaBinReadContainer(
                     content_data,
                     data_pointer,
-                    [x.id for x in static_data.dungeon_data.items],
                 )
             )
         )

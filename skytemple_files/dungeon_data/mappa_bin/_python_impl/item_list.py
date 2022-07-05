@@ -47,12 +47,10 @@ class MappaItemList(MappaItemListProtocol, AutoString):
 
     @classmethod
     def from_mappa(cls, read: "MappaBinReadContainer", pointer: int):
-        return cls.from_bytes(read.data, read.items, pointer)
+        return cls.from_bytes(read.data, pointer)
 
     @classmethod
-    def from_bytes(
-        cls, data: bytes, item_list: List[_MappaItem], pointer: int
-    ) -> "MappaItemList":
+    def from_bytes(cls, data: bytes, pointer: int) -> "MappaItemList":
         processing_categories = True
         item_or_cat_id = 0
         orig_pointer = pointer
@@ -74,10 +72,9 @@ class MappaItemList(MappaItemListProtocol, AutoString):
                 else:
                     weight = val
                 if processing_categories:
-                    # TODO: Switch to Pmd2DungeonItemCategory
                     categories[item_or_cat_id] = weight
                 else:
-                    items[item_list[item_or_cat_id]] = weight
+                    items[item_or_cat_id] = weight
                 item_or_cat_id += 1
             if item_or_cat_id >= 0xF and processing_categories:
                 processing_categories = False

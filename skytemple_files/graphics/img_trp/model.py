@@ -21,7 +21,6 @@ from typing import Optional
 
 from PIL import Image
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -46,7 +45,6 @@ class ImgTrp(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 

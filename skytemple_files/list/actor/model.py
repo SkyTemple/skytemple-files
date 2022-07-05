@@ -18,7 +18,6 @@ from __future__ import annotations
 
 from range_typed_integers import u16_checked, u32_checked
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptEntity
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -94,7 +93,6 @@ class ActorListBin(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> "ActorListBin":
         return cls(content_data, data_pointer)
 

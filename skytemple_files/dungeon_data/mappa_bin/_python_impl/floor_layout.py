@@ -98,7 +98,7 @@ class MappaFloorLayout(
     initial_enemy_density: i8
     kecleon_shop_chance: u8
     monster_house_chance: u8
-    unusued_chance: u8
+    unused_chance: u8
     sticky_item_chance: u8
     dead_ends: bool
     secondary_terrain: u8
@@ -132,7 +132,7 @@ class MappaFloorLayout(
         initial_enemy_density: i8,
         kecleon_shop_chance: u8,
         monster_house_chance: u8,
-        unusued_chance: u8,
+        unused_chance: u8,
         sticky_item_chance: u8,
         dead_ends: bool,
         secondary_terrain: u8,
@@ -163,7 +163,7 @@ class MappaFloorLayout(
         self.initial_enemy_density = initial_enemy_density
         self.kecleon_shop_chance = kecleon_shop_chance
         self.monster_house_chance = monster_house_chance
-        self.unusued_chance = unusued_chance
+        self.unused_chance = unused_chance
         self.sticky_item_chance = sticky_item_chance
         self.dead_ends = dead_ends
         self.secondary_terrain = secondary_terrain
@@ -202,7 +202,7 @@ class MappaFloorLayout(
             initial_enemy_density=read_i8(read.data, pointer + 0x06),
             kecleon_shop_chance=read_u8(read.data, pointer + 0x07),
             monster_house_chance=read_u8(read.data, pointer + 0x08),
-            unusued_chance=read_u8(read.data, pointer + 0x09),
+            unused_chance=read_u8(read.data, pointer + 0x09),
             sticky_item_chance=read_u8(read.data, pointer + 0x0A),
             dead_ends=bool(read_u8(read.data, pointer + 0x0B)),
             secondary_terrain=read_u8(read.data, pointer + 0x0C),
@@ -236,7 +236,7 @@ class MappaFloorLayout(
         write_i8(data, self.initial_enemy_density, 0x06)
         write_u8(data, self.kecleon_shop_chance, 0x07)
         write_u8(data, self.monster_house_chance, 0x08)
-        write_u8(data, self.unusued_chance, 0x09)
+        write_u8(data, self.unused_chance, 0x09)
         write_u8(data, self.sticky_item_chance, 0x0A)
         write_u8(data, u8(int(self.dead_ends)), 0x0B)
         write_u8(data, self.secondary_terrain, 0x0C)
@@ -273,7 +273,7 @@ class MappaFloorLayout(
             and self.initial_enemy_density == other.initial_enemy_density
             and self.kecleon_shop_chance == other.kecleon_shop_chance
             and self.monster_house_chance == other.monster_house_chance
-            and self.unusued_chance == other.unusued_chance
+            and self.unused_chance == other.unused_chance
             and self.sticky_item_chance == other.sticky_item_chance
             and self.dead_ends == other.dead_ends
             and self.secondary_terrain == other.secondary_terrain

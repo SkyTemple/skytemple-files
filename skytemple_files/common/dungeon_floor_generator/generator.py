@@ -160,7 +160,7 @@ class DungeonFloorGenerator:
         Properties.nb_rooms = floor_layout.room_density
         Properties.bit_flags = floor_layout.terrain_settings.to_mappa()
         Properties.floor_connectivity = floor_layout.floor_connectivity
-        Properties.maze_chance = floor_layout.unusued_chance
+        Properties.maze_chance = floor_layout.unused_chance
         Properties.dead_end = int(floor_layout.dead_ends)
         Properties.extra_hallways = floor_layout.extra_hallway_density
         Properties.secondary_density = floor_layout.water_density

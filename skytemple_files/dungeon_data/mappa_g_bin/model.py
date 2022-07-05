@@ -112,9 +112,7 @@ class MappaGBin(Sir0Serializable):
         return MappaGBinWriter(self).write()
 
     @classmethod
-    def sir0_unwrap(
-        cls, content_data: bytes, data_pointer: u32, static_data=None
-    ) -> "MappaGBin":
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> "MappaGBin":
         return cls(
             cls._read_floor_list(MappaGBinReadContainer(content_data, data_pointer))
         )

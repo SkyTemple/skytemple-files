@@ -21,7 +21,6 @@ from typing import Optional, Tuple, List
 
 from range_typed_integers import u32, u8, u16, u8_checked
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import read_u32, read_u16
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
@@ -82,7 +81,6 @@ class DummySir0Serializable(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> Sir0Serializable:
         # We are using the pointers to get the values of a, b, c, d to test that they are valid.
         assert data_pointer == 2

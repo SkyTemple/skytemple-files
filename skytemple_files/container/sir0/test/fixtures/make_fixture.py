@@ -2,7 +2,6 @@ from typing import Optional, Tuple, List
 
 from range_typed_integers import u8, u16, u32
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.test.fixture import DummySir0Serializable
@@ -17,7 +16,6 @@ class Dummy2(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> Sir0Serializable:
         raise NotImplementedError()
 
@@ -31,7 +29,6 @@ class Dummy3(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> Sir0Serializable:
         raise NotImplementedError()
 

@@ -18,10 +18,9 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Protocol, Type, Optional
+from typing import TypeVar, Generic, Protocol, Type
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -112,10 +111,7 @@ class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
         from skytemple_files.common.types.file_types import FileType
 
         sir0 = FileType.SIR0.deserialize(data)
-        static_data: Optional[Pmd2Data] = None
-        if kwargs is not None and "static_data" in kwargs:
-            static_data = kwargs["static_data"]  # type: ignore
-        return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls(), static_data)
+        return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls())
 
     @classmethod
     def serialize(cls, data: PS, **kwargs: OptionalKwargs) -> bytes:

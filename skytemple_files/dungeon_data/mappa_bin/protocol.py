@@ -18,7 +18,16 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from enum import Enum
-from typing import Protocol, TypeVar, Sequence, List, Optional, Dict, Union
+from typing import (
+    Protocol,
+    TypeVar,
+    Sequence,
+    List,
+    Optional,
+    Dict,
+    Union,
+    MutableSequence,
+)
 
 from range_typed_integers import *
 
@@ -237,9 +246,7 @@ class MappaItemListProtocol(Protocol):
 
     @classmethod
     @abstractmethod
-    def from_bytes(
-        cls, data: bytes, item_list: List[_MappaItem], pointer: int
-    ) -> MappaItemListProtocol:
+    def from_bytes(cls, data: bytes, pointer: int) -> MappaItemListProtocol:
         ...
 
     @abstractmethod
@@ -293,7 +300,7 @@ class MappaFloorLayoutProtocol(Protocol[TS]):
     initial_enemy_density: i8
     kecleon_shop_chance: u8
     monster_house_chance: u8
-    unusued_chance: u8
+    unused_chance: u8
     sticky_item_chance: u8
     dead_ends: bool
     secondary_terrain: u8
@@ -365,7 +372,7 @@ IL = TypeVar("IL", bound=MappaItemListProtocol)
 
 class MappaFloorProtocol(Protocol[L, M, TL, IL]):
     layout: L
-    monsters: Sequence[M]
+    monsters: MutableSequence[M]
     traps: TL
     floor_items: IL
     shop_items: IL
@@ -374,6 +381,7 @@ class MappaFloorProtocol(Protocol[L, M, TL, IL]):
     unk_items1: IL
     unk_items2: IL
 
+    @classmethod
     @abstractmethod
     def __init__(
         self,
@@ -402,6 +410,22 @@ class MappaBinProtocol(Sir0Serializable, Protocol[F]):
 
     @abstractmethod
     def __init__(self, floor_lists: List[List[F]]):
+        ...
+
+    @abstractmethod
+    def add_floor_list(self, floor_list: List[F]):
+        ...
+
+    @abstractmethod
+    def remove_floor_list(self, index: int):
+        ...
+
+    @abstractmethod
+    def add_floor_to_floor_list(self, floor_list_index: int, floor: F):
+        ...
+
+    @abstractmethod
+    def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
         ...
 
     @abstractmethod

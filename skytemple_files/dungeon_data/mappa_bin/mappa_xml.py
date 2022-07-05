@@ -322,7 +322,7 @@ def mappa_floor_layout_to_xml(mfl: MappaFloorLayoutProtocol) -> Element:
         {
             XML_FLOOR_LAYOUT__CHANCES__SHOP: str(mfl.kecleon_shop_chance),
             XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE: str(mfl.monster_house_chance),
-            XML_FLOOR_LAYOUT__CHANCES__UNUSED: str(mfl.unusued_chance),
+            XML_FLOOR_LAYOUT__CHANCES__UNUSED: str(mfl.unused_chance),
             XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM: str(mfl.sticky_item_chance),
             XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE: str(
                 mfl.empty_monster_house_chance

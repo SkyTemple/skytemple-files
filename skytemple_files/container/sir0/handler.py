@@ -16,11 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List, Optional, Type, TypeVar
+from typing import List, Type, TypeVar
 
 from range_typed_integers import u32
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler
 from skytemple_files.common.util import OptionalKwargs, read_bytes
 from skytemple_files.container.sir0.protocol import Sir0Protocol
@@ -85,7 +84,5 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
         return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
-    def unwrap_obj(
-        cls, data: Sir0Protocol, spec: Type[T], static_data: Optional[Pmd2Data] = None
-    ) -> T:
-        return spec.sir0_unwrap(data.content, data.data_pointer, static_data)  # type: ignore
+    def unwrap_obj(cls, data: Sir0Protocol, spec: Type[T]) -> T:
+        return spec.sir0_unwrap(data.content, data.data_pointer)  # type: ignore

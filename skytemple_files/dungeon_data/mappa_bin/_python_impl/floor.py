@@ -25,7 +25,9 @@ from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
 from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import MappaItemList
 from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import MappaMonster
 from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import MappaTrapList
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaFloorProtocol,
+)
 
 if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (

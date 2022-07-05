@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin
@@ -30,12 +29,10 @@ class FixedBinHandler(DataHandler[FixedBin]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs) -> "FixedBin":  # type: ignore
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "FixedBin":  # type: ignore
         from skytemple_files.common.types.file_types import FileType
 
-        return FileType.SIR0.unwrap_obj(
-            FileType.SIR0.deserialize(data), FixedBin, static_data
-        )
+        return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FixedBin)
 
     @classmethod
     def serialize(cls, data: "FixedBin", **kwargs: OptionalKwargs) -> bytes:

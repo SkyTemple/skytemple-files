@@ -21,7 +21,6 @@ from typing import List, Optional, Tuple
 from range_typed_integers import u32_checked, u32
 
 from skytemple_files.common import string_codec
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
 from skytemple_files.common.util import (
     read_i16,
@@ -111,7 +110,6 @@ class LevelListBin(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-        static_data: Optional[Pmd2Data] = None,
     ) -> "LevelListBin":
         return cls(content_data, data_pointer)
 

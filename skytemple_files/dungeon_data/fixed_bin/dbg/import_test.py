@@ -20,17 +20,15 @@ import os
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import get_ppmdu_config_for_rom
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 
 output_dir = os.path.join(os.path.dirname(__file__), "dbg_output")
 os.makedirs(output_dir, exist_ok=True)
 
 rom = NintendoDSRom.fromFile("/home/marco/dev/skytemple/skytemple/skyworkcopy.nds")
-static_data = get_ppmdu_config_for_rom(rom)
 
 fixed_bin = rom.getFileByName("BALANCE/fixed.bin")
-fixed = FixedBinHandler.deserialize(fixed_bin, static_data=static_data)
+fixed = FixedBinHandler.deserialize(fixed_bin)
 fixed_bin_after = FixedBinHandler.serialize(fixed)
 
 with open(os.path.join(output_dir, "before.bin"), "wb") as f:

@@ -96,6 +96,7 @@ from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 from skytemple_files.patch.handler.fix_memory_softlock import (
     FixMemorySoftlockPatchHandler,
 )
+from skytemple_files.patch.handler.fix_nocash_saves import FixNocashSavesPatchHandler
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandler
@@ -161,6 +162,7 @@ class PatchType(Enum):
     DISARM_ONE_ROOM_MH = DisarmOneRoomMHPatchHandler
     DYNAMIC_BOSSES_EVERYWHERE = DynamicBossesEverywherePatchHandler
     PITFALL_TRAP_TWEAK = PitfallTrapTweakPatchHandler
+    FIX_NOCASH_SAVES = FixNocashSavesPatchHandler
 
 
 class Patcher:

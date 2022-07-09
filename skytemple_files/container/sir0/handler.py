@@ -24,6 +24,7 @@ from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler
 from skytemple_files.common.util import OptionalKwargs, read_bytes
 from skytemple_files.container.sir0.protocol import Sir0Protocol
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
+from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 
 T = TypeVar("T", bound=Sir0Serializable)
 

@@ -370,7 +370,7 @@ class FixedFloor:
 
     @classmethod
     def new(cls, width: u16, height: u16, actions: List[FixedFloorActionRule]):
-        n = cls(None, None, None)  # type: ignore
+        n = cls(None, None)  # type: ignore
         n.width = width
         n.height = height
         n.actions = actions

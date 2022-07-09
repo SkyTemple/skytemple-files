@@ -44,6 +44,5 @@ class Sir0Serializable(Protocol):
     ) -> "Sir0Serializable":
         """
         Builds the model from the unwrapped Sir0.
-        static_data may be omitted if not needed for this type.
         """
         pass

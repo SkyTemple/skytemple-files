@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
@@ -43,9 +43,7 @@ class FixNocashSavesPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Fixes an issue that causes saving to fail on the No$GBA emulator."
-        )
+        return _("Fixes an issue that causes saving to fail on the No$GBA emulator.")
 
     @property
     def author(self) -> str:

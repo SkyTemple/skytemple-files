@@ -16,5 +16,5 @@
 .definelabel HookGetObjectData4, 0x022F7818
 .definelabel HookGetObjectData5, 0x022F7890
 
-.definelabel ObjectData, 0x0231DE40
+.definelabel ObjectData, 0x0231E820
 .definelabel SizeObjectData, 0x2B68

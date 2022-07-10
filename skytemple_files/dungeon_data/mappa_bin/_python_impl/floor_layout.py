@@ -122,7 +122,6 @@ class MappaFloorLayout(
 
     def __init__(
         self,
-        *,
         structure: _MappaFloorStructureType,
         room_density: i8,
         tileset_id: u8,

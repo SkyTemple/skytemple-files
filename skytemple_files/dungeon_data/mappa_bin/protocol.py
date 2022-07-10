@@ -325,7 +325,6 @@ class MappaFloorLayoutProtocol(Protocol[TS]):
     @abstractmethod
     def __init__(
         self,
-        *,
         structure: _MappaFloorStructureType,
         room_density: i8,
         tileset_id: u8,

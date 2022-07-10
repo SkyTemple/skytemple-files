@@ -158,12 +158,13 @@ jobs:
         override: true
     - name: Test with tox
       run: tox -- -m "not romtest"
+      working-directory: test
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v2
       with:
         name: "Pytest Test Results (Python ${{ matrix.python-version }} - Native ${{ matrix.native }})"
-        path: pytest.xml
+        path: test/pytest.xml
 
   test_with_rom:
     # This uses a self-hosted runner with access to the ROM at /rom.nds.
@@ -202,6 +203,7 @@ jobs:
         override: true
     - name: Test with tox
       run: tox -- -m "romtest"
+      working-directory: test
       env:
         SKYTEMPLE_TEST_ROM: /rom.nds
     - name: Upload Test Results
@@ -209,7 +211,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native ${{ matrix.native }})"
-        path: pytest.xml
+        path: test/pytest.xml
 
   publish-test-results:
     name: "Publish Unit Tests Results"

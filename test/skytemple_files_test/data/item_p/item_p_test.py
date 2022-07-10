@@ -21,11 +21,11 @@ from typing import Optional
 
 from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.item_p.protocol import ItemPProtocol, ItemPEntryProtocol
-from skytemple_files.data.item_p.test.fixture import (
+from skytemple_files_test.data.item_p.fixture import (
     EXPECTED_ITEM_P_ENTRIES,
     eq_item_p_protocol,
 )
-from skytemple_files.test.case import SkyTempleFilesTestCase, romtest, fixpath
+from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
 
 
 class ItemPTestCase(

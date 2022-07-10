@@ -21,7 +21,7 @@ from typing import Sequence, Tuple, Optional
 
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md.protocol import MdProtocol, MdEntryProtocol
-from skytemple_files.data.md.test.fixture import (
+from skytemple_files_test.data.md.fixture import (
     eq_md_protocol,
     EXPECTED_MD_ENTRIES,
     EXPECTED_BASE_INDICES,
@@ -30,7 +30,7 @@ from skytemple_files.data.md.test.fixture import (
     EXPECTED_NEW_ENTRY,
     EXPECTED_NEW_ENTRY_BASE_ID,
 )
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
 class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]]):

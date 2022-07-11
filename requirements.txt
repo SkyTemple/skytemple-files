@@ -11,7 +11,7 @@ dungeon-eos==0.0.5
 gql[aiohttp]==3.3.0
 graphql-core>=3.2.0
 aiohttp[speedups]==3.8.1
-lru-dict==1.1.7
+lru-dict==1.1.8
 skytemple-3rdparty-typestubs
 types-Pillow==9.2.0
 types-PyYAML==6.0.9

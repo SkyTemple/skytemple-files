@@ -334,7 +334,7 @@ class MappaFloorLayoutProtocol(Protocol[TS]):
         initial_enemy_density: i8,
         kecleon_shop_chance: u8,
         monster_house_chance: u8,
-        unusued_chance: u8,
+        unused_chance: u8,
         sticky_item_chance: u8,
         dead_ends: bool,
         secondary_terrain: u8,
@@ -421,6 +421,12 @@ class MappaBinProtocol(Sir0Serializable, Protocol[F]):
 
     @abstractmethod
     def add_floor_to_floor_list(self, floor_list_index: int, floor: F):
+        ...
+
+    @abstractmethod
+    def insert_floor_in_floor_list(
+        self, floor_list_index: int, insert_index: int, floor: F
+    ):
         ...
 
     @abstractmethod

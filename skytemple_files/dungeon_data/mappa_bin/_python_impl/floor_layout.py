@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     )
 
 
-class MappaFloorTerrainSettings(MappaFloorTerrainSettingsProtocol):
+class MappaFloorTerrainSettings(MappaFloorTerrainSettingsProtocol, AutoString):
     def __init__(
         self,
         has_secondary_terrain: bool,

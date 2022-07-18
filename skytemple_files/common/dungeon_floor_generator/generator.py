@@ -29,6 +29,8 @@ from dungeon_eos.DungeonAlgorithm import (
     generate_floor,
 )
 from dungeon_eos.RandomGen import RandomGenerator
+from range_typed_integers import u8
+from skytemple_files.common.util import generate_bitfield
 
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorLayoutProtocol
 from skytemple_files.graphics.dma.model import DmaType
@@ -158,7 +160,20 @@ class DungeonFloorGenerator:
         Properties.kecleon_chance = floor_layout.kecleon_shop_chance
         Properties.middle_room_secondary = floor_layout.secondary_terrain
         Properties.nb_rooms = floor_layout.room_density
-        Properties.bit_flags = floor_layout.terrain_settings.to_mappa()
+        Properties.bit_flags = u8(
+            generate_bitfield(
+                (
+                    floor_layout.terrain_settings.unk7,
+                    floor_layout.terrain_settings.unk6,
+                    floor_layout.terrain_settings.unk5,
+                    floor_layout.terrain_settings.unk4,
+                    floor_layout.terrain_settings.unk3,
+                    floor_layout.terrain_settings.generate_imperfect_rooms,
+                    floor_layout.terrain_settings.unk1,
+                    floor_layout.terrain_settings.has_secondary_terrain,
+                )
+            )
+        )
         Properties.floor_connectivity = floor_layout.floor_connectivity
         Properties.maze_chance = floor_layout.unused_chance
         Properties.dead_end = int(floor_layout.dead_ends)

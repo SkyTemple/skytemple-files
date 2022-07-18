@@ -56,7 +56,7 @@ class MappaBinReadContainer:
         self.read_cache = {}  # type: ignore
 
 
-class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
+class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
     floor_lists: List[List[MappaFloor]]
 
     def __init__(self, floor_lists: List[List[MappaFloor]]):
@@ -70,6 +70,11 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable):
 
     def add_floor_to_floor_list(self, floor_list_index: int, floor: MappaFloor):
         self.floor_lists[floor_list_index].append(floor)
+
+    def insert_floor_in_floor_list(
+        self, floor_list_index: int, insert_index: int, floor: MappaFloor
+    ):
+        self.floor_lists[floor_list_index].insert(insert_index, floor)
 
     def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
         del self.floor_lists[floor_list_index][floor_index]

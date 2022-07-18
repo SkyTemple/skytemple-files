@@ -23,7 +23,7 @@ from __future__ import annotations
 from typing import Dict, no_type_check, TypedDict, List, Optional
 from xml.etree.ElementTree import Element
 
-from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked
+from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked, u8
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonItemCategory
@@ -479,14 +479,42 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
         ],
     )
 
+    if not hasattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)):
+        raise XmlValidateError(
+            f(_("Invalid structure type {ele.get(XML_FLOOR_LAYOUT__STRUCTURE)}"))
+        )
+    structure = u8(
+        getattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)).value
+    )
+
+    if not hasattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER)):
+        raise XmlValidateError(
+            f(_("Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}"))
+        )
+    weather = u8(getattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER)).value)
+
+    if not hasattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)):
+        raise XmlValidateError(
+            f(
+                _(
+                    "Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}"
+                )
+            )
+        )
+    darkness_level = u8(
+        getattr(
+            MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)
+        ).value
+    )
+
     return MappaBinHandler.get_floor_layout_model()(
-        structure=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__STRUCTURE))),
+        structure=structure,
         room_density=i8_checked(
             int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY))
         ),
         tileset_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__TILESET))),
         music_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__BGM))),
-        weather=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__WEATHER))),
+        weather=weather,
         floor_connectivity=u8_checked(
             int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY))
         ),
@@ -499,7 +527,7 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
         monster_house_chance=u8_checked(
             int(chances.get(XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE))
         ),
-        unusued_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED))),
+        unused_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED))),
         sticky_item_chance=u8_checked(
             int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM))
         ),
@@ -541,7 +569,7 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
         water_density=u8_checked(
             int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY))
         ),
-        darkness_level=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL))),
+        darkness_level=darkness_level,
         max_coin_amount=int(
             generator_settings.get(XML_FLOOR_LAYOUT__GENSET__MAX_COIN_AMOUNT)
         ),

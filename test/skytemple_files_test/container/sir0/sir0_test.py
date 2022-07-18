@@ -24,11 +24,11 @@ from skytemple_files.common.util import read_bytes, read_u32
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.container.sir0.protocol import Sir0Protocol
-from skytemple_files.container.sir0.test.fixture import (
+from skytemple_files_test.container.sir0.fixture import (
     DUMMY_FIXTURES,
     DummySir0Serializable,
 )
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath
+from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath
 
 
 class Sir0TestCase(SkyTempleFilesTestCase[Sir0Handler, Sir0Protocol]):

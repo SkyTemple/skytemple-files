@@ -19,6 +19,8 @@ from __future__ import annotations
 import typing
 from typing import Sequence, Tuple, Optional
 
+from range_typed_integers import u32, u16, i16, u8, i8
+
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md.protocol import MdProtocol, MdEntryProtocol
 from skytemple_files_test.data.md.fixture import (
@@ -81,6 +83,113 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
             self.handler.get_entry_model_cls().new_empty(EXPECTED_NEW_ENTRY_BASE_ID),
             EXPECTED_NEW_ENTRY,
         )
+
+    def test_md_entry_attrs(self):
+        e = self.fixture.entries[0]
+
+        e.md_index = u32(0xFFFFF)
+        e.entid = u16(0xFFF)
+        e.unk31 = u16(0xFFF)
+        e.national_pokedex_number = u16(0xFFF)
+        e.base_movement_speed = u16(0xFFF)
+        e.pre_evo_index = u16(0xFFF)
+        e.evo_method = u16(1)
+        e.evo_param1 = u16(0xFFF)
+        e.evo_param2 = u16(2)
+        e.sprite_index = i16(-0xFFF)
+        e.gender = u8(2)
+        e.body_size = u8(123)
+        e.type_primary = u8(2)
+        e.type_secondary = u8(15)
+        e.movement_type = u8(2)
+        e.iq_group = u8(4)
+        e.ability_primary = u8(23)
+        e.ability_secondary = u8(12)
+        e.exp_yield = u16(0xFFF)
+        e.recruit_rate1 = i16(-0xFFF)
+        e.base_hp = u16(0xFFF)
+        e.recruit_rate2 = i16(-0xFFF)
+        e.base_atk = u8(123)
+        e.base_sp_atk = u8(123)
+        e.base_def = u8(123)
+        e.base_sp_def = u8(123)
+        e.weight = i16(-0xFFF)
+        e.size = i16(-0xFFF)
+        e.unk17 = u8(123)
+        e.unk18 = u8(123)
+        e.shadow_size = i8(0)
+        e.chance_spawn_asleep = i8(-123)
+        e.hp_regeneration = u8(123)
+        e.unk21_h = i8(-123)
+        e.base_form_index = i16(-0xFFF)
+        e.exclusive_item1 = i16(-0xFFF)
+        e.exclusive_item2 = i16(-0xFFF)
+        e.exclusive_item3 = i16(-0xFFF)
+        e.exclusive_item4 = i16(-0xFFF)
+        e.unk27 = i16(-0xFFF)
+        e.unk28 = i16(-0xFFF)
+        e.unk29 = i16(-0xFFF)
+        e.unk30 = i16(-0xFFF)
+        e.bitfield1_0 = True
+        e.bitfield1_1 = False
+        e.bitfield1_2 = True
+        e.bitfield1_3 = False
+        e.can_move = True
+        e.bitfield1_5 = False
+        e.can_evolve = True
+        e.item_required_for_spawning = False
+
+        self.assertEqual(e.md_index, u32(0xFFFFF))
+        self.assertEqual(e.entid, u16(0xFFF))
+        self.assertEqual(e.unk31, u16(0xFFF))
+        self.assertEqual(e.national_pokedex_number, u16(0xFFF))
+        self.assertEqual(e.base_movement_speed, u16(0xFFF))
+        self.assertEqual(e.pre_evo_index, u16(0xFFF))
+        self.assertEqual(e.evo_method, u16(1))
+        self.assertEqual(e.evo_param1, u16(0xFFF))
+        self.assertEqual(e.evo_param2, u16(2))
+        self.assertEqual(e.sprite_index, i16(-0xFFF))
+        self.assertEqual(e.gender, u8(2))
+        self.assertEqual(e.body_size, u8(123))
+        self.assertEqual(e.type_primary, u8(2))
+        self.assertEqual(e.type_secondary, u8(15))
+        self.assertEqual(e.movement_type, u8(2))
+        self.assertEqual(e.iq_group, u8(4))
+        self.assertEqual(e.ability_primary, u8(23))
+        self.assertEqual(e.ability_secondary, u8(12))
+        self.assertEqual(e.exp_yield, u16(0xFFF))
+        self.assertEqual(e.recruit_rate1, i16(-0xFFF))
+        self.assertEqual(e.base_hp, u16(0xFFF))
+        self.assertEqual(e.recruit_rate2, i16(-0xFFF))
+        self.assertEqual(e.base_atk, u8(123))
+        self.assertEqual(e.base_sp_atk, u8(123))
+        self.assertEqual(e.base_def, u8(123))
+        self.assertEqual(e.base_sp_def, u8(123))
+        self.assertEqual(e.weight, i16(-0xFFF))
+        self.assertEqual(e.size, i16(-0xFFF))
+        self.assertEqual(e.unk17, u8(123))
+        self.assertEqual(e.unk18, u8(123))
+        self.assertEqual(e.shadow_size, i8(0))
+        self.assertEqual(e.chance_spawn_asleep, i8(-123))
+        self.assertEqual(e.hp_regeneration, u8(123))
+        self.assertEqual(e.unk21_h, i8(-123))
+        self.assertEqual(e.base_form_index, i16(-0xFFF))
+        self.assertEqual(e.exclusive_item1, i16(-0xFFF))
+        self.assertEqual(e.exclusive_item2, i16(-0xFFF))
+        self.assertEqual(e.exclusive_item3, i16(-0xFFF))
+        self.assertEqual(e.exclusive_item4, i16(-0xFFF))
+        self.assertEqual(e.unk27, i16(-0xFFF))
+        self.assertEqual(e.unk28, i16(-0xFFF))
+        self.assertEqual(e.unk29, i16(-0xFFF))
+        self.assertEqual(e.unk30, i16(-0xFFF))
+        self.assertEqual(e.bitfield1_0, True)
+        self.assertEqual(e.bitfield1_1, False)
+        self.assertEqual(e.bitfield1_2, True)
+        self.assertEqual(e.bitfield1_3, False)
+        self.assertEqual(e.can_move, True)
+        self.assertEqual(e.bitfield1_5, False)
+        self.assertEqual(e.can_evolve, True)
+        self.assertEqual(e.item_required_for_spawning, False)
 
     def test_md_get_by_id(self) -> None:
         self.assertMdEntriesEqual(

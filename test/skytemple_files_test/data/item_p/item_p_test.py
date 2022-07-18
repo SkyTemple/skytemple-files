@@ -19,6 +19,8 @@ from __future__ import annotations
 import typing
 from typing import Optional
 
+from range_typed_integers import u8, u16
+
 from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.item_p.protocol import ItemPProtocol, ItemPEntryProtocol
 from skytemple_files_test.data.item_p.fixture import (
@@ -54,6 +56,42 @@ class ItemPTestCase(
         ):
             self.assertItemPEntriesEqual(entry_before, entry_after)
 
+    def test_entries_attrs(self):
+        e = self.fixture.item_list[0]
+
+        e.buy_price = u16(0xFFF)
+        e.sell_price = u16(0xFFF)
+        e.category = u8(123)
+        e.sprite = u8(123)
+        e.item_id = u16(0xFFF)
+        e.move_id = u16(0xFFF)
+        e.range_min = u8(123)
+        e.range_max = u8(123)
+        e.palette = u8(123)
+        e.action_name = u8(123)
+        e.is_valid = True
+        e.is_in_td = False
+        e.ai_flag_1 = True
+        e.ai_flag_2 = False
+        e.ai_flag_3 = True
+
+        self.assertEqual(e.buy_price, u16(0xFFF))
+        self.assertEqual(e.sell_price, u16(0xFFF))
+        self.assertEqual(e.category, u8(123))
+        self.assertEqual(e.sprite, u8(123))
+        self.assertEqual(e.item_id, u16(0xFFF))
+        self.assertEqual(e.move_id, u16(0xFFF))
+        self.assertEqual(e.range_min, u8(123))
+        self.assertEqual(e.range_max, u8(123))
+        self.assertEqual(e.palette, u8(123))
+        self.assertEqual(e.action_name, u8(123))
+        self.assertEqual(e.is_valid, True)
+        self.assertEqual(e.is_in_td, False)
+        self.assertEqual(e.ai_flag_1, True)
+        self.assertEqual(e.ai_flag_2, False)
+        self.assertEqual(e.ai_flag_3, True)
+
+
     def test_write_bin(self) -> None:
         item_p_after = self._save_and_reload_main_fixture(self.fixture)
         with open(self._fix_path(), "rb") as f:
@@ -63,8 +101,8 @@ class ItemPTestCase(
         for entry_fixture, entry_fixture_plus_1 in zip(
             self.fixture.item_list, self.fixture.item_list[1:]
         ):
-            self.assertTrue(entry_fixture.__eq__(entry_fixture))
-            self.assertFalse(entry_fixture.__eq__(entry_fixture_plus_1))
+            self.assertEqual(entry_fixture, entry_fixture)
+            self.assertNotEqual(entry_fixture, entry_fixture_plus_1)
 
     @romtest(file_names=["item_p.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):

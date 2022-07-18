@@ -16,11 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple, Sequence
 
 from range_typed_integers import u8, u8_checked
 
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol, MappaBinProtocol
 from skytemple_files.dungeon_data.mappa_bin.validator.exception import (
     DungeonMissingFloorError,
     DungeonTotalFloorCountInvalidError,
@@ -33,9 +33,9 @@ from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
 class DungeonValidator:
-    def __init__(self, floors: List[List[MappaFloorProtocol]]):
+    def __init__(self, mappa: MappaBinProtocol):
         self.dungeons: Optional[List[DungeonDefinition]] = None
-        self.floors = floors
+        self.mappa = mappa
 
         self._errors: List[DungeonValidatorError] = []
         self._validated = False
@@ -59,7 +59,7 @@ class DungeonValidator:
 
     def validate(self, dungeons: List[DungeonDefinition]) -> bool:
         # Reset
-        self.__init__(self.floors)  # type: ignore
+        self.__init__(self.mappa)  # type: ignore
         self.dungeons = dungeons
         self._validated = True
 
@@ -108,7 +108,7 @@ class DungeonValidator:
 
         for visited_floor_list_id, visited_floors in self._visited_floor_lists.items():
             open_floors = set(
-                i for i in range(0, len(self.floors[visited_floor_list_id]))
+                i for i in range(0, len(self.mappa.floor_lists[visited_floor_list_id]))
             ) - set(visited_floors)
             already_invalidated: Dict[int, DungeonMissingFloorError] = {}
             if len(open_floors) > 0:
@@ -130,12 +130,12 @@ class DungeonValidator:
         return len(self._errors) < 1
 
     def _mappa_floor_list_doesnt_exist(self, mappa_index: int) -> bool:
-        return len(self.floors) <= mappa_index
+        return len(self.mappa.floor_lists) <= mappa_index
 
     def _mappa_floor_doesnt_exist(
         self, mappa_index: int, start_after: int, number_floors: int
     ) -> bool:
-        return len(self.floors[mappa_index]) < start_after + number_floors
+        return len(self.mappa.floor_lists[mappa_index]) < start_after + number_floors
 
     def _mappa_floor_already_visited(
         self, mappa_index: int, start_after: int, number_floors: int
@@ -147,7 +147,7 @@ class DungeonValidator:
 
     def _init_mappa_visited(self, mappa_index: int) -> List[int]:
         s = []
-        for i in range(0, len(self.floors[mappa_index])):
+        for i in range(0, len(self.mappa.floor_lists[mappa_index])):
             s.append(i)
         return s
 

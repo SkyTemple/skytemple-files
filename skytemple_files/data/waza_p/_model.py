@@ -38,7 +38,7 @@ from skytemple_files.data.waza_p.protocol import (
 )
 
 # TODO: Consider actually reading until the header later, in case modded games
-#       have added move moves.
+#       have added more moves.
 MOVE_COUNT = 559
 MOVE_ENTRY_BYTELEN = 26
 

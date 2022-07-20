@@ -1,5 +1,5 @@
 # because IDEs and editors won't be able to parse the big file...
-# See notes in ./make_fixture_compiled.sh
+# See notes in ./fixtures/make_fixture.sh
 
 from skytemple_files_test.dungeon_data.mappa_bin.fixture import *
 

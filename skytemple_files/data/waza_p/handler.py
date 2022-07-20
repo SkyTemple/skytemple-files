@@ -28,7 +28,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     LevelUpMoveProtocol,
-    WazaMoveProtocol,
+    WazaMoveProtocol, WazaMoveRangeSettingsProtocol,
 )
 
 
@@ -88,6 +88,20 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         )
 
         return WazaMove
+
+    @classmethod
+    def get_range_settings_model(cls) -> Type[WazaMoveRangeSettingsProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_waza_p import (
+                WazaMoveRangeSettings as WazaMoveRangeSettingsNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return WazaMoveRangeSettingsNative
+        from skytemple_files.data.waza_p._model import (
+            WazaMoveRangeSettings,
+        )
+
+        return WazaMoveRangeSettings
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> WazaPProtocol:

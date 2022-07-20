@@ -196,6 +196,11 @@ class MoveLearnsetProtocol(Protocol[LUM]):
 
 
 class WazaMoveRangeSettingsProtocol(Protocol):
+    target: int
+    range: int
+    condition: int
+    unused: int
+
     @abstractmethod
     def __init__(self, data: bytes):
         ...
@@ -252,7 +257,7 @@ M = TypeVar("M", bound=WazaMoveProtocol)
 L = TypeVar("L", bound=MoveLearnsetProtocol)
 
 
-class WazaPProtocol(Protocol[M, L], Sir0Serializable):
+class WazaPProtocol(Sir0Serializable, Protocol[M, L]):
     moves: MutableSequence[M]
     learnsets: MutableSequence[L]
 

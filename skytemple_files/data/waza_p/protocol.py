@@ -178,6 +178,10 @@ class LevelUpMoveProtocol(Protocol):
     level_id: u16
 
     @abstractmethod
+    def __init__(self, move_id: u16, level_id: u16):
+        ...
+
+    @abstractmethod
     def __eq__(self, other: object) -> bool:
         ...
 

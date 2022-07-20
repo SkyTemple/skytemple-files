@@ -96,16 +96,17 @@ class LevelUpMoveStub(LevelUpMoveProtocol, AutoString):
     move_id: u16
     level_id: u16
 
+    def __init__(self, move_id: u16, level_id: u16):
+        self.level_id = level_id
+        self.move_id = move_id
+
     @classmethod
     def stub_new(
         cls,
         level_id: u16,
         move_id: u16,
     ) -> LevelUpMoveStub:
-        self = cls.__new__(cls)
-        self.level_id = level_id
-        self.move_id = move_id
-        return self
+        return cls(move_id, level_id)
 
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError("not implemented for stub")

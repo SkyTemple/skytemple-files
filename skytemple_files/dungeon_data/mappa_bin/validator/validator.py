@@ -16,11 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Set, Tuple, Sequence
+from typing import Dict, List, Optional, Set, Tuple
 
 from range_typed_integers import u8, u8_checked
 
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorProtocol, MappaBinProtocol
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaBinProtocol,
+)
 from skytemple_files.dungeon_data.mappa_bin.validator.exception import (
     DungeonMissingFloorError,
     DungeonTotalFloorCountInvalidError,

@@ -1,3 +1,4 @@
+"""Converts WazaP models back into the binary format used by the game"""
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -14,6 +15,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-
-
 from __future__ import annotations
+from skytemple_files.data.waza_p._model import WazaP
+
+
+class WazaPWriter:
+    def write(self, model: WazaP) -> bytes:
+        return model.sir0_serialize_parts()[0]

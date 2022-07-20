@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Protocol, TypeVar, Sequence
+from typing import Protocol, TypeVar, MutableSequence
 
 from range_typed_integers import u16, u8
 
@@ -50,7 +50,7 @@ E = TypeVar("E", bound=ItemPEntryProtocol)
 
 
 class ItemPProtocol(Sir0Serializable, Protocol[E]):
-    item_list: Sequence[E]
+    item_list: MutableSequence[E]
 
     def __init__(self, data: bytes, pointer_to_pointers: int):
         ...

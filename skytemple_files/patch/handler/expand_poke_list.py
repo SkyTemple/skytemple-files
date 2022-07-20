@@ -365,7 +365,7 @@ and to save a backup of your ROM before applying this."""
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
                 )  # Max Moveset
-            waza_p_model.learnsets = waza_p_model.learnsets + waza_p_model.learnsets
+            waza_p_model.learnsets += waza_p_model.learnsets
             while len(waza_p_model.learnsets) < NUM_NEW_ENTRIES:
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
@@ -381,7 +381,7 @@ and to save a backup of your ROM before applying this."""
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
                 )  # Max Moveset
-            waza_p_model.learnsets = waza_p_model.learnsets + waza_p_model.learnsets
+            waza_p_model.learnsets += waza_p_model.learnsets
             while len(waza_p_model.learnsets) < NUM_NEW_ENTRIES:
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]

@@ -16,15 +16,26 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from enum import Enum
-from typing import Optional, Union
+from typing import Optional, Union, MutableSequence
 
+from range_typed_integers import u32_checked
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
+from skytemple_files.container.sir0.sir0_util import (
+    decode_sir0_pointer_offsets,
+    encode_sir0_pointer_offsets,
+)
 from skytemple_files.data.md.protocol import PokeType
 from skytemple_files.data.waza_p import WAZA_MOVE_ENTRY_LEN
+from skytemple_files.data.waza_p.protocol import (
+    LevelUpMoveProtocol,
+    MoveLearnsetProtocol,
+    WazaMoveRangeSettingsProtocol,
+    WazaMoveProtocol,
+    _WazaMoveCategory,
+    WazaPProtocol, _PokeType,
+)
 
 # TODO: Consider actually reading until the header later, in case modded games
 #       have added move moves.
@@ -32,7 +43,7 @@ MOVE_COUNT = 559
 MOVE_ENTRY_BYTELEN = 26
 
 
-class LevelUpMove(AutoString):
+class LevelUpMove(LevelUpMoveProtocol, AutoString):
     move_id: u16
     level_id: u16
 
@@ -46,10 +57,10 @@ class LevelUpMove(AutoString):
         return self.move_id == other.move_id and self.level_id == other.level_id
 
 
-class MoveLearnset(AutoString):
-    level_up_moves: List[LevelUpMove]
-    tm_hm_moves: Sequence[u32]
-    egg_moves: Sequence[u32]
+class MoveLearnset(MoveLearnsetProtocol[LevelUpMove], AutoString):
+    level_up_moves: MutableSequence[LevelUpMove]
+    tm_hm_moves: MutableSequence[u32]
+    egg_moves: MutableSequence[u32]
 
     def __init__(
         self,
@@ -58,8 +69,8 @@ class MoveLearnset(AutoString):
         egg_moves: Sequence[u32],
     ):
         self.level_up_moves = level_up_moves
-        self.tm_hm_moves = tm_hm_moves
-        self.egg_moves = egg_moves
+        self.tm_hm_moves = list(tm_hm_moves)
+        self.egg_moves = list(egg_moves)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MoveLearnset):
@@ -71,166 +82,21 @@ class MoveLearnset(AutoString):
         )
 
 
-class WazaMoveCategory(Enum):
-    PHYSICAL = 0, _("Physical Move")
-    SPECIAL = 1, _("Special Move")
-    STATUS = 2, _("Status Move")
-
-    def __new__(cls, *args, **kwargs):  # type: ignore
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, name_localized: str):
-        self.name_localized = name_localized
-
-    def __str__(self):
-        return f"WazaMoveCategory.{self.name}"
-
-    def __repr__(self):
-        return str(self)
-
-    @property
-    def print_name(self):
-        return self.name_localized
-
-
-class WazaMoveRangeTarget(Enum):
-    ENEMIES = 0, _("Enemies")
-    ALLIES = 1, _("Allies")
-    EVERYONE = 2, _("Everyone")
-    USER = 3, _("User")
-    TWO_TURN = 4, _("Two-turn move")
-    EVERYONE_EXCEPT_USER = 5, _("Everyone except user")
-    ALLIES_EXCEPT_USER = 6, _("All allies except user")
-    U7 = 7, _("Invalid ") + "7"
-    U8 = 8, _("Invalid ") + "8"
-    U9 = 9, _("Invalid ") + "9"
-    U10 = 10, _("Invalid ") + "10"
-    U11 = 11, _("Invalid ") + "11"
-    U12 = 12, _("Invalid ") + "12"
-    U13 = 13, _("Invalid ") + "13"
-    U14 = 14, _("Invalid ") + "14"
-    SPECIAL = 15, _("Special / Invalid")
-
-    def __new__(cls, *args, **kwargs):  # type: ignore
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, name_localized: str):
-        self.name_localized = name_localized
-
-    def __str__(self):
-        return f"WazaMoveRangeTarget.{self.name}"
-
-    def __repr__(self):
-        return str(self)
-
-    @property
-    def print_name(self):
-        return self.name_localized
-
-
-class WazaMoveRangeRange(Enum):
-    IN_FRONT = 0, _("In front")
-    TRHEE_IN_FRONT = 1, _("In front + adjacent (like Wide Slash)")
-    AROUND = 2, _("8 tiles around user")
-    ROOM = 3, _("Room")
-    TWO_TILES = 4, _(
-        "Two tiles away"
-    )  # Also cuts corners, but the AI doesn't account for that
-    STRAIGHT_LINE = 5, _("Straight line")
-    FLOOR = 6, _("Floor")
-    USER = 7, _("User")
-    IN_FRONT_CORNERS = 8, _("In front; cuts corners")
-    TWO_TILES_CORNERS = 9, _("Two tiles away; cuts corners")
-    U10 = 10, _("Invalid ") + "10"
-    U11 = 11, _("Invalid ") + "11"
-    U12 = 12, _("Invalid ") + "12"
-    U13 = 13, _("Invalid ") + "13"
-    U14 = 14, _("Invalid ") + "14"
-    SPECIAL = 15, _("Special / Invalid")
-
-    def __new__(cls, *args, **kwargs):  # type: ignore
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, name_localized: str):
-        self.name_localized = name_localized
-
-    def __str__(self):
-        return f"WazaMoveRangeRange.{self.name}"
-
-    def __repr__(self):
-        return str(self)
-
-    @property
-    def print_name(self):
-        return self.name_localized
-
-
-class WazaMoveRangeCondition(Enum):
-    """Only relevant for AI setting."""
-
-    NO_CONDITION = 0, _("No condition")
-    CHANCE_AI_WEIGHT = 1, _("Based on AI Condition 1 Chance")
-    CRITICAL_HP = 2, _("Current HP <= 25%")
-    NEGATIVE_STATUS = 3, _("Has at least one negative status condition")
-    ASLEEP = 4, _("Is asleep, in a nightmare or napping")
-    GHOST = 5, _("Is a ghost-type Pokémon and does not have the exposed status")
-    CRITICAL_HP_NEGATIVE_STATUS = 6, _(
-        "Current HP <= 25% or has at least one negative status condition"
-    )
-    U7 = 7, _("Invalid ") + "7"
-    U8 = 8, _("Invalid ") + "8"
-    U9 = 9, _("Invalid ") + "9"
-    U10 = 10, _("Invalid ") + "10"
-    U11 = 11, _("Invalid ") + "11"
-    U12 = 12, _("Invalid ") + "12"
-    U13 = 13, _("Invalid ") + "13"
-    U14 = 14, _("Invalid ") + "14"
-    U15 = 15, _("Invalid ") + "15"
-
-    def __new__(cls, *args, **kwargs):  # type: ignore
-        obj = object.__new__(cls)
-        obj._value_ = args[0]
-        return obj
-
-    # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, name_localized: str):
-        self.name_localized = name_localized
-
-    def __str__(self):
-        return f"WazaMoveRangeCondition.{self.name}"
-
-    def __repr__(self):
-        return str(self)
-
-    @property
-    def print_name(self):
-        return self.name_localized
-
-
-class WazaMoveRangeSettings(AutoString):
-    def __init__(self, data: Union[memoryview, bytes]):
+class WazaMoveRangeSettings(WazaMoveRangeSettingsProtocol, AutoString):
+    def __init__(self, data: bytes):
         val = read_u16(data, 0)
         n4, n3, n2, n1 = val >> 12 & 0xF, val >> 8 & 0xF, val >> 4 & 0xF, val & 0xF
-        self.target = WazaMoveRangeTarget(int(n1))  # type: ignore
-        self.range = WazaMoveRangeRange(int(n2))  # type: ignore
-        self.condition = WazaMoveRangeCondition(int(n3))  # type: ignore
+        self.target = int(n1)
+        self.range = int(n2)
+        self.condition = int(n3)
         self.unused = int(n4)
 
     def __int__(self):
         return (
             (self.unused << 12)
-            + (self.condition.value << 8)
-            + (self.range.value << 4)
-            + self.target.value
+            + (self.condition << 8)
+            + (self.range << 4)
+            + self.target
         )
 
     def __eq__(self, other: object) -> bool:
@@ -244,10 +110,10 @@ class WazaMoveRangeSettings(AutoString):
         )
 
 
-class WazaMove(AutoString):
+class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
     base_power: u16
-    type: PokeType
-    category: WazaMoveCategory
+    type: _PokeType
+    category: _WazaMoveCategory
     settings_range: WazaMoveRangeSettings
     settings_range_ai: WazaMoveRangeSettings
     base_pp: u8
@@ -267,13 +133,13 @@ class WazaMove(AutoString):
     move_id: u16
     message_id: u8
 
-    def __init__(self, data: Union[memoryview, bytes]):
+    def __init__(self, data: bytes):
         # 0x00	2	uint16	Base Power	The base power of the move.
         self.base_power = read_u16(data, 0x00)
         # 0x02	1	uint8	Type	The type of the move.
-        self.type = PokeType(read_u8(data, 0x02))
+        self.type = read_u8(data, 0x02)
         # 0x03	1	uint8	Category	What kind of move is it.
-        self.category = WazaMoveCategory(read_u8(data, 0x03))  # type: ignore
+        self.category = read_u8(data, 0x03)
         # 0x04	2	4xunit4	4 Nibbles enconding different values, see WazaMoveSettings. Actual values.
         self.settings_range = WazaMoveRangeSettings(data[0x04:0x06])
         assert read_u16(data, 0x04) == int(self.settings_range)
@@ -319,8 +185,8 @@ class WazaMove(AutoString):
     def to_bytes(self) -> bytes:
         data = bytearray(WAZA_MOVE_ENTRY_LEN)
         write_u16(data, self.base_power, 0)
-        write_u8(data, self.type.value, 2)
-        write_u8(data, self.category.value, 3)
+        write_u8(data, self.type, 2)
+        write_u8(data, self.category, 3)
         write_u16(data, u16(int(self.settings_range)), 4)
         write_u16(data, u16(int(self.settings_range_ai)), 6)
         write_u8(data, self.base_pp, 8)
@@ -369,7 +235,10 @@ class WazaMove(AutoString):
         )
 
 
-class WazaP(Sir0Serializable, AutoString):
+class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString):
+    moves: MutableSequence[WazaMove]
+    learnsets: MutableSequence[MoveLearnset]
+
     def __init__(self, data: bytes, waza_content_pointer: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
@@ -436,9 +305,70 @@ class WazaP(Sir0Serializable, AutoString):
         return cls(content_data, data_pointer)
 
     def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
-        from skytemple_files.data.waza_p.writer import WazaPWriter
+        pointer_offsets: List[u32] = []
+        data = bytearray(3)
+        # Learnset
+        learnset_pointers: List[Tuple[u32, u32, u32]] = []
+        for learnset in self.learnsets:
+            # Level Up
+            pnt_lvlup = len(data)
+            buff = bytearray(8 * (len(learnset.level_up_moves) + 1))
+            lvl_up_move_list = []
+            for lvl_up_move in learnset.level_up_moves:
+                lvl_up_move_list.append(lvl_up_move.move_id)
+                lvl_up_move_list.append(lvl_up_move.level_id)
+            c = encode_sir0_pointer_offsets(buff, lvl_up_move_list, False)
+            data += buff[:c]
+            # TM/HM
+            pnt_tm_hm = len(data)
+            buff = bytearray(4 * (len(learnset.tm_hm_moves) + 1))
+            c = encode_sir0_pointer_offsets(buff, learnset.tm_hm_moves, False)
+            data += buff[:c]
+            # Egg
+            pnt_egg = len(data)
+            buff = bytearray(4 * (len(learnset.egg_moves) + 1))
+            c = encode_sir0_pointer_offsets(buff, learnset.egg_moves, False)
+            data += buff[:c]
 
-        return WazaPWriter(self).write()  # type: ignore
+            learnset_pointers.append(
+                (u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg))
+            )
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
+        # Move data
+        move_pointer = len(data)
+        for move in self.moves:
+            data += move.to_bytes()
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
+        # Learnset pointer table
+        learnset_pointer_table_pnt = len(data)
+        learnset_pointer_table = bytearray(len(learnset_pointers) * 12)
+        for i, (lvlup, tm_hm, egg) in enumerate(learnset_pointers):
+            pointer_offsets.append(u32(len(data) + i * 12))
+            pointer_offsets.append(u32(len(data) + i * 12 + 4))
+            pointer_offsets.append(u32(len(data) + i * 12 + 8))
+            write_u32(learnset_pointer_table, lvlup, i * 12)
+            write_u32(learnset_pointer_table, tm_hm, i * 12 + 4)
+            write_u32(learnset_pointer_table, egg, i * 12 + 8)
+        data += learnset_pointer_table
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
+        # Waza Header (<- content pointer)
+        header = bytearray(8)
+        waza_header_start = u32(len(data))
+        pointer_offsets.append(waza_header_start)
+        write_u32(header, u32_checked(move_pointer), 0)
+        pointer_offsets.append(u32(waza_header_start + 4))
+        write_u32(header, u32_checked(learnset_pointer_table_pnt), 4)
+        data += header
+        # Padding
+        if len(data) % 16 != 0:
+            data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))
+        return data, pointer_offsets, waza_header_start
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, WazaP):

@@ -44,7 +44,9 @@ from skytemple_files.data.level_bin_entry.model import LevelBinEntry, LevelEntry
 from skytemple_files.data.md.protocol import (
     MdEntryProtocol,
 )
-from skytemple_files.data.waza_p.model import LevelUpMove, MoveLearnset
+from skytemple_files.data.waza_p.protocol import (
+    MoveLearnsetProtocol,
+)
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 from skytemple_files.hardcoded.monster_sprite_data_table import IdleAnimType
 
@@ -558,9 +560,9 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
         return f(_("Invalid XML. '{a}' missing for a {b}."))
 
 
-class MovesetXml(XmlConverter[MoveLearnset]):
+class MovesetXml(XmlConverter[MoveLearnsetProtocol]):
     @classmethod
-    def to_xml(cls, value: MoveLearnset) -> Element:
+    def to_xml(cls, value: MoveLearnsetProtocol) -> Element:
         xml = Element(XML_MOVESET)
         level_up = Element(XML_MOVESET_LEVEL_UP)
         for level_up_move in value.level_up_moves:
@@ -587,7 +589,7 @@ class MovesetXml(XmlConverter[MoveLearnset]):
 
     @classmethod
     @no_type_check
-    def from_xml(cls, xml: Element, value_to_update: MoveLearnset):
+    def from_xml(cls, xml: Element, value_to_update: MoveLearnsetProtocol):
         for xml_type in xml:
             if xml_type.tag == XML_MOVESET_LEVEL_UP:
                 new_level_up = []
@@ -616,7 +618,9 @@ class MovesetXml(XmlConverter[MoveLearnset]):
                                 )
                             )
                         )
-                    new_level_up.append(LevelUpMove(move_id, level))
+                    new_level_up.append(
+                        FileType.WAZA_P.get_level_up_model()(move_id, level)
+                    )
                 value_to_update.level_up_moves = new_level_up
             elif xml_type.tag == XML_MOVESET_EGG:
                 new_eggs = []
@@ -808,8 +812,8 @@ def monster_xml_export(
     md_gender1: Optional[MdEntryProtocol],
     md_gender2: Optional[MdEntryProtocol],
     names: Optional[Dict[str, Tuple[str, str]]],
-    moveset: Optional[MoveLearnset],
-    moveset2: Optional[MoveLearnset],
+    moveset: Optional[MoveLearnsetProtocol],
+    moveset2: Optional[MoveLearnsetProtocol],
     stats: Optional[LevelBinEntry],
     portraits: Optional[Sequence[KaoImageProtocol]],
     portraits2: Optional[Sequence[KaoImageProtocol]],
@@ -860,8 +864,8 @@ def monster_xml_import(
     md_gender1: Optional[GenderedConvertEntry],
     md_gender2: Optional[GenderedConvertEntry],
     names: Optional[Dict[str, Tuple[str, str]]],
-    moveset: Optional[MoveLearnset],
-    moveset2: Optional[MoveLearnset],
+    moveset: Optional[MoveLearnsetProtocol],
+    moveset2: Optional[MoveLearnsetProtocol],
     stats: Optional[LevelBinEntry],
     portraits: Optional[List[KaoImageProtocol]],
     portraits2: Optional[List[KaoImageProtocol]],

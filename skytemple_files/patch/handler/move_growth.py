@@ -30,7 +30,7 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.common.util import *
 from skytemple_files.data.waza_p.handler import WazaPHandler
-from skytemple_files.data.waza_p.model import WazaMoveCategory
+from skytemple_files.data.waza_p.protocol import WazaMoveCategory
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
@@ -277,7 +277,10 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
             modelwp = WazaPHandler.deserialize(bin_before)
             total = bytearray(0)
             for m in modelwp.moves:
-                if m.category != WazaMoveCategory.STATUS and m.max_upgrade_level == 99:
+                if (
+                    m.category != WazaMoveCategory.STATUS.value
+                    and m.max_upgrade_level == 99
+                ):
                     total += mgrow_data_dama
                 else:
                     total += mgrow_data_stat

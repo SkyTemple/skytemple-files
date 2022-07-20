@@ -36,7 +36,7 @@ from skytemple_files.graphics.dpla.model import Dpla
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
-class GroundTilesetMapping(AutoString, CheckedIntWrites):
+class GroundTilesetMapping(AutoString):
     ground_level: i16
     dungeon_tileset: u8
     floor_id: u8

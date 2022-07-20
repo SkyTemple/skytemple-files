@@ -18,11 +18,11 @@ from __future__ import annotations
 
 from range_typed_integers import i16
 
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
-class SsaPositionMarker(AutoString, CheckedIntWrites):
+class SsaPositionMarker(AutoString):
     pos: SsaPosition
     unk8: i16
     unkA: i16

@@ -191,7 +191,7 @@ class MappaFloorDarknessLevel(Enum):
         return self._print_name_
 
 
-class MappaFloorLayout(AutoString, XmlSerializable, CheckedIntWrites):
+class MappaFloorLayout(AutoString, XmlSerializable):
     structure: MappaFloorStructureType
     room_density: i8
     tileset_id: u8

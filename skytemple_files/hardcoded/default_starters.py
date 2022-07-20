@@ -23,7 +23,7 @@ from skytemple_files.common.util import *
 SE_PC_LNTRY_LEN = 0x14
 
 
-class SpecialEpisodePc(AutoString, CheckedIntWrites):
+class SpecialEpisodePc:
     poke_id: u16
     joined_at: u16
     move1: u16

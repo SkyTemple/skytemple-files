@@ -86,7 +86,7 @@ class ItemAnim(AutoString):
         return data
 
 
-class MoveAnim(AutoString, CheckedIntWrites):
+class MoveAnim(AutoString):
     anim1: u16
     anim2: u16
     anim3: u16
@@ -144,7 +144,7 @@ class MoveAnim(AutoString, CheckedIntWrites):
         return data
 
 
-class GeneralAnim(AutoString, CheckedIntWrites):
+class GeneralAnim(AutoString):
     anim_type: AnimType
     anim_file: u32
     unk1: u32
@@ -183,7 +183,7 @@ class GeneralAnim(AutoString, CheckedIntWrites):
         return data
 
 
-class SpecMoveAnim(AutoString, CheckedIntWrites):
+class SpecMoveAnim(AutoString):
     pkmn_id: u16
     animation: u8
     point: AnimPointType

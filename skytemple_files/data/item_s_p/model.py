@@ -108,7 +108,7 @@ class ItemSPType(Enum):
         return str(self)
 
 
-class ItemSPEntry(AutoString, CheckedIntWrites):
+class ItemSPEntry(AutoString):
     type: ItemSPType
     parameter: u16
 

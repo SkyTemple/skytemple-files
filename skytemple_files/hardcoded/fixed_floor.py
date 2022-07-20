@@ -83,7 +83,7 @@ class EntitySpawnEntry(AutoString):
         )
 
 
-class ItemSpawn(AutoString, CheckedIntWrites):
+class ItemSpawn(AutoString):
     item_id: u16
     quantity: u16
     null2: u16
@@ -188,7 +188,7 @@ class MonsterSpawnType(Enum):
         self.description = description
 
 
-class MonsterSpawn(AutoString, CheckedIntWrites):
+class MonsterSpawn(AutoString):
     md_idx: u16
     stats_entry: u8
 
@@ -216,7 +216,7 @@ class MonsterSpawn(AutoString, CheckedIntWrites):
         )
 
 
-class TileSpawn(AutoString, CheckedIntWrites):
+class TileSpawn(AutoString):
     trap_id: u8
     trap_data: u8
     room_id: u8
@@ -256,7 +256,7 @@ class TileSpawn(AutoString, CheckedIntWrites):
         )
 
 
-class MonsterSpawnStats(AutoString, CheckedIntWrites):
+class MonsterSpawnStats(AutoString):
     level: u16
     hp: u16
     exp_yield: u16
@@ -313,7 +313,7 @@ class MonsterSpawnStats(AutoString, CheckedIntWrites):
         )
 
 
-class FixedFloorProperties(AutoString, CheckedIntWrites):
+class FixedFloorProperties(AutoString):
     music_track: u32
     unk4: bool
     unk5: bool

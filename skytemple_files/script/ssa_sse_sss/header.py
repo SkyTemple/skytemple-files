@@ -20,10 +20,10 @@ from typing import Optional
 
 from range_typed_integers import u16
 
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 
 
-class SsaHeader(AutoString, CheckedIntWrites):
+class SsaHeader(AutoString):
     """
     The header of a read SSA file.
     Only contains information used during read-in of the data. Not used for saving.

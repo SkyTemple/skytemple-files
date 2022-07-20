@@ -24,13 +24,13 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptData,
     Pmd2ScriptObject,
 )
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 logger = logging.getLogger(__name__)
 
 
-class SsaObject(AutoString, CheckedIntWrites):
+class SsaObject(AutoString):
     object_id: Pmd2ScriptObject
     hitbox_w: i16
     hitbox_h: i16

@@ -18,11 +18,11 @@ from __future__ import annotations
 
 from range_typed_integers import i16, u16
 
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss.position import SsaPosition
 
 
-class SsaPerformer(AutoString, CheckedIntWrites):
+class SsaPerformer(AutoString):
     type: u16
     hitbox_w: i16
     hitbox_h: i16

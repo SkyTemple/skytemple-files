@@ -24,7 +24,6 @@ from range_typed_integers import u8, u8_checked, u16, u16_checked
 
 from skytemple_files.common.util import (
     AutoString,
-    CheckedIntWrites,
     read_u16,
     write_u16,
 )
@@ -41,7 +40,7 @@ DUMMY_MD_INDEX = 0x229
 LEVEL_MULTIPLIER = 512
 
 
-class MappaMonster(AutoString, XmlSerializable, CheckedIntWrites):
+class MappaMonster(AutoString, XmlSerializable):
     level: u8
     weight: u16
     weight2: u16

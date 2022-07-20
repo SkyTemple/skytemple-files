@@ -33,7 +33,7 @@ from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEn
 from skytemple_files.graphics.fonts.font_sir0 import *
 
 
-class FontSir0Entry(AbstractFontEntry, CheckedIntWrites):
+class FontSir0Entry(AbstractFontEntry):
     def __init__(
         self, char: u8, table: u8, width: u32, cat: u8, padding: u8, data: bytes
     ):
@@ -112,7 +112,7 @@ class FontSir0Entry(AbstractFontEntry, CheckedIntWrites):
         )
 
 
-class FontSir0(Sir0Serializable, AbstractFont, CheckedIntWrites):
+class FontSir0(Sir0Serializable, AbstractFont):
     def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)

@@ -29,7 +29,7 @@ from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProto
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
-class BpaFrameInfo(BpaFrameInfoProtocol, CheckedIntWrites):
+class BpaFrameInfo(BpaFrameInfoProtocol):
     def __init__(self, duration_per_frame: u16, unk2: u16):
         # speed?
         self.duration_per_frame = duration_per_frame
@@ -41,7 +41,7 @@ class BpaFrameInfo(BpaFrameInfoProtocol, CheckedIntWrites):
         return f"BpaFrameInfo({self.duration_per_frame}, {self.unk2})"
 
 
-class Bpa(BpaProtocol[BpaFrameInfoProtocol], CheckedIntWrites):
+class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
     def __init__(self, data: Optional[bytes]):
         self.number_of_tiles = u16(0)
         self.number_of_frames = u16(0)

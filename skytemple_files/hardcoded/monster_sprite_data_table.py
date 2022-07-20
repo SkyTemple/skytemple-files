@@ -30,7 +30,7 @@ from skytemple_files.common.util import *
 ENTRY_LEN = 2
 
 
-class MonsterSpriteDataTableEntry(AutoString, CheckedIntWrites):
+class MonsterSpriteDataTableEntry(AutoString):
     sprite_tile_slots: u8
     unk1: u8
 

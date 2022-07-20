@@ -21,7 +21,7 @@ from skytemple_files.common.util import *
 LEVEL_BIN_ENTRY_LEVEL_LEN = 12
 
 
-class LevelEntry(AutoString, CheckedIntWrites):
+class LevelEntry(AutoString):
     experience_required: i32
     hp_growth: u16
     attack_growth: u8

@@ -111,7 +111,7 @@ class ExtraDungeonDataEntry(AutoString):
         return -1 <= index <= 62
 
 
-class GuestPokemon(AutoString, CheckedIntWrites):
+class GuestPokemon(AutoString):
     unk1: u32
     poke_id: u16
     joined_at: u16

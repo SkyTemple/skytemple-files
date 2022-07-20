@@ -20,7 +20,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 
 
-class DungeonMusicEntry(AutoString, CheckedIntWrites):
+class DungeonMusicEntry(AutoString):
     track_or_ref: u16
     is_random_ref: bool
 

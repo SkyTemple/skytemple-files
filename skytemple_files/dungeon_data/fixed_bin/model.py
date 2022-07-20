@@ -354,7 +354,7 @@ class DirectRule(FixedFloorActionRule):
         raise NotImplementedError("Not applicable for direct rules.")
 
 
-class FixedFloor(CheckedIntWrites):
+class FixedFloor:
     width: u16
     height: u16
     unk3: u16

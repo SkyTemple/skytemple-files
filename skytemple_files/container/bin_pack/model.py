@@ -21,7 +21,7 @@ from skytemple_files.common.util import *
 PADDING = bytes([0xFF] * 16)
 
 
-class BinPackTocEntry(CheckedIntWrites):
+class BinPackTocEntry:
     pointer: u32
     length: u32
 
@@ -30,7 +30,7 @@ class BinPackTocEntry(CheckedIntWrites):
         self.length = read_u32(data, 4)
 
 
-class BinPackHeader(CheckedIntWrites):
+class BinPackHeader:
     """Header for a BinPack"""
 
     number_files: u32

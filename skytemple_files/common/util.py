@@ -840,42 +840,6 @@ def mutate_sequence(obj: object, attr: str) -> Generator[List[Any], None, None]:
     setattr(obj, attr, l)
 
 
-class CheckedIntWrites:
-    """
-    A base class that checks attribute writes, if they are annotated with an integer type
-    annotated with a ValueRange.
-
-    If writing is attempted that would not fit, a ValueError is raised.
-
-    **Note for contributors:**
-    Do not rely on this for UI purposes. This error message will only work for Python-implemented code
-    and should be considered a helpful fallback for the SkyTemple UI and tests.
-    Code implemented in Rust will instead (as of writing) raise a plain OverflowError when an integer type error occurs
-    (with no custom message detailing the error for the user).
-    The UI code should make sure user input is properly validated separately.
-    """
-
-    def __setattr__(self, key, value):
-        if hasattr(self, key) or key in get_type_hints(
-            self.__class__, include_extras=True
-        ):
-            if not check_int(
-                (self.__class__, key), value, suppress_warning_for_unresolved_hints=True
-            ):
-                typ = get_type_hints(self.__class__, include_extras=True)[key]
-                r = get_range(typ)
-                if r is not None:
-                    raise IntegerBoundError(
-                        f(
-                            _(
-                                "The value '{value}' does not fit into the field '{key}'. "
-                                "The value must fit into the range [{r.min},{r.max}]."
-                            )
-                        )
-                    )
-        super().__setattr__(key, value)
-
-
 class AutoString:
     """Utility base class, that implements convenient __str__ and __repr__ based on object attributes."""
 

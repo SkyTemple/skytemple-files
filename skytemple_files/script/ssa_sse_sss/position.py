@@ -25,7 +25,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptData,
     Pmd2ScriptDirection,
 )
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ ACTOR_DEFAULT_HITBOX_W = 2 * BPC_TILE_DIM
 ACTOR_DEFAULT_HITBOX_H = 1 * BPC_TILE_DIM
 
 
-class SsaPosition(AutoString, CheckedIntWrites):
+class SsaPosition(AutoString):
     scriptdata: Pmd2ScriptData
     x_pos: u16
     y_pos: u16

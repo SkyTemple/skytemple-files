@@ -408,7 +408,7 @@ class ShadowSize(Enum):
         return self._print_name_
 
 
-class MdEntry(AutoString, CheckedIntWrites):
+class MdEntry(AutoString):
     md_index: u32
     entid: u16
     unk31: u16

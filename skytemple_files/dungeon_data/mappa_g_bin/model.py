@@ -24,7 +24,7 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 G_FLOOR_IDX_ENTRY_LEN = 4
 
 
-class MappaGBinReadContainer(CheckedIntWrites):
+class MappaGBinReadContainer:
     dungeon_list_index_start: u32
     floor_layout_data_start: u32
 
@@ -34,7 +34,7 @@ class MappaGBinReadContainer(CheckedIntWrites):
         self.floor_layout_data_start = read_u32(data, header_start + 0x04)
 
 
-class StubMappaGFloor(CheckedIntWrites):
+class StubMappaGFloor:
     """A mappa_g floor that only references an index for all of it's data."""
 
     layout_idx: u16
@@ -72,7 +72,7 @@ class MappaGFloor(AutoString):
         return self.layout == other.layout
 
 
-class MappaGFloorLayout(AutoString, CheckedIntWrites):
+class MappaGFloorLayout(AutoString):
     tileset_id: u8
     fixed_floor_id: u8
 

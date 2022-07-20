@@ -24,12 +24,12 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptData,
     Pmd2ScriptRoutine,
 )
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 
 logger = logging.getLogger(__name__)
 
 
-class SsaTrigger(AutoString, CheckedIntWrites):
+class SsaTrigger(AutoString):
     """NOTE: This is called Event in SkyTemple. Trigger is the historic name from reverse engineering."""
 
     coroutine: Pmd2ScriptRoutine

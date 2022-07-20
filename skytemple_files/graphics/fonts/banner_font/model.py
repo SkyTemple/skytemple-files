@@ -37,7 +37,7 @@ from skytemple_files.graphics.fonts.banner_font import *
 from skytemple_files.graphics.pal.model import Pal
 
 
-class BannerFontEntry(AbstractFontEntry, CheckedIntWrites):
+class BannerFontEntry(AbstractFontEntry):
     char: u8
     table: u8
     width: i16
@@ -93,7 +93,7 @@ class BannerFontEntry(AbstractFontEntry, CheckedIntWrites):
         )
 
 
-class BannerFont(Sir0Serializable, AbstractFont, CheckedIntWrites):
+class BannerFont(Sir0Serializable, AbstractFont):
     unknown: u32
 
     def __init__(self, data: bytes, header_pnt: int):

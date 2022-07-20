@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     from skytemple_files.dungeon_data.mappa_bin._deprecated import MappaItemCategory
 
 
-class ItemPEntry(AutoString, CheckedIntWrites):
+class ItemPEntry(AutoString):
     buy_price: u16
     sell_price: u16
     category: u8

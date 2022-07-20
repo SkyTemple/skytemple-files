@@ -30,7 +30,7 @@ from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL
 
 
-class BpcLayer(BpcLayerProtocol, CheckedIntWrites):
+class BpcLayer(BpcLayerProtocol):
     def __init__(
         self,
         number_tiles: u16,

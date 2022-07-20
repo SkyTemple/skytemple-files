@@ -30,7 +30,7 @@ from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEn
 from skytemple_files.graphics.fonts.font_dat import *
 
 
-class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
+class FontDatEntry(AbstractFontEntry):
     def __init__(self, char: u8, table: u8, width: u8, bprow: u8, data: bytes):
         self.char = char
         self.table = table
@@ -111,7 +111,7 @@ class FontDatEntry(AbstractFontEntry, CheckedIntWrites):
         )
 
 
-class FontDat(AbstractFont, CheckedIntWrites):
+class FontDat(AbstractFont):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)

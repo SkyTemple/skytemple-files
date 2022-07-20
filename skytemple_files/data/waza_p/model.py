@@ -33,7 +33,7 @@ MOVE_COUNT = 559
 MOVE_ENTRY_BYTELEN = 26
 
 
-class LevelUpMove(AutoString, CheckedIntWrites):
+class LevelUpMove(AutoString):
     move_id: u16
     level_id: u16
 
@@ -47,7 +47,7 @@ class LevelUpMove(AutoString, CheckedIntWrites):
         return self.move_id == other.move_id and self.level_id == other.level_id
 
 
-class MoveLearnset(AutoString, CheckedIntWrites):
+class MoveLearnset(AutoString):
     level_up_moves: List[LevelUpMove]
     tm_hm_moves: Sequence[u32]
     egg_moves: Sequence[u32]
@@ -245,7 +245,7 @@ class WazaMoveRangeSettings(AutoString):
         )
 
 
-class WazaMove(AutoString, CheckedIntWrites):
+class WazaMove(AutoString):
     base_power: u16
     type: PokeType
     category: WazaMoveCategory

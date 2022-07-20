@@ -50,7 +50,7 @@ class WteImageType(Enum):
         self.has_image = has_image
 
 
-class Wte(Sir0Serializable, AutoString, CheckedIntWrites):
+class Wte(Sir0Serializable, AutoString):
     actual_dim: u8
     unk10: u32
     width: u16

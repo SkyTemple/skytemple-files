@@ -23,7 +23,6 @@ from range_typed_integers import u32
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import (
     AutoString,
-    CheckedIntWrites,
     read_u32,
     write_u32,
 )
@@ -31,7 +30,7 @@ from skytemple_files.common.util import (
 ENTRY_LEN = 16
 
 
-class Rank(AutoString, CheckedIntWrites):
+class Rank(AutoString):
     rank_name_str: u32
     points_needed_next: u32
     storage_capacity: u32

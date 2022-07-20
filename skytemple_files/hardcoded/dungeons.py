@@ -31,7 +31,7 @@ MAP_MARKER_PLACEMENTS_ENTRY_LEN = 8
 TILESET_PROPERTIES_ENTRY_LEN = 0xC
 
 
-class DungeonDefinition(AutoString, CheckedIntWrites):
+class DungeonDefinition(AutoString):
     number_floors: u8
     mappa_index: u8
     start_after: u8
@@ -65,7 +65,7 @@ class DungeonRestrictionDirection(Enum):
     UP = 1
 
 
-class DungeonRestriction(AutoString, CheckedIntWrites):
+class DungeonRestriction(AutoString):
     direction: DungeonRestrictionDirection
     enemies_evolve_when_team_member_koed: bool
     enemies_grant_exp: bool
@@ -245,7 +245,7 @@ class SecondaryTerrainTableEntry(Enum):
     VOID = 2
 
 
-class MapMarkerPlacement(AutoString, CheckedIntWrites):
+class MapMarkerPlacement(AutoString):
     level_id: i16
     reference_id: i16
     x: i16

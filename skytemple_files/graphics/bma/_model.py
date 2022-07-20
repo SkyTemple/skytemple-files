@@ -43,7 +43,7 @@ from skytemple_files.graphics.bpl._model import Bpl
 from skytemple_files.graphics.bpl.protocol import BplProtocol
 
 
-class Bma(BmaProtocol[Bpa, Bpc, Bpl], CheckedIntWrites):
+class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
     def __init__(self, data: bytes):
         from skytemple_files.common.types.file_types import FileType
 

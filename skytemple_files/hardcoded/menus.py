@@ -679,7 +679,7 @@ class MenuType(Enum):
         self.menu_name = menu_name
 
 
-class MenuEntry(CheckedIntWrites):
+class MenuEntry:
     name_id: u16
     description_id: u16
     action: i32

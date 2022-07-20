@@ -49,7 +49,7 @@ BGP_TOTAL_NUMBER_TILES_ACTUALLY = 1024
 # NOTE: Tile 0 is always 0x0. <- THIS
 
 
-class BgpHeader(CheckedIntWrites):
+class BgpHeader:
     """Header for a Bgp Image"""
 
     palette_begin: u32

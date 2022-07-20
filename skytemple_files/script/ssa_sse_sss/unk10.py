@@ -18,10 +18,10 @@ from __future__ import annotations
 
 from range_typed_integers import i16
 
-from skytemple_files.common.util import AutoString, CheckedIntWrites
+from skytemple_files.common.util import AutoString
 
 
-class SsaUnk10(AutoString, CheckedIntWrites):
+class SsaUnk10(AutoString):
     unk0: i16
     unk2: i16
     unk4: i16

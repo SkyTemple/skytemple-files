@@ -41,7 +41,7 @@ class InterDEntryType(Enum):
         self.explanation = explanation
 
 
-class InterDEntry(AutoString, CheckedIntWrites):
+class InterDEntry(AutoString):
     floor: u8
     continue_music: bool
     ent_type: InterDEntryType

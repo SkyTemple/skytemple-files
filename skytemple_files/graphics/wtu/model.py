@@ -22,7 +22,7 @@ MAGIC_NUMBER = b"WTU\0"
 WTU_ENTRY_LEN = 8
 
 
-class WtuEntry(AutoString, CheckedIntWrites):
+class WtuEntry(AutoString):
     x: u16
     y: u16
     width: u16
@@ -45,7 +45,7 @@ class WtuEntry(AutoString, CheckedIntWrites):
         )
 
 
-class Wtu(AutoString, CheckedIntWrites):
+class Wtu(AutoString):
     image_mode: u32
     header_size: u32
 

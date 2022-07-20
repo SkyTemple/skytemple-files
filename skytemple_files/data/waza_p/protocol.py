@@ -195,6 +195,15 @@ class MoveLearnsetProtocol(Protocol[LUM]):
     egg_moves: MutableSequence[u32]
 
     @abstractmethod
+    def __init__(
+        self,
+        level_up_moves: Sequence[LUM],
+        tm_hm_moves: Sequence[u32],
+        egg_moves: Sequence[u32],
+    ):
+        ...
+
+    @abstractmethod
     def __eq__(self, other: object) -> bool:
         ...
 

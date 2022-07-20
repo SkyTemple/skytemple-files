@@ -30,6 +30,7 @@ from skytemple_files.data.waza_p.protocol import (
     LevelUpMoveProtocol,
     WazaMoveProtocol,
     WazaMoveRangeSettingsProtocol,
+    MoveLearnsetProtocol,
 )
 
 
@@ -103,6 +104,20 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         )
 
         return WazaMoveRangeSettings
+
+    @classmethod
+    def get_learnset_model(cls) -> Type[MoveLearnsetProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_waza_p import (
+                MoveLearnset as MoveLearnsetNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MoveLearnsetNative
+        from skytemple_files.data.waza_p._model import (
+            MoveLearnset,
+        )
+
+        return MoveLearnset
 
     @classmethod
     def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> WazaPProtocol:

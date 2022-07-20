@@ -64,11 +64,11 @@ class MoveLearnset(MoveLearnsetProtocol[LevelUpMove], AutoString):
 
     def __init__(
         self,
-        level_up_moves: List[LevelUpMove],
+        level_up_moves: Sequence[LevelUpMove],
         tm_hm_moves: Sequence[u32],
         egg_moves: Sequence[u32],
     ):
-        self.level_up_moves = level_up_moves
+        self.level_up_moves = list(level_up_moves)
         self.tm_hm_moves = list(tm_hm_moves)
         self.egg_moves = list(egg_moves)
 

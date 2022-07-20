@@ -22,7 +22,6 @@ from typing import MutableSequence
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.data.md.protocol import PokeType
 
 
 _WazaMoveCategory = u8

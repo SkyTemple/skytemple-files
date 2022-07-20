@@ -26,7 +26,6 @@ from skytemple_files.container.sir0.sir0_util import (
     decode_sir0_pointer_offsets,
     encode_sir0_pointer_offsets,
 )
-from skytemple_files.data.md.protocol import PokeType
 from skytemple_files.data.waza_p import WAZA_MOVE_ENTRY_LEN
 from skytemple_files.data.waza_p.protocol import (
     LevelUpMoveProtocol,
@@ -34,7 +33,8 @@ from skytemple_files.data.waza_p.protocol import (
     WazaMoveRangeSettingsProtocol,
     WazaMoveProtocol,
     _WazaMoveCategory,
-    WazaPProtocol, _PokeType,
+    WazaPProtocol,
+    _PokeType,
 )
 
 # TODO: Consider actually reading until the header later, in case modded games

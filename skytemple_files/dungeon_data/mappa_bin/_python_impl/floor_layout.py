@@ -86,9 +86,7 @@ class MappaFloorTerrainSettings(MappaFloorTerrainSettingsProtocol, AutoString):
         )
 
 
-class MappaFloorLayout(
-    MappaFloorLayoutProtocol[MappaFloorTerrainSettings], AutoString
-):
+class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], AutoString):
     structure: _MappaFloorStructureType
     room_density: i8
     tileset_id: u8

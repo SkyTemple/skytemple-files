@@ -27,7 +27,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
 from skytemple_files.common.util import *
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
-from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
 from skytemple_files.graphics.dma.model import Dma
 from skytemple_files.graphics.dpc.model import Dpc
 from skytemple_files.graphics.dpci.model import Dpci
@@ -119,7 +119,7 @@ class HardcodedGroundDungeonTilesets:
 def resolve_mapping_for_level(
     level: Pmd2ScriptLevel,
     tileset_mappings: List[GroundTilesetMapping],
-    mappa: MappaBin,
+    mappa: MappaBinProtocol,
     fixed: FixedBin,
     dungeon_bin: DungeonBinPack,
     dungeons: List[DungeonDefinition],

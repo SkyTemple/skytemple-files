@@ -14,11 +14,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 import os
-from typing import Callable
+from typing import Callable, cast
 
 from ndspy.rom import NintendoDSRom
 from PIL import Image
@@ -93,7 +92,7 @@ This patch may not be compatible if the markfont.dat file has been modified."""
     def apply(
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
-        START_ACCURACY = self.get_parameter("StartGraphicPos")
+        START_ACCURACY = cast(int, self.get_parameter("StartGraphicPos"))
         START_POWER = START_ACCURACY + 12
         MAX_POWER = (
             f"[M:B{START_POWER}]"
@@ -122,7 +121,7 @@ This patch may not be compatible if the markfont.dat file has been modified."""
         }
         bin_before = rom.getFileByName("FONT/markfont.dat")
         model = GraphicFontHandler.deserialize(bin_before)
-        entries = []
+        entries: List[Optional[Image.Image]] = []
         for x in range(model.get_nb_entries()):
             entries.append(model.get_entry(x))
         while len(entries) < max(START_ACCURACY + 12, START_POWER + 11):

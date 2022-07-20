@@ -23,7 +23,6 @@ from typing import Optional
 from PIL import Image
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.graphics.zmappat import *
@@ -74,12 +73,11 @@ class ZMappaT(Sir0Serializable, AutoString):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
+        data_pointer: u32,
     ) -> "Sir0Serializable":
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         from skytemple_files.graphics.zmappat.writer import ZMappaTWriter
 
         return ZMappaTWriter(self).write()

@@ -31,9 +31,9 @@ class MappaGBinWriter:
         self.data = None
         self.bytes_written = 0
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
-        pointer_offsets = []
+        pointer_offsets: List[u32] = []
 
         floor_lists, floor_layouts = self.model.minimize()
         # Floor list data
@@ -49,7 +49,7 @@ class MappaGBinWriter:
         floor_list_lut = bytearray(4 * len(floor_lists))
         cursor_floor_data = u32(0)
         for i, floor_list in enumerate(floor_lists):
-            pointer_offsets.append(start_floor_list_lut + i * 4)
+            pointer_offsets.append(u32(start_floor_list_lut + i * 4))
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
             cursor_floor_data = u32_checked(
                 cursor_floor_data + (len(floor_list) + 1) * 4
@@ -62,11 +62,11 @@ class MappaGBinWriter:
             layout_data[i * 4 : (i + 1) * 4] = layout.to_mappa()
         data += layout_data
         # Sub-header
-        data_pointer = len(data)
+        data_pointer = u32(len(data))
         subheader = bytearray(8)
-        pointer_offsets.append(data_pointer + 0x00)
+        pointer_offsets.append(u32(data_pointer + 0x00))
         write_u32(subheader, start_floor_list_lut, 0x00)
-        pointer_offsets.append(data_pointer + 0x04)
+        pointer_offsets.append(u32(data_pointer + 0x04))
         write_u32(subheader, start_floor_layout_data, 0x04)
         data += subheader
 

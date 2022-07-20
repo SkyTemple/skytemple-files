@@ -25,7 +25,6 @@ from range_typed_integers import u16_checked
 
 from skytemple_files.common.dungeon_floor_generator.generator import Tile
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -360,19 +359,18 @@ class FixedFloor:
     unk3: u16
     actions: List[FixedFloorActionRule]
 
-    def __init__(self, data: bytes, floor_pointer: u32, static_data: Pmd2Data):
+    def __init__(self, data: bytes, floor_pointer: u32):
         if data is not None:
             self.width = read_u16(data, floor_pointer)
             self.height = read_u16(data, floor_pointer + 2)
             self.unk4 = read_u16(data, floor_pointer + 4)
-            self.static_data = static_data
             self.actions = self.read_actions(
                 data, floor_pointer + 6, self.width * self.height
             )
 
     @classmethod
     def new(cls, width: u16, height: u16, actions: List[FixedFloorActionRule]):
-        n = cls(None, None, None)  # type: ignore
+        n = cls(None, None)  # type: ignore
         n.width = width
         n.height = height
         n.actions = actions
@@ -400,7 +398,7 @@ class FixedFloor:
         parameter = action_value >> 0xC
         direction = None
         if parameter > 0:
-            direction = self.static_data.script_data.directions__by_ssa_id[parameter]
+            direction = Pmd2ScriptDirection(parameter, "")
 
         repeat_times = read_u16(data, action_pointer + 2)
         if TileRuleType.has_value(action_id):
@@ -456,19 +454,17 @@ class FixedFloor:
 
 
 class FixedBin(Sir0Serializable):
-    def __init__(self, data: bytes, floor_list_offset: int, static_data: Pmd2Data):
+    def __init__(self, data: bytes, floor_list_offset: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
         cursor = floor_list_offset
         self.fixed_floors = []
         while data[cursor : cursor + 4] != END_OF_LIST_PADDING:
-            self.fixed_floors.append(
-                FixedFloor(data, read_u32(data, cursor), static_data)
-            )
+            self.fixed_floors.append(FixedFloor(data, read_u32(data, cursor)))
             cursor += 4
             assert cursor < len(data)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         from skytemple_files.dungeon_data.fixed_bin.writer import FixedBinWriter
 
         return FixedBinWriter(self).write()  # type: ignore
@@ -477,7 +473,6 @@ class FixedBin(Sir0Serializable):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
+        data_pointer: u32,
     ) -> "FixedBin":
-        return cls(content_data, data_pointer, static_data)  # type: ignore
+        return cls(content_data, data_pointer)  # type: ignore

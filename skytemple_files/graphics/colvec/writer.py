@@ -28,9 +28,9 @@ class ColvecWriter:
     def __init__(self, model: Colvec):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
-        pointer_offsets: List[int] = []
-        header_pointer = 0
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+        pointer_offsets: List[u32] = []
+        header_pointer = u32(0)
         buffer = bytearray()
         for colormap in self.model.colormaps:
             palette_buffer = bytearray(COLVEC_DATA_LEN)

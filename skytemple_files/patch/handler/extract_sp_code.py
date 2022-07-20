@@ -14,13 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u16_checked
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -149,8 +148,8 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
                 code_data += fdata
 
                 current_ptr += len(fdata)  # type: ignore
-            for i, x in enumerate(main_calls):
-                write_u16(header, id_codes[x], 4 + 2 * i)
+            for i, y in enumerate(main_calls):
+                write_u16(header, u16_checked(id_codes[y]), 4 + 2 * i)
             file_data = header + code_data
             create_file_in_rom(rom, SP_CODE_PATH, file_data)
         try:

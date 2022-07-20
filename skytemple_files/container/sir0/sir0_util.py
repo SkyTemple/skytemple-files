@@ -23,8 +23,6 @@ from range_typed_integers import u32
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-
-
 def decode_sir0_pointer_offsets(
     data: bytes, pointer_offset_list_pointer: u32, relative=True
 ) -> Sequence[u32]:

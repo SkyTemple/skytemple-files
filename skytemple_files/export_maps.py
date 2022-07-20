@@ -58,7 +58,7 @@ from skytemple_files.common.util import (
     get_rom_folder,
 )
 from skytemple_files.container.bin_pack.model import BinPack
-from skytemple_files.data.md.model import Md
+from skytemple_files.data.md.protocol import MdProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
@@ -83,7 +83,7 @@ COLOR_EVENTS = (0, 0, 255, 100)
 BPC_TILE_DIM_H = int(BPC_TILE_DIM / 2)
 
 monster_bin_pack_file: Optional[BinPack] = None
-monster_md: Optional[Md] = None
+monster_md: Optional[MdProtocol] = None
 map_bgs: Dict[str, List[Image.Image]] = {}
 map_bg_durations: Dict[str, int] = {}
 draw_invisible_actors_objects = False

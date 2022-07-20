@@ -18,10 +18,9 @@ from __future__ import annotations
 
 from typing import List, Optional, Tuple
 
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u32
 
 from skytemple_files.common import string_codec
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptLevel
 from skytemple_files.common.util import (
     read_i16,
@@ -69,7 +68,7 @@ class LevelListBin(Sir0Serializable):
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         string_codec.init()
 
         out_data = bytearray()
@@ -84,14 +83,14 @@ class LevelListBin(Sir0Serializable):
 
         # Write table
         sir0_pointer_offsets = []
-        pointer_data_block = len(out_data)
+        pointer_data_block = u32(len(out_data))
         for i, entry in enumerate(self.list):
             entry_buffer = bytearray(LEN_LEVEL_ENTRY)
             write_u16(entry_buffer, entry.mapty, 0)
             write_u16(entry_buffer, entry.nameid, 2)
             write_u16(entry_buffer, entry.mapid, 4)
             write_i16(entry_buffer, entry.weather, 6)
-            sir0_pointer_offsets.append(len(out_data) + 8)
+            sir0_pointer_offsets.append(u32(len(out_data) + 8))
             write_u32(entry_buffer, pointer_offsets[i], 8)
             out_data += entry_buffer
         out_data += PADDING_END
@@ -110,8 +109,7 @@ class LevelListBin(Sir0Serializable):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
+        data_pointer: u32,
     ) -> "LevelListBin":
         return cls(content_data, data_pointer)
 

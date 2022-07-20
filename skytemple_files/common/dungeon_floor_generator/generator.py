@@ -29,8 +29,10 @@ from dungeon_eos.DungeonAlgorithm import (
     generate_floor,
 )
 from dungeon_eos.RandomGen import RandomGenerator
+from range_typed_integers import u8
+from skytemple_files.common.util import generate_bitfield
 
-from skytemple_files.dungeon_data.mappa_bin.floor_layout import MappaFloorLayout
+from skytemple_files.dungeon_data.mappa_bin.protocol import MappaFloorLayoutProtocol
 from skytemple_files.graphics.dma.model import DmaType
 
 
@@ -138,7 +140,7 @@ class DungeonFloorGenerator:
             self.gen_properties = RandomGenProperties.default()
 
     def generate(
-        self, floor_layout: MappaFloorLayout, max_retries=1, flat=False
+        self, floor_layout: MappaFloorLayoutProtocol, max_retries=1, flat=False
     ) -> Union[List[List[Tile]], List[Tile], None]:
         """
         Returns a dungeon floor matrix (Tile matrix SIZE_Y x SIZE_X).
@@ -153,14 +155,27 @@ class DungeonFloorGenerator:
         RandomGenerator.use_seed_t1 = self.gen_properties.use_seed_t1
         RandomGenerator.seeds_t1 = self.gen_properties.seeds_t1
 
-        Properties.layout = floor_layout.structure.value
+        Properties.layout = floor_layout.structure
         Properties.mh_chance = floor_layout.monster_house_chance
         Properties.kecleon_chance = floor_layout.kecleon_shop_chance
         Properties.middle_room_secondary = floor_layout.secondary_terrain
         Properties.nb_rooms = floor_layout.room_density
-        Properties.bit_flags = floor_layout.terrain_settings.to_mappa()
+        Properties.bit_flags = u8(
+            generate_bitfield(
+                (
+                    floor_layout.terrain_settings.unk7,
+                    floor_layout.terrain_settings.unk6,
+                    floor_layout.terrain_settings.unk5,
+                    floor_layout.terrain_settings.unk4,
+                    floor_layout.terrain_settings.unk3,
+                    floor_layout.terrain_settings.generate_imperfect_rooms,
+                    floor_layout.terrain_settings.unk1,
+                    floor_layout.terrain_settings.has_secondary_terrain,
+                )
+            )
+        )
         Properties.floor_connectivity = floor_layout.floor_connectivity
-        Properties.maze_chance = floor_layout.unusued_chance
+        Properties.maze_chance = floor_layout.unused_chance
         Properties.dead_end = int(floor_layout.dead_ends)
         Properties.extra_hallways = floor_layout.extra_hallway_density
         Properties.secondary_density = floor_layout.water_density

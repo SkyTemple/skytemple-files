@@ -14,7 +14,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 from typing import Callable
@@ -32,7 +31,11 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.common.util import *
 from skytemple_files.data.md.handler import MdHandler
-from skytemple_files.data.md.model import AdditionalRequirement, EvolutionMethod, Gender
+from skytemple_files.data.md.protocol import (
+    AdditionalRequirement,
+    EvolutionMethod,
+    Gender,
+)
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
@@ -57,7 +60,7 @@ EVO_SPEC_BONUS_JP = 0xA2CB8
 
 MAX_TRY = 1000
 
-SPECIAL_EVOS = {
+SPECIAL_EVOS: Dict[int, List[int]] = {
     462: [464],
     463: [465],
     1062: [1064],
@@ -74,7 +77,7 @@ SPECIAL_EVOS = {
     454: [],
     1054: [455],
 }
-SPECIAL_EGGS = {
+SPECIAL_EGGS: Dict[int, List[int]] = {
     379: [379],
     380: [379],
     381: [379],
@@ -166,6 +169,7 @@ This supposedly removes most of the particular cases the game handles for evolut
 
             mevo_data = bytearray(len(md_model) * MEVO_ENTRY_LENGTH + 4)
             write_u32(mevo_data, u32_checked(len(mevo_data)), 0)
+            next_stage: List[int]
             for i in range(len(md_model)):
                 if i in SPECIAL_EVOS:
                     next_stage = SPECIAL_EVOS[i]
@@ -175,13 +179,13 @@ This supposedly removes most of the particular cases the game handles for evolut
                         if (i < 600 and 1 <= j < 555) or (i >= 600 and 601 <= j < 1155):
                             if (
                                 x.pre_evo_index == i
-                                and x.evo_method != EvolutionMethod.NONE
+                                and x.evo_method != EvolutionMethod.NONE.value
                                 and (
-                                    x.evo_param2 != AdditionalRequirement.MALE
+                                    x.evo_param2 != AdditionalRequirement.MALE.value
                                     or i < 600
                                 )
                                 and (
-                                    x.evo_param2 != AdditionalRequirement.FEMALE
+                                    x.evo_param2 != AdditionalRequirement.FEMALE.value
                                     or i >= 600
                                 )
                             ):
@@ -190,7 +194,9 @@ This supposedly removes most of the particular cases the game handles for evolut
                     mevo_data, u16_checked(len(next_stage)), i * MEVO_ENTRY_LENGTH + 4
                 )
                 for j, x in enumerate(next_stage):
-                    write_u16(mevo_data, x, i * MEVO_ENTRY_LENGTH + j * 2 + 6)
+                    write_u16(
+                        mevo_data, u16_checked(x), i * MEVO_ENTRY_LENGTH + j * 2 + 6
+                    )
                 if i in SPECIAL_EGGS:
                     next_stage = SPECIAL_EGGS[i]
                 else:
@@ -201,15 +207,17 @@ This supposedly removes most of the particular cases the game handles for evolut
                         current = md_model[pre_evo]
                         pre_evo = current.pre_evo_index
                         if (
-                            current.evo_param2 == AdditionalRequirement.MALE
-                            and md_model[pre_evo % 600].gender == Gender.MALE
-                            and md_model[pre_evo % 600 + 600].gender == Gender.FEMALE
+                            current.evo_param2 == AdditionalRequirement.MALE.value
+                            and md_model[pre_evo % 600].gender == Gender.MALE.value
+                            and md_model[pre_evo % 600 + 600].gender
+                            == Gender.FEMALE.value
                         ):
                             pre_evo = pre_evo % 600
                         elif (
-                            current.evo_param2 == AdditionalRequirement.FEMALE
-                            and md_model[pre_evo % 600].gender == Gender.MALE
-                            and md_model[pre_evo % 600 + 600].gender == Gender.FEMALE
+                            current.evo_param2 == AdditionalRequirement.FEMALE.value
+                            and md_model[pre_evo % 600].gender == Gender.MALE.value
+                            and md_model[pre_evo % 600 + 600].gender
+                            == Gender.FEMALE.value
                         ):
                             pre_evo = pre_evo % 600 + 600
                         tries += 1
@@ -227,7 +235,11 @@ This supposedly removes most of the particular cases the game handles for evolut
                         i * MEVO_ENTRY_LENGTH + 0x16,
                     )
                     for j, x in enumerate(next_stage):
-                        write_u16(mevo_data, x, i * MEVO_ENTRY_LENGTH + j * 2 + 0x18)
+                        write_u16(
+                            mevo_data,
+                            u16_checked(x),
+                            i * MEVO_ENTRY_LENGTH + j * 2 + 0x18,
+                        )
 
             hp_bonus = read_u32(rom.arm9, evo_hp_bonus)
             atk_bonus = read_u16(rom.arm9, evo_ph_bonus)

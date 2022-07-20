@@ -45,20 +45,11 @@ from typing import (
 
 from pmdsky_debug_py.protocol import SectionProtocol
 
-try:
-    # We prefer this version since it has include_extras for sure.
-    from typing_extensions import get_type_hints  # type: ignore
-except ImportError:
-    from typing import get_type_hints  # type: ignore
-
 import pkg_resources
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 from PIL import Image
 from range_typed_integers import (
-    IntegerBoundError,
-    check_int,
-    get_range,
     i8,
     i16,
     i32,

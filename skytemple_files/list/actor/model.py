@@ -18,7 +18,6 @@ from __future__ import annotations
 
 from range_typed_integers import u16_checked, u32_checked
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptEntity
 from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
@@ -52,7 +51,7 @@ class ActorListBin(Sir0Serializable):
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         string_codec.init()
 
         out_data = bytearray()
@@ -72,7 +71,7 @@ class ActorListBin(Sir0Serializable):
             entry_buffer = bytearray(LEN_ACTOR_ENTRY)
             write_u16(entry_buffer, entry.type, 0)
             write_u16(entry_buffer, entry.entid, 2)
-            sir0_pointer_offsets.append(len(out_data) + 4)
+            sir0_pointer_offsets.append(u32(len(out_data) + 4))
             write_u32(entry_buffer, pointer_offsets[i], 4)
             write_u16(entry_buffer, entry.unk3, 8)
             write_u16(entry_buffer, entry.unk4, 10)
@@ -82,8 +81,8 @@ class ActorListBin(Sir0Serializable):
         self._pad(out_data)
 
         # 4. Write sub-header
-        data_pointer = len(out_data)
-        sir0_pointer_offsets.append(len(out_data))
+        data_pointer = u32(len(out_data))
+        sir0_pointer_offsets.append(u32(len(out_data)))
         out_data += pointer_data_block.to_bytes(4, byteorder="little", signed=False)
         out_data += len(self.list).to_bytes(4, byteorder="little", signed=False)
 
@@ -93,8 +92,7 @@ class ActorListBin(Sir0Serializable):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
+        data_pointer: u32,
     ) -> "ActorListBin":
         return cls(content_data, data_pointer)
 

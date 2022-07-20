@@ -16,36 +16,142 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type
+
+from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.hybrid_data_handler import (
+    WriterProtocol,
+    HybridSir0DataHandler,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.dungeon_data.mappa_bin.model import MappaBin
-from skytemple_files.dungeon_data.mappa_bin.writer import MappaBinWriter
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaBinProtocol,
+    MappaFloorProtocol,
+    MappaFloorLayoutProtocol,
+    MappaMonsterProtocol,
+    MappaItemListProtocol,
+    MappaTrapListProtocol,
+    MappaFloorTerrainSettingsProtocol,
+)
 
 
-class MappaBinHandler(DataHandler[MappaBin]):
-    """
-    Deals with Sir0 wrapped models by default (assumes they are Sir0 wrapped).
-    Use the deserialize_raw / serialize_raw methods to work with the unwrapped models instead.
-    """
+class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):
+    @classmethod
+    def load_python_model(cls) -> Type[MappaBinProtocol]:
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.model import MappaBin
+
+        return MappaBin
 
     @classmethod
-    def deserialize(cls, data: bytes, *, static_data: Pmd2Data = None, **kwargs: OptionalKwargs) -> "MappaBin":  # type: ignore
-        if static_data is None:
-            static_data = Pmd2XmlReader.load_default()
-        from skytemple_files.common.types.file_types import FileType
+    def load_native_model(cls) -> Type[MappaBinProtocol]:
+        from skytemple_rust.st_mappa_bin import (
+            MappaBin,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
 
-        return FileType.SIR0.unwrap_obj(
-            FileType.SIR0.deserialize(data), MappaBin, static_data
+        return MappaBin
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol["PyMappaBin"]]:  # type: ignore
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.writer import (
+            MappaBinWriter,
         )
 
-    @classmethod
-    def serialize(cls, data: "MappaBin", **kwargs: OptionalKwargs) -> bytes:
-        from skytemple_files.common.types.file_types import FileType
-
-        return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
+        return MappaBinWriter
 
     @classmethod
-    def serialize_raw(cls, data: "MappaBin", **kwargs: OptionalKwargs) -> bytes:
-        return MappaBinWriter(data).write()[0]
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeMappaBin"]]:  # type: ignore
+        from skytemple_rust.st_mappa_bin import (
+            MappaBinWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return MappaBinWriter
+
+    @classmethod
+    def get_floor_model(cls) -> Type[MappaFloorProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaFloor as MappaFloorNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaFloorNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor import MappaFloor
+
+        return MappaFloor
+
+    @classmethod
+    def get_floor_layout_model(cls) -> Type[MappaFloorLayoutProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaFloorLayout as MappaFloorLayoutNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaFloorLayoutNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+            MappaFloorLayout,
+        )
+
+        return MappaFloorLayout
+
+    @classmethod
+    def get_monster_model(cls) -> Type[MappaMonsterProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaMonster as MappaMonsterNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaMonsterNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.monster import (
+            MappaMonster,
+        )
+
+        return MappaMonster
+
+    @classmethod
+    def get_item_list_model(cls) -> Type[MappaItemListProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaItemList as MappaItemListNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaItemListNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import (
+            MappaItemList,
+        )
+
+        return MappaItemList
+
+    @classmethod
+    def get_trap_list_model(cls) -> Type[MappaTrapListProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaTrapList as MappaTrapListNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaTrapListNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.trap_list import (
+            MappaTrapList,
+        )
+
+        return MappaTrapList
+
+    @classmethod
+    def get_terrain_settings_model(cls) -> Type[MappaFloorTerrainSettingsProtocol]:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_mappa_bin import (
+                MappaFloorTerrainSettings as MappaFloorTerrainSettingsNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return MappaFloorTerrainSettingsNative
+        from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
+            MappaFloorTerrainSettings,
+        )
+
+        return MappaFloorTerrainSettings
+
+    @classmethod
+    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> MappaBinProtocol:
+        raise NotImplementedError("Not implemented for Mappa.")
+
+    @classmethod
+    def serialize_raw(cls, data: MappaBinProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return data.sir0_serialize_parts()[0]

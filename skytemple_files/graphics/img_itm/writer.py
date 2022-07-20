@@ -29,7 +29,7 @@ class ImgItmWriter:
     def __init__(self, model: ImgItm):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         buffer = bytearray()
 
         # Sprites
@@ -57,8 +57,8 @@ class ImgItmWriter:
         write_u32(header, u32_checked(len(self.model.sprites)), 0x04)
         write_u32(header, u32_checked(pal_pointer), 0x08)
         write_u32(header, u32_checked(len(self.model.palettes) * PAL_LEN), 0x0C)
-        pointer_offsets = [len(buffer), len(buffer) + 8]
-        header_pointer = len(buffer)
+        pointer_offsets = [u32(len(buffer)), u32(len(buffer) + 8)]
+        header_pointer = u32(len(buffer))
         buffer += header
 
         return buffer, pointer_offsets, header_pointer

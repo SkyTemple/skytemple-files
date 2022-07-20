@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from typing import List
 from xml.dom import minidom
 from xml.etree import ElementTree
@@ -28,17 +27,6 @@ from skytemple_files.common.i18n_util import _, f
 
 class XmlValidateError(ValueError):
     pass
-
-
-class XmlSerializable(ABC):
-    @abstractmethod
-    def to_xml(self) -> Element:
-        """Returns an XML element for this object."""
-
-    @classmethod
-    @abstractmethod
-    def from_xml(cls, ele: Element) -> "XmlSerializable":
-        """Turns an XML element into an instance this object"""
 
 
 def validate_xml_tag(ele: Element, tag: str):

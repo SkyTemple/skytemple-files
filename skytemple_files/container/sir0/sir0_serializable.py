@@ -16,15 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple
+from abc import abstractmethod
+from typing import List, Optional, Tuple, runtime_checkable, Protocol
 
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from range_typed_integers import u32
 
 
-class Sir0Serializable(ABC):
+@runtime_checkable
+class Sir0Serializable(Protocol):
     @abstractmethod
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         """
         Prepares this object to be wrapped in Sir0.
         Returns:
@@ -39,11 +40,9 @@ class Sir0Serializable(ABC):
     def sir0_unwrap(
         cls,
         content_data: bytes,
-        data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
+        data_pointer: u32,
     ) -> "Sir0Serializable":
         """
         Builds the model from the unwrapped Sir0.
-        static_data may be omitted if not needed for this type.
         """
         pass

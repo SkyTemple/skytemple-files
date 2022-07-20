@@ -14,12 +14,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-# mypy: ignore-errors
 from __future__ import annotations
 
 from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16_checked, i16_checked
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -142,6 +142,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
+                raise NotImplementedError()  # see TODO at ITEM_EFFECT_JP.
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
@@ -151,13 +152,16 @@ Also, you'll need to reapply this if you apply AddTypes again. """
     def apply(
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
+        item_effect: bytes
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 item_effect = ITEM_EFFECT_US
-            if config.game_region == GAME_REGION_EU:
+            elif config.game_region == GAME_REGION_EU:
                 item_effect = ITEM_EFFECT_EU
-            if config.game_region == GAME_REGION_JP:
-                item_effect = ITEM_EFFECT_JP
+            else:
+                raise NotImplementedError("ROM not supported.")
+        else:
+            raise NotImplementedError("ROM not supported.")
 
         # Apply Gummi item properties
         item_p_bin = rom.getFileByName("BALANCE/item_p.bin")
@@ -185,7 +189,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """
         item_cd_model = DataCDHandler.deserialize(item_cd_bin)
         effect_id = item_cd_model.nb_effects()
         item_cd_model.add_effect_code(item_effect)
-        item_cd_model.set_item_effect_id(GUMMI_ITEM_ID, effect_id)
+        item_cd_model.set_item_effect_id(GUMMI_ITEM_ID, u16_checked(effect_id))
         rom.setFileByName("BALANCE/item_cd.bin", DataCDHandler.serialize(item_cd_model))
 
         # Change item's text attributes
@@ -204,7 +208,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """
         bar_bin = rom.getFileByName("BALANCE/itembar.bin")
         bar_model = DataSTHandler.deserialize(bar_bin)
         gummi_id = bar_model.get_item_struct_id(OTHER_GUMMI_ID)
-        bar_model.set_item_struct_id(GUMMI_ITEM_ID, gummi_id)
+        bar_model.set_item_struct_id(GUMMI_ITEM_ID, i16_checked(gummi_id))
         rom.setFileByName("BALANCE/itembar.bin", DataSTHandler.serialize(bar_model))
 
         try:

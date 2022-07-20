@@ -29,7 +29,7 @@ class FontSir0Writer:
     def __init__(self, model: FontSir0):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         pointer_offsets = []
 
         sorted_entries = sorted(self.model.entries, key=lambda x: (x.table, x.char))
@@ -54,7 +54,7 @@ class FontSir0Writer:
                     )
                 )
             last = (e.char, e.table)
-            pointer_offsets.append(len(buffer) + i * FONT_SIR0_ENTRY_LEN)
+            pointer_offsets.append(u32(len(buffer) + i * FONT_SIR0_ENTRY_LEN))
             write_u32(
                 char_pointer,
                 u32_checked(i * FONT_SIR0_DATA_LEN),
@@ -70,10 +70,10 @@ class FontSir0Writer:
         # Header
         header = bytearray(0x8)
         write_u32(header, u32_checked(len(self.model.entries)), 0)
-        pointer_offsets.append(len(buffer) + 4)
+        pointer_offsets.append(u32(len(buffer) + 4))
         write_u32(header, u32_checked(char_pointer_offset), 0x4)
 
-        header_pointer = len(buffer)
+        header_pointer = u32(len(buffer))
         buffer += header
 
         return buffer, pointer_offsets, header_pointer

@@ -28,7 +28,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     LevelUpMoveProtocol,
-    WazaMoveProtocol, WazaMoveRangeSettingsProtocol,
+    WazaMoveProtocol,
+    WazaMoveRangeSettingsProtocol,
 )
 
 

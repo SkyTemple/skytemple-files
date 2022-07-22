@@ -386,8 +386,8 @@
         <StringBlock name="Move Descriptions"                      beg="10147"  end="10706"/>
         <StringBlock name="Item Long Descriptions"                 beg="10706"  end="12106"/>
         <StringBlock name="Item Short Descriptions"                beg="12106"  end="13506"/>
-        <StringBlock name="Trap Names"                             beg="13506"  end="13532"/>
-        <StringBlock name="Trap Descriptions"                      beg="13532"  end="13556"/>
+        <StringBlock name="Trap Names"                             beg="13506"  end="13531"/>
+        <StringBlock name="Trap Descriptions"                      beg="13531"  end="13556"/>
         <StringBlock name="Statuses Names and Descriptions"        beg="13556"  end="13763"/>
         <StringBlock name="Type Names"                             beg="13772"  end="13791"/>
         <StringBlock name="Ability Names"                          beg="13791"  end="13915"/>

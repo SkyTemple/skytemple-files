@@ -191,7 +191,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install tox tox-gh-actions
+        pip install -Urrequirements.txt
+        pip install .
     - name: Enable native modules
       if: matrix.native
       run: |
@@ -201,8 +202,10 @@ jobs:
     #    toolchain: nightly
     #    default: true
     #    override: true
-    - name: Test with tox
-      run: tox -- -m "romtest"
+    # We aren't using tox because of the complicated depdendency situation
+    # on the ARM based self-hosted runners
+    - name: Test
+      run: pytest --junitxml pytest.xml -m "romtest"
       working-directory: test
       env:
         SKYTEMPLE_TEST_ROM: /rom.nds

@@ -192,6 +192,8 @@ jobs:
       run: |
         pip install -Urrequirements.txt
         pip install .
+      env:
+        GETTEXT_SYSTEM: true
     - name: Enable native modules
       if: matrix.native
       run: |

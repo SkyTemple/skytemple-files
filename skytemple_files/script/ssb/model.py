@@ -47,7 +47,20 @@ logger = logging.getLogger(__name__)
 
 SSB_LEN_ROUTINE_INFO_ENTRY = 6
 SSB_PADDING_BEFORE_ROUTINE_INFO = 4
-
+ENUM_ARGUMENTS = {
+    "Entity": "level_entities__by_id",
+    "Object": "objects__by_id",
+    "Routine": "common_routine_info__by_id",
+    "Face": "face_names__by_id",
+    "FaceMode": "face_position_modes__by_id",
+    "GameVar": "game_variables__by_id",
+    "Level": "level_list__by_id",
+    "Menu": "menus__by_id",
+    "ProcessSpecial": "process_specials__by_id",
+    "Direction": "directions__by_ssb_id",
+    "Bgm": "bgms__by_id",
+    "Effect", "sprite_effects__by_id",
+}
 
 class SkyTempleSsbOperation(SsbOperation):
     def __init__(
@@ -309,105 +322,16 @@ class Ssb:
                             if param & 0x8000:
                                 param = -0x10000 + param
                             new_params.append(param)
-                        elif argument_spec.type == "Entity":
-                            new_params.append(
-                                SsbConstant.create_for(
-                                    self._scriptdata.level_entities__by_id[param]
-                                )
-                            )
-                        elif argument_spec.type == "Object":
-                            new_params.append(
-                                SsbConstant.create_for(
-                                    self._scriptdata.objects__by_id[param]
-                                )
-                            )
-                        elif argument_spec.type == "Routine":
-                            new_params.append(
-                                SsbConstant.create_for(
-                                    self._scriptdata.common_routine_info__by_id[param]
-                                )
-                            )
-                        elif argument_spec.type == "Face":
-                            if param in self._scriptdata.face_names__by_id:
+                        elif argument_spec.type in ENUM_ARGUMENTS:
+                            const_data = getattr(self._scriptdata, ENUM_ARGUMENTS[argument_spec.type])
+                            if param in const_data:
                                 new_params.append(
                                     SsbConstant.create_for(
-                                        self._scriptdata.face_names__by_id[param]
+                                        const_data[param]
                                     )
                                 )
                             else:
-                                logger.warning(f"Unknown face id: {param}")
-                                new_params.append(param)
-                        elif argument_spec.type == "FaceMode":
-                            new_params.append(
-                                SsbConstant.create_for(
-                                    self._scriptdata.face_position_modes__by_id[param]
-                                )
-                            )
-                        elif argument_spec.type == "GameVar":
-                            new_params.append(
-                                SsbConstant.create_for(
-                                    self._scriptdata.game_variables__by_id[param]
-                                )
-                            )
-                        elif argument_spec.type == "Level":
-                            if param in self._scriptdata.level_list__by_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.level_list__by_id[param]
-                                    )
-                                )
-                            else:
-                                logger.warning(f"Unknown level id: {param}")
-                                new_params.append(param)
-                        elif argument_spec.type == "Menu":
-                            if param in self._scriptdata.menus__by_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.menus__by_id[param]
-                                    )
-                                )
-                            else:
-                                logger.warning(f"Unknown menu id: {param}")
-                                new_params.append(param)
-                        elif argument_spec.type == "ProcessSpecial":
-                            if param in self._scriptdata.process_specials__by_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.process_specials__by_id[param]
-                                    )
-                                )
-                            else:
-                                new_params.append(param)
-                                logger.warning(f"Unknown special process id: {param}")
-                        elif argument_spec.type == "Direction":
-                            if param in self._scriptdata.directions__by_ssb_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.directions__by_ssb_id[param]
-                                    )
-                                )
-                            else:
-                                new_params.append(param)
-                                logger.warning(f"Unknown direction id: {param}")
-                        elif argument_spec.type == "Bgm":
-                            if param in self._scriptdata.bgms__by_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.bgms__by_id[param]
-                                    )
-                                )
-                            else:
-                                logger.warning(f"Unknown BGM id: {param}")
-                                new_params.append(param)
-                        elif argument_spec.type == "Effect":
-                            if param in self._scriptdata.sprite_effects__by_id:
-                                new_params.append(
-                                    SsbConstant.create_for(
-                                        self._scriptdata.sprite_effects__by_id[param]
-                                    )
-                                )
-                            else:
-                                logger.warning(f"Unknown effect id: {param}")
+                                logger.warning(f"Unknown {argument_spec.type} id: {param}")
                                 new_params.append(param)
                         elif (
                             argument_spec.type == "String"

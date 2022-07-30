@@ -59,8 +59,9 @@ ENUM_ARGUMENTS = {
     "ProcessSpecial": "process_specials__by_id",
     "Direction": "directions__by_ssb_id",
     "Bgm": "bgms__by_id",
-    "Effect", "sprite_effects__by_id",
+    "Effect": "sprite_effects__by_id",
 }
+
 
 class SkyTempleSsbOperation(SsbOperation):
     def __init__(

@@ -262,7 +262,7 @@ class Ssb:
         return ExplorerScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
-            self._scriptdata.common_routine_info__by_id,
+            self._scriptdata.common_routine_info,
             SsbConstant.create_for(
                 self._scriptdata.game_variables__by_name["PERFORMANCE_PROGRESS_LIST"]
             ).name,
@@ -274,7 +274,7 @@ class Ssb:
         return SsbScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
-            self._scriptdata.common_routine_info__by_id,
+            self._scriptdata.common_routine_info,
         ).convert()
 
     def add_linked_to_names_to_routine_ops(self):

@@ -458,8 +458,8 @@ class Pmd2ScriptData(AutoString):
         self._common_routine_info = value
 
     @property
-    def common_routine_info__by_id(self) -> List[Pmd2ScriptRoutine]:
-        return self.common_routine_info
+    def common_routine_info__by_id(self) -> Dict[int, Pmd2ScriptRoutine]:
+        return {o.id: o for o in self.common_routine_info}
 
     @property
     def common_routine_info__by_name(self) -> Dict[str, Pmd2ScriptRoutine]:

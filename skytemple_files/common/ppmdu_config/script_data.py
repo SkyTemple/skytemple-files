@@ -422,8 +422,8 @@ class Pmd2ScriptData(AutoString):
         self._face_position_modes = value
 
     @property
-    def face_position_modes__by_id(self) -> List[Pmd2ScriptFacePositionMode]:
-        return self.face_position_modes
+    def face_position_modes__by_id(self) -> Dict[int, Pmd2ScriptFacePositionMode]:
+        return {n.id: n for n in self.face_position_modes}
 
     @property
     def face_position_modes__by_name(self) -> Dict[str, Pmd2ScriptFacePositionMode]:
@@ -458,8 +458,8 @@ class Pmd2ScriptData(AutoString):
         self._common_routine_info = value
 
     @property
-    def common_routine_info__by_id(self) -> List[Pmd2ScriptRoutine]:
-        return self.common_routine_info
+    def common_routine_info__by_id(self) -> Dict[int, Pmd2ScriptRoutine]:
+        return {o.id: o for o in self.common_routine_info}
 
     @property
     def common_routine_info__by_name(self) -> Dict[str, Pmd2ScriptRoutine]:

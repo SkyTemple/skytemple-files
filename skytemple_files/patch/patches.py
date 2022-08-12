@@ -53,11 +53,17 @@ from skytemple_files.patch.handler.add_type import AddTypePatchHandler
 from skytemple_files.patch.handler.allow_unrecruitable_mons import (
     AllowUnrecruitableMonsPatchHandler,
 )
+from skytemple_files.patch.handler.bold_text import (
+    BoldTextPatchHandler,
+)
 from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.patch.handler.change_ff_prop import (
     ChangeFixedFloorPropertiesPatchHandler,
 )
 from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
+from skytemple_files.patch.handler.change_text_sound import (
+    ChangeTextSoundPatchHandler,
+)
 from skytemple_files.patch.handler.choose_starter import ChooseStarterPatchHandler
 from skytemple_files.patch.handler.complete_team_control import CompleteTeamControl
 from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
@@ -163,6 +169,8 @@ class PatchType(Enum):
     DYNAMIC_BOSSES_EVERYWHERE = DynamicBossesEverywherePatchHandler
     PITFALL_TRAP_TWEAK = PitfallTrapTweakPatchHandler
     FIX_NOCASH_SAVES = FixNocashSavesPatchHandler
+    BOLD_TEXT = BoldTextPatchHandler
+    CHANGE_TEXT_SOUND = ChangeTextSoundPatchHandler
 
 
 class Patcher:

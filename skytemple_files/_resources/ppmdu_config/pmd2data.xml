@@ -1,4 +1,4 @@
-﻿<PMD2>
+<PMD2>
   <!--=======================================================================-->
   <!--PPMDU Configuration File-->
   <!--=======================================================================-->
@@ -878,6 +878,24 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>
         </SimplePatch>
+
+        <Patch id="BoldText">
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="adex_asm_mods/bold_text/selector_arm9.asm"/>
+	  </OpenBin>
+	  <OpenBin filepath="overlay/overlay_0036.bin">
+	  	<Include filename ="adex_asm_mods/bold_text/selector_overlay36.asm"/>
+	  </OpenBin>
+        </Patch>
+
+        <Patch id="ChangeTextSound">
+          <OpenBin filepath="arm9.bin">
+	  	<Include filename ="adex_asm_mods/change_text_sound/selector_arm9.asm"/>
+	  </OpenBin>
+	  <OpenBin filepath="overlay/overlay_0036.bin">
+	  	<Include filename ="adex_asm_mods/change_text_sound/selector_overlay36.asm"/>
+	  </OpenBin>
+        </Patch>
 
       </Game>
     </Patches>

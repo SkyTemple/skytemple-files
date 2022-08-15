@@ -36,10 +36,9 @@ OFFSET_US = 0x21BA4
 
 
 class BoldTextPatchHandler(AbstractPatchHandler, DependantPatch):
-
     @property
     def name(self) -> str:
-        return 'BoldText'
+        return "BoldText"
 
     @property
     def description(self) -> str:
@@ -47,30 +46,34 @@ class BoldTextPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def author(self) -> str:
-        return 'Adex'
+        return "Adex"
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return "0.1.0"
 
     def depends_on(self) -> List[str]:
-         return ['ExtraSpace']
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.NEW_MECHANIC
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
-         if config.game_version == GAME_VERSION_EOS:
-             if config.game_region == GAME_REGION_US:
-                 return read_u32(rom.arm9, OFFSET_US) != ORIGINAL_INSTRUCTION
-             if config.game_region == GAME_REGION_EU:
-                 return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION
-         raise NotImplementedError()
+        if config.game_version == GAME_VERSION_EOS:
+            if config.game_region == GAME_REGION_US:
+                return read_u32(rom.arm9, OFFSET_US) != ORIGINAL_INSTRUCTION
+            if config.game_region == GAME_REGION_EU:
+                return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION
+        raise NotImplementedError()
 
-    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
-         # Apply the patch
-         apply()
+    def apply(
+        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ) -> None:
+        # Apply the patch
+        apply()
 
-    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
+    def unapply(
+        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
+    ):
         raise NotImplementedError()

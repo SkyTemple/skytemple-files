@@ -324,15 +324,17 @@ class Ssb:
                                 param = -0x10000 + param
                             new_params.append(param)
                         elif argument_spec.type in ENUM_ARGUMENTS:
-                            const_data = getattr(self._scriptdata, ENUM_ARGUMENTS[argument_spec.type])
+                            const_data = getattr(
+                                self._scriptdata, ENUM_ARGUMENTS[argument_spec.type]
+                            )
                             if param in const_data:
                                 new_params.append(
-                                    SsbConstant.create_for(
-                                        const_data[param]
-                                    )
+                                    SsbConstant.create_for(const_data[param])
                                 )
                             else:
-                                logger.warning(f"Unknown {argument_spec.type} id: {param}")
+                                logger.warning(
+                                    f"Unknown {argument_spec.type} id: {param}"
+                                )
                                 new_params.append(param)
                         elif (
                             argument_spec.type == "String"

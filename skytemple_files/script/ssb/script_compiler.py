@@ -377,9 +377,12 @@ class ScriptCompiler:
                 raise SsbCompilerError(str(err)) from err
 
         if isinstance(param, SsbOpParamConstString):
-            i = len(built_constants)
-            built_constants.append(param.name)
-            return i
+            try:
+                return build_constants.index(param.name)
+            except:
+                i = len(built_constants)
+                built_constants.append(param.name)
+                return i
 
         if isinstance(param, SsbOpParamLanguageString):
             i = len(built_strings[next(iter(built_strings.keys()))])

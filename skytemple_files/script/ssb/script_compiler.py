@@ -378,7 +378,7 @@ class ScriptCompiler:
 
         if isinstance(param, SsbOpParamConstString):
             try:
-                return build_constants.index(param.name)
+                return built_constants.index(param.name)
             except:
                 i = len(built_constants)
                 built_constants.append(param.name)

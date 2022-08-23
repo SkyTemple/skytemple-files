@@ -1,4 +1,4 @@
-; PMD EOS - Complete Team Control Code v1.2.3
+; PMD EOS - Complete Team Control Code v1.2.4
 ; Made by Cipnit
 ; https://www.pokecommunity.com/showthread.php?t=437108
 ; Build this file using armips: https://github.com/Kingcom/armips
@@ -183,6 +183,7 @@
 	push r0
 	cmp r1,34h		;farewell decision
 	cmpne r1,3Bh	;change leader decision
+	cmpne r1,1Ah	;tactics decision, screws with turn order for some reason
 	bne @@paranoiaagent_nvm
 	ldr r0,=@ManualModeOn
 	ldrb r0,[r0]

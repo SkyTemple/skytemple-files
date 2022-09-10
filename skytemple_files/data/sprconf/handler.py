@@ -35,7 +35,7 @@ class SprconfHandler(DataHandler[SprconfType]):
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> SprconfType:
-        sprconf = {}
+        sprconf: SprconfType = {}
         for k, v in json.loads(str(data, "utf-8")).items():
             sprconf[int(k)] = {}
             for kk, vv in v.items():

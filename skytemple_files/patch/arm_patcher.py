@@ -246,4 +246,4 @@ def binary_path_to_name(path: str) -> str:
     if matches is not None:
         return f"overlay{int(matches.group(1))}"
     else:
-        return path.removesuffix(".bin")
+        return path.replace(".bin", "")

@@ -29,6 +29,7 @@ from __future__ import annotations
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import asyncio
+import logging
 import os.path
 import tempfile
 from dataclasses import dataclass, field
@@ -48,11 +49,13 @@ from typing import (
     Union,
     cast,
     overload,
+    Sequence,
 )
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from zipfile import ZipFile
 
+import PIL
 from gql import Client
 from gql.client import AsyncClientSession
 from gql.dsl import DSLField, DSLFragment, DSLQuery, DSLSchema, dsl_gql
@@ -84,8 +87,12 @@ from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 from skytemple_files.graphics.kao.sprite_bot_sheet import SpriteBotSheet
 
 # This is the default "canonical" SpriteCollab server.
-DEFAULT_SERVER = "https://spriteserver.pmdcollab.org/graphql"
+# We use http by default due to some ssl issues with PyInstaller.
+DEFAULT_SERVER = "http://spriteserver.pmdcollab.org/graphql"
 EMOTION_NORMAL = "Normal"
+
+
+logger = logging.getLogger(__name__)
 
 
 T = TypeVar("T")
@@ -304,7 +311,7 @@ class SpriteCollabSession:
                     "monster_id": monster["id"],
                     "form_path": form["path"],
                     "monster_name": monster["name"],
-                    "full_form_name": form["fullName"],
+                    "full_form_name": f'{monster["name"]} {form["fullName"]}',
                     "shiny": form["isShiny"],
                     "female": form["isFemale"],
                     "canon": form["canon"],
@@ -398,7 +405,7 @@ class SpriteCollabSession:
                 monster_id=monster["id"],
                 form_path=form["path"],
                 monster_name=monster["name"],
-                full_form_name=form["fullName"],
+                full_form_name=f'{monster["name"]} {form["fullName"]}',
                 shiny=form["isShiny"],
                 female=form["isFemale"],
                 canon=form["canon"],
@@ -449,7 +456,7 @@ class SpriteCollabSession:
         )
 
     async def fetch_portraits(
-        self, monsters_and_forms: List[Tuple[int, str]]
+        self, monsters_and_forms: Sequence[Tuple[int, str]]
     ) -> List[List[Optional[KaoImageProtocol]]]:
         """
         Fetch portraits for the given forms. `monsters_and_forms` is a list of tuples, where the first entry is the
@@ -463,21 +470,33 @@ class SpriteCollabSession:
         """
 
         async def process_form(
-            _idx: int, _monster: Monster_Metadata, form: MonsterForm
+            idx: int, _monster: Monster_Metadata, form: MonsterForm
         ) -> List[Optional[KaoImageProtocol]]:
             kao = FileType.KAO.new(1)
 
-            with tempfile.NamedTemporaryFile() as tmp:
+            with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
 
                 portrait_sheet = await self._request_adapter.fetch_bin(
                     form["portraits"]["sheetUrl"]
                 )
                 tmp.write(portrait_sheet)
+                tmp.flush()
 
                 this_sheet: List[Optional[KaoImageProtocol]] = [None] * 40
-                for subindex, image in SpriteBotSheet.load(tmp.name, lambda *args: ""):
-                    kao.set_from_img(0, subindex, image)
-                    this_sheet[subindex] = kao.get(0, subindex)
+                try:
+                    for subindex, image in SpriteBotSheet.load(
+                        tmp.name, lambda *args: ""
+                    ):
+                        kao.set_from_img(0, subindex, image)
+                        this_sheet[subindex] = kao.get(0, subindex)
+                except PIL.UnidentifiedImageError as ex:
+                    with open(tmp.name, "rb") as f:
+                        logger.error(
+                            f"Error trying to read downloaded sprite sheet for "
+                            f"{monsters_and_forms[idx]} (could not be identified). "
+                            f"Content of file: {f.read()!r}"
+                        )
+                    raise ex
 
                 return this_sheet
 
@@ -495,16 +514,17 @@ class SpriteCollabSession:
 
     async def fetch_sprites(
         self,
-        monsters_and_forms: List[Tuple[int, str]],
+        monsters_and_forms: Sequence[Tuple[int, str]],
         actions: List[Optional[List[str]]],
         copy_to_event_sleep_if_missing: bool = False,
-    ) -> List[Optional[Tuple[WanFile, Pmd2Sprite]]]:
+    ) -> List[Optional[Tuple[WanFile, Pmd2Sprite, int]]]:
         """
         Fetch sprites for the given forms. `monsters_and_forms` is a list of tuples, where the first entry is the
         monster ID and the second the form path.
 
         The sprites are converted into a merged WanFile. The returned list contains sprites for monsters in the same
-        order as `monsters_and_forms`.
+        order as `monsters_and_forms`. The tuples in the list contain the wan file, a single Pmd2Sprite with the action
+        mappings, and the shadow size.
 
         `actions` must be a list with one entry for each entry in `monsters_and_forms`. Each entry is a list of
         actions that should be imported (if they don't exist on SpriteCollab, they are ignored). Alternatively
@@ -523,7 +543,7 @@ class SpriteCollabSession:
 
         async def process_form(
             idx: int, monster: Monster_Metadata, form: MonsterForm
-        ) -> Optional[Tuple[WanFile, Pmd2Sprite]]:
+        ) -> Optional[Tuple[WanFile, Pmd2Sprite, int]]:
             actions_for_this_form = actions[idx]
             if actions_for_this_form is not None:
                 actions_for_this_form = [x.lower() for x in actions_for_this_form]
@@ -544,6 +564,7 @@ class SpriteCollabSession:
                     )
                 try:
                     root = ElementTree.parse(xml_path).getroot()
+                    shadow_size = int(root.find("ShadowSize").text)  # type: ignore
                     anims: List[Element] = root.find("Anims")  # type: ignore
                     sleep_found = None
                     event_sleep_found = None
@@ -576,8 +597,9 @@ class SpriteCollabSession:
                             wake_requested = wake_requested or name == "wake"
                             laying_requested = laying_requested or name == "laying"
                             new_actions.append(action)
-                            idx = int(action.find("Index").text)  # type: ignore
-                            action_indices[idx] = Pmd2Index(idx, [name_normal])
+                            if action.find("Index") is not None:
+                                idx = int(action.find("Index").text)  # type: ignore
+                                action_indices[idx] = Pmd2Index(idx, [name_normal])
                         else:
                             fname = os.path.join(tmp_dir, f"{name_normal}-Anim.png")
                             if os.path.exists(fname):
@@ -625,6 +647,7 @@ class SpriteCollabSession:
                 return (
                     CharaWanHandler.import_sheets(tmp_dir),
                     Pmd2Sprite(-1, action_indices),
+                    shadow_size,
                 )
 
         return await self._fetch_details(
@@ -647,7 +670,7 @@ class SpriteCollabSession:
 
     async def _fetch_details(
         self,
-        monsters_and_forms: List[Tuple[int, str]],
+        monsters_and_forms: Sequence[Tuple[int, str]],
         selector_fn: Callable[
             [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
@@ -773,7 +796,7 @@ class SpriteCollabSession:
     async def _fetch_details_multi_mons(
         self,
         monster_ids: Iterable[int],
-        monsters_and_forms: List[Tuple[int, str]],
+        monsters_and_forms: Sequence[Tuple[int, str]],
         fragments: Iterable[DSLFragment],
         sprite: DSLFragment,
         copy_of: DSLFragment,
@@ -852,7 +875,9 @@ class SpriteCollabClient:
 
         if isinstance(transport_or_schema, AsyncTransport):
             self._client = Client(
-                transport=transport_or_schema, fetch_schema_from_transport=True
+                transport=transport_or_schema,
+                fetch_schema_from_transport=True,
+                execute_timeout=120,
             )
         else:
             # Execute against local schema
@@ -869,7 +894,7 @@ class SpriteCollabClient:
         session = await self._client.__aenter__()
         if self._client.schema:
             ds = DSLSchema(self._client.schema)
-            self.flush_cache()
+            # self.flush_cache()
             self._session = SpriteCollabSession(session, ds, self._request_adapter)
             return self._session
         else:

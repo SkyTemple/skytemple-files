@@ -44,10 +44,10 @@ class AioRequestAdapter(ABC):
 
 class AioRequestAdapterImpl(AioRequestAdapter):
     async def fetch_bin(self, url: str) -> bytes:
-        async with aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=60)
-        ) as session:
-            async with session.get(url) as resp:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                url, timeout=aiohttp.ClientTimeout(total=120)
+            ) as resp:
                 resp.raise_for_status()
                 return await resp.read()
 

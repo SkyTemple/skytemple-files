@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -41,6 +42,7 @@ from skytemple_files.user_error import make_user_err
 ASM_ENTRYPOINT_FN = "__main.asm"
 Y9_BIN = "y9.bin"
 logger = logging.getLogger(__name__)
+EXPR_OVERLAY_PATH = re.compile(r"overlay/overlay_(\d+).bin")
 
 
 class PatchError(RuntimeError):
@@ -124,8 +126,10 @@ class ArmPatcher:
                 # Build binary blocks
                 if isinstance(patch, Pmd2Patch):
                     for open_bin in patch.open_bins:
-                        binary = binaries[open_bin.filepath]
-                        binary_path = binary_name_to_path(tmp, binary_name)
+                        binary = binaries[binary_path_to_name(open_bin.filepath)]
+                        binary_path = os.path.join(
+                            tmp, open_bin.filepath.split("/")[-1]
+                        )
                         os.makedirs(os.path.dirname(binary_path), exist_ok=True)
                         # Write binary to tmp dir
                         with open(binary_path, "wb") as fib:
@@ -211,7 +215,8 @@ class ArmPatcher:
                 else:
                     # Read opened binaries again
                     for open_bin in patch.open_bins:
-                        opened_binaries[open_bin.filepath] = binaries[open_bin.filepath]
+                        binary_name = binary_path_to_name(open_bin.filepath)
+                        opened_binaries[binary_name] = binaries[binary_name]
                 for binary_name, binary in opened_binaries.items():
                     binary_path = binary_name_to_path(tmp, binary_name)
                     with open(binary_path, "rb") as fib:
@@ -233,3 +238,12 @@ def binary_name_to_path(tmp_path: str, binary_name: str) -> str:
     if binary_name.startswith("overlay"):
         binary_name = "overlay_" + f"{int(binary_name[7:]):04}"
     return os.path.join(tmp_path, binary_name + ".bin")
+
+
+def binary_path_to_name(path: str) -> str:
+    """For compatibility with ppmdu binary names (prior SkyTemple 1.4)"""
+    matches = EXPR_OVERLAY_PATH.match(path)
+    if matches is not None:
+        return f"overlay{int(matches.group(1))}"
+    else:
+        return path.removesuffix(".bin")

@@ -45,6 +45,7 @@ class RomDataLoader:
         self.load_level_list_into(config_load_into, ignore_not_supported=True)
         self.load_object_list_into(config_load_into, ignore_not_supported=True)
         self.load_item_categories_into(config_load_into)
+        self.load_sprconf_into(config_load_into)
 
     def load_actor_list_into(
         self, config_load_into: "Pmd2Data", ignore_not_supported=False
@@ -103,3 +104,15 @@ class RomDataLoader:
 
         for category in config_load_into.dungeon_data.item_categories.values():
             category.items = cats[category]
+
+    def load_sprconf_into(self, config_load_into: Pmd2Data):
+        """Loads the overrides in the MONSTER/sprconf.json into the configuration."""
+        from skytemple_files.common.ppmdu_config.data import Pmd2Sprite, Pmd2Index
+        from skytemple_files.common.types.file_types import FileType
+
+        sprconf = FileType.SPRCONF.load(self.rom, create=False)
+        for idx, config in sprconf.items():
+            indices: Dict[int, Pmd2Index] = {}
+            for idx_index, index in config.items():
+                indices[idx_index] = Pmd2Index(idx_index, index)
+            config_load_into.animation_names[idx] = Pmd2Sprite(idx, indices)

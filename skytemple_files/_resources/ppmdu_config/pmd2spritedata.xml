@@ -1,4 +1,10 @@
 <PMD2>
+  <!--
+  These are the animation names for each index for each monster.
+  This is the default configuration. A ROM may contain a sprconf.json in the MONSTER
+  directory which may override the data below. It is imported by the rom_data.loader
+  module.
+  -->
   <AnimationNames>
     <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
       <Sprite id="0">

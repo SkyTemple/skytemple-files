@@ -56,6 +56,7 @@ from skytemple_files.data.item_s_p.handler import ItemSPHandler
 from skytemple_files.data.level_bin_entry.handler import LevelBinEntryHandler
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md_evo.handler import MdEvoHandler
+from skytemple_files.data.sprconf.handler import SprconfHandler
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.data.waza_p.handler import WazaPHandler
@@ -191,6 +192,8 @@ class FileType:
     DBIN_SIR0_IMG_ITM = ImgItmHandler
     DBIN_SIR0_IMG_TRP = ImgTrpHandler
     DBIN_SIR0_ZMAPPAT = ZMappaTHandler
+
+    SPRCONF = SprconfHandler
 
     # Please don't use these directly, use them via the ppmdu_config instead!
     # (skytemple_files.common.util.get_ppmdu_config_for_rom).

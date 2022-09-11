@@ -202,7 +202,8 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
             self.assertEqual(result, QUERY_API_VERSION_FIX)
 
     def assertSpritesEqual(
-        self, expected_dir: str, sprite: Optional[WanFile], sprite_names: Pmd2Sprite
+        self, expected_dir: str,
+        sprite: Optional[WanFile], sprite_names: Pmd2Sprite, _shadow_size: int
     ):
         self.assertIsNotNone(sprite)
         with tempfile.TemporaryDirectory() as tempdir:

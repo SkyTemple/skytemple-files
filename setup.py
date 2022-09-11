@@ -52,7 +52,7 @@ setup(
             "gql[aiohttp] >= 3.3.0",
             "graphql-core >= 3.2.0",
             "aiohttp[speedups] >= 3.8.0",
-            "lru-dict >= 1.1.0"
+            "lru-dict >= 1.1.8"
         ]
     },
     entry_points='''

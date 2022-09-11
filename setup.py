@@ -51,7 +51,8 @@ setup(
         'spritecollab': [
             "gql[aiohttp] >= 3.3.0",
             "graphql-core >= 3.2.0",
-            "aiohttp[speedups] >= 3.8.0",
+            # TODO: Add speedups extra again if cchardet is no longer required by it
+            "aiohttp >= 3.8.0",
             "lru-dict >= 1.1.8"
         ]
     },

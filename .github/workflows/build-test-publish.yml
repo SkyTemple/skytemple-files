@@ -272,9 +272,9 @@ jobs:
         with:
           name: wheels
       - name: Set up Python 3.10
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.10
+          python-version: "3.10"
       - name: Upgrade pip and install Twine
         run: |
           python -m pip install --upgrade pip

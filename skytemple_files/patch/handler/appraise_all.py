@@ -135,20 +135,20 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
                 bin_before = rom.getFileByName(filename)
                 strings = StrHandler.deserialize(bin_before)
                 strings.strings[
-                    param["MenuOptionStringID"] - 1
+                    int(param["MenuOptionStringID"]) - 1
                 ] = get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))
                 strings.strings[
-                    param["AppraiseAllConfirmStringID"] - 1
+                    int(param["AppraiseAllConfirmStringID"]) - 1
                 ] = get_locales().translate(
                     APPRAISE_ALL_CONFIRM, lang.locale.replace("-", "_")
                 )
                 strings.strings[
-                    param["AppraiseRevealBeforeStringID"] - 1
+                    int(param["AppraiseRevealBeforeStringID"]) - 1
                 ] = get_locales().translate(
                     APPRAISE_REVEAL_BEFORE, lang.locale.replace("-", "_")
                 )
                 strings.strings[
-                    param["AppraiseRevealItemStringID"] - 1
+                    int(param["AppraiseRevealItemStringID"]) - 1
                 ] = get_locales().translate(
                     APPRAISE_REVEAL_ITEM, lang.locale.replace("-", "_")
                 )

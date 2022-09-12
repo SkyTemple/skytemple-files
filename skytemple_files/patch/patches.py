@@ -53,6 +53,7 @@ from skytemple_files.patch.handler.add_type import AddTypePatchHandler
 from skytemple_files.patch.handler.allow_unrecruitable_mons import (
     AllowUnrecruitableMonsPatchHandler,
 )
+from skytemple_files.patch.handler.appraise_all import AppraiseAllPatchHandler
 from skytemple_files.patch.handler.bold_text import (
     BoldTextPatchHandler,
 )
@@ -136,6 +137,7 @@ class PatchType(Enum):
     EXTRACT_DUNGEON_DATA = ExtractDungeonDataPatchHandler
     FIX_EVOLUTION = FixEvolutionPatchHandler
     EXP_SHARE = ExpSharePatchHandler
+    APPRAISE_ALL = AppraiseAllPatchHandler
     CHOOSE_STARTER = ChooseStarterPatchHandler
     SKIP_QUIZ = SkipQuizPatchHandler
     DUNGEON_INTERRUPT = DungeonInterruptPatchHandler

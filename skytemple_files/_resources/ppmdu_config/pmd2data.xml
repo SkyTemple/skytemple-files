@@ -708,15 +708,33 @@
             <Param name="PercentageShared" label="% of exp. shared" min="0" max="255" default="100" type="int"/>
           </Parameters>
         </Patch>
+        
+        <!-- A patch to let the player appraise all their boxes -->
+        <Patch id="AppraiseAll">
+          <OpenBin filepath="overlay/overlay_0025.bin">
+            <Include filename ="anonymous_asm_mods/appraise_all/selector_overlay25.asm"/>
+          </OpenBin>
+          <Parameters>
+            <Param name="MenuOptionStringID" label="String ID for the Menu Option" min="0" max="65535" default="300" type="int"/>
+            <Param name="AppraiseAllConfirmStringID" label="String ID to confirm the appraise all" min="0" max="65535" default="301" type="int"/>
+            <Param name="AppraiseRevealBeforeStringID" label="String ID before revealing the items" min="0" max="65535" default="302" type="int"/>
+            <Param name="AppraiseRevealItemStringID" label="String ID when revealing an item" min="0" max="65535" default="303" type="int"/>
+            <Param name="ReplaceStrings" label="All strings mentioned above are replaced by a default text when applying" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+            <Param name="BoxCost" label="Cost of each Treasure Box (Only for Appraise All option)" min="0" max="65535" default="150" type="int"/>
+          </Parameters>
+        </Patch>
 
-        <!-- A patch to let the player choose its starter after the quiz -->
+        <!-- A patch to let the player choose their starter after the quiz -->
         <Patch id="ChooseStarter" >
           <OpenBin filepath="overlay/overlay_0013.bin">
 	  	<Include filename ="anonymous_asm_mods/choose_starter/selector_overlay13.asm"/>
 	  </OpenBin>
         </Patch>
 
-        <!-- A patch to let the player choose its starter after the quiz -->
+        <!-- A patch to let the player skip the quiz -->
         <Patch id="SkipQuiz" >
           <OpenBin filepath="overlay/overlay_0013.bin">
 	  	<Include filename ="anonymous_asm_mods/skip_quiz/selector_overlay13.asm"/>

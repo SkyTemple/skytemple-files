@@ -474,13 +474,14 @@ class SpriteCollabSession:
         ) -> List[Optional[KaoImageProtocol]]:
             kao = FileType.KAO.new(1)
 
-            with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
+            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
 
                 portrait_sheet = await self._request_adapter.fetch_bin(
                     form["portraits"]["sheetUrl"]
                 )
                 tmp.write(portrait_sheet)
                 tmp.flush()
+                tmp.close()
 
                 this_sheet: List[Optional[KaoImageProtocol]] = [None] * 40
                 try:
@@ -497,6 +498,11 @@ class SpriteCollabSession:
                             f"Content of file: {f.read()!r}"
                         )
                     raise ex
+                finally:
+                    try:
+                        os.unlink(tmp.name)
+                    except Exception as ex:
+                        logger.warning(f"Failed to remove temporary file {tmp}: {type(ex)}: {ex}")
 
                 return this_sheet
 

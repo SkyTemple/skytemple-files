@@ -502,7 +502,9 @@ class SpriteCollabSession:
                     try:
                         os.unlink(tmp.name)
                     except Exception as ex:
-                        logger.warning(f"Failed to remove temporary file {tmp}: {type(ex)}: {ex}")
+                        logger.warning(
+                            f"Failed to remove temporary file {tmp}: {type(ex)}: {ex}"
+                        )
 
                 return this_sheet
 

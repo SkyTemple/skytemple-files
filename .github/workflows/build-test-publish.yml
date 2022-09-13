@@ -169,7 +169,6 @@ jobs:
   test_with_rom:
     # This uses a self-hosted runner with access to the ROM at /rom.nds.
     runs-on: ["self-hosted", "romtests"]
-    needs: cache
     name: Runs tests with real ROM
     strategy:
       fail-fast: false
@@ -184,10 +183,6 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - uses: actions/cache@v2
-      with:
-        path: ${{ env.pythonLocation }}
-        key: py${{ matrix.python-version }}-${{ github.run_id }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

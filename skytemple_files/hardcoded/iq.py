@@ -222,7 +222,7 @@ class HardcodedIq:
     def set_iq_skills(
         value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
-        block = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
+        block = config.bin_sections.arm9.data.IQ_SKILLS
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
         assert block_restr.length is not None

@@ -19,7 +19,7 @@ from __future__ import annotations
 from typing import List
 
 from ndspy.rom import NintendoDSRom
-from pmdsky_debug_py.protocol import SectionProtocol
+from pmdsky_debug_py.protocol import SectionProtocol, Symbol
 from range_typed_integers import u32, u32_checked
 
 from skytemple_files.common import string_codec
@@ -42,13 +42,13 @@ class ListExtractor:
     ):
         self._rom = rom
         self._out_path = spec.filepath
-        self._key = spec.srcdata
+        self._key = spec.srcdata.upper()
         self._binary = binary
         if not hasattr(self._binary.data, self._key):
             raise ValueError(
                 "The source data block for the patch was not found in the configuration."
             )
-        self._block = getattr(self._binary.data, self._key)
+        self._block: Symbol = getattr(self._binary.data, self._key)
 
     def extract(
         self, entry_len: int, string_offs_per_entry: List[int], write_subheader=True
@@ -58,7 +58,7 @@ class ListExtractor:
             binary = get_binary_from_rom(self._rom, self._binary)
             data = self._wrap_sir0(
                 binary,
-                binary[self._block.begin : self._block.end],
+                binary[self._block.address : (self._block.address + self._block.length)],
                 entry_len,
                 string_offs_per_entry,
                 write_subheader,

@@ -58,7 +58,9 @@ class ListExtractor:
             binary = get_binary_from_rom(self._rom, self._binary)
             data = self._wrap_sir0(
                 binary,
-                binary[self._block.address : (self._block.address + self._block.length)],
+                binary[
+                    self._block.address : (self._block.address + self._block.length)
+                ],
                 entry_len,
                 string_offs_per_entry,
                 write_subheader,

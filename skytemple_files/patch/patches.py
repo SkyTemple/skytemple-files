@@ -53,6 +53,7 @@ from skytemple_files.patch.handler.add_type import AddTypePatchHandler
 from skytemple_files.patch.handler.allow_unrecruitable_mons import (
     AllowUnrecruitableMonsPatchHandler,
 )
+from skytemple_files.patch.handler.anti_softlock import AntiSoftlockPatchHandler
 from skytemple_files.patch.handler.appraise_all import AppraiseAllPatchHandler
 from skytemple_files.patch.handler.bold_text import (
     BoldTextPatchHandler,
@@ -173,6 +174,7 @@ class PatchType(Enum):
     FIX_NOCASH_SAVES = FixNocashSavesPatchHandler
     BOLD_TEXT = BoldTextPatchHandler
     CHANGE_TEXT_SOUND = ChangeTextSoundPatchHandler
+    ANTI_SOFTLOCK = AntiSoftlockPatchHandler
 
 
 class Patcher:

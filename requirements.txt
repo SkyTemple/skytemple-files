@@ -6,7 +6,7 @@ Pillow==9.2.0
 appdirs==1.4.4
 explorerscript==0.1.1
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
-tilequant==0.4.0.post0
+tilequant==0.4.1
 dungeon-eos==0.0.5
 gql[aiohttp]==3.4.0
 graphql-core>=3.2.0

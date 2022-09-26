@@ -1,5 +1,5 @@
 # mypy: ignore-errors
-__version__ = '1.4.0a4'
+__version__ = '1.4.0'
 import os
 
 from setuptools import setup, find_packages
@@ -41,7 +41,7 @@ setup(
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
         'explorerscript >= 0.1.1',
-        'skytemple-rust >= 1.4.0a2',
+        'skytemple-rust >= 1.4.0',
         'tilequant >= 0.4.1',
         'pyobjc==8.5.1; sys_platform == "darwin"',
         'dungeon-eos==0.0.5',

@@ -34,7 +34,7 @@ setup(
     long_description_content_type='text/x-rst',
     url='https://github.com/SkyTemple/skytemple-files/',
     install_requires=[
-        'pmdsky-debug-py == 3.0.4',
+        'pmdsky-debug-py == 3.0.5',
         'ndspy >= 3.0.0',
         'pyyaml >= 6.0.0',
         'range-typed-integers >= 1.0.1',

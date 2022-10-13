@@ -61,6 +61,7 @@ from range_typed_integers import (
 from skytemple_files.common import string_codec
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
+from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 from skytemple_files.user_error import UserValueError
 
 if TYPE_CHECKING:
@@ -78,11 +79,23 @@ DUNGEON_BIN = "DUNGEON/dungeon.bin"
 OVERLAY_RE = re.compile(r"overlay(\d+)", re.IGNORECASE)
 
 DEBUG = False
-_READ_WRITE_DEPRECATION_WARNING = (
-    "The functions read_{s|u}int{be|le} and write_{s|u}int{be|le} are deprecated. "
-    "Use the specific read/write functions instead."
-)
 logger = logging.getLogger(__name__)
+
+
+# Explicit re-exports for backwards-compatibility
+# noinspection PyUnresolvedReferences
+from skytemple_files.common.compat_13x import (  # nopycln: import
+    read_sintbe,
+    read_sintle,
+    read_uintbe,
+    read_uintle,
+    write_sintbe,
+    write_sintle,
+    write_uintbe,
+    write_uintle,
+    get_binary_from_rom_ppmdu,
+    set_binary_in_rom_ppmdu,
+)
 
 
 class CapturableProtocol(Protocol):
@@ -173,62 +186,6 @@ def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     return data[start : (start + length)]
 
 
-def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
-    """
-    Return an unsigned integer in little endian from the bytes-like object at the given position.
-    Recommended usage with memoryview for performance!
-
-    .. deprecated:: 1.4.0
-           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
-           Use read_dynamic if you need a varying length.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    return int.from_bytes(
-        data[start : (start + length)], byteorder="little", signed=False
-    )
-
-
-def read_sintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:
-    """
-    Return a signed integer in little endian from the bytes-like object at the given position.
-    Recommended usage with memoryview for performance!
-
-    .. deprecated:: 1.4.0
-           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
-           Use read_dynamic if you need a varying length.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    return int.from_bytes(
-        data[start : (start + length)], byteorder="little", signed=True
-    )
-
-
-def read_uintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
-    """
-    Return an unsigned integer in big endian from the bytes-like object at the given position.
-    Recommended usage with memoryview for performance!
-
-    .. deprecated:: 1.4.0
-           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
-           Use read_dynamic if you need a varying length.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    return int.from_bytes(data[start : (start + length)], byteorder="big", signed=False)
-
-
-def read_sintbe(data: ByteReadable, start: int = 0, length: int = 1) -> int:
-    """
-    Return a signed integer in big endian from the bytes-like object at the given position.
-    Recommended usage with memoryview for performance!
-
-    .. deprecated:: 1.4.0
-           Use the more specific read_* (read_i8, read_u16, etc.) functions instead.
-           Use read_dynamic if you need a varying length.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    return int.from_bytes(data[start : (start + length)], byteorder="big", signed=True)
-
-
 def read_dynamic(
     data: ByteReadable, start: int = 0, *, length: int, signed: bool, big_endian: bool
 ) -> int:
@@ -312,66 +269,6 @@ def read_var_length_string(
             bytes_of_string.append(current_byte)
 
     return cursor - start, str(bytes_of_string, codec)
-
-
-def write_uintle(
-    data: bytearray, to_write: int, start: int = 0, length: int = 1
-) -> None:
-    """
-    Write an unsigned integer in little endian to the bytes-like mutable object at the given position.
-
-    .. deprecated:: 1.4.0
-           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    data[start : start + length] = to_write.to_bytes(
-        length, byteorder="little", signed=False
-    )
-
-
-def write_sintle(
-    data: bytearray, to_write: int, start: int = 0, length: int = 1
-) -> None:
-    """
-    Write a signed integer in little endian to the bytes-like mutable object at the given position.
-
-    .. deprecated:: 1.4.0
-           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    data[start : start + length] = to_write.to_bytes(
-        length, byteorder="little", signed=True
-    )
-
-
-def write_uintbe(
-    data: bytearray, to_write: int, start: int = 0, length: int = 1
-) -> None:
-    """
-    Write an unsigned integer in big endian to the bytes-like mutable object at the given position.
-
-    .. deprecated:: 1.4.0
-           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    data[start : start + length] = to_write.to_bytes(
-        length, byteorder="big", signed=False
-    )
-
-
-def write_sintbe(
-    data: bytearray, to_write: int, start: int = 0, length: int = 1
-) -> None:
-    """
-    Write a signed integer in big endian to the bytes-like mutable object at the given position.
-
-    .. deprecated:: 1.4.0
-           Use the more specific write_* (write_i8, write_u16, etc.) functions instead.
-    """
-    warnings.warn(_READ_WRITE_DEPRECATION_WARNING, DeprecationWarning)
-    data[start : start + length] = to_write.to_bytes(
-        length, byteorder="big", signed=True
-    )
 
 
 def write_u8(data: bytearray, to_write: u8, start: int = 0):
@@ -845,6 +742,7 @@ class EnumCompatibleInt(int):
     """For backwards compatibility"""
 
     _DEPR_WARN = "This (formerly '{}') is now an int and should no longer be used like an enum instance."
+    _DEPR_VER = (1, 5, 0)
 
     # noinspection PyAttributeOutsideInit
     def former(self, f: str) -> None:
@@ -854,8 +752,9 @@ class EnumCompatibleInt(int):
     @property
     def value(self) -> int:
         warnings.warn(
-            self._DEPR_WARN.format(self._former),
-            category=DeprecationWarning,
+            DeprecatedToBeRemovedWarning(
+                self._DEPR_WARN.format(self._former), self._DEPR_VER
+            ),
             stacklevel=2,
         )
         logger.warning(self._DEPR_WARN.format(self._former))
@@ -864,8 +763,9 @@ class EnumCompatibleInt(int):
     @property
     def name(self) -> str:
         warnings.warn(
-            self._DEPR_WARN.format(self._former),
-            category=DeprecationWarning,
+            DeprecatedToBeRemovedWarning(
+                self._DEPR_WARN.format(self._former), self._DEPR_VER
+            ),
             stacklevel=2,
         )
         logger.warning(self._DEPR_WARN.format(self._former))

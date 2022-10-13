@@ -29,6 +29,7 @@ from range_typed_integers import i16, u8, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import AutoString
+from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 
 
 class GameVariableType(IntEnum):
@@ -306,7 +307,10 @@ class Pmd2ScriptDirection(AutoString):
         """
         For backwards compatibility.
         """
-        warnings.warn("Please use self.ssa_id instead.", DeprecationWarning)
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Please use self.ssa_id instead.", (1, 5, 0)),
+            stacklevel=2,
+        )
         return self.ssa_id
 
     @property

@@ -25,7 +25,9 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Union
 
 import pmdsky_debug_py
+from pmdsky_debug_py.protocol import SectionProtocol
 
+from skytemple_files.common.compat_13x import _DeprecatedBinaries
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData
 from skytemple_files.common.ppmdu_config.pmdsky_debug.extras import (
     ExtraAllSymbolsProtocol,
@@ -309,6 +311,9 @@ class Pmd2Data(AutoString):
             self.extra_bin_sections = ExtraEuSections  # type: ignore
         if self.game_region == GAME_REGION_JP:
             self.extra_bin_sections = ExtraJpSections  # type: ignore
+
+        # Backwards compatibility, deprecated
+        self.binaries = _DeprecatedBinaries(self)
 
     @staticmethod
     def get_region_constant_for_region_name(region: str) -> str:

@@ -349,7 +349,7 @@ class Patcher:
             parameter_values,
         )
 
-    def add_pkg(self, path: str, is_zipped: bool = True) -> None:
+    def add_pkg(self, path: str, is_zipped: bool = True) -> AbstractPatchHandler:
         """Loads a skypatch file. Raises PatchPackageError on error."""
         tmpdir = TemporaryDirectory()
         self._created_tmpdirs.append(tmpdir)
@@ -412,6 +412,7 @@ class Patcher:
                     "in the config.xml."
                 )
             ) from ex
+        return handler
 
     def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str) -> None:
         # Try to find the patch in the config

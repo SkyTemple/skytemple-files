@@ -246,7 +246,7 @@ class _DeprecatedBinaries:
     def __init__(self, parent: Pmd2Data):
         self._parent = parent
 
-    def __get__(self, obj, objtype=None):
+    def __getitem__(self, item) -> _DeprecatedBinaryProxy:
         warnings.warn(
             DeprecatedToBeRemovedWarning(
                 "The `binaries` attribute of `Pmd2Data` is deprecated. "
@@ -257,9 +257,7 @@ class _DeprecatedBinaries:
             ),
             stacklevel=2,
         )
-        return self
 
-    def __getitem__(self, item) -> _DeprecatedBinaryProxy:
         parts = item.split("/")
         if parts[0] == "arm9.bin":
             return _DeprecatedBinaryProxy(self._parent.bin_sections.arm9)

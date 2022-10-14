@@ -22,7 +22,7 @@ Replace the following code...:
     from skytemple_files.common.util import read_uintle
 
     def do_something(data: bytes):
-        output = read_uintle(data, 0, 2)
+        output = read_uintle(data, 0x12, 2)
 
 ...with:
 
@@ -119,7 +119,7 @@ We recommend you phase out the backwards compatibility after the release of SkyT
             # SkyTemple Files < 1.4
             # NOW import old functions.
             from skytemple_files.common.util import read_uintle, get_binary_from_rom_ppmdu
-            output = read_uintle(data, 0, 2)
+            output = read_uintle(data, 0x12, 2)
             binary_data = get_binary_from_rom_ppmdu(rom, config.binaries['overlay/overlay_0029.bin'])
 
 .. note::

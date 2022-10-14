@@ -181,7 +181,9 @@ def write_sintbe(
     )
 
 
-def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: _DeprecatedBinaryProxy) -> bytearray:
+def get_binary_from_rom_ppmdu(
+    rom: NintendoDSRom, binary: _DeprecatedBinaryProxy
+) -> bytearray:
     """
     .. deprecated:: 1.4.0
         This was used in SkyTemple 1.3.x and prior to get a binary from the ROM using values
@@ -202,6 +204,7 @@ def get_binary_from_rom_ppmdu(rom: NintendoDSRom, binary: _DeprecatedBinaryProxy
         stacklevel=2,
     )
     from skytemple_files.common.util import get_binary_from_rom
+
     return get_binary_from_rom(rom, binary.bin_section)
 
 
@@ -228,6 +231,7 @@ def set_binary_in_rom_ppmdu(
         stacklevel=2,
     )
     from skytemple_files.common.util import set_binary_in_rom
+
     set_binary_in_rom(rom, binary.bin_section, data)
 
 
@@ -261,8 +265,6 @@ class _DeprecatedBinaries:
         parts = item.split("/")
         if parts[0] == "arm9.bin":
             return _DeprecatedBinaryProxy(self._parent.bin_sections.arm9)
-        if parts[0] == "arm7.bin":
-            return _DeprecatedBinaryProxy(self._parent.bin_sections.arm7)
         if parts[0] == "overlay":
             if len(parts) > 1:
                 r = re.compile(r"overlay_(\d+).bin", re.IGNORECASE)
@@ -270,7 +272,11 @@ class _DeprecatedBinaries:
                 if match is not None:
                     ov_id = int(match.group(1))
                     if ov_id == 36:
-                        return _DeprecatedBinaryProxy(self._parent.extra_bin_sections.overlay36)
+                        return _DeprecatedBinaryProxy(
+                            self._parent.extra_bin_sections.overlay36  # type: ignore
+                        )
                     elif hasattr(self._parent.bin_sections, f"overlay{ov_id}"):
-                        return _DeprecatedBinaryProxy(getattr(self._parent.bin_sections, f"overlay{ov_id}"))
+                        return _DeprecatedBinaryProxy(
+                            getattr(self._parent.bin_sections, f"overlay{ov_id}")
+                        )
         raise KeyError(item)

@@ -25,7 +25,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Union
 
 import pmdsky_debug_py
-from pmdsky_debug_py.protocol import SectionProtocol
 
 from skytemple_files.common.compat_13x import _DeprecatedBinaries
 from skytemple_files.common.ppmdu_config.dungeon_data import Pmd2DungeonData

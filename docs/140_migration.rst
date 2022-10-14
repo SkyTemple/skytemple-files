@@ -51,13 +51,14 @@ The following things have been removed:
 
 The following functionality has been deprecated (will raise deprecation warnings and will be removed in
 SkyTemple Files 1.6.0):
+
 - Retrieving `Pmd2Data.binaries`.
 - `get_binary_from_rom_ppmdu` and `set_binary_in_rom_ppmdu`. However right now they work just as before,
   taking in a value from an item of `Pmd2Data.binaries`.
 
 Replacements:
-- Use binary and symbol information of pmdsky-debug-py, provided via `Pmd2Data.bin_sections` and
-  `Pmd2Data.extra_bin_sections` (for SkyTemple extensions, such as info on overlay 36).
+
+- Use binary and symbol information of pmdsky-debug-py, provided via `Pmd2Data.bin_sections` and `Pmd2Data.extra_bin_sections` (for SkyTemple extensions, such as info on overlay 36).
 - Use `get_binary_in_rom` and `set_binary_in_rom`. These use the before mentioned pmdsky-debug-py references.
 
 Example

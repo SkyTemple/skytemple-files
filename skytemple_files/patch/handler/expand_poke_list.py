@@ -28,6 +28,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
@@ -246,9 +247,9 @@ and to save a backup of your ROM before applying this."""
             md_bin = rom.getFileByName("BALANCE/monster.md")
             md_model = MdHandler.deserialize(md_bin)
             new_entries = list(md_model.entries)
-            while len(md_model.entries) < NUM_NEW_ENTRIES:
+            while len(new_entries) < NUM_NEW_ENTRIES:
                 new_entries.append(
-                    MdEntryProtocol.new_empty(u16_checked(len(new_entries)))
+                    FileType.MD.get_entry_model_cls().new_empty(u16_checked(len(new_entries)))
                 )
             for i in range(NUM_PREVIOUS_ENTRIES):
                 new_entries[i].entid = i
@@ -365,7 +366,8 @@ and to save a backup of your ROM before applying this."""
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
                 )  # Max Moveset
-            waza_p_model.learnsets += waza_p_model.learnsets
+            for new_moveset in waza_p_model.learnsets:
+                waza_p_model.learnsets.append(new_moveset)
             while len(waza_p_model.learnsets) < NUM_NEW_ENTRIES:
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
@@ -381,7 +383,8 @@ and to save a backup of your ROM before applying this."""
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]
                 )  # Max Moveset
-            waza_p_model.learnsets += waza_p_model.learnsets
+            for new_moveset in waza_p_model.learnsets:
+                waza_p_model.learnsets.append(new_moveset)
             while len(waza_p_model.learnsets) < NUM_NEW_ENTRIES:
                 waza_p_model.learnsets.append(
                     waza_p_model.learnsets[DUMMY_LS]

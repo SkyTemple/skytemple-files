@@ -35,7 +35,7 @@ from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.level_bin_entry.model import LEVEL_BIN_ENTRY_LEVEL_LEN
 from skytemple_files.data.md.handler import MdHandler
-from skytemple_files.data.md.protocol import Gender, MdEntryProtocol
+from skytemple_files.data.md.protocol import Gender
 from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.md_evo.model import MdEvoEntry, MdEvoStats
@@ -249,7 +249,9 @@ and to save a backup of your ROM before applying this."""
             new_entries = list(md_model.entries)
             while len(new_entries) < NUM_NEW_ENTRIES:
                 new_entries.append(
-                    FileType.MD.get_entry_model_cls().new_empty(u16_checked(len(new_entries)))
+                    FileType.MD.get_entry_model_cls().new_empty(
+                        u16_checked(len(new_entries))
+                    )
                 )
             for i in range(NUM_PREVIOUS_ENTRIES):
                 new_entries[i].entid = i

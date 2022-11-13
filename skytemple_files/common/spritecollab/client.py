@@ -83,6 +83,7 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.graphics.chara_wan.handler import CharaWanHandler
 from skytemple_files.graphics.chara_wan.model import WanFile
+from skytemple_files.graphics.chara_wan.sheets import MAX_ANIMS
 from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 from skytemple_files.graphics.kao.sprite_bot_sheet import SpriteBotSheet
 
@@ -630,6 +631,9 @@ class SpriteCollabSession:
                         for (name, index) in names:
                             while index in action_indices.keys():
                                 index += 1
+                            if index >= MAX_ANIMS:
+                                # If we reached the max already, there isn't much we can do.
+                                break
                             new_action = Element("Anim")
                             e = Element("Name")
                             e.text = name

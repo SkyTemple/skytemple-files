@@ -96,9 +96,9 @@ class MenuType(Enum):
         1300,
         MenuDataType.NORMAL,
         "overlay13",
-        "UNKNOWN_MENU_1",
-        lambda: Overlay13DataProtocol.UNKNOWN_MENU_1,
-        _("Unknown Menu") + " 1",
+        "QUIZ_DEBUG_MENU",
+        lambda: Overlay13DataProtocol.QUIZ_DEBUG_MENU,
+        _("Quiz Debug Menu"),
     )
     FOOT_DEBUG_MENU_1 = (
         1400,
@@ -640,9 +640,9 @@ class MenuType(Enum):
         3400,
         MenuDataType.NORMAL,
         "overlay34",
-        "UNKNOWN_MENU_CONFIRM",
-        lambda: Overlay34DataProtocol.UNKNOWN_MENU_CONFIRM,
-        _("Unknown Menu Confirm"),
+        "START_MENU_CONFIRM",
+        lambda: Overlay34DataProtocol.START_MENU_CONFIRM,
+        _("Start Menu Confirm"),
     )
     DUNGEON_DEBUG_MENU = (
         3401,

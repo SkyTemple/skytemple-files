@@ -25,7 +25,7 @@ jobs:
         default: true
         override: true
         profile: minimal
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         # We do this per Run, since the requirements.txt contains references to Git repos that might have changed.
         path: ${{ env.pythonLocation }}
@@ -45,7 +45,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: py3.11-${{ github.run_id }}
@@ -68,7 +68,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ${{ env.pythonLocation }}
           key: py3.11-${{ github.run_id }}
@@ -87,7 +87,7 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - uses: actions/cache@v2
+    - uses: actions/cache@v3
       with:
         path: ${{ env.pythonLocation }}
         key: py3.11-${{ github.run_id }}

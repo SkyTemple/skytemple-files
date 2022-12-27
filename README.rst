@@ -7,7 +7,7 @@ SkyTemple Files
 
 .. |logo| image:: https://raw.githubusercontent.com/SkyTemple/skytemple/master/skytemple/data/icons/hicolor/256x256/apps/skytemple.png
 
-.. |build| image:: https://img.shields.io/github/workflow/status/SkyTemple/skytemple-files/Build,%20test%20and%20publish
+.. |build| image:: https://img.shields.io/github/actions/workflow/status/SkyTemple/skytemple-files/build-test-publish.yml
     :target: https://pypi.org/project/skytemple-files/
     :alt: Build Status
 

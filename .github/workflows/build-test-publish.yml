@@ -13,7 +13,7 @@ jobs:
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -40,7 +40,7 @@ jobs:
     needs: cache
     name: Pylint
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
@@ -63,7 +63,7 @@ jobs:
     needs: cache
     name: Code Format Check
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
@@ -82,7 +82,7 @@ jobs:
     needs: cache
     name: Check unused imports
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
@@ -107,7 +107,7 @@ jobs:
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: theCapypara/mypy-check@rust-support
       name: Run type checks
       with:
@@ -117,7 +117,7 @@ jobs:
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MyPy Test Results (Python ${{ matrix.python-version }})
         path: mypy.xml
@@ -132,7 +132,7 @@ jobs:
         python-version: [ "3.8", "3.9", "3.10", "3.11" ]
         native: [true, false]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
     - name: Set up Python ${{ matrix.python-version }}
@@ -161,7 +161,7 @@ jobs:
       working-directory: test
     - name: Upload Test Results
       if: always()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: "Pytest Test Results (Python ${{ matrix.python-version }} - Native ${{ matrix.native }})"
         path: test/pytest.xml
@@ -176,7 +176,7 @@ jobs:
 #        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
 #        native: [true, false]
 #    steps:
-#    - uses: actions/checkout@v2
+#    - uses: actions/checkout@v3
 #      with:
 #        submodules: 'recursive'
 #    - name: Set up Python ${{ matrix.python-version }}
@@ -203,7 +203,7 @@ jobs:
 #        SKYTEMPLE_TEST_ROM: /rom.nds
 #    - name: Upload Test Results
 #      if: always()
-#      uses: actions/upload-artifact@v2
+#      uses: actions/upload-artifact@v3
 #      with:
 #        name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native ${{ matrix.native }})"
 #        path: test/pytest.xml
@@ -236,7 +236,7 @@ jobs:
     steps:
       # For tags we assume the version in setup.py is correct!
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       - name: Rewrite version for dev if not tag
@@ -251,7 +251,7 @@ jobs:
         with:
           python-versions: 'cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311'
       - name: Upload wheels
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: dist/*.whl

@@ -109,8 +109,9 @@ class ArmPatcher:
                             try:
                                 fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
-                                if binary_name == "overlay36":
-                                    # SPECIAL CASE for ExtraSpace patch.
+                                if binary_name == "overlay36" and patch.id == "ExtraSpace":
+                                    # SPECIAL CASE for ExtraSpace patch, the overlay hasn't been added to the overlay
+                                    # table yet so get_binary_from_rom() fails.
                                     with open(OV_FILE_PATH, "rb") as ovfib:
                                         fib.write(ovfib.read())
                                 else:
@@ -224,12 +225,7 @@ class ArmPatcher:
                 for binary_name, binary in opened_binaries.items():
                     binary_path = binary_name_to_path(tmp, binary_name)
                     with open(binary_path, "rb") as fib:
-                        try:
-                            set_binary_in_rom(self.rom, binary, fib.read())
-                        except ValueError as err:
-                            if binary_name == "overlay36":
-                                continue  # We ignore if End's extra overlay is missing.
-                            raise err
+                        set_binary_in_rom(self.rom, binary, fib.read())
 
             except (PatchError, ArmipsNotInstalledError):
                 raise

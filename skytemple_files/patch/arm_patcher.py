@@ -37,6 +37,7 @@ from skytemple_files.common.util import (
     set_binary_in_rom,
     set_rw_permission_folder,
 )
+from skytemple_files.patch.handler.extra_space import OV_FILE_PATH
 from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = "__main.asm"
@@ -109,8 +110,11 @@ class ArmPatcher:
                                 fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
                                 if binary_name == "overlay36":
-                                    continue  # We ignore if End's extra overlay is missing.
-                                raise err
+                                    # SPECIAL CASE for ExtraSpace patch.
+                                    with open(OV_FILE_PATH, "rb") as ovfib:
+                                        fib.write(ovfib.read())
+                                else:
+                                    raise err
                     # For simple patches we also output the overlay table as y9.bin:
                     binary_path = os.path.join(tmp, Y9_BIN)
                     # Write binary to tmp dir

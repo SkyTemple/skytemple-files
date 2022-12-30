@@ -67,9 +67,6 @@ class ExtraSpacePatch(AbstractPatchHandler):
     def apply(
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
-
-        apply()
-
         # Put the overlay file into the ROM
         folder: Folder = rom.filenames
         folder_first_file_id = folder.firstID
@@ -86,6 +83,8 @@ class ExtraSpacePatch(AbstractPatchHandler):
                 recursive_increment_folder_start_idx(sfolder, if_bigger_than)
 
         recursive_increment_folder_start_idx(rom.filenames, folder_first_file_id - 1)
+
+        apply()
 
     def unapply(
         self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data

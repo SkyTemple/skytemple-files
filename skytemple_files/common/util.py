@@ -605,8 +605,10 @@ def set_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol, data: bytes) 
     raise ValueError(f(_("Binary {binary.name} not found.")))
 
 
-def is_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol) -> bool:
+def is_binary_in_rom(rom: NintendoDSRom, binary: Optional[SectionProtocol]) -> bool:
     """Returns true if the specified binary is present in the rom"""
+    if binary is None:
+        return False
     try:
         get_binary_from_rom(rom, binary)
         return True

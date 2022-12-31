@@ -28,6 +28,7 @@ from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
 
 from ndspy.rom import NintendoDSRom
+from pmdsky_debug_py.protocol import SectionProtocol
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import (
@@ -300,7 +301,7 @@ class Patcher:
         patch_dir_for_version = self._config.asm_patches_constants.patch_dir.filepath
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
         parameter_values = calling_patch.get_parameters()
-        binaries = {
+        binaries: dict[str, SectionProtocol] = {
             "arm9": self._config.bin_sections.arm9,
             "overlay0": self._config.bin_sections.overlay0,
             "overlay1": self._config.bin_sections.overlay1,
@@ -340,8 +341,9 @@ class Patcher:
             "overlay35": self._config.bin_sections.overlay35,
         }
 
-        if is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36) or name == "ExtraSpace":
-            binaries["overlay36"] = self._config.extra_bin_sections.overlay36  # type: ignore
+        if self._config.extra_bin_sections.overlay36 is not None:
+            if is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36) or name == "ExtraSpace":
+                binaries["overlay36"] = self._config.extra_bin_sections.overlay36
 
         self._arm_patcher.apply(
             patch,

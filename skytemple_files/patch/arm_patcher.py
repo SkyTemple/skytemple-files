@@ -37,6 +37,7 @@ from skytemple_files.common.util import (
     set_binary_in_rom,
     set_rw_permission_folder,
 )
+from skytemple_files.patch.handler.extra_space import OV_FILE_PATH
 from skytemple_files.user_error import make_user_err
 
 ASM_ENTRYPOINT_FN = "__main.asm"
@@ -108,9 +109,16 @@ class ArmPatcher:
                             try:
                                 fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
-                                if binary_name == "overlay36":
-                                    continue  # We ignore if End's extra overlay is missing.
-                                raise err
+                                if (
+                                    binary_name == "overlay36"
+                                    and patch.id == "ExtraSpace"
+                                ):
+                                    # SPECIAL CASE for ExtraSpace patch, the overlay hasn't been added to the overlay
+                                    # table yet so get_binary_from_rom() fails.
+                                    with open(OV_FILE_PATH, "rb") as ovfib:
+                                        fib.write(ovfib.read())
+                                else:
+                                    raise err
                     # For simple patches we also output the overlay table as y9.bin:
                     binary_path = os.path.join(tmp, Y9_BIN)
                     # Write binary to tmp dir
@@ -220,12 +228,7 @@ class ArmPatcher:
                 for binary_name, binary in opened_binaries.items():
                     binary_path = binary_name_to_path(tmp, binary_name)
                     with open(binary_path, "rb") as fib:
-                        try:
-                            set_binary_in_rom(self.rom, binary, fib.read())
-                        except ValueError as err:
-                            if binary_name == "overlay36":
-                                continue  # We ignore if End's extra overlay is missing.
-                            raise err
+                        set_binary_in_rom(self.rom, binary, fib.read())
 
             except (PatchError, ArmipsNotInstalledError):
                 raise

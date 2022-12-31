@@ -28,6 +28,7 @@ from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
 
 from ndspy.rom import NintendoDSRom
+from pmdsky_debug_py.protocol import SectionProtocol
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import (
@@ -38,7 +39,7 @@ from skytemple_files.common.ppmdu_config.data import (
 from skytemple_files.common.ppmdu_config.xml_reader import (
     Pmd2AsmPatchesConstantsXmlReader,
 )
-from skytemple_files.common.util import get_resources_dir
+from skytemple_files.common.util import get_resources_dir, is_binary_in_rom
 from skytemple_files.patch.arm_patcher import ArmPatcher
 from skytemple_files.patch.errors import (
     PatchDependencyError,
@@ -300,49 +301,56 @@ class Patcher:
         patch_dir_for_version = self._config.asm_patches_constants.patch_dir.filepath
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
         parameter_values = calling_patch.get_parameters()
+        binaries: dict[str, SectionProtocol] = {
+            "arm9": self._config.bin_sections.arm9,
+            "overlay0": self._config.bin_sections.overlay0,
+            "overlay1": self._config.bin_sections.overlay1,
+            "overlay2": self._config.bin_sections.overlay2,
+            "overlay3": self._config.bin_sections.overlay3,
+            "overlay4": self._config.bin_sections.overlay4,
+            "overlay5": self._config.bin_sections.overlay5,
+            "overlay6": self._config.bin_sections.overlay6,
+            "overlay7": self._config.bin_sections.overlay7,
+            "overlay8": self._config.bin_sections.overlay8,
+            "overlay9": self._config.bin_sections.overlay9,
+            "overlay10": self._config.bin_sections.overlay10,
+            "overlay11": self._config.bin_sections.overlay11,
+            "overlay12": self._config.bin_sections.overlay12,
+            "overlay13": self._config.bin_sections.overlay13,
+            "overlay14": self._config.bin_sections.overlay14,
+            "overlay15": self._config.bin_sections.overlay15,
+            "overlay16": self._config.bin_sections.overlay16,
+            "overlay17": self._config.bin_sections.overlay17,
+            "overlay18": self._config.bin_sections.overlay18,
+            "overlay19": self._config.bin_sections.overlay19,
+            "overlay20": self._config.bin_sections.overlay20,
+            "overlay21": self._config.bin_sections.overlay21,
+            "overlay22": self._config.bin_sections.overlay22,
+            "overlay23": self._config.bin_sections.overlay23,
+            "overlay24": self._config.bin_sections.overlay24,
+            "overlay25": self._config.bin_sections.overlay25,
+            "overlay26": self._config.bin_sections.overlay26,
+            "overlay27": self._config.bin_sections.overlay27,
+            "overlay28": self._config.bin_sections.overlay28,
+            "overlay29": self._config.bin_sections.overlay29,
+            "overlay30": self._config.bin_sections.overlay30,
+            "overlay31": self._config.bin_sections.overlay31,
+            "overlay32": self._config.bin_sections.overlay32,
+            "overlay33": self._config.bin_sections.overlay33,
+            "overlay34": self._config.bin_sections.overlay34,
+            "overlay35": self._config.bin_sections.overlay35,
+        }
+
+        if self._config.extra_bin_sections.overlay36 is not None:
+            if (
+                is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36)
+                or name == "ExtraSpace"
+            ):
+                binaries["overlay36"] = self._config.extra_bin_sections.overlay36
 
         self._arm_patcher.apply(
             patch,
-            {
-                "arm9": self._config.bin_sections.arm9,
-                "overlay0": self._config.bin_sections.overlay0,
-                "overlay1": self._config.bin_sections.overlay1,
-                "overlay2": self._config.bin_sections.overlay2,
-                "overlay3": self._config.bin_sections.overlay3,
-                "overlay4": self._config.bin_sections.overlay4,
-                "overlay5": self._config.bin_sections.overlay5,
-                "overlay6": self._config.bin_sections.overlay6,
-                "overlay7": self._config.bin_sections.overlay7,
-                "overlay8": self._config.bin_sections.overlay8,
-                "overlay9": self._config.bin_sections.overlay9,
-                "overlay10": self._config.bin_sections.overlay10,
-                "overlay11": self._config.bin_sections.overlay11,
-                "overlay12": self._config.bin_sections.overlay12,
-                "overlay13": self._config.bin_sections.overlay13,
-                "overlay14": self._config.bin_sections.overlay14,
-                "overlay15": self._config.bin_sections.overlay15,
-                "overlay16": self._config.bin_sections.overlay16,
-                "overlay17": self._config.bin_sections.overlay17,
-                "overlay18": self._config.bin_sections.overlay18,
-                "overlay19": self._config.bin_sections.overlay19,
-                "overlay20": self._config.bin_sections.overlay20,
-                "overlay21": self._config.bin_sections.overlay21,
-                "overlay22": self._config.bin_sections.overlay22,
-                "overlay23": self._config.bin_sections.overlay23,
-                "overlay24": self._config.bin_sections.overlay24,
-                "overlay25": self._config.bin_sections.overlay25,
-                "overlay26": self._config.bin_sections.overlay26,
-                "overlay27": self._config.bin_sections.overlay27,
-                "overlay28": self._config.bin_sections.overlay28,
-                "overlay29": self._config.bin_sections.overlay29,
-                "overlay30": self._config.bin_sections.overlay30,
-                "overlay31": self._config.bin_sections.overlay31,
-                "overlay32": self._config.bin_sections.overlay32,
-                "overlay33": self._config.bin_sections.overlay33,
-                "overlay34": self._config.bin_sections.overlay34,
-                "overlay35": self._config.bin_sections.overlay35,
-                "overlay36": self._config.extra_bin_sections.overlay36,  # type: ignore
-            },
+            binaries,
             os.path.join(self._patch_dirs[name], patch_dir_for_version),
             stub_path_for_version,
             self._config.game_edition,

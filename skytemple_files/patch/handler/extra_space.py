@@ -80,7 +80,9 @@ class ExtraSpacePatch(AbstractPatchHandler):
                 for _, sfolder in rfolder.folders:
                     recursive_increment_folder_start_idx(sfolder, if_bigger_than)
 
-            recursive_increment_folder_start_idx(rom.filenames, folder_first_file_id - 1)
+            recursive_increment_folder_start_idx(
+                rom.filenames, folder_first_file_id - 1
+            )
 
         apply()
 

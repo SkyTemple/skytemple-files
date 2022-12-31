@@ -342,7 +342,10 @@ class Patcher:
         }
 
         if self._config.extra_bin_sections.overlay36 is not None:
-            if is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36) or name == "ExtraSpace":
+            if (
+                is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36)
+                or name == "ExtraSpace"
+            ):
                 binaries["overlay36"] = self._config.extra_bin_sections.overlay36
 
         self._arm_patcher.apply(

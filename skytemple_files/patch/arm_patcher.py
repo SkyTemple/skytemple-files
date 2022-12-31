@@ -109,7 +109,10 @@ class ArmPatcher:
                             try:
                                 fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
-                                if binary_name == "overlay36" and patch.id == "ExtraSpace":
+                                if (
+                                    binary_name == "overlay36"
+                                    and patch.id == "ExtraSpace"
+                                ):
                                     # SPECIAL CASE for ExtraSpace patch, the overlay hasn't been added to the overlay
                                     # table yet so get_binary_from_rom() fails.
                                     with open(OV_FILE_PATH, "rb") as ovfib:

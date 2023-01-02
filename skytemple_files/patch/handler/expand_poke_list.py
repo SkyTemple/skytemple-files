@@ -1,4 +1,4 @@
-#  Copyright 2020-2021 Parakoopa
+#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

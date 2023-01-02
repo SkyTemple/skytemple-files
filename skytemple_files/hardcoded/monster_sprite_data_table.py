@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from skytemple_files.common.i18n_util import _
 
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

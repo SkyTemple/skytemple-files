@@ -1,5 +1,5 @@
 """The custom text codec used by the game, based on ANSI+Shift-JIS. NOTE: Not for Japenese version!"""
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

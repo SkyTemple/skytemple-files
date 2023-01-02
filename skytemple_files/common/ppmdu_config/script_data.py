@@ -4,7 +4,7 @@ For now, the documentation of fields is in the pmd2scriptdata.xml.
 """
 from __future__ import annotations
 
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

@@ -49,7 +49,7 @@ class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
 
     @property
     def author(self) -> str:
-        return "End45, irdkwia"
+        return "End45, Anonymous"
 
     @property
     def version(self) -> str:

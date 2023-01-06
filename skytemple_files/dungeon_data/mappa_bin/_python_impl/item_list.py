@@ -26,7 +26,7 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import (
     _MappaItem,
     MAX_ITEM_ID,
     CMD_SKIP,
-    GUARANTEED,
+    GUARANTEED, MAX_CAT_IDS,
 )
 
 if TYPE_CHECKING:
@@ -76,9 +76,9 @@ class MappaItemList(MappaItemListProtocol, AutoString):
                 else:
                     items[item_or_cat_id] = weight
                 item_or_cat_id += 1
-            if item_or_cat_id >= 0xF and processing_categories:
+            if item_or_cat_id >= MAX_CAT_IDS and processing_categories:
                 processing_categories = False
-                item_or_cat_id -= 0x10
+                item_or_cat_id -= MAX_CAT_IDS + 1
             pointer += 2
 
         assert (
@@ -101,7 +101,7 @@ class MappaItemList(MappaItemListProtocol, AutoString):
         # Continue with the items
         sorted_items = sorted(self.items.items(), key=lambda it: it[0])
         first_item_id = sorted_items[0][0] if len(sorted_items) > 0 else 0
-        self._write_skip(data, current_id, 0x10 + first_item_id)
+        self._write_skip(data, current_id, MAX_CAT_IDS + 1 + first_item_id)
         current_id = first_item_id
         for item, val in sorted_items:
             if current_id != item:

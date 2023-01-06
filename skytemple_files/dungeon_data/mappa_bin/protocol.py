@@ -38,6 +38,7 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 CMD_SKIP = 0x7530
 GUARANTEED = 0xFFFF
 MAX_ITEM_ID = 363
+MAX_CAT_IDS = 0xF
 POKE_ID = 183
 DUMMY_MD_INDEX = 0x229
 LEVEL_MULTIPLIER = 512

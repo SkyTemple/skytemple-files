@@ -1,44 +1,138 @@
-UNFINISHED/POC/EXPERIMENTAL AND ALL DISCLAIMER
+EXPERIMENTAL DISCLAIMER
 
-Only activates if PERFORMANCE flag 1 is set (the one that enables the team name). 
+Push Allies
 
-Currently not finished, there are some things I'm not sure about.
-Mostly ensure that enemies never get PP boosts.
-This should already be verified for accuracy and power.
+A method to allow the leader to push allies.
 
-This is only for fun.
+How does it work?
 
-Destroys save data, as the save structure has been altered for this.
-To implement this, the move boosts feature (via Ginsengs) has been deleted.
-In fact, move boosts data gives the space needed for moves exp. data, and the save data is incredibly flexible.
+Same as in PSMD: 
+- Pressing a direction where an ally is will result in pushing it in that direction.
+- Holding B while pressing a direction will exchange places with that ally (original behaviour).
 
-Bits Per Boost * Moves Per Moveset * Pokémon In Storage > Bits Per Move Exp. * Max # Of Moves
-       7       *         4         *        555         >         15         *      1024
+Currently, pushing does not deplete your belly more than an usual turn.
 
-Move stats are stored BALANCE/mgrowth.bin
-150 bytes per move
-6 bytes * 25 levels
-for each level: 
- - 2 bytes: exp to next level
- - 2 bytes: power bonus
- - 1 byte:  pp bonus
- - 1 byte:  accuracy bonus
- 
-All stats are additive, for example if level 0 is [25,0,0,0], level 1 is [33,1,1,0] and level 2 [40,1,1,1], 
-then stats bonuses for level 2 are: 
-25+33+40 = 98 exp. points to reach level 3
-0+1+1 = 2 for power
-0+1+1 = 2 for pp
-0+1+0 = 1 for accuracy
+When pushing an ally, the game will check several directions, in that order:
+- Straight in line
+- A bit to the right
+- A bit to the left
+- Completely to the right
+- Completely to the left
 
-Default config.: 
-Normal moves use the same table as in GtI (available in the PMD spreadsheet). 
-Status/Misc. moves use a null table.
-Each time you use a move you get 3 exp. points, only if the move does not fail. 
-Ginseng has been reworked to give 300 (1000 if lucky) exp. points to the topmost move. 
+e.g.: If pushing to the right, the game will check right, bottom-right, top-right, bottom, top in that order.
+The 3 other directions are not checked (you can't push towards your direction).
 
-Note: Moves don't have proper stats. They just get boosts depending on their current exp. points.
-Things like PP Boost, Accuracy Boost and Power Boosts would need to have another structure to store extra boosts, 
-which would require to create and store another structure in the save data.
+If another ally is present in one checked direction, the game will try to push it first in said direction, 
+before confirming if the other ally can, or continuing checks with the next available direction if it can't
 
-I.R.D.K.W.I.A.
+e.g. Player tries to push Ally 1 to the right. When checking Ally 1 detects Ally 2 bottom-right -> Ally 1 tries to push Ally 2 to the bottom right.
+
+Map Examples
+
+Legend:
+X = Wall
+. = Empty
+0 = Player
+1 = Ally 1
+2 = Ally 2
+3 = Ally 3
+E = Enemy
+
+Room 1
+Before    After-
+XXXXXX    XXXXXX
+X.....    X.....
+X.01..    X..01.
+X.....    X.....
+X.....    X.....
+Player tries to push Ally 1 to the right (Empty)
+-> success, Ally 1 pushed to the right
+
+Room 2
+Before    After-
+XXXXXX    XXXXXX
+X.....    X.....
+X.01E.    X..0E.
+X.....    X...1.
+X.....    X.....
+Player tries to push Ally 1 to the right, but there is one enemy
+Ally 1 can be pushed to the bottom-right
+-> success, Ally 1 pushed to the bottom-right
+
+Room 3
+Before    After-
+XXXXXX    XXXXXX
+X.....    X...1.
+X.01E.    X..0E.
+X...E.    X...E.
+X.....    X.....
+Player tries to push Ally 1 to the right, but there is one enemy
+Ally 1 cannot be pushed to the bottom-right (enemy)
+Ally 1 can be pushed to the top-right
+-> success, Ally 1 pushed to the top-right
+
+Room 4
+Before    After-
+XXXXXX    XXXXXX
+X...E.    X...E.
+X.01E.    X..0E.
+X...E.    X..1E.
+X.....    X.....
+Player tries to push Ally 1 to the right, but there is one enemy
+Ally 1 cannot be pushed to the bottom-right (enemy)
+Ally 1 cannot be pushed to the top-right (enemy)
+Ally 1 can be pushed to the bottom
+-> success, Ally 1 pushed to the bottom
+
+Room 5
+Before    After-
+XXXXXX    XXXXXX
+X...E.    X..1E.
+X.01E.    X..0E.
+X..EE.    X..EE.
+X.....    X.....
+Player tries to push Ally 1 to the right, but there is one enemy
+Ally 1 cannot be pushed to the bottom-right (enemy)
+Ally 1 cannot be pushed to the top-right (enemy)
+Ally 1 cannot be pushed to the bottom (enemy)
+Ally 1 can be pushed to the top
+-> success, Ally 1 pushed to the top
+
+Room 6
+Before    After-
+XXXXXX    XXXXXX
+X..EE.    X..EE.
+X.01E.    X.01E.
+X..EE.    X..EE.
+X.....    X.....
+Player tries to push Ally 1 to the right, but there is one enemy
+Ally 1 cannot be pushed to the bottom-right (enemy)
+Ally 1 cannot be pushed to the top-right (enemy)
+Ally 1 cannot be pushed to the bottom (enemy)
+Ally 1 cannot be pushed to the top (enemy)
+-> failure, nothing happens (still player's turn)
+
+Corridors 1
+Before    After-
+XXXXXX    XXXXXX
+XXX3..    XXX23.
+.012XX    ..01XX
+XXXXXX    XXXXXX
+XXXXXX    XXXXXX
+Player tries to push Ally 1 to the right (Ally 2)
+Ally 1 tries to push Ally 2 to the right (wall)
+Ally 2 can only be pushed to the top (Ally 3)
+Ally 2 tries to push Ally 3 to the top (wall)
+Ally 3 can only be pushed to the right (empty)
+-> success, Ally 3 pushed to the right, Ally 2 to the top, Ally 1 to the right
+
+Corridors 2
+Before    After-
+XXXXXX    XXXXXX
+XXX3E.    XXX3E.
+.012XX    .012XX
+XXXXXX    XXXXXX
+XXXXXX    XXXXXX
+Same steps as in Corridors 1, but
+Ally 3 cannot be pushed to the right either (enemy)
+-> failure, nothing happens (still player's turn)

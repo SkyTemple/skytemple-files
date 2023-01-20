@@ -27,6 +27,8 @@ before confirming if the other ally can, or continuing checks with the next avai
 
 e.g. Player tries to push Ally 1 to the right. When checking Ally 1 detects Ally 2 bottom-right -> Ally 1 tries to push Ally 2 to the bottom right.
 
+You can't push more than 3 other allies at the same time (this is most of a counter-measure to infinite recursion).
+
 Map Examples
 
 Legend:

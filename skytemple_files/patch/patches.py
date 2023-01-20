@@ -116,6 +116,7 @@ from skytemple_files.patch.handler.pitfall_trap_tweak import (
     PitfallTrapTweakPatchHandler,
 )
 from skytemple_files.patch.handler.pkmn_ground_anim import PkmnGroundAnimPatchHandler
+from skytemple_files.patch.handler.push_allies import PushAlliesPatchHandler
 from skytemple_files.patch.handler.reduce_jumpcut_pause_time import (
     ReduceJumpcutPauseTime,
 )
@@ -142,6 +143,7 @@ class PatchType(Enum):
     APPRAISE_ALL = AppraiseAllPatchHandler
     CHOOSE_STARTER = ChooseStarterPatchHandler
     SKIP_QUIZ = SkipQuizPatchHandler
+    PUSH_ALLIES = PushAlliesPatchHandler
     DUNGEON_INTERRUPT = DungeonInterruptPatchHandler
     CHANGE_FF_PROP = ChangeFixedFloorPropertiesPatchHandler
     COMPLETE_TEAM_CONTROL = CompleteTeamControl

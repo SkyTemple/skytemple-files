@@ -27,7 +27,6 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
@@ -41,6 +40,7 @@ PUSH_DIALOGUE = "[string:0] pushed [string:1]!"
 # For xgettext scanning:
 _("[string:0] pushed [string:1]!")  # TRANSLATORS: Push allies dialogue
 
+
 class PushAlliesPatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def name(self) -> str:
@@ -48,8 +48,10 @@ class PushAlliesPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _("""Implements pushing allies in dungeons.
-Uses the same command style as PSMD""")
+        return _(
+            """Implements pushing allies in dungeons.
+Uses the same command style as PSMD"""
+        )
 
     @property
     def author(self) -> str:
@@ -97,7 +99,9 @@ Uses the same command style as PSMD""")
                     strings = StrHandler.deserialize(bin_before)
                     strings.strings[
                         int(param["PushStringID"]) - 1
-                    ] = get_locales().translate(PUSH_DIALOGUE, lang.locale.replace("-", "_"))
+                    ] = get_locales().translate(
+                        PUSH_DIALOGUE, lang.locale.replace("-", "_")
+                    )
                     bin_after = StrHandler.serialize(strings)
                     rom.setFileByName(filename, bin_after)
             apply()

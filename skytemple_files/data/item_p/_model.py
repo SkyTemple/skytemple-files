@@ -62,9 +62,9 @@ class ItemPEntry(ItemPEntryProtocol, AutoString):
         bitfield = read_u8(data, 14)
         self.is_valid = (bitfield & 0x1) != 0  # Is Valid
         self.is_in_td = (bitfield & 0x2) != 0  # Is in Time/Darkness
-        self.ai_flag_1 = (bitfield & 0x20) != 0  # Flag 1 for the AI?
-        self.ai_flag_2 = (bitfield & 0x40) != 0  # Flag 2 for the AI?
-        self.ai_flag_3 = (bitfield & 0x80) != 0  # Flag 3 for the AI?
+        self.ai_flag_1 = (bitfield & 0x20) != 0  # AI flag: Throw at enemies
+        self.ai_flag_2 = (bitfield & 0x40) != 0  # AI flag: Throw at allies
+        self.ai_flag_3 = (bitfield & 0x80) != 0  # AI flag: Use on self
 
     def to_bytes(self) -> bytes:
         data = bytearray(ITEM_P_ENTRY_SIZE)

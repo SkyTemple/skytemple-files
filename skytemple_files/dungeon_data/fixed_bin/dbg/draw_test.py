@@ -80,7 +80,7 @@ def draw_monster_sprite(
     frame_id = direction.ssb_id if direction is not None else 0
     mfg_id = ani_group[frame_id].frames[0].frame_id
 
-    sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
+    sprite_img, (cx, cy) = sprite.render_frame(sprite.frames[mfg_id])
     render_x = x * 24 - cx + 12
     render_y = y * 24 - cy + 18
     img.paste(sprite_img, (render_x, render_y), sprite_img)

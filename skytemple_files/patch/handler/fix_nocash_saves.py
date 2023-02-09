@@ -43,7 +43,7 @@ class FixNocashSavesPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("Fixes an issue that causes saving to fail on the No$GBA emulator.")
+        return _("Fixes an issue that causes saving to fail on the No$GBA emulator. Warning: Causes saving to fail on the MelonDS emulator instead.")
 
     @property
     def author(self) -> str:

@@ -307,8 +307,8 @@ def pmd2_encode(text: str, *args: List[Any]) -> Tuple[bytes, int]:
             cursor += 2
         else:
             raise ValueError(
-                f"String contains characters, that are not printable as PMD2 text. "
-                f"First unprintable char: {c}"
+                f"String contains characters that are not printable as PMD2 text. "
+                f"Full text: {text}, first unprintable char: {c}"
             )
     return bytes(bytearr[:cursor]), cursor
 
@@ -348,6 +348,15 @@ def pmd2_codec_search_function(encoding_name: str) -> Optional[codecs.CodecInfo]
     if encoding_name == PMD2_STR_ENCODER:
         return codecs.CodecInfo(pmd2_encode, pmd2_decode, name=PMD2_STR_ENCODER)  # type: ignore
     return None
+
+
+def can_be_encoded(text: str) -> bool:
+    """Returns true if every character in the specified string can be encoded using this codec"""
+    for c in text:
+        if not (c in _encode_table or c in _shift_jis_characters):
+            return False
+
+    return True
 
 
 def init() -> None:

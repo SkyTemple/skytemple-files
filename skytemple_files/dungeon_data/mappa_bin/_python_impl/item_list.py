@@ -26,7 +26,8 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import (
     _MappaItem,
     MAX_ITEM_ID,
     CMD_SKIP,
-    GUARANTEED, MAX_CAT_IDS,
+    GUARANTEED,
+    MAX_CAT_IDS,
 )
 
 if TYPE_CHECKING:

@@ -318,7 +318,6 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             previous_end_of_tiles = orig_len
             # For each frame: Insert all BPA current frame tiles into their slots
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
-
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
                 ldata.tiles[
@@ -373,7 +372,6 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             previous_end_of_tiles = orig_len
             # For each frame: Insert all BPA current frame tiles into their slots
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
-
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
                 ldata.tiles[

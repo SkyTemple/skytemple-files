@@ -83,7 +83,6 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
     def apply(
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
-
         if INTER_PATH not in rom.filenames:
             header = bytearray(0x206)
             header[0] = 6

@@ -24,7 +24,7 @@ from skytemple_rust.pmd_wan import (  # pylint: disable=no-name-in-module,no-mem
     FrameStore,
     WanImage,
     Frame,
-    Animation
+    Animation,
 )
 
 
@@ -88,22 +88,20 @@ class Wan:
     def anim_groups(self) -> List[List[Animation]]:
         return self.model.animation_store.anim_groups
 
-    def render_frame(
-        self, frame: Frame
-    ) -> Tuple[Image.Image, Tuple[int, int]]:
+    def render_frame(self, frame: Frame) -> Tuple[Image.Image, Tuple[int, int]]:
         """Returns the frame group as an image and it's center position as a tuple."""
         specs: List[MetaFramePositioningSpecs] = []
         for fragment in frame.fragments:
-            fragment_bytes: FragmentBytes = self.model.fragment_bytes_store.fragment_bytes[
-                fragment.fragment_bytes_index
-            ]
+            fragment_bytes: FragmentBytes = (
+                self.model.fragment_bytes_store.fragment_bytes[
+                    fragment.fragment_bytes_index
+                ]
+            )
 
             im = Image.frombuffer(
                 "RGBA",
                 (fragment.resolution.x, fragment.resolution.y),
-                bytearray(
-                    fragment_bytes.to_image(self.model.palette, fragment)
-                ),
+                bytearray(fragment_bytes.to_image(self.model.palette, fragment)),
                 "raw",
                 "RGBA",
                 0,

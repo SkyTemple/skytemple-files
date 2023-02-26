@@ -51,7 +51,6 @@ class SsaHeader(AutoString):
         position_marker_pointer: int,
         unk10_pointer: int,
     ):
-
         # If the pointer of the following entry is the same, then this layer doesn't actually exist.
         self.layer_count = layer_count
         self.layer_list_pointer = (

@@ -178,7 +178,8 @@ class Wte(Sir0Serializable, AutoString):
 
     def to_pil_canvas(self, variation: int = 0) -> Image.Image:
         """Returns the image with its data part size (the width and height specified in the WTE header).
-        If this file has no image, returns an image representation of the palette instead."""
+        If this file has no image, returns an image representation of the palette instead.
+        """
         im: Image.Image = self.to_pil(variation)
         if not self.has_image():
             return im
@@ -187,7 +188,8 @@ class Wte(Sir0Serializable, AutoString):
 
     def to_pil(self, variation: int = 0) -> Image.Image:
         """Returns the image with its actual size (the one specified by the image mode).
-        If this file has no image, returns an image representation of the palette instead."""
+        If this file has no image, returns an image representation of the palette instead.
+        """
 
         dimensions = self.actual_dimensions()
         pil_img_data = bytearray(dimensions[0] * dimensions[1])

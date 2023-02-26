@@ -79,8 +79,8 @@ def render_group(wan_model, group_id, base_pil, x_offset, color=None):
     max_size = 0
     for ani_i, ani in enumerate(wan_model.get_animations_for_group(g)):
         for frame_i, frame in enumerate(ani.frames):
-            mfg_id = wan_model.frame_groups[frame.frame_id]
-            img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+            mfg_id = wan_model.frames[frame.frame_id]
+            img, (cx, cy) = wan_model.render_frame(mfg_id)
             max_size = max(max_size, max((cx, cy)) + max((img.width, img.height)))
 
     group_meta_entry.append(max_size)
@@ -92,8 +92,8 @@ def render_group(wan_model, group_id, base_pil, x_offset, color=None):
         for frame_i, frame in enumerate(ani.frames):
             ani_entry.append(frame.duration)
             # A single image
-            mfg_id = wan_model.frame_groups[frame.frame_id]
-            img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+            mfg_id = wan_model.frames[frame.frame_id]
+            img, (cx, cy) = wan_model.render_frame(mfg_id)
             if color is None:
                 color = process_color(*get_dominant_color(img))
             oimg = outline_sprite(img, color)

@@ -127,7 +127,6 @@ def process_single(file_name, times, static_data, output_dir, rom):
     os.makedirs(os.path.dirname(out_file_name), exist_ok=True)
 
     try:
-
         with rom_lock:
             time_before = time.time()
             bin_before = rom.getFileByName(file_name)

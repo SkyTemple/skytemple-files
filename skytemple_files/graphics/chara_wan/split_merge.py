@@ -16,7 +16,6 @@ from skytemple_files.graphics.chara_wan.model import MINUS_FRAME, WanFile
 
 
 def MergeWan(wan_files):
-
     # custom palettes are always the same
     sdwSize = wan_files[0].sdwSize
     customPalette = wan_files[0].customPalette
@@ -59,7 +58,6 @@ def MergeWan(wan_files):
 def SplitWan(wan, anim_presence):
     wan_files = []
     for anim_list in anim_presence:
-
         animGroupData = []
         for anim_idx, anim_group in enumerate(anim_list):
             if not anim_group:

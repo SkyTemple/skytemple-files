@@ -53,7 +53,6 @@ class SsaLayer(AutoString):
         unk10_block_count: Optional[int] = None,
         unk10_block_pointer: Optional[int] = None,
     ):
-
         self.actors: List[SsaActor] = []
         self.objects: List[SsaObject] = []
         self.performers: List[SsaPerformer] = []

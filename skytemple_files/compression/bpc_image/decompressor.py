@@ -131,7 +131,9 @@ class BpcImageDecompressor:
             self._handle_main_operation(cmd, number_of_bytes_to_output)
 
         if DEBUG:
-            print(f"== Cursor advanced: {self.cursor - cursor_was_at}")  # pylint: disable=used-before-assignment
+            print(
+                f"== Cursor advanced: {self.cursor - cursor_was_at}"  # pylint: disable=used-before-assignment
+            )
 
     def _handle_main_operation(self, cmd, number_of_bytes_to_output):
         count_of_copy = 0

@@ -21,7 +21,6 @@ from typing import List, Tuple
 from PIL import Image, ImageOps
 from skytemple_rust.pmd_wan import (  # pylint: disable=no-name-in-module,no-member,import-error
     FragmentBytes,
-    FrameStore,
     WanImage,
     Frame,
     Animation,

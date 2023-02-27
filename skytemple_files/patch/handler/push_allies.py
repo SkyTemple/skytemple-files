@@ -20,32 +20,39 @@ from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.i18n_util import _
+from skytemple_files.common.i18n_util import _, get_locales
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u32
+from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-PATCH_CHECK_ADDR_APPLIED_US = 0x3E68
-PATCH_CHECK_ADDR_APPLIED_EU = 0x3E68
-PATCH_CHECK_INSTR_APPLIED = 0xBA000006
+PATCH_CHECK_ADDR_APPLIED_US = 0x16440
+PATCH_CHECK_ADDR_APPLIED_EU = 0x164B4
+PATCH_CHECK_INSTR_APPLIED = 0xE59D0014
 
-INTER_PATH = "BALANCE/inter_d.bin"
+PUSH_DIALOGUE = "[string:0] pushed [string:1]!"
+
+# For xgettext scanning:
+_("[string:0] pushed [string:1]!")  # TRANSLATORS: Push allies dialogue
 
 
-class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
+class PushAlliesPatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def name(self) -> str:
-        return "DungeonInterrupt"
+        return "PushAllies"
 
     @property
     def description(self) -> str:
-        return _("""Implements dungeon interruptions. """)
+        return _(
+            """Implements pushing allies in dungeons.
+Uses the same command style as PSMD"""
+        )
 
     @property
     def author(self) -> str:
@@ -56,7 +63,7 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
         return "0.0.1"
 
     def depends_on(self) -> List[str]:
-        return ["ExtractAnimData"]
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:
@@ -83,12 +90,21 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
     def apply(
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
-        if INTER_PATH not in rom.filenames:
-            header = bytearray(0x206)
-            header[0] = 6
-            header[1] = 2
-            create_file_in_rom(rom, INTER_PATH, bytes(header))
         try:
+            param = self.get_parameters()
+            if param["ReplaceStrings"] == "1":
+                # Change dialogue
+                for lang in config.string_index_data.languages:
+                    filename = "MESSAGE/" + lang.filename
+                    bin_before = rom.getFileByName(filename)
+                    strings = StrHandler.deserialize(bin_before)
+                    strings.strings[
+                        int(param["PushStringID"]) - 1
+                    ] = get_locales().translate(
+                        PUSH_DIALOGUE, lang.locale.replace("-", "_")
+                    )
+                    bin_after = StrHandler.serialize(strings)
+                    rom.setFileByName(filename, bin_after)
             apply()
         except RuntimeError as ex:
             raise ex

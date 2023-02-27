@@ -109,7 +109,6 @@ class FlipMode(Enum):
 
 
 def ImportSheets(inDir, strict=False):
-
     if DEBUG_PRINT:
         if not os.path.isdir(os.path.join(inDir, "_pieces_in")):
             os.makedirs(os.path.join(inDir, "_pieces_in"))
@@ -598,7 +597,6 @@ def ImportSheetsFromZip(zipFile, strict=False):
 
 
 def ExportSheets(outDir, sdwImg, wan, anim_name_map):
-
     if not os.path.isdir(outDir):
         os.makedirs(outDir)
 
@@ -722,7 +720,6 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
     shadow_rect_tight = exUtils.getCoveredBounds(sdwImg)
     shadow_rect_tight = exUtils.addToBounds(shadow_rect_tight, shadow_rect)
     for idx, animGroup in enumerate(wan.animGroupData):
-
         maxBounds = (10000, 10000, -10000, -10000)
         for g_idx, singleAnim in enumerate(animGroup):
             for a_idx, animFrame in enumerate(singleAnim):

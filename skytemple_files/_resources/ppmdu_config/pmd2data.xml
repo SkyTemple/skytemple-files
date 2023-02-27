@@ -640,6 +640,23 @@
           </Parameters>
         </Patch>
 
+        <!-- A patch to implement pushing allies -->
+        <Patch id="PushAllies" >
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	<Include filename ="anonymous_asm_mods/push_allies/selector_overlay29.asm"/>
+	  </OpenBin>
+          <OpenBin filepath="overlay/overlay_0036.bin">
+	  	<Include filename ="anonymous_asm_mods/push_allies/selector_overlay36.asm"/>
+	  </OpenBin>
+          <Parameters>
+            <Param name="PushStringID" label="String ID for push dialogue" min="0" max="65535" default="299" type="int"/>
+            <Param name="ReplaceStrings" label="String mentioned above is replaced by a default text when applying" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+          </Parameters>
+        </Patch>
+        
         <!-- A patch to implement dungeon interruptions -->
         <Patch id="DungeonInterrupt" >
           <OpenBin filepath="arm9.bin">

@@ -21,6 +21,7 @@ from typing import List, Sequence, cast
 
 from range_typed_integers import u32
 
+
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
 def decode_sir0_pointer_offsets(

@@ -476,7 +476,6 @@ class SpriteCollabSession:
             kao = FileType.KAO.new(1)
 
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-
                 portrait_sheet = await self._request_adapter.fetch_bin(
                     form["portraits"]["sheetUrl"]
                 )
@@ -628,7 +627,7 @@ class SpriteCollabSession:
                         if laying_requested and not laying_found:
                             names.append(("Laying", 27))
 
-                        for (name, index) in names:
+                        for name, index in names:
                             while index in action_indices.keys():
                                 index += 1
                             if index >= MAX_ANIMS:

@@ -55,7 +55,7 @@ class Icon:
     def palette(self) -> bytes:
         data = bytearray(len(self._palette) // 3 * ICON_PAL_CNT // 2)
         cursor = 0
-        for (r, g, b) in chunks(self._palette, 3):
+        for r, g, b in chunks(self._palette, 3):
             r //= 8
             g = (g // 8) << 5
             b = (b // 8) << 10

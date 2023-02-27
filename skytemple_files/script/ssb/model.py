@@ -86,7 +86,6 @@ class Ssb:
         if_empty_supported_langs=None,
         string_codec=string_codec.PMD2_STR_ENCODER,
     ):
-
         self._scriptdata = scriptdata
         self._string_codec = string_codec
 

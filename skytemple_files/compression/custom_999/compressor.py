@@ -27,7 +27,6 @@ class Custom999Compressor:
         self.uncompressed_data = uncompressed_data
 
     def compress(self) -> bytes:
-
         new_data = []
         for b in self.uncompressed_data:
             new_data.append(b % 16)

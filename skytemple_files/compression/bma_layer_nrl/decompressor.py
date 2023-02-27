@@ -95,7 +95,7 @@ class BmaLayerNrlDecompressor:
 
         if DEBUG:
             print(
-                f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}"
+                f"-- cursor advancement: {self.cursor - cursor_before} -- write advancement: {self.bytes_written - wr_before}"  # pylint: disable=used-before-assignment
             )
 
     def _read(self, bytes=1):

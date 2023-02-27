@@ -48,9 +48,9 @@ for path in get_files_from_rom_with_extension(rom, "wan"):
         if group is None:
             continue
         for ani_i, ani in enumerate(group):
-            mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
+            mfg_id = wan_model.frames[ani.frames[0].frame_id]
             try:
-                img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+                img, (cx, cy) = wan_model.render_frame(mfg_id)
                 img.save(os.path.join(output_dir, basename, f"{ag_i}_{ani_i}.png"))
             except ValueError as e:
                 print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)
@@ -69,9 +69,9 @@ for s_i, sprite in enumerate(bin_pack):
         if group is None:
             continue
         for ani_i, ani in enumerate(group):
-            mfg_id = wan_model.frame_groups[ani.frames[0].frame_id]
+            mfg_id = wan_model.frames[ani.frames[0].frame_id]
             try:
-                img, (cx, cy) = wan_model.render_frame_group(mfg_id)
+                img, (cx, cy) = wan_model.render_frame(mfg_id)
                 img.save(os.path.join(output_dir, basename, f"{ag_i}_{ani_i}.png"))
             except ValueError as e:
                 print(f"Error for {basename}/{ag_i}_{ani_i}: {e}", file=sys.stderr)

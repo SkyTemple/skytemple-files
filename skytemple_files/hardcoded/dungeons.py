@@ -20,7 +20,6 @@ from __future__ import annotations
 import typing
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.util import *
 from skytemple_files.data.md.protocol import PokeType
 
@@ -82,8 +81,7 @@ class DungeonRestriction(AutoString):
     max_party_members: i8
     null7: i8
     turn_limit: i16
-    nullA: i8
-    nullB: i8
+    random_movement_chance: i16
 
     def __init__(
         self,
@@ -103,8 +101,7 @@ class DungeonRestriction(AutoString):
         max_party_members: i8,
         null7: i8,
         turn_limit: i16,
-        nullA: i8,
-        nullB: i8,
+        random_movement_chance: i16,
     ):
         self.direction = direction
         self.enemies_evolve_when_team_member_koed = enemies_evolve_when_team_member_koed
@@ -122,8 +119,7 @@ class DungeonRestriction(AutoString):
         self.max_party_members = max_party_members
         self.null7 = null7
         self.turn_limit = turn_limit
-        self.nullA = nullA
-        self.nullB = nullB
+        self.random_movement_chance = random_movement_chance
 
     @classmethod
     def from_bytes(cls, b: bytes) -> "DungeonRestriction":
@@ -163,8 +159,7 @@ class DungeonRestriction(AutoString):
             read_i8(b, 6),
             read_i8(b, 7),
             read_i16(b, 8),
-            read_i8(b, 10),
-            read_i8(b, 11),
+            read_i16(b, 10),
         )
 
     def to_bytes(self) -> bytes:
@@ -208,8 +203,7 @@ class DungeonRestriction(AutoString):
         write_i8(buff, self.max_party_members, 6)
         write_i8(buff, self.null7, 7)
         write_i16(buff, self.turn_limit, 8)
-        write_i8(buff, self.nullA, 10)
-        write_i8(buff, self.nullB, 11)
+        write_i16(buff, self.random_movement_chance, 10)
         return buff
 
     def __eq__(self, other: object) -> bool:
@@ -234,8 +228,7 @@ class DungeonRestriction(AutoString):
             and self.max_party_members == other.max_party_members
             and self.null7 == other.null7
             and self.turn_limit == other.turn_limit
-            and self.nullA == other.nullA
-            and self.nullB == other.nullB
+            and self.random_movement_chance == other.random_movement_chance
         )
 
 

@@ -29,7 +29,6 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_INSTRUCTION = 0xEB0004C5
 OFFSET_EU = 0x2680C

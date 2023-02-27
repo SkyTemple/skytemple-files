@@ -939,6 +939,33 @@
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
           </Replace>
         </SimplePatch>
+        
+        <SimplePatch id="BetterEnemyEvolution">
+          <Include filename="end_asm_mods/src/BetterEnemyEvolution.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+          <Parameters>
+            <Param name="_UpdateStats" label="Update the level and stats of evolved enemies" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+            <Param name="_FullHeal" label="Fully heal enemies after evolving" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+            <Param name="_UpdateMoves" label="Update the moves of evolved enemies" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+            <Param name="_StatBoost" label="Increase Atk/SpAtk/Def/SpDef of evolved enemies by" min="0" max="255" default="0" type="int"/>
+            <Param name="_EvolveWithRevive" label="Let enemies evolve even if the defeated pokémon is revived" type="select">
+              <Option label="Yes" type="int">1</Option>
+              <Option label="No" type="int">0</Option>
+            </Param>
+          </Parameters>
+        </SimplePatch>
 
       </Game>
     </Patches>

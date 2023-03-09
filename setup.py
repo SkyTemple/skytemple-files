@@ -1,5 +1,5 @@
 # mypy: ignore-errors
-__version__ = '1.4.4'
+__version__ = '1.4.7'
 import os
 
 from setuptools import setup, find_packages

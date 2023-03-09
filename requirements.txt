@@ -1,5 +1,5 @@
 pmdsky-debug-py==4.0.0
-ndspy==3.0.0
+ndspy==4.0.0
 pyyaml==6.0
 range-typed-integers==1.0.1
 Pillow==9.4.0

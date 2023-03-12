@@ -23,7 +23,7 @@ from collections.abc import Iterator
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.util import *
 from skytemple_files.compression_container.common_at.handler import (
-    COMMON_AT_MUST_COMPRESS_3,
+    COMMON_AT_BEST_3,
     CommonAtType,
 )
 from skytemple_files.graphics.kao import (
@@ -33,8 +33,23 @@ from skytemple_files.graphics.kao import (
     SUBENTRIES,
     SUBENTRY_LEN,
 )
-from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
+from skytemple_files.graphics.kao.protocol import _KaoPropertiesProtocol, KaoImageProtocol, KaoProtocol, KAO_IMAGE_LIMIT
 
+
+class KaoPropertiesState(_KaoPropertiesProtocol):
+    _instance: Optional[KaoPropertiesState] = None
+    kao_image_limit: int
+
+    def __init__(self, kao_image_limit: int):
+        self.kao_image_limit = kao_image_limit
+
+    @classmethod
+    def instance(cls) -> KaoPropertiesState:
+        if cls._instance is None:
+            cls._instance = KaoPropertiesState(
+                KAO_IMAGE_LIMIT
+            )
+        return cls._instance
 
 class KaoImage(KaoImageProtocol):
     def __init__(self, whole_kao_data: bytes, start_pnt: int):
@@ -349,7 +364,7 @@ def pil_to_kao(
     from skytemple_files.common.types.file_types import FileType
 
     if allowed_compressions is None:
-        allowed_compressions = COMMON_AT_MUST_COMPRESS_3
+        allowed_compressions = COMMON_AT_BEST_3
 
     img_dim = KAO_IMG_METAPIXELS_DIM * KAO_IMG_IMG_DIM
     if pil.width != img_dim or pil.height != img_dim:
@@ -471,13 +486,15 @@ def pil_to_kao(
     new_img_compressed = FileType.COMMON_AT.serialize(
         FileType.COMMON_AT.compress(new_img, allowed_compressions)
     )
-    if len(new_img_compressed) > 800:
+    limit = KaoPropertiesState.instance().kao_image_limit
+    if len(new_img_compressed) > limit:
         raise AttributeError(
             f(
                 _(
-                    "This portrait does not compress well, the result size is greater than 800 bytes ({len(new_img_compressed)} bytes total).\n"
-                    "If you haven't done already, try applying the 'ProvideATUPXSupport' to install an optimized compression algorithm, "
+                    "This portrait does not compress well, the result size is greater than {limit} bytes ({len(new_img_compressed)} bytes total).\n"
+                    "If you haven't done already, try applying the 'ProvideATUPXSupport' ASM patch to install an optimized compression algorithm, "
                     "which might be able to better compress this image."
+                    "If this still doesn't work, try the 'ExpandPortraitStructs' instead."
                 )
             )
         )

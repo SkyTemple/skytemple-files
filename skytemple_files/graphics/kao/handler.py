@@ -24,7 +24,11 @@ from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
 )
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.kao.protocol import _KaoPropertiesProtocol, KaoImageProtocol, KaoProtocol
+from skytemple_files.graphics.kao.protocol import (
+    _KaoPropertiesProtocol,
+    KaoImageProtocol,
+    KaoProtocol,
+)
 
 if TYPE_CHECKING:
     pass

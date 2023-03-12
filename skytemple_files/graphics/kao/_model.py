@@ -33,7 +33,12 @@ from skytemple_files.graphics.kao import (
     SUBENTRIES,
     SUBENTRY_LEN,
 )
-from skytemple_files.graphics.kao.protocol import _KaoPropertiesProtocol, KaoImageProtocol, KaoProtocol, KAO_IMAGE_LIMIT
+from skytemple_files.graphics.kao.protocol import (
+    _KaoPropertiesProtocol,
+    KaoImageProtocol,
+    KaoProtocol,
+    KAO_IMAGE_LIMIT,
+)
 
 
 class KaoPropertiesState(_KaoPropertiesProtocol):
@@ -46,10 +51,9 @@ class KaoPropertiesState(_KaoPropertiesProtocol):
     @classmethod
     def instance(cls) -> KaoPropertiesState:
         if cls._instance is None:
-            cls._instance = KaoPropertiesState(
-                KAO_IMAGE_LIMIT
-            )
+            cls._instance = KaoPropertiesState(KAO_IMAGE_LIMIT)
         return cls._instance
+
 
 class KaoImage(KaoImageProtocol):
     def __init__(self, whole_kao_data: bytes, start_pnt: int):

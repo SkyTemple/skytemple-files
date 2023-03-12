@@ -42,6 +42,7 @@ class _KaoPropertiesProtocol(Protocol):
         """This is a singleton."""
         ...
 
+
 class KaoImageProtocol(Protocol):
     @classmethod
     @abstractmethod

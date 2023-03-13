@@ -84,6 +84,7 @@ from skytemple_files.patch.handler.edit_extra_pokemon import (
 )
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
 from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
+from skytemple_files.patch.handler.expand_portrait import ExpandPortraitPatchHandler
 from skytemple_files.patch.handler.externalize_mappa import ExternalizeMappaPatchHandler
 from skytemple_files.patch.handler.externalize_waza import ExternalizeWazaPatchHandler
 from skytemple_files.patch.handler.extra_space import ExtraSpacePatch
@@ -138,6 +139,7 @@ class PatchType(Enum):
     MOVE_SHORTCUTS = MoveShortcutsPatch
     DISABLE_TIPS = DisableTipsPatch
     SAME_TYPE_PARTNER = SameTypePartnerPatch
+    EXPAND_PORTRAIT = ExpandPortraitPatchHandler
     SUPPORT_ATUPX = AtupxSupportPatchHandler
     EXTRACT_ITEM_LISTS = ExtractItemListsPatchHandler
     EXTRACT_DUNGEON_DATA = ExtractDungeonDataPatchHandler

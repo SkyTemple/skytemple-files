@@ -21,6 +21,27 @@ from typing import Iterator, Optional, Protocol, Tuple, TypeVar
 
 from PIL.Image import Image
 
+KAO_IMAGE_LIMIT = 800
+
+
+class _KaoPropertiesProtocol(Protocol):
+    """
+    Implementations must provide an implementation of this.
+    This keeps track of "changeable" constants.
+
+    The values must default to the values below, users may
+    change it via the MdHandler, if for example a patch to expand
+    the monster list is applied.
+    """
+
+    kao_image_limit: int  # Must default to KAO_IMAGE_LIMIT.
+
+    @classmethod
+    @abstractmethod
+    def instance(cls) -> "_KaoPropertiesProtocol":
+        """This is a singleton."""
+        ...
+
 
 class KaoImageProtocol(Protocol):
     @classmethod

@@ -24,7 +24,11 @@ from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
 )
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.kao.protocol import KaoImageProtocol, KaoProtocol
+from skytemple_files.graphics.kao.protocol import (
+    _KaoPropertiesProtocol,
+    KaoImageProtocol,
+    KaoProtocol,
+)
 
 if TYPE_CHECKING:
     pass
@@ -58,6 +62,18 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
         )  # pylint: disable=no-name-in-module,no-member,import-error
 
         return KaoWriter
+
+    @classmethod
+    def properties(cls) -> _KaoPropertiesProtocol:
+        if get_implementation_type() == ImplementationType.NATIVE:
+            from skytemple_rust.st_kao import (
+                KaoPropertiesState as KaoPropertiesNative,
+            )  # pylint: disable=no-name-in-module,no-member,import-error
+
+            return KaoPropertiesNative.instance()
+        from skytemple_files.graphics.kao._model import KaoPropertiesState
+
+        return KaoPropertiesState.instance()
 
     @classmethod
     def get_image_model_cls(cls) -> Type[KaoImageProtocol]:

@@ -967,6 +967,14 @@
           </Parameters>
         </SimplePatch>
 
+        <SimplePatch id="NoWeatherStop">
+          <Include filename="end_asm_mods/src/NoWeatherStop.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
       </Game>
     </Patches>
 

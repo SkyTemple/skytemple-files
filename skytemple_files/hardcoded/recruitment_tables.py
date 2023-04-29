@@ -23,11 +23,7 @@ from pmdsky_debug_py.protocol import Symbol
 from range_typed_integers import u16, u8
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import (
-    read_dynamic,
-    write_u16,
-    write_u8
-)
+from skytemple_files.common.util import read_dynamic, write_u16, write_u8
 
 
 class HardcodedRecruitmentTables:

@@ -29,12 +29,7 @@ from typing import (
     MutableSequence,
 )
 
-from range_typed_integers import (
-    u16,
-    u8,
-    i16,
-    i8
-)
+from range_typed_integers import u16, u8, i16, i8
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable

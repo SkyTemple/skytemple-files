@@ -26,12 +26,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptLevel,
     Pmd2ScriptLevelMapType,
 )
-from skytemple_files.common.util import (
-    AutoString,
-    read_u8,
-    read_i16,
-    read_u32
-)
+from skytemple_files.common.util import AutoString, read_u8, read_i16, read_u32
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol

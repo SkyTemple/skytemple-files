@@ -28,11 +28,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import (
-    create_file_in_rom,
-    read_u32,
-    write_u32
-)
+from skytemple_files.common.util import create_file_in_rom, read_u32, write_u32
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 

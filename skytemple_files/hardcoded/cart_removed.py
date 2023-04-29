@@ -22,9 +22,7 @@ from PIL import Image
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import (
-    iter_bytes
-)
+from skytemple_files.common.util import iter_bytes
 from skytemple_files.compression_container.common_at.handler import (
     CommonAtHandler,
     CommonAtType,

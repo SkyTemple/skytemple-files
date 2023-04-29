@@ -23,7 +23,7 @@ from skytemple_files.common.util import (
     write_u32,
     read_dynamic,
     write_u16,
-    write_u8
+    write_u8,
 )
 
 

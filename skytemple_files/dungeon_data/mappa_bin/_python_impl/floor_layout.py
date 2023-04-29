@@ -30,7 +30,7 @@ from skytemple_files.common.util import (
     write_u16,
     write_i16,
     write_u8,
-    read_i8
+    read_i8,
 )
 from skytemple_files.dungeon_data.mappa_bin.protocol import (
     _MappaFloorWeather,

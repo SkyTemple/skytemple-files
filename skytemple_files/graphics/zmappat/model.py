@@ -34,7 +34,7 @@ from skytemple_files.graphics.zmappat import (
     ZMAPPAT_TILE_SIZE,
     ZMAPPAT_NB_VARIATIONS,
     ZMAPPAT_NB_TILES_PER_VARIATION,
-    ZMAPPAT_NB_TILES_PER_LINE
+    ZMAPPAT_NB_TILES_PER_LINE,
 )
 
 logger = logging.getLogger(__name__)

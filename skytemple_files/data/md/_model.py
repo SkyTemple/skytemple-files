@@ -26,7 +26,7 @@ from skytemple_files.common.util import (
     read_u8,
     read_i16,
     read_u32,
-    read_i8
+    read_i8,
 )
 from skytemple_files.data.md.protocol import (
     MdProtocol,

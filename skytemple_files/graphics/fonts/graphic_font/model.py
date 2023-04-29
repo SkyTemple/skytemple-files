@@ -21,11 +21,7 @@ from typing import Optional, List
 
 from PIL import Image
 
-from skytemple_files.common.util import (
-    AutoString,
-    read_u16,
-    read_u8
-)
+from skytemple_files.common.util import AutoString, read_u16, read_u8
 from skytemple_files.graphics.fonts.graphic_font import GRAPHIC_FONT_ENTRY_LEN
 from skytemple_files.graphics.pal.model import Pal
 

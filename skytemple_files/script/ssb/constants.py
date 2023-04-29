@@ -39,7 +39,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptSpecial,
     Pmd2ScriptFaceName,
     Pmd2ScriptData,
-    Pmd2ScriptEntity
+    Pmd2ScriptEntity,
 )
 from skytemple_files.common.util import AutoString
 from skytemple_files.user_error import UserValueError

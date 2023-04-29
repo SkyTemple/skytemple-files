@@ -44,10 +44,14 @@ from skytemple_files.graphics.fonts import (
     XML_FONT,
     XML_TABLE,
     XML_CHAR__WIDTH,
-    XML_HEADER__UNKNOWN
+    XML_HEADER__UNKNOWN,
 )
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
-from skytemple_files.graphics.fonts.banner_font import BANNER_FONT_DATA_LEN, BANNER_FONT_ENTRY_LEN, BANNER_FONT_SIZE
+from skytemple_files.graphics.fonts.banner_font import (
+    BANNER_FONT_DATA_LEN,
+    BANNER_FONT_ENTRY_LEN,
+    BANNER_FONT_SIZE,
+)
 from skytemple_files.graphics.pal.model import Pal
 
 

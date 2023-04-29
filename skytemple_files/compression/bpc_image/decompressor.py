@@ -26,7 +26,7 @@ from skytemple_files.compression.bpc_image import (
     CMD__NEXT,
     CMD_USE_LAST_PATTERN_AND_CP,
     CMD_CYCLE_PATTERN_AND_CP__NEXT,
-    CMD_LOAD_BYTE_AS_PATTERN_AND_CP
+    CMD_LOAD_BYTE_AS_PATTERN_AND_CP,
 )
 
 DEBUG = False

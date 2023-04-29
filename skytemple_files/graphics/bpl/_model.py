@@ -20,10 +20,7 @@ from typing import List
 
 from range_typed_integers import u16_checked, u16
 
-from skytemple_files.common.util import (
-    iter_bytes,
-    read_u16
-)
+from skytemple_files.common.util import iter_bytes, read_u16
 from skytemple_files.graphics.bpl import (
     BPL_COL_INDEX_ENTRY_LEN,
     BPL_FOURTH_COLOR,

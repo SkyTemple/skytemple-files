@@ -29,7 +29,7 @@ from skytemple_files.common.util import (
     read_u16,
     write_u16,
     read_dynamic,
-    write_u8
+    write_u8,
 )
 
 IQ_GAINS_TABLES = {False: (18, 2), True: (25, 1)}

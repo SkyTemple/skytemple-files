@@ -47,7 +47,7 @@ from skytemple_files.common.ppmdu_config.data import (
     Union,
     Pmd2GameEdition,
     Pmd2PatchDir,
-    Pmd2LooseBinFile
+    Pmd2LooseBinFile,
 )
 from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2BinPackFile,
@@ -73,7 +73,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptSpriteEffect,
     Pmd2ScriptFaceName,
     Pmd2ScriptData,
-    Pmd2ScriptEntity
+    Pmd2ScriptEntity,
 )
 from skytemple_files.common.util import get_resources_dir
 

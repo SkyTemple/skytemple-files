@@ -32,7 +32,7 @@ from skytemple_files.common.util import (
     get_files_from_rom_with_extension,
     get_binary_from_rom,
     read_u32,
-    set_binary_in_rom
+    set_binary_in_rom,
 )
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.patch.category import PatchCategory

@@ -41,10 +41,14 @@ from skytemple_files.graphics.fonts import (
     XML_TABLE,
     FONT_DEFAULT_CAT,
     XML_CHAR__CAT,
-    XML_CHAR__WIDTH
+    XML_CHAR__WIDTH,
 )
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
-from skytemple_files.graphics.fonts.font_sir0 import FONT_SIR0_ENTRY_LEN, FONT_SIR0_DATA_LEN, FONT_SIR0_SIZE
+from skytemple_files.graphics.fonts.font_sir0 import (
+    FONT_SIR0_ENTRY_LEN,
+    FONT_SIR0_DATA_LEN,
+    FONT_SIR0_SIZE,
+)
 
 
 class FontSir0Entry(AbstractFontEntry):

@@ -20,10 +20,7 @@ from __future__ import annotations
 
 from range_typed_integers import u16, u8
 
-from skytemple_files.common.util import (
-    write_u16,
-    write_u8
-)
+from skytemple_files.common.util import write_u16, write_u8
 from skytemple_files.graphics.bpl import (
     BPL_COL_INDEX_ENTRY_LEN,
     BPL_FOURTH_COLOR,

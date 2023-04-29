@@ -27,7 +27,7 @@ from skytemple_files.common.util import (
     write_u16,
     write_i16,
     read_u32,
-    write_u8
+    write_u8,
 )
 from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 

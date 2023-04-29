@@ -19,10 +19,7 @@ from __future__ import annotations
 
 from range_typed_integers import u16_checked, u32_checked
 
-from skytemple_files.common.util import (
-    write_u16,
-    write_u32
-)
+from skytemple_files.common.util import write_u16, write_u32
 from skytemple_files.data.data_cd.model import DataCD
 
 

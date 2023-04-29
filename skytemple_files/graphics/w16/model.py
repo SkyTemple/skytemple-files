@@ -24,11 +24,7 @@ from typing import List, Tuple
 from PIL import Image
 
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
-from skytemple_files.common.util import (
-    read_u8,
-    iter_bytes,
-    read_u32
-)
+from skytemple_files.common.util import read_u8, iter_bytes, read_u32
 
 TOC_ENTRY_LEN = 4 + 4
 NUM_CHANNELS = 3

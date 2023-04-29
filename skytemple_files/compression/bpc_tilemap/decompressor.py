@@ -17,16 +17,13 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import (
-    read_dynamic,
-    read_u16
-)
+from skytemple_files.common.util import read_dynamic, read_u16
 from skytemple_files.compression.bpc_tilemap import (
     CMD_1_COPY_BYTES,
     CMD_1_FILL_OUT,
     CMD_1_ZERO_OUT,
     CMD_2_COPY_LOW,
-    CMD_2_SEEK_OFFSET
+    CMD_2_SEEK_OFFSET,
 )
 
 DEBUG = False

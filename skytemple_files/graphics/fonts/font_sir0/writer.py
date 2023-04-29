@@ -26,7 +26,10 @@ from skytemple_files.common.util import (
     write_u32,
     write_u8,
 )
-from skytemple_files.graphics.fonts.font_sir0 import FONT_SIR0_DATA_LEN, FONT_SIR0_ENTRY_LEN
+from skytemple_files.graphics.fonts.font_sir0 import (
+    FONT_SIR0_DATA_LEN,
+    FONT_SIR0_ENTRY_LEN,
+)
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
 
 

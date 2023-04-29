@@ -39,10 +39,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptData,
     Pmd2ScriptOpCode,
 )
-from skytemple_files.common.util import (
-    read_var_length_string,
-    read_u16
-)
+from skytemple_files.common.util import read_var_length_string, read_u16
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
 

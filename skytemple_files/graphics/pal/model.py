@@ -18,9 +18,7 @@ from __future__ import annotations
 
 from typing import List
 
-from skytemple_files.common.util import (
-    AutoString
-)
+from skytemple_files.common.util import AutoString
 
 
 class Pal(AutoString):

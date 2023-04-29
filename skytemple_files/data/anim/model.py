@@ -38,7 +38,7 @@ from skytemple_files.data.anim import (
     MOVE_DATA_SIZE,
     TRAP_DATA_SIZE,
     ITEM_DATA_SIZE,
-    SPECIAL_MOVE_DATA_SIZE
+    SPECIAL_MOVE_DATA_SIZE,
 )
 
 

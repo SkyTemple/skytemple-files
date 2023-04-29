@@ -18,13 +18,7 @@ from __future__ import annotations
 
 from range_typed_integers import i32, u16, u8
 
-from skytemple_files.common.util import (
-    AutoString,
-    read_i32,
-    read_u16,
-    read_u8,
-    chunks
-)
+from skytemple_files.common.util import AutoString, read_i32, read_u16, read_u8, chunks
 
 LEVEL_BIN_ENTRY_LEVEL_LEN = 12
 

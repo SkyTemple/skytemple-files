@@ -22,10 +22,7 @@ from typing import Optional, List, Tuple
 from PIL import Image
 from range_typed_integers import u32
 
-from skytemple_files.common.util import (
-    AutoString,
-    iter_bytes
-)
+from skytemple_files.common.util import AutoString, iter_bytes
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.graphics.colvec import COLVEC_DATA_LEN
 

@@ -22,10 +22,7 @@ from typing import List
 from range_typed_integers import u8, u16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import (
-    read_u16,
-    read_u8
-)
+from skytemple_files.common.util import read_u16, read_u8
 from skytemple_files.data.tbl_talk import TBL_TALK_PERSONALITY_LEN, TBL_TALK_SPEC_LEN
 
 

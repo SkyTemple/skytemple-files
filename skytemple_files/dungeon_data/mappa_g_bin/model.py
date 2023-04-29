@@ -26,7 +26,7 @@ from skytemple_files.common.util import (
     read_u16,
     write_u16,
     read_u32,
-    write_u8
+    write_u8,
 )
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 

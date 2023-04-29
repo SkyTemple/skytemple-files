@@ -37,7 +37,7 @@ from skytemple_files.graphics.fonts import (
     FONT_DEFAULT_BPROW,
     XML_TABLE,
     XML_CHAR__BPROW,
-    XML_CHAR__WIDTH
+    XML_CHAR__WIDTH,
 )
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
 from skytemple_files.graphics.fonts.font_dat import FONT_DAT_SIZE, FONT_DAT_ENTRY_LEN

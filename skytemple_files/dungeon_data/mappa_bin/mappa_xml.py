@@ -101,7 +101,7 @@ from skytemple_files.dungeon_data.mappa_bin import (
     XML_FLOOR_LAYOUT__GENSET,
     XML_MONSTER__LEVEL,
     XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS,
-    XML_CATEGORY
+    XML_CATEGORY,
 )
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler
 from skytemple_files.dungeon_data.mappa_bin.protocol import (

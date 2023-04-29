@@ -21,12 +21,7 @@ from math import ceil
 from range_typed_integers import u32_checked, u16
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import (
-    write_u16,
-    read_u16,
-    read_u32,
-    write_u32
-)
+from skytemple_files.common.util import write_u16, read_u16, read_u32, write_u32
 
 
 class HardcodedDungeonMisc:

@@ -18,10 +18,7 @@ from __future__ import annotations
 
 from range_typed_integers import u8
 
-from skytemple_files.common.util import (
-    iter_bytes,
-    write_u8
-)
+from skytemple_files.common.util import iter_bytes, write_u8
 
 # Length of a palette in colors.
 DPL_PAL_LEN = 16

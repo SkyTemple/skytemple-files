@@ -20,13 +20,7 @@ from abc import abstractmethod
 from enum import Enum
 from typing import Protocol, TypeVar, Sequence, List, Tuple, Iterator, Optional
 
-from range_typed_integers import (
-    u32,
-    u8,
-    u16,
-    i8,
-    i16
-)
+from range_typed_integers import u32, u8, u16, i8, i16
 
 from skytemple_files.common.i18n_util import _
 

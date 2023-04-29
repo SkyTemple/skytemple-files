@@ -17,7 +17,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from range_typed_integers import u32, u8, i8, u16, i16, i32
+
+from skytemple_files.common.util import (
+    write_u32,
+    write_i8,
+    write_i32,
+    generate_bitfield,
+    write_u16,
+    write_i16,
+    write_u8,
+)
 from skytemple_files.data.md._model import MD_ENTRY_LEN, Md
 
 

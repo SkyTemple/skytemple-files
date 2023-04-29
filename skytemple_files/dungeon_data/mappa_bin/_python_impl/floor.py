@@ -16,9 +16,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, List
+
+from range_typed_integers import u16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    write_u16,
+    read_u32,
+)
 from skytemple_files.dungeon_data.mappa_bin._python_impl.floor_layout import (
     MappaFloorLayout,
 )

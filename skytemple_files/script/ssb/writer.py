@@ -21,7 +21,7 @@ import logging
 import math
 from typing import Dict, Type
 
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -30,7 +30,9 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_US,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u16,
+)
 from skytemple_files.script.ssb.header import (
     SSB_HEADER_EU_LENGTH,
     SSB_HEADER_JP_LENGTH,

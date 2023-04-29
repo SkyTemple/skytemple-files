@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from range_typed_integers import u32_checked
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import write_u16, write_u32
 from skytemple_files.graphics.wtu.model import MAGIC_NUMBER, WTU_ENTRY_LEN, Wtu
 
 

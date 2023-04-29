@@ -16,7 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from typing import List
+
+from range_typed_integers import u32
+
+from skytemple_files.common.util import read_u32
 
 PADDING = bytes([0xFF] * 16)
 

@@ -17,8 +17,16 @@
 
 from __future__ import annotations
 
+from typing import List
+
+from range_typed_integers import u16
+
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    read_u32,
+)
 from skytemple_files.data.data_cd.armips_importer import ArmipsImporter
 from skytemple_files.user_error import UserValueError
 

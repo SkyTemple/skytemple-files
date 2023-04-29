@@ -17,7 +17,15 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from typing import List
+
+from range_typed_integers import i16
+
+from skytemple_files.common.util import (
+    AutoString,
+    read_i16,
+    read_u32
+)
 
 
 class DataST(AutoString):

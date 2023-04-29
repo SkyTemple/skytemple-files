@@ -20,7 +20,7 @@ from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import get_binary_from_rom, read_u32
 from skytemple_files.common.ppmdu_config.data import (
     Pmd2Data,
     GAME_VERSION_EOS,

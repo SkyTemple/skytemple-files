@@ -16,9 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict
+import logging
+from typing import Dict, TYPE_CHECKING
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+)
 from skytemple_files.dungeon_data.mappa_bin.protocol import (
     MappaItemListProtocol,
     Probability,

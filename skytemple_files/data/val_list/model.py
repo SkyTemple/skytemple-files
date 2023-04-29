@@ -16,9 +16,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, Union
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    write_u32,
+    read_dynamic,
+    write_u16,
+    write_u8
+)
 
 
 class ValList(AutoString):

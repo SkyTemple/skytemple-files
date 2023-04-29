@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 

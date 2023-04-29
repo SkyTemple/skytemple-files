@@ -17,11 +17,15 @@
 from __future__ import annotations
 
 from itertools import chain
-from typing import Optional
+from typing import Optional, List, Tuple
 
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u32
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    write_u32,
+    read_u32,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.dungeon_data.mappa_bin._python_impl.floor import (
     MappaFloor,

@@ -20,8 +20,8 @@ from __future__ import annotations
 
 from range_typed_integers import u32_checked
 
-from skytemple_files.common.util import *
-from skytemple_files.data.md_evo import *
+from skytemple_files.common.util import write_u32
+from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH
 from skytemple_files.data.md_evo.model import MdEvo
 
 

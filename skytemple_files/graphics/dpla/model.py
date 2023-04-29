@@ -17,12 +17,18 @@
 from __future__ import annotations
 
 from itertools import islice
-from typing import Optional
+from typing import Optional, Tuple, List
 
-from range_typed_integers import u8_checked, u32_checked
+from range_typed_integers import u8_checked, u32_checked, u8
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u32,
+    read_u16,
+    iter_bytes,
+    read_u32,
+    write_u8,
+)
 
 DPLA_COLORS_PER_PALETTE = 16
 

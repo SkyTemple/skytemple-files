@@ -16,11 +16,20 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Union, MutableSequence
+from typing import Optional, Union, MutableSequence, Sequence, List, Tuple, Iterable
 
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u16, u32, u8
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    chunks,
+    write_u32,
+    read_u8,
+    read_u16,
+    write_u16,
+    read_u32,
+    write_u8,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.container.sir0.sir0_util import (
     decode_sir0_pointer_offsets,

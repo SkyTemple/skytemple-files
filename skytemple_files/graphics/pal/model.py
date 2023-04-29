@@ -16,7 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from typing import List
+
+from skytemple_files.common.util import (
+    AutoString
+)
 
 
 class Pal(AutoString):

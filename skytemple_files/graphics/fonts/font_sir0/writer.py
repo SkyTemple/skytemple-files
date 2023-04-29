@@ -17,11 +17,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u32_checked
+from typing import Tuple, List, Optional
+
+from range_typed_integers import u32_checked, u32
 
 from skytemple_files.common.i18n_util import _, f
-from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts.font_sir0 import *
+from skytemple_files.common.util import (
+    write_u32,
+    write_u8,
+)
+from skytemple_files.graphics.fonts.font_sir0 import FONT_SIR0_DATA_LEN, FONT_SIR0_ENTRY_LEN
 from skytemple_files.graphics.fonts.font_sir0.model import FontSir0
 
 

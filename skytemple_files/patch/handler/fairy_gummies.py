@@ -29,7 +29,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import get_files_from_rom_with_extension, read_u32
 from skytemple_files.data.data_cd.handler import DataCDHandler
 from skytemple_files.data.data_st.handler import DataSTHandler
 from skytemple_files.data.item_p.handler import ItemPHandler

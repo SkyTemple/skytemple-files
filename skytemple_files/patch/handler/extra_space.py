@@ -22,8 +22,9 @@ from typing import Callable
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import _, get_resources_dir
+from skytemple_files.common.util import get_resources_dir
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 

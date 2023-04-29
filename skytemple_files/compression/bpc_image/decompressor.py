@@ -19,8 +19,15 @@ from __future__ import annotations
 
 from typing import Tuple
 
-from skytemple_files.common.util import *
-from skytemple_files.compression.bpc_image import *
+from skytemple_files.common.util import read_dynamic
+from skytemple_files.compression.bpc_image import (
+    CMD_CYCLE_PATTERN_AND_CP,
+    CMD_COPY__NEXT__LE_16,
+    CMD__NEXT,
+    CMD_USE_LAST_PATTERN_AND_CP,
+    CMD_CYCLE_PATTERN_AND_CP__NEXT,
+    CMD_LOAD_BYTE_AS_PATTERN_AND_CP
+)
 
 DEBUG = False
 
@@ -221,7 +228,6 @@ class BpcImageDecompressor:
             self.bytes_written : self.bytes_written + 2
         ] = pattern_to_write.to_bytes(2, "little")
         self.bytes_written += 2
-        pass
 
     def _read(self, bytes=1):
         """Read a single byte and increase cursor"""

@@ -18,12 +18,13 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, List, Tuple
 from xml.etree.ElementTree import Element
 
 from PIL import Image
+from range_typed_integers import u8
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import AutoString
 
 
 class AbstractFontEntry(ABC, AutoString):

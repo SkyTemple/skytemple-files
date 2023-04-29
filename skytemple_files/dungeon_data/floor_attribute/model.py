@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from typing import List, Optional, Tuple
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u32
 
 
 class FloorAttribute:

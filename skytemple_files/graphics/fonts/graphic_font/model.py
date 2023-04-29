@@ -17,12 +17,16 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, List
 
 from PIL import Image
 
-from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts.graphic_font import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    read_u8
+)
+from skytemple_files.graphics.fonts.graphic_font import GRAPHIC_FONT_ENTRY_LEN
 from skytemple_files.graphics.pal.model import Pal
 
 

@@ -17,10 +17,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u16,
+    read_i16
+)
 from skytemple_files.script.ssa_sse_sss.model import Ssa
 
 LEN_HEADER = 0x12

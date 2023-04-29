@@ -18,12 +18,17 @@
 from __future__ import annotations
 
 import math
+from typing import Optional, List, Sequence
 
-from range_typed_integers import u16_checked
+from PIL import Image
+from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u16,
+    iter_bytes,
+)
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
 from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
 from skytemple_files.graphics.bpl import BPL_IMG_PAL_LEN, BPL_MAX_PAL

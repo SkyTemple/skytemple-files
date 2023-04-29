@@ -16,7 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from range_typed_integers import u16, u32
+
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    read_u32
+)
 
 MAGIC_NUMBER = b"WTU\0"
 WTU_ENTRY_LEN = 8

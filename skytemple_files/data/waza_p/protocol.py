@@ -16,11 +16,13 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from abc import abstractmethod
 from enum import Enum
-from typing import MutableSequence
+from typing import MutableSequence, Protocol, TypeVar, Sequence
+
+from range_typed_integers import u8, u16, u32
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 

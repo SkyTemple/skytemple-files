@@ -17,7 +17,10 @@
 
 from __future__ import annotations
 
+from typing import List
+
 from PIL import Image
+from range_typed_integers import u32, u16
 
 from skytemple_files.common.tiled_image import (
     TilemapEntry,
@@ -25,7 +28,10 @@ from skytemple_files.common.tiled_image import (
     to_pil,
     to_pil_tiled,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    iter_bytes,
+    read_u32,
+)
 
 BGP_RES_WIDTH = 256
 BGP_RES_HEIGHT = 192

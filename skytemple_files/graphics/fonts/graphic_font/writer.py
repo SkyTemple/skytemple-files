@@ -17,10 +17,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u8_checked, u16_checked
+from range_typed_integers import u8_checked, u16_checked, u32
 
-from skytemple_files.common.util import *
-from skytemple_files.graphics.fonts.graphic_font import *
+from skytemple_files.common.util import (
+    write_u8,
+    write_u16,
+    write_u32
+)
+from skytemple_files.graphics.fonts.graphic_font import GRAPHIC_FONT_ENTRY_LEN
 from skytemple_files.graphics.fonts.graphic_font.model import GraphicFont
 
 

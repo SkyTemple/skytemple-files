@@ -18,7 +18,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import write_u8, write_u16
 from skytemple_files.list.object.model import LEN_OBJECT_ENTRY, ObjectListBin
 
 

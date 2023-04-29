@@ -16,10 +16,20 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u8_checked, u16_checked
+from typing import List
 
-from skytemple_files.common.util import *
-from skytemple_files.data.md_evo import *
+from range_typed_integers import u8_checked, u16_checked, u16, i16
+
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    read_i16,
+    write_u16,
+    write_i16,
+    read_u32,
+    write_u8
+)
+from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 
 
 class MdEvoEntry(AutoString):

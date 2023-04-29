@@ -17,11 +17,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Tuple, List
 
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u32
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import write_u32
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin
 
 

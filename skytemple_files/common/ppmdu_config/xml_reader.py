@@ -20,11 +20,35 @@ from __future__ import annotations
 
 import os
 import re
+from typing import List
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.ppmdu_config.data import *
+from skytemple_files.common.ppmdu_config.data import (
+    Pmd2Sprite,
+    Pmd2PatchInclude,
+    Pmd2Data,
+    Pmd2StringBlock,
+    Pmd2Patch,
+    Pmd2PatchParameterType,
+    Pmd2PatchStringReplacementGame,
+    Pmd2Index,
+    Pmd2PatchParameter,
+    Pmd2DungeonData,
+    Pmd2SortLists,
+    Pmd2PatchOpenBin,
+    Pmd2PatchParameterOption,
+    Pmd2StringIndexData,
+    Pmd2PatchStringReplacement,
+    Pmd2Language,
+    Pmd2AsmPatchesConstants,
+    Pmd2SimplePatch,
+    Union,
+    Pmd2GameEdition,
+    Pmd2PatchDir,
+    Pmd2LooseBinFile
+)
 from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2BinPackFile,
     Pmd2DungeonBinFiles,
@@ -32,7 +56,25 @@ from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2DungeonItem,
     Pmd2DungeonItemCategory,
 )
-from skytemple_files.common.ppmdu_config.script_data import *
+from skytemple_files.common.ppmdu_config.script_data import (
+    Pmd2ScriptBgm,
+    Pmd2ScriptFacePositionMode,
+    Pmd2ScriptMenu,
+    Pmd2ScriptLevel,
+    Pmd2ScriptGroundStateStruct,
+    Pmd2ScriptOpCode,
+    Pmd2ScriptObject,
+    Pmd2ScriptOpCodeArgument,
+    Pmd2ScriptDirection,
+    Pmd2ScriptGameVar,
+    Pmd2ScriptRoutine,
+    Pmd2ScriptOpCodeRepeatingArgumentGroup,
+    Pmd2ScriptSpecial,
+    Pmd2ScriptSpriteEffect,
+    Pmd2ScriptFaceName,
+    Pmd2ScriptData,
+    Pmd2ScriptEntity
+)
 from skytemple_files.common.util import get_resources_dir
 
 

@@ -16,9 +16,20 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import List
+
+from range_typed_integers import u16, u32
+
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    write_u32,
+    read_bytes,
+    read_u16,
+    write_u16,
+    read_u32,
+)
 
 GUEST_DATA_ENTRY_SIZE = 36
 EXTRA_DUNGEON_DATA_ENTRY_SIZE = 2

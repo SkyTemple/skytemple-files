@@ -22,8 +22,8 @@ import typing
 
 from range_typed_integers import u32_checked
 
-from skytemple_files.common.util import *
-from skytemple_files.data.anim import *
+from skytemple_files.common.util import write_u32
+from skytemple_files.data.anim import HEADER_SIZE
 from skytemple_files.data.anim.model import Anim
 
 

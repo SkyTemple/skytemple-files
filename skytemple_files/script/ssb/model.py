@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Tuple
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (
@@ -34,11 +34,15 @@ from explorerscript.ssb_script.ssb_converting.ssb_decompiler import (
     SsbScriptSsbDecompiler,
 )
 
+from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptData,
     Pmd2ScriptOpCode,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_var_length_string,
+    read_u16
+)
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
 

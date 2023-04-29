@@ -18,12 +18,19 @@ from __future__ import annotations
 
 import itertools
 import math
+from typing import List, Tuple
 
 from PIL import Image
+from range_typed_integers import u16
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    chunks,
+    read_u16,
+    write_u16,
+    iter_bytes,
+)
 from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
 from skytemple_files.graphics.dpl.model import DPL_MAX_PAL, DPL_PAL_LEN
 

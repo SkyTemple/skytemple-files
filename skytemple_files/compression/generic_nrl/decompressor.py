@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u8
 from skytemple_files.compression.generic_nrl import (
     CMD_COPY_BYTES,
     CMD_FILL_OUT,
@@ -41,7 +41,6 @@ class GenericNrlDecompressor:
         self.decompressed_data = bytearray(self.stop_when_size)
         self.cursor = 0
         self.bytes_written = 0
-        pass
 
     def decompress(self) -> Tuple[bytes, int]:
         self.reset()

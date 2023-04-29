@@ -18,9 +18,19 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import List
+
+from range_typed_integers import u8, u16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u8,
+    read_u16,
+    write_u16,
+    read_u32,
+    write_u8,
+)
 
 
 class InterDEntryType(Enum):

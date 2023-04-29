@@ -16,10 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import List
+
 from range_typed_integers import u16_checked
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptObject
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u16,
+    read_u8
+)
 
 LEN_OBJECT_ENTRY = 16
 

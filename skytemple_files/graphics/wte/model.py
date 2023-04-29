@@ -18,13 +18,19 @@ from __future__ import annotations
 
 import logging
 from enum import Enum
-from typing import Optional
+from typing import Optional, Tuple, List
 
 from PIL import Image
-from range_typed_integers import u8_checked, u16_checked
+from range_typed_integers import u8_checked, u16_checked, u8, u32, u16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u8,
+    read_u16,
+    iter_bytes,
+    read_u32,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 MAGIC_NUMBER = b"WTE\0"

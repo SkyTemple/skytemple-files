@@ -16,9 +16,9 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u16
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_bytes, read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
 
 

@@ -21,13 +21,14 @@ from typing import Callable, List, Any
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import _, get_binary_from_rom
+from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 

@@ -29,7 +29,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u32
 from skytemple_files.patch.asm_tools import AsmFunction
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler

@@ -16,8 +16,22 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
-from skytemple_files.common.util import *
+from range_typed_integers import u8, i8, u16, i16
+
+from skytemple_files.common.util import (
+    AutoString,
+    write_i8,
+    read_u8,
+    read_u16,
+    generate_bitfield,
+    read_i16,
+    write_u16,
+    write_i16,
+    write_u8,
+    read_i8
+)
 from skytemple_files.dungeon_data.mappa_bin.protocol import (
     _MappaFloorWeather,
     _MappaFloorDarknessLevel,

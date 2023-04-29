@@ -28,7 +28,7 @@ from skytemple_files.common.ppmdu_config.data import (
     LANG_IT,
     LANG_SP,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u16
 
 SSB_HEADER_US_LENGTH = 0x0C
 SSB_HEADER_EU_LENGTH = 0x12

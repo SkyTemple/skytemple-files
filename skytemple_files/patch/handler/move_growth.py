@@ -17,9 +17,11 @@
 from __future__ import annotations
 
 import os
-from typing import Callable, List, cast
+from typing import Callable, List, cast, Optional
 
+from PIL import Image
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u16, u8
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -28,7 +30,14 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    create_file_in_rom,
+    get_resources_dir,
+    get_binary_from_rom,
+    write_u16,
+    read_u32,
+    write_u8,
+)
 from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.waza_p.protocol import WazaMoveCategory
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler

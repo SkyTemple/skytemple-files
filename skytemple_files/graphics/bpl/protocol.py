@@ -19,7 +19,7 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import List, Protocol, Sequence, TypeVar, runtime_checkable
 
-from range_typed_integers import *
+from range_typed_integers import u16
 
 
 @runtime_checkable

@@ -17,14 +17,21 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import cast
+from typing import cast, List, Optional, Tuple
+
+from range_typed_integers import i16, u8, u32
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptLevel,
     Pmd2ScriptLevelMapType,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    read_u8,
+    read_i16,
+    read_u32
+)
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol

@@ -16,9 +16,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u16_checked
+from typing import List
 
-from skytemple_files.common.util import *
+from range_typed_integers import u16_checked, u16
+
+from skytemple_files.common.util import (
+    iter_bytes,
+    read_u16
+)
 from skytemple_files.graphics.bpl import (
     BPL_COL_INDEX_ENTRY_LEN,
     BPL_FOURTH_COLOR,

@@ -17,11 +17,11 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Union
+from typing import Union, List
 
 from PIL import Image
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import chunks
 from skytemple_files.graphics.dpc.model import DPC_TILING_DIM, Dpc
 from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
 

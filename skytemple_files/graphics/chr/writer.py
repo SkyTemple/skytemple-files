@@ -18,8 +18,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
-from skytemple_files.graphics.chr import *
+from skytemple_files.graphics.chr import CHR_TILE_WIDTH
 from skytemple_files.graphics.chr.model import Chr
 
 

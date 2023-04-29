@@ -18,6 +18,7 @@
 from __future__ import annotations
 
 from enum import Enum, auto
+from typing import Any, List
 
 from pmdsky_debug_py.protocol import (
     Overlay1DataProtocol,
@@ -38,10 +39,16 @@ from pmdsky_debug_py.protocol import (
     Overlay31DataProtocol,
     Overlay34DataProtocol,
 )
+from range_typed_integers import u16, i32
 
-from skytemple_files.common.i18n_util import _
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_i32,
+    read_u16,
+    write_i32,
+    write_u16,
+)
 
 MENU_ENTRY_LEN = 8
 

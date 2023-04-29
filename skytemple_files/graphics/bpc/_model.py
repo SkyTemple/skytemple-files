@@ -18,12 +18,17 @@
 from __future__ import annotations
 
 import math
+from typing import List, Tuple, Sequence, Optional
 
-from range_typed_integers import u16_checked
+from PIL import Image
+from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u16,
+    iter_bytes,
+)
 from skytemple_files.graphics.bpa.protocol import BpaProtocol
 from skytemple_files.graphics.bpc import BPC_TILE_DIM, BPC_TILEMAP_BYTELEN
 from skytemple_files.graphics.bpc.protocol import BpcLayerProtocol, BpcProtocol

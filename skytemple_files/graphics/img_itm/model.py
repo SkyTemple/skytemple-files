@@ -17,12 +17,16 @@
 
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, List, Tuple
 
 from PIL import Image
+from range_typed_integers import u32
 
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    iter_bytes,
+    read_u32
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.graphics.img_itm import CHUNK_DIM, PAL_ENTRY_LEN, PAL_LEN, TILE_DIM
 

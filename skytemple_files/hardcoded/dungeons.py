@@ -17,10 +17,27 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
+from enum import Enum
+from typing import no_type_check, List
+
+from range_typed_integers import u8, i8, i16
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.common.util import (
+    AutoString,
+    write_u32,
+    write_i8,
+    read_u8,
+    read_u16,
+    generate_bitfield,
+    read_i16,
+    write_u16,
+    write_i16,
+    read_u32,
+    write_u8,
+    read_i8,
+)
 from skytemple_files.data.md.protocol import PokeType
 
 DUNGEON_LIST_ENTRY_LEN = 4
@@ -386,7 +403,7 @@ class TilesetProperties(AutoString):
         self.full_water_floor = full_water_floor
 
     @classmethod
-    @typing.no_type_check
+    @no_type_check
     def from_bytes(cls, b: bytes) -> "TilesetProperties":
         return TilesetProperties(
             TilesetMapColor(read_u32(b, 0)),

@@ -17,11 +17,20 @@
 from __future__ import annotations
 
 from itertools import chain
+from typing import List
 
-from range_typed_integers import u8_checked, u16_checked
+from range_typed_integers import u8_checked, u16_checked, i32, i16, u16, u8
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_i32,
+    read_u8,
+    read_i16,
+    read_u16,
+    write_u16,
+    read_dynamic,
+    write_u8
+)
 
 IQ_GAINS_TABLES = {False: (18, 2), True: (25, 1)}
 IQ_SKILL_ENTRY_LEN = 4

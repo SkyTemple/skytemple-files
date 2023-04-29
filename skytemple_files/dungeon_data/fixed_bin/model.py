@@ -19,14 +19,20 @@ from __future__ import annotations
 import itertools
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Optional
+from typing import Optional, List, Tuple
 
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u16, u32
 
 from skytemple_files.common.dungeon_floor_generator.generator import Tile
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptDirection
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    shrink_list,
+    read_u16,
+    write_u16,
+    read_u32,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 END_OF_LIST_PADDING = b"\xaa\xaa\xaa\xaa"

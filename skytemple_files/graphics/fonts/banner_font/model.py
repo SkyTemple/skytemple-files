@@ -16,23 +16,38 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Tuple, no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image
+from range_typed_integers import i16, u32
 
 from skytemple_files.common.i18n_util import _, f
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u8,
+    read_i16,
+    read_u32,
+)
 from skytemple_files.common.xml_util import (
     XmlValidateError,
     validate_xml_attribs,
     validate_xml_tag,
 )
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts import (
+    FONT_VALID_TABLES,
+    u8,
+    XML_CHAR,
+    XML_HEADER,
+    XML_CHAR__ID,
+    XML_TABLE__ID,
+    XML_FONT,
+    XML_TABLE,
+    XML_CHAR__WIDTH,
+    XML_HEADER__UNKNOWN
+)
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
-from skytemple_files.graphics.fonts.banner_font import *
+from skytemple_files.graphics.fonts.banner_font import BANNER_FONT_DATA_LEN, BANNER_FONT_ENTRY_LEN, BANNER_FONT_SIZE
 from skytemple_files.graphics.pal.model import Pal
 
 
@@ -206,7 +221,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
 
-    @typing.no_type_check
+    @no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         self.unknown = 0

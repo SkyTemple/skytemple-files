@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable
+from typing import Callable, List, Dict
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, u32_checked
@@ -29,7 +29,13 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    create_file_in_rom,
+    write_u32,
+    read_u16,
+    write_u16,
+    read_u32,
+)
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.data.md.protocol import (
     AdditionalRequirement,

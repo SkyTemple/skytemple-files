@@ -19,14 +19,20 @@ from __future__ import annotations
 import copy
 import itertools
 import math
-from typing import List, Sequence, Tuple
+from typing import List, Sequence, Tuple, Optional
 
 from PIL import Image, ImageDraw, ImageFont
+from range_typed_integers import u16
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.common.tiled_image import from_pil, search_for_chunk
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u8,
+    read_u16,
+    iter_bytes,
+    lcm,
+)
 from skytemple_files.graphics.bma import MASK_PAL
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 

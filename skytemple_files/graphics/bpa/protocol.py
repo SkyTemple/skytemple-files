@@ -20,7 +20,7 @@ from abc import abstractmethod
 from typing import List, Protocol, Sequence, TypeVar, runtime_checkable
 
 from PIL import Image
-from range_typed_integers import *
+from range_typed_integers import u16
 
 
 @runtime_checkable

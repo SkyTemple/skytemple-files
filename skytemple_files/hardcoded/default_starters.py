@@ -17,8 +17,17 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import List
+
+from range_typed_integers import u16, u8
+
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u16,
+    read_u8,
+    write_u16,
+    write_u8
+)
 
 SE_PC_LNTRY_LEN = 0x14
 

@@ -16,8 +16,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import List
+
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u16,
+    read_i16,
+    iter_bytes,
+)
 from skytemple_files.script.ssa_sse_sss import (
     ACTOR_ENTRY_LEN,
     EVENTS_ENTRY_LEN,

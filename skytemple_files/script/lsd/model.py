@@ -17,10 +17,16 @@
 from __future__ import annotations
 
 import string
+from typing import Optional, List
 
 from range_typed_integers import u16_checked
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u16,
+    read_u16,
+    read_bytes,
+    iter_bytes
+)
 
 ALLOWED_CHARS = set(string.digits + string.ascii_uppercase)
 MAX_LEN = 8

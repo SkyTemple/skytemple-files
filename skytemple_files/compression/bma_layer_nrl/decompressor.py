@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_dynamic
 
 # Operations are encoded in command bytes (CMD):
 CMD_ZERO_OUT = 0x80  # All values below
@@ -42,7 +42,6 @@ class BmaLayerNrlDecompressor:
         self.decompressed_data = bytearray(self.stop_when_size)
         self.cursor = 0
         self.bytes_written = 0
-        pass
 
     def decompress(self) -> Tuple[bytes, int]:
         self.reset()

@@ -17,10 +17,12 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import PurePosixPath
+from typing import List, Optional, Union
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
-from skytemple_files.common.util import *
+from skytemple_files.common.util import iter_bytes, read_bytes
 from skytemple_files.graphics.bg_list_dat import BMA_EXT, BPA_EXT, BPC_EXT, BPL_EXT, DIR
 from skytemple_files.graphics.bg_list_dat.protocol import (
     BgListEntryProtocol,

@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import chunks
 
 
 class Custom999Decompressor:

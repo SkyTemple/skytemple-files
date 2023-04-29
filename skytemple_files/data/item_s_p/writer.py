@@ -17,9 +17,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Tuple, List
 
-from skytemple_files.common.util import *
+from range_typed_integers import u32
+
 from skytemple_files.data.item_s_p.model import ItemSP
 
 

@@ -18,7 +18,9 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from range_typed_integers import u16
+
+from skytemple_files.common.util import write_u16
 from skytemple_files.graphics.bpa import BPA_TILE_DIM
 from skytemple_files.graphics.bpa._model import Bpa
 

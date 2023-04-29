@@ -16,18 +16,31 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import typing
-from typing import Dict
+from typing import Dict, List, Tuple, no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image
+from range_typed_integers import u8
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u8,
+    read_u32,
+)
 from skytemple_files.common.xml_util import validate_xml_attribs, validate_xml_tag
-from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts import (
+    FONT_VALID_TABLES,
+    XML_CHAR,
+    XML_CHAR__ID,
+    XML_TABLE__ID,
+    XML_FONT,
+    FONT_DEFAULT_BPROW,
+    XML_TABLE,
+    XML_CHAR__BPROW,
+    XML_CHAR__WIDTH
+)
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
-from skytemple_files.graphics.fonts.font_dat import *
+from skytemple_files.graphics.fonts.font_dat import FONT_DAT_SIZE, FONT_DAT_ENTRY_LEN
 
 
 class FontDatEntry(AbstractFontEntry):
@@ -184,7 +197,7 @@ class FontDat(AbstractFont):
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
 
-    @typing.no_type_check
+    @no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)

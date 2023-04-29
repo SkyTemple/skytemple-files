@@ -18,10 +18,22 @@
 from __future__ import annotations
 
 import math
+import warnings
 from collections.abc import Iterator
+from typing import Optional, Tuple, List, Union, Dict
+
+from PIL import Image
+from range_typed_integers import i32
 
 from skytemple_files.common.i18n_util import _, f
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    iter_bytes_4bit_le,
+    read_i32,
+    read_bytes,
+    write_i32,
+    simple_quant,
+    read_u32,
+)
 from skytemple_files.compression_container.common_at.handler import (
     COMMON_AT_MUST_COMPRESS_3,
     CommonAtType,

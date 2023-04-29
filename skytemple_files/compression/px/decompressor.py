@@ -17,7 +17,12 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_bytes,
+    read_u8,
+    iter_bits,
+    DEBUG
+)
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN
 
 DEBUG = False
@@ -105,7 +110,6 @@ class PxDecompressor:
         else:
             self._copy_sequence(low_nibble, high_nibble)
 
-        pass
 
     def _read_next_byte(self):
         b = read_u8(self.compressed_data, self.cursor)
@@ -133,7 +137,6 @@ class PxDecompressor:
         if DEBUG:
             print(f"> Inserting by byte pattern: {two_bytes}")  # type: ignore
         self.uncompressed_data += two_bytes
-        pass
 
     def _copy_sequence(self, low_nibble, high_nibble):
         # In this case, we append a a sequence from a previous position in the decompressed data.
@@ -156,4 +159,3 @@ class PxDecompressor:
         self.uncompressed_data += read_bytes(
             self.uncompressed_data, copy_pos, bytes_to_copy
         )
-        pass

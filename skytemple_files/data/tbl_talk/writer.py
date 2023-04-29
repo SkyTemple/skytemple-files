@@ -19,8 +19,8 @@ from __future__ import annotations
 
 from range_typed_integers import u16_checked
 
-from skytemple_files.common.util import *
-from skytemple_files.data.tbl_talk import *
+from skytemple_files.common.util import write_u16
+from skytemple_files.data.tbl_talk import TBL_TALK_PERSONALITY_LEN
 from skytemple_files.data.tbl_talk.model import TblTalk
 
 

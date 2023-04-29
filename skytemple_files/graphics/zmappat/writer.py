@@ -17,12 +17,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, Tuple, List
 
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u32, u8
 
-from skytemple_files.common.util import *
-from skytemple_files.graphics.zmappat import *
+from skytemple_files.common.util import (
+    write_u32,
+    write_u8
+)
+from skytemple_files.graphics.zmappat import model, ZMAPPAT_TILE_SIZE
 from skytemple_files.graphics.zmappat.model import ZMappaT
 
 

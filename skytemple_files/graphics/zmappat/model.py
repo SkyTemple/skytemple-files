@@ -18,14 +18,24 @@ from __future__ import annotations
 
 import logging
 from enum import Enum
-from typing import Optional
+from typing import Optional, List, Tuple
 
 from PIL import Image
+from range_typed_integers import u32
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    AutoString,
+    iter_bytes,
+    read_u32,
+)
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.graphics.zmappat import *
+from skytemple_files.graphics.zmappat import (
+    ZMAPPAT_TILE_SIZE,
+    ZMAPPAT_NB_VARIATIONS,
+    ZMAPPAT_NB_TILES_PER_VARIATION,
+    ZMAPPAT_NB_TILES_PER_LINE
+)
 
 logger = logging.getLogger(__name__)
 

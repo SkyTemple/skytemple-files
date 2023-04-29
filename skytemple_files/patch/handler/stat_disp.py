@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import os
-from typing import Callable, cast
+from typing import Callable, cast, Optional, List
 
 from ndspy.rom import NintendoDSRom
 from PIL import Image
@@ -29,7 +29,11 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    get_files_from_rom_with_extension,
+    get_resources_dir,
+    read_u32,
+)
 from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.graphics.fonts.graphic_font.handler import GraphicFontHandler
 from skytemple_files.patch.category import PatchCategory

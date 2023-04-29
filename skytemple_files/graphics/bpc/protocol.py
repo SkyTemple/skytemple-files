@@ -20,7 +20,7 @@ from abc import abstractmethod
 from typing import List, Optional, Protocol, Sequence, TypeVar, runtime_checkable
 
 from PIL import Image
-from range_typed_integers import *
+from range_typed_integers import u16
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 from skytemple_files.graphics.bpa.protocol import BpaProtocol

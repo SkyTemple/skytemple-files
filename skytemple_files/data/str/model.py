@@ -16,10 +16,16 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import List
+
 from range_typed_integers import u32_checked
 
 from skytemple_files.common.string_codec import PMD2_STR_ENCODER
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u32,
+    read_var_length_string,
+    read_u32,
+)
 
 
 class Str:

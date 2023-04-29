@@ -17,7 +17,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    write_u8,
+    write_u16,
+    write_i32
+)
 from skytemple_files.data.level_bin_entry.model import (
     LEVEL_BIN_ENTRY_LEVEL_LEN,
     LevelBinEntry,

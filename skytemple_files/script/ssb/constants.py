@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 import re
-from typing import Iterable, TypeVar, Union
+from enum import Enum
+from typing import Iterable, TypeVar, Union, Dict
 
 from explorerscript.ssb_converting.ssb_data_types import (
     DungeonModeConstants,
@@ -25,7 +26,22 @@ from explorerscript.ssb_converting.ssb_data_types import (
 )
 
 from skytemple_files.common.i18n_util import _, f
-from skytemple_files.common.ppmdu_config.script_data import *
+from skytemple_files.common.ppmdu_config.script_data import (
+    Pmd2ScriptBgm,
+    Pmd2ScriptFacePositionMode,
+    Pmd2ScriptMenu,
+    Pmd2ScriptLevel,
+    Pmd2ScriptObject,
+    Pmd2ScriptDirection,
+    Pmd2ScriptGameVar,
+    Pmd2ScriptRoutine,
+    Pmd2ScriptSpriteEffect,
+    Pmd2ScriptSpecial,
+    Pmd2ScriptFaceName,
+    Pmd2ScriptData,
+    Pmd2ScriptEntity
+)
+from skytemple_files.common.util import AutoString
 from skytemple_files.user_error import UserValueError
 
 PREFIX_DIRECTION = "DIR_"
@@ -259,7 +275,7 @@ class SsbConstant(SsbOpParamConstant):
 
     @staticmethod
     def _in_dict_insensitive(d: Dict[str, T], k: str) -> T:
-        """Case insensitive access to a string indexed dict"""
+        """Case-insensitive access to a string indexed dict"""
         for dk, dv in d.items():
             if dk.lower() == k.lower():
                 return dv

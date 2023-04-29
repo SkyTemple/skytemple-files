@@ -17,8 +17,17 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import *
-from skytemple_files.compression.bpc_tilemap import *
+from skytemple_files.common.util import (
+    read_dynamic,
+    read_u16
+)
+from skytemple_files.compression.bpc_tilemap import (
+    CMD_1_COPY_BYTES,
+    CMD_1_FILL_OUT,
+    CMD_1_ZERO_OUT,
+    CMD_2_COPY_LOW,
+    CMD_2_SEEK_OFFSET
+)
 
 DEBUG = False
 
@@ -35,7 +44,6 @@ class BpcTilemapDecompressor:
         self.decompressed_data = bytearray(self.stop_when_size)
         self.cursor = 0
         self.bytes_written = 0
-        pass
 
     def decompress(self) -> bytes:
         self.reset()
@@ -160,4 +168,3 @@ class BpcTilemapDecompressor:
             self.bytes_written : self.bytes_written + 2
         ] = pattern_to_write.to_bytes(2, "little")
         self.bytes_written += 2
-        pass

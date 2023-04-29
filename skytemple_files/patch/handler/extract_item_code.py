@@ -19,7 +19,7 @@ from __future__ import annotations
 from typing import Callable
 
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -28,7 +28,12 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    create_file_in_rom,
+    write_u32,
+    write_u16,
+    read_u32,
+)
 from skytemple_files.patch.asm_tools import AsmFunction
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler

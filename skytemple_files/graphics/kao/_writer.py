@@ -21,7 +21,10 @@ from __future__ import annotations
 # file is 16-bytes aligned!
 from sys import maxsize
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_i32,
+    DEBUG,
+)
 from skytemple_files.graphics.kao import (
     KAO_FILE_BYTE_ALIGNMENT,
     KAO_IMG_PAL_B_SIZE,
@@ -37,7 +40,6 @@ class KaoWriter:
     def __init__(self, force_rebuild_all: bool = False, update_kao: bool = True):
         self.force_rebuild_all = force_rebuild_all
         self.update_kao = update_kao
-        pass
 
     def write(self, kao: Kao) -> bytes:
         """

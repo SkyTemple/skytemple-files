@@ -16,10 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
-from range_typed_integers import u16_checked
+from range_typed_integers import u16_checked, u8
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
@@ -29,7 +29,14 @@ from skytemple_files.common.ppmdu_config.data import (
     Pmd2Data,
 )
 from skytemple_files.common.types.file_types import FileType
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    normalize_string,
+    get_files_from_rom_with_extension,
+    read_u16,
+    get_binary_from_rom,
+    read_u32,
+    set_binary_in_rom
+)
 from skytemple_files.compression_container.pkdpx.handler import PkdpxHandler
 from skytemple_files.container.bin_pack.handler import BinPackHandler
 from skytemple_files.container.sir0.handler import Sir0Handler

@@ -22,7 +22,10 @@ from collections import deque
 from enum import Enum
 from typing import Deque, Tuple
 
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u8,
+    read_bytes
+)
 from skytemple_files.compression.px import (
     PX_LOOKBACK_BUFFER_SIZE,
     PX_MAX_MATCH_SEQLEN,

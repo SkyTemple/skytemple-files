@@ -17,9 +17,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u32_checked
+from typing import Sequence
 
-from skytemple_files.common.util import *
+from range_typed_integers import u32_checked, u32
+
+from skytemple_files.common.util import (
+    write_u32,
+    read_u32,
+)
 from skytemple_files.container.sir0 import HEADER_LEN
 from skytemple_files.container.sir0._model import Sir0
 from skytemple_files.container.sir0.sir0_util import encode_sir0_pointer_offsets

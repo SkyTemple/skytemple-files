@@ -17,19 +17,34 @@
 
 from __future__ import annotations
 
-import typing
-from typing import Dict, Optional
+from typing import Dict, Optional, List, Tuple, no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image
+from range_typed_integers import u32, u8
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.common.util import *
+from skytemple_files.common.util import (
+    read_u8,
+    read_u32,
+)
 from skytemple_files.common.xml_util import validate_xml_attribs, validate_xml_tag
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
-from skytemple_files.graphics.fonts import *
+from skytemple_files.graphics.fonts import (
+    FONT_VALID_TABLES,
+    FONT_DEFAULT_PADDING,
+    XML_CHAR,
+    XML_CHAR__ID,
+    XML_TABLE__ID,
+    XML_CHAR__PADDING,
+    XML_FONT,
+    XML_TABLE,
+    FONT_DEFAULT_CAT,
+    XML_CHAR__CAT,
+    XML_CHAR__WIDTH
+)
 from skytemple_files.graphics.fonts.abstract import AbstractFont, AbstractFontEntry
-from skytemple_files.graphics.fonts.font_sir0 import *
+from skytemple_files.graphics.fonts.font_sir0 import FONT_SIR0_ENTRY_LEN, FONT_SIR0_DATA_LEN, FONT_SIR0_SIZE
 
 
 class FontSir0Entry(AbstractFontEntry):
@@ -210,7 +225,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 tables[item.table].append(xml_char)
         return font_xml, self.to_pil()
 
-    @typing.no_type_check
+    @no_type_check
     def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)

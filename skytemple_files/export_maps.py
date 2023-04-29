@@ -353,7 +353,7 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
     frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0  # type: ignore
     mfg_id = ani_group[frame_id].frames[0].frame_id
 
-    sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
+    sprite_img, (cx, cy) = sprite.render_frame(sprite.frames[mfg_id])
     render_x = actor.pos.x_absolute - cx
     render_y = actor.pos.y_absolute - cy
     img.paste(sprite_img, (render_x, render_y), sprite_img)
@@ -398,7 +398,7 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
         frame_id = 0
     mfg_id = ani_group[frame_id].frames[0].frame_id
 
-    sprite_img, (cx, cy) = sprite.render_frame_group(sprite.frame_groups[mfg_id])
+    sprite_img, (cx, cy) = sprite.render_frame(sprite.frames[mfg_id])
     render_x = obj.pos.x_absolute - cx
     render_y = obj.pos.y_absolute - cy
     img.paste(sprite_img, (render_x, render_y), sprite_img)

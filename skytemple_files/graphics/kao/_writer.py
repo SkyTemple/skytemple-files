@@ -21,10 +21,7 @@ from __future__ import annotations
 # file is 16-bytes aligned!
 from sys import maxsize
 
-from skytemple_files.common.util import (
-    read_i32,
-    DEBUG,
-)
+from skytemple_files.common.util import read_i32
 from skytemple_files.graphics.kao import (
     KAO_FILE_BYTE_ALIGNMENT,
     KAO_IMG_PAL_B_SIZE,

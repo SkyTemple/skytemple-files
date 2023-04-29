@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.util import read_bytes, read_u8, iter_bits, DEBUG
+from skytemple_files.common.util import read_bytes, read_u8, iter_bits
 from skytemple_files.compression.px import PX_MIN_MATCH_SEQLEN
 
 DEBUG = False

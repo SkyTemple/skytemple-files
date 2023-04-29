@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from skytemple_files.common.util import read_u8, read_dynamic, DEBUG
+from skytemple_files.common.util import read_u8, read_dynamic
 from skytemple_files.compression.bpc_image import (
     CMD_CYCLE_PATTERN_AND_CP,
     CMD_COPY__NEXT__LE_16,

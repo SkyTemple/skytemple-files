@@ -22,7 +22,7 @@ from typing import Optional, Tuple, List
 from range_typed_integers import u32_checked, u32, u8
 
 from skytemple_files.common.util import write_u32, write_u8
-from skytemple_files.graphics.zmappat import model, ZMAPPAT_TILE_SIZE
+from skytemple_files.graphics.zmappat import ZMAPPAT_TILE_SIZE
 from skytemple_files.graphics.zmappat.model import ZMappaT
 
 

@@ -19,7 +19,7 @@ types-PyYAML==6.0.12.8
 types-setuptools
 pytest
 pylint
-pycln
+pycln>=2.1.3
 black
 parameterized
 xmldiff

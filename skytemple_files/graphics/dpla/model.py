@@ -30,6 +30,10 @@ from skytemple_files.common.util import (
     write_u8,
 )
 
+# XXX: Removing this re-export his is a breaking change in skytemple-dtef due to a typo.
+# noinspection PyUnresolvedReferences
+from skytemple_files.common.util import chunks  # nopycln: import
+
 DPLA_COLORS_PER_PALETTE = 16
 
 

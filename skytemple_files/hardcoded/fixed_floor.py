@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List
+from typing import Any, List
 
 from pmdsky_debug_py.protocol import Overlay29Protocol, Symbol
 from range_typed_integers import u32_checked, u32, u16, u8

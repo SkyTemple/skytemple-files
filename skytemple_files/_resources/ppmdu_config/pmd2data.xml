@@ -779,13 +779,6 @@
           </OpenBin>
         </Patch>
 
-        <!-- A patch that fixes the unused dungeon chance -->
-        <Patch id="UnusedDungeonChancePatch" >
-          <OpenBin filepath="overlay/overlay_0029.bin">
-            <Include filename ="unused_dungeon_chance_patch.asm"/>
-          </OpenBin>
-        </Patch>
-
         <!-- A patch to pacify one-room monster houses -->
         <Patch id="DisarmOneRoomMonsterHouses">
           <OpenBin filepath="overlay/overlay_0029.bin">
@@ -969,6 +962,14 @@
 
         <SimplePatch id="NoWeatherStop">
           <Include filename="end_asm_mods/src/NoWeatherStop.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+          </Replace>
+        </SimplePatch>
+
+        <SimplePatch id="UnusedDungeonChance">
+          <Include filename="end_asm_mods/src/UnusedDungeonChance.asm"/>
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>

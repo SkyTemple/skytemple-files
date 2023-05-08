@@ -8,7 +8,7 @@ explorerscript==0.1.2
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 tilequant==0.4.1.post0
 dungeon-eos==0.0.5
-gql[aiohttp]==3.4.0
+gql[aiohttp]==3.4.1
 graphql-core>=3.2.0
 # TODO: Add speedups extra again if cchardet is no longer required by it
 aiohttp==3.8.4

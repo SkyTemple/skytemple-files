@@ -39,12 +39,12 @@ OFFSET_US = 0x64024
 class UnusedDungeonChancePatch(AbstractPatchHandler):
     @property
     def name(self) -> str:
-        return "UnusedDungeonChancePatch"
+        return "UnusedDungeonChance"
 
     @property
     def description(self) -> str:
         return _(
-            "Fixes the 'unused' chance for dungeons. It now determines a chance that a room randomly has walls in it, with some of it replaced by secondary terrain."
+            "Fixes the 'unused' chance for dungeons. It now determines a chance of spawning a wall maze room in the floor."
         )
 
     @property
@@ -53,7 +53,7 @@ class UnusedDungeonChancePatch(AbstractPatchHandler):
 
     @property
     def version(self) -> str:
-        return "0.1.0"
+        return "0.1.1"
 
     @property
     def category(self) -> PatchCategory:

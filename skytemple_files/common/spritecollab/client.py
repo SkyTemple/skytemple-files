@@ -902,7 +902,7 @@ class SpriteCollabClient:
             self._request_adapter.flush_cache()
 
     async def __aenter__(self) -> SpriteCollabSession:
-        session = await self._client.__aenter__()
+        session = await self._client.connect_async(True)
         if self._client.schema:
             ds = DSLSchema(self._client.schema)
             # self.flush_cache()
@@ -914,6 +914,6 @@ class SpriteCollabClient:
             )
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        r = await self._client.__aexit__(exc_type, exc_val, exc_tb)
+        r = await self._client.close_async()
         self._session = None
         return r

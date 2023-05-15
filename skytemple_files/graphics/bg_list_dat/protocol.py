@@ -105,3 +105,13 @@ class BgListProtocol(Protocol[T]):
     def add_level(self, level: T):
         """Adds a level to the level list."""
         ...
+
+    @abstractmethod
+    def set_level(self, level_id: int, level: T):
+        """Overwrites a level in the level list."""
+        ...
+
+    @abstractmethod
+    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: Optional[str]):
+        """Overwrites an entry in a level's BPA list."""
+        ...

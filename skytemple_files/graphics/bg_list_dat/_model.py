@@ -55,7 +55,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         self.bpl_name = bpl_name
         self.bpc_name = bpc_name
         self.bma_name = bma_name
-        self.bpa_names = bpa_names
+        self.bpa_names: List[Optional[str]] = bpa_names
         # There can only be 8 BPAs. There isn't more space!
         assert len(bpa_names) == 8
 
@@ -218,3 +218,11 @@ class BgList(BgListProtocol[BgListEntry]):
     def add_level(self, level: BgListEntry):
         """Add a level to the list."""
         self.level.append(level)
+
+    def set_level(self, level_id: int, level: BgListEntry):
+        """Overwrites a level in the level list."""
+        self.level[level_id] = level
+
+    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: Optional[str]):
+        """Overwrites an entry in a level's BPA list."""
+        self.level[level_id].bpa_names[bpa_id] = bpa_name

@@ -55,7 +55,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         # Read palettes:
         pal_end = 4 + (self.number_palettes * BPL_PAL_SIZE)
         # Format: [ [r,g,b,r,g,b,r,g,b,r,g,b...], ...]
-        self.palettes = []
+        self.palettes: List[List[int]] = []
         self.current_palette = [
             0,
             0,
@@ -84,7 +84,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         # Extra colors - Palette animation
         # Format: [ [r,g,b,r,g,b,r,g,b,r,g,b...], ...]
         # Only 15 colors per frame!
-        self.animation_palette = []
+        self.animation_palette: List[List[int]] = []
         if self.has_palette_animation:
             # Read color index table
             cit_end = pal_end + self.number_palettes * BPL_COL_INDEX_ENTRY_LEN

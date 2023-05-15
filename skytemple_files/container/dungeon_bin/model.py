@@ -37,7 +37,7 @@ class DungeonBinPack(BinPack):
         self.files_def = files_def
         self._loaded_models: Dict[int, Any] = {}
 
-    def get(self, filename: str) -> T:
+    def get(self, filename: str) -> T:  # type: ignore
         """Returns a file by name."""
         for i in range(0, len(self)):
             if filename == self.get_filename(i):

@@ -29,6 +29,7 @@ from skytemple_files.common.util import AutoString
 
 class AbstractFontEntry(ABC, AutoString):
     @classmethod
+    @abstractmethod
     def get_class_properties(cls) -> List[str]:
         """Returns a list of the properties of this class"""
 

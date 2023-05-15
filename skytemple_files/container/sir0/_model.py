@@ -32,7 +32,10 @@ class Sir0(Sir0Protocol):
     content_pointer_offsets: List[u32]
 
     def __init__(
-        self, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
+        self,
+        content: bytes,
+        pointer_offsets: List[u32],
+        data_pointer: Optional[int] = None,
     ):
         self.content = content
         self.content_pointer_offsets = pointer_offsets

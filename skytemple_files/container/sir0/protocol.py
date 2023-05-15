@@ -29,7 +29,10 @@ class Sir0Protocol(Protocol):
 
     @abstractmethod
     def __init__(
-        self, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
+        self,
+        content: bytes,
+        pointer_offsets: List[u32],
+        data_pointer: Optional[int] = None,
     ):
         ...
 

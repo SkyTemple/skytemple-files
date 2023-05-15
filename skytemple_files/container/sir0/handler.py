@@ -75,7 +75,10 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
 
     @classmethod
     def wrap(
-        cls, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
+        cls,
+        content: bytes,
+        pointer_offsets: List[u32],
+        data_pointer: Optional[int] = None,
     ) -> Sir0Protocol:
         """Wraps existing data in Sir0."""
         return cls.get_model_cls()(content, pointer_offsets, data_pointer)

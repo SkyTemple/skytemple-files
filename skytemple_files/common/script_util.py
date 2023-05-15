@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import re
 from collections import OrderedDict
-from typing import Dict, List, Tuple, Union
+from typing import Optional, Dict, List, Tuple, Union
 
 from skytemple_files.list.level.model import LevelListBin
 
@@ -60,7 +60,7 @@ class ScriptFiles(TypedDict):
 
 
 def load_script_files(
-    script_folder: Folder, level_list: LevelListBin = None
+    script_folder: Folder, level_list: Optional[LevelListBin] = None
 ) -> ScriptFiles:
     """Returns information about the files used by the script engine in an 'introspectable' way."""
     script_files = ScriptFiles(common=[], maps=OrderedDict())

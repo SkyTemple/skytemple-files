@@ -81,7 +81,7 @@ DEBUG_PRINT = False
 
 
 class WanFile:
-    def __init__(self, data: bytes = None, header_pnt: int = 0):
+    def __init__(self, data: Optional[bytes] = None, header_pnt: int = 0):
         if data is None:
             self.imgData = []
             self.frameData = []

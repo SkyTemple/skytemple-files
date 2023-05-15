@@ -20,12 +20,13 @@ from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.util import read_bytes, read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
+from typing import Optional
 
 
 class At3px(CommonAt):
     length_decompressed: u16
 
-    def __init__(self, data: bytes = None):
+    def __init__(self, data: Optional[bytes] = None):
         """
         Create a AT3PX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.

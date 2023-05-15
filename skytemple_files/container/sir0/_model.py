@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List, Sequence
+from typing import Optional, List, Sequence
 
 from range_typed_integers import u32_checked, u32
 
@@ -32,7 +32,7 @@ class Sir0(Sir0Protocol):
     content_pointer_offsets: List[u32]
 
     def __init__(
-        self, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
+        self, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
     ):
         self.content = content
         self.content_pointer_offsets = pointer_offsets

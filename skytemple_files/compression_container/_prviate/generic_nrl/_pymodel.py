@@ -20,12 +20,13 @@ from range_typed_integers import u16, u16_checked
 
 from skytemple_files.common.util import read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
+from typing import Optional
 
 
 class GenericNrlCompressionContainer(CommonAt):
     length_decompressed: u16
 
-    def __init__(self, data: bytes = None):
+    def __init__(self, data: Optional[bytes] = None):
         if data:
             self.length_decompressed = read_u16(data, 6)
             self.compressed_data = data[8:]

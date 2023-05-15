@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import Iterable, TypeVar, Union, Dict
+from typing import Optional, Iterable, TypeVar, Union, Dict
 
 from explorerscript.ssb_converting.ssb_data_types import (
     DungeonModeConstants,
@@ -140,8 +140,8 @@ class SsbConstant(SsbOpParamConstant):
     def __init__(
         self,
         constant_as_string: str,
-        script_data: Pmd2ScriptData = None,
-        value: SsbConstantPmdScriptMappable = None,
+        script_data: Optional[Pmd2ScriptData] = None,
+        value: Optional[SsbConstantPmdScriptMappable] = None,
     ):
         """Either script_data or the value argument must be present."""
         super().__init__(constant_as_string)

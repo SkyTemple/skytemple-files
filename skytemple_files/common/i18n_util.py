@@ -19,7 +19,7 @@ from __future__ import annotations
 import gettext
 from abc import ABC, abstractmethod
 from inspect import currentframe
-from typing import Any, List
+from typing import Optional, Any, List
 
 
 class AbstractLocaleManager(ABC):
@@ -99,7 +99,7 @@ def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> Non
         pass
 
 
-def f(s: str, additional_locals: Any = None) -> str:
+def f(s: str, additional_locals: Optional[Any] = None) -> str:
     """f-strings as a function, for use with translatable strings: f'{techticks}' == f('{techticks}')"""
     if additional_locals is None:
         additional_locals = {}

@@ -41,7 +41,7 @@ class SsaLayer(AutoString):
 
     def __init__(
         self,
-        header: SsaHeader = None,
+        header: Optional[SsaHeader] = None,
         actors_count: Optional[int] = None,
         actors_pointer: Optional[int] = None,
         objects_count: Optional[int] = None,

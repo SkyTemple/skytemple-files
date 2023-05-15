@@ -64,7 +64,7 @@ class ScriptCompiler:
         self.rom_data = rom_data
 
     def compile_ssbscript(
-        self, ssb_script_src: str, callback_after_parsing: Callback = None
+        self, ssb_script_src: str, callback_after_parsing: Optional[Callback] = None
     ) -> Tuple[Ssb, SourceMap]:
         """
         Compile SSBScript into a SSB model
@@ -93,7 +93,7 @@ class ScriptCompiler:
         self,
         es_src: str,
         exps_absolue_path: str,
-        callback_after_parsing: Callback = None,
+        callback_after_parsing: Optional[Callback] = None,
         lookup_paths: Optional[List[str]] = None,
     ) -> Tuple[Ssb, SourceMap]:
         """

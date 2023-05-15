@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List, Type, TypeVar
+from typing import Optional, List, Type, TypeVar
 
 from range_typed_integers import u32
 
@@ -75,7 +75,7 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
 
     @classmethod
     def wrap(
-        cls, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
+        cls, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
     ) -> Sir0Protocol:
         """Wraps existing data in Sir0."""
         return cls.get_model_cls()(content, pointer_offsets, data_pointer)

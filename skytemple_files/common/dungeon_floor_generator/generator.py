@@ -50,7 +50,7 @@ class RandomGenProperties:
         self.seeds_t1 = seeds_t1
 
     @classmethod
-    def default(cls, rng: random.Random = None) -> "RandomGenProperties":
+    def default(cls, rng: Optional[random.Random] = None) -> "RandomGenProperties":
         if rng is None:
             rng = random
         return cls(

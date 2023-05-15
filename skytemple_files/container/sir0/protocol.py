@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Protocol, List
+from typing import Optional, Protocol, List
 
 from range_typed_integers import u32
 
@@ -29,7 +29,7 @@ class Sir0Protocol(Protocol):
 
     @abstractmethod
     def __init__(
-        self, content: bytes, pointer_offsets: List[u32], data_pointer: int = None
+        self, content: bytes, pointer_offsets: List[u32], data_pointer: Optional[int] = None
     ):
         ...
 

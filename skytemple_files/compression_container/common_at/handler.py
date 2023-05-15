@@ -124,7 +124,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
 
     @classmethod
     def compress(
-        cls, data: bytes, compression_type: List[CommonAtType] = None
+        cls, data: bytes, compression_type: Optional[List[CommonAtType]] = None
     ) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT container"""
         if compression_type is None:

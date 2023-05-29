@@ -41,11 +41,33 @@ class RomDataLoader:
         self.rom = rom
 
     def load_into(self, config_load_into: "Pmd2Data"):
+        self.load_script_var_list_into(config_load_into)
         self.load_actor_list_into(config_load_into, ignore_not_supported=True)
         self.load_level_list_into(config_load_into, ignore_not_supported=True)
         self.load_object_list_into(config_load_into, ignore_not_supported=True)
         self.load_item_categories_into(config_load_into)
         self.load_sprconf_into(config_load_into)
+
+    def load_script_var_list_into(self, config_load_into: "Pmd2Data"):
+        from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptGameVar
+        from skytemple_rust.st_script_var_table import ScriptVariableTables
+
+        var_table = ScriptVariableTables(
+            bytes(self.rom.arm9),
+            config_load_into.bin_sections.arm9.data.SCRIPT_VARS.address,
+            config_load_into.bin_sections.arm9.data.SCRIPT_VARS_LOCALS.address,
+            config_load_into.bin_sections.arm9.loadaddress
+        )
+        variables_converted = []
+        for v in var_table.globals:
+            variables_converted.append(Pmd2ScriptGameVar(
+                v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, False
+            ))
+        for v in var_table.locals:
+            variables_converted.append(Pmd2ScriptGameVar(
+                v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, True
+            ))
+        config_load_into.script_data.game_variables = variables_converted
 
     def load_actor_list_into(
         self, config_load_into: "Pmd2Data", ignore_not_supported=False

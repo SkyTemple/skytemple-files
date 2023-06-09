@@ -58,17 +58,37 @@ class RomDataLoader:
                 bytes(self.rom.arm9),
                 config_load_into.bin_sections.arm9.data.SCRIPT_VARS.address,
                 config_load_into.bin_sections.arm9.data.SCRIPT_VARS_LOCALS.address,
-                u32(config_load_into.bin_sections.arm9.loadaddress)
+                u32(config_load_into.bin_sections.arm9.loadaddress),
             )
             variables_converted = []
             for v in var_table.globals:
-                variables_converted.append(Pmd2ScriptGameVar(
-                    v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, False
-                ))
+                variables_converted.append(
+                    Pmd2ScriptGameVar(
+                        v.id,
+                        v.type,
+                        v.unk1,
+                        v.memoffset,
+                        v.bitshift,
+                        v.nbvalues,
+                        v.default,
+                        v.name,
+                        False,
+                    )
+                )
             for v in var_table.locals:
-                variables_converted.append(Pmd2ScriptGameVar(
-                    v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, True
-                ))
+                variables_converted.append(
+                    Pmd2ScriptGameVar(
+                        v.id,
+                        v.type,
+                        v.unk1,
+                        v.memoffset,
+                        v.bitshift,
+                        v.nbvalues,
+                        v.default,
+                        v.name,
+                        True,
+                    )
+                )
             config_load_into.script_data.game_variables = variables_converted
 
     def load_actor_list_into(

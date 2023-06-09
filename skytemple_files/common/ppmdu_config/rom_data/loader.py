@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List
 
 from ndspy.rom import NintendoDSRom
+from range_typed_integers import u32
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -52,22 +53,23 @@ class RomDataLoader:
         from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptGameVar
         from skytemple_rust.st_script_var_table import ScriptVariableTables
 
-        var_table = ScriptVariableTables(
-            bytes(self.rom.arm9),
-            config_load_into.bin_sections.arm9.data.SCRIPT_VARS.address,
-            config_load_into.bin_sections.arm9.data.SCRIPT_VARS_LOCALS.address,
-            config_load_into.bin_sections.arm9.loadaddress
-        )
-        variables_converted = []
-        for v in var_table.globals:
-            variables_converted.append(Pmd2ScriptGameVar(
-                v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, False
-            ))
-        for v in var_table.locals:
-            variables_converted.append(Pmd2ScriptGameVar(
-                v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, True
-            ))
-        config_load_into.script_data.game_variables = variables_converted
+        if config_load_into.bin_sections.arm9.loadaddress is not None:
+            var_table = ScriptVariableTables(
+                bytes(self.rom.arm9),
+                config_load_into.bin_sections.arm9.data.SCRIPT_VARS.address,
+                config_load_into.bin_sections.arm9.data.SCRIPT_VARS_LOCALS.address,
+                u32(config_load_into.bin_sections.arm9.loadaddress)
+            )
+            variables_converted = []
+            for v in var_table.globals:
+                variables_converted.append(Pmd2ScriptGameVar(
+                    v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, False
+                ))
+            for v in var_table.locals:
+                variables_converted.append(Pmd2ScriptGameVar(
+                    v.id, v.type, v.unk1, v.memoffset, v.bitshift, v.nbvalues, v.default, v.name, True
+                ))
+            config_load_into.script_data.game_variables = variables_converted
 
     def load_actor_list_into(
         self, config_load_into: "Pmd2Data", ignore_not_supported=False

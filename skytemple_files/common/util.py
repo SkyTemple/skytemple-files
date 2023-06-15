@@ -499,8 +499,13 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> "Pmd2Data":
     from skytemple_files.common.ppmdu_config.xml_reader import Pmd2XmlReader
 
     data_general = Pmd2XmlReader.load_default()
-    game_code = rom.idCode.decode("ascii")
-    arm9off14 = read_u16(rom.arm9[0xE:0x10], 0)
+    try:
+        game_code = rom.idCode.decode("ascii")
+        arm9off14 = read_u16(rom.arm9[0xE:0x10], 0)
+    except (ValueError, IndexError):
+        raise UserValueError(
+            _("The file you tried to open does not seem to be a valid NDS ROM file.")
+        )
 
     matched_edition = None
     for edition_name, edition in data_general.game_editions.items():

@@ -94,7 +94,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
         return self.tiles[frame_idx * self.number_of_tiles + tile_idx]
 
-    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Optional[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -118,6 +118,8 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
                     )
                 )
         width = width_in_tiles * BPA_TILE_DIM
+        if width_in_tiles == 0:
+            return None
         height = math.ceil(etr / width_in_tiles) * BPA_TILE_DIM
 
         return to_pil(
@@ -131,6 +133,8 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
         """
+        if self.number_of_tiles < 1:
+            return []
         dummy_tile_map = []
 
         # create a dummy tile map containing all the tiles

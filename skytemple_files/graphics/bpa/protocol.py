@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Protocol, Sequence, TypeVar, runtime_checkable
+from typing import List, Protocol, Sequence, TypeVar, runtime_checkable, Optional
 
 from PIL import Image
 from range_typed_integers import u16
@@ -59,10 +59,12 @@ class BpaProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Optional[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
+
+        Returns None if the BPA has no tiles.
         """
 
     @abstractmethod

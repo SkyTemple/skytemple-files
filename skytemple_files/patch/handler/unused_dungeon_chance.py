@@ -36,7 +36,7 @@ OFFSET_EU = 0x642C8
 OFFSET_US = 0x64024
 
 
-class UnusedDungeonChancePatch(AbstractPatchHandler):
+class UnusedDungeonChancePatch(AbstractPatchHandler, DependantPatch):
     @property
     def name(self) -> str:
         return "UnusedDungeonChance"
@@ -53,7 +53,10 @@ class UnusedDungeonChancePatch(AbstractPatchHandler):
 
     @property
     def version(self) -> str:
-        return "0.1.1"
+        return "0.1.2"
+
+    def depends_on(self) -> List[str]:
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:

@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -29,7 +29,7 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 ORIGINAL_BYTESEQ = bytes(b"w\x00\x00\xaa")
 OFFSET_EU = 0x642C8

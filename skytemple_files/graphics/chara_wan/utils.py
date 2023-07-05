@@ -21,12 +21,14 @@ from typing import Optional, Tuple, Union
 
 from PIL import Image
 
+from skytemple_files.user_error import UserValueError
+
 Point = Tuple[int, int]
 Bounds = Tuple[int, int, int, int]
 PointLike = Union[Point, Bounds]
 
 
-class MultipleOffsetError(Exception):
+class MultipleOffsetError(UserValueError):
     def __init__(self, message: str):
         self.message = message
         super().__init__(self.message)

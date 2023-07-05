@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable
+from typing import Callable, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -29,14 +29,14 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 ORIGINAL_BYTESEQ = bytes(b"w\x00\x00\xaa")
 OFFSET_EU = 0x642C8
 OFFSET_US = 0x64024
 
 
-class UnusedDungeonChancePatch(AbstractPatchHandler):
+class UnusedDungeonChancePatch(AbstractPatchHandler, DependantPatch):
     @property
     def name(self) -> str:
         return "UnusedDungeonChance"
@@ -53,7 +53,10 @@ class UnusedDungeonChancePatch(AbstractPatchHandler):
 
     @property
     def version(self) -> str:
-        return "0.1.1"
+        return "0.1.2"
+
+    def depends_on(self) -> List[str]:
+        return ["ExtraSpace"]
 
     @property
     def category(self) -> PatchCategory:

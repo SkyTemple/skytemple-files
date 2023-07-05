@@ -36,6 +36,8 @@ class BpaTestCase(
         self.assertIsNotNone(self.one)
         self.two = self._load_main_fixture(self._fix_path2())
         self.assertIsNotNone(self.two)
+        self.empty = self._load_main_fixture(self._fix_path_empty())
+        self.assertIsNotNone(self.empty)
 
     def test_metadata(self) -> None:
         self.assertEqual(6, self.one.number_of_frames)
@@ -550,6 +552,10 @@ class BpaTestCase(
             self._fix_path_expected(("joined", "two.png")),
             self.two.tiles_to_pil(SIMPLE_DUMMY_PALETTE[1]),
         )
+        self.assertEqual(
+            None,
+            self.empty.tiles_to_pil(SIMPLE_DUMMY_PALETTE[1]),
+        )
 
     def test_tiles_to_pil_separate(self) -> None:
         for i, image in enumerate(
@@ -564,6 +570,7 @@ class BpaTestCase(
             self.assertImagesEqual(
                 self._fix_path_expected(("separate", "two", f"{i}.png")), image
             )
+        self.assertEqual(0, len(self.empty.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)))
 
     def test_pil_to_tiles(self) -> None:
         self.one.pil_to_tiles(self._load_image(self._fix_path_joined()))
@@ -690,6 +697,12 @@ class BpaTestCase(
     @fixpath
     def _fix_path2(cls):
         return "..", "fixtures", "MAP_BG", "coco2.bpa"
+
+    @typing.no_type_check
+    @classmethod
+    @fixpath
+    def _fix_path_empty(cls):
+        return "..", "fixtures", "MAP_BG", "empty.bpa"
 
     @typing.no_type_check
     @classmethod

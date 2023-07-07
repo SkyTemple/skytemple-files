@@ -1,5 +1,5 @@
 # mypy: ignore-errors
-__version__ = '1.5.3'
+__version__ = '1.5.4'
 import os
 
 from setuptools import setup, find_packages
@@ -40,7 +40,7 @@ setup(
         'range-typed-integers >= 1.0.1',
         'Pillow >= 6.1.0',
         'appdirs >= 1.4.0',
-        'explorerscript >= 0.1.1',
+        'explorerscript >= 0.1.3',
         'skytemple-rust >= 1.5.3',
         'tilequant >= 0.4.1',
         'pyobjc==9.1.1; sys_platform == "darwin"',

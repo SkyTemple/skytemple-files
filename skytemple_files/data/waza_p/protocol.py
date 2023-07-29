@@ -249,7 +249,7 @@ class WazaMoveProtocol(Protocol[R]):
     affected_by_magic_coat: bool
     is_snatchable: bool
     uses_mouth: bool
-    ai_frozen_check: u8
+    ai_frozen_check: bool
     ignores_taunted: bool
     range_check_text: u8
     move_id: u16

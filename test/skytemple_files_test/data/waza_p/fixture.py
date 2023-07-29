@@ -84,9 +84,9 @@ def eq_move(one: WazaMoveProtocol, two: WazaMoveProtocol) -> bool:
         one.affected_by_magic_coat == two.affected_by_magic_coat and
         one.is_snatchable == two.is_snatchable and
         one.uses_mouth == two.uses_mouth and
-        one.unk13 == two.unk13 and
+        one.ai_frozen_check == two.ai_frozen_check and
         one.ignores_taunted == two.ignores_taunted and
-        one.unk15 == two.unk15 and
+        one.range_check_text == two.range_check_text and
         one.move_id == two.move_id and
         one.message_id == two.message_id
     )
@@ -152,9 +152,9 @@ class WazaMoveStub(WazaMoveProtocol[int]):  # type: ignore
     affected_by_magic_coat: bool
     is_snatchable: bool
     uses_mouth: bool
-    unk13: u8
+    ai_frozen_check: u8
     ignores_taunted: bool
-    unk15: u8
+    range_check_text: u8
     move_id: u16
     message_id: u8
     
@@ -177,9 +177,9 @@ class WazaMoveStub(WazaMoveProtocol[int]):  # type: ignore
         affected_by_magic_coat: bool,
         is_snatchable: bool,
         uses_mouth: bool,
-        unk13: u8,
+        ai_frozen_check: u8,
         ignores_taunted: bool,
-        unk15: u8,
+        range_check_text: u8,
         move_id: u16,
         message_id: u8,
     ) -> WazaMoveStub:
@@ -200,9 +200,9 @@ class WazaMoveStub(WazaMoveProtocol[int]):  # type: ignore
         self.affected_by_magic_coat = affected_by_magic_coat
         self.is_snatchable = is_snatchable
         self.uses_mouth = uses_mouth
-        self.unk13 = unk13
+        self.ai_frozen_check = ai_frozen_check
         self.ignores_taunted = ignores_taunted
-        self.unk15 = unk15
+        self.range_check_text = range_check_text
         self.move_id = move_id
         self.message_id = message_id
         return self

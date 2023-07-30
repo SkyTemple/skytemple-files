@@ -180,7 +180,7 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
         # 0x12	1	uint8	Unk#15	Boolean, whether the move is disabled by the "muzzled" status.
         self.uses_mouth = bool(read_u8(data, 0x12))
         # 0x13	1	uint8	Unk#16	If true, the AI won't try to use the move on frozen targets.
-        self.ai_frozen_check = read_u8(data, 0x13)
+        self.ai_frozen_check = bool(read_u8(data, 0x13))
         # 0x14	1	uint8	Unk#17	Boolean, whether the move can be used while taunted.
         self.ignores_taunted = bool(read_u8(data, 0x14))
         # 0x15	1	uint8	Unk#18	Determines the string that is displayed for the range of the move in-game
@@ -209,7 +209,7 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
         write_u8(data, u8(int(self.affected_by_magic_coat)), 16)
         write_u8(data, u8(int(self.is_snatchable)), 17)
         write_u8(data, u8(int(self.uses_mouth)), 18)
-        write_u8(data, self.ai_frozen_check, 19)
+        write_u8(data, u8(int(self.ai_frozen_check)), 19)
         write_u8(data, u8(int(self.ignores_taunted)), 20)
         write_u8(data, self.range_check_text, 21)
         write_u16(data, self.move_id, 22)

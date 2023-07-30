@@ -136,9 +136,9 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
     affected_by_magic_coat: bool
     is_snatchable: bool
     uses_mouth: bool
-    unk13: u8
+    ai_frozen_check: bool
     ignores_taunted: bool
-    unk15: u8
+    range_check_text: u8
     move_id: u16
     message_id: u8
 
@@ -179,12 +179,12 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
         self.is_snatchable = bool(read_u8(data, 0x11))
         # 0x12	1	uint8	Unk#15	Boolean, whether the move is disabled by the "muzzled" status.
         self.uses_mouth = bool(read_u8(data, 0x12))
-        # 0x13	1	uint8	Unk#16	Unknown.
-        self.unk13 = read_u8(data, 0x13)
+        # 0x13	1	uint8	Unk#16	If true, the AI won't try to use the move on frozen targets.
+        self.ai_frozen_check = bool(read_u8(data, 0x13))
         # 0x14	1	uint8	Unk#17	Boolean, whether the move can be used while taunted.
         self.ignores_taunted = bool(read_u8(data, 0x14))
-        # 0x15	1	uint8	Unk#18	Unknown. Possible bitfield.
-        self.unk15 = read_u8(data, 0x15)
+        # 0x15	1	uint8	Unk#18	Determines the string that is displayed for the range of the move in-game
+        self.range_check_text = read_u8(data, 0x15)
         # 0x16	2	uint16	Move ID	The move's ID, possibly used by the game code for allocating resources and etc..
         self.move_id = read_u16(data, 0x16)
         # 0x18	1	uint8	Unk#19	Message ID offset that is displayed for the move.
@@ -209,9 +209,9 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
         write_u8(data, u8(int(self.affected_by_magic_coat)), 16)
         write_u8(data, u8(int(self.is_snatchable)), 17)
         write_u8(data, u8(int(self.uses_mouth)), 18)
-        write_u8(data, self.unk13, 19)
+        write_u8(data, u8(int(self.ai_frozen_check)), 19)
         write_u8(data, u8(int(self.ignores_taunted)), 20)
-        write_u8(data, self.unk15, 21)
+        write_u8(data, self.range_check_text, 21)
         write_u16(data, self.move_id, 22)
         write_u8(data, self.message_id, 24)
         return bytes(data)
@@ -236,9 +236,9 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
             and self.affected_by_magic_coat == other.affected_by_magic_coat
             and self.is_snatchable == other.is_snatchable
             and self.uses_mouth == other.uses_mouth
-            and self.unk13 == other.unk13
+            and self.ai_frozen_check == other.ai_frozen_check
             and self.ignores_taunted == other.ignores_taunted
-            and self.unk15 == other.unk15
+            and self.range_check_text == other.range_check_text
             and self.move_id == other.move_id
             and self.message_id == other.message_id
         )

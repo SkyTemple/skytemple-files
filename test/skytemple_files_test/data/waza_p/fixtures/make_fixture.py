@@ -47,9 +47,9 @@ def randomize_move() -> WazaMove:
     move.affected_by_magic_coat = bool(random.randint(0, 1))
     move.is_snatchable = bool(random.randint(0, 1))
     move.uses_mouth = bool(random.randint(0, 1))
-    move.unk13 = u8(random.randint(0, 255))
+    move.ai_frozen_check = bool(random.randint(0, 1))
     move.ignores_taunted = bool(random.randint(0, 1))
-    move.unk15 = u8(random.randint(0, 255))
+    move.range_check_text = u8(random.randint(0, 255))
     move.move_id = u16(random.randint(0, 65_535))
     move.message_id = u8(random.randint(0, 255))
     return move
@@ -100,9 +100,9 @@ if __name__ == "__main__":
               f"{entry.affected_by_magic_coat}, "
               f"{entry.is_snatchable}, "
               f"{entry.uses_mouth}, "
-              f"u8({entry.unk13}), "
+              f"{entry.ai_frozen_check}, "
               f"{entry.ignores_taunted}, "
-              f"u8({entry.unk15}), "
+              f"u8({entry.range_check_text}), "
               f"u16({entry.move_id}), "
               f"u8({entry.message_id}), "
               f"),")

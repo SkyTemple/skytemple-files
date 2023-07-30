@@ -94,9 +94,9 @@ class WazaPTestCase(
         e.affected_by_magic_coat = True
         e.is_snatchable = True
         e.uses_mouth = False
-        e.unk13 = u8(12)
+        e.ai_frozen_check = True
         e.ignores_taunted = True
-        e.unk15 = u8(3)
+        e.range_check_text = u8(3)
         e.move_id = u16(4)
         e.message_id = u8(5)
 
@@ -124,9 +124,9 @@ class WazaPTestCase(
         self.assertEqual(True, e.affected_by_magic_coat)
         self.assertEqual(True, e.is_snatchable)
         self.assertEqual(False, e.uses_mouth)
-        self.assertEqual(u8(12), e.unk13)
+        self.assertEqual(True, e.ai_frozen_check)
         self.assertEqual(True, e.ignores_taunted)
-        self.assertEqual(u8(3), e.unk15)
+        self.assertEqual(u8(3), e.range_check_text)
         self.assertEqual(u16(4), e.move_id)
         self.assertEqual(u8(5), e.message_id)
 

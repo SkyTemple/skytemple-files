@@ -45,7 +45,8 @@ setup(
         'tilequant >= 0.4.1',
         'pyobjc==9.1.1; sys_platform == "darwin"',
         'dungeon-eos==0.0.5',
-        'typing_extensions >= 3.9; python_version < "3.9"'
+        'typing_extensions >= 3.9; python_version < "3.9"',
+        'importlib_resources>=1.3; python_version < "3.9"'
     ],
     extras_require={
         'spritecollab': [

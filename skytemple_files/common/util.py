@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import atexit
 import bisect
 import contextlib
 import logging
@@ -27,6 +28,7 @@ import warnings
 from abc import abstractmethod
 from enum import Enum
 from itertools import groupby
+from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -41,11 +43,13 @@ from typing import (
     Tuple,
     TypeVar,
     Union,
+    overload,
+    Literal,
 )
 
 from pmdsky_debug_py.protocol import SectionProtocol
 
-import pkg_resources
+import sys
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 from PIL import Image
@@ -63,6 +67,11 @@ from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 from skytemple_files.user_error import UserValueError
+
+if sys.version_info >= (3, 9):
+    import importlib.resources as importlib_resources
+else:
+    import importlib_resources
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -481,8 +490,27 @@ def _mpcu__check(
         )
 
 
-def get_resources_dir() -> str:
-    return pkg_resources.resource_filename("skytemple_files", "_resources")
+@overload
+def get_resources_dir(*, as_string: Literal[True] = True) -> str:
+    ...
+
+
+@overload
+def get_resources_dir(*, as_string: Literal[False]) -> Path:
+    ...
+
+
+def get_resources_dir(*, as_string: bool = True) -> Union[str, Path]:
+    # This is a bit tricky now that pkg_resources is gone, because importlib does
+    # things different to support virtual files.
+    # See: https://importlib-resources.readthedocs.io/en/latest/migration.html#pkg-resources-resource-filename
+    file_manager = contextlib.ExitStack()
+    atexit.register(file_manager.close)
+    ref = importlib_resources.files("skytemple_files") / "_resources"
+    path = file_manager.enter_context(importlib_resources.as_file(ref)).absolute()
+    if as_string:
+        return str(path)
+    return path
 
 
 def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> "Pmd2Data":

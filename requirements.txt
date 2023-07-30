@@ -11,7 +11,7 @@ dungeon-eos==0.0.5
 gql[aiohttp]==3.4.1
 graphql-core>=3.2.0
 # TODO: Add speedups extra again if cchardet is no longer required by it
-aiohttp==3.8.4
+aiohttp==3.8.5
 lru-dict==1.1.8
 skytemple-3rdparty-typestubs
 types-Pillow==9.5.0.2

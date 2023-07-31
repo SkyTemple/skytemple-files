@@ -1,6 +1,6 @@
 pmdsky-debug-py==4.0.0
 ndspy==3.0.0
-pyyaml==6.0
+pyyaml==6.0.1
 range-typed-integers==1.0.1
 Pillow==9.5.0
 appdirs==1.4.4

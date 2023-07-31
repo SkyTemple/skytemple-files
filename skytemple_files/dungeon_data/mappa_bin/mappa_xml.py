@@ -667,8 +667,8 @@ def mappa_monster_to_xml(monster: MappaMonsterProtocol) -> Element:
         XML_MONSTER,
         {
             XML_MONSTER__LEVEL: str(monster.level),
-            XML_MONSTER__WEIGHT: str(monster.weight),
-            XML_MONSTER__WEIGHT2: str(monster.weight2),
+            XML_MONSTER__WEIGHT: str(monster.main_spawn_weight),
+            XML_MONSTER__WEIGHT2: str(monster.monster_house_spawn_weight),
             XML_MONSTER__MD_INDEX: str(monster.md_index),
         },
     )

@@ -164,8 +164,8 @@ def p_floor_terrain_settings(settings: MappaFloorTerrainSettings):
 
 def p_monster(monster: MappaMonster) -> str:
     return f"""{monster.level},
-{monster.weight},
-{monster.weight2},
+{monster.main_spawn_weight},
+{monster.monster_house_spawn_weight},
 {monster.md_index}
 """.replace(
         "\n", ""

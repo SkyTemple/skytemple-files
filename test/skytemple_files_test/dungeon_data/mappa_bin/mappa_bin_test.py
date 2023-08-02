@@ -468,8 +468,8 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             for expected in expected_list:
                 subject = self.handler.get_monster_model()(
                     expected.level,
-                    expected.weight,
-                    expected.weight2,
+                    expected.main_spawn_weight,
+                    expected.monster_house_spawn_weight,
                     expected.md_index,
                 )
 
@@ -478,8 +478,8 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
     def test_mappa_monster__eq__(self):
         subject_not_same = self.handler.get_monster_model()(
                 FIX_MONSTER_LISTS[0][0].level,
-                FIX_MONSTER_LISTS[0][0].weight,
-                FIX_MONSTER_LISTS[0][0].weight2,
+                FIX_MONSTER_LISTS[0][0].main_spawn_weight,
+                FIX_MONSTER_LISTS[0][0].monster_house_spawn_weight,
                 FIX_MONSTER_LISTS[0][0].md_index,
             )
 
@@ -487,14 +487,14 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             for expected in expected_list:
                 subject1 = self.handler.get_monster_model()(
                     expected.level,
-                    expected.weight,
-                    expected.weight2,
+                    expected.main_spawn_weight,
+                    expected.monster_house_spawn_weight,
                     expected.md_index
                 )
                 subject2 = self.handler.get_monster_model()(
                     expected.level,
-                    expected.weight,
-                    expected.weight2,
+                    expected.main_spawn_weight,
+                    expected.monster_house_spawn_weight,
                     expected.md_index
                 )
 
@@ -509,13 +509,13 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
         )
 
         e.level = u8(123)
-        e.weight = u16(0xFFF)
-        e.weight2 = u16(0x1FFF)
+        e.main_spawn_weight = u16(0xFFF)
+        e.monster_house_spawn_weight = u16(0x1FFF)
         e.md_index = u16(1234)
 
         self.assertEqual(e.level, u8(123))
-        self.assertEqual(e.weight, u16(0xFFF))
-        self.assertEqual(e.weight2, u16(0x1FFF))
+        self.assertEqual(e.main_spawn_weight, u16(0xFFF))
+        self.assertEqual(e.monster_house_spawn_weight, u16(0x1FFF))
         self.assertEqual(e.md_index, u16(1234))
 
     def test_mappa_trap_list__init__(self):
@@ -1225,8 +1225,8 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             [
                 self.handler.get_monster_model()(
                     monster.level,
-                    monster.weight,
-                    monster.weight2,
+                    monster.main_spawn_weight,
+                    monster.monster_house_spawn_weight,
                     monster.md_index,
                 )
                 for monster in monsters

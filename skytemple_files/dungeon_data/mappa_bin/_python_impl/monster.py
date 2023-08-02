@@ -38,14 +38,20 @@ if TYPE_CHECKING:
 
 class MappaMonster(MappaMonsterProtocol, AutoString):
     level: u8
-    weight: u16
-    weight2: u16
+    main_spawn_weight: u16
+    monster_house_spawn_weight: u16
     md_index: u16
 
-    def __init__(self, level: u8, weight: u16, weight2: u16, md_index: u16):
+    def __init__(
+        self,
+        level: u8,
+        main_spawn_weight: u16,
+        monster_house_spawn_weight: u16,
+        md_index: u16,
+    ):
         self.level = level
-        self.weight = weight
-        self.weight2 = weight2
+        self.main_spawn_weight = main_spawn_weight
+        self.monster_house_spawn_weight = monster_house_spawn_weight
         self.md_index = md_index
 
     @classmethod
@@ -68,8 +74,8 @@ class MappaMonster(MappaMonsterProtocol, AutoString):
     def to_mappa(self):
         data = bytearray(8)
         write_u16(data, u16(self.level * LEVEL_MULTIPLIER), 0x00)
-        write_u16(data, self.weight, 0x02)
-        write_u16(data, self.weight2, 0x04)
+        write_u16(data, self.main_spawn_weight, 0x02)
+        write_u16(data, self.monster_house_spawn_weight, 0x04)
         write_u16(data, self.md_index, 0x06)
         return data
 
@@ -83,6 +89,6 @@ class MappaMonster(MappaMonsterProtocol, AutoString):
         return (
             self.md_index == other.md_index
             and self.level == other.level
-            and self.weight == other.weight
-            and self.weight2 == other.weight2
+            and self.main_spawn_weight == other.main_spawn_weight
+            and self.monster_house_spawn_weight == other.monster_house_spawn_weight
         )

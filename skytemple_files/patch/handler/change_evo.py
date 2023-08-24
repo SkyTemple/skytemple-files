@@ -230,17 +230,21 @@ This supposedly removes most of the particular cases the game handles for evolut
                             tries += 1
                             if tries >= MAX_TRY:
                                 raise Exception(
-                                    f(_(
-                                        "Infinite recursion detected in pre evolutions for md entry {i}. "
-                                    ))
+                                    f(
+                                        _(
+                                            "Infinite recursion detected in pre evolutions for md entry {i}. "
+                                        )
+                                    )
                                 )
                         next_stage.append(pre_evo)
                     except IndexError as e:
                         raise Exception(
-                            f(_(
-                                "One of the monsters in the pre-evolution chain of monster ${i:04} has an invalid pre "
-                                "evolution configured: ${pre_evo:04}. Can not apply patch."
-                            ))
+                            f(
+                                _(
+                                    "One of the monsters in the pre-evolution chain of monster ${i:04} has an invalid pre "
+                                    "evolution configured: ${pre_evo:04}. Can not apply patch."
+                                )
+                            )
                         ) from e
                 if next_stage != [i]:
                     write_u16(

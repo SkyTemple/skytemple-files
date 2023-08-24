@@ -15,7 +15,7 @@
     <Game id="EoD_EU"    issupported="false"/>
     <Game id="EoT_EU"    issupported="false"/>
 
-    <Game id="EoS_JP"    issupported="true"/>
+    <Game id="EoS_JP"    issupported="false"/>
     <Game id="EoD_JP"    issupported="false"/>
     <Game id="EoT_JP"    issupported="false"/>
   </GameEditions>

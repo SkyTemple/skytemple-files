@@ -21,7 +21,7 @@ from typing import Callable, List, Dict
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, u32_checked
 
-from skytemple_files.common.i18n_util import _
+from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_JP,
@@ -127,7 +127,7 @@ This supposedly removes most of the particular cases the game handles for evolut
 
     @property
     def version(self) -> str:
-        return "0.0.1"
+        return "0.0.2"
 
     @property
     def category(self) -> PatchCategory:
@@ -209,31 +209,39 @@ This supposedly removes most of the particular cases the game handles for evolut
                     next_stage = []
                     pre_evo = i
                     tries = 0
-                    while md_model[pre_evo].pre_evo_index != 0:
-                        current = md_model[pre_evo]
-                        pre_evo = current.pre_evo_index
-                        if (
-                            current.evo_param2 == AdditionalRequirement.MALE.value
-                            and md_model[pre_evo % 600].gender == Gender.MALE.value
-                            and md_model[pre_evo % 600 + 600].gender
-                            == Gender.FEMALE.value
-                        ):
-                            pre_evo = pre_evo % 600
-                        elif (
-                            current.evo_param2 == AdditionalRequirement.FEMALE.value
-                            and md_model[pre_evo % 600].gender == Gender.MALE.value
-                            and md_model[pre_evo % 600 + 600].gender
-                            == Gender.FEMALE.value
-                        ):
-                            pre_evo = pre_evo % 600 + 600
-                        tries += 1
-                        if tries >= MAX_TRY:
-                            raise Exception(
-                                _(
-                                    "Infinite recursion detected in pre evolutions for md entry {i}. "
+                    try:
+                        while md_model[pre_evo].pre_evo_index != 0:
+                            current = md_model[pre_evo]
+                            pre_evo = current.pre_evo_index
+                            if (
+                                current.evo_param2 == AdditionalRequirement.MALE.value
+                                and md_model[pre_evo % 600].gender == Gender.MALE.value
+                                and md_model[pre_evo % 600 + 600].gender
+                                == Gender.FEMALE.value
+                            ):
+                                pre_evo = pre_evo % 600
+                            elif (
+                                current.evo_param2 == AdditionalRequirement.FEMALE.value
+                                and md_model[pre_evo % 600].gender == Gender.MALE.value
+                                and md_model[pre_evo % 600 + 600].gender
+                                == Gender.FEMALE.value
+                            ):
+                                pre_evo = pre_evo % 600 + 600
+                            tries += 1
+                            if tries >= MAX_TRY:
+                                raise Exception(
+                                    f(_(
+                                        "Infinite recursion detected in pre evolutions for md entry {i}. "
+                                    ))
                                 )
-                            )
-                    next_stage.append(pre_evo)
+                        next_stage.append(pre_evo)
+                    except IndexError as e:
+                        raise Exception(
+                            f(_(
+                                "One of the monsters in the pre-evolution chain of monster ${i:04} has an invalid pre "
+                                "evolution configured: ${pre_evo:04}. Can not apply patch."
+                            ))
+                        ) from e
                 if next_stage != [i]:
                     write_u16(
                         mevo_data,

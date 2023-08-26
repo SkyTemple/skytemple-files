@@ -53,9 +53,9 @@ from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import (
+    get_binary_from_rom,
     get_ppmdu_config_for_rom,
     get_rom_folder,
-    get_binary_from_rom_ppmdu,
 )
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.protocol import MdProtocol
@@ -160,12 +160,12 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
 
     ground_dungeon_tilesets = (
         HardcodedGroundDungeonTilesets.get_ground_dungeon_tilesets(
-            get_binary_from_rom_ppmdu(rom, config.binaries["overlay/overlay_0011.bin"]),
+            get_binary_from_rom(rom, config.bin_sections.overlay11),
             config,
         )
     )
     dungeons = HardcodedDungeons.get_dungeon_list(
-        get_binary_from_rom_ppmdu(rom, config.binaries["arm9.bin"]), config
+        get_binary_from_rom(rom, config.bin_sections.arm9), config
     )
     mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName("BALANCE/mappa_s.bin"))
 

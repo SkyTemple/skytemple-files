@@ -16,9 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import math
-from enum import Enum
-from typing import Union, List
+from typing import List, Sequence
 
 from PIL import Image
 

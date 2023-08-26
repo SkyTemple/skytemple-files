@@ -19,14 +19,13 @@ from __future__ import annotations
 import itertools
 import math
 
-from typing import List, Tuple
+from typing import Tuple, Sequence
 
 from PIL import Image
 from range_typed_integers import u16
 
 from skytemple_files.common.protocol import TilemapEntryProtocol
 
-from skytemple_files.common.util import *
 from skytemple_files.graphics.dpc import DPC_TILING_DIM
 from skytemple_files.graphics.dpc.protocol import DpcProtocol
 from skytemple_files.graphics.dpci._model import Dpci
@@ -40,8 +39,6 @@ from skytemple_files.common.util import (
     write_u16,
     iter_bytes,
 )
-from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
-from skytemple_files.graphics.dpl.model import DPL_MAX_PAL, DPL_PAL_LEN
 
 
 class Dpc(DpcProtocol[Dpci]):

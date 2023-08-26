@@ -36,7 +36,6 @@ class WriterProtocol(Protocol[U]):
 
 P = TypeVar("P")
 PS = TypeVar("PS", bound=Sir0Serializable)
-PS = TypeVar("PS", bound=Sir0Serializable)
 
 
 class HybridDataHandler(Generic[P], DataHandler[P], ABC):
@@ -112,10 +111,7 @@ class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
         from skytemple_files.common.types.file_types import FileType
 
         sir0 = FileType.SIR0.deserialize(data)
-        static_data = None
-        if kwargs is not None and "static_data" in kwargs:
-            static_data = kwargs["static_data"]
-        return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls(), static_data)
+        return FileType.SIR0.unwrap_obj(sir0, cls.get_model_cls())
 
     @classmethod
     def serialize(cls, data: PS, **kwargs: OptionalKwargs) -> bytes:

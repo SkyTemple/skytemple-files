@@ -16,9 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from range_typed_integers import u8_checked, u32_checked
-from itertools import islice
-from typing import Optional, Tuple, List
+from range_typed_integers import u8_checked, u32_checked, u32
+from typing import Optional, Tuple, List, Sequence
 
 from range_typed_integers import u8_checked, u32_checked, u8
 
@@ -161,7 +160,7 @@ class Dpla(DplaProtocol):
 
         return new_pal
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         data = bytearray()
         pointers = []
         pointer_offsets = []
@@ -193,10 +192,10 @@ class Dpla(DplaProtocol):
         data += bytes(4 * len(pointers))
         for pnt in pointers:
             write_u32(data, pnt, cursor)
-            pointer_offsets.append(cursor)
+            pointer_offsets.append(u32(cursor))
             cursor += 4
 
-        return data, pointer_offsets, data_offset
+        return data, pointer_offsets, u32(data_offset)
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> "Dpla":

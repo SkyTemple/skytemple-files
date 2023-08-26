@@ -28,10 +28,7 @@ from skytemple_files.common.tiled_image import (
     to_pil,
     to_pil_tiled,
 )
-from skytemple_files.common.util import (
-    iter_bytes,
-    read_u32
-)
+from skytemple_files.common.util import iter_bytes, read_u32
 from skytemple_files.graphics.bgp import (
     BGP_RES_WIDTH,
     BGP_RES_HEIGHT,

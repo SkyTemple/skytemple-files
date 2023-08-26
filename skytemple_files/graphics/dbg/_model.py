@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import math
-from typing import List
+from typing import List, Sequence
 
 from PIL import Image
 from range_typed_integers import u16
@@ -42,7 +42,6 @@ from skytemple_files.graphics.dpci._model import Dpci
 from skytemple_files.graphics.dpci import DPCI_TILE_DIM
 from skytemple_files.graphics.dpl._model import Dpl
 from skytemple_files.graphics.dpl import DPL_PAL_LEN, DPL_MAX_PAL
-from skytemple_files.common.i18n_util import f, _
 from skytemple_files.user_error import UserValueError
 
 

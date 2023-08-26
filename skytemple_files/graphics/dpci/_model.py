@@ -20,6 +20,8 @@ import itertools
 import math
 from typing import List, Sequence
 
+from PIL import Image
+
 from skytemple_files.common.tiled_image import TilemapEntry, from_pil, to_pil
 from skytemple_files.common.util import iter_bytes
 from skytemple_files.graphics.dpci import DPCI_TILE_DIM

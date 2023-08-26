@@ -37,6 +37,11 @@ class DbgProtocol(Protocol[C, CI, L]):
         ...
 
     @abstractmethod
+    def place_chunk(self, x: int, y: int, chunk_index: int) -> None:
+        """Place the chunk with the given ID at the X and Y position. No error checking is done."""
+        ...
+
+    @abstractmethod
     def to_pil(
         self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
     ) -> Image.Image:

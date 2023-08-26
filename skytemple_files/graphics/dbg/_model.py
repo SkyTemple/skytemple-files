@@ -55,6 +55,10 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
         for pos in range(0, len(data), 2):
             self.mappings.append(read_u16(data, pos))
 
+    def place_chunk(self, x: int, y: int, chunk_index: int) -> None:
+        dbg_index = y * DBG_WIDTH_AND_HEIGHT + x
+        self.mappings[dbg_index] = u16(chunk_index)
+
     def to_pil(
         self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]
     ) -> Image.Image:

@@ -15,10 +15,10 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from range_typed_integers import u32_checked
+from range_typed_integers import u32_checked, u32, u8
 
 from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
-from skytemple_files.common.util import *
+from skytemple_files.common.util import write_u32, write_u8, write_u16
 from skytemple_files.graphics.bgp._model import Bgp
 from skytemple_files.graphics.bgp import (
     BGP_HEADER_LENGTH,

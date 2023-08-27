@@ -165,8 +165,7 @@ class Dpc(DpcProtocol[Dpci]):
         if correct_tile_ids:
             for chunk in tile_mappings:
                 for entry in chunk:
-                    if not contains_null_chunk:
-                        entry.idx += 1
+                    entry.idx += 1
         if not contains_null_chunk:
             tile_mappings = [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] + tile_mappings  # type: ignore
         self.chunks = tile_mappings

@@ -1,4 +1,4 @@
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #
@@ -19,8 +19,8 @@ import typing
 from skytemple_files.common.tiled_image import TilemapEntry
 from skytemple_files.graphics.bgp.handler import BgpHandler
 from skytemple_files.graphics.bgp.protocol import BgpProtocol
-from skytemple_files.graphics.test.util import assert_tilemap_lists_equal
-from skytemple_files.test.case import SkyTempleFilesTestCase, fixpath, romtest
+from skytemple_files_test.graphics.util import assert_tilemap_lists_equal
+from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
 class BgpTestCase(SkyTempleFilesTestCase[BgpHandler, BgpProtocol]):

@@ -31,10 +31,8 @@ from skytemple_files.common.util import read_u32
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-ORIGINAL_INSTRUCTION_EU = 0xE59F002C
-OFFSET_EU = 0x1238
-ORIGINAL_INSTRUCTION_US = 0xE59F0038
-OFFSET_US = 0x15DC
+ORIGINAL_INSTRUCTION = 0xE59F0038
+OFFSET = 0x15DC
 
 
 class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -44,11 +42,7 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _(
-            "Prevents the game from crashing if it runs out of memory when trying to display a sprite (this can "
-            "happen during cutscenes when using custom sprites or the randomizer). Instead, the game will be "
-            "forced to continue, which will most likely prevent the crash but could cause glitches."
-        )
+        return _("If the game runs out of memory trying to load a sprite, a default one will be used instead, preventing the crash.")
 
     @property
     def author(self) -> str:
@@ -56,7 +50,7 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def version(self) -> str:
-        return "0.1.1"
+        return "2.0.0"
 
     def depends_on(self) -> List[str]:
         return ["ExtraSpace"]
@@ -68,9 +62,9 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return read_u32(rom.arm9, OFFSET_US) != ORIGINAL_INSTRUCTION_US
+                return read_u32(rom.arm9, OFFSET) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
-                return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION_EU
+                return read_u32(rom.arm9, OFFSET) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(

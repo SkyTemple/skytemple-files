@@ -42,7 +42,9 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _("If the game runs out of memory trying to load a sprite, a default one will be used instead, preventing the crash.")
+        return _(
+            "If the game runs out of memory trying to load a sprite, a default one will be used instead, preventing the crash."
+        )
 
     @property
     def author(self) -> str:

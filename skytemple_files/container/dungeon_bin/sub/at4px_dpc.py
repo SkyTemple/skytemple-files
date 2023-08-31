@@ -18,20 +18,20 @@ from __future__ import annotations
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.graphics.dpc.protocol import DpcProtocol
 from skytemple_files.compression_container.common_at.handler import COMMON_AT_BEST_3
-from skytemple_files.graphics.dpc.model import Dpc
 
 
-class DbinAt4pxDpcHandler(DataHandler[Dpc]):
+class DbinAt4pxDpcHandler(DataHandler[DpcProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpc:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DpcProtocol:
         from skytemple_files.common.types.file_types import FileType
 
         at = FileType.COMMON_AT.deserialize(data)
         return FileType.DPC.deserialize(at.decompress())
 
     @classmethod
-    def serialize(cls, data: Dpc, **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: DpcProtocol, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         serialized = FileType.DPC.serialize(data)

@@ -14,23 +14,24 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dma.model import Dma
+from skytemple_files.graphics.dma.protocol import DmaProtocol
 
 
-class DbinSir0At4pxDmaHandler(DataHandler[Dma]):
+class DbinSir0At4pxDmaHandler(DataHandler[DmaProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dma:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DmaProtocol:
         from skytemple_files.common.types.file_types import FileType
 
         common_at = FileType.DBIN_SIR0_AT4PX.deserialize(data)
         return FileType.DMA.deserialize(common_at.decompress())
 
     @classmethod
-    def serialize(cls, data: Dma, **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: DmaProtocol, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         serialized = FileType.DMA.serialize(data)

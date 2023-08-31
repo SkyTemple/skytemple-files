@@ -44,13 +44,13 @@ import os
 import sys
 import traceback
 import warnings
-from typing import Dict, List, Optional
+from typing import Optional, List, Dict
 
-from ndspy.rom import NintendoDSRom
 from PIL import Image, ImageDraw
+from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
-from skytemple_files.common.script_util import SCRIPT_DIR, load_script_files
+from skytemple_files.common.script_util import load_script_files, SCRIPT_DIR
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import (
     get_binary_from_rom,
@@ -62,11 +62,11 @@ from skytemple_files.data.md.protocol import MdProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files.graphics.bpc import BPC_TILE_DIM
 from skytemple_files.graphics.dma.dma_drawer import DmaDrawer
-from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma.protocol import DmaProtocol
+from skytemple_files.graphics.dpc.protocol import DpcProtocol
+from skytemple_files.graphics.dpci.protocol import DpciProtocol
+from skytemple_files.graphics.dpl.protocol import DplProtocol
+from skytemple_files.graphics.dpla.protocol import DplaProtocol
 from skytemple_files.hardcoded.dungeons import HardcodedDungeons
 from skytemple_files.hardcoded.ground_dungeon_tilesets import (
     HardcodedGroundDungeonTilesets,
@@ -178,7 +178,7 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
         if entry.ground_level >= 0xFFFF:
             continue
         level = levels_by_id[entry.ground_level]
-        print(f"{i + 1}/{len(ground_dungeon_tilesets)-1} - {level.name}")
+        print(f"{i + 1}/{len(ground_dungeon_tilesets) - 1} - {level.name}")
         print(entry)
 
         mappa_idx = dungeons[entry.dungeon_id].mappa_index
@@ -197,11 +197,11 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
             raise ValueError("Unknown unk2")
         if tileset_id == 170:
             tileset_id = 1
-        dma: Dma = dungeon_bin.get(f"dungeon{tileset_id}.dma")
-        dpl: Dpl = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
-        dpla: Dpla = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
-        dpci: Dpci = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
-        dpc: Dpc = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
+        dma: DmaProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dma")
+        dpl: DplProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
+        dpla: DplaProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
+        dpci: DpciProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
+        dpc: DpcProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
 
         bma: BmaProtocol = bg_list.level[level.mapid].get_bma(rom)
 
@@ -306,7 +306,13 @@ def draw_scene_for__rest(
     # Performers
     for i, performer in enumerate(layer.performers):
         has_written_something = True
-        triangle(draw, performer.pos.x_absolute, performer.pos.y_absolute, COLOR_PERFORMER, performer.pos.direction.id)  # type: ignore
+        triangle(
+            draw,
+            performer.pos.x_absolute,
+            performer.pos.y_absolute,
+            COLOR_PERFORMER,
+            performer.pos.direction.id,
+        )  # type: ignore
 
     # Events
     for i, event in enumerate(layer.events):
@@ -332,7 +338,13 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
     """Draws the sprite for an actor"""
     if actor.actor.entid == 0:
         if draw_invisible_actors_objects:
-            return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)  # type: ignore
+            return triangle(
+                draw,
+                actor.pos.x_absolute,
+                actor.pos.y_absolute,
+                COLOR_ACTORS,
+                actor.pos.direction.id,
+            )  # type: ignore
         return
 
     actor_sprite_id = monster_md[actor.actor.entid].sprite_index  # type: ignore
@@ -348,7 +360,13 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
         )
         if not draw_invisible_actors_objects:
             return
-        return triangle(draw, actor.pos.x_absolute, actor.pos.y_absolute, COLOR_ACTORS, actor.pos.direction.id)  # type: ignore
+        return triangle(
+            draw,
+            actor.pos.x_absolute,
+            actor.pos.y_absolute,
+            COLOR_ACTORS,
+            actor.pos.direction.id,
+        )  # type: ignore
 
     frame_id = actor.pos.direction.id - 1 if actor.pos.direction.id > 0 else 0  # type: ignore
     mfg_id = ani_group[frame_id].frames[0].frame_id
@@ -391,7 +409,13 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
         )
         if not draw_invisible_actors_objects:
             return
-        return triangle(draw, obj.pos.x_absolute, obj.pos.y_absolute, COLOR_OBJECTS, obj.pos.direction.id)  # type: ignore
+        return triangle(
+            draw,
+            obj.pos.x_absolute,
+            obj.pos.y_absolute,
+            COLOR_OBJECTS,
+            obj.pos.direction.id,
+        )  # type: ignore
 
     frame_id = obj.pos.direction.id - 1 if obj.pos.direction.id > 0 else 0  # type: ignore
     if frame_id > len(ani_group) - 1:

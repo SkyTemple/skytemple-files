@@ -30,11 +30,11 @@ from skytemple_files.common.util import AutoString, read_u8, read_i16, read_u32
 from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 from skytemple_files.dungeon_data.fixed_bin.model import FixedBin, FixedFloor
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
-from skytemple_files.graphics.dma.model import Dma
-from skytemple_files.graphics.dpc.model import Dpc
-from skytemple_files.graphics.dpci.model import Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma.protocol import DmaProtocol
+from skytemple_files.graphics.dpc.protocol import DpcProtocol
+from skytemple_files.graphics.dpci.protocol import DpciProtocol
+from skytemple_files.graphics.dpl.protocol import DplProtocol
+from skytemple_files.graphics.dpla.protocol import DplaProtocol
 from skytemple_files.hardcoded.dungeons import DungeonDefinition
 
 
@@ -125,7 +125,16 @@ def resolve_mapping_for_level(
     fixed: FixedBin,
     dungeon_bin: DungeonBinPack,
     dungeons: List[DungeonDefinition],
-) -> Optional[Tuple[Dma, Dpc, Dpci, Dpl, Dpla, Optional[FixedFloor]]]:
+) -> Optional[
+    Tuple[
+        DmaProtocol,
+        DpcProtocol,
+        DpciProtocol,
+        DplProtocol,
+        DplaProtocol,
+        Optional[FixedFloor],
+    ]
+]:
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
     if (
         level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM
@@ -149,11 +158,11 @@ def resolve_mapping_for_level(
     tileset_id = layout.tileset_id
     if tileset_id > 169:
         tileset_id = u8(0)
-    dma: Dma = dungeon_bin.get(f"dungeon{tileset_id}.dma")
-    dpl: Dpl = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
-    dpla: Dpla = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
-    dpci: Dpci = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
-    dpc: Dpc = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
+    dma: DmaProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dma")
+    dpl: DplProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpl")
+    dpla: DplaProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpla")
+    dpci: DpciProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpci")
+    dpc: DpcProtocol = dungeon_bin.get(f"dungeon{tileset_id}.dpc")
 
     fixedf = None
     if level.mapty_enum == Pmd2ScriptLevelMapType.FIXED_ROOM:

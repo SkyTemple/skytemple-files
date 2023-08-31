@@ -17,16 +17,52 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dma.model import Dma
+from skytemple_files.graphics.dma.protocol import DmaProtocol
+
+if TYPE_CHECKING:
+    pass
 
 
-class DmaHandler(DataHandler[Dma]):
+class DmaHandler(HybridDataHandler[DmaProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dma:
-        return Dma(data)
+    def load_python_model(cls) -> Type[DmaProtocol]:
+        from skytemple_files.graphics.dma._model import Dma
+
+        return Dma
 
     @classmethod
-    def serialize(cls, data: Dma, **kwargs: OptionalKwargs) -> bytes:
-        return data.to_bytes()
+    def load_native_model(cls) -> Type[DmaProtocol]:
+        from skytemple_rust.st_dma import (
+            Dma,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Dma
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol["PyDma"]]:  # type: ignore
+        from skytemple_files.graphics.dma._writer import DmaWriter
+
+        return DmaWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeDma"]]:  # type: ignore
+        from skytemple_rust.st_dma import (
+            DmaWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return DmaWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DmaProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: DmaProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

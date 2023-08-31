@@ -17,22 +17,32 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type
+
+from skytemple_files.common.types.hybrid_data_handler import HybridSir0DataHandler
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dpla.protocol import DplaProtocol
 
 
-class DplaHandler(DataHandler[Dpla]):
-    """
-    Dpla handler. Note that this isn't actually used, since dpla is notmally Sir0 wrapped,
-    see skytemple_files.container.dungeon_bin.sub.sir0_dpla.DbinSir0DbplaHandler.
-    If used directly, we assume the file starts with the pointers to the palette.
-    """
+class DplaHandler(HybridSir0DataHandler[DplaProtocol]):
+    @classmethod
+    def load_python_model(cls) -> Type[DplaProtocol]:
+        from skytemple_files.graphics.dpla._model import Dpla
+
+        return Dpla
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Dpla:
-        return Dpla(data, 0)
+    def load_native_model(cls) -> Type[DplaProtocol]:
+        from skytemple_rust.st_dpla import (
+            Dpla,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Dpla
 
     @classmethod
-    def serialize(cls, data: Dpla, **kwargs: OptionalKwargs) -> bytes:
+    def deserialize_raw(cls, data: bytes, **kwargs: OptionalKwargs) -> DplaProtocol:
+        return cls.get_model_cls()(data, 0)
+
+    @classmethod
+    def serialize_raw(cls, data: DplaProtocol, **kwargs: OptionalKwargs) -> bytes:
         return data.sir0_serialize_parts()[0]

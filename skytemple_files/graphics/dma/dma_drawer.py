@@ -18,33 +18,36 @@ from __future__ import annotations
 
 import itertools
 from random import choice
-from typing import Iterable, List, Optional, Sequence, Union
+from typing import List, Optional, Union, Iterable, Sequence
 
 from PIL import Image
 
 from skytemple_files.dungeon_data.fixed_bin.model import (
     FixedFloor,
-    FloorType,
-    TileRule,
     TileRuleType,
+    TileRule,
+    FloorType,
 )
 from skytemple_files.graphics.bma.protocol import BmaProtocol
-from skytemple_files.graphics.dma.model import Dma, DmaType
-from skytemple_files.graphics.dpc.model import DPC_TILING_DIM, Dpc
-from skytemple_files.graphics.dpci.model import DPCI_TILE_DIM, Dpci
-from skytemple_files.graphics.dpl.model import Dpl
-from skytemple_files.graphics.dpla.model import Dpla
+from skytemple_files.graphics.dma.protocol import DmaProtocol, DmaType, _DmaType
+from skytemple_files.graphics.dma.util import get_tile_neighbors
+from skytemple_files.graphics.dpc import DPC_TILING_DIM
+from skytemple_files.graphics.dpci import DPCI_TILE_DIM
+from skytemple_files.graphics.dpc.protocol import DpcProtocol
+from skytemple_files.graphics.dpci.protocol import DpciProtocol
+from skytemple_files.graphics.dpl.protocol import DplProtocol
+from skytemple_files.graphics.dpla.protocol import DplaProtocol
 
 
 class DmaDrawer:
     """Class to render DMAs as PIL images (or to just get the BPC tile indices for rules)."""
 
-    def __init__(self, dma: Dma):
+    def __init__(self, dma: DmaProtocol):
         self.dma = dma
 
     def rules_from_bma(
         self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None
-    ) -> List[List[DmaType]]:
+    ) -> List[List[_DmaType]]:
         rules = []
         active_row = None
         layer: Sequence[int] = bma  # type: ignore
@@ -108,7 +111,7 @@ class DmaDrawer:
 
     def get_mappings_for_rules(
         self,
-        rules: List[List[DmaType]],
+        rules: List[List[_DmaType]],
         variation_index=None,
         treat_outside_as_wall=False,
     ) -> List[List[int]]:
@@ -139,7 +142,7 @@ class DmaDrawer:
             active_row: List[int] = []
             mappings.append(active_row)
             for rx, rule_cell in enumerate(rule_row):
-                solid_neighbors = self.dma.get_tile_neighbors(
+                solid_neighbors = get_tile_neighbors(
                     water_matrix if rule_cell == DmaType.WATER else wall_matrix,  # type: ignore
                     rx,
                     ry,
@@ -157,10 +160,10 @@ class DmaDrawer:
     def draw(
         self,
         mappings: List[List[int]],
-        dpci: Dpci,
-        dpc: Dpc,
-        dpl: Dpl,
-        dpla: Optional[Dpla],
+        dpci: DpciProtocol,
+        dpc: DpcProtocol,
+        dpl: DplProtocol,
+        dpla: Optional[DplaProtocol],
     ) -> List[Image.Image]:
         chunks = dpc.chunks_to_pil(dpci, dpl.palettes, 1)
 
@@ -195,7 +198,7 @@ class DmaDrawer:
             has_a_second_palette = len(dpla.colors) > 16 and len(dpla.colors[16]) > 0
 
             for fidx in range(0, number_frames):
-                pal_copy = dpl.palettes.copy()
+                pal_copy = dpl.palettes.copy()  # type: ignore
                 img_copy = fimg.copy()
                 # Put palette 11
                 pal_copy[10] = dpla.get_palette_for_frame(0, fidx)

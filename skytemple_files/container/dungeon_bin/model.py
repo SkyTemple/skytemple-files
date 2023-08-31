@@ -44,6 +44,13 @@ class DungeonBinPack(BinPack):
                 return self[i]
         raise KeyError(f"File {filename} not found.")
 
+    def get_raw(self, filename: str) -> bytes:
+        """Returns the bytes of a file by name."""
+        for i in range(0, len(self)):
+            if filename == self.get_filename(i):
+                return self._files[i]
+        raise KeyError(f"File {filename} not found.")
+
     def set(self, filename, data):
         """Sets a file by name."""
         for i in range(0, len(self)):

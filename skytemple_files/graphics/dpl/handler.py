@@ -17,16 +17,52 @@
 
 from __future__ import annotations
 
-from skytemple_files.common.types.data_handler import DataHandler
+from typing import Type, TYPE_CHECKING
+
+from skytemple_files.common.types.hybrid_data_handler import (
+    HybridDataHandler,
+    WriterProtocol,
+)
 from skytemple_files.common.util import OptionalKwargs
-from skytemple_files.graphics.dpl.model import Dpl
+from skytemple_files.graphics.dpl.protocol import DplProtocol
+
+if TYPE_CHECKING:
+    pass
 
 
-class DplHandler(DataHandler[Dpl]):
+class DplHandler(HybridDataHandler[DplProtocol]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "Dpl":
-        return Dpl(data)
+    def load_python_model(cls) -> Type[DplProtocol]:
+        from skytemple_files.graphics.dpl._model import Dpl
+
+        return Dpl
 
     @classmethod
-    def serialize(cls, data: "Dpl", **kwargs: OptionalKwargs) -> bytes:
-        return data.to_bytes()
+    def load_native_model(cls) -> Type[DplProtocol]:
+        from skytemple_rust.st_dpl import (
+            Dpl,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return Dpl
+
+    @classmethod
+    def load_python_writer(cls) -> Type[WriterProtocol["PyDpl"]]:  # type: ignore
+        from skytemple_files.graphics.dpl._writer import DplWriter
+
+        return DplWriter
+
+    @classmethod
+    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpl"]]:  # type: ignore
+        from skytemple_rust.st_dpl import (
+            DplWriter,
+        )  # pylint: disable=no-name-in-module,no-member,import-error
+
+        return DplWriter
+
+    @classmethod
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DplProtocol:
+        return cls.get_model_cls()(bytes(data))
+
+    @classmethod
+    def serialize(cls, data: DplProtocol, **kwargs: OptionalKwargs) -> bytes:
+        return cls.get_writer_cls()().write(data)

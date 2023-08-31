@@ -4579,7 +4579,9 @@ class DpcTestCase(SkyTempleFilesTestCase[DpcHandler, DpcProtocol[DpciMock]]):
             try:
                 model = self.handler.deserialize(dbin_model.get_raw(fn))
                 model_reloaded = self._save_and_reload_main_fixture(model)
-                self.assertEqual(model.chunks, model_reloaded.chunks)
+                self.assertEqual(len(model.chunks), len(model_reloaded.chunks))
+                for before, after in zip(model.chunks, model_reloaded.chunks):
+                    assert_tilemap_lists_equal(before, after)
             except Exception as e:
                 raise AssertionError(f"failed processing file {fn}") from e
 

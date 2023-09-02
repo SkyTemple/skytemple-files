@@ -37,8 +37,8 @@ _RW_DEPR_WARNING = (
     "See https://github.com/SkyTemple/skytemple-files/blob/master/docs/140_migration.rst "
     "for info on how to update."
 )
-_RW_DEPR_WARNING_VER = (1, 6, 0)
-_BIN_DEPR_VER = (1, 6, 0)
+_RW_DEPR_WARNING_VER = (1, 7, 0)
+_BIN_DEPR_VER = (1, 7, 0)
 
 
 def read_uintle(data: ByteReadable, start: int = 0, length: int = 1) -> int:

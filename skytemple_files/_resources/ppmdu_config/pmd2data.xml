@@ -123,7 +123,7 @@
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
         <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
-        <StringBlock name="Kirila Secret Bazaar Greeting"          beg="3889"  end="3890"/>
+        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="3889"  end="3890"/>
         <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>
         <StringBlock name="Shedinja Shop Strings"                  beg="3902"  end="3913"/>
         <StringBlock name="Mime Jr. Spa Strings"                   beg="3913"  end="3923"/>
@@ -240,7 +240,7 @@
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="2954"  end="2966"/>
         <!--<StringBlock name="Misc Battle Events Strings"             beg="2966"  end="3157??"/> --><!-- Darkaim: Go over again with Capypara (This one needs a lot of work) -->
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3890"/>  <!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Kirila Secret Bazaar Greeting"          beg="2216"  end="2217"/>  <!-- Darkaim: Go over again with Capypara (?) -->
+        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="2216"  end="2217"/>  <!-- Darkaim: Go over again with Capypara (?) -->
         <StringBlock name="Grab Bags Shop Strings"                 beg="2217"  end="2229"/>
         <StringBlock name="Shedinja Shop Strings"                  beg="2229"  end="2240"/>
         <StringBlock name="Mime Jr. Spa Strings"                   beg="2240"  end="2250"/>
@@ -360,7 +360,7 @@
         <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
         <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
         <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
-        <StringBlock name="Kirila Secret Bazaar Greeting"          beg="3889"  end="3890"/>
+        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="3889"  end="3890"/>
         <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>
         <StringBlock name="Shedinja Shop Strings"                  beg="3902"  end="3913"/>
         <StringBlock name="Mime Jr. Spa Strings"                   beg="3913"  end="3923"/>

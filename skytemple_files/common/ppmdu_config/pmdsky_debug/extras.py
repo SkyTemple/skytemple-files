@@ -279,10 +279,23 @@ class ExtraJpArm9Functions:
 
 class ExtraJpArm9Data:
     COMPRESSED_IQ_GROUP_SKILLS = Symbol(
-        None, None, None, COMPRESSED_IQ_GROUP_SKILLS_DESC
+        [0x20A3164 - JpArm9Section.loadaddress],
+        [0x20A3164],
+        0x90,
+        COMPRESSED_IQ_GROUP_SKILLS_DESC,
     )
-    GUEST_MONSTER_DATA2 = Symbol(None, None, None, GUEST_MONSTER_DATA2_DESC)
-    EXTRA_DUNGEON_DATA = Symbol(None, None, None, EXTRA_DUNGEON_DATA_DESC)
+    GUEST_MONSTER_DATA2 = Symbol(
+        [0x204F168 - JpArm9Section.loadaddress],
+        [0x204F168],
+        0x1D0,
+        GUEST_MONSTER_DATA2_DESC,
+    )
+    EXTRA_DUNGEON_DATA = Symbol(
+        [0x204F000 - JpArm9Section.loadaddress],
+        [0x204F000],
+        0x168,
+        EXTRA_DUNGEON_DATA_DESC,
+    )
 
 
 class ExtraJpArm9Section:
@@ -299,7 +312,12 @@ class ExtraJpOverlay11Functions:
 
 
 class ExtraJpOverlay11Data:
-    MONSTER_GROUND_IDLE_ANIM = Symbol(None, None, None, MONSTER_GROUND_IDLE_ANIM_DESC)
+    MONSTER_GROUND_IDLE_ANIM = Symbol(
+        [0x22F73D8 - JpOverlay11Section.loadaddress],
+        [0x22F73D8],
+        0x800,
+        MONSTER_GROUND_IDLE_ANIM_DESC,
+    )
 
 
 class ExtraJpOverlay11Section:

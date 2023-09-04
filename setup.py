@@ -64,7 +64,7 @@ setup(
         "appdirs >= 1.4.0",
         "explorerscript >= 0.1.3",
         "skytemple-rust >= 1.6.0a3, < 1.7.0",
-        'pyobjc==9.1.1; sys_platform == "darwin"',
+        'pyobjc==9.2; sys_platform == "darwin"',
         "dungeon-eos==0.0.5",
         'typing_extensions >= 3.9; python_version < "3.9"',
         'importlib_resources>=1.3; python_version < "3.9"',

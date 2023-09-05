@@ -866,19 +866,26 @@ class SpriteCollabClient:
         server_url: str = DEFAULT_SERVER,
         cache_size: int = 5000,
         request_adapter: Optional[AioRequestAdapter] = None,
+        use_certifi_ssl=False,
     ):
         """
         Create a new client instance.
         The last `cache_size` requests are cached (including fetched assets).
         To disable the cache, set ``cache_size`` to 0.
+        If `use_certifi_ssl` is used, then the certificate of the `certifi` package are used.
+        The caller must make sure that package is installed.
 
-        If you specify a custom request adapter, the `cache_size` parameter is ignored.
+        If you specify a custom request adapter, the `cache_size` and `use_certifi_ssl` parameter are ignored.
         """
         if request_adapter is None:
             if cache_size > 0:
-                self._request_adapter = CachedRequestAdapter(cache_size)
+                self._request_adapter = CachedRequestAdapter(
+                    cache_size, use_certifi_ssl=use_certifi_ssl
+                )
             else:
-                self._request_adapter = AioRequestAdapterImpl()
+                self._request_adapter = AioRequestAdapterImpl(
+                    use_certifi_ssl=use_certifi_ssl
+                )
         else:
             self._request_adapter = request_adapter
 

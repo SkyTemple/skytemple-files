@@ -43,6 +43,9 @@ class AioRequestAdapter(ABC):
 
 
 class AioRequestAdapterImpl(AioRequestAdapter):
+    def __init__(self, *, use_certifi_ssl=False):
+        self.use_certifi_ssl = use_certifi_ssl
+
     async def fetch_bin(self, url: str) -> bytes:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -52,6 +55,12 @@ class AioRequestAdapterImpl(AioRequestAdapter):
                 return await resp.read()
 
     def graphql_transport(self, url: str) -> AsyncTransport:
+        if self.use_certifi_ssl:
+            import certifi, ssl  # type: ignore
+
+            return AIOHTTPTransport(
+                url=url, ssl=ssl.create_default_context(cafile=certifi.where())
+            )
         return AIOHTTPTransport(url=url)
 
 
@@ -59,8 +68,9 @@ class CachedRequestAdapter(AioRequestAdapter):
     _request_adapter: AioRequestAdapter
     cache: LRU
 
-    def __init__(self, cache_size: int):
-        self._request_adapter = AioRequestAdapterImpl()
+    def __init__(self, cache_size: int, use_certifi_ssl=False):
+        self._request_adapter = AioRequestAdapterImpl(use_certifi_ssl=use_certifi_ssl)
+        self.use_certifi_ssl = use_certifi_ssl
         self.cache = LRU(cache_size)
 
     def flush_cache(self):
@@ -72,7 +82,7 @@ class CachedRequestAdapter(AioRequestAdapter):
         return self.cache[url]
 
     def graphql_transport(self, url: str) -> "CachedAIOHTTPTransport":
-        return CachedAIOHTTPTransport(url, self)
+        return CachedAIOHTTPTransport(url, self, use_certifi_ssl=self.use_certifi_ssl)
 
 
 class CachedAIOHTTPTransport(AsyncTransport):
@@ -85,8 +95,15 @@ class CachedAIOHTTPTransport(AsyncTransport):
     async def close(self):
         return await self._transport.close()
 
-    def __init__(self, url: str, cache: "CachedRequestAdapter"):
-        self._transport = AIOHTTPTransport(url=url)
+    def __init__(self, url: str, cache: "CachedRequestAdapter", use_certifi_ssl=False):
+        if use_certifi_ssl:
+            import certifi, ssl  # type: ignore
+
+            self._transport = AIOHTTPTransport(
+                url=url, ssl=ssl.create_default_context(cafile=certifi.where())
+            )
+        else:
+            self._transport = AIOHTTPTransport(url=url)
         self._cache = cache
 
     async def execute(

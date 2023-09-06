@@ -4,69 +4,6 @@
 
     <!--Common to all 3-->
     <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP" id4="EoSWVC_NA" id5="EoSWVC_EU">
-
-      <!--**********************************************-->
-      <!--File names and types of the files in DUNGEON/dungeon.bin-->
-      <!--**********************************************-->
-      <!--Please note, that those names are NOT stored in the ROM! We basically just made them up.-->
-      <!--%d in the name patterns will be replaced with the file id.-->
-      <!--%i in the name patterns will be replaced with the relative file id in this set of entries.-->
-      <DungeonBinFiles>
-        <!-- Those files are the dungeon tile files -->
-        <BinPackFile idxfirst="0"    idxlast="169"  type="DBIN_SIR0_DPLA"            name="dungeon%i.dpla"/>
-        <BinPackFile idxfirst="170"  idxlast="339"  type="DBIN_SIR0_AT4PX_DMA"       name="dungeon%i.dma"/>
-        <BinPackFile idxfirst="340"  idxlast="509"  type="DBIN_AT4PX_DPC"            name="dungeon%i.dpc"/>
-        <BinPackFile idxfirst="510"  idxlast="679"  type="DBIN_AT4PX_DPCI"           name="dungeon%i.dpci"/>
-        <BinPackFile idxfirst="680"  idxlast="849"  type="DPL"                       name="dungeon%i.dpl"/>
-        <!-- Dungeon background images animated paletted (tilesets 170+) - Count: 29 -->
-        <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_DPLA"            name="dungeon_bg%i.dpla"/>
-        <!-- Dungeon background images tile mappings (tilesets 170+) - Count: 29 -->
-        <BinPackFile idxfirst="879"  idxlast="907"  type="DBIN_AT4PX_DPC"            name="dungeon_bg%i.dpc"/>
-        <!-- Dungeon background images tile graphics (tilesets 170+) - Count: 29 -->
-        <BinPackFile idxfirst="908"  idxlast="936"  type="DBIN_AT4PX_DPCI"           name="dungeon_bg%i.dpci"/>
-        <!-- Dungeon background images chunk mappings (tilesets 170+) - Count: 29 -->
-        <BinPackFile idxfirst="937"  idxlast="965"  type="DBIN_SIR0_PKDPX_DBG"       name="dungeon_bg%i.dbg"/>
-        <!-- Dungeon background images palettes (tilesets 170+) - Count: 29 -->
-        <BinPackFile idxfirst="966"  idxlast="994"  type="DPL"                       name="dungeon_bg%i.dpl"/>
-        <BinPackFile idxfirst="995"                 type="DBIN_RAW_IMAGE_4BPP"       name="%d.img"/>
-        <BinPackFile idxfirst="996"                 type="SIR0"                      name="%d.sir0"/>
-        <BinPackFile idxfirst="997"                 type="DPL"                       name="%d.dpl"/>
-        <BinPackFile idxfirst="998"                 type="UNKNOWN"                   name="%d.bin"/>
-        <BinPackFile idxfirst="999"                 type="DPL"                       name="%d.dpl"/>
-        <BinPackFile idxfirst="1000"                type="DBIN_SIR0_WEIRD_DATA_FILE" name="%d.sir0"/>
-        <BinPackFile idxfirst="1001"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1002"                type="WTU"                       name="1001.wtu"/>
-        <BinPackFile idxfirst="1003"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1004"                type="WTU"                       name="1003.wtu"/>
-        <BinPackFile idxfirst="1005"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1006"                type="WTU"                       name="1005.wtu"/>
-        <BinPackFile idxfirst="1007" idxlast="1012" type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1013"                type="WTU"                       name="1012.wtu"/>
-        <BinPackFile idxfirst="1014"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1015"                type="WTU"                       name="1014.wtu"/>
-        <BinPackFile idxfirst="1016"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1017"                type="WTU"                       name="1016.wtu"/>
-        <BinPackFile idxfirst="1018"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1019"                type="WTU"                       name="1018.wtu"/>
-        <BinPackFile idxfirst="1020"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1021"                type="WTU"                       name="1020.wtu"/>
-        <BinPackFile idxfirst="1022"                type="DBIN_SIR0_IMG_ITM"         name="items.itm.img"/>
-        <BinPackFile idxfirst="1023"                type="SIR0"                      name="%d.sir0"/>
-        <BinPackFile idxfirst="1024" idxlast="1025" type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1026" idxlast="1027" type="BGP"                       name="%d.bgp"/>
-        <!-- The WAN sprite can't be read by pmd_wan -->
-        <!--<BinPackFile idxfirst="1028"                type="WAN"                       name="%d.wan"/>-->
-        <BinPackFile idxfirst="1028"                type="UNKNOWN"                   name="%d.wan.bin"/>
-        <BinPackFile idxfirst="1029"                type="UNKNOWN"                   name="%d.bin"/>
-        <BinPackFile idxfirst="1030"                type="DPL"                       name="%d.dpl"/>
-        <BinPackFile idxfirst="1031"                type="WTE"                       name="%d.wte"/>
-        <BinPackFile idxfirst="1032"                type="WTU"                       name="1031.wtu"/>
-        <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMG_TRP"         name="traps.trp.img"/>
-        <BinPackFile idxfirst="1034"                type="DBIN_SIR0_COLVEC"          name="colormap.colvec"/>
-        <BinPackFile idxfirst="1035"                type="DBIN_SIR0_ZMAPPAT"         name="minimap.zmappat"/>
-      </DungeonBinFiles>
-
-
       <!--**********************************************-->
       <!--Definitions for item categories.-->
       <!--**********************************************-->
@@ -3064,6 +3001,117 @@
         <Dungeon>Final Maze</Dungeon>
       </Dungeons>
 
+    </Game>
+
+    <Game id="EoS_NA" id2="EoS_EU" id3="EoSWVC_NA" id4="EoSWVC_EU">
+      <!--**********************************************-->
+      <!--File names and types of the files in DUNGEON/dungeon.bin-->
+      <!--**********************************************-->
+      <!--Please note, that those names are NOT stored in the ROM! We basically just made them up.-->
+      <!--%d in the name patterns will be replaced with the file id.-->
+      <!--%i in the name patterns will be replaced with the relative file id in this set of entries.-->
+      <DungeonBinFiles>
+        <!-- Those files are the dungeon tile files -->
+        <BinPackFile idxfirst="0"    idxlast="169"  type="DBIN_SIR0_DPLA"            name="dungeon%i.dpla"/>
+        <BinPackFile idxfirst="170"  idxlast="339"  type="DBIN_SIR0_AT4PX_DMA"       name="dungeon%i.dma"/>
+        <BinPackFile idxfirst="340"  idxlast="509"  type="DBIN_AT4PX_DPC"            name="dungeon%i.dpc"/>
+        <BinPackFile idxfirst="510"  idxlast="679"  type="DBIN_AT4PX_DPCI"           name="dungeon%i.dpci"/>
+        <BinPackFile idxfirst="680"  idxlast="849"  type="DPL"                       name="dungeon%i.dpl"/>
+        <!-- Dungeon background images animated paletted (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_DPLA"            name="dungeon_bg%i.dpla"/>
+        <!-- Dungeon background images tile mappings (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="879"  idxlast="907"  type="DBIN_AT4PX_DPC"            name="dungeon_bg%i.dpc"/>
+        <!-- Dungeon background images tile graphics (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="908"  idxlast="936"  type="DBIN_AT4PX_DPCI"           name="dungeon_bg%i.dpci"/>
+        <!-- Dungeon background images chunk mappings (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="937"  idxlast="965"  type="DBIN_SIR0_PKDPX_DBG"       name="dungeon_bg%i.dbg"/>
+        <!-- Dungeon background images palettes (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="966"  idxlast="994"  type="DPL"                       name="dungeon_bg%i.dpl"/>
+        <BinPackFile idxfirst="995"                 type="DBIN_RAW_IMAGE_4BPP"       name="%d.img"/>
+        <BinPackFile idxfirst="996"                 type="SIR0"                      name="%d.sir0"/>
+        <BinPackFile idxfirst="997"                 type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="998"                 type="UNKNOWN"                   name="%d.bin"/>
+        <BinPackFile idxfirst="999"                 type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="1000"                type="DBIN_SIR0_WEIRD_DATA_FILE" name="%d.sir0"/>
+        <BinPackFile idxfirst="1001"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1002"                type="WTU"                       name="1001.wtu"/>
+        <BinPackFile idxfirst="1003"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1004"                type="WTU"                       name="1003.wtu"/>
+        <BinPackFile idxfirst="1005"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1006"                type="WTU"                       name="1005.wtu"/>
+        <BinPackFile idxfirst="1007" idxlast="1012" type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1013"                type="WTU"                       name="1012.wtu"/>
+        <BinPackFile idxfirst="1014"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1015"                type="WTU"                       name="1014.wtu"/>
+        <BinPackFile idxfirst="1016"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1017"                type="WTU"                       name="1016.wtu"/>
+        <BinPackFile idxfirst="1018"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1019"                type="WTU"                       name="1018.wtu"/>
+        <BinPackFile idxfirst="1020"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1021"                type="WTU"                       name="1020.wtu"/>
+        <BinPackFile idxfirst="1022"                type="DBIN_SIR0_IMG_ITM"         name="items.itm.img"/>
+        <BinPackFile idxfirst="1023"                type="SIR0"                      name="%d.sir0"/>
+        <BinPackFile idxfirst="1024" idxlast="1025" type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1026" idxlast="1027" type="BGP"                       name="%d.bgp"/>
+        <!-- The WAN sprite can't be read by pmd_wan -->
+        <!--<BinPackFile idxfirst="1028"                type="WAN"                       name="%d.wan"/>-->
+        <BinPackFile idxfirst="1028"                type="UNKNOWN"                   name="%d.wan.bin"/>
+        <BinPackFile idxfirst="1029"                type="UNKNOWN"                   name="%d.bin"/>
+        <BinPackFile idxfirst="1030"                type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="1031"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1032"                type="WTU"                       name="1031.wtu"/>
+        <BinPackFile idxfirst="1033"                type="DBIN_SIR0_IMG_TRP"         name="traps.trp.img"/>
+        <BinPackFile idxfirst="1034"                type="DBIN_SIR0_COLVEC"          name="colormap.colvec"/>
+        <BinPackFile idxfirst="1035"                type="DBIN_SIR0_ZMAPPAT"         name="minimap.zmappat"/>
+      </DungeonBinFiles>
+    </Game>
+
+    <Game id="EoS_JP">
+      <DungeonBinFiles>
+        <!-- Those files are the dungeon tile files -->
+        <BinPackFile idxfirst="0"    idxlast="169"  type="DBIN_SIR0_DPLA"            name="dungeon%i.dpla"/>
+        <BinPackFile idxfirst="170"  idxlast="339"  type="DBIN_SIR0_AT4PX_DMA"       name="dungeon%i.dma"/>
+        <BinPackFile idxfirst="340"  idxlast="509"  type="DBIN_AT4PX_DPC"            name="dungeon%i.dpc"/>
+        <BinPackFile idxfirst="510"  idxlast="679"  type="DBIN_AT4PX_DPCI"           name="dungeon%i.dpci"/>
+        <BinPackFile idxfirst="680"  idxlast="849"  type="DPL"                       name="dungeon%i.dpl"/>
+        <!-- Dungeon background images animated paletted (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="850"  idxlast="878"  type="DBIN_SIR0_DPLA"            name="dungeon_bg%i.dpla"/>
+        <!-- Dungeon background images tile mappings (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="879"  idxlast="907"  type="DBIN_AT4PX_DPC"            name="dungeon_bg%i.dpc"/>
+        <!-- Dungeon background images tile graphics (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="908"  idxlast="936"  type="DBIN_AT4PX_DPCI"           name="dungeon_bg%i.dpci"/>
+        <!-- Dungeon background images chunk mappings (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="937"  idxlast="965"  type="DBIN_SIR0_PKDPX_DBG"       name="dungeon_bg%i.dbg"/>
+        <!-- Dungeon background images palettes (tilesets 170+) - Count: 29 -->
+        <BinPackFile idxfirst="966"  idxlast="994"  type="DPL"                       name="dungeon_bg%i.dpl"/>
+        <BinPackFile idxfirst="995"                 type="DBIN_RAW_IMAGE_4BPP"       name="%d.img"/>
+        <BinPackFile idxfirst="996"                 type="SIR0"                      name="%d.sir0"/>
+        <BinPackFile idxfirst="997"                 type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="998"                 type="UNKNOWN"                   name="%d.bin"/>
+        <BinPackFile idxfirst="999"                 type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="1000"                type="DBIN_SIR0_WEIRD_DATA_FILE" name="%d.sir0"/>
+        <BinPackFile idxfirst="1001"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1002"                type="WTU"                       name="1001.wtu"/>
+        <BinPackFile idxfirst="1003"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1004"                type="WTU"                       name="1003.wtu"/>
+        <BinPackFile idxfirst="1005"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1006"                type="WTU"                       name="1005.wtu"/>
+        <BinPackFile idxfirst="1007"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1008"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1009"                type="WTU"                       name="1012.wtu"/>
+        <BinPackFile idxfirst="1010"                type="DBIN_SIR0_IMG_ITM"         name="items.itm.img"/>
+        <BinPackFile idxfirst="1011"                type="SIR0"                      name="%d.sir0"/>
+        <BinPackFile idxfirst="1012" idxlast="1013" type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1014" idxlast="1015" type="BGP"                       name="%d.bgp"/>
+        <BinPackFile idxfirst="1016"                type="UNKNOWN"                   name="%d.wan.bin"/>
+        <BinPackFile idxfirst="1017"                type="UNKNOWN"                   name="%d.bin"/>
+        <BinPackFile idxfirst="1018"                type="DPL"                       name="%d.dpl"/>
+        <BinPackFile idxfirst="1019"                type="WTE"                       name="%d.wte"/>
+        <BinPackFile idxfirst="1020"                type="WTU"                       name="1031.wtu"/>
+        <BinPackFile idxfirst="1021"                type="DBIN_SIR0_IMG_TRP"         name="traps.trp.img"/>
+        <BinPackFile idxfirst="1022"                type="DBIN_SIR0_COLVEC"          name="colormap.colvec"/>
+        <BinPackFile idxfirst="1023"                type="DBIN_SIR0_ZMAPPAT"         name="minimap.zmappat"/>
+      </DungeonBinFiles>
     </Game>
 
   </DungeonData>

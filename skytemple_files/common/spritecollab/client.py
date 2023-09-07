@@ -88,8 +88,7 @@ from skytemple_files.graphics.kao.protocol import KaoImageProtocol
 from skytemple_files.graphics.kao.sprite_bot_sheet import SpriteBotSheet
 
 # This is the default "canonical" SpriteCollab server.
-# We use http by default due to some ssl issues with PyInstaller.
-DEFAULT_SERVER = "http://spriteserver.pmdcollab.org/graphql"
+DEFAULT_SERVER = "https://spriteserver.pmdcollab.org/graphql"
 EMOTION_NORMAL = "Normal"
 
 
@@ -866,17 +865,23 @@ class SpriteCollabClient:
         server_url: str = DEFAULT_SERVER,
         cache_size: int = 5000,
         request_adapter: Optional[AioRequestAdapter] = None,
+        use_ssl=True,
         use_certifi_ssl=False,
     ):
         """
         Create a new client instance.
         The last `cache_size` requests are cached (including fetched assets).
         To disable the cache, set ``cache_size`` to 0.
+        If `use_ssl` is set to `False`, requests are always made via HTTP (SSL is disabled). "https://" at the start of
+        the provided `server_url` is replaced with "http://" then. HTTP traffic may still be redirected to SSL.
         If `use_certifi_ssl` is used, then the certificate of the `certifi` package are used.
         The caller must make sure that package is installed.
 
-        If you specify a custom request adapter, the `cache_size` and `use_certifi_ssl` parameter are ignored.
+        If you specify a custom request adapter, the `cache_size`, `use_ssl` and `use_certifi_ssl` parameters
+        are ignored.
         """
+        if not use_ssl:
+            server_url = server_url.replace("https://", "http://")
         if request_adapter is None:
             if cache_size > 0:
                 self._request_adapter = CachedRequestAdapter(

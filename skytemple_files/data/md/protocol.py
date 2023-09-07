@@ -245,7 +245,9 @@ class Ability(Enum):
     FLOWER_GIFT = 0x71, _("Flower Gift")
     POISION_HEAL = 0x72, _("Poison Heal")
     MAGIC_GUARD = 0x73, _("Magic Guard")
-    INVALID = 0x74, _("$$$")
+    # This is named $$$ in the NA/EU ROM and マルチタイプ in the JP ROM. It is Multitype.
+    # But it's unused in the final game.
+    MULTITYPE = 0x74, _("Multitype")  # TRANSLATORS: Name of the ability.
     HONEY_GATHER = 0x75, _("Honey Gather")
     AFTERMATH = 0x76, _("Aftermath")
     SNOW_CLOAK = 0x77, _("Snow Cloak")

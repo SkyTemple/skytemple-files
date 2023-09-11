@@ -1,4 +1,4 @@
-pmdsky-debug-py==7.0.17
+pmdsky-debug-py==8.0.0
 ndspy==3.0.0
 pyyaml==6.0.1
 range-typed-integers==1.0.1

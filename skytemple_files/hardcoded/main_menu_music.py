@@ -19,7 +19,7 @@ from __future__ import annotations
 
 # Normal spawn delay (0x24): [EU]overlay_0010:0x7A74 / [US]overlay_0010:0x7A5C
 # Spawn delay after stealing from a shop (3): [EU]overlay_0010:0x7BD8 / [US]overlay_0010:0x7BC0
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, overload
 
 from range_typed_integers import u8
 
@@ -28,6 +28,18 @@ from skytemple_files.common.util import read_u8, write_u8
 
 
 class HardcodedMainMenuMusic:
+    @staticmethod
+    @overload
+    def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: None = None) -> u8:
+        ...
+
+    @staticmethod
+    @overload
+    def get_main_menu_music(
+        ov00: bytes, config: Pmd2Data, ov09: bytes
+    ) -> Tuple[u8, u8]:
+        ...
+
     @staticmethod
     def get_main_menu_music(
         ov00: bytes, config: Pmd2Data, ov09: Optional[bytes] = None

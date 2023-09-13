@@ -122,7 +122,9 @@ Uses the supposedly unused string 2613 in the strings file. """
         for lang in config.string_index_data.languages:
             filename = "MESSAGE/" + lang.filename
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+            strings = StrHandler.deserialize(
+                bin_before, string_encoding=config.string_encoding
+            )
             strings.strings[string_id - 1] = get_locales().translate(
                 MESSAGE, lang.locale.replace("-", "_")
             )

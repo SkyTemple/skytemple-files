@@ -97,7 +97,9 @@ Uses the same command style as PSMD"""
                 for lang in config.string_index_data.languages:
                     filename = "MESSAGE/" + lang.filename
                     bin_before = rom.getFileByName(filename)
-                    strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+                    strings = StrHandler.deserialize(
+                        bin_before, string_encoding=config.string_encoding
+                    )
                     strings.strings[
                         int(param["PushStringID"]) - 1
                     ] = get_locales().translate(

@@ -1444,7 +1444,9 @@ class AddTypePatchHandler(AbstractPatchHandler):
         # Change Fairy's type name
         for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+            strings = StrHandler.deserialize(
+                bin_before, string_encoding=config.string_encoding
+            )
             block = config.string_index_data.string_blocks["Type Names"]
             strings.strings[block.begin + 18] = TYPE_LIST[filename]
             bin_after = StrHandler.serialize(strings)

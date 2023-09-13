@@ -133,7 +133,9 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
             for lang in config.string_index_data.languages:
                 filename = "MESSAGE/" + lang.filename
                 bin_before = rom.getFileByName(filename)
-                strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+                strings = StrHandler.deserialize(
+                    bin_before, string_encoding=config.string_encoding
+                )
                 strings.strings[
                     int(param["MenuOptionStringID"]) - 1
                 ] = get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))

@@ -148,7 +148,9 @@ This patch may not be compatible if the markfont.dat file has been modified."""
         # Change some move descriptions
         for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(bin_before)
+            strings = StrHandler.deserialize(
+                bin_before, string_encoding=config.string_encoding
+            )
             block = config.string_index_data.string_blocks["Move Descriptions"]
             for k, v in DESC_CHANGES.items():
                 strings.strings[block.begin + k] = strings.strings[

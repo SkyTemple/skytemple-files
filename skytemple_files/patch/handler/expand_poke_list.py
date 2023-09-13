@@ -167,7 +167,7 @@ and to save a backup of your ROM before applying this."""
             # Apply the patch
             for filename in get_files_from_rom_with_extension(rom, "str"):
                 bin_before = rom.getFileByName(filename)
-                strings = StrHandler.deserialize(bin_before)
+                strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
                 block = config.string_index_data.string_blocks["Pokemon Names"]
                 monsters = strings.strings[block.begin : block.end]
                 strings.strings[block.begin : block.end] = [""] * (

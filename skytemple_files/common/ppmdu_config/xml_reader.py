@@ -594,14 +594,14 @@ class Pmd2AsmPatchesConstantsXmlReader:
                                 patch = self._parse_patch(e_node)
                                 patch.parameters = {
                                     param.name: param
-                                    for param in self._read_parameter_node(e_node)
+                                    for param in self._read_parameter_node(e_node, self._game_edition)
                                 }
                                 patches.append(patch)
                             if e_node.tag == "SimplePatch":
                                 spatch = self._parse_simple_patch(e_node)
                                 spatch.parameters = {
                                     param.name: param
-                                    for param in self._read_parameter_node(e_node)
+                                    for param in self._read_parameter_node(e_node, self._game_edition)
                                 }
                                 patches.append(spatch)
         return Pmd2AsmPatchesConstants(
@@ -650,55 +650,60 @@ class Pmd2AsmPatchesConstantsXmlReader:
                 )
         return Pmd2SimplePatch(e_patch.attrib["id"], includes, string_replacements, [])
 
-    def _read_parameter_node(self, e_patch) -> List[Pmd2PatchParameter]:
+    def _read_parameter_node(self, e_patch, edition) -> List[Pmd2PatchParameter]:
         params = []
         for e_sub in e_patch:
             if e_sub.tag == "Parameters":
                 for e_param in e_sub:
+                    if e_param.tag == "Game":
+                        if id_matches_edition(e_param, edition):
+                            for e_game_param in e_param:
+                                param = self._read_single_param_node(e_game_param)
+                                params.append(param)
                     if e_param.tag == "Param":
-                        options = []
-                        for e_option in e_param:
-                            if e_option.tag == "Option":
-                                value_type = Pmd2PatchParameterType(
-                                    e_param.attrib["type"]
-                                )
-                                options.append(
-                                    Pmd2PatchParameterOption(
-                                        type=value_type,
-                                        value=Pmd2XmlReader.xml_int(e_option.text)
-                                        if value_type == Pmd2PatchParameterType.INTEGER
-                                        else e_option.text,
-                                        label=e_option.attrib["label"]
-                                        if "label" in e_option.attrib
-                                        else e_option.attrib["value"],
-                                    )
-                                )
-                        param_type = Pmd2PatchParameterType(e_param.attrib["type"])
-                        default = None
-                        if "default" in e_param.attrib:
-                            default = (
-                                Pmd2XmlReader.xml_int(e_param.attrib["default"])
-                                if param_type == Pmd2PatchParameterType.INTEGER
-                                else e_param.attrib["default"]
-                            )
-                        params.append(
-                            Pmd2PatchParameter(
-                                name=e_param.attrib["name"],
-                                type=param_type,
-                                label=e_param.attrib["label"]
-                                if "label" in e_param.attrib
-                                else e_param.attrib["name"],
-                                min=Pmd2XmlReader.xml_int(e_param.attrib["min"])
-                                if "min" in e_param.attrib
-                                else None,
-                                max=Pmd2XmlReader.xml_int(e_param.attrib["max"])
-                                if "max" in e_param.attrib
-                                else None,
-                                options=options,
-                                default=default,
-                            )
-                        )
+                        param = self._read_single_param_node(e_param)
+                        params.append(param)
         return params
+
+    def _read_single_param_node(self, e_param):
+        options = []
+        for e_option in e_param:
+            if e_option.tag == "Option":
+                value_type = Pmd2PatchParameterType(e_param.attrib["type"])
+                options.append(
+                    Pmd2PatchParameterOption(
+                        type=value_type,
+                        value=Pmd2XmlReader.xml_int(e_option.text)
+                        if value_type == Pmd2PatchParameterType.INTEGER
+                        else e_option.text,
+                        label=e_option.attrib["label"]
+                        if "label" in e_option.attrib
+                        else e_option.attrib["value"],
+                    )
+                )
+        param_type = Pmd2PatchParameterType(e_param.attrib["type"])
+        default = None
+        if "default" in e_param.attrib:
+            default = (
+                Pmd2XmlReader.xml_int(e_param.attrib["default"])
+                if param_type == Pmd2PatchParameterType.INTEGER
+                else e_param.attrib["default"]
+            )
+        return Pmd2PatchParameter(
+            name=e_param.attrib["name"],
+            type=param_type,
+            label=e_param.attrib["label"]
+            if "label" in e_param.attrib
+            else e_param.attrib["name"],
+            min=Pmd2XmlReader.xml_int(e_param.attrib["min"])
+            if "min" in e_param.attrib
+            else None,
+            max=Pmd2XmlReader.xml_int(e_param.attrib["max"])
+            if "max" in e_param.attrib
+            else None,
+            options=options,
+            default=default,
+        )
 
 
 class XmlCombinerMergeConfig:

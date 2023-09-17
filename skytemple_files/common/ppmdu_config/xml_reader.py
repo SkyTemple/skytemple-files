@@ -594,14 +594,18 @@ class Pmd2AsmPatchesConstantsXmlReader:
                                 patch = self._parse_patch(e_node)
                                 patch.parameters = {
                                     param.name: param
-                                    for param in self._read_parameter_node(e_node, self._game_edition)
+                                    for param in self._read_parameter_node(
+                                        e_node, self._game_edition
+                                    )
                                 }
                                 patches.append(patch)
                             if e_node.tag == "SimplePatch":
                                 spatch = self._parse_simple_patch(e_node)
                                 spatch.parameters = {
                                     param.name: param
-                                    for param in self._read_parameter_node(e_node, self._game_edition)
+                                    for param in self._read_parameter_node(
+                                        e_node, self._game_edition
+                                    )
                                 }
                                 patches.append(spatch)
         return Pmd2AsmPatchesConstants(

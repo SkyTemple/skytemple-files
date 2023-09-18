@@ -47,8 +47,7 @@ class LevelListBin(Sir0Serializable):
 
         # pointer_start = read_uintle(data, header_start, 4)
         # number_entries = read_uintle(data, header_start + 4, 4)
-        for i in range(0, len(data) - header_start):
-            start = header_start + (i * LEN_LEVEL_ENTRY)
+        for i, start in enumerate(range(header_start, len(data), LEN_LEVEL_ENTRY)):
             if (
                 data[start : start + 12]
                 == b"\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa"

@@ -45,7 +45,7 @@ class TilemapEntry(TilemapEntryProtocol):
     ):
         self.idx = idx
         if idx > 0x3FF and not ignore_too_large:
-            raise ValueError(
+            raise UserValueError(
                 f(
                     _(
                         "Tile Mapping can not be processed. The tile number referenced ({idx}) is bigger "

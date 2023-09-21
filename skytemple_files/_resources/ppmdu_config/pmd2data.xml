@@ -258,17 +258,17 @@
         <StringBlock name="Pokemon Names"                          beg="5519"  end="6119"/>  <!-- Darkaim: Go over again with Capypara (Also English names in text) -->
         <StringBlock name="Pokemon Categories"                     beg="6719"  end="7319"/>
         <StringBlock name="Tactics Names"                          beg="16124"  end="16135"/>
-        <StringBlock name="Tactics Descriptions"                   beg="16135"  end="16146"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="IQ Skills Names"                        beg="16146"  end="16215"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="IQ Skills Descriptions"                 beg="16215"  end="16284"/>
+        <StringBlock name="Tactics Descriptions"                   beg="16135"  end="16145"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="IQ Skills Names"                        beg="16147"  end="16216"/><!-- Darkaim: Go over again with Capypara -->
+        <StringBlock name="IQ Skills Descriptions"                 beg="16216"  end="16285"/>
         <StringBlock name="Move Targets Strings"                   beg="18808"  end="18840"/>
         <StringBlock name="Accuracy/Power Stars Ratings"           beg="18840"  end="18857"/><!-- Darkaim: Go over again with Capypara ("Always Hit" and "No Damage" found in 16284 and 16285) -->
-        <StringBlock name="Move Descriptions"                      beg="16287"  end="16845"/>
-        <StringBlock name="Item Long Descriptions"                 beg="16845"  end="18245"/>
+        <StringBlock name="Move Descriptions"                      beg="16286"  end="16844"/>
+        <StringBlock name="Item Long Descriptions"                 beg="16844"  end="18244"/>
         <StringBlock name="Item Short Descriptions"                beg="7488"  end="8888"/>  <!-- Darkaim: Go over again with Capypara (Is "-" needed?) -->
-        <StringBlock name="Trap Names"                             beg="18245"  end="18271"/>
-        <StringBlock name="Trap Descriptions"                      beg="18271"  end="18295"/><!-- Darkaim: Go over again with Capypara (Possibly out of order) -->
-        <StringBlock name="Statuses Names and Descriptions"        beg="18295"  end="18507"/><!-- Darkaim: Go over again with Capypara (Missing "Stair Spotter", Extra = 18507 to 18510) -->
+        <StringBlock name="Trap Names"                             beg="18244"  end="18270"/>
+        <StringBlock name="Trap Descriptions"                      beg="18270"  end="18294"/><!-- Darkaim: Go over again with Capypara (Possibly out of order) -->
+        <StringBlock name="Statuses Names and Descriptions"        beg="18294"  end="18506"/><!-- Darkaim: Go over again with Capypara (Missing "Stair Spotter", Extra = 18507 to 18510) -->
         <StringBlock name="Type Names"                             beg="18541"  end="18560"/>
         <StringBlock name="Ability Names"                          beg="18560"  end="18684"/>
         <StringBlock name="Ability Descriptions"                   beg="18684"  end="18808"/><!-- Darkaim: WiFi related strings are 13143 to 14496 -->

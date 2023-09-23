@@ -14,7 +14,7 @@ aiohttp==3.8.5
 lru-dict==1.2.0
 skytemple-3rdparty-typestubs
 types-Pillow==10.0.0.3
-types-PyYAML==6.0.12.11
+types-PyYAML==6.0.12.12
 types-setuptools
 pytest
 pylint

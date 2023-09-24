@@ -264,9 +264,9 @@
         <StringBlock name="Move Targets Strings"                   beg="18808"  end="18840"/>
         <StringBlock name="Accuracy/Power Stars Ratings"           beg="18840"  end="18857"/><!-- Darkaim: Go over again with Capypara ("Always Hit" and "No Damage" found in 16284 and 16285) -->
         <StringBlock name="Move Descriptions"                      beg="16286"  end="16844"/>
-        <StringBlock name="Item Long Descriptions"                 beg="16844"  end="18244"/>
+        <StringBlock name="Item Long Descriptions"                 beg="16844"  end="18245"/>
         <StringBlock name="Item Short Descriptions"                beg="7488"  end="8888"/>  <!-- Darkaim: Go over again with Capypara (Is "-" needed?) -->
-        <StringBlock name="Trap Names"                             beg="18244"  end="18270"/>
+        <StringBlock name="Trap Names"                             beg="18245"  end="18270"/>
         <StringBlock name="Trap Descriptions"                      beg="18270"  end="18294"/><!-- Darkaim: Go over again with Capypara (Possibly out of order) -->
         <StringBlock name="Statuses Names and Descriptions"        beg="18294"  end="18506"/><!-- Darkaim: Go over again with Capypara (Missing "Stair Spotter", Extra = 18507 to 18510) -->
         <StringBlock name="Type Names"                             beg="18541"  end="18560"/>

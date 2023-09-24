@@ -11,7 +11,7 @@ Functions like `read_uintle` and `write_sintle` in `skytemple_files.common.util`
 with more specialized functions like `read_u8` or `write_u32`. If integers of dynamic sizes based on paremters need to
 be read, `read_dynamic` can be used instead.
 
-The deprecated functions will be removed in SkyTemple Files 1.6.0.
+The deprecated functions will be removed in SkyTemple Files 1.7.0.
 
 Example
 ~~~~~~~
@@ -50,7 +50,7 @@ The following things have been removed:
 - The ``Binaries`` section has been fully removed from the ``pmd2data.xml``.
 
 The following functionality has been deprecated (will raise deprecation warnings and will be removed in
-SkyTemple Files 1.6.0):
+SkyTemple Files 1.7.0):
 
 - Retrieving `Pmd2Data.binaries`.
 - `get_binary_from_rom_ppmdu` and `set_binary_in_rom_ppmdu`. However right now they work just as before,
@@ -96,7 +96,7 @@ Backwards compatibility
 To keep backwards compatibility, check the version of skytemple-files and use the old
 or new functionality accordingly.
 
-We recommend you phase out the backwards compatibility after the release of SkyTemple Files 1.6.0.
+We recommend you phase out the backwards compatibility after the release of SkyTemple Files 1.7.0.
 
 .. code:: python
 

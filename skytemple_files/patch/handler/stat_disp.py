@@ -94,7 +94,7 @@ This patch may not be compatible if the markfont.dat file has been modified."""
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
-                raise NotImplementedError() # TODO STAT_DISP: Causes a hard crash on hardware when attempting to view Move Descriptions. Then again, EU also softlocks...
+                raise NotImplementedError()  # TODO STAT_DISP: Causes a hard crash on hardware when attempting to view Move Descriptions. Then again, EU also softlocks...
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED

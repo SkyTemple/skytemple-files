@@ -204,7 +204,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
-                raise NotImplementedError() # TODO STAT_DISP: Relies on ChangeMoveStatsDisplay to work.
+                raise NotImplementedError()  # TODO STAT_DISP: Relies on ChangeMoveStatsDisplay to work.
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED

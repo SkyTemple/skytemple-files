@@ -146,7 +146,7 @@ and to save a backup of your ROM before applying this."""
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
-                raise NotImplementedError() # TODO EXPAND_POKE_LIST: Ensure JP compatibility!
+                raise NotImplementedError()  # TODO EXPAND_POKE_LIST: Ensure JP compatibility!
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED

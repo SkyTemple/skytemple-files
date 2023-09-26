@@ -16,6 +16,10 @@
 	.include "eu/patch_floor_ranks.asm"
 	.include "eu/patch_forbidden_floors.asm"
 	.include "eu/patch_available_items.asm"
+.elseif PPMD_GameVer == GameVer_EoS_JP
+	.include "jp/patch_floor_ranks.asm"
+	.include "jp/patch_forbidden_floors.asm"
+	.include "jp/patch_available_items.asm"
 .endif
 
 .relativeinclude off

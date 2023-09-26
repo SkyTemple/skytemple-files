@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -34,6 +35,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 ORIGINAL_INSTRUCTION = 0xE59F0080
 OFFSET_EU = 0x8114
 OFFSET_US = 0x8114
+OFFSET_JP = 0x80A0
 
 
 class AntiSoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -71,6 +73,8 @@ class AntiSoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay11, OFFSET_US) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
                 return read_u32(overlay11, OFFSET_EU) != ORIGINAL_INSTRUCTION
+            if config.game_region == GAME_REGION_JP:
+                return read_u32(overlay11, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(

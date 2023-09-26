@@ -10,6 +10,9 @@
 .nds
 .arm
 
+.definelabel JP_OFFSET, 0x0
+.definelabel ENTITY_TABLE_OFFSET, 0xB28
+
 .definelabel MoveStringIDStartL, 0xF0
 .definelabel MoveStringIDStartH, 0x1F00
 

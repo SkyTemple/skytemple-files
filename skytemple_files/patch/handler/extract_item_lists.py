@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -41,9 +42,12 @@ PATCH_CHECK_ADDR_APPLIED_US = 0xE1E0
 PATCH_CHECK_INSTR_APPLIED_US = 0xE1A00008
 PATCH_CHECK_ADDR_APPLIED_EU = 0xE268
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE1A00008
+PATCH_CHECK_ADDR_APPLIED_JP = 0xE210
+PATCH_CHECK_INSTR_APPLIED_JP = 0xE1A00008
 
 ITEM_LISTS_TABLE_US = 0xB0948
 ITEM_LISTS_TABLE_EU = 0xB1264
+ITEM_LISTS_TABLE_JP = 0xB21BC
 ITEM_LISTS_SIZE = 0x2F8
 ITEM_LISTS_NB = 26
 LIST_PATH = "TABLEDAT/list_%02d.bin"
@@ -85,6 +89,11 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED_JP
+                )
         raise NotImplementedError()
 
     def apply(
@@ -99,6 +108,8 @@ class ExtractItemListsPatchHandler(AbstractPatchHandler):
                     table = ITEM_LISTS_TABLE_US
                 if config.game_region == GAME_REGION_EU:
                     table = ITEM_LISTS_TABLE_EU
+                if config.game_region == GAME_REGION_JP:
+                    table = ITEM_LISTS_TABLE_JP
 
             ranges = []
             for i in range(ITEM_LISTS_NB):

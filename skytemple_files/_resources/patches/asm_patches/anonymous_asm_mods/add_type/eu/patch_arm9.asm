@@ -17,3 +17,7 @@
 	ldrb r0,[r10, r1]
 	nop
 .endarea
+.org 0x020A1EC2
+.area 0x1
+	.byte MATCHUP_BYTE
+.endarea

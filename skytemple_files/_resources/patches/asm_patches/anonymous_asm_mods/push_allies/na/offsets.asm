@@ -10,6 +10,8 @@
 .nds
 .arm
 
+.definelabel JP_OFFSET, 0x0
+
 .definelabel ChangeString, 0x022E2AD8
 .definelabel SetupAction, 0x022EB408
 .definelabel HookPush1, 0x022F2680

@@ -2,6 +2,9 @@
 ov_36 equ 023A7080h	;CHANGE THIS IF END45'S OVERLAY IS CHANGED
 
 ov_29 equ 022DC240h
+ENTITY_TABLE_OFFSET equ 0B28h
+CTC_AUTO_STRINGID equ 128h
+CTC_MANUAL_STRINGID equ 129h
 .definelabel NA_022EB408, 022EB408h	;Function - team submenu option recorder
 .definelabel NA_022EBD10, 022EBD10h	;Operation - the round function's third operation
 .definelabel NA_022EBD50, 022EBD50h	;Operation - calls the function which lowers the gusting wind counter
@@ -26,7 +29,7 @@ ov_29 equ 022DC240h
 .definelabel NA_0230506C, 0230506Ch	;Operation - partner direction setter 2
 .definelabel NA_02305160, 02305160h	;Operation - some line at the end of the partner direction setter
 .definelabel NA_0230579C, 0230579Ch	;Operation - prevents partners from triggering hidden traps
-.definelabel NA_0234B508, 0234B508h	;Function - puts a message in the dialogue
+.definelabel NA_0234B714, 0234B714h	;Function - puts a message in the dialogue
 .definelabel NA_02352284, 02352284h	;Variable - used in turn verification algorithm
 .definelabel NA_02353538, 02353538h	;Variable - pointer to beginning of dungeon data. beginning of dungeon data +12B28 is the beginning of the list of pokemon entity addresses.
 .definelabel NA_0235355C, 0235355Ch	;Variable - points to the current team leader

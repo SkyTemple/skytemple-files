@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -67,17 +68,18 @@ DOJO_MAPPA_ENTRY = u8(0x35)
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x5449C
 PATCH_CHECK_ADDR_APPLIED_EU = 0x54818
+PATCH_CHECK_ADDR_APPLIED_JP = 0x547D4
 PATCH_CHECK_INSTR_APPLIED = 0x00000483
 
 US_TABLE_SF = 0xA3D14
 EU_TABLE_SF = 0xA4314
-JP_TABLE_SF = 0x0
+JP_TABLE_SF = 0xA50F8
 US_TABLE_MF = 0xA3DAC
 EU_TABLE_MF = 0xA43AC
-JP_TABLE_MF = 0x0
+JP_TABLE_MF = 0xA5190
 US_TABLE_SP = 0x39B4
 EU_TABLE_SP = 0x39A8
-JP_TABLE_SP = 0x0
+JP_TABLE_SP = 0x39AC
 TABLE_SP_SIZE = 0xD8
 
 US_NEW_PKMN_STR_REGION = 0x4814
@@ -92,6 +94,9 @@ EU_FILE_ASSOC = {
     "MESSAGE/text_i.str": ("BALANCE/st_m2n_i.bin", "BALANCE/st_n2m_i.bin"),
     "MESSAGE/text_s.str": ("BALANCE/st_m2n_s.bin", "BALANCE/st_n2m_s.bin"),
 }
+JP_NEW_PKMN_STR_REGION = 0x4A42
+JP_NEW_CAT_STR_REGION = 0x5242
+JP_FILE_ASSOC = {"MESSAGE/text_j.str": ("BALANCE/st_m2n_j.bin", "BALANCE/st_n2m_j.bin")}
 NUM_NEW_ENTRIES = 2048
 
 DUMMY_PKMN = 553
@@ -140,6 +145,12 @@ and to save a backup of your ROM before applying this."""
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
+            if config.game_region == GAME_REGION_JP:
+                raise NotImplementedError() # TODO EXPAND_POKE_LIST: Ensure JP compatibility!
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
     def apply(
@@ -160,6 +171,13 @@ and to save a backup of your ROM before applying this."""
                 table_sf = EU_TABLE_SF
                 table_mf = EU_TABLE_MF
                 table_sp = EU_TABLE_SP
+            if config.game_region == GAME_REGION_JP:
+                new_pkmn_str_region = JP_NEW_PKMN_STR_REGION
+                new_cat_str_region = JP_NEW_CAT_STR_REGION
+                file_assoc = JP_FILE_ASSOC
+                table_sf = JP_TABLE_SF
+                table_mf = JP_TABLE_MF
+                table_sp = JP_TABLE_SP
         if not self.is_applied(rom, config):
             bincfg = config.bin_sections.arm9
             binary = bytearray(get_binary_from_rom(rom, bincfg))

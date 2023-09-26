@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -35,6 +36,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 ORIGINAL_BYTESEQ = bytes(b"\x3C\x00\x50\xE3")
 OFFSET_EU = 0x022FA32C - 0x022DCB80
 OFFSET_US = 0x022F9920 - 0x022DC240
+OFFSET_JP = 0x022FAED8 - 0x022DD8E0
 
 
 class ReduceJumpcutPauseTime(AbstractPatchHandler):
@@ -67,6 +69,8 @@ class ReduceJumpcutPauseTime(AbstractPatchHandler):
                 return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
                 return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
+            if config.game_region == GAME_REGION_JP:
+                return overlay29[OFFSET_JP : OFFSET_JP + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
     def apply(

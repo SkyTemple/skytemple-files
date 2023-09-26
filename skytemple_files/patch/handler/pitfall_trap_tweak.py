@@ -23,6 +23,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -33,6 +34,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 ORIGINAL_INSTRUCTION = 0xE5C01006
 OFFSET_EU = 0x12738
 OFFSET_US = 0x126C4
+OFFSET_JP = 0x12678
 
 
 class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -50,7 +52,7 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def version(self) -> str:
-        return "0.1.0"
+        return "0.2.0"
 
     def depends_on(self) -> List[str]:
         return ["ExtraSpace"]
@@ -66,6 +68,8 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_US) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
                 return read_u32(overlay29, OFFSET_EU) != ORIGINAL_INSTRUCTION
+            if config.game_region == GAME_REGION_JP:
+                return read_u32(overlay29, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(

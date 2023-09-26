@@ -5,7 +5,6 @@
 ; Change the way stats are displayed
 ; ------------------------------------------------------------------------------
 
-; WARNING! Not tested
 
 .relativeinclude on
 .nds
@@ -28,7 +27,7 @@
 .definelabel SetStringPower, 0x02024478
 .definelabel StrCpyFromFile, 0x02025898
 .definelabel StrCat, 0x02089A94
-.definelabel EuclidianDivision, 0x0208FEA4
-.definelabel PrintAttr, 0x02099CD4
-.definelabel NullString, 0x02099D50
-.definelabel SpecialCharString, 0x02099D84
+.definelabel EuclidianDivision, 0x0209018C
+.definelabel PrintAttr, 0x02099FC8
+.definelabel NullString, 0x0209A044
+.definelabel SpecialCharString, 0x0209A078

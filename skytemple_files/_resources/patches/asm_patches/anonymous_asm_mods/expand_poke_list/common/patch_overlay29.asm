@@ -1,4 +1,5 @@
 ; ///////////////////////// overlay_0029.bin
+; TODO EXPAND_POKE_LIST: The JP Dungeon Struct is offset by 0xA4 bytes at some point compared to the NA/EU counterparts. This WILL affect SEVERAL things, so thorough testing is NECESSARY!!!
 
 ; Change StoreSpriteFileIndexBothGenders
 
@@ -34,7 +35,7 @@
 	ldr r0,=DungeonBaseStructurePtr
 	ldr r0,[r0, #+0x0]
 	add  r0,r0,#0x3E00
-	ldrsh r0,[r0, #+0x3a]
+	ldrsh r0,[r0, #+0x3a-DUNGEON_DIFF_A4]
 	bl LoadSpriteForPkmn
 	ldmia  r13!,{r4,r5,r15}
 no_deoxys:
@@ -183,22 +184,51 @@ kecleon_hold:
 	mov  r0,r5
 	add  r4,r1,MDDSpr_H
 .endarea
-.org HookDungeonSpriteFile4
-.area 0x4
-	.word MDDSpr_L+MDDSpr_H
-.endarea
-.org HookDungeonSpriteFile5
-.area 0x4
-	.word MDDSpr_L+MDDSpr_H
-.endarea
-.org HookDungeonSpriteFile6
-.area 0x4
-	.word MDDSpr_L+MDDSpr_H
-.endarea
-.org HookDungeonSpriteFile7
-.area 0x4
-	.word MDDSpr_L+MDDSpr_H
-.endarea
+; The JP version uses two immediate values instead of storing one value as a word, so we'll change those instead.
+.if PPMD_GameVer == GameVer_EoS_JP
+	.org HookDungeonSpriteFile4
+	.area 0x8
+		add  r0,r0,MDDSpr_H
+		ldrsh r0,[r0, MDDSpr_L]
+	.endarea
+	.org HookDungeonSpriteFile5
+	.area 0x8
+		add  r1,r1,MDDSpr_H
+		ldrsh r1,[r1, MDDSpr_L]
+	.endarea
+	.org HookDungeonSpriteFile6_0
+	.area 0x8
+		add  r0,r0,MDDSpr_H
+		ldrsh r1,[r0, MDDSpr_L]
+	.endarea
+	.org HookDungeonSpriteFile6_1
+	.area 0x8
+		add  r1,r1,MDDSpr_H
+		ldrsh r2,[r1, MDDSpr_L]
+	.endarea
+	.org HookDungeonSpriteFile7
+	.area 0x8
+		add  r1,r1,MDDSpr_H
+		ldrsh r1,[r1, MDDSpr_L]
+	.endarea
+.else
+	.org HookDungeonSpriteFile4
+	.area 0x4
+		.word MDDSpr_L+MDDSpr_H
+	.endarea
+	.org HookDungeonSpriteFile5
+	.area 0x4
+		.word MDDSpr_L+MDDSpr_H
+	.endarea
+	.org HookDungeonSpriteFile6
+	.area 0x4
+		.word MDDSpr_L+MDDSpr_H
+	.endarea
+	.org HookDungeonSpriteFile7
+	.area 0x4
+		.word MDDSpr_L+MDDSpr_H
+	.endarea
+.endif
 
 ; Dungeon Recruit Index
 

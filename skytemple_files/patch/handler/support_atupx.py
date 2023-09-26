@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -35,6 +36,7 @@ NUM_PREVIOUS_ENTRIES = 600
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x1F6B0
 PATCH_CHECK_ADDR_APPLIED_EU = 0x1F74C
+PATCH_CHECK_ADDR_APPLIED_JP = 0x1F708
 PATCH_CHECK_INSTR_APPLIED = 0xEA0000D4
 
 
@@ -74,6 +76,11 @@ class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
             if config.game_region == GAME_REGION_EU:
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()

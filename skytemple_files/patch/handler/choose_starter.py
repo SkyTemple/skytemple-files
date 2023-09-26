@@ -47,7 +47,7 @@ OVERLAY13_ADD_SIZE = 0x800
 
 STRING_ID_US = 2613
 STRING_ID_EU = 2613
-STRING_ID_JP = 2613  # Just a guess
+STRING_ID_JP = 9648
 
 MESSAGE = "Then, who would you like to be?"
 
@@ -63,8 +63,7 @@ class ChooseStarterPatchHandler(AbstractPatchHandler):
     @property
     def description(self) -> str:
         return _(
-            """Adds an extra menu during the personality test to choose the starter.
-Uses the supposedly unused string 2613 in the strings file. """
+            """Adds an extra menu during the personality test to choose the starter."""
         )
 
     @property

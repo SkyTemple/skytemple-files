@@ -12,6 +12,8 @@
 	.include "na/patch.asm"
 .elseif PPMD_GameVer == GameVer_EoS_EU
 	.include "eu/patch.asm"
+.elseif PPMD_GameVer == GameVer_EoS_JP
+	.include "jp/patch.asm"
 .endif
 
 .relativeinclude off

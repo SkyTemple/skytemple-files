@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -42,6 +43,8 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x53664
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3A01001
 PATCH_CHECK_ADDR_APPLIED_EU = 0x53764
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE3A01001
+PATCH_CHECK_ADDR_APPLIED_JP = 0x533B8
+PATCH_CHECK_INSTR_APPLIED_JP = 0xE3A01001
 
 START_OV29_US = 0x022DC240
 START_TABLE_US = 0x0232F8AC
@@ -54,6 +57,12 @@ START_TABLE_EU = 0x023302EC
 START_M_FUNC_EU = 0x02330B74
 END_M_FUNC_EU = 0x0233310C
 START_METRONOME_DATA_EU = 0x9374
+
+START_OV29_JP = 0x022DD8E0
+START_TABLE_JP = 0x02330CA0
+START_M_FUNC_JP = 0x02331528
+END_M_FUNC_JP = 0x02333AC0
+START_METRONOME_DATA_JP = 0x92A4
 
 METRONOME_DATA_LENGTH = 0x540
 
@@ -98,6 +107,13 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
                     )
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED_JP
+                )
         raise NotImplementedError()
 
     def apply(
@@ -116,6 +132,12 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
                 start_m_functions = START_M_FUNC_EU
                 end_m_functions = END_M_FUNC_EU
                 start_metronome_data = START_METRONOME_DATA_EU
+            if config.game_region == GAME_REGION_JP:
+                start_ov29 = START_OV29_JP
+                start_table = START_TABLE_JP
+                start_m_functions = START_M_FUNC_JP
+                end_m_functions = END_M_FUNC_JP
+                start_metronome_data = START_METRONOME_DATA_JP
 
         if MOVE_CODE_PATH not in rom.filenames:
             main_func = dict()

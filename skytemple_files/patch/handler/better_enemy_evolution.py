@@ -26,6 +26,7 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     GAME_REGION_US,
     GAME_REGION_EU,
+    GAME_REGION_JP,
 )
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
@@ -33,6 +34,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 ORIGINAL_INSTRUCTION = 0xEB0004C5
 OFFSET_EU = 0x2680C
 OFFSET_US = 0x26720
+OFFSET_JP = 0x265D0
 
 
 class BetterEnemyEvolutionPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -66,6 +68,8 @@ class BetterEnemyEvolutionPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_US) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
                 return read_u32(overlay29, OFFSET_EU) != ORIGINAL_INSTRUCTION
+            if config.game_region == GAME_REGION_JP:
+                return read_u32(overlay29, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(

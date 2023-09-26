@@ -24,6 +24,7 @@ from range_typed_integers import u32_checked
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -41,6 +42,8 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x4F7F8
 PATCH_CHECK_INSTR_APPLIED_US = 0x359F1010
 PATCH_CHECK_ADDR_APPLIED_EU = 0x4FB30
 PATCH_CHECK_INSTR_APPLIED_EU = 0x359F1010
+PATCH_CHECK_ADDR_APPLIED_JP = 0x4FB4C
+PATCH_CHECK_INSTR_APPLIED_JP = 0x359F1010
 
 FLOOR_FORBID_TABLE_US = 0x9F714
 ITEM_AVAILABLE_TABLE_US = 0x94D34
@@ -48,6 +51,9 @@ FLOOR_RANKS_TABLE_US = 0xA0AD4
 FLOOR_FORBID_TABLE_EU = 0x9FC98
 ITEM_AVAILABLE_TABLE_EU = 0x95130
 FLOOR_RANKS_TABLE_EU = 0xA1058
+FLOOR_FORBID_TABLE_JP = 0xA0AE8
+ITEM_AVAILABLE_TABLE_JP = 0x95028
+FLOOR_RANKS_TABLE_JP = 0xA1EA8
 NB_ITEMS_TABLE = 100
 AVAILABLE_ITEMS_NB = 1024
 ARM9_START = 0x02000000
@@ -195,6 +201,11 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED_JP
+                )
         raise NotImplementedError()
 
     def apply(
@@ -210,6 +221,10 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
                     rank_table = FLOOR_RANKS_TABLE_EU
                     item_table = ITEM_AVAILABLE_TABLE_EU
                     forbid_table = FLOOR_FORBID_TABLE_EU
+                if config.game_region == GAME_REGION_JP:
+                    rank_table = FLOOR_RANKS_TABLE_JP
+                    item_table = ITEM_AVAILABLE_TABLE_JP
+                    forbid_table = FLOOR_FORBID_TABLE_JP
 
             header = bytearray(NB_ITEMS_TABLE * 4)
             rank_data = bytearray(0)

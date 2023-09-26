@@ -329,7 +329,24 @@ class ExtraJpOverlay11Section:
     data = ExtraJpOverlay11Data
 
 
+class ExtraJpOverlay36Functions(Protocol):
+    pass
+
+
+class ExtraJpOverlay36Data(Protocol):
+    pass
+
+
+class ExtraJpOverlay36Section:
+    name = "overlay36"
+    description = OV36_DESC
+    loadaddress = 0x23A7080
+    length = 0x38F80
+    functions = ExtraJpOverlay36Functions
+    data = ExtraJpOverlay36Data
+
+
 class ExtraJpSections:
     arm9 = ExtraJpArm9Section
     overlay11 = ExtraJpOverlay11Section
-    overlay36 = None
+    overlay36 = ExtraJpOverlay36Section

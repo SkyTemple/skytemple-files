@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -34,10 +35,12 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x3420
 PATCH_CHECK_ADDR_APPLIED_EU = 0x3420
+PATCH_CHECK_ADDR_APPLIED_JP = 0x3424
 PATCH_CHECK_INSTR_APPLIED = 0xE59F2008
 
 START_TABLE_US = 0xAFD0
 START_TABLE_EU = 0xAFE8
+START_TABLE_JP = 0xAF18
 
 ANIM_PATH = "BALANCE/anim.bin"
 
@@ -84,6 +87,13 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
                     )
                     != PATCH_CHECK_INSTR_APPLIED
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
     def apply(
@@ -95,6 +105,8 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
                     start_table = START_TABLE_US
                 if config.game_region == GAME_REGION_EU:
                     start_table = START_TABLE_EU
+                if config.game_region == GAME_REGION_JP:
+                    start_table = START_TABLE_JP
         if ANIM_PATH not in rom.filenames:
             data = rom.loadArm9Overlays([10])[10].data
 

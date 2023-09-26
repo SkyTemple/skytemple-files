@@ -31,9 +31,9 @@
 	bl TransformDungeonData
 	ldrb r2,[r9, #+0x74a]
 	add  r0,r9,#0x28000
-	strb r2,[r0, #+0x6b0]
+	strb r2,[r0, #+0x6b0-DUNGEON_DIFF_A4]
 	ldrb r2,[r9, #+0x74b]
-	strb r2,[r0, #+0x6b1]
+	strb r2,[r0, #+0x6b1-DUNGEON_DIFF_A4]
 	ldrb r0,[r9, #+0x748]
 	bl GetNbPreviousFloors
 	mov  r6,#0x0
@@ -70,8 +70,8 @@ load:
 	bl ReadAt
 	ldr r1,[r13,#+0x98] ; Header + 0x0
 	add  r0,r9,#0x28000
-	ldrb r3,[r0, #+0x6b0]
-	ldrb r6,[r0, #+0x6b1]
+	ldrb r3,[r0, #+0x6b0-DUNGEON_DIFF_A4]
+	ldrb r6,[r0, #+0x6b1-DUNGEON_DIFF_A4]
 	add r0,r13,#0x50
 	add r1,r3,lsl #0x2
 	add r2,r13,#0xAC
@@ -86,7 +86,7 @@ load:
 	ldrb r0,[r9, #+0x748]
 	bl GetNbFloorsPlus1
 	add  r1,r9,#0x2C000
-	strb r0,[r1, #+0xaf4]
+	strb r0,[r1, #+0xaf4-DUNGEON_DIFF_A4]
 	ldrb r0,[r9, #+0x748]
 	cmp r0,#0xAE
 	moveq  r0,#0x1
@@ -97,22 +97,22 @@ load:
 	cmp r0,#0x0
 	bne no_decrement
 	add  r0,r9,#0x2C000
-	ldrb r1,[r0, #+0xaf4]
+	ldrb r1,[r0, #+0xaf4-DUNGEON_DIFF_A4]
 	sub  r1,r1,#0x1
-	strb r1,[r0, #+0xaf4]
+	strb r1,[r0, #+0xaf4-DUNGEON_DIFF_A4]
 no_decrement: ;///////// Floor Attributes
 	ldrsh r2,[r13,#+0xac] ; List + 0x0
 	ldr r3,[r13,#+0x9c] ; Header + 0x4
 	add  r1,r3,r2,lsl #0x5
-	ldr r0,=0x000286B2
+	ldr r0,=0x000286B2-DUNGEON_DIFF_A4
 	add  r2,r9,r0
 	mov  r3,#0x20
 	add r0,r13,#0x50
 	bl ReadAt
 	;///////// End Floor Attributes
 	;///////// Trap Attributes
-	ldr r2,=0x000286CE
-	ldr r3,=0x0002CB08
+	ldr r2,=0x000286CE-DUNGEON_DIFF_A4
+	ldr r3,=0x0002CB08-DUNGEON_DIFF_A4
 	ldrsh r7,[r9, r2]
 	mov  r0,#0x0
 	strh r7,[r9, r3]
@@ -162,7 +162,7 @@ no_spec_process:
 	bl UnknownFunc2
 	str r0,[r13, #+0x10]
 	ldr r3,=0x0000FFFF
-	ldr r0,=0x0002C9EA
+	ldr r0,=0x0002C9EA-DUNGEON_DIFF_A4
 	mov  r5,r4
 loop_init_store:
 	add  r2,r9,r5,lsl #0x1
@@ -222,7 +222,7 @@ monster_loop:
 	addeq  r10,r10,#0x1
 	beq monster_loop
 	add  r0,r9,#0x28000
-	ldrb r0,[r0, #+0x6c4]
+	ldrb r0,[r0, #+0x6c4-DUNGEON_DIFF_A4]
 	bl IsBossFight
 	cmp r0,#0x0
 	bne end_monster_loop
@@ -336,7 +336,7 @@ no_compute_special_pokemon_size:
 compute_file_size_loop:
 	ldr r2,[r7,+r8, lsl #0x2]
 	add  r1,r9,r8,lsl #0x1
-	ldr r0,=0x0002C9EA
+	ldr r0,=0x0002C9EA-DUNGEON_DIFF_A4
 	strh r2,[r1, r0]
 	ldr r0,[r7,+r8, lsl #0x2]
 	add r1,r6,r0,lsl #0x3
@@ -358,7 +358,7 @@ compute_file_size_loop:
 end_compute_file_size_loop:
 	cmp r8,r4
 	blt compute_file_size_loop
-	ldr r1,=0x0002C9E6
+	ldr r1,=0x0002C9E6-DUNGEON_DIFF_A4
 	cmp r5,#0x58000
 	strh r11,[r9, r1]
 	bls total_file_size_ok
@@ -394,7 +394,7 @@ total_file_size_ok:
 	ldr r0,=0x0000FFFF
 	cmp r2,r0
 	beq no_statue
-	ldr r0,=0x0002C9EA
+	ldr r0,=0x0002C9EA-DUNGEON_DIFF_A4
 	add  r1,r9,r4,lsl #0x1
 	strh r2,[r1, r0]
 	add  r4,r4,#0x1
@@ -402,10 +402,10 @@ no_statue:
 	ldrh r2,[r13, #+0x46]
 	ldr r0,=0x0000FFFF
 	cmp r2,r0
-	ldrne r0,=0x0002C9EA
+	ldrne r0,=0x0002C9EA-DUNGEON_DIFF_A4
 	addne  r1,r9,r4,lsl #0x1
 	strneh r2,[r1, r0]
-	ldr r2,=0x0002C9EA
+	ldr r2,=0x0002C9EA-DUNGEON_DIFF_A4
 	mov  r1,#0x0
 loop_sort_pkmn_id:
 	mov  r0,r1
@@ -458,7 +458,7 @@ label_46:
 	mov  r10,#0x0
 	b end_copy_spawn_entry_loop
 copy_spawn_entry_loop:
-	ldr r0,=0x0002C9EA
+	ldr r0,=0x0002C9EA-DUNGEON_DIFF_A4
 	ldr r1,=0x0000FFFF
 	add  r2,r9,r10,lsl #0x1
 	ldrh r3,[r2, r0]
@@ -482,7 +482,7 @@ copy_spawn_entry_loop:
 	add  r7,r13,#0x2C
 	mov  r2,#0x4
 	add  r1,r9,r8,lsl #0x3
-	add  r1,r1,#0x164
+	add  r1,r1,#0x164-DUNGEON_DIFF_A4
 	add  r3,r1,#0x2C800
 copy_monster_spawn_loop:
 	ldrh r1,[r7],#+0x2
@@ -503,7 +503,7 @@ copy_monster_spawn_loop:
 	bne copied_spawn_entry
 	mov  r0,r7,lsl #0x10
 	mov  r1,r0,asr #0x10
-	add  r0,r9,#0x164
+	add  r0,r9,#0x164-DUNGEON_DIFF_A4
 	add  r0,r0,#0x2C800
 	add  r0,r0,r8,lsl #0x3
 	bl StoreMonsterID
@@ -518,28 +518,28 @@ break_copy_spawn_entry:
 	bl IsFixedFloor
 	cmp r0,#0x0
 	beq no_fixed_floor
-	ldr r3,=0x0002C9E6
+	ldr r3,=0x0002C9E6-DUNGEON_DIFF_A4
 	rsb  r1,r8,#0x10
 	add  r2,r9,#0x4000
-	add  r0,r9,#0x164
+	add  r0,r9,#0x164-DUNGEON_DIFF_A4
 	add  r0,r0,#0x2C800
-	ldrb r2,[r2, #+0xda]
+	ldrb r2,[r2, #+0xda-DUNGEON_DIFF_A4]
 	ldrsh r3,[r9, r3]
 	add  r0,r0,r8,lsl #0x3
 	bl UnknownFunc6
 	add  r1,r9,#0x12000
-	str r0,[r1, #+0xb20]
+	str r0,[r1, #+0xb20-DUNGEON_DIFF_A4]
 	add  r0,r9,#0x12000
-	ldr r0,[r0, #+0xb20]
+	ldr r0,[r0, #+0xb20-DUNGEON_DIFF_A4]
 	add  r8,r8,r0
 no_fixed_floor:
-	ldr r0,=0x0002C9E4
+	ldr r0,=0x0002C9E4-DUNGEON_DIFF_A4
 	mov  r5,#0x0
 	strh r8,[r9, r0]
 	b end_nullify_spawn_entry_loop
 nullify_spawn_entry_loop:
 	mov  r1,r5
-	add  r0,r9,#0x164
+	add  r0,r9,#0x164-DUNGEON_DIFF_A4
 	add  r0,r0,#0x2C800
 	add  r0,r0,r8,lsl #0x3
 	bl StoreMonsterID
@@ -551,7 +551,7 @@ end_nullify_spawn_entry_loop:
 	mov  r1,#0x0
 	bl MemAlloc
 	mov r6,r0
-	ldr r1,=0x0002C9E8
+	ldr r1,=0x0002C9E8-DUNGEON_DIFF_A4
 	mov  r4,#0x0
 	strh r4,[r9, r1]
 all_item_lists_loop:
@@ -611,7 +611,7 @@ end_item_load_loop:
 	mov  r1,#0xB10
 	mul  r1,r4,r1
 	mov  r2,#0x0
-	ldr r5,=0x000286D2
+	ldr r5,=0x000286D2-DUNGEON_DIFF_A4
 	mov  r3,r2
 loop_copy_item_cat_chances:
 	mov  r10,r2,lsl #0x1
@@ -623,7 +623,7 @@ loop_copy_item_cat_chances:
 	cmp r3,#0x10
 	add  r2,r2,#0x1
 	blt loop_copy_item_cat_chances
-	ldr r5,=0x000286F2
+	ldr r5,=0x000286F2-DUNGEON_DIFF_A4
 	mov  r3,#0x0
 loop_copy_item_chances:
 	mov  r10,r2,lsl #0x1
@@ -639,8 +639,8 @@ loop_copy_item_chances:
 	cmp r4,#0x6
 	blt all_item_lists_loop
 	mov  r8,#0x0
-	ldr r2,=0x000286F2
-	ldr r1,=0x0002C9E8
+	ldr r2,=0x000286F2-DUNGEON_DIFF_A4
+	ldr r1,=0x0002C9E8-DUNGEON_DIFF_A4
 	ldr r3,=0x0000FFFF
 	mov  r0,r8
 loop_copy_normal_item_chances:

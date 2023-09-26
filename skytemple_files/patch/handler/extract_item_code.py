@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -42,6 +43,8 @@ PATCH_CHECK_ADDR_APPLIED_US = 0x3F76C
 PATCH_CHECK_INSTR_APPLIED_US = 0xE3500F67
 PATCH_CHECK_ADDR_APPLIED_EU = 0x3F88C
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE3500F67
+PATCH_CHECK_ADDR_APPLIED_JP = 0x3F598
+PATCH_CHECK_INSTR_APPLIED_JP = 0xE3500F67
 
 START_OV29_US = 0x022DC240
 START_TABLE_US = 0x0231B9AC
@@ -54,6 +57,12 @@ START_TABLE_EU = 0x0231C40C
 START_M_FUNC_EU = 0x0231C8B0
 END_M_FUNC_EU = 0x0231D574
 DATA_SEG_EU = 0x0231D120
+
+START_OV29_JP = 0x022DD8E0
+START_TABLE_JP = 0x0231CE78
+START_M_FUNC_JP = 0x0231D31C
+END_M_FUNC_JP = 0x0231DFE0
+DATA_SEG_JP = 0x0231DB8C
 
 ITEM_CODE_PATH = "BALANCE/item_cd.bin"
 
@@ -95,6 +104,13 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                     )
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED_JP
+                )
         raise NotImplementedError()
 
     def apply(
@@ -114,6 +130,12 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                     start_m_functions = START_M_FUNC_EU
                     end_m_functions = END_M_FUNC_EU
                     data_seg = DATA_SEG_EU
+                if config.game_region == GAME_REGION_JP:
+                    start_ov29 = START_OV29_JP
+                    start_table = START_TABLE_JP
+                    start_m_functions = START_M_FUNC_JP
+                    end_m_functions = END_M_FUNC_JP
+                    data_seg = DATA_SEG_JP
 
             main_func = dict()
 

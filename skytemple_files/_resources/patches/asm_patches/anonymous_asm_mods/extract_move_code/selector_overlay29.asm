@@ -12,6 +12,8 @@
 	.include "na/patch_overlay29.asm"
 .elseif PPMD_GameVer == GameVer_EoS_EU
 	.include "eu/patch_overlay29.asm"
+.elseif PPMD_GameVer == GameVer_EoS_JP
+	.include "jp/patch_overlay29.asm"
 .endif
 
 .relativeinclude off

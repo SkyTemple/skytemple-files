@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -33,6 +34,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x3E68
 PATCH_CHECK_ADDR_APPLIED_EU = 0x3E68
+PATCH_CHECK_ADDR_APPLIED_JP = 0x3E60
 PATCH_CHECK_INSTR_APPLIED = 0xBA000006
 
 INTER_PATH = "BALANCE/inter_d.bin"
@@ -75,6 +77,13 @@ class DungeonInterruptPatchHandler(AbstractPatchHandler, DependantPatch):
                 return (
                     read_u32(
                         rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
                     )
                     != PATCH_CHECK_INSTR_APPLIED
                 )

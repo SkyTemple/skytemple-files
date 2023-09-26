@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -34,6 +35,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 ORIGINAL_INSTRUCTION = 0xE1A05009
 OFFSET_EU = 0x67ED4
 OFFSET_US = 0x67C30
+OFFSET_JP = 0x67954
 
 
 class DynamicBossesEverywherePatchHandler(AbstractPatchHandler, DependantPatch):
@@ -70,6 +72,8 @@ class DynamicBossesEverywherePatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_US) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
                 return read_u32(overlay29, OFFSET_EU) != ORIGINAL_INSTRUCTION
+            if config.game_region == GAME_REGION_JP:
+                return read_u32(overlay29, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
     def apply(

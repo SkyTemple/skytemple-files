@@ -577,6 +577,13 @@
           <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="anonymous_asm_mods/add_type/selector_overlay29.asm"/>
 	  </OpenBin>
+            <Parameters>
+              <Param name="FairyTypeMatchup" label="Conversion 2 Type when hit by a Fairy move" type="select">
+                <Option label="Fire" type="int">0</Option>
+                <Option label="Poison" type="int">1</Option>
+                <Option label="Steel" type="int">2</Option>
+              </Param>
+            </Parameters>
         </Patch>
 
         <!-- A patch to implement Fairy-type gummies -->
@@ -649,7 +656,12 @@
 	  	<Include filename ="anonymous_asm_mods/push_allies/selector_overlay36.asm"/>
 	  </OpenBin>
           <Parameters>
-            <Param name="PushStringID" label="String ID for push dialogue" min="0" max="65535" default="299" type="int"/>
+            <Game id="EoS_NA" id2="EoS_EU" id3="EoSWVC_NA" id4="EoSWVC_EU">
+              <Param name="PushStringID" label="String ID for push dialogue" min="0" max="65535" default="299" type="int"/>
+            </Game>
+            <Game id="EoS_JP">
+              <Param name="PushStringID" label="String ID for push dialogue" min="0" max="65535" default="9241" type="int"/>
+            </Game>
             <Param name="ReplaceStrings" label="String mentioned above is replaced by a default text when applying" type="select">
               <Option label="Yes" type="int">1</Option>
               <Option label="No" type="int">0</Option>
@@ -732,10 +744,18 @@
             <Include filename ="anonymous_asm_mods/appraise_all/selector_overlay25.asm"/>
           </OpenBin>
           <Parameters>
-            <Param name="MenuOptionStringID" label="String ID for the Menu Option" min="0" max="65535" default="300" type="int"/>
-            <Param name="AppraiseAllConfirmStringID" label="String ID to confirm the appraise all" min="0" max="65535" default="301" type="int"/>
-            <Param name="AppraiseRevealBeforeStringID" label="String ID before revealing the items" min="0" max="65535" default="302" type="int"/>
-            <Param name="AppraiseRevealItemStringID" label="String ID when revealing an item" min="0" max="65535" default="303" type="int"/>
+            <Game id="EoS_NA" id2="EoS_EU" id3="EoSWVC_NA" id4="EoSWVC_EU">
+              <Param name="MenuOptionStringID" label="String ID for the Menu Option" min="0" max="65535" default="300" type="int"/>
+              <Param name="AppraiseAllConfirmStringID" label="String ID to confirm the appraise all" min="0" max="65535" default="301" type="int"/>
+              <Param name="AppraiseRevealBeforeStringID" label="String ID before revealing the items" min="0" max="65535" default="302" type="int"/>
+              <Param name="AppraiseRevealItemStringID" label="String ID when revealing an item" min="0" max="65535" default="303" type="int"/>
+            </Game>
+            <Game id="EoS_JP">
+              <Param name="MenuOptionStringID" label="String ID for the Menu Option" min="0" max="65535" default="9242" type="int"/>
+              <Param name="AppraiseAllConfirmStringID" label="String ID to confirm the appraise all" min="0" max="65535" default="9243" type="int"/>
+              <Param name="AppraiseRevealBeforeStringID" label="String ID before revealing the items" min="0" max="65535" default="9244" type="int"/>
+              <Param name="AppraiseRevealItemStringID" label="String ID when revealing an item" min="0" max="65535" default="9245" type="int"/>
+            </Game>
             <Param name="ReplaceStrings" label="All strings mentioned above are replaced by a default text when applying" type="select">
               <Option label="Yes" type="int">1</Option>
               <Option label="No" type="int">0</Option>
@@ -791,6 +811,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -799,6 +820,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -807,6 +829,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -815,6 +838,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -823,6 +847,7 @@
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
+            <Game id="EoS_JP" replace='_REGION equ "JP"' />
           </Replace>
         </SimplePatch>
 
@@ -831,6 +856,7 @@
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"' />
           </Replace>
         </SimplePatch>
 
@@ -839,6 +865,7 @@
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"' />
           </Replace>
         </SimplePatch>
 
@@ -847,6 +874,7 @@
           <Replace filename="cipnit_asm_mods/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"' />
           </Replace>
         </SimplePatch>
 
@@ -855,6 +883,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -863,6 +892,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -871,6 +901,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -879,6 +910,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -887,6 +919,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -904,6 +937,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -930,6 +964,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
         
@@ -938,6 +973,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
           <Parameters>
             <Param name="_UpdateStats" label="Update the level and stats of evolved enemies" type="select">
@@ -965,6 +1001,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 
@@ -973,6 +1010,7 @@
           <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
           </Replace>
         </SimplePatch>
 

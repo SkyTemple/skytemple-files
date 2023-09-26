@@ -451,11 +451,22 @@ CheckSecondPartRead:
 	add  r0,r1,Pkmn_StrID_L
 	add  r0,r0,Pkmn_StrID_H
 .endarea
-.org HookStringsCate1
-.area 0x8
-	add  r0,r1,Cate_StrID_L
-	add  r0,r0,Cate_StrID_H
-.endarea
+; The JP version only uses one instruction, while the NA/EU versions use two.
+; There's undoubtedly a better way to structure this, but it helps to be explicit!
+.if PPMD_GameVer == GameVer_EoS_JP
+	.org HookStringsCate1
+	.area 0xC
+		add  r0,r1,Cate_StrID_L
+		add  r0,r0,Cate_StrID_H
+		nop ; I doubt the game will ever attempt to call a string that has any of the upper 16 bits set...right?
+	.endarea
+.else
+	.org HookStringsCate1
+	.area 0x8
+		add  r0,r1,Cate_StrID_L
+		add  r0,r0,Cate_StrID_H
+	.endarea
+.endif
 
 ; monster.md
 

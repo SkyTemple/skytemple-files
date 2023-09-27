@@ -106,9 +106,11 @@ class SsbWriter:
             self.model.strings = {
                 lang_name: [] for lang_name in header_cls.supported_langs()
             }
-        number_of_strings = len(
-            self.model.strings[next(iter(self.model.strings.keys()))]
-        )
+        number_of_strings = 0
+        if len(self.model.strings.keys()) > 0:
+            number_of_strings = len(
+                self.model.strings[next(iter(self.model.strings.keys()))]
+            )
 
         # Routine Info - The offsets used for the routine starts MUST already be correctly calculated!
         for offset, routine_info in self.model.routine_info:
@@ -175,7 +177,10 @@ class SsbWriter:
         len_of_string_tables = 2 * number_of_strings
         previous_languages_block_sizes = 0
         string_lengths: Dict[str, int] = {}
-        if len({len(i) for i in self.model.strings.values()}) != 1:
+        if (
+            number_of_strings != 0
+            and len({len(i) for i in self.model.strings.values()}) != 1
+        ):
             raise ValueError(
                 _(
                     "Could not compile script: All languages must have the same amount of strings."

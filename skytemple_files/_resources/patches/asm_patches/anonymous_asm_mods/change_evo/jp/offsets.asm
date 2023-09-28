@@ -32,5 +32,5 @@
 
 .definelabel RandMax, 0x022EC100
 .definelabel GetRandomSpawnPkmnID, 0x0233935C
-.definelabel GenerateMissionEggPkmn, 0x023498A0
+.definelabel GenerateMissionEggPkmn, 0x0234AB90
 .definelabel GMEPSize, 0x180

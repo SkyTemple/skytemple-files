@@ -5,7 +5,6 @@
 ; Adds a menu to choose the starter after the quiz
 ; ------------------------------------------------------------------------------
 
-; WARNING! Not tested!
 
 .relativeinclude on
 .nds

@@ -10,6 +10,9 @@
 .nds
 .arm
 
+.definelabel MOVE_STR_ID_IMM_0, 0x314
+.definelabel MOVE_STR_ID_IMM_1, 0xC00
+
 .definelabel FillWithZeros8Bytes, 0x02003228
 .definelabel FillWithConstant1ByteArray, 0x020032A4
 

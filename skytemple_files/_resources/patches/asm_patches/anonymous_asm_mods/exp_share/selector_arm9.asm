@@ -16,6 +16,10 @@
 	.include "eu/offsets.asm"
 	.include "eu/patch_arm9.asm"
 	.include "common/patch_arm9.asm"
+.elseif PPMD_GameVer == GameVer_EoS_JP
+	.include "jp/offsets.asm"
+	.include "jp/patch_arm9.asm"
+	.include "common/patch_arm9.asm"
 .endif
 
 .relativeinclude off

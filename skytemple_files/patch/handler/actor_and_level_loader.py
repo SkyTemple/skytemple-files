@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -38,6 +39,7 @@ EXTRACT_LOOSE_BIN_SRCDATA__LEVELS = "Events"
 PATCH_STRING = b"PATCH PPMD ActorLoader 0.1"
 PATCH_STRING_ADDR_ARM9_US = 0xA6910
 PATCH_STRING_ADDR_ARM9_EU = 0xA71B0
+PATCH_STRING_ADDR_ARM9_JP = 0xA7D58
 
 
 class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
@@ -48,7 +50,7 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
     @property
     def description(self) -> str:
         return _(
-            "Tells the game, to load the actor and level lists from a separate file. "
+            "Tells the game to load the actor and level lists from separate files.\n"
             "Extracts both files on applying the patch."
         )
 
@@ -83,6 +85,16 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                 return (
                     rom.arm9[
                         PATCH_STRING_ADDR_ARM9_EU : PATCH_STRING_ADDR_ARM9_EU
+                        + len(PATCH_STRING)
+                    ]
+                    != b"PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY"
+                )
+            if config.game_region == GAME_REGION_JP:
+                # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
+                # return rom.arm9[PATCH_STRING_ADDR_ARM9_JP:PATCH_STRING_ADDR_ARM9_JP + len(PATCH_STRING)] == PATCH_STRING
+                return (
+                    rom.arm9[
+                        PATCH_STRING_ADDR_ARM9_JP : PATCH_STRING_ADDR_ARM9_JP
                         + len(PATCH_STRING)
                     ]
                     != b"PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY"

@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -61,6 +62,7 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
             OFFSETS = {
                 GAME_REGION_US: 0x605F4,
                 GAME_REGION_EU: 0x60898,
+                GAME_REGION_JP: 0x60314,
             }
             offset = OFFSETS.get(config.game_region)
             if offset is not None:

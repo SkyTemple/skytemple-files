@@ -5,7 +5,6 @@
 ; Change fixed floor properties functions
 ; ------------------------------------------------------------------------------
 
-; WARNING! Not Tested!
 
 .relativeinclude on
 .nds

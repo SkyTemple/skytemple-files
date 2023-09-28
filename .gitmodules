@@ -1,7 +1,6 @@
 [submodule "skytemple_files/_resources/patches/asm_patches/pmd2_asm_mods"]
 	path = skytemple_files/_resources/patches/asm_patches/pmd2_asm_mods
-	url = https://github.com/SkyTemple/pmd2_asm_mods.git
-	branch = dev
+	url = https://github.com/PsyCommando/pmd2_asm_mods.git
 [submodule "skytemple_files/_resources/patches/asm_patches/end_asm_mods"]
 	path = skytemple_files/_resources/patches/asm_patches/end_asm_mods
 	url = https://github.com/End45/EoS-asm-hacks.git

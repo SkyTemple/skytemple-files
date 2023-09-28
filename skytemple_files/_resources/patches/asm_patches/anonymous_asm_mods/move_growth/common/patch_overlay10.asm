@@ -104,7 +104,7 @@ IsTargetInTeam:
 	add r1,r1,#0x12000
 	mov r2,#0
 loop_in_team:
-	ldr r3,[r1, #+0xb28]
+	ldr r3,[r1, ENTITY_TABLE_OFFSET]
 	cmp r3,r0
 	moveq r0, #1
 	ldmeqia  r13!,{r15}

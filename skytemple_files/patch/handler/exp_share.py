@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -40,6 +41,11 @@ PATCH_CODE_START_EU = 0x981D8
 PATCH_CODE_END_EU = 0x982B4
 PATCH_CHECK_ADDR_APPLIED_EU = 0x5A904
 PATCH_CHECK_INSTR_APPLIED_EU = 0xE0410000
+
+PATCH_CODE_START_JP = 0x97DD0
+PATCH_CODE_END_JP = 0x97EAC
+PATCH_CHECK_ADDR_APPLIED_JP = 0x5A884
+PATCH_CHECK_INSTR_APPLIED_JP = 0xE0410000
 
 
 class ExpSharePatchHandler(AbstractPatchHandler, DependantPatch):
@@ -81,6 +87,11 @@ class ExpSharePatchHandler(AbstractPatchHandler, DependantPatch):
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED_EU
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED_JP
                 )
         raise NotImplementedError()
 

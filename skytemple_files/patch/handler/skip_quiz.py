@@ -40,7 +40,7 @@ PATCH_CHECK_INSTR_APPLIED = 0xE2822001
 
 STRING_ID_US = 2613
 STRING_ID_EU = 2613
-STRING_ID_JP = 2613  # Just a guess
+STRING_ID_JP = 9648
 
 MESSAGE = "Who would you like to be?"
 # For xgettext scanning:

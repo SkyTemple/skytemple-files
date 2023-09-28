@@ -24,6 +24,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -34,6 +35,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 ORIGINAL_INSTRUCTION = 0xE59F1060
 OFFSET_EU = 0x31A58
 OFFSET_US = 0x31924
+OFFSET_JP = 0x317C4
 
 
 class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
@@ -69,6 +71,11 @@ class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
             if config.game_region == GAME_REGION_EU:
                 return (
                     read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_EU)
+                    != ORIGINAL_INSTRUCTION
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_JP)
                     != ORIGINAL_INSTRUCTION
                 )
         raise NotImplementedError()

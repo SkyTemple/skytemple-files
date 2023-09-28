@@ -5,13 +5,12 @@
 ; Adds a menu to choose the starter after the quiz
 ; ------------------------------------------------------------------------------
 
-; WARNING! Not tested!
 
 .relativeinclude on
 .nds
 .arm
 
-.definelabel SpecialStringID, 0xA35 ;Guess
+.definelabel SpecialStringID, 0x25B0
 
 .definelabel OrgSize, 0x2E80
 .definelabel ExtendSize, 0x800
@@ -72,7 +71,7 @@
 .definelabel PlayersListPkmnID, 0x0238D620
 .definelabel MenuOptionString, 0x0238E3D8
 
-.definelabel GlobalStructPointer, 0x0238E408
+.definelabel GlobalStructPointer, 0x0238E400
 ;0x2 = CurrentDialogueBoxID [0x1]
 ;0x3 = CurrentMenuID [0x1]
 ;0x5 = CurrentPortraitBoXID [0x1]
@@ -80,5 +79,5 @@
 ;0x30 = WaitingCase [0x4]
 ;0x5F = Gender [0x1]
 
-.definelabel DBLayout5, 0x0238E414
-.definelabel DBLayout6, 0x0238E424
+.definelabel DBLayout5, 0x0238E40C
+.definelabel DBLayout6, 0x0238E41C

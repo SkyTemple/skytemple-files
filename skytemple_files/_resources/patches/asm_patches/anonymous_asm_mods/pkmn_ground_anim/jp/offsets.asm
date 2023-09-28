@@ -5,7 +5,6 @@
 ; Use filestreams to partially load mappa files instead of loading entirely
 ; ------------------------------------------------------------------------------
 
-; WARNING! Not Tested!
 
 .relativeinclude on
 .nds

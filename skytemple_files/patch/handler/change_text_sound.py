@@ -23,6 +23,7 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -32,8 +33,10 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler, Dependa
 
 ORIGINAL_INSTRUCTION_EU = 0xEA0002AC
 ORIGINAL_INSTRUCTION_US = 0xEA000291
+ORIGINAL_INSTRUCTION_JP = 0xEA000291
 OFFSET_EU = 0x2111C
 OFFSET_US = 0x20FC4
+OFFSET_JP = 0x21014
 
 
 class ChangeTextSoundPatchHandler(AbstractPatchHandler, DependantPatch):
@@ -66,6 +69,8 @@ class ChangeTextSoundPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(rom.arm9, OFFSET_US) != ORIGINAL_INSTRUCTION_US
             if config.game_region == GAME_REGION_EU:
                 return read_u32(rom.arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION_EU
+            if config.game_region == GAME_REGION_JP:
+                return read_u32(rom.arm9, OFFSET_JP) != ORIGINAL_INSTRUCTION_JP
         raise NotImplementedError()
 
     def apply(

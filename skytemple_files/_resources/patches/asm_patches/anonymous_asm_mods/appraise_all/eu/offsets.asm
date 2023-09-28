@@ -10,6 +10,13 @@
 .nds
 .arm
 
+.definelabel DBOX_STRING_ID0, 0x000003E2
+.definelabel DBOX_STRING_ID1, 0x000003E1
+
+.definelabel MENU_STRING_ID0, 0x3D3
+.definelabel MENU_STRING_ID1, 0x3D5
+.definelabel MENU_STRING_ID2, 0x3D6
+
 .definelabel IsThrowable, 0x0200CB98
 
 .definelabel CreateItem, 0x0200D128

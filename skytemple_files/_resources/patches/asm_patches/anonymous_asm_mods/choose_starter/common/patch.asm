@@ -98,7 +98,11 @@
 		ldr r0,[r0, #+0x0]
 		add  r3,r13,#0x128
 		ldrsb r0,[r0, #+0x2]
+	.if PPMD_GameVer == GameVer_EoS_JP
+		mov  r2,#0x31C0
+	.else
 		add  r2,r1,#0x6C0
+	.endif
 		bl ShowMessageInDB
 		ldr r1,=GlobalStructPointer
 		ldr r1,[r1, #+0x0]

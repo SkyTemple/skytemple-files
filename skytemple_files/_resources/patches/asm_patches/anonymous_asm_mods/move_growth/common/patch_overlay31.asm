@@ -7,7 +7,7 @@
 
 .org HookMenuPP1
 .area 0x68
-	add  r5,r4,#0x124
+	add  r5,r4,#0x124-JP_OFFSET
 label_hmpp1_2:
 	ldrb r0,[r5,+r9, lsl #0x3]
 	add  r8,r5,r9,lsl #0x3

@@ -45,32 +45,29 @@ PATCH_CHECK_INSTR_APPLIED = 0xB3A00000
 # Too lazy to put that in an actual file
 ITEM_EFFECT_US = b"\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x96\x04\x00\xeb*\x03\x00\xea"
 ITEM_EFFECT_EU = b"\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x98\x04\x00\xeb*\x03\x00\xea"
-ITEM_EFFECT_JP = None  # TODO
+ITEM_EFFECT_JP = b"\x08\x00\xa0\xe1\x010\xa0\xe3\x07\x10\xa0\xe1\x12 \xa0\xe3\x95\x04\x00\xeb*\x03\x00\xea"
 
 GUMMI_ITEM_ID = 138
 OTHER_GUMMI_ID = 136
 
-# TODO; support other languages
 NAME_LIST = {
     "MESSAGE/text_e.str": "Fairy Gummi",
     "MESSAGE/text_f.str": "Gelée Féerique",
     "MESSAGE/text_g.str": "Feegummi",
     "MESSAGE/text_i.str": "Gommafolletto",
     "MESSAGE/text_s.str": "Gomi Hada",
-    "MESSAGE/text_j.str": "---",
+    "MESSAGE/text_j.str": "フェアリーグミ",
 }
 
-# TODO; support other languages
 SDES_LIST = {
     "MESSAGE/text_e.str": "Raises IQ.",
     "MESSAGE/text_f.str": "Augmente le Q.I.",
     "MESSAGE/text_g.str": "Erhöht den IQ.",
     "MESSAGE/text_i.str": "Aumenta il QI.",
     "MESSAGE/text_s.str": "Sube el CI.",
-    "MESSAGE/text_j.str": "---",
+    "MESSAGE/text_j.str": "かしこさがあがる",
 }
 
-# TODO; support other languages
 LDES_LIST = {
     "MESSAGE/text_e.str": """A food item that permanently
 raises the [CS:E]IQ[CR] of a team member.
@@ -97,7 +94,11 @@ permanente el [CS:E]CI[CR] del Pokémon.
 Los de tipo Hada las adoran.
 También llena ligeramente su
 [CS:E]Tripa[CR].""",
-    "MESSAGE/text_j.str": "---",
+    "MESSAGE/text_j.str": """たべると [CS:E]おなか[CR]が すこしかいふくする
+たんけんたいの なかまに あげると
+[CS:E]かしこさ[CR]が あがる
+フェアリータイプの ポケモンが
+すきな たべものだ""",
 }
 
 
@@ -142,7 +143,6 @@ Also, you'll need to reapply this if you apply AddTypes again. """
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
-                raise NotImplementedError()  # see TODO at ITEM_EFFECT_JP.
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
@@ -158,6 +158,8 @@ Also, you'll need to reapply this if you apply AddTypes again. """
                 item_effect = ITEM_EFFECT_US
             elif config.game_region == GAME_REGION_EU:
                 item_effect = ITEM_EFFECT_EU
+            elif config.game_region == GAME_REGION_JP:
+                item_effect = ITEM_EFFECT_JP
             else:
                 raise NotImplementedError("ROM not supported.")
         else:

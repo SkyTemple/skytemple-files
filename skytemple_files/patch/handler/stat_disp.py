@@ -26,6 +26,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -41,6 +42,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x243A0
 PATCH_CHECK_ADDR_APPLIED_EU = 0x24600
+PATCH_CHECK_ADDR_APPLIED_JP = 0x243F0
 PATCH_CHECK_INSTR_APPLIED = 0xEA000004
 
 SRC_DIR = os.path.join(
@@ -89,6 +91,12 @@ This patch may not be compatible if the markfont.dat file has been modified."""
             if config.game_region == GAME_REGION_EU:
                 return (
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
+            if config.game_region == GAME_REGION_JP:
+                raise NotImplementedError()  # TODO STAT_DISP: Causes a hard crash on hardware when attempting to view Move Descriptions. Then again, EU also softlocks...
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()

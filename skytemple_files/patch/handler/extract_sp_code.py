@@ -25,6 +25,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -40,6 +41,7 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0xAF00
 PATCH_CHECK_ADDR_APPLIED_EU = 0xAF00
+PATCH_CHECK_ADDR_APPLIED_JP = 0xAE94
 PATCH_CHECK_INSTR_APPLIED = 0xE355003E
 
 START_OV11_US = 0x022DC240
@@ -51,6 +53,11 @@ START_OV11_EU = 0x022DCB80
 START_TABLE_EU = 0x022E7A80
 START_M_FUNC_EU = 0x022E7B88
 END_M_FUNC_EU = 0x022E8400
+
+START_OV11_JP = 0x022DD8E0
+START_TABLE_JP = 0x022E8774
+START_M_FUNC_JP = 0x022E887C
+END_M_FUNC_JP = 0x022E90F4
 
 SP_CODE_PATH = "BALANCE/process.bin"
 
@@ -92,6 +99,13 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
                     )
                     != PATCH_CHECK_INSTR_APPLIED
                 )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
     def apply(
@@ -109,6 +123,11 @@ class ExtractSPCodePatchHandler(AbstractPatchHandler):
                     start_table = START_TABLE_EU
                     start_m_functions = START_M_FUNC_EU
                     end_m_functions = END_M_FUNC_EU
+                if config.game_region == GAME_REGION_JP:
+                    start_ov11 = START_OV11_JP
+                    start_table = START_TABLE_JP
+                    start_m_functions = START_M_FUNC_JP
+                    end_m_functions = END_M_FUNC_JP
         if SP_CODE_PATH not in rom.filenames:
             main_func = dict()
 

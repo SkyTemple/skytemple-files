@@ -708,6 +708,10 @@ NEW_TYPES = [
     0,
 ]  # Leftovers
 
+# Type Chart """Correction"""
+NEW_TYPES[39] = 2
+NEW_TYPES[189] = 2
+
 NEW_IQ_GUMMI = [
     0,
     0,

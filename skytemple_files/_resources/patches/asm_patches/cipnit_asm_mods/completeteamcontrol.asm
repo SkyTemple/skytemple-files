@@ -80,10 +80,12 @@
 	.word 0h
 
 @Message_SetToAuto:
-	.ascii "[CS:S]Control mode set to[CR] [CS:C]automatic[CR][CS:S].[CR]", 0
+	;.ascii "[CS:S]Control mode set to[CR] [CS:C]automatic[CR][CS:S].[CR]", 0
+	.word CTC_AUTO_STRINGID
 @Message_SetToManual:
-	.ascii "[CS:S]Control mode set to[CR] [CS:E]manual[CR][CS:S].[CR]", 0
-	.align 4
+	;.ascii "[CS:S]Control mode set to[CR] [CS:E]manual[CR][CS:S].[CR]", 0
+	.word CTC_MANUAL_STRINGID
+	;.align 4
 
 @Mode_Switch:	;Switches modes when you press start on the leader's turn
 	push r1-r5,r12,r14
@@ -99,7 +101,7 @@
 	ldr r2,=NA_02353538
 	ldr r2,[r2]
 	add r2,r2,12000h
-	ldr r4,[r2,0B28h]	;first pokemon's entity address
+	ldr r4,[r2,ENTITY_TABLE_OFFSET]	;first pokemon's entity address
 	ldr r3,[r4]
 	cmp r3,0h
 	beq @@modeswitch_return		;if first pokemon doesn't exist, return
@@ -120,10 +122,11 @@
 	strb r2,[r1]
 	ldr r1,=@Message_SetToAuto
 	addeq r1,r1,@Message_SetToManual -@Message_SetToAuto
+	ldr r1,[r1]
 	mov r0,r4
 	mov r2,1h
 	mov r3,0h
-	bl NA_0234B508	;this function puts a message in the dialogue
+	bl NA_0234B714	;this function puts a message in the dialogue
 	mov r0,0h
 @@modeswitch_return:
 	pop r1-r5,r12,r15
@@ -146,7 +149,7 @@
 	sub r6,r5,NA_0235355C -NA_02353538
 	ldr r6,[r6]
 	add r6,12000h
-	ldr r6,[r6,0B28h]		;first pokemon's address
+	ldr r6,[r6,ENTITY_TABLE_OFFSET]		;first pokemon's address
 	ldr r7,[r5]				;address of currently controled pokemon
 	ldr r0,=@CurrentLeader	;temporarally storing current pokemon's MDA here
 	str r7,[r0]
@@ -208,7 +211,7 @@
 	ldr r0,=NA_02353538
 	ldr r0,[r0]
 	add r0,r0,12000h
-	ldr r0,[r0,0B28h]
+	ldr r0,[r0,ENTITY_TABLE_OFFSET]
 	ldr r0,[r0,0B4h]
 	ldrb r0,[r0,7h]
 	cmp r0,1h
@@ -244,7 +247,7 @@
 	ldr r1,=NA_02353538
 	ldr r1,[r1]
 	add r1,r1,12000h
-	ldr r1,[r1,0B28h]	;first pokemon's entity address
+	ldr r1,[r1,ENTITY_TABLE_OFFSET]	;first pokemon's entity address
 	ldr r1,[r1,0B4h]
 	ldrb r1,[r1,7h]
 	cmp r1,1h
@@ -289,7 +292,7 @@
 	sub r1,r1,1h
 	str r1,[r0]		;disabling moving using the touch screen to prevent a funny bug, nop this line to see it
 	add r6,12000h
-	ldr r6,[r6,0B28h]	;first pokemon's entity address
+	ldr r6,[r6,ENTITY_TABLE_OFFSET]	;first pokemon's entity address
 	mov r8,r6
 	bl @leaderchanger
 	ldr r12,=NA_02301D10

@@ -73,7 +73,7 @@ switch_main_no_21:
 	ldr r1,=0x00003008
 	add  r0,r3,#0x100
 	ldrsb r0,[r0, #+0x38]
-	ldr r2,=0x000003E2
+	ldr r2,=DBOX_STRING_ID0
 	add  r3,r3,#0x28
 	bl ShowMessageInDB
 	b ReturnEndHandler
@@ -179,7 +179,7 @@ switch_sub_no_21:
 	str r3,[r1, #+0x24]
 	ldr r1,=0x00003018
 	ldr r3,[r0, #+0x0]
-	ldr r2,=0x000003E1
+	ldr r2,=DBOX_STRING_ID1
 	add  r0,r3,#0x100
 	ldrsb r0,[r0, #+0x38]
 	add  r3,r3,#0x28
@@ -350,9 +350,9 @@ OpenBox:
 	ldmia r13!, {r4,r15}
 	.pool
 new_menu:
-	.word 0x3D3, 7
+	.word MENU_STRING_ID0, 7
 	.word MenuOptionStringID, 8
-	.word 0x3D5, 6
-	.word 0x3D6, 1
+	.word MENU_STRING_ID1, 6
+	.word MENU_STRING_ID2, 1
 	.word 0, 1
 .endarea

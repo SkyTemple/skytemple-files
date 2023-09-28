@@ -79,6 +79,7 @@ This patch is useless on its own, unless you have a too big mappa file."""
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
+                raise NotImplementedError()  # TODO EXTERNALIZE_MAPPA: Works fine for the most part, but some attributes are read incorrectly (trying to add Pitfall Traps to a dungeon resulted in Chestnut Traps).
                 return (
                     read_u32(
                         rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP

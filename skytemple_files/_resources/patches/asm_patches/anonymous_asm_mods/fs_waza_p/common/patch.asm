@@ -596,8 +596,8 @@ status_move:
 	mov  r1,#0x18
 	mov  r2,#2
 	bl ReadMoveValue
-	add  r0,r0,#0x314
-	add  r0,r0,#0xC00
+	add  r0,r0,MOVE_STR_ID_IMM_0
+	add  r0,r0,MOVE_STR_ID_IMM_1
 	mov  r0,r0,lsl #0x10
 	mov  r0,r0,lsr #0x10
 	bl UnkGetString

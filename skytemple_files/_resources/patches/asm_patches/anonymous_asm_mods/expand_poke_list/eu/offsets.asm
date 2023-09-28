@@ -10,6 +10,13 @@
 .nds
 .arm
 
+; The JP dungeon struct differs from the NA/EU dungeon struct, at least presumably due to the monster struct having 4 less bytes.
+; We have to account for the difference in offsets!
+
+.definelabel DUNGEON_DIFF_A4, 0x0
+
+; General offsets
+
 .definelabel IsItemForSpecialSpawnInBag, 0x0200F0F8
 
 .definelabel CanMonsterSpawn, 0x0204D698

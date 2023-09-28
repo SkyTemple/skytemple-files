@@ -47,11 +47,12 @@ START_TABLE_EU = 0x0231F8DC
 TABLE_ENTRIES_EU = 569
 
 START_OV11_JP = 0x022DD8E0
-START_TABLE_JP = 0
-TABLE_ENTRIES_JP = 0
+START_TABLE_JP = 0x023203B8
+TABLE_ENTRIES_JP = 555
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x1FEC8
 PATCH_CHECK_ADDR_APPLIED_EU = 0x1FF28
+PATCH_CHECK_ADDR_APPLIED_JP = 0x1FEA0
 PATCH_CHECK_INSTR_APPLIED = 0xE5D50008
 
 OBJECT_TABLE_PATH = "BALANCE/objects.bin"
@@ -91,6 +92,13 @@ class ExtractObjectTablePatchHandler(AbstractPatchHandler):
                 return (
                     read_u32(
                         rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
+                    )
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(
+                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP
                     )
                     != PATCH_CHECK_INSTR_APPLIED
                 )

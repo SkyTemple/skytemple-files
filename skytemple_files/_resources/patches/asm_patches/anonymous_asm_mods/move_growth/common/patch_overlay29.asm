@@ -25,7 +25,7 @@ label_hpp1_1:
 	add  r1,r5,r7,lsl #0x3
 	bl GetPPWithLevelBonus
 	add  r1,r6,r7,lsl #0x3
-	ldrb r1,[r1, #+0x12a]
+	ldrb r1,[r1, #+0x12a-JP_OFFSET]
 	cmp r1,r0
 	blt label_hpp1_0
 	add  r7,r7,#0x1
@@ -104,12 +104,33 @@ label_hpp2_0:
 	bl GetPPWithLevelBonus
 .endarea
 
+; The JP version of this loop doesn't save the currently-iterated entity pointer, which MoveGrowth relies on.
+; The following instances of changed code are to make r11 in the loop stay as the entity pointer, due to r4 being overwritten.
+.if PPMD_GameVer == GameVer_EoS_JP ; This is cursed but I don't wanna reorganize the structure of this patch
+	.org 0x022E1B6C
+	.area 0x8
+		ldr r11,[r0,ENTITY_TABLE_OFFSET]
+		mov r0,r11
+	.endarea
+	.org 0x022E1B88
+	.area 0xC
+		strb r0,[r11,#0x22]
+		strb r3,[r11,#0x20]
+		ldr r5,[r11,#0xb4]
+	.endarea
+.endif
+
 .org HookPP6_1
 .area 0x18
 	tst r0,#0x1
 	beq HookPP6_1+0x20
-	mov  r0,r6
-	mov  r1,r7
+	.if PPMD_GameVer == GameVer_EoS_JP ; I can't use "equ", send help, this is ugly
+		mov  r0,r11
+		mov  r1,r9
+	.else
+		mov  r0,r6
+		mov  r1,r7
+	.endif
 	nop
 	nop
 .endarea
@@ -119,7 +140,7 @@ label_hpp2_0:
 	mov r5,r0
 	ldr r0,[r0, #+0xb4]
 	mov  r7,#0x0
-	add  r6,r0,#0x124
+	add  r6,r0,#0x124-JP_OFFSET
 	nop
 	ldrb r0,[r6,+r7, lsl #0x3]
 	add  r8,r6,r7,lsl #0x3
@@ -189,7 +210,7 @@ label_hpp2_0:
 
 .org HookPP8
 .area 0xB4
-	add  r9,r7,#0x124
+	add  r9,r7,#0x124-JP_OFFSET
 label_hpp8_2:
 	add  r0,r7,r8,lsl #0x3
 	cmp r5,#0x0
@@ -207,10 +228,10 @@ label_hpp8_2:
 	bl GetPPWithLevelBonus
 	add  r2,r7,r8,lsl #0x3
 	mov  r0,r0,lsl #0x10
-	ldrb r1,[r2, #+0x12a]
+	ldrb r1,[r2, #+0x12a-JP_OFFSET]
 	mov  r3,r0,asr #0x10
 	cmp r1,r0,asr #0x10
-	strgtb r3,[r2, #+0x12a]
+	strgtb r3,[r2, #+0x12a-JP_OFFSET]
 label_hpp8_0:
 	add  r0,r7,r8,lsl #0x3
 	cmp r6,#0x0
@@ -228,10 +249,10 @@ label_hpp8_0:
 	bl GetPPWithLevelBonus
 	add  r2,r7,r8,lsl #0x3
 	mov  r0,r0,lsl #0x10
-	ldrb r1,[r2, #+0x12a]
+	ldrb r1,[r2, #+0x12a-JP_OFFSET]
 	mov  r3,r0,asr #0x10
 	cmp r1,r0,asr #0x10
-	strgtb r3,[r2, #+0x12a]
+	strgtb r3,[r2, #+0x12a-JP_OFFSET]
 label_hpp8_1:
 	add  r8,r8,#0x1
 	cmp r8,#0x4

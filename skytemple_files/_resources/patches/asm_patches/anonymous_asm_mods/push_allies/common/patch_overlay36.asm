@@ -136,7 +136,7 @@ CheckValidity:
 	bl CheckEntityUnk1
 	cmp r0,#0x0
 	bne skip_validity
-	ldrb r0,[r4, #+0xbc]
+	ldrb r0,[r4, #+0xbc-JP_OFFSET]
 	cmp r0,#0x7
 	bne end_check_validity
 skip_validity:
@@ -144,10 +144,10 @@ skip_validity:
 	bl CheckEntityStatus
 	cmp r0,#0x0
 	beq end_check_validity
-	ldrb r0,[r4, #+0xd0]
+	ldrb r0,[r4, #+0xd0-JP_OFFSET]
 	cmp r0,#0x2
 	beq end_check_validity
-	ldrb r0,[r4, #+0xbd]
+	ldrb r0,[r4, #+0xbd-JP_OFFSET]
 	cmp r0,#0
 	cmpne r0,#2
 	cmpne r0,#4
@@ -173,9 +173,9 @@ MoveDirection:
 	orr  r1,r1,#0x8000
 	strh r1,[r5, #+0x0]
 	ldrsh r1,[r4, #+0x4]
-	strh r1,[r2, #+0x7e]
+	strh r1,[r2, #+0x7e-JP_OFFSET]
 	ldrsh r1,[r4, #+0x6]
-	strh r1,[r2, #+0x80]
+	strh r1,[r2, #+0x80-JP_OFFSET]
 	ldmia r13!,{r4,r5,r6,r15}
 CheckStack:
 	ldr r2,=push_stack

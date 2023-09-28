@@ -27,6 +27,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
+    GAME_REGION_JP,
     GAME_VERSION_EOS,
     Pmd2Data,
 )
@@ -55,6 +56,7 @@ SRC_DIR = os.path.join(
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x14A74
 PATCH_CHECK_ADDR_APPLIED_EU = 0x14B1C
+PATCH_CHECK_ADDR_APPLIED_JP = 0x14A44
 PATCH_CHECK_INSTR_APPLIED = 0xE2841004
 
 MGROW_PATH = "BALANCE/mgrowth.bin"
@@ -201,6 +203,12 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
                     read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
+            if config.game_region == GAME_REGION_JP:
+                raise NotImplementedError()  # TODO STAT_DISP: Relies on ChangeMoveStatsDisplay to work.
+                return (
+                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
+                    != PATCH_CHECK_INSTR_APPLIED
+                )
         raise NotImplementedError()
 
     def is_applied_ms(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
@@ -208,17 +216,21 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
         OFFSET_EU = 0x158F0
         OFFSET_US = 0x1587C
+        OFFSET_JP = 0x1584C
         overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return overlay29[OFFSET_US : OFFSET_US + 4] != ORIGINAL_BYTESEQ
             if config.game_region == GAME_REGION_EU:
                 return overlay29[OFFSET_EU : OFFSET_EU + 4] != ORIGINAL_BYTESEQ
+            if config.game_region == GAME_REGION_JP:
+                return overlay29[OFFSET_JP : OFFSET_JP + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
     def is_applied_dv(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         PATCH_DV_CHECK_ADDR_APPLIED_US = 0x243F0
         PATCH_DV_CHECK_ADDR_APPLIED_EU = 0x24650
+        PATCH_DV_CHECK_ADDR_APPLIED_JP = 0x24440
         PATCH_DV_CHECK_INSTR_APPLIED = 0xE3A09001
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
@@ -229,6 +241,11 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
             if config.game_region == GAME_REGION_EU:
                 return (
                     read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU)
+                    == PATCH_DV_CHECK_INSTR_APPLIED
+                )
+            if config.game_region == GAME_REGION_JP:
+                return (
+                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_JP)
                     == PATCH_DV_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()

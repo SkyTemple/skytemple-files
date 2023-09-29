@@ -44,7 +44,7 @@ see the ``dbg`` packages and the SkyTemple main application.
 Directly in the package (``skytemple_files`` directory) you can find a few an example script that help with understanding
 how to use this library. After installing the package you will have is as a cli command: ``skytemple_export_maps``.
 
-In addition to the dependencies in the ``requirements.txt`` and ``setup.py``, ARMIPS must
+In addition to the dependencies in the ``requirements.txt`` and ``pyproject.toml``, ARMIPS must
 be installed and in the system's ``PATH`` to be able to apply ROM patches.
 
 Extras

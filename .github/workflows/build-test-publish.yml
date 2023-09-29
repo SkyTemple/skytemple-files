@@ -244,7 +244,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build the Python wheel
     steps:
-      # For tags we assume the version in setup.py is correct!
+      # For tags we assume the version in pyproject.toml is correct!
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -252,10 +252,10 @@ jobs:
       - name: Rewrite version for dev if not tag
         if: "!startsWith(github.ref, 'refs/tags/')"
         run: |
-          perl -i -pe "s/__version__\s*=\s*'(.*?)(\.rc.*|\.a.*|\.post.*)?'/__version__='\1.dev0+${GITHUB_SHA::8}'/" setup.py
+          perl -i -pe "s/version\s*=\s*\"(.*?)(\.rc.*|\.a.*|\.post.*)?\"/version=\"\1.dev0+${GITHUB_SHA::8}\"/" pyproject.toml
       - name: Note version
         run: |
-          echo "PACKAGE_VERSION=$(python3 -- ./setup.py --version)" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=$(tomlq '.project.version' pyproject.toml -r)" >> $GITHUB_ENV
       - name: Build Python wheels
         uses: RalfG/python-wheels-manylinux-build@v0.5.0-manylinux2014_x86_64
         with:

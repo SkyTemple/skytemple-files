@@ -1,0 +1,12 @@
+recursive-include skytemple_files/_resources *.xml
+recursive-include skytemple_files/_resources *.asm
+recursive-include skytemple_files/_resources *.rst
+recursive-include skytemple_files/_resources LICENSE
+recursive-include skytemple_files/_resources *.txt
+recursive-include skytemple_files/_resources *.md
+recursive-include skytemple_files/_resources *.bin
+recursive-include skytemple_files/_resources *.png
+recursive-include skytemple_files/_resources *.yml
+recursive-include skytemple_files/_resources *.yaml
+include skytemple_files/py.typed
+include skytemple_files/graphics/chara_wan/Shadow.png

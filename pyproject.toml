@@ -57,6 +57,3 @@ spritecollab = [
 
 [project.scripts]
 skytemple_export_maps = "skytemple_files.export_maps:main"
-
-[project.entry-points."skytemple.module"]
-example_plugin = "skytemple_example_plugin.module:ExamplePluginModule"

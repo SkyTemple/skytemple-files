@@ -47,7 +47,6 @@ from skytemple_files.script.ssb.header import (
 from skytemple_files.script.ssb.model import (
     SSB_LEN_ROUTINE_INFO_ENTRY,
     SSB_PADDING_BEFORE_ROUTINE_INFO,
-    List,
     SkyTempleSsbOperation,
     Ssb,
 )
@@ -94,7 +93,7 @@ class ScriptCompiler:
         es_src: str,
         exps_absolue_path: str,
         callback_after_parsing: Callback | None = None,
-        lookup_paths: List[str] | None = None,
+        lookup_paths: list[str] | None = None,
     ) -> tuple[Ssb, SourceMap]:
         """
         Compile ExplorerScript into a SSB model. Returns the Ssb model, the source map, and a list of macros
@@ -139,9 +138,9 @@ class ScriptCompiler:
 
     def compile_structured(
         self,
-        routine_infos: List[SsbRoutineInfo],
-        routine_ops: List[List[SsbOperation]],
-        named_coroutines: List[str],
+        routine_infos: list[SsbRoutineInfo],
+        routine_ops: list[list[SsbOperation]],
+        named_coroutines: list[str],
         original_source_map: SourceMap,
     ) -> tuple[Ssb, SourceMap]:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
@@ -161,17 +160,17 @@ class ScriptCompiler:
             if self.rom_data.game_region == GAME_REGION_EU:
                 header_class = SsbHeaderEu
 
-            built_strings: dict[str, List[str]] = {
+            built_strings: dict[str, list[str]] = {
                 lang: [] for lang in header_class.supported_langs()
             }
-            built_constants: List[str] = []
+            built_constants: list[str] = []
 
             for i, r in enumerate(routine_infos):
                 if r is None:
                     raise SsbCompilerError(f(_("Routine {i} not found.")))
 
-            input_routine_structure: List[
-                tuple[SsbRoutineInfo, str, List[SsbOperation]]
+            input_routine_structure: list[
+                tuple[SsbRoutineInfo, str, list[SsbOperation]]
             ] = list(zip(routine_infos, named_coroutines, routine_ops))
 
             # The cursor position of the written routine opcodes.
@@ -211,8 +210,8 @@ class ScriptCompiler:
                     raise SsbCompilerError(f(_("Unknown coroutine {err}"))) from err
 
             # Build Routine Infos
-            built_routine_info_with_offset: List[tuple[int, SsbRoutineInfo]] = []
-            built_routine_ops: List[List[SsbOperation]] = []
+            built_routine_info_with_offset: list[tuple[int, SsbRoutineInfo]] = []
+            built_routine_ops: list[list[SsbOperation]] = []
             # A list of lists for ALL opcodes that maps all opcode indices to their memory address.
             opcode_index_mem_offset_mapping: dict[int, int] = {}
             bytes_written_last_rtn = 0
@@ -231,7 +230,7 @@ class ScriptCompiler:
 
                 routine_start_cursor = opcode_cursor
                 # Build OPs
-                built_ops: List[SkyTempleSsbOperation] = []
+                built_ops: list[SkyTempleSsbOperation] = []
                 if len(input_ops) == 0:
                     # ALIAS ROUTINE. This alias the PREVIOUS routine
                     routine_start_cursor = opcode_cursor - bytes_written_last_rtn
@@ -245,7 +244,7 @@ class ScriptCompiler:
                             raise SsbCompilerError(
                                 f(_("Unknown operation {in_op.op_code.name}."))
                             )
-                        op_codes: List[
+                        op_codes: list[
                             Pmd2ScriptOpCode
                         ] = self.rom_data.script_data.op_codes__by_name[
                             in_op.op_code.name
@@ -277,7 +276,7 @@ class ScriptCompiler:
                                 )
                         else:
                             op_code = op_codes[0]
-                        new_params: List[int] = []
+                        new_params: list[int] = []
                         op_len = 2
                         if op_code.params == -1:
                             # Handle variable length opcode by inserting the number of opcodes as the first argument.
@@ -364,8 +363,8 @@ class ScriptCompiler:
     def _parse_param(
         self,
         param: SsbOpParam,
-        built_strings: dict[str, List[str]],
-        built_constants: List[str],
+        built_strings: dict[str, list[str]],
+        built_constants: list[str],
     ) -> int:
         if isinstance(param, int):
             return param
@@ -406,7 +405,7 @@ class ScriptCompiler:
         )
 
     @staticmethod
-    def _correct_param_list_len(params: List[SsbOpParam]) -> int:
+    def _correct_param_list_len(params: list[SsbOpParam]) -> int:
         """Returns the correct length of a parameter list (positon markers count as 4"""
         len = 0
         for p in params:

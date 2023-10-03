@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -80,7 +80,7 @@ jobs:
           key: py3.11-${{ github.run_id }}
       - uses: psf/black@stable
         with:
-          options: "--check -t py38 --extend-exclude _resources/pmdsky-debug"
+          options: "--check -t py39 --extend-exclude _resources/pmdsky-debug"
           src: "skytemple_files"
 
   import-check:
@@ -113,7 +113,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -139,7 +139,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
         native: [true, false]
     steps:
     - uses: actions/checkout@v4
@@ -183,7 +183,7 @@ jobs:
 #    strategy:
 #      fail-fast: false
 #      matrix:
-#        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
+#        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
 #        native: [true, false]
 #    steps:
 #    - uses: actions/checkout@v4
@@ -259,7 +259,7 @@ jobs:
       - name: Build Python wheels
         uses: RalfG/python-wheels-manylinux-build@v0.5.0-manylinux2014_x86_64
         with:
-          python-versions: 'cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311'
+          python-versions: 'cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312'
       - name: Upload wheels
         uses: actions/upload-artifact@v3
         with:

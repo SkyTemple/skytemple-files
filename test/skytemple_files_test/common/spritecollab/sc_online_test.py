@@ -60,7 +60,6 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
         else:
             self.assertIsInstance(v, ftype)
 
-    @skipIf(sys.version_info < (3, 9, 0), "type checks incompatibilities in python 3.8")
     async def test_fetch_config(self):
         async with self.client as session:
             result = await session.fetch_config()

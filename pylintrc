@@ -5,6 +5,8 @@ jobs=0
 suggestion-mode=yes
 
 disable=
+    # Broken: https://github.com/pylint-dev/pylint/issues/9106
+    inherit-non-class,
     # This one seems to be broken with make_user_err.
     raising-non-exception,
     # Not required:

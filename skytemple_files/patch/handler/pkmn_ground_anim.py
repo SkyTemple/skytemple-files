@@ -116,7 +116,7 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
                     start_table = START_TABLE_JP
                     lst_func = LST_FUNC_JP
 
-            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b'')
+            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b"")
             ov = table[11]
             ov11 = bytearray(rom.files[ov.fileID])
 

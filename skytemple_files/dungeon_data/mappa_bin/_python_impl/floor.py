@@ -127,9 +127,7 @@ class MappaFloor(
         self.unk_items2: MappaItemList = unk_items2
 
     @classmethod
-    def from_mappa(
-        cls, read: MappaBinReadContainer, floor_data: bytes
-    ) -> MappaFloor:
+    def from_mappa(cls, read: MappaBinReadContainer, floor_data: bytes) -> MappaFloor:
         return cls(
             cls._from_cache(
                 read,

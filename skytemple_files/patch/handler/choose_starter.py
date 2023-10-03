@@ -130,7 +130,7 @@ class ChooseStarterPatchHandler(AbstractPatchHandler):
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
 
-        table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b'')
+        table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b"")
         ov = table[13]
         ov.ramSize = overlay_size + OVERLAY13_ADD_SIZE
         rom.arm9OverlayTable = saveOverlayTable(table)

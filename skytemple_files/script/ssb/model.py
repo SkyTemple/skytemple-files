@@ -93,7 +93,7 @@ class Ssb:
             # Empty model mode, for the ScriptCompiler.
             if if_empty_supported_langs is None:
                 if_empty_supported_langs = []
-            self.original_binary_data = b''
+            self.original_binary_data = b""
             self.routine_info: list[tuple[int, SsbRoutineInfo]] = []
             self.routine_ops: list[list[SkyTempleSsbOperation]] = []
             self.constants: list[str] = []

@@ -68,7 +68,7 @@ class Wte(Sir0Serializable, AutoString):
             self.unk10 = u32(0)
             self.width = u16(0)
             self.height = u16(0)
-            self.image_data = b''
+            self.image_data = b""
             self.palette = []
             return
 

@@ -78,9 +78,7 @@ class SpriteBotSheet:
     @classmethod
     def _iter_portraits(
         cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int
-    ) -> Generator[
-        tuple[KaoImageProtocol | None, KaoImageProtocol | None], None, None
-    ]:
+    ) -> Generator[tuple[KaoImageProtocol | None, KaoImageProtocol | None], None, None]:
         for i in range(0, SUBENTRIES, 2):
             yield kao.get(portrait_item_id, i), kao.get(portrait_item_id, i + 1)
 

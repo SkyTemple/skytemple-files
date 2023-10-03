@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 
-
 class RleNibbleDecompressor:
     def __init__(self, compressed_data: bytes, decompressed_size: int):
         self.compressed_data = compressed_data

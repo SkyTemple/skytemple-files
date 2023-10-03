@@ -748,9 +748,7 @@ class PortraitsXml(XmlConverter[list[Optional[KaoImageProtocol]]]):
         return xml
 
     @classmethod
-    def from_xml(
-        cls, xml: Element, value_to_update: Sequence[KaoImageProtocol | None]
-    ):
+    def from_xml(cls, xml: Element, value_to_update: Sequence[KaoImageProtocol | None]):
         if len(value_to_update) != len(xml):
             raise XmlValidateError(
                 f(

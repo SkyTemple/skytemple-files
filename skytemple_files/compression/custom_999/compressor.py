@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 
-
 class Custom999Compressor:
     def __init__(self, uncompressed_data: bytes):
         if not isinstance(uncompressed_data, memoryview):

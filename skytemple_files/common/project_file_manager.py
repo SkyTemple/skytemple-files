@@ -92,9 +92,7 @@ class ProjectFileManager:
             source_map = SourceMap.create_empty()
         return source_map
 
-    def explorerscript_save(
-        self, filename, code, source_map: SourceMap | None = None
-    ):
+    def explorerscript_save(self, filename, code, source_map: SourceMap | None = None):
         """Save the ExplorerScript file and it's source map if given"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
         with open_utf8(filename, "w") as f:

@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 
-
 class DeprecatedToBeRemovedWarning(DeprecationWarning):
     """
     A special DeprecationWarning that includes a version in which the deprecated functionality is no longer

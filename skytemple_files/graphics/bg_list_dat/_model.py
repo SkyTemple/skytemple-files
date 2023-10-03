@@ -61,9 +61,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
     def __str__(self) -> str:
         return f"BPL: {self.bpl_name}, BPC: {self.bpc_name}, BMA: {self.bma_name}, BPAs: {self.bpa_names}"
 
-    def get_bpl(
-        self, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> Bpl:
+    def get_bpl(self, rom_or_directory_root: str | RomFileProviderProtocol) -> Bpl:
         """
         Returns the BPL model that is referenced in this entry.
         Can be serialized with the BPL DataHandler. Original filename in self.bpl_name.
@@ -98,9 +96,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
             tiling_height=bpc_tiling_height,
         )
 
-    def get_bma(
-        self, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> Bma:
+    def get_bma(self, rom_or_directory_root: str | RomFileProviderProtocol) -> Bma:
         """
         Returns the BMA model that is referenced in this entry.
         Can be serialized with the BMA DataHandler. Original filename in self.bma_name.

@@ -60,9 +60,7 @@ class CharaWanHandler(DataHandler[WanFile]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))  # type: ignore
 
     @classmethod
-    def export_sheets(
-        cls, out_dir: str, wan: WanFile, sprite_def: Pmd2Sprite
-    ) -> None:
+    def export_sheets(cls, out_dir: str, wan: WanFile, sprite_def: Pmd2Sprite) -> None:
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), "Shadow.png"))
         anim_name_map: list[int] = []
         for index_index, index in sprite_def.indices.items():

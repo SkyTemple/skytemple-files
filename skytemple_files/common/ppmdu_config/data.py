@@ -153,9 +153,7 @@ class Pmd2PatchParameterType(Enum):
 
 
 class Pmd2PatchParameterOption(AutoString):
-    def __init__(
-        self, type: Pmd2PatchParameterType, label: str, value: int | str
-    ):
+    def __init__(self, type: Pmd2PatchParameterType, label: str, value: int | str):
         self.type = type
         self.label = label
         self.value = value

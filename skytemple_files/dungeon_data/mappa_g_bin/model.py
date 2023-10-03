@@ -61,9 +61,7 @@ class MappaGFloor(AutoString):
         self.layout: MappaGFloorLayout = layout
 
     @classmethod
-    def from_mappa(
-        cls, read: MappaGBinReadContainer, floor_data: bytes
-    ) -> MappaGFloor:
+    def from_mappa(cls, read: MappaGBinReadContainer, floor_data: bytes) -> MappaGFloor:
         return cls(
             MappaGFloorLayout.from_mappa(
                 read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)

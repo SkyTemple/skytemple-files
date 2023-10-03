@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 from range_typed_integers import u16
 

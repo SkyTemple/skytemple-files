@@ -23,7 +23,6 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
 from __future__ import annotations
 
 from enum import Enum
-from typing import List
 
 from range_typed_integers import u8
 

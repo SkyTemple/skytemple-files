@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional, TypeVar
+from typing import Any, TypeVar
 
 from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2BinPackFile,

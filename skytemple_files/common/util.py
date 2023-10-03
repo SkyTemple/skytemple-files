@@ -33,11 +33,8 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Dict,
-    List,
     Optional,
     Protocol,
-    Tuple,
     TypeVar,
     Union,
     overload,
@@ -47,7 +44,6 @@ from collections.abc import Generator, Iterable, Sequence
 
 from pmdsky_debug_py.protocol import SectionProtocol
 
-import sys
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 from PIL import Image

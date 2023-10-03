@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import no_type_check, List
+from typing import no_type_check
 
 from range_typed_integers import u8, i8, i16
 

@@ -19,7 +19,6 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from collections import OrderedDict
-from typing import Dict, Optional
 
 from skytemple_files.common.ppmdu_config.data import (
     LANG_DE,

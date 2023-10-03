@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import Optional, TypeVar, Union, Dict
+from typing import TypeVar, Union
 from collections.abc import Iterable
 
 from explorerscript.ssb_converting.ssb_data_types import (

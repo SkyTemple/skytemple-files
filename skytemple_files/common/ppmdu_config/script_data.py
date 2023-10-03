@@ -22,7 +22,6 @@ from __future__ import annotations
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import warnings
 from enum import Enum, IntEnum
-from typing import Dict, List, Optional
 
 from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16

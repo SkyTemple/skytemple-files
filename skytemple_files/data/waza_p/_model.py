@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Union, List, Tuple
 from collections.abc import MutableSequence, Sequence, Iterable
 
 from range_typed_integers import u32_checked, u16, u32, u8

@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
 from skytemple_files.dungeon_data.mappa_g_bin.model import (

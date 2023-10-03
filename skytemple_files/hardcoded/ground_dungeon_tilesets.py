@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import cast, List, Optional, Tuple
+from typing import cast
 
 from range_typed_integers import i16, u8, u32
 

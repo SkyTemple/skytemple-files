@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, Optional, List, Tuple, no_type_check
+from typing import no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image

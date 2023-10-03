@@ -22,7 +22,7 @@ For now, the documentation of fields is in the pmd2data.xml.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 from re import Pattern
 
 import pmdsky_debug_py

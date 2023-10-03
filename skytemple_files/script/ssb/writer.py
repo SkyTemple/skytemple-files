@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import logging
 import math
-from typing import Dict, Type
 
 from range_typed_integers import u16_checked, u16
 

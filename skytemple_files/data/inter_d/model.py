@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List
 
 from range_typed_integers import u8, u16
 

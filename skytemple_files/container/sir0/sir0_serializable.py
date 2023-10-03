@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Optional, Tuple, runtime_checkable, Protocol
+from typing import runtime_checkable, Protocol
 
 from range_typed_integers import u32
 

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Any, Dict, Optional, Union
+from typing import Any
 from collections.abc import AsyncGenerator
 
 import aiohttp

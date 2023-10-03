@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from ndspy.rom import NintendoDSRom
 from pmdsky_debug_py.protocol import SectionProtocol, Symbol

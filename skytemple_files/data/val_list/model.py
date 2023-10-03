@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Literal, Union
+from typing import Literal
 
 from skytemple_files.common.util import (
     AutoString,

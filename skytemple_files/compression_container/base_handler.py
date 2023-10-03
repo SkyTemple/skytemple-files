@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Type, TypeVar
+from typing import TypeVar
 
 from skytemple_files.common.types.hybrid_data_handler import (
     HybridDataHandler,

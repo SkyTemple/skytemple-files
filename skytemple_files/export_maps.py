@@ -44,7 +44,6 @@ import os
 import sys
 import traceback
 import warnings
-from typing import Optional, List, Dict
 
 from PIL import Image, ImageDraw
 from ndspy.rom import NintendoDSRom

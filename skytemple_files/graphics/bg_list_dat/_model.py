@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import os
 from pathlib import PurePosixPath
-from typing import List, Optional, Union
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
 from skytemple_files.common.util import iter_bytes, read_bytes

@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, TypeVar, Tuple
+from typing import Protocol, TypeVar
 from collections.abc import Sequence
 
 from PIL import Image

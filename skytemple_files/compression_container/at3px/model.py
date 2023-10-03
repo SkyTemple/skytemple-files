@@ -20,7 +20,6 @@ from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.util import read_bytes, read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
-from typing import Optional
 
 
 class At3px(CommonAt):

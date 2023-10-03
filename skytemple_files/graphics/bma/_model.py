@@ -19,7 +19,6 @@ from __future__ import annotations
 import copy
 import itertools
 import math
-from typing import List, Tuple, Optional
 from collections.abc import Sequence
 
 from PIL import Image, ImageDraw, ImageFont

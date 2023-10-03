@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.compression.bma_collision_rle.compressor import (
     BmaCollisionRleCompressor,

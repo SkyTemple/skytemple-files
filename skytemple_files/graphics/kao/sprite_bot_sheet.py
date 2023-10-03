@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List, Optional, Tuple
+from typing import Callable
 from collections.abc import Generator
 
 from PIL import Image

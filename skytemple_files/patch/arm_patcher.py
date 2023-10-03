@@ -23,7 +23,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from typing import Dict, Union
 
 from ndspy.rom import NintendoDSRom
 from pmdsky_debug_py.protocol import SectionProtocol

@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Optional, Protocol, Tuple, TypeVar
+from typing import Protocol, TypeVar
 from collections.abc import Iterator
 
 from PIL.Image import Image

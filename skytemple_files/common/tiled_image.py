@@ -21,7 +21,6 @@ import logging
 import math
 import typing
 from itertools import chain
-from typing import List, Optional, Tuple, Union
 from collections.abc import Sequence
 
 from PIL import Image

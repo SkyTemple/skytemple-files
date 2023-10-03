@@ -18,7 +18,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.compression.bma_layer_nrl.compressor import BmaLayerNrlCompressor
 from skytemple_files.compression.bma_layer_nrl.decompressor import (

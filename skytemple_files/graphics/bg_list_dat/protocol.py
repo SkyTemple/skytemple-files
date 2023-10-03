@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Optional, Protocol, TypeVar, Union
+from typing import Protocol, TypeVar
 from collections.abc import Sequence
 
 from skytemple_files.common.protocol import RomFileProviderProtocol

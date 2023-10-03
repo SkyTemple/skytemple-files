@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import codecs
 import string
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 # prepare encoding map - First fill with ascii printable
 _encode_table = {letter: bytes(letter, "ascii") for letter in string.printable}

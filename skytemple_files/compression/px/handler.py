@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.compression.px.compressor import PxCompressor
 from skytemple_files.compression.px.decompressor import PxDecompressor

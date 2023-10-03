@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import logging
 from enum import Enum
-from typing import Optional, Tuple, List
 
 from PIL import Image
 from range_typed_integers import u8_checked, u16_checked, u8, u32, u16

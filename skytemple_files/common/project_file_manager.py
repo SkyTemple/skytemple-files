@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import json
 import os
-from typing import List, Optional, Tuple
 
 from appdirs import user_config_dir
 from explorerscript import EXPLORERSCRIPT_EXT

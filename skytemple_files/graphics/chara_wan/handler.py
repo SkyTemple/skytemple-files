@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import os
-from typing import IO, List, Union
+from typing import IO
 
 from PIL import Image
 

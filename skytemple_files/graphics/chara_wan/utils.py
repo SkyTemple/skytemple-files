@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import typing
-from typing import Optional, Tuple, Union
+from typing import Union
 
 from PIL import Image
 

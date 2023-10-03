@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from range_typed_integers import u8_checked, u32_checked, u32
-from typing import Optional, Tuple, List
 from collections.abc import Sequence
 
 from range_typed_integers import u8_checked, u32_checked, u8

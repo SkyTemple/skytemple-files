@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 import math
-from typing import Optional, List
 from collections.abc import Sequence
 
 from PIL import Image

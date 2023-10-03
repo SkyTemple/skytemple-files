@@ -20,7 +20,6 @@ from range_typed_integers import u16, u16_checked
 
 from skytemple_files.common.util import read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
-from typing import Optional
 
 
 class BpcTilemapCompressionContainer(CommonAt):

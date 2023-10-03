@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.common.util import read_u8
 from skytemple_files.compression.generic_nrl import (

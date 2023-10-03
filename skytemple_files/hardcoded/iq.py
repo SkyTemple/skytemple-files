@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from itertools import chain
-from typing import List
 
 from range_typed_integers import u8_checked, u16_checked, i32, i16, u16, u8
 

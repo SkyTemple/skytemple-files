@@ -38,13 +38,8 @@ from io import BytesIO
 from typing import (
     Any,
     Callable,
-    Dict,
-    List,
     Literal,
-    Optional,
-    Tuple,
     TypeVar,
-    Union,
     cast,
     overload,
 )

@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import List, cast
+from typing import cast
 from collections.abc import Sequence
 
 from range_typed_integers import u32

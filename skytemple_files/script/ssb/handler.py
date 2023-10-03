@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Type
 
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,

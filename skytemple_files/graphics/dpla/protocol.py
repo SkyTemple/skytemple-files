@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
 from itertools import islice
-from typing import Protocol, List
+from typing import Protocol
 from collections.abc import Sequence
 
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable

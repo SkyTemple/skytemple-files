@@ -19,7 +19,7 @@ from __future__ import annotations
 import gettext
 from abc import ABC, abstractmethod
 from inspect import currentframe
-from typing import Optional, Any, List
+from typing import Any
 
 
 class AbstractLocaleManager(ABC):

@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.common.types.hybrid_data_handler import HybridSir0DataHandler
 from skytemple_files.common.util import OptionalKwargs

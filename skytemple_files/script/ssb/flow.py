@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import (
     SsbGraphMinimizer,

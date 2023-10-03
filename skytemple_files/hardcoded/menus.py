@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 from enum import Enum, auto
-from typing import Any, List
+from typing import Any
 
 from pmdsky_debug_py.protocol import (
     Overlay1DataProtocol,

@@ -21,10 +21,6 @@ from enum import Enum
 from typing import (
     Protocol,
     TypeVar,
-    List,
-    Optional,
-    Dict,
-    Union,
 )
 from collections.abc import Sequence, MutableSequence
 

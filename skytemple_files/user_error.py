@@ -6,7 +6,7 @@ but not be treated or reported as bugs.
 from __future__ import annotations
 
 # User errors have this attribute defined.
-from typing import Type, TypeVar
+from typing import TypeVar
 
 USER_ERROR_MARK = "_skytemple__user_error"
 

@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import cast, List
+from typing import cast
 from collections.abc import Sequence
 
 from pmdsky_debug_py.protocol import Symbol

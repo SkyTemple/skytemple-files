@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import Protocol, List, Optional
+from typing import Protocol
 
 from pmdsky_debug_py.eu import EuArm9Section, EuOverlay11Section
 from pmdsky_debug_py.jp import JpArm9Section, JpOverlay11Section

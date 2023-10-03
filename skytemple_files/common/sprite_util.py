@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 import math
-from typing import Optional, List
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.container.bin_pack.model import BinPack

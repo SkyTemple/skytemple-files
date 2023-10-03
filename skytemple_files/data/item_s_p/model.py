@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from enum import Enum, auto
-from typing import Optional, Tuple, List
 from collections.abc import Sequence
 
 from range_typed_integers import u16, u32

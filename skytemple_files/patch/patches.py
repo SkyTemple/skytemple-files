@@ -22,7 +22,7 @@ import shutil
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Any, Dict, List, Optional
+from typing import Any
 from collections.abc import Generator
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError

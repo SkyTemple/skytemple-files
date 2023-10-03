@@ -19,7 +19,6 @@ from __future__ import annotations
 import itertools
 from abc import ABC, abstractmethod
 from itertools import zip_longest
-from typing import List, Tuple
 
 from PIL import Image
 

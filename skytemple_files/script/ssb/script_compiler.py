@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Dict, Optional, Tuple, Type
+from typing import Callable, Optional
 
 from explorerscript.error import ParseError, SsbCompilerError
 from explorerscript.source_map import SourceMap

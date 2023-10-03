@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List, Dict
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, u32_checked

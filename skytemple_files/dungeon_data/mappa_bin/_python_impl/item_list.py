@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.util import (
     AutoString,

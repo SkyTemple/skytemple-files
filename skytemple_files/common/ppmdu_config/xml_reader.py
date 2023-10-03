@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 

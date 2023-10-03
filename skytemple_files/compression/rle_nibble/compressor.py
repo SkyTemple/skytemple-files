@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import List
 
 MAX_COPY = 0x7
 MAX_SINGLE = 0x7

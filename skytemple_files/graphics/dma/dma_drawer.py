@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import itertools
 from random import choice
-from typing import List, Optional, Union
 from collections.abc import Iterable, Sequence
 
 from PIL import Image

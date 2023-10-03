@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.compression_container.base_handler import (
     CompressionContainerHandler,

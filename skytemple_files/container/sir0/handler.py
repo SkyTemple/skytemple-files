@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, List, Type, TypeVar
+from typing import TypeVar
 
 from range_typed_integers import u32
 

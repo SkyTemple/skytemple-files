@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.compression.generic_nrl.compressor import GenericNrlCompressor
 from skytemple_files.compression.generic_nrl.decompressor import GenericNrlDecompressor

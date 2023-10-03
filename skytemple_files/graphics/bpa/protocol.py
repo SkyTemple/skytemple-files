@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Protocol, TypeVar, runtime_checkable, Optional
+from typing import Protocol, TypeVar, runtime_checkable
 from collections.abc import Sequence
 
 from PIL import Image

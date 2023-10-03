@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Optional, List, Tuple
 
 from PIL import Image
 from range_typed_integers import u32

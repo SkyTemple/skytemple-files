@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import os
 from enum import Enum, auto
-from typing import List, Optional
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs, read_bytes

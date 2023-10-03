@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional, List, Tuple
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (

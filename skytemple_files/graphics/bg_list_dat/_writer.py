@@ -19,7 +19,6 @@
 from __future__ import annotations
 
 import string
-from typing import Optional
 
 from skytemple_files.graphics.bg_list_dat._model import BgList
 

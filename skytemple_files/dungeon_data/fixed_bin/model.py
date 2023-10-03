@@ -19,7 +19,6 @@ from __future__ import annotations
 import itertools
 from abc import ABC, abstractmethod
 from enum import Enum, auto
-from typing import Optional, List, Tuple
 
 from range_typed_integers import u16_checked, u16, u32
 

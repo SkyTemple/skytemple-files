@@ -20,7 +20,6 @@ from __future__ import annotations
 import math
 import warnings
 from collections.abc import Iterator
-from typing import Optional, Tuple, List, Union, Dict
 
 from PIL import Image
 from range_typed_integers import i32

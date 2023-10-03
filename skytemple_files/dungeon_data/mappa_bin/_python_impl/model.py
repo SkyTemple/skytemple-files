@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from itertools import chain
-from typing import Optional, List, Tuple
 
 from range_typed_integers import u32_checked, u32
 

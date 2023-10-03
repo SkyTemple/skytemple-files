@@ -20,7 +20,7 @@ This can also handle partial data in the XML!
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, no_type_check, TypedDict, List, Optional
+from typing import no_type_check, TypedDict
 from xml.etree.ElementTree import Element
 
 from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked, u8

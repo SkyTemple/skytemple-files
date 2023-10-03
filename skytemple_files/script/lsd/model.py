@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import string
-from typing import Optional, List
 
 from range_typed_integers import u16_checked
 

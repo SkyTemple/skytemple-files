@@ -32,7 +32,7 @@ from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
+ORIGINAL_BYTESEQ = b"\x01 \xa0\xe3"
 OFFSET_EU = 0x158F0
 OFFSET_US = 0x1587C
 OFFSET_JP = 0x157D4
@@ -57,7 +57,7 @@ class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.2.2"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

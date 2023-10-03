@@ -17,7 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import cast, List, Sequence
+from typing import cast, List
+from collections.abc import Sequence
 
 from pmdsky_debug_py.protocol import Symbol
 from range_typed_integers import u16, u8
@@ -30,10 +31,10 @@ class HardcodedRecruitmentTables:
     @classmethod
     def get_monster_species_list(
         cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> List[u16]:
+    ) -> list[u16]:
         """Returns the list of Pokémon species from the recruitment table."""
         return cast(
-            List[u16],
+            list[u16],
             cls._get_generic(
                 overlay11bin,
                 config.bin_sections.overlay11.data.RECRUITMENT_TABLE_SPECIES,
@@ -43,7 +44,7 @@ class HardcodedRecruitmentTables:
 
     @classmethod
     def set_monster_species_list(
-        cls, value: List[u16], overlay11bin: bytearray, config: Pmd2Data
+        cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the recruitment species list.
@@ -59,10 +60,10 @@ class HardcodedRecruitmentTables:
     @classmethod
     def get_monster_levels_list(
         cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> List[u16]:
+    ) -> list[u16]:
         """Returns the list of Pokémon levels from the recruitment table."""
         return cast(
-            List[u16],
+            list[u16],
             cls._get_generic(
                 overlay11bin,
                 config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LEVELS,
@@ -72,7 +73,7 @@ class HardcodedRecruitmentTables:
 
     @classmethod
     def set_monster_levels_list(
-        cls, value: List[u16], overlay11bin: bytearray, config: Pmd2Data
+        cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the recruitment levels list.
@@ -88,10 +89,10 @@ class HardcodedRecruitmentTables:
     @classmethod
     def get_monster_locations_list(
         cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> List[u8]:
+    ) -> list[u8]:
         """Returns the list of Pokémon locations from the recruitment table."""
         return cast(
-            List[u8],
+            list[u8],
             cls._get_generic(
                 overlay11bin,
                 config.bin_sections.overlay11.data.RECRUITMENT_TABLE_LOCATIONS,
@@ -101,7 +102,7 @@ class HardcodedRecruitmentTables:
 
     @classmethod
     def set_monster_locations_list(
-        cls, value: List[u8], overlay11bin: bytearray, config: Pmd2Data
+        cls, value: list[u8], overlay11bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the recruitment locations list.
@@ -115,7 +116,7 @@ class HardcodedRecruitmentTables:
         )
 
     @staticmethod
-    def _get_generic(ov11: bytes, block: Symbol, bytelen: int) -> List[int]:
+    def _get_generic(ov11: bytes, block: Symbol, bytelen: int) -> list[int]:
         lst = []
         for i in range(block.address, block.address + block.length, bytelen):
             lst.append(

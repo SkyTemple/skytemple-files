@@ -18,7 +18,8 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from io import BytesIO
-from typing import Any, AsyncGenerator, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union
+from collections.abc import AsyncGenerator
 
 import aiohttp
 from gql.transport import AsyncTransport
@@ -34,7 +35,7 @@ class AioRequestAdapter(ABC):
         ...
 
     @abstractmethod
-    def graphql_transport(self, url: str) -> Union[AsyncTransport, GraphQLSchema]:
+    def graphql_transport(self, url: str) -> AsyncTransport | GraphQLSchema:
         """Returns the transport or a local GraphQL schema to execute against."""
         ...
 
@@ -81,13 +82,13 @@ class CachedRequestAdapter(AioRequestAdapter):
             self.cache[url] = await self._request_adapter.fetch_bin(url)
         return self.cache[url]
 
-    def graphql_transport(self, url: str) -> "CachedAIOHTTPTransport":
+    def graphql_transport(self, url: str) -> CachedAIOHTTPTransport:
         return CachedAIOHTTPTransport(url, self, use_certifi_ssl=self.use_certifi_ssl)
 
 
 class CachedAIOHTTPTransport(AsyncTransport):
     _transport: AsyncTransport
-    _cache: "CachedRequestAdapter"
+    _cache: CachedRequestAdapter
 
     async def connect(self):
         return await self._transport.connect()
@@ -95,7 +96,7 @@ class CachedAIOHTTPTransport(AsyncTransport):
     async def close(self):
         return await self._transport.close()
 
-    def __init__(self, url: str, cache: "CachedRequestAdapter", use_certifi_ssl=False):
+    def __init__(self, url: str, cache: CachedRequestAdapter, use_certifi_ssl=False):
         if use_certifi_ssl:
             import certifi, ssl  # type: ignore  #  pylint: disable=no-name-in-module,no-member,import-error
 
@@ -109,8 +110,8 @@ class CachedAIOHTTPTransport(AsyncTransport):
     async def execute(
         self,
         document: DocumentNode,
-        variable_values: Optional[Dict[str, Any]] = None,
-        operation_name: Optional[str] = None,
+        variable_values: dict[str, Any] | None = None,
+        operation_name: str | None = None,
     ) -> ExecutionResult:
         cache_key = (document, variable_values, operation_name)
         if cache_key not in self._cache.cache:
@@ -122,8 +123,8 @@ class CachedAIOHTTPTransport(AsyncTransport):
     def subscribe(
         self,
         document: DocumentNode,
-        variable_values: Optional[Dict[str, Any]] = None,
-        operation_name: Optional[str] = None,
+        variable_values: dict[str, Any] | None = None,
+        operation_name: str | None = None,
     ) -> AsyncGenerator[ExecutionResult, None]:
         # We don't cache these.
         return self._transport.subscribe(document, variable_values, operation_name)

@@ -43,7 +43,7 @@ class BmaLayerNrlDecompressor:
         self.cursor = 0
         self.bytes_written = 0
 
-    def decompress(self) -> Tuple[bytes, int]:
+    def decompress(self) -> tuple[bytes, int]:
         self.reset()
         if DEBUG:
             print(f"BMA Layer NRL decompression start....")

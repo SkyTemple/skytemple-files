@@ -36,6 +36,6 @@ class PxHandler:
         return PxDecompressor(compressed_data, flags).decompress()
 
     @classmethod
-    def compress(cls, uncompressed_data: bytes) -> Tuple[bytes, bytes]:
+    def compress(cls, uncompressed_data: bytes) -> tuple[bytes, bytes]:
         """Compresses data as PX and returns the control flags (0) and data (1)."""
         return PxCompressor(uncompressed_data).compress()

@@ -25,10 +25,10 @@ class DeprecatedToBeRemovedWarning(DeprecationWarning):
     expected to work.
     """
 
-    expected_removal: Tuple[int, int, int]
+    expected_removal: tuple[int, int, int]
     message: str
 
-    def __init__(self, message: str, expected_removal: Tuple[int, int, int]):
+    def __init__(self, message: str, expected_removal: tuple[int, int, int]):
         self.message = message
         self.expected_removal = expected_removal
 

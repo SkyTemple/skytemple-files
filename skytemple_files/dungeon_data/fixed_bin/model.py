@@ -307,7 +307,7 @@ class TileRuleType(Enum):
 
 
 class FixedFloorActionRule(ABC, AutoString):
-    def __init__(self, direction: Optional[Pmd2ScriptDirection]):
+    def __init__(self, direction: Pmd2ScriptDirection | None):
         self.direction = direction
 
     @abstractmethod
@@ -322,7 +322,7 @@ class FixedFloorActionRule(ABC, AutoString):
 
 class TileRule(FixedFloorActionRule):
     def __init__(
-        self, tr_type: TileRuleType, direction: Optional[Pmd2ScriptDirection] = None
+        self, tr_type: TileRuleType, direction: Pmd2ScriptDirection | None = None
     ):
         super().__init__(direction)
         self.tr_type = tr_type
@@ -333,7 +333,7 @@ class TileRule(FixedFloorActionRule):
 
 class EntityRule(FixedFloorActionRule):
     def __init__(
-        self, entity_rule_id: int, direction: Optional[Pmd2ScriptDirection] = None
+        self, entity_rule_id: int, direction: Pmd2ScriptDirection | None = None
     ):
         super().__init__(direction)
         self.entity_rule_id = entity_rule_id
@@ -348,8 +348,8 @@ class DirectRule(FixedFloorActionRule):
     def __init__(
         self,
         tile: Tile,
-        itmtpmon_id: Optional[int],
-        direction: Optional[Pmd2ScriptDirection] = None,
+        itmtpmon_id: int | None,
+        direction: Pmd2ScriptDirection | None = None,
     ):
         super().__init__(direction)
         self.tile = tile
@@ -363,7 +363,7 @@ class FixedFloor:
     width: u16
     height: u16
     unk3: u16
-    actions: List[FixedFloorActionRule]
+    actions: list[FixedFloorActionRule]
 
     def __init__(self, data: bytes, floor_pointer: u32):
         if data is not None:
@@ -375,7 +375,7 @@ class FixedFloor:
             )
 
     @classmethod
-    def new(cls, width: u16, height: u16, actions: List[FixedFloorActionRule]):
+    def new(cls, width: u16, height: u16, actions: list[FixedFloorActionRule]):
         n = cls(None, None)  # type: ignore
         n.width = width
         n.height = height
@@ -384,9 +384,9 @@ class FixedFloor:
 
     def read_actions(
         self, data: bytes, action_list_start: int, max_actions: int
-    ) -> List[FixedFloorActionRule]:
+    ) -> list[FixedFloorActionRule]:
         cursor = action_list_start
-        actions: List[FixedFloorActionRule] = []
+        actions: list[FixedFloorActionRule] = []
         while len(actions) < max_actions:
             action, repeat_times = self._read_action(data, cursor)
             cursor += 4
@@ -398,7 +398,7 @@ class FixedFloor:
 
     def _read_action(
         self, data: bytes, action_pointer: int
-    ) -> Tuple[FixedFloorActionRule, int]:
+    ) -> tuple[FixedFloorActionRule, int]:
         action_value = read_u16(data, action_pointer)
         action_id = action_value & 0xFFF
         parameter = action_value >> 0xC
@@ -449,7 +449,7 @@ class FixedFloor:
         self.height = height
 
     def _actions_to_bytes(self) -> bytes:
-        actions: List[Tuple[FixedFloorActionRule, int]] = shrink_list(self.actions)
+        actions: list[tuple[FixedFloorActionRule, int]] = shrink_list(self.actions)
         buffer = bytearray(4 * len(actions))
 
         for i, (action, n_times) in enumerate(actions):
@@ -470,7 +470,7 @@ class FixedBin(Sir0Serializable):
             cursor += 4
             assert cursor < len(data)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.dungeon_data.fixed_bin.writer import FixedBinWriter
 
         return FixedBinWriter(self).write()  # type: ignore
@@ -480,5 +480,5 @@ class FixedBin(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "FixedBin":
+    ) -> FixedBin:
         return cls(content_data, data_pointer)  # type: ignore

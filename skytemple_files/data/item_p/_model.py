@@ -16,7 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, List, Tuple, Sequence
+from typing import Optional, List, Tuple
+from collections.abc import Sequence
 
 from range_typed_integers import u16, u8, u32
 
@@ -126,7 +127,7 @@ class ItemP(ItemPProtocol[ItemPEntry], Sir0Serializable, AutoString):
     def __init__(self, data: bytes, pointer_to_pointers: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.item_list: List[ItemPEntry] = []
+        self.item_list: list[ItemPEntry] = []
         for x in range(0, len(data), ITEM_P_ENTRY_SIZE):
             self.item_list.append(ItemPEntry(data[x : x + ITEM_P_ENTRY_SIZE]))
 
@@ -135,11 +136,11 @@ class ItemP(ItemPProtocol[ItemPEntry], Sir0Serializable, AutoString):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
-        pointer_offsets: List[u32] = []
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
+        pointer_offsets: list[u32] = []
         header_offset = u32(0)
         data = bytearray(0)
         for i in self.item_list:

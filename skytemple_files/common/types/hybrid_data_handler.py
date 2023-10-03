@@ -49,32 +49,32 @@ class HybridDataHandler(Generic[P], DataHandler[P], ABC):
 
     @classmethod
     @abstractmethod
-    def load_python_model(cls) -> Type[P]:
+    def load_python_model(cls) -> type[P]:
         pass
 
     @classmethod
     @abstractmethod
-    def load_native_model(cls) -> Type[P]:
+    def load_native_model(cls) -> type[P]:
         pass
 
     @classmethod
     @abstractmethod
-    def load_python_writer(cls) -> Type[WriterProtocol[P]]:
+    def load_python_writer(cls) -> type[WriterProtocol[P]]:
         pass
 
     @classmethod
     @abstractmethod
-    def load_native_writer(cls) -> Type[WriterProtocol[P]]:
+    def load_native_writer(cls) -> type[WriterProtocol[P]]:
         pass
 
     @classmethod
-    def get_model_cls(cls) -> Type[P]:
+    def get_model_cls(cls) -> type[P]:
         if get_implementation_type() == ImplementationType.NATIVE:
             return cls.load_native_model()
         return cls.load_python_model()
 
     @classmethod
-    def get_writer_cls(cls) -> Type[WriterProtocol[P]]:
+    def get_writer_cls(cls) -> type[WriterProtocol[P]]:
         if get_implementation_type() == ImplementationType.NATIVE:
             return cls.load_native_writer()
         return cls.load_python_writer()
@@ -92,16 +92,16 @@ class HybridSir0DataHandler(Generic[PS], DataHandler[PS]):
 
     @classmethod
     @abstractmethod
-    def load_python_model(cls) -> Type[PS]:
+    def load_python_model(cls) -> type[PS]:
         pass
 
     @classmethod
     @abstractmethod
-    def load_native_model(cls) -> Type[PS]:
+    def load_native_model(cls) -> type[PS]:
         pass
 
     @classmethod
-    def get_model_cls(cls) -> Type[PS]:
+    def get_model_cls(cls) -> type[PS]:
         if get_implementation_type() == ImplementationType.NATIVE:
             return cls.load_native_model()
         return cls.load_python_model()

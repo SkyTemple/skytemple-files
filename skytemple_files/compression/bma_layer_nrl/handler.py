@@ -34,7 +34,7 @@ class BmaLayerNrlHandler:
     @classmethod
     def decompress(
         cls, compressed_data: bytes, stop_when_size: int
-    ) -> Tuple[bytes, int]:
+    ) -> tuple[bytes, int]:
         """todo. Stops when stop_when_size bytes have been decompressed.
         Second return is compressed original size.
         Returns 16 bit LE integer list. Input is compressed as pair24 (pairs of two 12 bit ints).

@@ -48,14 +48,14 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         bpl_name: str,
         bpc_name: str,
         bma_name: str,
-        bpa_names: List[Optional[str]],
+        bpa_names: list[str | None],
     ):
         # ALL names can only be 1-8 character ASCII strings with only uppercase
         # letters. This is checked during serialization in the writer.
         self.bpl_name = bpl_name
         self.bpc_name = bpc_name
         self.bma_name = bma_name
-        self.bpa_names: List[Optional[str]] = bpa_names
+        self.bpa_names: list[str | None] = bpa_names
         # There can only be 8 BPAs. There isn't more space!
         assert len(bpa_names) == 8
 
@@ -63,7 +63,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         return f"BPL: {self.bpl_name}, BPC: {self.bpc_name}, BMA: {self.bma_name}, BPAs: {self.bpa_names}"
 
     def get_bpl(
-        self, rom_or_directory_root: Union[str, RomFileProviderProtocol]
+        self, rom_or_directory_root: str | RomFileProviderProtocol
     ) -> Bpl:
         """
         Returns the BPL model that is referenced in this entry.
@@ -80,7 +80,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
 
     def get_bpc(
         self,
-        rom_or_directory_root: Union[str, RomFileProviderProtocol],
+        rom_or_directory_root: str | RomFileProviderProtocol,
         bpc_tiling_width: int = 3,
         bpc_tiling_height: int = 3,
     ) -> Bpc:
@@ -100,7 +100,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         )
 
     def get_bma(
-        self, rom_or_directory_root: Union[str, RomFileProviderProtocol]
+        self, rom_or_directory_root: str | RomFileProviderProtocol
     ) -> Bma:
         """
         Returns the BMA model that is referenced in this entry.
@@ -116,8 +116,8 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         )
 
     def get_bpas(
-        self, rom_or_directory_root: Union[str, RomFileProviderProtocol]
-    ) -> List[Optional[Bpa]]:
+        self, rom_or_directory_root: str | RomFileProviderProtocol
+    ) -> list[Bpa | None]:
         """
         Returns a list of BPA models that are referenced in this entry.
         Can be serialized with the BPA DataHandler. Original filenames in self.bpa_names.
@@ -125,7 +125,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         """
         from skytemple_files.common.types.file_types import FileType
 
-        bpas: List[Optional[Bpa]] = []
+        bpas: list[Bpa | None] = []
         for bpa_name in self.bpa_names:
             if bpa_name is not None:
                 bpas.append(
@@ -144,7 +144,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
 
     @staticmethod
     def _get_file(
-        filename: str, rom_or_directory_root: Union[str, RomFileProviderProtocol]
+        filename: str, rom_or_directory_root: str | RomFileProviderProtocol
     ) -> bytes:
         if isinstance(rom_or_directory_root, RomFileProviderProtocol):
             return rom_or_directory_root.getFileByName(filename)
@@ -164,9 +164,9 @@ class BgList(BgListProtocol[BgListEntry]):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.level: List[BgListEntry] = []
+        self.level: list[BgListEntry] = []
         for entry in iter_bytes(data, 11 * 8):
-            bpas: List[Optional[str]] = []
+            bpas: list[str | None] = []
             for potential_bpa in iter_bytes(entry, 8, 24, 88):
                 if bytes(potential_bpa)[0] != 0:
                     bpas.append(bytes(potential_bpa).rstrip(b"\0").decode("ascii"))
@@ -223,6 +223,6 @@ class BgList(BgListProtocol[BgListEntry]):
         """Overwrites a level in the level list."""
         self.level[level_id] = level
 
-    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: Optional[str]):
+    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: str | None):
         """Overwrites an entry in a level's BPA list."""
         self.level[level_id].bpa_names[bpa_id] = bpa_name

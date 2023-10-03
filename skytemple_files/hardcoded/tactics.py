@@ -28,7 +28,7 @@ ENTRY_LEN = 2
 
 class HardcodedTactics:
     @staticmethod
-    def get_unlock_levels(arm9: bytes, config: Pmd2Data) -> List[i16]:
+    def get_unlock_levels(arm9: bytes, config: Pmd2Data) -> list[i16]:
         block = config.bin_sections.arm9.data.TACTICS_UNLOCK_LEVEL_TABLE
         lst = []
         for i in range(block.address, block.address + block.length, ENTRY_LEN):
@@ -36,7 +36,7 @@ class HardcodedTactics:
         return lst
 
     @staticmethod
-    def set_unlock_levels(value: List[i16], arm9: bytearray, config: Pmd2Data) -> None:
+    def set_unlock_levels(value: list[i16], arm9: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.arm9.data.TACTICS_UNLOCK_LEVEL_TABLE
         assert block.length is not None
         expected_length = int(block.length / ENTRY_LEN)

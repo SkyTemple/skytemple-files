@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class DbgHandler(HybridDataHandler[DbgProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DbgProtocol]:
+    def load_python_model(cls) -> type[DbgProtocol]:
         from skytemple_files.graphics.dbg._model import Dbg
 
         return Dbg
 
     @classmethod
-    def load_native_model(cls) -> Type[DbgProtocol]:
+    def load_native_model(cls) -> type[DbgProtocol]:
         from skytemple_rust.st_dbg import (
             Dbg,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +46,13 @@ class DbgHandler(HybridDataHandler[DbgProtocol]):
         return Dbg
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDbg"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDbg]]:  # type: ignore
         from skytemple_files.graphics.dbg._writer import DbgWriter
 
         return DbgWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDbg"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDbg]]:  # type: ignore
         from skytemple_rust.st_dbg import (
             DbgWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

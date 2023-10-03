@@ -17,7 +17,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, Generator, List, Optional, Tuple
+from typing import Callable, List, Optional, Tuple
+from collections.abc import Generator
 
 from PIL import Image
 
@@ -58,13 +59,13 @@ class SpriteBotSheet:
     @classmethod
     def load(
         cls, fn: str, portrait_name_fn: Callable[[int], str]
-    ) -> Generator[Tuple[int, Image.Image], None, None]:
+    ) -> Generator[tuple[int, Image.Image], None, None]:
         img = Image.open(fn)
         occupied = cls._verify_portraits(img, portrait_name_fn)
         for xx, column in enumerate(occupied):
             for yy, o in enumerate(column):
                 if o:
-                    si = cls._convert_index((yy * PORTRAIT_TILE_X + xx))
+                    si = cls._convert_index(yy * PORTRAIT_TILE_X + xx)
                     yield si, img.crop(
                         (
                             xx * PORTRAIT_SIZE,
@@ -78,7 +79,7 @@ class SpriteBotSheet:
     def _iter_portraits(
         cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int
     ) -> Generator[
-        Tuple[Optional[KaoImageProtocol], Optional[KaoImageProtocol]], None, None
+        tuple[KaoImageProtocol | None, KaoImageProtocol | None], None, None
     ]:
         for i in range(0, SUBENTRIES, 2):
             yield kao.get(portrait_item_id, i), kao.get(portrait_item_id, i + 1)
@@ -90,9 +91,9 @@ class SpriteBotSheet:
         idx: int,
         max_x: int,
         max_y: int,
-        kao_image: Optional[KaoImageProtocol],
+        kao_image: KaoImageProtocol | None,
         flip: bool,
-    ) -> Tuple[int, int]:
+    ) -> tuple[int, int]:
         """Original author: Audino (https://github.com/audinowho)"""
         if kao_image is None:
             return max_x, max_y
@@ -107,7 +108,7 @@ class SpriteBotSheet:
     @classmethod
     def _verify_portraits(
         cls, img: Image.Image, portrait_name_fn: Callable[[int], str]
-    ) -> List[List[Optional[bool]]]:
+    ) -> list[list[bool | None]]:
         """
         Verifies the input sheet and returns a matrix of occupied portraits.
 
@@ -135,7 +136,7 @@ class SpriteBotSheet:
             )
 
         in_data = img.convert("RGBA").getdata()
-        occupied: List[List[Optional[bool]]] = [[]] * PORTRAIT_TILE_X
+        occupied: list[list[bool | None]] = [[]] * PORTRAIT_TILE_X
         for ii in range(PORTRAIT_TILE_X):
             occupied[ii] = [None] * PORTRAIT_TILE_Y
 
@@ -165,7 +166,7 @@ class SpriteBotSheet:
                         break
                 if is_rogue:
                     rogue_str = portrait_name_fn(
-                        cls._convert_index((yy * PORTRAIT_TILE_X + xx))
+                        cls._convert_index(yy * PORTRAIT_TILE_X + xx)
                     )
                     rogue_tiles.append(rogue_str)
 
@@ -191,7 +192,7 @@ class SpriteBotSheet:
                     has_one_flip = True
                 if occupied[xx][yy] and not occupied[xx][yy - halfway]:
                     rogue_str = portrait_name_fn(
-                        cls._convert_index((yy * PORTRAIT_TILE_X + xx))
+                        cls._convert_index(yy * PORTRAIT_TILE_X + xx)
                     )
                     flipped_tiles.append(rogue_str)
 

@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class DpciHandler(HybridDataHandler[DpciProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DpciProtocol]:
+    def load_python_model(cls) -> type[DpciProtocol]:
         from skytemple_files.graphics.dpci._model import Dpci
 
         return Dpci
 
     @classmethod
-    def load_native_model(cls) -> Type[DpciProtocol]:
+    def load_native_model(cls) -> type[DpciProtocol]:
         from skytemple_rust.st_dpci import (
             Dpci,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +46,13 @@ class DpciHandler(HybridDataHandler[DpciProtocol]):
         return Dpci
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDpci"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDpci]]:  # type: ignore
         from skytemple_files.graphics.dpci._writer import DpciWriter
 
         return DpciWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpci"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDpci]]:  # type: ignore
         from skytemple_rust.st_dpci import (
             DpciWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

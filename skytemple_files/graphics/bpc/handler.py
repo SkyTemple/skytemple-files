@@ -31,13 +31,13 @@ if TYPE_CHECKING:
 
 class BpcHandler(HybridDataHandler[BpcProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[BpcProtocol]:
+    def load_python_model(cls) -> type[BpcProtocol]:
         from skytemple_files.graphics.bpc._model import Bpc
 
         return Bpc
 
     @classmethod
-    def load_native_model(cls) -> Type[BpcProtocol]:
+    def load_native_model(cls) -> type[BpcProtocol]:
         from skytemple_rust.st_bpc import (
             Bpc,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -45,13 +45,13 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
         return Bpc
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyBpc"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyBpc]]:  # type: ignore
         from skytemple_files.graphics.bpc._writer import BpcWriter
 
         return BpcWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeBpc"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeBpc]]:  # type: ignore
         from skytemple_rust.st_bpc import (
             BpcWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

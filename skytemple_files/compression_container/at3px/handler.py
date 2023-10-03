@@ -30,13 +30,13 @@ class At3pxHandler(CompressionContainerHandler):
         return b"AT3PX"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.at3px.model import At3px
 
         return At3px
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust.st_at3px import (
             At3px,
         )

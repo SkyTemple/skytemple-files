@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Optional, Protocol, Sequence, TypeVar, runtime_checkable
+from typing import List, Optional, Protocol, TypeVar, runtime_checkable
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u8, u16
@@ -57,14 +58,14 @@ class BmaProtocol(Protocol[P, C, L]):
     number_of_collision_layers: u16
 
     layer0: Sequence[int]
-    layer1: Optional[Sequence[int]]
+    layer1: Sequence[int] | None
 
     # if unk6:
-    unknown_data_block: Optional[Sequence[int]]
+    unknown_data_block: Sequence[int] | None
     # if number_of_collision_layers > 0:
-    collision: Optional[Sequence[bool]]
+    collision: Sequence[bool] | None
     # if number_of_collision_layers > 1:
-    collision2: Optional[Sequence[bool]]
+    collision2: Sequence[bool] | None
 
     @abstractmethod
     def __init__(self, data: bytes):
@@ -75,7 +76,7 @@ class BmaProtocol(Protocol[P, C, L]):
         self,
         bpc: C,
         palettes: Sequence[Sequence[int]],
-        bpas: Sequence[Optional[P]],
+        bpas: Sequence[P | None],
         layer: int,
     ) -> Image.Image:
         """
@@ -100,12 +101,12 @@ class BmaProtocol(Protocol[P, C, L]):
         self,
         bpc: C,
         bpl: L,
-        bpas: List[Optional[P]],
+        bpas: list[P | None],
         include_collision: bool = True,
         include_unknown_data_block: bool = True,
         pal_ani: bool = True,
         single_frame: bool = False,
-    ) -> List[Image.Image]:
+    ) -> list[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
         frame. The palettes argument can be retrieved from the map's BPL (bpl.palettes).
@@ -127,8 +128,8 @@ class BmaProtocol(Protocol[P, C, L]):
         self,
         bpc: C,
         bpl: L,
-        lower_img: Optional[Image.Image] = None,
-        upper_img: Optional[Image.Image] = None,
+        lower_img: Image.Image | None = None,
+        upper_img: Image.Image | None = None,
         force_import: bool = False,
         how_many_palettes_lower_layer: int = 16,
     ) -> None:
@@ -202,6 +203,6 @@ class BmaProtocol(Protocol[P, C, L]):
         ...
 
     @abstractmethod
-    def deepcopy(self) -> "BmaProtocol":
+    def deepcopy(self) -> BmaProtocol:
         """Perform a deep copy of self."""
         ...

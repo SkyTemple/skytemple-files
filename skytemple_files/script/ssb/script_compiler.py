@@ -64,8 +64,8 @@ class ScriptCompiler:
         self.rom_data = rom_data
 
     def compile_ssbscript(
-        self, ssb_script_src: str, callback_after_parsing: Optional[Callback] = None
-    ) -> Tuple[Ssb, SourceMap]:
+        self, ssb_script_src: str, callback_after_parsing: Callback | None = None
+    ) -> tuple[Ssb, SourceMap]:
         """
         Compile SSBScript into a SSB model
 
@@ -93,9 +93,9 @@ class ScriptCompiler:
         self,
         es_src: str,
         exps_absolue_path: str,
-        callback_after_parsing: Optional[Callback] = None,
-        lookup_paths: Optional[List[str]] = None,
-    ) -> Tuple[Ssb, SourceMap]:
+        callback_after_parsing: Callback | None = None,
+        lookup_paths: List[str] | None = None,
+    ) -> tuple[Ssb, SourceMap]:
         """
         Compile ExplorerScript into a SSB model. Returns the Ssb model, the source map, and a list of macros
         that were used in the ExplorerScript file.
@@ -143,7 +143,7 @@ class ScriptCompiler:
         routine_ops: List[List[SsbOperation]],
         named_coroutines: List[str],
         original_source_map: SourceMap,
-    ) -> Tuple[Ssb, SourceMap]:
+    ) -> tuple[Ssb, SourceMap]:
         """Compile the structured data from a base compiler for SsbScript or ExplorerScript into an SSB model."""
         logger.debug("Assembling SSB model...")
 
@@ -157,11 +157,11 @@ class ScriptCompiler:
 
         # Build routines and opcodes.
         if len(routine_ops) > 0:
-            header_class: Type[AbstractSsbHeader] = SsbHeaderUs
+            header_class: type[AbstractSsbHeader] = SsbHeaderUs
             if self.rom_data.game_region == GAME_REGION_EU:
                 header_class = SsbHeaderEu
 
-            built_strings: Dict[str, List[str]] = {
+            built_strings: dict[str, List[str]] = {
                 lang: [] for lang in header_class.supported_langs()
             }
             built_constants: List[str] = []
@@ -171,7 +171,7 @@ class ScriptCompiler:
                     raise SsbCompilerError(f(_("Routine {i} not found.")))
 
             input_routine_structure: List[
-                Tuple[SsbRoutineInfo, str, List[SsbOperation]]
+                tuple[SsbRoutineInfo, str, List[SsbOperation]]
             ] = list(zip(routine_infos, named_coroutines, routine_ops))
 
             # The cursor position of the written routine opcodes.
@@ -211,10 +211,10 @@ class ScriptCompiler:
                     raise SsbCompilerError(f(_("Unknown coroutine {err}"))) from err
 
             # Build Routine Infos
-            built_routine_info_with_offset: List[Tuple[int, SsbRoutineInfo]] = []
+            built_routine_info_with_offset: List[tuple[int, SsbRoutineInfo]] = []
             built_routine_ops: List[List[SsbOperation]] = []
             # A list of lists for ALL opcodes that maps all opcode indices to their memory address.
-            opcode_index_mem_offset_mapping: Dict[int, int] = {}
+            opcode_index_mem_offset_mapping: dict[int, int] = {}
             bytes_written_last_rtn = 0
 
             for i, (input_info, __, input_ops) in enumerate(input_routine_structure):
@@ -364,7 +364,7 @@ class ScriptCompiler:
     def _parse_param(
         self,
         param: SsbOpParam,
-        built_strings: Dict[str, List[str]],
+        built_strings: dict[str, List[str]],
         built_constants: List[str],
     ) -> int:
         if isinstance(param, int):

@@ -17,7 +17,8 @@
 
 from __future__ import annotations
 
-from typing import List, Sequence, cast
+from typing import List, cast
+from collections.abc import Sequence
 
 from range_typed_integers import u32
 
@@ -57,7 +58,7 @@ def decode_sir0_pointer_offsets(
                 decoded.append(buffer)
             buffer = 0
 
-    return cast(List[u32], decoded)
+    return cast(list[u32], decoded)
 
 
 # Based on C++ algorithm by psy_commando from

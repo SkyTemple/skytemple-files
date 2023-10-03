@@ -35,13 +35,13 @@ if TYPE_CHECKING:
 
 class BgpHandler(HybridDataHandler[BgpProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[BgpProtocol]:
+    def load_python_model(cls) -> type[BgpProtocol]:
         from skytemple_files.graphics.bgp._model import Bgp
 
         return Bgp
 
     @classmethod
-    def load_native_model(cls) -> Type[BgpProtocol]:
+    def load_native_model(cls) -> type[BgpProtocol]:
         from skytemple_rust.st_bgp import (
             Bgp,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -50,13 +50,13 @@ class BgpHandler(HybridDataHandler[BgpProtocol]):
         return Bgp  # type: ignore
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyBgp"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyBgp]]:  # type: ignore
         from skytemple_files.graphics.bgp._writer import BgpWriter
 
         return BgpWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeBgp"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeBgp]]:  # type: ignore
         from skytemple_rust.st_bgp import (
             BgpWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

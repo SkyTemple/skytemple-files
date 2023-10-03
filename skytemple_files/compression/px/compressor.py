@@ -116,7 +116,7 @@ class PxCompressor:
         self.cursor = 0
         self.output_cursor = 0
 
-    def compress(self) -> Tuple[bytes, bytes]:
+    def compress(self) -> tuple[bytes, bytes]:
         """Compresses the input data"""
         self.reset()
 

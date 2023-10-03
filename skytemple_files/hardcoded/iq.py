@@ -96,12 +96,12 @@ class HardcodedIq:
     @staticmethod
     def get_gummi_iq_gains(
         arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.bin_sections.arm9.data.IQ_GUMMI_GAIN_TABLE
         lst = []
         for y in range(0, dim):
-            row: List[int] = []
+            row: list[int] = []
             lst.append(row)
             for x in range(0, dim):
                 row.append(
@@ -117,7 +117,7 @@ class HardcodedIq:
 
     @staticmethod
     def set_gummi_iq_gains(
-        value: List[List[int]],
+        value: list[list[int]],
         arm9: bytearray,
         config: Pmd2Data,
         add_types_patch_applied: bool,
@@ -137,12 +137,12 @@ class HardcodedIq:
     @staticmethod
     def get_gummi_belly_heal(
         arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.bin_sections.arm9.data.GUMMI_BELLY_RESTORE_TABLE
         lst = []
         for y in range(0, dim):
-            row: List[int] = []
+            row: list[int] = []
             lst.append(row)
             for x in range(0, dim):
                 row.append(
@@ -158,7 +158,7 @@ class HardcodedIq:
 
     @staticmethod
     def set_gummi_belly_heal(
-        value: List[List[int]],
+        value: list[list[int]],
         arm9: bytearray,
         config: Pmd2Data,
         add_types_patch_applied: bool,
@@ -206,7 +206,7 @@ class HardcodedIq:
         write_u8(ov29, value, block.address)
 
     @staticmethod
-    def get_iq_skills(arm9bin: bytes, config: Pmd2Data) -> List[IqSkill]:
+    def get_iq_skills(arm9bin: bytes, config: Pmd2Data) -> list[IqSkill]:
         block = config.bin_sections.arm9.data.IQ_SKILLS
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
@@ -229,7 +229,7 @@ class HardcodedIq:
 
     @staticmethod
     def set_iq_skills(
-        value: List[IqSkill], arm9bin: bytearray, config: Pmd2Data
+        value: list[IqSkill], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         block = config.bin_sections.arm9.data.IQ_SKILLS
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
@@ -263,7 +263,7 @@ class HardcodedIq:
 
 class IqGroupsSkills:
     @staticmethod
-    def read_uncompressed(arm9: bytes, config: Pmd2Data) -> List[List[u8]]:
+    def read_uncompressed(arm9: bytes, config: Pmd2Data) -> list[list[u8]]:
         block = config.bin_sections.arm9.data.IQ_GROUP_SKILLS
         ret = []
         for i in range(block.address, block.address + block.length, IQ_GROUP_LIST_LEN):
@@ -277,7 +277,7 @@ class IqGroupsSkills:
         return ret
 
     @staticmethod
-    def read_compressed(arm9: bytes, config: Pmd2Data) -> List[List[u8]]:
+    def read_compressed(arm9: bytes, config: Pmd2Data) -> list[list[u8]]:
         block = config.extra_bin_sections.arm9.data.COMPRESSED_IQ_GROUP_SKILLS
         ret = []
         for i in range(
@@ -294,7 +294,7 @@ class IqGroupsSkills:
 
     @staticmethod
     def write_compressed(
-        arm9: bytearray, data: List[List[u8]], config: Pmd2Data
+        arm9: bytearray, data: list[list[u8]], config: Pmd2Data
     ) -> None:
         block = config.extra_bin_sections.arm9.data.COMPRESSED_IQ_GROUP_SKILLS
         assert block.length is not None

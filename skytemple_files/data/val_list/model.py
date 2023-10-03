@@ -43,7 +43,7 @@ class ValList(AutoString):
             )
         return lst
 
-    def set_list(self, lst, value_size: Union[Literal[1], Literal[2], Literal[4]] = 2):
+    def set_list(self, lst, value_size: Literal[1] | Literal[2] | Literal[4] = 2):
         self.data = bytearray(len(lst) * value_size)
         if value_size == 1:
             for i, x in enumerate(lst):

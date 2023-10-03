@@ -26,13 +26,13 @@ from skytemple_files.graphics.dpla.protocol import DplaProtocol
 
 class DplaHandler(HybridSir0DataHandler[DplaProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DplaProtocol]:
+    def load_python_model(cls) -> type[DplaProtocol]:
         from skytemple_files.graphics.dpla._model import Dpla
 
         return Dpla
 
     @classmethod
-    def load_native_model(cls) -> Type[DplaProtocol]:
+    def load_native_model(cls) -> type[DplaProtocol]:
         from skytemple_rust.st_dpla import (
             Dpla,
         )  # pylint: disable=no-name-in-module,no-member,import-error

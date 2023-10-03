@@ -81,7 +81,7 @@ DEBUG_PRINT = False
 
 
 class WanFile:
-    def __init__(self, data: Optional[bytes] = None, header_pnt: int = 0):
+    def __init__(self, data: bytes | None = None, header_pnt: int = 0):
         if data is None:
             self.imgData = []
             self.frameData = []
@@ -98,11 +98,11 @@ class WanFile:
         cls,
         content_data: bytes,
         data_pointer: int,
-        static_data: Optional[Pmd2Data] = None,
-    ) -> "Sir0Serializable":
+        static_data: Pmd2Data | None = None,
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[int], Optional[int]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[int], int | None]:
         from skytemple_files.graphics.chara_wan.writer import ExportWan
 
         return ExportWan(self)

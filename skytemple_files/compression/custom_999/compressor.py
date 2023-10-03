@@ -83,7 +83,7 @@ class Custom999Compressor:
                 bit_list += tmp
                 current = b
         while len(bit_list) > 0:
-            currentl: List[int] = bit_list[:8]
+            currentl: list[int] = bit_list[:8]
             bit_list = bit_list[8:]
             compressed.append(0)
             for i, b in enumerate(currentl):

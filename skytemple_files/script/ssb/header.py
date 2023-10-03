@@ -70,7 +70,7 @@ class AbstractSsbHeader(ABC):
 
     @property
     @abstractmethod
-    def string_table_lengths(self) -> Dict[str, int]:
+    def string_table_lengths(self) -> dict[str, int]:
         """Returns an OrderedDict where keys are languages and values are the number of bytes in that table"""
         pass
 
@@ -82,7 +82,7 @@ class AbstractSsbHeader(ABC):
 
 
 class SsbHeaderUs(AbstractSsbHeader):
-    def __init__(self, data: Optional[bytes]):
+    def __init__(self, data: bytes | None):
         if data is None:
             # Build mode.
             return
@@ -120,7 +120,7 @@ class SsbHeaderUs(AbstractSsbHeader):
         return self._const_table_length
 
     @property
-    def string_table_lengths(self) -> Dict[str, int]:
+    def string_table_lengths(self) -> dict[str, int]:
         return self._string_table_lengths
 
     @property
@@ -129,7 +129,7 @@ class SsbHeaderUs(AbstractSsbHeader):
 
 
 class SsbHeaderEu(AbstractSsbHeader):
-    def __init__(self, data: Optional[bytes]):
+    def __init__(self, data: bytes | None):
         if data is None:
             # Build mode.
             return
@@ -174,12 +174,12 @@ class SsbHeaderEu(AbstractSsbHeader):
         return self._const_table_length
 
     @property
-    def string_table_lengths(self) -> Dict[str, int]:
+    def string_table_lengths(self) -> dict[str, int]:
         return self._string_table_lengths
 
 
 class SsbHeaderJp(AbstractSsbHeader):
-    def __init__(self, data: Optional[bytes]):
+    def __init__(self, data: bytes | None):
         if data is None:
             # Build mode.
             return
@@ -217,5 +217,5 @@ class SsbHeaderJp(AbstractSsbHeader):
         return self._const_table_length
 
     @property
-    def string_table_lengths(self) -> Dict[str, int]:
+    def string_table_lengths(self) -> dict[str, int]:
         return {}

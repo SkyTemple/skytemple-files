@@ -28,13 +28,13 @@ from skytemple_files.data.item_p.protocol import ItemPProtocol
 
 class ItemPHandler(HybridSir0DataHandler[ItemPProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[ItemPProtocol]:
+    def load_python_model(cls) -> type[ItemPProtocol]:
         from skytemple_files.data.item_p._model import ItemP
 
         return ItemP
 
     @classmethod
-    def load_native_model(cls) -> Type[ItemPProtocol]:
+    def load_native_model(cls) -> type[ItemPProtocol]:
         from skytemple_rust.st_item_p import (
             ItemP,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -42,13 +42,13 @@ class ItemPHandler(HybridSir0DataHandler[ItemPProtocol]):
         return ItemP
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyItemP"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyItemP]]:  # type: ignore
         from skytemple_files.data.item_p._writer import ItemPWriter
 
         return ItemPWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeItemP"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeItemP]]:  # type: ignore
         from skytemple_rust.st_item_p import (
             ItemPWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

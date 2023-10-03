@@ -40,7 +40,7 @@ class ActorListBin(Sir0Serializable):
     def __init__(self, data: bytes, header_start: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list: List[Pmd2ScriptEntity] = []
+        self.list: list[Pmd2ScriptEntity] = []
 
         pointer_start = read_u32(data, header_start)
         number_entries = read_u32(data, header_start + 4)
@@ -60,12 +60,12 @@ class ActorListBin(Sir0Serializable):
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         string_codec.init()
 
         out_data = bytearray()
         # 1. Write strings
-        pointer_offsets: List[u32] = []
+        pointer_offsets: list[u32] = []
         for entry in self.list:
             pointer_offsets.append(u32_checked(len(out_data)))
             out_data += bytes(entry.name, string_codec.PMD2_STR_ENCODER) + b"\0"
@@ -102,7 +102,7 @@ class ActorListBin(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "ActorListBin":
+    ) -> ActorListBin:
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

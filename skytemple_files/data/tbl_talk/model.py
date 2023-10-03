@@ -78,10 +78,10 @@ class TblTalk:
         for _ in range(TBL_TALK_PERSONALITY_LEN):
             self.groups[-1].append([])
 
-    def get_dialogues(self, group: int, talk_type: TalkType) -> List[u16]:
+    def get_dialogues(self, group: int, talk_type: TalkType) -> list[u16]:
         return self.groups[group][talk_type.value]
 
-    def set_dialogues(self, group: int, talk_type: TalkType, dialogues: List[u16]):
+    def set_dialogues(self, group: int, talk_type: TalkType, dialogues: list[u16]):
         self.groups[group][talk_type.value] = dialogues
 
     def get_nb_groups(self) -> int:

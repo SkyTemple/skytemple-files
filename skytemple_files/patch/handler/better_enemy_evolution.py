@@ -54,7 +54,7 @@ class BetterEnemyEvolutionPatchHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.1.0"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

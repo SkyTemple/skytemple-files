@@ -25,9 +25,9 @@ from skytemple_files.data.data_cd.writer import DataCDWriter
 
 class DataCDHandler(DataHandler[DataCD]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "DataCD":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DataCD:
         return DataCD(data)
 
     @classmethod
-    def serialize(cls, data: "DataCD", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: DataCD, **kwargs: OptionalKwargs) -> bytes:
         return DataCDWriter(data).write()

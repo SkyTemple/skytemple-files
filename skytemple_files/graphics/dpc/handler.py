@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class DpcHandler(HybridDataHandler[DpcProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DpcProtocol]:
+    def load_python_model(cls) -> type[DpcProtocol]:
         from skytemple_files.graphics.dpc._model import Dpc
 
         return Dpc
 
     @classmethod
-    def load_native_model(cls) -> Type[DpcProtocol]:
+    def load_native_model(cls) -> type[DpcProtocol]:
         from skytemple_rust.st_dpc import (
             Dpc,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -47,13 +47,13 @@ class DpcHandler(HybridDataHandler[DpcProtocol]):
         return Dpc  # type: ignore
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDpc"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDpc]]:  # type: ignore
         from skytemple_files.graphics.dpc._writer import DpcWriter
 
         return DpcWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpc"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDpc]]:  # type: ignore
         from skytemple_rust.st_dpc import (
             DpcWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

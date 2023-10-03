@@ -32,7 +32,7 @@ from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
-ORIGINAL_BYTESEQ = bytes(b"w\x00\x00\xaa")
+ORIGINAL_BYTESEQ = b"w\x00\x00\xaa"
 OFFSET_EU = 0x642C8
 OFFSET_US = 0x64024
 OFFSET_JP = 0x63D44
@@ -57,7 +57,7 @@ class UnusedDungeonChancePatch(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.1.2"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

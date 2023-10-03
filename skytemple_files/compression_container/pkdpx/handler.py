@@ -30,13 +30,13 @@ class PkdpxHandler(CompressionContainerHandler):
         return b"PKDPX"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.pkdpx.model import Pkdpx
 
         return Pkdpx
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust.st_pkdpx import (
             Pkdpx,
         )

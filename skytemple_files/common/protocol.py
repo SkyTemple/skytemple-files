@@ -52,5 +52,5 @@ class TilemapEntryProtocol(Protocol):
 
     @classmethod
     @abstractmethod
-    def from_int(cls, entry: u16) -> "TilemapEntryProtocol":
+    def from_int(cls, entry: u16) -> TilemapEntryProtocol:
         ...

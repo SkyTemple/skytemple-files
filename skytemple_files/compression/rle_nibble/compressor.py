@@ -31,8 +31,8 @@ class RleNibbleCompressor:
 
     def compress(self) -> bytes:
         """Compresses the input data"""
-        self.compressed_data: List[int] = []
-        buffer_single: List[int] = []
+        self.compressed_data: list[int] = []
+        buffer_single: list[int] = []
         i = 0
         while i < len(self.uncompressed_data):
             nb = self._search_max_seq(i)

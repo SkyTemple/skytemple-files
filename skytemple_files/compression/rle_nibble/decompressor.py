@@ -26,7 +26,7 @@ class RleNibbleDecompressor:
         self.decompressed_size = decompressed_size
 
     def decompress(self) -> bytes:
-        out: List[int] = []
+        out: list[int] = []
         copy_next = -1
         nb_keep = 0
         for b in self.compressed_data:

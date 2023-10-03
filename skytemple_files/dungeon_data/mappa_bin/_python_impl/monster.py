@@ -56,8 +56,8 @@ class MappaMonster(MappaMonsterProtocol, AutoString):
 
     @classmethod
     def list_from_mappa(
-        cls, read: "MappaBinReadContainer", pointer: int
-    ) -> List["MappaMonster"]:
+        cls, read: MappaBinReadContainer, pointer: int
+    ) -> list[MappaMonster]:
         monsters = []
         while not cls._is_end_of_entries(read.data, pointer):
             monsters.append(

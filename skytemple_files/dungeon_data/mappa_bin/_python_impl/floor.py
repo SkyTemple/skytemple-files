@@ -107,7 +107,7 @@ class MappaFloor(
     def __init__(
         self,
         layout: MappaFloorLayout,
-        monsters: List[MappaMonster],
+        monsters: list[MappaMonster],
         traps: MappaTrapList,
         floor_items: MappaItemList,
         shop_items: MappaItemList,
@@ -117,7 +117,7 @@ class MappaFloor(
         unk_items2: MappaItemList,
     ):
         self.layout: MappaFloorLayout = layout
-        self.monsters: List[MappaMonster] = monsters
+        self.monsters: list[MappaMonster] = monsters
         self.traps: MappaTrapList = traps
         self.floor_items: MappaItemList = floor_items
         self.shop_items: MappaItemList = shop_items
@@ -128,8 +128,8 @@ class MappaFloor(
 
     @classmethod
     def from_mappa(
-        cls, read: "MappaBinReadContainer", floor_data: bytes
-    ) -> "MappaFloor":
+        cls, read: MappaBinReadContainer, floor_data: bytes
+    ) -> MappaFloor:
         return cls(
             cls._from_cache(
                 read,

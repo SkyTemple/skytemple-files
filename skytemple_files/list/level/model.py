@@ -43,7 +43,7 @@ class LevelListBin(Sir0Serializable):
     def __init__(self, data: bytes, header_start: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list: List[Pmd2ScriptLevel] = []
+        self.list: list[Pmd2ScriptLevel] = []
 
         # pointer_start = read_uintle(data, header_start, 4)
         # number_entries = read_uintle(data, header_start + 4, 4)
@@ -67,7 +67,7 @@ class LevelListBin(Sir0Serializable):
     def serialize(self) -> bytes:
         return self.sir0_serialize_parts()[0]
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         string_codec.init()
 
         out_data = bytearray()
@@ -109,7 +109,7 @@ class LevelListBin(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "LevelListBin":
+    ) -> LevelListBin:
         return cls(content_data, data_pointer)
 
     def _read_string(self, data: bytes, string_offset: int) -> str:

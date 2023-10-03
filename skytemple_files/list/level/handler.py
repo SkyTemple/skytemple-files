@@ -33,5 +33,5 @@ class LevelListBinHandler(DataHandler[LevelListBin]):
         return data.serialize()
 
     @classmethod
-    def type(cls) -> Type[LevelListBin]:
+    def type(cls) -> type[LevelListBin]:
         return LevelListBin

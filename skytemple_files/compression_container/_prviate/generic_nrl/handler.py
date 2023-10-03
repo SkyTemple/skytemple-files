@@ -30,7 +30,7 @@ class GenericNrlHandler(CompressionContainerHandler):
         return b"GENNRL"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container._prviate.generic_nrl._pymodel import (
             GenericNrlCompressionContainer,
         )
@@ -38,7 +38,7 @@ class GenericNrlHandler(CompressionContainerHandler):
         return GenericNrlCompressionContainer
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust._st_generic_nrl_compression import (
             GenericNrlCompressionContainer,
         )

@@ -64,7 +64,7 @@ Uses the same command style as PSMD"""
     def version(self) -> str:
         return "0.0.1"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

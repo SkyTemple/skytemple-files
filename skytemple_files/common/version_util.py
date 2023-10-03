@@ -44,7 +44,7 @@ def check_newest_release(rtype: ReleaseType) -> str:
     )
 
 
-def get_event_banner() -> Tuple[Optional[bytes], Optional[str]]:
+def get_event_banner() -> tuple[bytes | None, str | None]:
     try:
         url = (
             urllib.request.urlopen(RELEASE_WEB + BANNER_LINK, context=create_context())

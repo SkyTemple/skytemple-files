@@ -51,7 +51,7 @@ class ListExtractor:
         self._block: Symbol = getattr(self._binary.data, self._key)
 
     def extract(
-        self, entry_len: int, string_offs_per_entry: List[int], write_subheader=True
+        self, entry_len: int, string_offs_per_entry: list[int], write_subheader=True
     ):
         """Performs the extraction. Raises a RuntimeError on error."""
         try:
@@ -77,7 +77,7 @@ class ListExtractor:
         full_binary: bytes,
         table_data: bytes,
         entry_len: int,
-        string_offs_per_entry: List[int],
+        string_offs_per_entry: list[int],
         write_subheader,
     ) -> bytes:
         table_data = bytearray(table_data)

@@ -96,7 +96,7 @@ class AbstractPatchHandler(ABC):
         May raise NotImplementedError, if not supported.
         """
 
-    def get_parameter(self, name: str) -> Union[int, str]:
+    def get_parameter(self, name: str) -> int | str:
         """
         Returns the given configuration parameter. Make sure it is defined.
         :param name: name of the parameter
@@ -112,7 +112,7 @@ class AbstractPatchHandler(ABC):
                 "No configuration provided.", "*", "No configuration provided."
             )
 
-    def get_parameters(self) -> Dict[str, Union[int, str]]:
+    def get_parameters(self) -> dict[str, int | str]:
         """
         Returns all given configuration parameters or an empty dict of nothing was given.
         """
@@ -122,7 +122,7 @@ class AbstractPatchHandler(ABC):
             return dict()
 
     # noinspection PyAttributeOutsideInit
-    def supply_parameters(self, parameters: Dict[str, Union[int, str]]) -> None:
+    def supply_parameters(self, parameters: dict[str, int | str]) -> None:
         """Only to be called by the patch handler: Sets the configuration parameters."""
         self.__parameters = parameters
 
@@ -131,7 +131,7 @@ class DependantPatch(ABC):
     """Extra interface to be implemented by patches that require other patches to be applied first."""
 
     @abstractmethod
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         """
         A list of patches (names) that need to be applied before this patch can be applied.
         """

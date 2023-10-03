@@ -37,13 +37,13 @@ class HardcodedMainMenuMusic:
     @overload
     def get_main_menu_music(
         ov00: bytes, config: Pmd2Data, ov09: bytes
-    ) -> Tuple[u8, u8]:
+    ) -> tuple[u8, u8]:
         ...
 
     @staticmethod
     def get_main_menu_music(
-        ov00: bytes, config: Pmd2Data, ov09: Optional[bytes] = None
-    ) -> Union[u8, Tuple[u8, u8]]:
+        ov00: bytes, config: Pmd2Data, ov09: bytes | None = None
+    ) -> u8 | tuple[u8, u8]:
         """Set ov09 to also return the Sky Jukebox return music"""
         main_block = config.bin_sections.overlay0.data.TOP_MENU_MUSIC_ID
         skyj_block = config.bin_sections.overlay9.data.TOP_MENU_RETURN_MUSIC_ID
@@ -54,7 +54,7 @@ class HardcodedMainMenuMusic:
 
     @staticmethod
     def set_main_menu_music(
-        value: u8, ov00: bytearray, config: Pmd2Data, ov09: Optional[bytearray] = None
+        value: u8, ov00: bytearray, config: Pmd2Data, ov09: bytearray | None = None
     ) -> None:
         """Set ov09 to also update the Sky Jukebox return music"""
         main_block = config.bin_sections.overlay0.data.TOP_MENU_MUSIC_ID

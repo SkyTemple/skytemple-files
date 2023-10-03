@@ -54,7 +54,7 @@ class FloorAttribute:
             )
 
     def reorder_floors(
-        self, reorder_list: List[List[Tuple[int, Optional[int], Optional[int]]]]
+        self, reorder_list: list[list[tuple[int, int | None, int | None]]]
     ):
         new_attrs = []
         for new_groups in reorder_list:

@@ -32,13 +32,13 @@ class At4pnHandler(CompressionContainerHandler):
         return b"AT4PN"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.at4pn.model import At4pn
 
         return At4pn
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust.st_at4pn import (
             At4pn,
         )

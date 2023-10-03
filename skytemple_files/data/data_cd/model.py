@@ -37,7 +37,7 @@ class DataCD(AutoString):
             data = memoryview(data)
         limit = read_u32(data, 0)
         self.items_effects = []
-        self.effects_code: List[bytes] = []
+        self.effects_code: list[bytes] = []
         for x in range(4, limit, 2):
             self.items_effects.append(read_u16(data, x))
 
@@ -59,7 +59,7 @@ class DataCD(AutoString):
     def add_item_effect_id(self, effect_id: u16) -> None:
         self.items_effects.append(effect_id)
 
-    def get_all_of(self, effect_id: int) -> List[int]:
+    def get_all_of(self, effect_id: int) -> list[int]:
         item_ids = []
         for i, x in enumerate(self.items_effects):
             if x == effect_id:

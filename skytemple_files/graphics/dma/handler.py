@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class DmaHandler(HybridDataHandler[DmaProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DmaProtocol]:
+    def load_python_model(cls) -> type[DmaProtocol]:
         from skytemple_files.graphics.dma._model import Dma
 
         return Dma
 
     @classmethod
-    def load_native_model(cls) -> Type[DmaProtocol]:
+    def load_native_model(cls) -> type[DmaProtocol]:
         from skytemple_rust.st_dma import (
             Dma,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +46,13 @@ class DmaHandler(HybridDataHandler[DmaProtocol]):
         return Dma
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDma"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDma]]:  # type: ignore
         from skytemple_files.graphics.dma._writer import DmaWriter
 
         return DmaWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDma"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDma]]:  # type: ignore
         from skytemple_rust.st_dma import (
             DmaWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

@@ -44,23 +44,23 @@ ENTER_SSB_PATTERN = re.compile("^enter\\d{1,2}\\.ssb$")
 
 class MapEntry(TypedDict):
     name: str
-    enter_sse: Union[str, None]
-    enter_ssbs: List[str]
+    enter_sse: str | None
+    enter_ssbs: list[str]
     # Dict of sss files and their ssb files:
-    subscripts: Dict[str, List[str]]
+    subscripts: dict[str, list[str]]
     # LSD file name
-    lsd: Union[str, None]
+    lsd: str | None
     # SSA and SSB file tuples (not loaded from LSD but read from dir directly!)
-    ssas: List[Tuple[str, str]]
+    ssas: list[tuple[str, str]]
 
 
 class ScriptFiles(TypedDict):
-    common: List[str]
-    maps: Dict[str, MapEntry]
+    common: list[str]
+    maps: dict[str, MapEntry]
 
 
 def load_script_files(
-    script_folder: Folder, level_list: Optional[LevelListBin] = None
+    script_folder: Folder, level_list: LevelListBin | None = None
 ) -> ScriptFiles:
     """Returns information about the files used by the script engine in an 'introspectable' way."""
     script_files = ScriptFiles(common=[], maps=OrderedDict())

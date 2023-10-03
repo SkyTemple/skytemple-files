@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class BpaHandler(HybridDataHandler[BpaProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[BpaProtocol]:
+    def load_python_model(cls) -> type[BpaProtocol]:
         from skytemple_files.graphics.bpa._model import Bpa
 
         return Bpa
 
     @classmethod
-    def load_native_model(cls) -> Type[BpaProtocol]:
+    def load_native_model(cls) -> type[BpaProtocol]:
         from skytemple_rust.st_bpa import (  # pylint: disable=no-name-in-module,no-member,import-error
             Bpa,
         )
@@ -46,13 +46,13 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
         return Bpa
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyBpa"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyBpa]]:  # type: ignore
         from skytemple_files.graphics.bpa._writer import BpaWriter
 
         return BpaWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeBpa"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeBpa]]:  # type: ignore
         from skytemple_rust.st_bpa import (
             BpaWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -60,7 +60,7 @@ class BpaHandler(HybridDataHandler[BpaProtocol]):
         return BpaWriter
 
     @classmethod
-    def get_frame_info_model_cls(cls) -> Type[BpaFrameInfoProtocol]:
+    def get_frame_info_model_cls(cls) -> type[BpaFrameInfoProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_bpa import (
                 BpaFrameInfo as BpaFrameInfoNative,

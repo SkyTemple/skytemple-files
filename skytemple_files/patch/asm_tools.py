@@ -64,7 +64,7 @@ def ror(val, rotate, nb_bits=32):
     return (val >> rotate) + (out << (nb_bits - rotate))
 
 
-def get_imm_value(reg_list: List[int], imm_val: int, is_imm_const: int):
+def get_imm_value(reg_list: list[int], imm_val: int, is_imm_const: int):
     if is_imm_const:
         const = imm_val & IMM_CONST_VAL
         rotate = (imm_val & IMM_CONST_SHIFT) >> 7
@@ -92,7 +92,7 @@ def get_imm_value(reg_list: List[int], imm_val: int, is_imm_const: int):
             return ror(val, val_shift)
 
 
-def cond_pass(flags: List[int], test: int):
+def cond_pass(flags: list[int], test: int):
     # flags = [Z, C, N, V]
     if test == COND_EQ and flags[0]:
         return True
@@ -139,7 +139,7 @@ class AsmFunction:
             code += self.data[i * 4 + x] * (256**x)
         return code
 
-    def process(self) -> Tuple[Set[int], Set[int]]:
+    def process(self) -> tuple[set[int], set[int]]:
         calls = set()
         ext_data = set()
         for x in range(len(self.data) // 4):
@@ -182,7 +182,7 @@ class AsmFunction:
     def add_instructions(self, instr: bytes):
         self.data += instr
 
-    def link_to_others(self, func_list: Dict[int, "AsmFunction"]) -> bool:
+    def link_to_others(self, func_list: dict[int, AsmFunction]) -> bool:
         has_links = False
         for c in self.external_calls.keys():
             v = self.external_calls[c]
@@ -193,7 +193,7 @@ class AsmFunction:
                     has_links = True
         return has_links
 
-    def provide_data(self, data_list: Dict[int, int]) -> bool:
+    def provide_data(self, data_list: dict[int, int]) -> bool:
         has_links = False
         for c in self.external_calls.keys():
             v = self.external_calls[c]
@@ -257,7 +257,7 @@ class AsmFunction:
             )
         return bytes(new_data)
 
-    def exec(self, reg_list: List[int]):
+    def exec(self, reg_list: list[int]):
         flags = [False, False, False, False]
         while (
             self.old_start_address
@@ -349,9 +349,9 @@ class AsmFunction:
     def process_switch(
         self,
         register_search: int,
-        range_search: Tuple[int, int],
-        init_values: Dict[int, int] = {},
-    ) -> List[int]:
+        range_search: tuple[int, int],
+        init_values: dict[int, int] = {},
+    ) -> list[int]:
         ends = []
         for x in range(range_search[0], range_search[1]):
             reg_list = [None] * 16

@@ -48,53 +48,53 @@ ANIM_PRESENCE.append(
 
 class CharaWanHandler(DataHandler[WanFile]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "WanFile":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> WanFile:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), WanFile)  # type: ignore
 
     @classmethod
-    def serialize(cls, data: "WanFile", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: WanFile, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))  # type: ignore
 
     @classmethod
     def export_sheets(
-        cls, out_dir: str, wan: "WanFile", sprite_def: Pmd2Sprite
+        cls, out_dir: str, wan: WanFile, sprite_def: Pmd2Sprite
     ) -> None:
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), "Shadow.png"))
-        anim_name_map: List[int] = []
+        anim_name_map: list[int] = []
         for index_index, index in sprite_def.indices.items():
             list_insert_enlarge(anim_name_map, index_index, index.names, lambda: "")  # type: ignore
         return ExportSheets(out_dir, shadow_img, wan, anim_name_map)  # type: ignore
 
     @classmethod
     def export_sheets_as_zip(
-        cls, zip_file: str, wan: "WanFile", sprite_def: Pmd2Sprite
+        cls, zip_file: str, wan: WanFile, sprite_def: Pmd2Sprite
     ) -> None:
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), "Shadow.png"))
-        anim_name_map: List[int] = []
+        anim_name_map: list[int] = []
         for index_index, index in sprite_def.indices.items():
             list_insert_enlarge(anim_name_map, index_index, index.names, lambda: "")  # type: ignore
         return ExportSheetsAsZip(zip_file, shadow_img, wan, anim_name_map)  # type: ignore
 
     @classmethod
-    def import_sheets(cls, in_dir: str, strict: bool = False) -> "WanFile":
+    def import_sheets(cls, in_dir: str, strict: bool = False) -> WanFile:
         return ImportSheets(in_dir, strict)  # type: ignore
 
     @classmethod
     def import_sheets_from_zip(
-        cls, zip_file: Union[str, IO[bytes]], strict: bool = False
-    ) -> "WanFile":
+        cls, zip_file: str | IO[bytes], strict: bool = False
+    ) -> WanFile:
         return ImportSheetsFromZip(zip_file, strict)  # type: ignore
 
     @classmethod
     def merge_wan(
         cls, wan_monster: WanFile, wan_ground: WanFile, wan_attack: WanFile
-    ) -> "WanFile":
+    ) -> WanFile:
         return MergeWan([wan_monster, wan_ground, wan_attack])  # type: ignore
 
     @classmethod
-    def split_wan(cls, wan: WanFile) -> List[WanFile]:
+    def split_wan(cls, wan: WanFile) -> list[WanFile]:
         return SplitWan(wan, ANIM_PRESENCE)  # type: ignore

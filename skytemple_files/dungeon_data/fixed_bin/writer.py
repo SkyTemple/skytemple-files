@@ -29,7 +29,7 @@ class FixedBinWriter:
     def __init__(self, model: FixedBin):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
         fixed_floors = bytearray()
         pointers = []

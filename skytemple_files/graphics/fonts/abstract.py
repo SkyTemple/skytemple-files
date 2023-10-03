@@ -30,15 +30,15 @@ from skytemple_files.common.util import AutoString
 class AbstractFontEntry(ABC, AutoString):
     @classmethod
     @abstractmethod
-    def get_class_properties(cls) -> List[str]:
+    def get_class_properties(cls) -> list[str]:
         """Returns a list of the properties of this class"""
 
     @abstractmethod
-    def get_properties(self) -> Dict[str, int]:
+    def get_properties(self) -> dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
 
     @abstractmethod
-    def set_properties(self, properties: Dict[str, int]) -> None:
+    def set_properties(self, properties: dict[str, int]) -> None:
         """Sets a list of the properties of the entry"""
 
 
@@ -48,11 +48,11 @@ class AbstractFont(ABC, AutoString):
         """Gets the size of image entries of this table"""
 
     @abstractmethod
-    def get_entry_properties(self) -> List[str]:
+    def get_entry_properties(self) -> list[str]:
         """Gets the properties of entries of this table"""
 
     @abstractmethod
-    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
+    def get_entries_from_table(self, table: u8) -> list[AbstractFontEntry]:
         """Gets all entries of a specific table"""
 
     @abstractmethod
@@ -64,13 +64,13 @@ class AbstractFont(ABC, AutoString):
         """Create an entry for a table"""
 
     @abstractmethod
-    def to_pil(self) -> Dict[int, Image.Image]:
+    def to_pil(self) -> dict[int, Image.Image]:
         """Returns all tables as a dictionnary of images"""
 
     @abstractmethod
-    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
+    def export_to_xml(self) -> tuple[Element, dict[int, Image.Image]]:
         """Exports all entries as xml with tables as a dictionnary of images"""
 
     @abstractmethod
-    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]) -> None:
+    def import_from_xml(self, xml: Element, tables: dict[int, Image.Image]) -> None:
         """Imports all entries font xml with tables as a dictionnary of images"""

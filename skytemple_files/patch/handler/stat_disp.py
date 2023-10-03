@@ -133,7 +133,7 @@ This patch may not be compatible if the markfont.dat file has been modified."""
         }
         bin_before = rom.getFileByName("FONT/markfont.dat")
         model = GraphicFontHandler.deserialize(bin_before)
-        entries: List[Optional[Image.Image]] = []
+        entries: list[Image.Image | None] = []
         for x in range(model.get_nb_entries()):
             entries.append(model.get_entry(x))
         while len(entries) < max(START_ACCURACY + 12, START_POWER + 11):

@@ -50,7 +50,7 @@ class RandomGenProperties:
         self.seeds_t1 = seeds_t1
 
     @classmethod
-    def default(cls, rng: Optional[random.Random] = None) -> "RandomGenProperties":
+    def default(cls, rng: random.Random | None = None) -> RandomGenProperties:
         if rng is None:
             rng = random
         return cls(
@@ -130,7 +130,7 @@ class DungeonFloorGenerator:
         unknown_dungeon_chance_patch_applied=False,
         fix_dead_end_error=False,
         fix_outer_room_error=False,
-        gen_properties: Optional[RandomGenProperties] = None,
+        gen_properties: RandomGenProperties | None = None,
     ):
         self.unknown_dungeon_chance_patch_applied = unknown_dungeon_chance_patch_applied
         self.fix_dead_end_error = fix_dead_end_error
@@ -141,7 +141,7 @@ class DungeonFloorGenerator:
 
     def generate(
         self, floor_layout: MappaFloorLayoutProtocol, max_retries=1, flat=False
-    ) -> Union[List[List[Tile]], List[Tile], None]:
+    ) -> list[list[Tile]] | list[Tile] | None:
         """
         Returns a dungeon floor matrix (Tile matrix SIZE_Y x SIZE_X).
         Returns None if no valid floor could be generated after max_retries attempts.

@@ -32,10 +32,10 @@ class ImgItm(Sir0Serializable):
     def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.sprites: List[List[bytes]] = self._read_sprites(
+        self.sprites: list[list[bytes]] = self._read_sprites(
             data, read_u32(data, header_pnt + 0x04), read_u32(data, header_pnt + 0x00)
         )
-        self.palettes: List[List[int]] = self._read_palettes(
+        self.palettes: list[list[int]] = self._read_palettes(
             data,
             read_u32(data, header_pnt + 0x0C) // PAL_LEN,
             read_u32(data, header_pnt + 0x08),
@@ -46,10 +46,10 @@ class ImgItm(Sir0Serializable):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.graphics.img_itm.writer import ImgItmWriter
 
         return ImgItmWriter(self).write()

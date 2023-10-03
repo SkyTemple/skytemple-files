@@ -33,9 +33,9 @@ if TYPE_CHECKING:
 
 
 class MappaTrapList(MappaTrapListProtocol, AutoString):
-    weights: Dict[_MappaTrapType, u16]
+    weights: dict[_MappaTrapType, u16]
 
-    def __init__(self, weights: Union[List[u16], Dict[_MappaTrapType, u16]]):
+    def __init__(self, weights: list[u16] | dict[_MappaTrapType, u16]):
         if isinstance(weights, list):
             if len(weights) != 25:
                 raise ValueError(
@@ -54,7 +54,7 @@ class MappaTrapList(MappaTrapListProtocol, AutoString):
             raise ValueError(f"Invalid type for MappaTrapList {type(weights)}")
 
     @classmethod
-    def from_mappa(cls, read: "MappaBinReadContainer", pointer: int) -> "MappaTrapList":
+    def from_mappa(cls, read: MappaBinReadContainer, pointer: int) -> MappaTrapList:
         weights = []
         for i in range(pointer, pointer + 50, 2):
             weights.append(read_u16(read.data, i))

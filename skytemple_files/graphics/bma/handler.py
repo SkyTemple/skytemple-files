@@ -31,13 +31,13 @@ if TYPE_CHECKING:
 
 class BmaHandler(HybridDataHandler[BmaProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[BmaProtocol]:
+    def load_python_model(cls) -> type[BmaProtocol]:
         from skytemple_files.graphics.bma._model import Bma
 
         return Bma
 
     @classmethod
-    def load_native_model(cls) -> Type[BmaProtocol]:
+    def load_native_model(cls) -> type[BmaProtocol]:
         from skytemple_rust.st_bma import (
             Bma,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -45,13 +45,13 @@ class BmaHandler(HybridDataHandler[BmaProtocol]):
         return Bma
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyBma"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyBma]]:  # type: ignore
         from skytemple_files.graphics.bma._writer import BmaWriter
 
         return BmaWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeBma"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeBma]]:  # type: ignore
         from skytemple_rust.st_bma import (
             BmaWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

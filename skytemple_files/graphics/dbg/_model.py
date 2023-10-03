@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 import math
-from typing import List, Sequence
+from typing import List
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16
@@ -46,7 +47,7 @@ from skytemple_files.user_error import UserValueError
 
 
 class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
-    mappings: List[u16]
+    mappings: list[u16]
 
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
@@ -150,7 +151,7 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
         # in the imported image. Generate chunk mappings.
         chunk_mappings = []
         chunk_mappings_counter = 1
-        tile_mappings: List[TilemapEntryProtocol] = []
+        tile_mappings: list[TilemapEntryProtocol] = []
         tiles_in_chunk = DBG_TILING_DIM * DBG_TILING_DIM
         for chk_fst_tile_idx in range(
             0,

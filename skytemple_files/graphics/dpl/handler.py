@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class DplHandler(HybridDataHandler[DplProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DplProtocol]:
+    def load_python_model(cls) -> type[DplProtocol]:
         from skytemple_files.graphics.dpl._model import Dpl
 
         return Dpl
 
     @classmethod
-    def load_native_model(cls) -> Type[DplProtocol]:
+    def load_native_model(cls) -> type[DplProtocol]:
         from skytemple_rust.st_dpl import (
             Dpl,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +46,13 @@ class DplHandler(HybridDataHandler[DplProtocol]):
         return Dpl
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDpl"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDpl]]:  # type: ignore
         from skytemple_files.graphics.dpl._writer import DplWriter
 
         return DplWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDpl"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDpl]]:  # type: ignore
         from skytemple_rust.st_dpl import (
             DplWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

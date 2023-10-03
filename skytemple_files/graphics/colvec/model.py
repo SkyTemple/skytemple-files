@@ -31,7 +31,7 @@ class Colvec(Sir0Serializable, AutoString):
     def __init__(self, data: bytes, header_pnt: int):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.colormaps: List[List[int]] = []
+        self.colormaps: list[list[int]] = []
         for i in range(len(data) // COLVEC_DATA_LEN):
             self.colormaps.append([])
             colormap = data[i * COLVEC_DATA_LEN : (i + 1) * COLVEC_DATA_LEN]
@@ -46,10 +46,10 @@ class Colvec(Sir0Serializable, AutoString):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.graphics.colvec.writer import ColvecWriter
 
         return ColvecWriter(self).write()  # type: ignore
@@ -57,7 +57,7 @@ class Colvec(Sir0Serializable, AutoString):
     def nb_colormaps(self):
         return len(self.colormaps)
 
-    def apply_colormap(self, index, palette: List[int]) -> List[int]:
+    def apply_colormap(self, index, palette: list[int]) -> list[int]:
         """Transforms the palette using the colormap in index"""
         new_palette = []
         for i, v in enumerate(palette):

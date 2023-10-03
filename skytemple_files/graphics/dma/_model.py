@@ -16,7 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List, Sequence
+from typing import List
+from collections.abc import Sequence
 
 from PIL import Image
 
@@ -41,7 +42,7 @@ class Dma(DmaProtocol):
         # 10 -> Floor
         # 11 -> Extra
         # Rest: SouthWest West NorthWest North NorthEast East SouthEast South
-        self.chunk_mappings: List[int] = list(data)
+        self.chunk_mappings: list[int] = list(data)
 
     def get(self, get_type: int, neighbors_same: int) -> Sequence[int]:
         """

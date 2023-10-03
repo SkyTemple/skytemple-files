@@ -27,20 +27,20 @@ from typing import List, Literal, Optional, TypedDict, Union
 # noinspection PyPep8Naming
 class Credit_Basic(TypedDict):
     id: str
-    name: Optional[str]
-    contact: Optional[str]
+    name: str | None
+    contact: str | None
 
 
 # noinspection PyPep8Naming
 class Credit_DiscordHandle(TypedDict):
-    discordHandle: Optional[str]
+    discordHandle: str | None
 
 
 class Credit(Credit_Basic, Credit_DiscordHandle):
     pass
 
 
-def credit_canonical_name(this: "Credit") -> str:
+def credit_canonical_name(this: Credit) -> str:
     if this["name"] is not None:
         return this["name"]
     if this["discordHandle"] is not None:
@@ -67,10 +67,10 @@ class OtherBounty(TypedDict):
 
 class MonsterBounty(TypedDict):
     modreward: bool
-    incomplete: Optional[int]
-    exists: Optional[int]
-    full: Optional[int]
-    other: List[OtherBounty]
+    incomplete: int | None
+    exists: int | None
+    full: int | None
+    other: list[OtherBounty]
 
 
 class ActionId(TypedDict):
@@ -108,17 +108,17 @@ class MonsterFormSprites_Metadata(TypedDict):
     bounty: MonsterBounty
     phase: Phase
     phaseRaw: int
-    creditPrimary: Optional[Credit]
-    creditSecondary: List[Credit]
-    animDataXml: Optional[str]
-    zipUrl: Optional[str]
-    recolorSheetUrl: Optional[str]
+    creditPrimary: Credit | None
+    creditSecondary: list[Credit]
+    animDataXml: str | None
+    zipUrl: str | None
+    recolorSheetUrl: str | None
     modifiedDate: str
 
 
 # noinspection PyPep8Naming
 class MonsterFormSprites_Actions(TypedDict):
-    actions: List[SpriteUnion]
+    actions: list[SpriteUnion]
 
 
 # noinspection PyPep8Naming
@@ -138,8 +138,8 @@ class MonsterFormPortraits_Metadata(TypedDict):
     bounty: MonsterBounty
     phase: Phase
     phaseRaw: int
-    creditPrimary: Optional[Credit]
-    creditSecondary: List[Credit]
+    creditPrimary: Credit | None
+    creditSecondary: list[Credit]
     sheetUrl: str
     recolorSheetUrl: str
     modifiedDate: str
@@ -147,19 +147,19 @@ class MonsterFormPortraits_Metadata(TypedDict):
 
 # noinspection PyPep8Naming
 class MonsterFormPortraits_PreviewEmotion(TypedDict):
-    previewEmotion: Optional[Portrait]
+    previewEmotion: Portrait | None
 
 
 # noinspection PyPep8Naming
 class MonsterFormPortraits_Emotions(TypedDict):
-    emotions: List[Portrait]
-    emotionsFlipped: List[Portrait]
+    emotions: list[Portrait]
+    emotionsFlipped: list[Portrait]
 
 
 # noinspection PyPep8Naming
 class MonsterFormPortraits_Emotion(TypedDict):
-    emotion: Optional[Portrait]
-    emotionFlipped: Optional[Portrait]
+    emotion: Portrait | None
+    emotionFlipped: Portrait | None
 
 
 class MonsterFormPortraits(
@@ -201,11 +201,11 @@ class Config(TypedDict):
     portraitSize: int
     portraitTileX: int
     portraitTileY: int
-    emotions: List[str]
-    actions: List[str]
-    completionEmotions: List[List[int]]
-    completionActions: List[List[int]]
-    actionMap: List[ActionId]
+    emotions: list[str]
+    actions: list[str]
+    completionEmotions: list[list[int]]
+    completionActions: list[list[int]]
+    actionMap: list[ActionId]
 
 
 # noinspection PyPep8Naming
@@ -217,17 +217,17 @@ class Monster_Metadata(TypedDict):
 
 # noinspection PyPep8Naming
 class Monster_Forms(TypedDict):
-    forms: List[MonsterForm]
+    forms: list[MonsterForm]
 
 
 # noinspection PyPep8Naming
 class Monster_Get(TypedDict):
-    get: Optional[MonsterForm]
+    get: MonsterForm | None
 
 
 # noinspection PyPep8Naming
 class Monster_Manual(TypedDict):
-    manual: Optional[MonsterForm]
+    manual: MonsterForm | None
 
 
 class Monster(Monster_Metadata, Monster_Forms, Monster_Get, Monster_Manual):
@@ -241,22 +241,22 @@ class Query_ApiVersion(TypedDict):
 
 # noinspection PyPep8Naming
 class Query_SearchMonster(TypedDict):
-    searchMonster: List[Monster]
+    searchMonster: list[Monster]
 
 
 # noinspection PyPep8Naming
 class Query_Monster(TypedDict):
-    monster: List[Monster]
+    monster: list[Monster]
 
 
 # noinspection PyPep8Naming
 class Query_SearchCredit(TypedDict):
-    searchCredit: List[Credit]
+    searchCredit: list[Credit]
 
 
 # noinspection PyPep8Naming
 class Query_Credit(TypedDict):
-    credit: List[Credit]
+    credit: list[Credit]
 
 
 # noinspection PyPep8Naming

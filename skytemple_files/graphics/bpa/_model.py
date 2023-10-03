@@ -18,7 +18,8 @@
 from __future__ import annotations
 
 import math
-from typing import Optional, List, Sequence
+from typing import Optional, List
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16_checked, u16
@@ -47,10 +48,10 @@ class BpaFrameInfo(BpaFrameInfoProtocol):
 
 
 class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
-    def __init__(self, data: Optional[bytes]):
+    def __init__(self, data: bytes | None):
         self.number_of_tiles = u16(0)
         self.number_of_frames = u16(0)
-        self.tiles: List[bytes] = []
+        self.tiles: list[bytes] = []
         self.frame_info = []
         if data is None:
             return
@@ -94,7 +95,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""
         return self.tiles[frame_idx * self.number_of_tiles + tile_idx]
 
-    def tiles_to_pil(self, palette: Sequence[int]) -> Optional[Image.Image]:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image | None:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -128,7 +129,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
 
     def tiles_to_pil_separate(
         self, palette: Sequence[int], width_in_tiles: int = 20
-    ) -> List[Image.Image]:
+    ) -> list[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -193,7 +194,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
 
         self._correct_frame_info()
 
-    def pil_to_tiles_separate(self, images: List[Image.Image]) -> None:
+    def pil_to_tiles_separate(self, images: list[Image.Image]) -> None:
         frames = []
         first_image_dims = None
         for image in images:

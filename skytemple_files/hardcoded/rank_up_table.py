@@ -69,7 +69,7 @@ class Rank(AutoString):
 
 class HardcodedRankUpTable:
     @classmethod
-    def get_rank_up_table(cls, arm9bin: bytes, config: Pmd2Data) -> List[Rank]:
+    def get_rank_up_table(cls, arm9bin: bytes, config: Pmd2Data) -> list[Rank]:
         """Returns the list of ranks in the game."""
         block = config.bin_sections.arm9.data.RANK_UP_TABLE
         lst = []
@@ -86,7 +86,7 @@ class HardcodedRankUpTable:
 
     @classmethod
     def set_rank_up_table(
-        cls, value: List[Rank], arm9bin: bytearray, config: Pmd2Data
+        cls, value: list[Rank], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the list of ranks in the game.

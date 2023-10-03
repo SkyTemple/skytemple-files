@@ -19,7 +19,8 @@ from __future__ import annotations
 import itertools
 import math
 
-from typing import Tuple, Sequence
+from typing import Tuple
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16
@@ -103,7 +104,7 @@ class Dpc(DpcProtocol[Dpci]):
 
     def pil_to_chunks(
         self, image: Image.Image, force_import=True
-    ) -> Tuple[Sequence[bytes], Sequence[Sequence[int]]]:
+    ) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tile mappings and returns the new tiles for storing them in a DPCI and the palettes

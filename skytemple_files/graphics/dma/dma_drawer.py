@@ -18,7 +18,8 @@ from __future__ import annotations
 
 import itertools
 from random import choice
-from typing import List, Optional, Union, Iterable, Sequence
+from typing import List, Optional, Union
+from collections.abc import Iterable, Sequence
 
 from PIL import Image
 
@@ -46,8 +47,8 @@ class DmaDrawer:
         self.dma = dma
 
     def rules_from_bma(
-        self, bma: Union[BmaProtocol, Iterable[int]], width_in_chunks=None
-    ) -> List[List[_DmaType]]:
+        self, bma: BmaProtocol | Iterable[int], width_in_chunks=None
+    ) -> list[list[_DmaType]]:
         rules = []
         active_row = None
         layer: Sequence[int] = bma  # type: ignore
@@ -111,20 +112,20 @@ class DmaDrawer:
 
     def get_mappings_for_rules(
         self,
-        rules: List[List[_DmaType]],
+        rules: list[list[_DmaType]],
         variation_index=None,
         treat_outside_as_wall=False,
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         """
         Return the DPC mappings for this DMA configuration and the given rules. If variation_index is given,
         this image variation is used for all tiles, otherwise one of the three variation is chosen at random.
         """
-        mappings: List[List[int]] = []
-        wall_matrix: List[List[bool]] = []
-        water_matrix: List[List[bool]] = []
+        mappings: list[list[int]] = []
+        wall_matrix: list[list[bool]] = []
+        water_matrix: list[list[bool]] = []
         for ry, rule_row in enumerate(rules):
-            active_wall: List[bool] = []
-            active_water: List[bool] = []
+            active_wall: list[bool] = []
+            active_water: list[bool] = []
             wall_matrix.append(active_wall)
             water_matrix.append(active_water)
             for rx, rule_cell in enumerate(rule_row):
@@ -139,7 +140,7 @@ class DmaDrawer:
                     active_water.append(False)
 
         for ry, rule_row in enumerate(rules):
-            active_row: List[int] = []
+            active_row: list[int] = []
             mappings.append(active_row)
             for rx, rule_cell in enumerate(rule_row):
                 solid_neighbors = get_tile_neighbors(
@@ -159,12 +160,12 @@ class DmaDrawer:
 
     def draw(
         self,
-        mappings: List[List[int]],
+        mappings: list[list[int]],
         dpci: DpciProtocol,
         dpc: DpcProtocol,
         dpl: DplProtocol,
-        dpla: Optional[DplaProtocol],
-    ) -> List[Image.Image]:
+        dpla: DplaProtocol | None,
+    ) -> list[Image.Image]:
         chunks = dpc.chunks_to_pil(dpci, dpl.palettes, 1)
 
         chunk_dim = DPCI_TILE_DIM * DPC_TILING_DIM

@@ -33,5 +33,5 @@ class ActorListBinHandler(DataHandler[ActorListBin]):
         return data.serialize()
 
     @classmethod
-    def type(cls) -> Type[ActorListBin]:
+    def type(cls) -> type[ActorListBin]:
         return ActorListBin

@@ -33,8 +33,8 @@ from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 
 
 class MdEvoEntry(AutoString):
-    evos: List[u16]
-    eggs: List[u16]
+    evos: list[u16]
+    eggs: list[u16]
 
     def __init__(self, data: bytes):
         nb_evos = read_u16(data, 0)

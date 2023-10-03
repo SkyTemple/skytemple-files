@@ -67,7 +67,7 @@ Needs ChooseStarter patch to be applied. """
     def version(self) -> str:
         return "0.0.1"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ChooseStarter"]
 
     @property

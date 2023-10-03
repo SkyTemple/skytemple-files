@@ -16,7 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
 from itertools import islice
-from typing import Protocol, Sequence, List
+from typing import Protocol, List
+from collections.abc import Sequence
 
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
@@ -30,7 +31,7 @@ class DplaProtocol(Sir0Serializable, Protocol):
         ...
 
     @abstractmethod
-    def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> List[int]:
+    def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> list[int]:
         """
         Returns the color palette at the given frame id. Returned is a stream of RGB colors: [R, G, B, R, G, B...].
         Returned are always 16 colors. If the palette file has more than 16 colors, the pal_idx specifies what set
@@ -75,7 +76,7 @@ class DplaProtocol(Sir0Serializable, Protocol):
     @abstractmethod
     def apply_palette_animations(
         self, palettes: Sequence[Sequence[int]], frame_idx: int
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         """
         Returns a modified copy of `palettes`.
 

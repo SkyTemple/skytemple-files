@@ -61,12 +61,12 @@ class MappaBinReadContainer:
 
 
 class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
-    floor_lists: List[List[MappaFloor]]
+    floor_lists: list[list[MappaFloor]]
 
-    def __init__(self, floor_lists: List[List[MappaFloor]]):
+    def __init__(self, floor_lists: list[list[MappaFloor]]):
         self.floor_lists = floor_lists
 
-    def add_floor_list(self, floor_list: List[MappaFloor]):
+    def add_floor_list(self, floor_list: list[MappaFloor]):
         self.floor_lists.append(floor_list)
 
     def remove_floor_list(self, index: int):
@@ -83,7 +83,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
     def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
         del self.floor_lists[floor_list_index][floor_index]
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
         pointer_offsets = []
 
@@ -192,7 +192,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
         # Item spawn lists data
         item_data_start = len(data)
         # TODO: I don't need to explain why a fixed size here per list is flawed.
-        item_data = bytearray((len(item_lists) * 500))
+        item_data = bytearray(len(item_lists) * 500)
         item_data_cursor = 0
         item_data_pointer = []
         for item_list in item_lists:
@@ -241,7 +241,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "MappaBin":
+    ) -> MappaBin:
         return cls(
             cls._read_floor_list(
                 MappaBinReadContainer(
@@ -280,12 +280,12 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
 
     def minimize(
         self,
-    ) -> Tuple[
-        List[List[StubMappaFloor]],
-        List[MappaFloorLayout],
-        List[List[MappaMonster]],
-        List[MappaTrapList],
-        List[MappaItemList],
+    ) -> tuple[
+        list[list[StubMappaFloor]],
+        list[MappaFloorLayout],
+        list[list[MappaMonster]],
+        list[MappaTrapList],
+        list[MappaItemList],
     ]:
         """
         Collects a list of floors, that references indices in other lists, like stored in the mappa files.
@@ -294,11 +294,11 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
         Returned are all lists.
         TODO: Performance could be improved here, by using more efficient lookup mechanisms.
         """
-        floor_lists: List[List[StubMappaFloor]] = []
-        floor_layouts: List[MappaFloorLayout] = []
-        monster_lists: List[List[MappaMonster]] = []
-        trap_lists: List[MappaTrapList] = []
-        item_lists: List[MappaItemList] = []
+        floor_lists: list[list[StubMappaFloor]] = []
+        floor_layouts: list[MappaFloorLayout] = []
+        monster_lists: list[list[MappaMonster]] = []
+        trap_lists: list[MappaTrapList] = []
+        item_lists: list[MappaItemList] = []
         for floor_list in self.floor_lists:
             stub_floor_list = []
             for floor in floor_list:

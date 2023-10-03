@@ -32,13 +32,13 @@ if TYPE_CHECKING:
 
 class KaoHandler(HybridDataHandler[KaoProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[KaoProtocol]:
+    def load_python_model(cls) -> type[KaoProtocol]:
         from skytemple_files.graphics.kao._model import Kao
 
         return Kao
 
     @classmethod
-    def load_native_model(cls) -> Type[KaoProtocol]:
+    def load_native_model(cls) -> type[KaoProtocol]:
         from skytemple_rust.st_kao import (
             Kao,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +46,13 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
         return Kao
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyKao"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyKao]]:  # type: ignore
         from skytemple_files.graphics.kao._writer import KaoWriter
 
         return KaoWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeKao"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeKao]]:  # type: ignore
         from skytemple_rust.st_kao import (
             KaoWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -60,7 +60,7 @@ class KaoHandler(HybridDataHandler[KaoProtocol]):
         return KaoWriter
 
     @classmethod
-    def get_image_model_cls(cls) -> Type[KaoImageProtocol]:
+    def get_image_model_cls(cls) -> type[KaoImageProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_kao import (
                 KaoImage as KaoImageNative,

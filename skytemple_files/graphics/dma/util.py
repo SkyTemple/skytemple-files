@@ -20,7 +20,7 @@ from skytemple_files.graphics.dma.protocol import DmaNeighbor
 
 
 def get_tile_neighbors(
-    wall_matrix: List[List[Union[int, bool]]],
+    wall_matrix: list[list[Union[int, bool]]],
     x,
     y,
     self_is_wall_or_water: bool,

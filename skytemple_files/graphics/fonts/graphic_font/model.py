@@ -32,8 +32,8 @@ class GraphicFont(AutoString):
             data = memoryview(data)
         number_entries = read_u16(data, 0x02) // GRAPHIC_FONT_ENTRY_LEN
 
-        self.palette: Optional[Pal] = None
-        self.entries: List[Optional[Image.Image]] = []
+        self.palette: Pal | None = None
+        self.entries: list[Image.Image | None] = []
         for i in range(
             0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN
         ):
@@ -53,7 +53,7 @@ class GraphicFont(AutoString):
     def set_palette(self, palette: Pal):
         self.palette = palette
 
-    def get_palette_raw(self) -> List[int]:
+    def get_palette_raw(self) -> list[int]:
         if self.palette:
             return [0, 0, 255] * 0x80 + self.palette.get_palette_4bpc()[: 0x80 * 3]
         else:
@@ -61,7 +61,7 @@ class GraphicFont(AutoString):
                 (i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)
             ]
 
-    def set_palette_raw(self, data: List[int]):
+    def set_palette_raw(self, data: list[int]):
         if self.palette:
             self.palette.set_palette_4bpc(data[0x80 * 3 :])
 
@@ -75,7 +75,7 @@ class GraphicFont(AutoString):
             entry.putpalette(self.get_palette_raw())
         return entry
 
-    def set_entries(self, entries: List[Optional[Image.Image]]):
+    def set_entries(self, entries: list[Image.Image | None]):
         self.entries = entries
         for e in entries:
             if e:

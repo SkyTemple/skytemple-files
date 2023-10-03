@@ -16,7 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Iterator, List, Tuple, Dict, no_type_check, Optional
+from typing import List, Tuple, Dict, no_type_check, Optional
+from collections.abc import Iterator
 
 from range_typed_integers import u32, u16, u8, i16, i8
 
@@ -55,7 +56,7 @@ from skytemple_files.data.md.protocol import (
 
 
 class MdPropertiesState(_MdPropertiesProtocol):
-    _instance: Optional[MdPropertiesState] = None
+    _instance: MdPropertiesState | None = None
     num_entities: int
     max_possible: int
 
@@ -233,7 +234,7 @@ class MdEntry(MdEntryProtocol, AutoString):
         self.unk30 = unk30
 
     @classmethod
-    def new_empty(cls, entid: u16) -> "MdEntry":
+    def new_empty(cls, entid: u16) -> MdEntry:
         return MdEntry(
             md_index=u32(0),
             entid=entid,
@@ -294,8 +295,8 @@ class Md(MdProtocol[MdEntry]):
 
         number_entries = read_u32(data, 4)
 
-        self.entries: List[MdEntry] = []
-        self._entries_by_entid: Dict[int, List[Tuple[int, MdEntry]]] = {}
+        self.entries: list[MdEntry] = []
+        self._entries_by_entid: dict[int, list[tuple[int, MdEntry]]] = {}
         for i in range(0, number_entries):
             start = 8 + (i * MD_ENTRY_LEN)
             entry = MdEntry(
@@ -353,7 +354,7 @@ class Md(MdProtocol[MdEntry]):
     def get_by_index(self, index: int) -> MdEntry:
         return self.entries[index]
 
-    def get_by_entity_id(self, index: int) -> List[Tuple[int, MdEntry]]:
+    def get_by_entity_id(self, index: int) -> list[tuple[int, MdEntry]]:
         return self._entries_by_entid[index]
 
     def __len__(self) -> int:

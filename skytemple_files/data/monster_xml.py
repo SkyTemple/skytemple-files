@@ -30,8 +30,8 @@ from typing import (
     Tuple,
     TypeVar,
     no_type_check,
-    Sequence,
 )
+from collections.abc import Sequence
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -188,9 +188,9 @@ class XmlConverter(Generic[T], ABC):
         pass
 
 
-class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
+class StringsXml(XmlConverter[dict[str, tuple[str, str]]]):
     @classmethod
-    def to_xml(cls, values: Dict[str, Tuple[str, str]]) -> Element:
+    def to_xml(cls, values: dict[str, tuple[str, str]]) -> Element:
         xml = Element(XML_STRINGS)
         for language, (name, category) in values.items():
             lang = Element(language)
@@ -204,7 +204,7 @@ class StringsXml(XmlConverter[Dict[str, Tuple[str, str]]]):
         return xml
 
     @classmethod
-    def from_xml(cls, xml: Element, value_to_update: Dict[str, Tuple[str, str]]):
+    def from_xml(cls, xml: Element, value_to_update: dict[str, tuple[str, str]]):
         for xml_lang in xml:
             if xml_lang.tag in value_to_update.keys():
                 name = None
@@ -237,8 +237,8 @@ class GenderedConvertEntry:
     def __init__(
         self,
         md_entry: MdEntryProtocol,
-        personality: Optional[u8],
-        idle_anim: Optional[u8],
+        personality: u8 | None,
+        idle_anim: u8 | None,
     ):
         self.md_entry = md_entry
         self.personality = personality
@@ -735,9 +735,9 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
             )
 
 
-class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
+class PortraitsXml(XmlConverter[list[Optional[KaoImageProtocol]]]):
     @classmethod
-    def to_xml(cls, values: Sequence[Optional[KaoImageProtocol]]) -> Element:
+    def to_xml(cls, values: Sequence[KaoImageProtocol | None]) -> Element:
         xml = Element(XML_PORTRAITS)
         for kao in values:
             kao_xml = Element(XML_PORTRAITS_PORTRAIT)
@@ -752,7 +752,7 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
 
     @classmethod
     def from_xml(
-        cls, xml: Element, value_to_update: Sequence[Optional[KaoImageProtocol]]
+        cls, xml: Element, value_to_update: Sequence[KaoImageProtocol | None]
     ):
         if len(value_to_update) != len(xml):
             raise XmlValidateError(
@@ -809,18 +809,18 @@ class PortraitsXml(XmlConverter[List[Optional[KaoImageProtocol]]]):
 
 def monster_xml_export(
     game_version: str,
-    md_gender1: Optional[MdEntryProtocol],
-    md_gender2: Optional[MdEntryProtocol],
-    names: Optional[Dict[str, Tuple[str, str]]],
-    moveset: Optional[MoveLearnsetProtocol],
-    moveset2: Optional[MoveLearnsetProtocol],
-    stats: Optional[LevelBinEntry],
-    portraits: Optional[Sequence[KaoImageProtocol]],
-    portraits2: Optional[Sequence[KaoImageProtocol]],
-    personality1: Optional[u8] = None,
-    personality2: Optional[u8] = None,
-    idle_anim1: Optional[IdleAnimType] = None,
-    idle_anim2: Optional[IdleAnimType] = None,
+    md_gender1: MdEntryProtocol | None,
+    md_gender2: MdEntryProtocol | None,
+    names: dict[str, tuple[str, str]] | None,
+    moveset: MoveLearnsetProtocol | None,
+    moveset2: MoveLearnsetProtocol | None,
+    stats: LevelBinEntry | None,
+    portraits: Sequence[KaoImageProtocol] | None,
+    portraits2: Sequence[KaoImageProtocol] | None,
+    personality1: u8 | None = None,
+    personality2: u8 | None = None,
+    idle_anim1: IdleAnimType | None = None,
+    idle_anim2: IdleAnimType | None = None,
 ) -> ElementTree.Element:
     """
     Exports properties of all given things as an XML file. If a second Md entry is given,
@@ -861,14 +861,14 @@ def monster_xml_export(
 
 def monster_xml_import(
     xml: ElementTree.Element,
-    md_gender1: Optional[GenderedConvertEntry],
-    md_gender2: Optional[GenderedConvertEntry],
-    names: Optional[Dict[str, Tuple[str, str]]],
-    moveset: Optional[MoveLearnsetProtocol],
-    moveset2: Optional[MoveLearnsetProtocol],
-    stats: Optional[LevelBinEntry],
-    portraits: Optional[List[KaoImageProtocol]],
-    portraits2: Optional[List[KaoImageProtocol]],
+    md_gender1: GenderedConvertEntry | None,
+    md_gender2: GenderedConvertEntry | None,
+    names: dict[str, tuple[str, str]] | None,
+    moveset: MoveLearnsetProtocol | None,
+    moveset2: MoveLearnsetProtocol | None,
+    stats: LevelBinEntry | None,
+    portraits: list[KaoImageProtocol] | None,
+    portraits2: list[KaoImageProtocol] | None,
 ) -> str:
     """
     Imports the available data from the XML into the models and lists given.

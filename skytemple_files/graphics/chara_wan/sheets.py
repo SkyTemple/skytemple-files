@@ -121,7 +121,7 @@ def ImportSheets(inDir, strict=False):
     root = tree.getroot()
     sdwSize = int(root.find("ShadowSize").text)
     if sdwSize < 0 or sdwSize > 2:
-        raise ValueError("Invalid shadow size: {0}".format(sdwSize))
+        raise ValueError(f"Invalid shadow size: {sdwSize}")
     anims_node = root.find("Anims")
     for anim_node in anims_node.iter("Anim"):
         name = anim_node.find("Name").text
@@ -158,13 +158,13 @@ def ImportSheets(inDir, strict=False):
             anim_names[name.lower()] = index
             if index == -1 and strict:
                 raise UserValueError(
-                    "{0} has its own sheet and does not have an index!".format(name)
+                    f"{name} has its own sheet and does not have an index!"
                 )
 
         if index > -1:
             if index in anim_stats:
                 raise UserValueError(
-                    "{0} and {1} both have the an index of {2}!".format(
+                    "{} and {} both have the an index of {}!".format(
                         anim_stats[index].name, name, index
                     )
                 )
@@ -209,10 +209,10 @@ def ImportSheets(inDir, strict=False):
         orphans = []
         for k in anim_names:
             orphans.append(k)
-        raise UserValueError("Xml found with no sheet: {0}".format(", ".join(orphans)))
+        raise UserValueError("Xml found with no sheet: {}".format(", ".join(orphans)))
     if len(extra_sheets) > 0:
         raise UserValueError(
-            "Sheet found with no xml: {0}".format(", ".join(extra_sheets))
+            "Sheet found with no xml: {}".format(", ".join(extra_sheets))
         )
 
     animGroupData = []
@@ -227,7 +227,7 @@ def ImportSheets(inDir, strict=False):
             # check against inconsistent sizing
             if anim_img.size != offset_img.size or anim_img.size != shadow_img.size:
                 raise UserValueError(
-                    "Anim, Offset, and Shadow sheets for {0} must be the same size!".format(
+                    "Anim, Offset, and Shadow sheets for {} must be the same size!".format(
                         anim_name
                     )
                 )
@@ -250,26 +250,26 @@ def ImportSheets(inDir, strict=False):
             # check against inconsistent duration counts
             if total_frames != len(durations):
                 raise UserValueError(
-                    "Number of frames in {0} does not match count of durations ({1}) specified in xml!".format(
+                    "Number of frames in {} does not match count of durations ({}) specified in xml!".format(
                         anim_name, len(durations)
                     )
                 )
 
             if anim_stats[idx].rushFrame >= len(durations):
                 raise UserValueError(
-                    "RushFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                    "RushFrame of {} is greater than the number of frames ({}) in {}!".format(
                         anim_stats[idx].rushFrame, len(durations), anim_name
                     )
                 )
             if anim_stats[idx].hitFrame >= len(durations):
                 raise UserValueError(
-                    "HitFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                    "HitFrame of {} is greater than the number of frames ({}) in {}!".format(
                         anim_stats[idx].hitFrame, len(durations), anim_name
                     )
                 )
             if anim_stats[idx].returnFrame >= len(durations):
                 raise UserValueError(
-                    "ReturnFrame of {0} is greater than the number of frames ({1}) in {2}!".format(
+                    "ReturnFrame of {} is greater than the number of frames ({}) in {}!".format(
                         anim_stats[idx].returnFrame, len(durations), anim_name
                     )
                 )
@@ -329,7 +329,7 @@ def ImportSheets(inDir, strict=False):
                         # raise warning if there's missing shadow or offsets
                         if strict:
                             raise UserValueError(
-                                "No frame offset found in frame {0} for {1}".format(
+                                "No frame offset found in frame {} for {}".format(
                                     (jj, dir), anim_name
                                 )
                             )
@@ -351,7 +351,7 @@ def ImportSheets(inDir, strict=False):
                         shadow = shadow_offset[4]
                     elif strict:
                         raise UserValueError(
-                            "No shadow offset found in frame {0} for {1}".format(
+                            "No shadow offset found in frame {} for {}".format(
                                 (jj, dir), anim_name
                             )
                         )
@@ -471,7 +471,7 @@ def ImportSheets(inDir, strict=False):
 
     if strict and len(colors) > 16:
         raise UserValueError(
-            "Number of (nontransparent) colors over 15: {0}".format(len(colors))
+            f"Number of (nontransparent) colors over 15: {len(colors)}"
         )
 
     transparent = (0, 127, 151, 255)
@@ -741,7 +741,7 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
             continue
 
         if idx >= len(anim_name_map) or anim_name_map[idx][0] == "":
-            raise UserValueError("Animation #{0} needs a name!".format(idx))
+            raise UserValueError(f"Animation #{idx} needs a name!")
 
         dupe_idx = -1
         for cmp_idx in ANIM_ORDER:

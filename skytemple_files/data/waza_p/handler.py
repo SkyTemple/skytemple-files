@@ -36,13 +36,13 @@ from skytemple_files.data.waza_p.protocol import (
 
 class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[WazaPProtocol]:
+    def load_python_model(cls) -> type[WazaPProtocol]:
         from skytemple_files.data.waza_p._model import WazaP
 
         return WazaP
 
     @classmethod
-    def load_native_model(cls) -> Type[WazaPProtocol]:
+    def load_native_model(cls) -> type[WazaPProtocol]:
         from skytemple_rust.st_waza_p import (
             WazaP,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -50,13 +50,13 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return WazaP
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyWazaP"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyWazaP]]:  # type: ignore
         from skytemple_files.data.waza_p._writer import WazaPWriter
 
         return WazaPWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeWazaP"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeWazaP]]:  # type: ignore
         from skytemple_rust.st_waza_p import (
             WazaPWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -64,7 +64,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return WazaPWriter
 
     @classmethod
-    def get_level_up_model(cls) -> Type[LevelUpMoveProtocol]:
+    def get_level_up_model(cls) -> type[LevelUpMoveProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_waza_p import (
                 LevelUpMove as LevelUpMoveNative,
@@ -78,7 +78,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return LevelUpMove
 
     @classmethod
-    def get_move_model(cls) -> Type[WazaMoveProtocol]:
+    def get_move_model(cls) -> type[WazaMoveProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_waza_p import (
                 WazaMove as WazaMoveNative,
@@ -92,7 +92,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return WazaMove
 
     @classmethod
-    def get_range_settings_model(cls) -> Type[WazaMoveRangeSettingsProtocol]:
+    def get_range_settings_model(cls) -> type[WazaMoveRangeSettingsProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_waza_p import (
                 WazaMoveRangeSettings as WazaMoveRangeSettingsNative,
@@ -106,7 +106,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return WazaMoveRangeSettings
 
     @classmethod
-    def get_learnset_model(cls) -> Type[MoveLearnsetProtocol]:
+    def get_learnset_model(cls) -> type[MoveLearnsetProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_waza_p import (
                 MoveLearnset as MoveLearnsetNative,

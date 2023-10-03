@@ -294,7 +294,7 @@ PMD2_STR_ENCODER = "pmd2str"
 was_init = False
 
 
-def pmd2_encode(text: str, *args: List[Any]) -> Tuple[bytes, int]:
+def pmd2_encode(text: str, *args: list[Any]) -> tuple[bytes, int]:
     bytearr = bytearray(len(text) * 2)
     cursor = 0
     for c in text:
@@ -313,7 +313,7 @@ def pmd2_encode(text: str, *args: List[Any]) -> Tuple[bytes, int]:
     return bytes(bytearr[:cursor]), cursor
 
 
-def pmd2_decode(binary: bytes, *args: List[Any]) -> Tuple[str, int]:
+def pmd2_decode(binary: bytes, *args: list[Any]) -> tuple[str, int]:
     len_str = len(binary)
     str = ""
     current_is_special_character = False
@@ -344,7 +344,7 @@ def pmd2_decode(binary: bytes, *args: List[Any]) -> Tuple[str, int]:
     return str, len_str
 
 
-def pmd2_codec_search_function(encoding_name: str) -> Optional[codecs.CodecInfo]:
+def pmd2_codec_search_function(encoding_name: str) -> codecs.CodecInfo | None:
     if encoding_name == PMD2_STR_ENCODER:
         return codecs.CodecInfo(pmd2_encode, pmd2_decode, name=PMD2_STR_ENCODER)  # type: ignore
     return None

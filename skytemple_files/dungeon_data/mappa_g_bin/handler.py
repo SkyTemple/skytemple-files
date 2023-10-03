@@ -30,17 +30,17 @@ class MappaGBinHandler(DataHandler[MappaGBin]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "MappaGBin":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> MappaGBin:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), MappaGBin)
 
     @classmethod
-    def serialize(cls, data: "MappaGBin", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: MappaGBin, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: "MappaGBin", **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: MappaGBin, **kwargs: OptionalKwargs) -> bytes:
         return MappaGBinWriter(data).write()[0]

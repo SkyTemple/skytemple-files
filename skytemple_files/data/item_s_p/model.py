@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from enum import Enum, auto
-from typing import Optional, Tuple, List, Sequence
+from typing import Optional, Tuple, List
+from collections.abc import Sequence
 
 from range_typed_integers import u16, u32
 
@@ -90,9 +91,9 @@ class ItemSPType(Enum):
         self,
         _: int,
         rarity: str,
-        slot: Optional[int],
+        slot: int | None,
         exclusive_to: ItemSPExclusiveType,
-        extra_trait_desc: Optional[str],
+        extra_trait_desc: str | None,
     ):
         self.rarity = rarity
         self.slot = slot
@@ -146,10 +147,10 @@ class ItemSP(Sir0Serializable, AutoString):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.data.item_s_p.writer import ItemSPWriter
 
         return ItemSPWriter(self).write()  # type: ignore

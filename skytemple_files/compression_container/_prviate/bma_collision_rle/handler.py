@@ -30,7 +30,7 @@ class BmaCollisionRleHandler(CompressionContainerHandler):
         return b"BMARLE"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container._prviate.bma_collision_rle._pymodel import (
             BmaCollisionRleCompressionContainer,
         )
@@ -38,7 +38,7 @@ class BmaCollisionRleHandler(CompressionContainerHandler):
         return BmaCollisionRleCompressionContainer
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust._st_bma_collision_rle_compression import (
             BmaCollisionRleCompressionContainer,
         )

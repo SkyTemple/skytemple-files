@@ -28,7 +28,7 @@ from skytemple_files.hardcoded.default_starters import HardcodedDefaultStarters
 
 class HardcodedPersonalityTestStarters:
     @staticmethod
-    def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
+    def get_partner_md_ids(overlay13: bytes, config: Pmd2Data) -> list[u16]:
         """Returns the monster.md indices of the partner starter choices (total index, with gender form!)"""
         block = config.bin_sections.overlay13.data.STARTERS_PARTNER_IDS
         ids = []
@@ -38,7 +38,7 @@ class HardcodedPersonalityTestStarters:
 
     @staticmethod
     def set_partner_md_ids(
-        value: List[u16], overlay13: bytearray, config: Pmd2Data
+        value: list[u16], overlay13: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the monster.md indices of the partner starter choices (in place, total index, with gender form!)
@@ -55,7 +55,7 @@ class HardcodedPersonalityTestStarters:
             write_u16(overlay13, v, block.address + (i * 2))
 
     @staticmethod
-    def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> List[u16]:
+    def get_player_md_ids(overlay13: bytes, config: Pmd2Data) -> list[u16]:
         """Returns the monster.md indices of the player starter choices (total index, with gender form!)"""
         block = config.bin_sections.overlay13.data.STARTERS_HERO_IDS
         ids = []
@@ -65,7 +65,7 @@ class HardcodedPersonalityTestStarters:
 
     @staticmethod
     def set_player_md_ids(
-        value: List[u16], overlay13: bytearray, config: Pmd2Data
+        value: list[u16], overlay13: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the monster.md indices of the player partner choices (in place, total index, with gender form!)

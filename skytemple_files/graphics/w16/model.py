@@ -35,7 +35,7 @@ TILE_DIM = 8
 
 class W16Image(ABC):
     def __init__(
-        self, entry_data: "W16TocEntry", compressed_img_data: bytes, pal: List[int]
+        self, entry_data: W16TocEntry, compressed_img_data: bytes, pal: list[int]
     ):
         self.entry_data = entry_data
         self.compressed_img_data = compressed_img_data
@@ -69,7 +69,7 @@ class W16Image(ABC):
             h,
         )
 
-    def set(self, pil: Image.Image) -> "W16Image":
+    def set(self, pil: Image.Image) -> W16Image:
         """Sets the w16 image using a PIL image with 16-bit color palette as input"""
         self.entry_data.width = int(pil.width / TILE_DIM)
         self.entry_data.height = int(pil.height / TILE_DIM)
@@ -81,7 +81,7 @@ class W16Image(ABC):
         return self
 
     @classmethod
-    def new(cls, entry_data: "W16TocEntry", pil: Image.Image) -> "W16Image":
+    def new(cls, entry_data: W16TocEntry, pil: Image.Image) -> W16Image:
         """Creates a new W16Image from a PIL image with 16-bit color palette as input"""
         entry_data.width = int(pil.width / TILE_DIM)
         entry_data.height = int(pil.height / TILE_DIM)
@@ -91,7 +91,7 @@ class W16Image(ABC):
     @classmethod
     def _read_in(
         cls, pil: Image.Image, w_in_tiles, h_in_tiles
-    ) -> Tuple[List[int], bytes]:
+    ) -> tuple[list[int], bytes]:
         w = TILE_DIM * w_in_tiles
         h = TILE_DIM * h_in_tiles
         tiles, tile_mappings, pal = from_pil(
@@ -142,7 +142,7 @@ class W16:
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self._files: List[W16Image] = []
+        self._files: list[W16Image] = []
         len_pal_bytes = int(NUM_CHANNELS * NUM_COLORS_IN_PAL)
         i = 0
         while True:
@@ -186,7 +186,7 @@ class W16:
     def append(self, img: W16Image):
         self._files.append(img)
 
-    def _read_pal(self, pal_bytes: bytes) -> List[int]:
+    def _read_pal(self, pal_bytes: bytes) -> list[int]:
         palette = []
         for pal_entry in iter_bytes(pal_bytes, NUM_CHANNELS):
             r, g, b = pal_entry

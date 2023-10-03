@@ -86,7 +86,7 @@ class Str:
         return result
 
     @classmethod
-    def internal__get_all_raw_strings_from(cls, data: bytes) -> List[bytes]:
+    def internal__get_all_raw_strings_from(cls, data: bytes) -> list[bytes]:
         """Returns all strings in this file, undecoded."""
         if not isinstance(data, memoryview):
             data = memoryview(data)

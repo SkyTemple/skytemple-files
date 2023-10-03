@@ -59,7 +59,7 @@ class MonsterSpriteDataTableEntry(AutoString):
 
 class HardcodedMonsterSpriteDataTable:
     @classmethod
-    def get(cls, arm9bin: bytes, config: Pmd2Data) -> List[MonsterSpriteDataTableEntry]:
+    def get(cls, arm9bin: bytes, config: Pmd2Data) -> list[MonsterSpriteDataTableEntry]:
         """Returns the list."""
         block = config.bin_sections.arm9.data.MONSTER_SPRITE_DATA
         lst = []
@@ -74,7 +74,7 @@ class HardcodedMonsterSpriteDataTable:
     @classmethod
     def set(
         cls,
-        value: List[MonsterSpriteDataTableEntry],
+        value: list[MonsterSpriteDataTableEntry],
         arm9bin: bytearray,
         config: Pmd2Data,
     ) -> None:
@@ -113,7 +113,7 @@ class IdleAnimType(Enum):
 
 class HardcodedMonsterGroundIdleAnimTable:
     @classmethod
-    def get(cls, ov11bin: bytes, config: Pmd2Data) -> List[IdleAnimType]:
+    def get(cls, ov11bin: bytes, config: Pmd2Data) -> list[IdleAnimType]:
         """Returns the list."""
         block = config.extra_bin_sections.overlay11.data.MONSTER_GROUND_IDLE_ANIM
         lst_i = list(ov11bin[block.address : block.address + block.length])
@@ -122,7 +122,7 @@ class HardcodedMonsterGroundIdleAnimTable:
 
     @classmethod
     def set(
-        cls, values: List[IdleAnimType], ov11bin: bytearray, config: Pmd2Data
+        cls, values: list[IdleAnimType], ov11bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the list.

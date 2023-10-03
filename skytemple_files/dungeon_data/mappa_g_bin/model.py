@@ -58,13 +58,13 @@ class StubMappaGFloor:
 
 
 class MappaGFloor(AutoString):
-    def __init__(self, layout: "MappaGFloorLayout"):
+    def __init__(self, layout: MappaGFloorLayout):
         self.layout: MappaGFloorLayout = layout
 
     @classmethod
     def from_mappa(
-        cls, read: "MappaGBinReadContainer", floor_data: bytes
-    ) -> "MappaGFloor":
+        cls, read: MappaGBinReadContainer, floor_data: bytes
+    ) -> MappaGFloor:
         return cls(
             MappaGFloorLayout.from_mappa(
                 read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)
@@ -90,7 +90,7 @@ class MappaGFloorLayout(AutoString):
         self.fixed_floor_id = fixed_floor_id
 
     @classmethod
-    def from_mappa(cls, read: "MappaGBinReadContainer", pointer: int):
+    def from_mappa(cls, read: MappaGBinReadContainer, pointer: int):
         return cls(
             tileset_id=read_u8(read.data, pointer + 0x00),
             fixed_floor_id=read_u8(read.data, pointer + 0x01),
@@ -112,16 +112,16 @@ class MappaGFloorLayout(AutoString):
 
 
 class MappaGBin(Sir0Serializable):
-    def __init__(self, floor_lists: List[List[MappaGFloor]]):
+    def __init__(self, floor_lists: list[list[MappaGFloor]]):
         self.floor_lists = floor_lists
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.dungeon_data.mappa_g_bin.writer import MappaGBinWriter
 
         return MappaGBinWriter(self).write()
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> "MappaGBin":
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> MappaGBin:
         return cls(
             cls._read_floor_list(MappaGBinReadContainer(content_data, data_pointer))
         )
@@ -156,7 +156,7 @@ class MappaGBin(Sir0Serializable):
                 break
         return floors
 
-    def minimize(self) -> Tuple[List[List[StubMappaGFloor]], List[MappaGFloorLayout]]:
+    def minimize(self) -> tuple[list[list[StubMappaGFloor]], list[MappaGFloorLayout]]:
         """
         Collects a list of floors, that references indices in other lists, like stored in the mappa_g files.
         If two floors use the same exact data for something, they will be pointing to the same index in the lists,

@@ -30,7 +30,7 @@ def mark_as_user_err(exc: BaseException):
         pass
 
 
-def make_user_err(base_type: Type[T], *args, **kwargs) -> T:
+def make_user_err(base_type: type[T], *args, **kwargs) -> T:
     """Dynamically creates a new subclass of base_type which is marked as a user error and constructs it."""
     cls = type(base_type.__name__ + "User", (base_type,), {USER_ERROR_MARK: True})
 

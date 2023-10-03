@@ -22,7 +22,8 @@ For now, the documentation of fields is in the pmd2data.xml.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Pattern, Union
+from typing import Any, Dict, List, Optional, Union
+from re import Pattern
 
 import pmdsky_debug_py
 
@@ -76,7 +77,7 @@ class Pmd2GameEdition(AutoString):
 
 
 class Pmd2SortLists(AutoString):
-    def __init__(self, m2n: Optional[str], n2m: Optional[str], i2n: Optional[str]):
+    def __init__(self, m2n: str | None, n2m: str | None, i2n: str | None):
         self.m2n = m2n
         self.n2m = n2m
         self.i2n = i2n
@@ -114,10 +115,10 @@ class Pmd2StringBlock(AutoString):
 
 class Pmd2StringIndexData(AutoString):
     def __init__(
-        self, languages: List[Pmd2Language], string_blocks: List[Pmd2StringBlock]
+        self, languages: list[Pmd2Language], string_blocks: list[Pmd2StringBlock]
     ):
         self.languages = languages
-        self.string_blocks: Dict[str, Pmd2StringBlock] = {
+        self.string_blocks: dict[str, Pmd2StringBlock] = {
             blk.name: blk for blk in string_blocks
         }
 
@@ -140,7 +141,7 @@ class Pmd2PatchInclude(AutoString):
 
 
 class Pmd2PatchOpenBin(AutoString):
-    def __init__(self, filepath: str, includes: List[Pmd2PatchInclude]):
+    def __init__(self, filepath: str, includes: list[Pmd2PatchInclude]):
         self.filepath = filepath
         self.includes = includes
 
@@ -153,7 +154,7 @@ class Pmd2PatchParameterType(Enum):
 
 class Pmd2PatchParameterOption(AutoString):
     def __init__(
-        self, type: Pmd2PatchParameterType, label: str, value: Union[int, str]
+        self, type: Pmd2PatchParameterType, label: str, value: int | str
     ):
         self.type = type
         self.label = label
@@ -167,10 +168,10 @@ class Pmd2PatchParameter(AutoString):
         type: Pmd2PatchParameterType,
         label: str,
         *,
-        min: Optional[int] = None,
-        max: Optional[int] = None,
-        options: Optional[List[Pmd2PatchParameterOption]] = None,
-        default: Union[int, str, None] = None,
+        min: int | None = None,
+        max: int | None = None,
+        options: list[Pmd2PatchParameterOption] | None = None,
+        default: int | str | None = None,
     ):
         self.name = name
         self.type = type
@@ -185,14 +186,14 @@ class Pmd2Patch(AutoString):
     def __init__(
         self,
         id: str,
-        includes: List[Pmd2PatchInclude],
-        open_bins: List[Pmd2PatchOpenBin],
-        parameters: List[Pmd2PatchParameter],
+        includes: list[Pmd2PatchInclude],
+        open_bins: list[Pmd2PatchOpenBin],
+        parameters: list[Pmd2PatchParameter],
     ):
         self.id = id
         self.includes = includes
         self.open_bins = open_bins
-        self.parameters: Dict[str, Pmd2PatchParameter] = {
+        self.parameters: dict[str, Pmd2PatchParameter] = {
             param.name: param for param in parameters
         }
 
@@ -211,7 +212,7 @@ class Pmd2PatchStringReplacement(AutoString):
         self,
         filename: str,
         regexp: Pattern[Any],
-        games: List[Pmd2PatchStringReplacementGame],
+        games: list[Pmd2PatchStringReplacementGame],
     ):
         self.filename = filename
         self.regexp = regexp
@@ -222,14 +223,14 @@ class Pmd2SimplePatch(AutoString):
     def __init__(
         self,
         id: str,
-        includes: List[Pmd2PatchInclude],
-        string_replacements: List[Pmd2PatchStringReplacement],
-        parameters: List[Pmd2PatchParameter],
+        includes: list[Pmd2PatchInclude],
+        string_replacements: list[Pmd2PatchStringReplacement],
+        parameters: list[Pmd2PatchParameter],
     ):
         self.id = id
         self.includes = includes
         self.string_replacements = string_replacements
-        self.parameters: Dict[str, Pmd2PatchParameter] = {
+        self.parameters: dict[str, Pmd2PatchParameter] = {
             param.name: param for param in parameters
         }
 
@@ -240,48 +241,48 @@ class Pmd2SimplePatch(AutoString):
 class Pmd2AsmPatchesConstants(AutoString):
     def __init__(
         self,
-        loose_bin_files: List[Pmd2LooseBinFile],
+        loose_bin_files: list[Pmd2LooseBinFile],
         patch_dir: Pmd2PatchDir,
-        patches: List[Union[Pmd2Patch, Pmd2SimplePatch]],
+        patches: list[Pmd2Patch | Pmd2SimplePatch],
     ):
-        self.loose_bin_files: Dict[str, Pmd2LooseBinFile] = {
+        self.loose_bin_files: dict[str, Pmd2LooseBinFile] = {
             var.srcdata: var for var in loose_bin_files
         }
         self.patch_dir = patch_dir
-        self.patches: Dict[str, Union[Pmd2Patch, Pmd2SimplePatch]] = {
+        self.patches: dict[str, Pmd2Patch | Pmd2SimplePatch] = {
             var.id: var for var in patches
         }
 
 
 class Pmd2Index(AutoString):
-    def __init__(self, id: int, names: List[str]):
+    def __init__(self, id: int, names: list[str]):
         self.id = id
         self.names = names
 
 
 class Pmd2Sprite(AutoString):
-    def __init__(self, id: int, indices: Dict[int, Pmd2Index]):
+    def __init__(self, id: int, indices: dict[int, Pmd2Index]):
         self.id = id
-        self.indices: Dict[int, Pmd2Index] = {k: indices[k] for k in sorted(indices)}
+        self.indices: dict[int, Pmd2Index] = {k: indices[k] for k in sorted(indices)}
 
 
 class Pmd2Data(AutoString):
     def __init__(
         self,
         game_edition: Pmd2GameEdition,
-        game_editions: List[Pmd2GameEdition],
-        game_constants: Dict[str, int],
+        game_editions: list[Pmd2GameEdition],
+        game_constants: dict[str, int],
         string_index_data: Pmd2StringIndexData,
         asm_patches_constants: Pmd2AsmPatchesConstants,
         script_data: Pmd2ScriptData,
         dungeon_data: Pmd2DungeonData,
         string_encoding: str,
-        animation_names: Dict[int, Pmd2Sprite],
+        animation_names: dict[int, Pmd2Sprite],
     ):
         self.game_edition = game_edition.id
         self.game_version = game_edition.version
         self.game_region = self.get_region_constant_for_region_name(game_edition.region)
-        self.game_editions: Dict[str, Pmd2GameEdition] = {
+        self.game_editions: dict[str, Pmd2GameEdition] = {
             edi.id: edi for edi in game_editions
         }
         self.game_constants = game_constants
@@ -290,7 +291,7 @@ class Pmd2Data(AutoString):
         self.script_data = script_data
         self.dungeon_data = dungeon_data
         self.string_encoding = string_encoding
-        self.animation_names: Dict[int, Pmd2Sprite] = {
+        self.animation_names: dict[int, Pmd2Sprite] = {
             k: animation_names[k] for k in sorted(animation_names)
         }
         self.bin_sections: pmdsky_debug_py.AllSymbolsProtocol

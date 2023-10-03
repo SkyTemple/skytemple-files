@@ -392,7 +392,7 @@ class HardcodedFixedFloorTables:
     @classmethod
     def get_entity_spawn_table(
         cls, overlay29: bytes, config: Pmd2Data
-    ) -> List[EntitySpawnEntry]:
+    ) -> list[EntitySpawnEntry]:
         """
         Returns the list of entity spawns. Each entry has three references, one to each of
         the other three tables (item spawn, monster spawn, tile type).
@@ -413,7 +413,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_entity_spawn_table(
-        cls, overlay29: bytearray, values: List[EntitySpawnEntry], config: Pmd2Data
+        cls, overlay29: bytearray, values: list[EntitySpawnEntry], config: Pmd2Data
     ) -> None:
         """
         Sets the list of entity spawns.
@@ -428,7 +428,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_item_spawn_list(cls, overlay29: bytes, config: Pmd2Data) -> List[ItemSpawn]:
+    def get_item_spawn_list(cls, overlay29: bytes, config: Pmd2Data) -> list[ItemSpawn]:
         """
         Returns the list of items that can be spawned in fixed floors.
         """
@@ -447,7 +447,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_item_spawn_list(
-        cls, overlay29: bytearray, values: List[ItemSpawn], config: Pmd2Data
+        cls, overlay29: bytearray, values: list[ItemSpawn], config: Pmd2Data
     ) -> None:
         """
         Returns the list of items that can be spawned in fixed floors.
@@ -464,7 +464,7 @@ class HardcodedFixedFloorTables:
     @classmethod
     def get_monster_spawn_list(
         cls, overlay29: bytes, config: Pmd2Data
-    ) -> List[MonsterSpawn]:
+    ) -> list[MonsterSpawn]:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
@@ -482,7 +482,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_monster_spawn_list(
-        cls, overlay29: bytearray, values: List[MonsterSpawn], config: Pmd2Data
+        cls, overlay29: bytearray, values: list[MonsterSpawn], config: Pmd2Data
     ) -> None:
         """
         Returns the list of monsters that can be spawned in fixed floors.
@@ -497,7 +497,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_tile_spawn_list(cls, overlay29: bytes, config: Pmd2Data) -> List[TileSpawn]:
+    def get_tile_spawn_list(cls, overlay29: bytes, config: Pmd2Data) -> list[TileSpawn]:
         """
         Returns the list of tiles that can be spawned in fixed floors.
         """
@@ -516,7 +516,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_tile_spawn_list(
-        cls, overlay29: bytearray, values: List[TileSpawn], config: Pmd2Data
+        cls, overlay29: bytearray, values: list[TileSpawn], config: Pmd2Data
     ) -> None:
         """
         Returns the list of tiles that can be spawned in fixed floors.
@@ -533,7 +533,7 @@ class HardcodedFixedFloorTables:
     @classmethod
     def get_monster_spawn_stats_table(
         cls, overlay10: bytes, config: Pmd2Data
-    ) -> List[MonsterSpawnStats]:
+    ) -> list[MonsterSpawnStats]:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
@@ -556,7 +556,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_monster_spawn_stats_table(
-        cls, overlay10: bytearray, values: List[MonsterSpawnStats], config: Pmd2Data
+        cls, overlay10: bytearray, values: list[MonsterSpawnStats], config: Pmd2Data
     ) -> None:
         """
         Returns the list of monsters that can be spawned in fixed floors.
@@ -573,7 +573,7 @@ class HardcodedFixedFloorTables:
     @classmethod
     def get_fixed_floor_properties(
         cls, overlay10: bytes, config: Pmd2Data
-    ) -> List[FixedFloorProperties]:
+    ) -> list[FixedFloorProperties]:
         """
         Returns the list of properties for fixed floors.
         """
@@ -597,7 +597,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_fixed_floor_properties(
-        cls, overlay10: bytearray, values: List[FixedFloorProperties], config: Pmd2Data
+        cls, overlay10: bytearray, values: list[FixedFloorProperties], config: Pmd2Data
     ) -> None:
         """
         Sets the list of properties for fixed floors.
@@ -612,7 +612,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_fixed_floor_overrides(cls, overlay29: bytes, config: Pmd2Data) -> List[u8]:
+    def get_fixed_floor_overrides(cls, overlay29: bytes, config: Pmd2Data) -> list[u8]:
         """
         Returns the list of overrides for fixed floors.
         """
@@ -624,7 +624,7 @@ class HardcodedFixedFloorTables:
 
     @classmethod
     def set_fixed_floor_overrides(
-        cls, overlay29: bytearray, values: List[u8], config: Pmd2Data
+        cls, overlay29: bytearray, values: list[u8], config: Pmd2Data
     ) -> None:
         """
         Sets the list of overrides for fixed floors.
@@ -640,7 +640,7 @@ class HardcodedFixedFloorTables:
             overlay29[i] = entry
 
     @classmethod
-    def _set(cls, binary: bytearray, values: List[Any], config: Pmd2Data, block: Symbol, entry_len: int) -> None:  # type: ignore
+    def _set(cls, binary: bytearray, values: list[Any], config: Pmd2Data, block: Symbol, entry_len: int) -> None:  # type: ignore
         expected_length = int(block.length / entry_len)
         if len(values) != expected_length:
             raise ValueError(

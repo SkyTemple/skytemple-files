@@ -30,14 +30,14 @@ class SsaHeader(AutoString):
     """
 
     layer_count: u16
-    layer_list_pointer: Optional[int]
-    trigger_pointer: Optional[int]
-    actor_pointer: Optional[int]
-    object_pointer: Optional[int]
-    performer_pointer: Optional[int]
-    events_pointer: Optional[int]
-    position_marker_pointer: Optional[int]
-    unk10_pointer: Optional[int]
+    layer_list_pointer: int | None
+    trigger_pointer: int | None
+    actor_pointer: int | None
+    object_pointer: int | None
+    performer_pointer: int | None
+    events_pointer: int | None
+    position_marker_pointer: int | None
+    unk10_pointer: int | None
 
     def __init__(
         self,

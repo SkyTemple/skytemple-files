@@ -64,7 +64,7 @@ class FloorReusedError(DungeonValidatorError):
     ):
         super().__init__(dungeon, dungeon_id)
         self.reused_of_dungeon_with_id = reused_of_dungeon_with_id
-        self.reused_of_dungeon_name: Optional[str] = None
+        self.reused_of_dungeon_name: str | None = None
 
     @property
     def name(self) -> str:
@@ -96,7 +96,7 @@ class DungeonMissingFloorError(DungeonValidatorError):
         self,
         dungeon: DungeonDefinition,
         dungeon_id: int,
-        floors_in_mappa_not_referenced: List[int],
+        floors_in_mappa_not_referenced: list[int],
     ):
         super().__init__(dungeon, dungeon_id)
         self.floors_in_mappa_not_referenced = floors_in_mappa_not_referenced

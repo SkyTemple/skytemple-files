@@ -224,11 +224,11 @@ class SpecMoveAnim(AutoString):
 
 
 class Anim(AutoString):
-    trap_table: List[TrapAnim]
-    item_table: List[ItemAnim]
-    move_table: List[MoveAnim]
-    general_table: List[GeneralAnim]
-    special_move_table: List[SpecMoveAnim]
+    trap_table: list[TrapAnim]
+    item_table: list[ItemAnim]
+    move_table: list[MoveAnim]
+    general_table: list[GeneralAnim]
+    special_move_table: list[SpecMoveAnim]
 
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):

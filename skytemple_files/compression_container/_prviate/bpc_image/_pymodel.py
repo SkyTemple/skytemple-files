@@ -26,7 +26,7 @@ from typing import Optional
 class BpcImageCompressionContainer(CommonAt):
     length_decompressed: u16
 
-    def __init__(self, data: Optional[bytes] = None):
+    def __init__(self, data: bytes | None = None):
         if data:
             self.length_decompressed = read_u16(data, 6)
             self.compressed_data = data[8:]
@@ -52,7 +52,7 @@ class BpcImageCompressionContainer(CommonAt):
         return len(data)
 
     @classmethod
-    def compress(cls, data: bytes) -> "BpcImageCompressionContainer":
+    def compress(cls, data: bytes) -> BpcImageCompressionContainer:
         from skytemple_files.common.types.file_types import FileType
 
         new_container = cls()

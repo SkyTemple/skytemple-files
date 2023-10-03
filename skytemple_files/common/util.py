@@ -34,18 +34,16 @@ from typing import (
     Any,
     Callable,
     Dict,
-    Generator,
-    Iterable,
     List,
     Optional,
     Protocol,
-    Sequence,
     Tuple,
     TypeVar,
     Union,
     overload,
     Literal,
 )
+from collections.abc import Generator, Iterable, Sequence
 
 from pmdsky_debug_py.protocol import SectionProtocol
 
@@ -68,10 +66,7 @@ from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 from skytemple_files.user_error import UserValueError
 
-if sys.version_info >= (3, 9):
-    import importlib.resources as importlib_resources
-else:
-    import importlib_resources
+import importlib.resources as importlib_resources
 
 if TYPE_CHECKING:
     from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -115,8 +110,8 @@ class CapturableProtocol(Protocol):
 
 # A type that can be captured and serialized in structured events, such as for error reports
 # Mypy can't handle cyclic dependencies yet :(
-Capturable = Union[int, str, bool, Iterable["Capturable"], Dict[str, "Capturable"], None, CapturableProtocol]  # type: ignore
-Captured = Union[int, str, bool, List["Captured"], Dict[str, "Captured"], None]  # type: ignore
+Capturable = Union[int, str, bool, Iterable["Capturable"], dict[str, "Capturable"], None, CapturableProtocol]  # type: ignore
+Captured = Union[int, str, bool, list["Captured"], dict[str, "Captured"], None]  # type: ignore
 
 
 # noinspection PyProtectedMember
@@ -160,7 +155,7 @@ def _capture_generic_object(obj: Any, recursion_check=None):
         return str(obj)
     if hasattr(obj, "__slots__"):
         return _capture_generic_object(
-            dict((name, getattr(obj, name)) for name in getattr(obj, "__slots__")),
+            {name: getattr(obj, name) for name in getattr(obj, "__slots__")},
             recursion_check + [obj],
         )
     if hasattr(obj, "__dict__"):
@@ -264,7 +259,7 @@ def read_i32(data: ByteReadable, start: int = 0, *, big_endian: bool = False) ->
 
 def read_var_length_string(
     data: bytes, start: int = 0, codec: str = string_codec.PMD2_STR_ENCODER
-) -> Tuple[int, str]:
+) -> tuple[int, str]:
     """Reads a zero terminated string of characters."""
     if codec == string_codec.PMD2_STR_ENCODER:
         string_codec.init()
@@ -338,7 +333,7 @@ def iter_bits(number: int) -> Iterable[int]:
 
 
 def iter_bytes(
-    data: bytes, slice_size: int, start: int = 0, end: Optional[int] = None
+    data: bytes, slice_size: int, start: int = 0, end: int | None = None
 ) -> Iterable[bytes]:
     if end is None:
         end = len(data)
@@ -348,7 +343,7 @@ def iter_bytes(
 
 
 def iter_bytes_4bit_le(
-    data: bytes, start: int = 0, end: Optional[int] = None
+    data: bytes, start: int = 0, end: int | None = None
 ) -> Iterable[int]:
     """
     Generator that generates two 4 bit integers for each byte in the bytes-like object data.
@@ -371,19 +366,19 @@ def generate_bitfield(vs: Iterable[bool]) -> int:
     return val >> 1
 
 
-def get_files_from_rom_with_extension(rom: NintendoDSRom, ext: str) -> List[str]:
+def get_files_from_rom_with_extension(rom: NintendoDSRom, ext: str) -> list[str]:
     """Returns paths to files in the ROM ending with the specified extension."""
     return _get_files_from_rom_with_extension__recursion("", rom.filenames, ext)
 
 
-def get_files_from_folder_with_extension(folder: Folder, ext: str) -> List[str]:
+def get_files_from_folder_with_extension(folder: Folder, ext: str) -> list[str]:
     """Returns paths to files in the ROM ending with the specified extension."""
     return _get_files_from_rom_with_extension__recursion("", folder, ext)
 
 
 def _get_files_from_rom_with_extension__recursion(
     path: str, folder: Folder, ext: str
-) -> List[str]:
+) -> list[str]:
     if ext == "":
         # Use all files
         files = [path + x for x in folder.files]
@@ -396,7 +391,7 @@ def _get_files_from_rom_with_extension__recursion(
     return files
 
 
-def get_rom_folder(rom: NintendoDSRom, path: str) -> Optional[Folder]:
+def get_rom_folder(rom: NintendoDSRom, path: str) -> Folder | None:
     """Returns the folder in the ROM."""
     return rom.filenames.subfolder(path)
 
@@ -413,7 +408,7 @@ def lcm(x: int, y: int) -> int:
     return x * y // gcd(x, y)
 
 
-def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
+def make_palette_colors_unique(inp: list[list[int]]) -> list[list[int]]:
     """
     Works with a list of lists of rgb color palettes and returns a modified copy.
 
@@ -421,10 +416,10 @@ def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
     the color values of duplicate colors.
     """
     # List of single RGB colors
-    already_collected_colors: List[List[int]] = []
+    already_collected_colors: list[list[int]] = []
     out = []
     for palette in inp:
-        out_p: List[int] = []
+        out_p: list[int] = []
         out.append(out_p)
         for color_idx in range(0, len(palette), 3):
             color = palette[color_idx : color_idx + 3]
@@ -436,11 +431,11 @@ def make_palette_colors_unique(inp: List[List[int]]) -> List[List[int]]:
 
 
 def _mpcu__check(
-    color: List[int],
-    already_collected_colors: List[List[int]],
+    color: list[int],
+    already_collected_colors: list[list[int]],
     change_next: int = 0,
     change_amount: int = 1,
-) -> List[int]:
+) -> list[int]:
     if color not in already_collected_colors:
         return color
     else:
@@ -500,7 +495,7 @@ def get_resources_dir(*, as_string: Literal[False]) -> Path:
     ...
 
 
-def get_resources_dir(*, as_string: bool = True) -> Union[str, Path]:
+def get_resources_dir(*, as_string: bool = True) -> str | Path:
     # This is a bit tricky now that pkg_resources is gone, because importlib does
     # things different to support virtual files.
     # See: https://importlib-resources.readthedocs.io/en/latest/migration.html#pkg-resources-resource-filename
@@ -513,7 +508,7 @@ def get_resources_dir(*, as_string: bool = True) -> Union[str, Path]:
     return path
 
 
-def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> "Pmd2Data":
+def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> Pmd2Data:
     """
     Returns the Pmd2Data for the given ROM.
     If the ROM is not a valid and supported PMD EoS ROM, raises ValueError.
@@ -638,7 +633,7 @@ def set_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol, data: bytes) 
     raise ValueError(f(_("Binary {binary.name} not found.")))
 
 
-def is_binary_in_rom(rom: NintendoDSRom, binary: Optional[SectionProtocol]) -> bool:
+def is_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol | None) -> bool:
     """Returns true if the specified binary is present in the rom"""
     if binary is None:
         return False
@@ -654,7 +649,7 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:
     path_list = path.split("/")
     dir_name = "/".join(path_list[:-1])
     file_name = path_list[-1]
-    folder: Optional[Folder] = rom.filenames.subfolder(dir_name)
+    folder: Folder | None = rom.filenames.subfolder(dir_name)
     if folder is None:
         raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
     folder_first_file_id = folder.firstID
@@ -685,7 +680,7 @@ def create_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
         raise FileNotFoundError(f(_("Folder {path} already exists.")))
     path_list = path.split("/")
     par_dir_name = "/".join(path_list[:-1])
-    parent_dir: Optional[Folder] = rom.filenames.subfolder(par_dir_name)
+    parent_dir: Folder | None = rom.filenames.subfolder(par_dir_name)
     if parent_dir is None:
         raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
 
@@ -714,12 +709,12 @@ def chunks(lst: Sequence[T], n: int) -> Iterable[Sequence[T]]:
         yield lst[i : i + n]
 
 
-def shrink_list(lst: List[T]) -> List[Tuple[T, int]]:
+def shrink_list(lst: list[T]) -> list[tuple[T, int]]:
     return [(element, len(list(i))) for element, i in groupby(lst)]
 
 
 def list_insert_enlarge(
-    lst: List[T], index: int, value: T, filler_fn: Callable[[], T]
+    lst: list[T], index: int, value: T, filler_fn: Callable[[], T]
 ) -> None:
     """Inserts an element value at index index in lst. If the list is not big enough,
     it is enlarged and empty slots are filled with the return value of filler_fn."""
@@ -759,7 +754,7 @@ def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.
 
 
 @contextlib.contextmanager
-def mutate_sequence(obj: object, attr: str) -> Generator[List[Any], None, None]:
+def mutate_sequence(obj: object, attr: str) -> Generator[list[Any], None, None]:
     """
     This context manager provides the attribute sequence value behind the attribute as a list (copy),
     and then assigns the attribute to that list. So while you can "mutate" the "original" sequence this way,

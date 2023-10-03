@@ -30,7 +30,7 @@ class BannerFontWriter:
     def __init__(self, model: BannerFont):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.common.types.file_types import FileType
 
         pointer_offsets = []
@@ -48,7 +48,7 @@ class BannerFontWriter:
         # Character pointers
         char_pointer = bytearray(len(self.model.entries) * BANNER_FONT_ENTRY_LEN)
         char_pointer_offset = u32_checked(len(buffer))
-        last: Tuple[Optional[int], Optional[int]] = (None, None)
+        last: tuple[int | None, int | None] = (None, None)
         for i, e in enumerate(sorted_entries):
             if last == (e.char, e.table):
                 raise ValueError(

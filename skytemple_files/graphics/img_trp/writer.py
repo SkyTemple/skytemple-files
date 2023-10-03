@@ -32,7 +32,7 @@ class ImgTrpWriter:
     def __init__(self, model: ImgTrp):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         buffer = bytearray()
 
         # Sprites

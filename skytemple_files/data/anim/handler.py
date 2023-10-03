@@ -25,9 +25,9 @@ from skytemple_files.data.anim.writer import AnimWriter
 
 class AnimHandler(DataHandler[Anim]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "Anim":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Anim:
         return Anim(data)
 
     @classmethod
-    def serialize(cls, data: "Anim", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: Anim, **kwargs: OptionalKwargs) -> bytes:
         return AnimWriter(data).write()

@@ -21,7 +21,8 @@ import logging
 import math
 import typing
 from itertools import chain
-from typing import List, Optional, Sequence, Tuple, Union
+from typing import List, Optional, Tuple, Union
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16
@@ -82,7 +83,7 @@ class TilemapEntry(TilemapEntryProtocol):
         )
 
     @classmethod
-    def from_int(cls, entry: u16) -> "TilemapEntry":
+    def from_int(cls, entry: u16) -> TilemapEntry:
         """Create a tile map entry from the common two byte format used by the game"""
         return cls(
             # 0000 0011 1111 1111, tile index
@@ -130,10 +131,10 @@ def to_pil(
     for i in range(0, number_tiles):
         tiles_in_chunks = tiling_width * tiling_height
         chunk_x = math.floor(
-            math.floor((i / tiles_in_chunks)) % (img_width_in_tiles / tiling_width)
+            math.floor(i / tiles_in_chunks) % (img_width_in_tiles / tiling_width)
         )
         chunk_y = math.floor(
-            math.floor((i / tiles_in_chunks)) / (img_width_in_tiles / tiling_width)
+            math.floor(i / tiles_in_chunks) / (img_width_in_tiles / tiling_width)
         )
 
         tile_x = (chunk_x * tiling_width) + (i % tiling_width)
@@ -182,7 +183,7 @@ def to_pil_tiled(
     palettes: Sequence[Sequence[int]],
     tile_dim: int,
     ignore_flip_bits: bool = False,
-) -> List[Image.Image]:
+) -> list[Image.Image]:
     """
     Convert all tiles of the image into separate PIL images.
     Each image has one palette with 16 colors.
@@ -227,7 +228,7 @@ def from_pil(
     force_import=False,
     optimize=True,
     palette_offset=0,
-) -> Tuple[List[bytearray], List[TilemapEntryProtocol], List[List[int]]]:
+) -> tuple[list[bytearray], list[TilemapEntryProtocol], list[list[int]]]:
     """
     Modify the image data in the tiled image by importing the passed PIL.
 
@@ -283,20 +284,20 @@ def from_pil(
 
     # Build new palette
     new_palette = memoryview(pil.palette.palette)
-    palettes: List[List[int]] = []
+    palettes: list[list[int]] = []
     for i, col in enumerate(new_palette):
         if i % (single_palette_size * 3) == 0:
-            cur_palette: List[int] = []
+            cur_palette: list[int] = []
             palettes.append(cur_palette)
         cur_palette.append(col)
 
     raw_pil_image = pil.tobytes("raw", "P")
     number_of_tiles = int(len(raw_pil_image) / tile_dim / tile_dim)
 
-    tiles_with_sum: List[Tuple[int, bytearray]] = [
+    tiles_with_sum: list[tuple[int, bytearray]] = [
         None for __ in range(0, number_of_tiles)
     ]
-    tilemap: List[TilemapEntryProtocol] = [None for __ in range(0, number_of_tiles)]
+    tilemap: list[TilemapEntryProtocol] = [None for __ in range(0, number_of_tiles)]
     the_two_px_to_write = [0, 0]
 
     # Set inside the loop:
@@ -391,7 +392,7 @@ def from_pil(
                 the_two_px_to_write[1] << 4
             )
 
-    final_tiles_with_sum: List[Tuple[int, bytearray]] = []
+    final_tiles_with_sum: list[tuple[int, bytearray]] = []
     len_final_tiles = 0
     # Create tilemap and optimize tiles list
     for tile_id, tile_with_sum in enumerate(tiles_with_sum):
@@ -426,15 +427,15 @@ def from_pil(
                 )
             )
         )
-    final_tiles: List[bytearray] = []
+    final_tiles: list[bytearray] = []
     for s, tile in final_tiles_with_sum:
         final_tiles.append(tile)
     return final_tiles, tilemap, palettes
 
 
 def search_for_chunk(
-    chunk: List[TilemapEntryProtocol], tile_mappings: List[TilemapEntryProtocol]
-) -> Optional[int]:
+    chunk: list[TilemapEntryProtocol], tile_mappings: list[TilemapEntryProtocol]
+) -> int | None:
     """
     In the provided list of tile mappings, find an existing chunk.
     Returns the position of the first tile of the chunk or None if not found.
@@ -448,10 +449,10 @@ def search_for_chunk(
 
 
 def search_for_tile_with_sum(
-    tiles_with_sum: List[Tuple[int, bytearray]],
-    tile_with_sum: Tuple[int, bytearray],
+    tiles_with_sum: list[tuple[int, bytearray]],
+    tile_with_sum: tuple[int, bytearray],
     tile_dim: int,
-) -> Tuple[Union[int, None], bool, bool]:
+) -> tuple[int | None, bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     Increases performance by comparing the bytes sum of each tile before actually compare them
@@ -475,8 +476,8 @@ def search_for_tile_with_sum(
 
 
 def search_for_tile(
-    tiles: List[bytes], tile: bytes, tile_dim: int
-) -> Tuple[Union[int, None], bool, bool]:
+    tiles: list[bytes], tile: bytes, tile_dim: int
+) -> tuple[int | None, bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     """
@@ -517,7 +518,7 @@ def _flip_tile_y(tile: bytes, tile_dim: int) -> bytes:
 
 def _px_pos_flipped(
     x: int, y: int, w: int, h: int, flip_x: bool, flip_y: bool
-) -> Tuple[int, int]:
+) -> tuple[int, int]:
     """
     Returns the flipped x and y position for a pixel in a fixed size image.
     If x and/or y actually get flipped is controled by the flip_ params.

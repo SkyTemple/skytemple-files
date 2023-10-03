@@ -25,14 +25,14 @@ from range_typed_integers import u32
 class Sir0Protocol(Protocol):
     data_pointer: u32
     content: bytes
-    content_pointer_offsets: List[u32]
+    content_pointer_offsets: list[u32]
 
     @abstractmethod
     def __init__(
         self,
         content: bytes,
-        pointer_offsets: List[u32],
-        data_pointer: Optional[int] = None,
+        pointer_offsets: list[u32],
+        data_pointer: int | None = None,
     ):
         ...
 

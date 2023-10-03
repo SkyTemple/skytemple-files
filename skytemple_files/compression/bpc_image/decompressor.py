@@ -65,7 +65,7 @@ class BpcImageDecompressor:
         # Used to keep track of when to end
         self.bytes_written = 0
 
-    def decompress(self) -> Tuple[bytes, int]:
+    def decompress(self) -> tuple[bytes, int]:
         """Returns the decompressed data and the size of the read, compressed data"""
         self.reset()
         if DEBUG:

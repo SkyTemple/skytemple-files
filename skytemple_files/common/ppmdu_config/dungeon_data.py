@@ -22,7 +22,7 @@ from skytemple_files.common.util import AutoString
 
 
 class Pmd2BinPackFile(AutoString):
-    def __init__(self, idxfirst: int, idxlast: Optional[int], type: str, name: str):
+    def __init__(self, idxfirst: int, idxlast: int | None, type: str, name: str):
         self.idxfirst = idxfirst
         self.idxlast = idxlast
         self.type = type
@@ -44,7 +44,7 @@ class Pmd2DungeonItem(AutoString):
 
 
 class Pmd2DungeonItemCategory(AutoString):
-    def __init__(self, id: int, name: str, items: List[int]):
+    def __init__(self, id: int, name: str, items: list[int]):
         self.id = id
         self.name = name
         self.items = items
@@ -52,7 +52,7 @@ class Pmd2DungeonItemCategory(AutoString):
         self.value = id
         self.first_item_id = -1
         self.number_of_items = 0
-        self.excluded_item_ids: List[int] = []
+        self.excluded_item_ids: list[int] = []
         self.extra_item_ids = items
 
     # Compatibility with the old enum
@@ -99,7 +99,7 @@ class Pmd2DungeonDungeon(AutoString):
 
 
 class Pmd2DungeonBinFiles(AutoString):
-    def __init__(self, files: List[Pmd2BinPackFile]):
+    def __init__(self, files: list[Pmd2BinPackFile]):
         self._files = files
 
     def get(self, idx: int) -> Pmd2BinPackFile:
@@ -116,9 +116,9 @@ class Pmd2DungeonData(AutoString):
     def __init__(
         self,
         dungeon_bin_files: Pmd2DungeonBinFiles,
-        items: List[Pmd2DungeonItem],
-        dungeons: List[Pmd2DungeonDungeon],
-        item_categories: Dict[int, Pmd2DungeonItemCategory],
+        items: list[Pmd2DungeonItem],
+        dungeons: list[Pmd2DungeonDungeon],
+        item_categories: dict[int, Pmd2DungeonItemCategory],
     ):
         self.dungeon_bin_files = dungeon_bin_files
         self.items = items

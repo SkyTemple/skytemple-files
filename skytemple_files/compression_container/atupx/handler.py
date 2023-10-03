@@ -30,13 +30,13 @@ class AtupxHandler(CompressionContainerHandler):
         return b"ATUPX"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.atupx.model import Atupx
 
         return Atupx
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust.st_atupx import (
             Atupx,
         )

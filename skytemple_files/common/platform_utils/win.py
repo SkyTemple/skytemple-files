@@ -39,7 +39,7 @@ def win_use_light_theme():
         value, regtype = winreg.QueryValueEx(registry_key, WIN_THEME_REG_KEY)
         winreg.CloseKey(registry_key)
         return value != 0
-    except WindowsError:
+    except OSError:
         return None
 
 

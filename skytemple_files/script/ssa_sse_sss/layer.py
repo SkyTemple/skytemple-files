@@ -42,23 +42,23 @@ class SsaLayer(AutoString):
 
     def __init__(
         self,
-        header: Optional[SsaHeader] = None,
-        actors_count: Optional[int] = None,
-        actors_pointer: Optional[int] = None,
-        objects_count: Optional[int] = None,
-        objects_pointer: Optional[int] = None,
-        performers_count: Optional[int] = None,
-        performers_pointer: Optional[int] = None,
-        events_count: Optional[int] = None,
-        events_pointer: Optional[int] = None,
-        unk10_block_count: Optional[int] = None,
-        unk10_block_pointer: Optional[int] = None,
+        header: SsaHeader | None = None,
+        actors_count: int | None = None,
+        actors_pointer: int | None = None,
+        objects_count: int | None = None,
+        objects_pointer: int | None = None,
+        performers_count: int | None = None,
+        performers_pointer: int | None = None,
+        events_count: int | None = None,
+        events_pointer: int | None = None,
+        unk10_block_count: int | None = None,
+        unk10_block_pointer: int | None = None,
     ):
-        self.actors: List[SsaActor] = []
-        self.objects: List[SsaObject] = []
-        self.performers: List[SsaPerformer] = []
-        self.events: List[SsaEvent] = []
-        self.unk10s: List[SsaUnk10] = []
+        self.actors: list[SsaActor] = []
+        self.objects: list[SsaObject] = []
+        self.performers: list[SsaPerformer] = []
+        self.events: list[SsaEvent] = []
+        self.unk10s: list[SsaUnk10] = []
 
         if header is None:
             # Empty layer

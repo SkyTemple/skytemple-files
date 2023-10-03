@@ -18,7 +18,8 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from enum import Enum
-from typing import Protocol, TypeVar, Sequence, List, Tuple, Iterator, Optional
+from typing import Protocol, TypeVar, List, Tuple, Optional
+from collections.abc import Sequence, Iterator
 
 from range_typed_integers import u32, u8, u16, i8, i16
 
@@ -44,7 +45,7 @@ class _MdPropertiesProtocol(Protocol):
 
     @classmethod
     @abstractmethod
-    def instance(cls) -> "_MdPropertiesProtocol":
+    def instance(cls) -> _MdPropertiesProtocol:
         """This is a singleton."""
         ...
 
@@ -74,7 +75,7 @@ class Gender(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -115,7 +116,7 @@ class PokeType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -395,7 +396,7 @@ class Ability(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -433,7 +434,7 @@ class IQGroup(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -461,7 +462,7 @@ class EvolutionMethod(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -499,7 +500,7 @@ class AdditionalRequirement(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -527,7 +528,7 @@ class MovementType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -552,7 +553,7 @@ class ShadowSize(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: str, print_name: Optional[str] = None):
+    def __init__(self, _: str, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self) -> str:
@@ -649,7 +650,7 @@ class MdProtocol(Protocol[E]):
         ...
 
     @abstractmethod
-    def get_by_entity_id(self, index: int) -> List[Tuple[int, E]]:
+    def get_by_entity_id(self, index: int) -> list[tuple[int, E]]:
         ...
 
     @abstractmethod

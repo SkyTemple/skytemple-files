@@ -44,18 +44,18 @@ logger = logging.getLogger(__name__)
 class MappaItemList(MappaItemListProtocol, AutoString):
     def __init__(
         self,
-        categories: Dict[_MappaItemCategory, Probability],
-        items: Dict[_MappaItem, Probability],
+        categories: dict[_MappaItemCategory, Probability],
+        items: dict[_MappaItem, Probability],
     ):
         self.categories = categories
         self.items = items
 
     @classmethod
-    def from_mappa(cls, read: "MappaBinReadContainer", pointer: int):
+    def from_mappa(cls, read: MappaBinReadContainer, pointer: int):
         return cls.from_bytes(read.data, pointer)
 
     @classmethod
-    def from_bytes(cls, data: bytes, pointer: int) -> "MappaItemList":
+    def from_bytes(cls, data: bytes, pointer: int) -> MappaItemList:
         processing_categories = True
         item_or_cat_id = 0
         orig_pointer = pointer

@@ -36,7 +36,7 @@ class Dpl(DplProtocol):
     """
 
     def __init__(self, data: bytes):
-        self.palettes: List[List[int]] = []
+        self.palettes: list[list[int]] = []
         assert len(data) / 4 % 1 == 0
         pal = []
         for i, (r, g, b, x) in enumerate(iter_bytes(data, DPL_PAL_ENTRY_LEN)):

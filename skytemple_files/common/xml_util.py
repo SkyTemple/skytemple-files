@@ -36,7 +36,7 @@ def validate_xml_tag(ele: Element, tag: str):
         )
 
 
-def validate_xml_attribs(ele: Element, attribs: List[str]):
+def validate_xml_attribs(ele: Element, attribs: list[str]):
     for attrib in attribs:
         if attrib not in ele.attrib:
             raise XmlValidateError(

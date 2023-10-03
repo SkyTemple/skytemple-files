@@ -25,9 +25,9 @@ from skytemple_files.data.md_evo.writer import MdEvoWriter
 
 class MdEvoHandler(DataHandler[MdEvo]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "MdEvo":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> MdEvo:
         return MdEvo(data)
 
     @classmethod
-    def serialize(cls, data: "MdEvo", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: MdEvo, **kwargs: OptionalKwargs) -> bytes:
         return MdEvoWriter(data).write()

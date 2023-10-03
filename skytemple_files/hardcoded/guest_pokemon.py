@@ -100,7 +100,7 @@ class ExtraDungeonDataEntry(AutoString):
         return buffer
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> "ExtraDungeonDataEntry":
+    def from_bytes(cls, b: bytes) -> ExtraDungeonDataEntry:
         data_int = read_u16(b, 0)
         guest1_index = (data_int & 0x3F) - 1
         guest2_index = ((data_int & 0x3F00) >> 8) - 1
@@ -126,7 +126,7 @@ class GuestPokemon(AutoString):
     unk1: u32
     poke_id: u16
     joined_at: u16
-    moves: List[u16]
+    moves: list[u16]
     hp: u16
     level: u16
     iq: u16
@@ -142,7 +142,7 @@ class GuestPokemon(AutoString):
         unk1: u32,
         poke_id: u16,
         joined_at: u16,
-        moves: List[u16],
+        moves: list[u16],
         hp: u16,
         level: u16,
         iq: u16,
@@ -227,7 +227,7 @@ class GuestPokemon(AutoString):
         return buffer
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> "GuestPokemon":
+    def from_bytes(cls, b: bytes) -> GuestPokemon:
         return cls(
             read_u32(b, 0),
             read_u16(b, 4),
@@ -247,7 +247,7 @@ class GuestPokemon(AutoString):
 
 class ExtraDungeonDataList:
     @staticmethod
-    def read(arm9bin: bytes, config: Pmd2Data) -> List[ExtraDungeonDataEntry]:
+    def read(arm9bin: bytes, config: Pmd2Data) -> list[ExtraDungeonDataEntry]:
         """Returns the list of extra dungeon data"""
         block = config.extra_bin_sections.arm9.data.EXTRA_DUNGEON_DATA
         lst = []
@@ -263,7 +263,7 @@ class ExtraDungeonDataList:
 
     @staticmethod
     def write(
-        lst: List[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data
+        lst: list[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Writes the list of dungeon extra data to the arm9 binary provided.
@@ -295,7 +295,7 @@ class GuestPokemonList:
         )
 
     @staticmethod
-    def read(arm9bin: bytes, config: Pmd2Data) -> List[GuestPokemon]:
+    def read(arm9bin: bytes, config: Pmd2Data) -> list[GuestPokemon]:
         """Returns the list of guest pokémon data"""
         block = config.bin_sections.arm9.data.GUEST_MONSTER_DATA
         lst = []
@@ -330,7 +330,7 @@ class GuestPokemonList:
         return lst
 
     @staticmethod
-    def write(lst: List[GuestPokemon], arm9bin: bytearray, config: Pmd2Data) -> None:
+    def write(lst: list[GuestPokemon], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Writes the list of guest pokémon data to the arm9 binary.
         The first 18 entries will be written to the GuestPokemonData block, the rest

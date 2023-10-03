@@ -68,7 +68,7 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
     def category(self) -> PatchCategory:
         return PatchCategory.UTILITY
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ActorAndLevelLoader"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:

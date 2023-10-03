@@ -61,7 +61,7 @@ class Wte(Sir0Serializable, AutoString):
     width: u16
     height: u16
 
-    def __init__(self, data: Optional[bytes], header_pnt: int):
+    def __init__(self, data: bytes | None, header_pnt: int):
         """Constructs a Wte model. Setting data to None will initialize an empty model."""
         if data is None:
             self.image_type = WteImageType.NONE
@@ -69,7 +69,7 @@ class Wte(Sir0Serializable, AutoString):
             self.unk10 = u32(0)
             self.width = u16(0)
             self.height = u16(0)
-            self.image_data = bytes()
+            self.image_data = b''
             self.palette = []
             return
 
@@ -105,15 +105,15 @@ class Wte(Sir0Serializable, AutoString):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.graphics.wte.writer import WteWriter
 
         return WteWriter(self).write()  # type: ignore
 
-    def actual_dimensions(self) -> Tuple[int, int]:
+    def actual_dimensions(self) -> tuple[int, int]:
         return 8 * (2 ** (self.actual_dim & 0x07)), 8 * (
             2 ** ((self.actual_dim >> 3) & 0x07)
         )
@@ -156,7 +156,7 @@ class Wte(Sir0Serializable, AutoString):
         else:
             return 1
 
-    def get_palette(self) -> List[int]:
+    def get_palette(self) -> list[int]:
         """Returns the palette that will be used to display the image."""
         colors_per_line: int = 2**self.image_type.bpp
         if not self.has_palette():
@@ -171,7 +171,7 @@ class Wte(Sir0Serializable, AutoString):
     def to_pil_palette(self) -> Image.Image:
         """Returns the palette as an image where each pixel represents each color of the palette."""
         colors_per_line = 16
-        palette: List[int] = [i for i in range(len(self.get_palette()) // 3)]
+        palette: list[int] = [i for i in range(len(self.get_palette()) // 3)]
         if len(palette) % colors_per_line != 0:
             palette += [0] * (colors_per_line - len(palette) % colors_per_line)
         img = Image.frombytes(
@@ -217,7 +217,7 @@ class Wte(Sir0Serializable, AutoString):
 
     def from_pil(
         self, img: Image.Image, img_type: WteImageType, discard_palette: bool
-    ) -> "Wte":
+    ) -> Wte:
         """Replace the image data by the new one passed in argument."""
         if img.mode != "P":
             raise AttributeError(
@@ -266,7 +266,7 @@ class Wte(Sir0Serializable, AutoString):
 
     def _read_palette(
         self, data: memoryview, pointer_pal, number_pal_colors
-    ) -> List[int]:
+    ) -> list[int]:
         pal = []
         data = data[pointer_pal : pointer_pal + (number_pal_colors * 4)]
         for i, (r, g, b, x) in enumerate(iter_bytes(data, 4)):

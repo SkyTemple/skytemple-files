@@ -130,7 +130,7 @@ and to save a backup of your ROM before applying this."""
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:

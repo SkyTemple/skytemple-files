@@ -55,7 +55,7 @@ class FixMemorySoftlockPatchHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "2.0.0"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

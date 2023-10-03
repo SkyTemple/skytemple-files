@@ -37,11 +37,11 @@ class CompressionContainerHandler(HybridDataHandler[T], ABC):
         pass
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol[T]]:
+    def load_python_writer(cls) -> type[WriterProtocol[T]]:
         return CompressionContainerWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol[T]]:
+    def load_native_writer(cls) -> type[WriterProtocol[T]]:
         return CompressionContainerWriter
 
     @classmethod

@@ -53,3 +53,13 @@ class SsaTrigger(AutoString):
         self.unk2 = unk2
         self.unk3 = unk3
         self.script_id = script_id
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.coroutine.id == other.coroutine.id
+            and self.unk2 == other.unk2
+            and self.unk3 == other.unk3
+            and self.script_id == other.script_id
+        )

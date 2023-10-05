@@ -38,8 +38,8 @@ ACTOR_DEFAULT_HITBOX_H = 1 * BPC_TILE_DIM
 
 class SsaPosition(AutoString):
     scriptdata: Pmd2ScriptData
-    x_pos: u16
-    y_pos: u16
+    x_relative: u16
+    y_relative: u16
     x_offset: u16
     y_offset: u16
     direction: Optional[Pmd2ScriptDirection]
@@ -83,3 +83,20 @@ class SsaPosition(AutoString):
         if self.y_offset >= 2:
             offset = 4
         return self.y_relative * TILE_SIZE + offset
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        self_dir = None
+        other_dir = None
+        if self.direction is not None:
+            self_dir = self.direction.ssa_id
+        if other.direction is not None:
+            other_dir = other.direction.ssa_id
+        return (
+            self.x_relative == other.x_relative
+            and self.y_relative == other.y_relative
+            and self.x_offset == other.x_offset
+            and self.y_offset == other.y_offset
+            and self_dir == other_dir
+        )

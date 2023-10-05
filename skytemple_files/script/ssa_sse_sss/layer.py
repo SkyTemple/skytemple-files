@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import List, Optional
 
 from skytemple_files.common.util import AutoString
@@ -140,6 +141,33 @@ class SsaLayer(AutoString):
         elif header.unk10_pointer is not None:
             assert header.unk10_pointer - 2 == unk10_block_pointer
 
+    @classmethod
+    def new(
+        cls,
+        all_actors: Iterable[SsaActor],
+        all_objects: Iterable[SsaObject],
+        all_performers: Iterable[SsaPerformer],
+        all_events: Iterable[SsaEvent],
+        all_unk10s: Iterable[SsaUnk10],
+    ) -> SsaLayer:
+        slf = cls.__new__(cls)
+        slf.actors = list(all_actors)
+        slf.objects = list(all_objects)
+        slf.performers = list(all_performers)
+        slf.events = list(all_events)
+        slf.unk10s = list(all_unk10s)
+        slf._actors_count = len(slf.actors)
+        slf._objects_count = len(slf.objects)
+        slf._performers_count = len(slf.performers)
+        slf._events_count = len(slf.events)
+        slf._unk10_block_count = len(slf.unk10s)
+        slf._actors_first_offset = None
+        slf._objects_first_offset = None
+        slf._performers_first_offset = None
+        slf._events_first_offset = None
+        slf._unk10_block_first_offset = None
+        return slf
+
     def fill_data(
         self, all_actors, all_objects, all_performers, all_events, all_unk10s
     ):
@@ -178,3 +206,14 @@ class SsaLayer(AutoString):
                     self._unk10_block_first_offset + self._unk10_block_count
                 )
             ]
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.actors == other.actors
+            and self.objects == other.objects
+            and self.performers == other.performers
+            and self.events == other.events
+            and self.unk10s == other.unk10s
+        )

@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 class SsaObject(AutoString):
-    object_id: Pmd2ScriptObject
+    object: Pmd2ScriptObject
     hitbox_w: i16
     hitbox_h: i16
     pos: SsaPosition
@@ -58,3 +58,15 @@ class SsaObject(AutoString):
         self.pos = pos
         self.script_id = script_id
         self.unk12 = unk12
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.object.id == other.object.id
+            and self.hitbox_w == other.hitbox_w
+            and self.hitbox_h == other.hitbox_h
+            and self.pos == other.pos
+            and self.script_id == other.script_id
+            and self.unk12 == other.unk12
+        )

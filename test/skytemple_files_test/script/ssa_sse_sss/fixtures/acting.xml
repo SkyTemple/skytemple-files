@@ -1,0 +1,58 @@
+<Scene>
+  <Layers>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="33" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="30" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="73" script_id="-1" unk_e="-1">
+        <Position direction="UP_LEFT" x_pos="71" y_pos="44" x_offset="0" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="75" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="58" y_pos="44" x_offset="0" y_offset="2"/>
+      </Actor>
+      <Unk10 unk_0="9" unk_2="-1" unk_4="-1" unk_6="-1"/>
+    </Layer>
+    <Layer>
+      <Actor actor_id="77" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="61" y_pos="34" x_offset="0" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="78" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="69" y_pos="34" x_offset="0" y_offset="2"/>
+      </Actor>
+    </Layer>
+  </Layers>
+  <Events>
+    <Event script_id="0" coroutine_id="680" unk_2="7" unk_3="0"/>
+  </Events>
+  <PositionMarks>
+    <PositionMark unk_8="1" unk_a="1" unk_c="2" unk_e="1">
+      <Position direction="NONE" x_pos="65" y_pos="39" x_offset="0" y_offset="2"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="2" unk_e="1">
+      <Position direction="NONE" x_pos="61" y_pos="39" x_offset="0" y_offset="2"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="2" unk_e="1">
+      <Position direction="NONE" x_pos="61" y_pos="36" x_offset="0" y_offset="2"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="2" unk_e="1">
+      <Position direction="NONE" x_pos="66" y_pos="34" x_offset="0" y_offset="2"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="1" unk_e="0">
+      <Position direction="NONE" x_pos="71" y_pos="36" x_offset="0" y_offset="2"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="2" unk_e="1">
+      <Position direction="NONE" x_pos="71" y_pos="37" x_offset="2" y_offset="0"/>
+    </PositionMark>
+    <PositionMark unk_8="4" unk_a="4" unk_c="3" unk_e="2">
+      <Position direction="NONE" x_pos="71" y_pos="36" x_offset="0" y_offset="0"/>
+    </PositionMark>
+    <PositionMark unk_8="1" unk_a="1" unk_c="1" unk_e="3">
+      <Position direction="NONE" x_pos="71" y_pos="36" x_offset="4" y_offset="2"/>
+    </PositionMark>
+  </PositionMarks>
+</Scene>

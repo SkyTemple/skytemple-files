@@ -1,0 +1,11 @@
+<Scene>
+  <Layers>
+    <Layer>
+      <Trigger width="3" height="12" unk_e="65535" event_id="0">
+        <Position direction="NONE" x_pos="117" y_pos="34" x_offset="0" y_offset="0"/>
+      </Trigger>
+    </Layer>
+  </Layers>
+  <Events/>
+  <PositionMarks/>
+</Scene>

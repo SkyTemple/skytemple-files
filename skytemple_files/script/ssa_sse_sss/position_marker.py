@@ -35,3 +35,14 @@ class SsaPositionMarker(AutoString):
         self.unkA = unkA
         self.unkC = unkC
         self.unkE = unkE
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.unk8 == other.unk8
+            and self.unkA == other.unkA
+            and self.unkC == other.unkC
+            and self.unkE == other.unkE
+            and self.pos == other.pos
+        )

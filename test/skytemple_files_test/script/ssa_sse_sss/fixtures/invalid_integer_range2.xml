@@ -1,0 +1,11 @@
+<Scene>
+  <Layers>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="0" y_pos="0" x_offset="999999999999999999" y_offset="0"/>
+      </Actor>
+    </Layer>
+  </Layers>
+  <Events/>
+  <PositionMarks/>
+</Scene>

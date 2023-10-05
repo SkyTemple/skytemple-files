@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 class SsaActor(AutoString):
     scriptdata: Pmd2ScriptData
-    actor_id: u16
+    actor: Pmd2ScriptEntity
     pos: SsaPosition
     script_id: i16
     unkE: i16
@@ -55,3 +55,13 @@ class SsaActor(AutoString):
         self.pos = pos
         self.script_id = script_id
         self.unkE = unkE
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.actor.id == other.actor.id
+            and self.pos == other.pos
+            and self.script_id == other.script_id
+            and self.unkE == other.unkE
+        )

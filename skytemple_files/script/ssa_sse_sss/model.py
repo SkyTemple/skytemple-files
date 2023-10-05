@@ -16,7 +16,10 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import List
+
+from range_typed_integers import u16
 
 from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptData
 from skytemple_files.common.util import (
@@ -67,6 +70,32 @@ class Ssa:
 
         for layer in self.layer_list:
             layer.fill_data(actors, objects, performers, events, unk10)
+
+    @classmethod
+    def new(
+        cls,
+        scriptdata: Pmd2ScriptData,
+        layer_list: Iterable[SsaLayer],
+        triggers: Iterable[SsaTrigger],
+        pos_marks: Iterable[SsaPositionMarker],
+    ):
+        slf = cls.__new__(cls)
+        slf._scriptdata = scriptdata
+        slf.layer_list = list(layer_list)
+        slf.triggers = list(triggers)
+        slf.position_markers = list(pos_marks)
+        slf.header = SsaHeader(
+            layer_count=u16(len(slf.layer_list)),
+            layer_list_pointer=0,
+            trigger_pointer=0,
+            actor_pointer=0,
+            object_pointer=0,
+            performer_pointer=0,
+            events_pointer=0,
+            position_marker_pointer=0,
+            unk10_pointer=0,
+        )
+        return slf
 
     def _init_header(self, data):
         # All offsets/pointers must be multiplied by 2, since they're counting 16 bits words and not bytes!
@@ -280,3 +309,12 @@ class Ssa:
                     )
                 )
         return lst
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.layer_list == other.layer_list
+            and self.position_markers == other.position_markers
+            and self.triggers == other.triggers
+        )

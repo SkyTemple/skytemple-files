@@ -60,3 +60,14 @@ class SsaEvent(AutoString):
         # direction must be none!
         self.pos = pos
         self.unkE = unkE
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return (
+            self.trigger_id == other.trigger_id
+            and self.trigger_width == other.trigger_width
+            and self.trigger_height == other.trigger_height
+            and self.pos == other.pos
+            and self.unkE == other.unkE
+        )

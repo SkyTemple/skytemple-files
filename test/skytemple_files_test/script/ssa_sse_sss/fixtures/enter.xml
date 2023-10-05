@@ -1,0 +1,102 @@
+<Scene>
+  <Layers>
+    <Layer>
+      <Object object_id="7" script_id="5" hitbox_width="3" hitbox_height="2" unk_12="-1">
+        <Position direction="DOWN" x_pos="13" y_pos="37" x_offset="2" y_offset="0"/>
+      </Object>
+      <Object object_id="7" script_id="6" hitbox_width="3" hitbox_height="2" unk_12="-1">
+        <Position direction="DOWN" x_pos="68" y_pos="10" x_offset="2" y_offset="0"/>
+      </Object>
+      <Object object_id="7" script_id="7" hitbox_width="3" hitbox_height="2" unk_12="-1">
+        <Position direction="DOWN" x_pos="114" y_pos="36" x_offset="2" y_offset="0"/>
+      </Object>
+      <Trigger width="3" height="12" unk_e="65535" event_id="1">
+        <Position direction="NONE" x_pos="0" y_pos="35" x_offset="0" y_offset="0"/>
+      </Trigger>
+      <Trigger width="3" height="12" unk_e="65535" event_id="2">
+        <Position direction="NONE" x_pos="117" y_pos="34" x_offset="0" y_offset="0"/>
+      </Trigger>
+      <Trigger width="9" height="3" unk_e="65535" event_id="3">
+        <Position direction="NONE" x_pos="63" y_pos="87" x_offset="0" y_offset="0"/>
+      </Trigger>
+      <Trigger width="9" height="3" unk_e="65535" event_id="4">
+        <Position direction="NONE" x_pos="60" y_pos="2" x_offset="0" y_offset="0"/>
+      </Trigger>
+      <Unk10 unk_0="9" unk_2="-1" unk_4="-1" unk_6="-1"/>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="33" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="31" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="29" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="33" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="31" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="29" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="RIGHT" x_pos="8" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="RIGHT" x_pos="5" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="RIGHT" x_pos="2" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="LEFT" x_pos="112" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="LEFT" x_pos="115" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="LEFT" x_pos="118" y_pos="40" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="8" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="6" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="DOWN" x_pos="64" y_pos="4" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+    <Layer>
+      <Actor actor_id="0" script_id="-1" unk_e="-1">
+        <Position direction="UP" x_pos="66" y_pos="83" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="10" script_id="-1" unk_e="-1">
+        <Position direction="UP" x_pos="66" y_pos="85" x_offset="2" y_offset="2"/>
+      </Actor>
+      <Actor actor_id="11" script_id="-1" unk_e="-1">
+        <Position direction="UP" x_pos="66" y_pos="87" x_offset="2" y_offset="2"/>
+      </Actor>
+    </Layer>
+  </Layers>
+  <Events>
+    <Event script_id="0" coroutine_id="683" unk_2="1" unk_3="0"/>
+    <Event script_id="1" coroutine_id="659" unk_2="2" unk_3="0"/>
+    <Event script_id="2" coroutine_id="659" unk_2="2" unk_3="0"/>
+    <Event script_id="3" coroutine_id="659" unk_2="2" unk_3="0"/>
+    <Event script_id="4" coroutine_id="659" unk_2="2" unk_3="0"/>
+  </Events>
+  <PositionMarks/>
+</Scene>

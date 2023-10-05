@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import List, Optional
 
 from skytemple_files.common.util import AutoString
 from skytemple_files.script.ssa_sse_sss import (

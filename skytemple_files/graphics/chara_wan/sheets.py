@@ -499,7 +499,7 @@ def ImportSheets(inDir, strict=False):
     # and that no palettes have over 16 colors (transparency included)
 
     # then, run through simple_quant
-    reducedImg = simple_quant(combinedImg).convert("RGBA")
+    reducedImg = simple_quant(combinedImg, False).convert("RGBA")
 
     datas = reducedImg.getdata()
     for idx in range(len(datas)):

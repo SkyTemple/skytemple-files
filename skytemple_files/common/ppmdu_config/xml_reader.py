@@ -43,7 +43,6 @@ from skytemple_files.common.ppmdu_config.data import (
     Pmd2Language,
     Pmd2AsmPatchesConstants,
     Pmd2SimplePatch,
-    Union,
     Pmd2GameEdition,
     Pmd2PatchDir,
     Pmd2LooseBinFile,
@@ -567,7 +566,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
     def read(self, e) -> Pmd2AsmPatchesConstants:
         loose_bin_files = []
         patch_dir = None
-        patches: list[Union[Pmd2Patch, Pmd2SimplePatch]] = []
+        patches: list[Pmd2Patch | Pmd2SimplePatch] = []
         for sub_e in e:
             if sub_e.tag == "LooseBinFiles":
                 for e_game in sub_e:
@@ -729,9 +728,7 @@ class XmlCombiner:
         # return the string representation
         return ElementTree.ElementTree(self.roots[0])
 
-    def combine_element(
-        self, one, other, merge_config: Union[XmlCombinerMergeConfig, None]
-    ):
+    def combine_element(self, one, other, merge_config: XmlCombinerMergeConfig | None):
         """
         This function recursively updates either the text or the children
         of an element if another element is found in `one`, or adds it

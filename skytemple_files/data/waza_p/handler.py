@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
@@ -31,6 +32,11 @@ from skytemple_files.data.waza_p.protocol import (
     WazaMoveRangeSettingsProtocol,
     MoveLearnsetProtocol,
 )
+
+
+if TYPE_CHECKING:
+    from skytemple_files.data.waza_p._model import WazaP as PyWazaP
+    from skytemple_rust.st_waza_p import WazaPWriter as NativeWazaP
 
 
 class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):

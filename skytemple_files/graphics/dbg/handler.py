@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dbg.protocol import DbgProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dbg._model import Dbg as PyDbg
+    from skytemple_rust.st_dbg import Dbg as NativeDbg
 
 
 class DbgHandler(HybridDataHandler[DbgProtocol]):

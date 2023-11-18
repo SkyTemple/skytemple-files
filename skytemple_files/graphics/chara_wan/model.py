@@ -20,9 +20,11 @@ from __future__ import annotations
 from io import BytesIO
 
 from PIL import Image
+from range_typed_integers import u32
 
 import skytemple_files.graphics.chara_wan.utils as exUtils
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
+from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 CENTER_X = 256
 CENTER_Y = 0
@@ -79,7 +81,7 @@ DIM_TABLE = [
 DEBUG_PRINT = False
 
 
-class WanFile:
+class WanFile(Sir0Serializable):
     def __init__(self, data: bytes | None = None, header_pnt: int = 0):
         if data is None:
             self.imgData = []
@@ -101,7 +103,7 @@ class WanFile:
     ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> tuple[bytes, list[int], int | None]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.graphics.chara_wan.writer import ExportWan
 
         return ExportWan(self)

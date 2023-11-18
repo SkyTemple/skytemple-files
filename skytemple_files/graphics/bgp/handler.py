@@ -30,7 +30,8 @@ from skytemple_files.compression_container.common_at.handler import (
 from skytemple_files.graphics.bgp.protocol import BgpProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.bgp._model import Bgp as PyBgp
+    from skytemple_rust.st_bgp import Bgp as NativeBgp
 
 
 class BgpHandler(HybridDataHandler[BgpProtocol]):

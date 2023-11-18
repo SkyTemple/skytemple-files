@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpl.protocol import DplProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dpl._model import Dpl as PyDpl
+    from skytemple_rust.st_dpl import Dpl as NativeDpl
 
 
 class DplHandler(HybridDataHandler[DplProtocol]):

@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpa.protocol import BpaFrameInfoProtocol, BpaProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.bpa._model import Bpa as PyBpa
+    from skytemple_rust.st_bpa import Bpa as NativeBpa
 
 
 class BpaHandler(HybridDataHandler[BpaProtocol]):

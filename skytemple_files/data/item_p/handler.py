@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
@@ -23,6 +24,10 @@ from skytemple_files.common.types.hybrid_data_handler import (
 )
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.data.item_p.protocol import ItemPProtocol
+
+if TYPE_CHECKING:
+    from skytemple_files.data.item_p._model import ItemP as PyItemP
+    from skytemple_rust.st_item_p import ItemP as NativeItemP
 
 
 class ItemPHandler(HybridSir0DataHandler[ItemPProtocol]):

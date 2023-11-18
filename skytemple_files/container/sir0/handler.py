@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TypeVar
+from typing import TypeVar, TYPE_CHECKING
 
 from range_typed_integers import u32
 
@@ -27,6 +27,10 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 
 T = TypeVar("T", bound=Sir0Serializable)
+
+if TYPE_CHECKING:
+    from skytemple_files.container.sir0._model import Sir0 as PySir0
+    from skytemple_rust.st_sir0 import Sir0 as NativeSir0
 
 
 class Sir0Handler(HybridDataHandler[Sir0Protocol]):

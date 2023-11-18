@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpci.protocol import DpciProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dpci._model import Dpci as PyDpci
+    from skytemple_rust.st_dpci import Dpci as NativeDpci
 
 
 class DpciHandler(HybridDataHandler[DpciProtocol]):

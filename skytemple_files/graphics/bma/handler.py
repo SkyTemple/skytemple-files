@@ -26,7 +26,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.bma._model import Bma as PyBma
+    from skytemple_rust.st_bma import Bma as NativeBma
 
 
 class BmaHandler(HybridDataHandler[BmaProtocol]):

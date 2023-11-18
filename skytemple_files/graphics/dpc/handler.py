@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dpc.protocol import DpcProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dpc._model import Dpc as PyDpc
+    from skytemple_rust.st_dpc import Dpc as NativeDpc
 
 
 class DpcHandler(HybridDataHandler[DpcProtocol]):

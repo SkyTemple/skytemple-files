@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
@@ -32,6 +33,12 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import (
     MappaTrapListProtocol,
     MappaFloorTerrainSettingsProtocol,
 )
+
+if TYPE_CHECKING:
+    from skytemple_files.dungeon_data.mappa_bin._python_impl.model import (
+        MappaBin as PyMappaBin,
+    )
+    from skytemple_rust.st_mappa_bin import MappaBin as NativeMappaBin
 
 
 class MappaBinHandler(HybridSir0DataHandler[MappaBinProtocol]):

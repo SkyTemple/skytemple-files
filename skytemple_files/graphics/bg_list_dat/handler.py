@@ -30,7 +30,8 @@ from skytemple_files.graphics.bg_list_dat.protocol import (
 )
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.bg_list_dat._model import BgList as PyBgList
+    from skytemple_rust.st_bg_list_dat import BgList as NativeBgList
 
 
 class BgListDatHandler(HybridDataHandler[BgListProtocol]):

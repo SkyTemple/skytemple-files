@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
@@ -28,6 +29,10 @@ from skytemple_files.data.md.protocol import (
     _MdPropertiesProtocol,
     MdEntryProtocol,
 )
+
+if TYPE_CHECKING:
+    from skytemple_files.data.md._model import Md as PyMd
+    from skytemple_rust.st_md import Md as NativeMd
 
 
 class MdHandler(HybridDataHandler[MdProtocol]):

@@ -27,7 +27,8 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dma.protocol import DmaProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dma._model import Dma as PyDma
+    from skytemple_rust.st_dma import Dma as NativeDma
 
 
 class DmaHandler(HybridDataHandler[DmaProtocol]):

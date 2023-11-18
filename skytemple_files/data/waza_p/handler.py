@@ -36,7 +36,7 @@ from skytemple_files.data.waza_p.protocol import (
 
 if TYPE_CHECKING:
     from skytemple_files.data.waza_p._model import WazaP as PyWazaP
-    from skytemple_rust.st_waza_p import WazaPWriter as NativeWazaP
+    from skytemple_rust.st_waza_p import WazaP as NativeWazaP
 
 
 class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):

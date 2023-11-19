@@ -311,6 +311,7 @@ class Patcher:
         stub_path_for_version = self._config.asm_patches_constants.patch_dir.stubpath
         parameter_values = calling_patch.get_parameters()
         binaries: dict[str, SectionProtocol] = {
+            "arm7": self._config.bin_sections.arm7,
             "arm9": self._config.bin_sections.arm9,
             "overlay0": self._config.bin_sections.overlay0,
             "overlay1": self._config.bin_sections.overlay1,

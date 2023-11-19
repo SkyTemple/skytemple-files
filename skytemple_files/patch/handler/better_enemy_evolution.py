@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
@@ -54,7 +54,7 @@ class BetterEnemyEvolutionPatchHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.1.0"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

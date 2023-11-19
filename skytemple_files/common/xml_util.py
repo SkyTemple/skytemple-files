@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 from xml.dom import minidom
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
@@ -36,7 +35,7 @@ def validate_xml_tag(ele: Element, tag: str):
         )
 
 
-def validate_xml_attribs(ele: Element, attribs: List[str]):
+def validate_xml_attribs(ele: Element, attribs: list[str]):
     for attrib in attribs:
         if attrib not in ele.attrib:
             raise XmlValidateError(

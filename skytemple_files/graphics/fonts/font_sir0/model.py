@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, List, Tuple, no_type_check
+from typing import no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image
@@ -79,10 +79,10 @@ class FontSir0Entry(AbstractFontEntry):
         return xml_entry
 
     @classmethod
-    def get_class_properties(cls) -> List[str]:
+    def get_class_properties(cls) -> list[str]:
         return ["char", "width", "cat", "padding"]
 
-    def get_properties(self) -> Dict[str, int]:
+    def get_properties(self) -> dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
         return {
             "char": self.char,
@@ -91,7 +91,7 @@ class FontSir0Entry(AbstractFontEntry):
             "padding": self.padding,
         }
 
-    def set_properties(self, properties: Dict[str, int]):
+    def set_properties(self, properties: dict[str, int]):
         """Sets a list of the properties of the entry"""
         if "char" in properties:
             self.char = u8(properties["char"])
@@ -105,7 +105,7 @@ class FontSir0Entry(AbstractFontEntry):
     @classmethod
     def from_pil(
         cls, img: Image.Image, char: u8, table: u8, width: u32, cat: u8, padding: u8
-    ) -> "FontSir0Entry":
+    ) -> FontSir0Entry:
         if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         data = []
@@ -161,10 +161,10 @@ class FontSir0(Sir0Serializable, AbstractFont):
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         from skytemple_files.graphics.fonts.font_sir0.writer import FontSir0Writer
 
         return FontSir0Writer(self).write()  # type: ignore
@@ -172,7 +172,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
     def get_entry_image_size(self) -> int:
         return FONT_SIR0_SIZE
 
-    def get_entry_properties(self) -> List[str]:
+    def get_entry_properties(self) -> list[str]:
         return FontSir0Entry.get_class_properties()
 
     def delete_entry(self, entry: AbstractFontEntry):
@@ -190,14 +190,14 @@ class FontSir0(Sir0Serializable, AbstractFont):
         self.entries.append(entry)
         return entry
 
-    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
+    def get_entries_from_table(self, table: u8) -> list[AbstractFontEntry]:
         entries = []
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
         return entries  # type: ignore
 
-    def to_pil(self) -> Dict[int, Image.Image]:
+    def to_pil(self) -> dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Image.new(
@@ -215,7 +215,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
                 )
         return tables
 
-    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
+    def export_to_xml(self) -> tuple[Element, dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
 
         tables = dict()
@@ -230,7 +230,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
         return font_xml, self.to_pil()
 
     @no_type_check
-    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
+    def import_from_xml(self, xml: Element, tables: dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)
         for child in xml:

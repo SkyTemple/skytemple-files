@@ -21,13 +21,8 @@ from enum import Enum
 from typing import (
     Protocol,
     TypeVar,
-    Sequence,
-    List,
-    Optional,
-    Dict,
-    Union,
-    MutableSequence,
 )
+from collections.abc import Sequence, MutableSequence
 
 from range_typed_integers import u16, u8, i16, i8
 
@@ -88,7 +83,7 @@ class MappaFloorStructureType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_: str = print_name  # type: ignore
 
     def __str__(self):
@@ -119,7 +114,7 @@ class MappaFloorWeather(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -142,7 +137,7 @@ class MappaFloorDarknessLevel(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -193,7 +188,7 @@ class MappaTrapType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(self, _: int, print_name: Optional[str] = None):
+    def __init__(self, _: int, print_name: str | None = None):
         self._print_name_ = print_name
 
     def __str__(self):
@@ -204,10 +199,10 @@ class MappaTrapType(Enum):
 
 
 class MappaTrapListProtocol(Protocol):
-    weights: Dict[_MappaTrapType, u16]
+    weights: dict[_MappaTrapType, u16]
 
     @abstractmethod
-    def __init__(self, weights: Union[List[u16], Dict[_MappaTrapType, u16]]):
+    def __init__(self, weights: list[u16] | dict[_MappaTrapType, u16]):
         ...
 
     @abstractmethod
@@ -240,14 +235,14 @@ class MappaMonsterProtocol(Protocol):
 
 
 class MappaItemListProtocol(Protocol):
-    categories: Dict[_MappaItemCategory, Probability]
-    items: Dict[_MappaItem, Probability]
+    categories: dict[_MappaItemCategory, Probability]
+    items: dict[_MappaItem, Probability]
 
     @abstractmethod
     def __init__(
         self,
-        categories: Dict[_MappaItemCategory, Probability],
-        items: Dict[_MappaItem, Probability],
+        categories: dict[_MappaItemCategory, Probability],
+        items: dict[_MappaItem, Probability],
     ):
         ...
 
@@ -392,7 +387,7 @@ class MappaFloorProtocol(Protocol[L, M, TL, IL]):
     def __init__(
         self,
         layout: L,
-        monsters: List[M],
+        monsters: list[M],
         traps: TL,
         floor_items: IL,
         shop_items: IL,
@@ -415,11 +410,11 @@ class MappaBinProtocol(Sir0Serializable, Protocol[F]):
     floor_lists: Sequence[Sequence[F]]
 
     @abstractmethod
-    def __init__(self, floor_lists: List[List[F]]):
+    def __init__(self, floor_lists: list[list[F]]):
         ...
 
     @abstractmethod
-    def add_floor_list(self, floor_list: List[F]):
+    def add_floor_list(self, floor_list: list[F]):
         ...
 
     @abstractmethod

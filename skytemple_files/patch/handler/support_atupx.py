@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
@@ -59,7 +59,7 @@ class AtupxSupportPatchHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.0.2"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ActorAndLevelLoader"]
 
     @property

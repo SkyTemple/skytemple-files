@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from skytemple_files.common.util import AutoString
 
@@ -27,7 +26,7 @@ class Pal(AutoString):
             data = memoryview(data)
         self.palette = list(data)
 
-    def get_palette_2bpc(self) -> List[int]:
+    def get_palette_2bpc(self) -> list[int]:
         """Returns the palette converting the data from 2 bpc to 3 bpc"""
         data = []
         for x in range(len(self.palette) // 2):
@@ -39,11 +38,11 @@ class Pal(AutoString):
             data.append(((v >> 10) % 32) * 8)
         return data
 
-    def get_palette(self) -> List[int]:
+    def get_palette(self) -> list[int]:
         """Returns the palette data"""
         return self.palette
 
-    def get_palette_4bpc(self) -> List[int]:
+    def get_palette_4bpc(self) -> list[int]:
         """Returns the palette converting the data from 4 bpc to 3 bpc"""
         data = []
         for i, x in enumerate(self.palette):
@@ -51,7 +50,7 @@ class Pal(AutoString):
                 data.append(x)
         return data
 
-    def set_palette_2bpc(self, data: List[int]):
+    def set_palette_2bpc(self, data: list[int]):
         """Sets the palette converting the data given from 3 bpc to 2 bpc"""
         self.palette = []
         for x in range(len(data) // 3):
@@ -62,11 +61,11 @@ class Pal(AutoString):
             self.palette.append(v % 256)
             self.palette.append(v // 256)
 
-    def set_palette(self, data: List[int]):
+    def set_palette(self, data: list[int]):
         """Sets the palette data"""
         self.palette = data
 
-    def set_palette_4bpc(self, data: List[int], padding=0xFF):
+    def set_palette_4bpc(self, data: list[int], padding=0xFF):
         """Sets the palette converting the data given from 3 bpc to 4 bpc"""
         self.palette = []
         for i, x in enumerate(data):

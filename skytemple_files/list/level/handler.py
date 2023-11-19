@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
@@ -33,5 +32,5 @@ class LevelListBinHandler(DataHandler[LevelListBin]):
         return data.serialize()
 
     @classmethod
-    def type(cls) -> Type[LevelListBin]:
+    def type(cls) -> type[LevelListBin]:
         return LevelListBin

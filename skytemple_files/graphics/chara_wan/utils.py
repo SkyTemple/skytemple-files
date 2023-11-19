@@ -17,14 +17,14 @@
 from __future__ import annotations
 
 import typing
-from typing import Optional, Tuple, Union
+from typing import Union
 
 from PIL import Image
 
 from skytemple_files.user_error import UserValueError
 
-Point = Tuple[int, int]
-Bounds = Tuple[int, int, int, int]
+Point = tuple[int, int]
+Bounds = tuple[int, int, int, int]
 PointLike = Union[Point, Bounds]
 
 
@@ -72,7 +72,7 @@ def addLoc(loc1: Bounds, loc2: Bounds, sub: bool = False) -> Point:
     return (loc1[0] + loc2[0] * mult, loc1[1] + loc2[1] * mult)
 
 
-def getCoveredBounds(inImg: Image.Image, max_box: Optional[Bounds] = None) -> Bounds:
+def getCoveredBounds(inImg: Image.Image, max_box: Bounds | None = None) -> Bounds:
     if max_box is None:
         max_box = (0, 0, inImg.size[0], inImg.size[1])
     minX, minY = inImg.size

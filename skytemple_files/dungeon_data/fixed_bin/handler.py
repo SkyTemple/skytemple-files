@@ -29,17 +29,17 @@ class FixedBinHandler(DataHandler[FixedBin]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "FixedBin":  # type: ignore
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> FixedBin:  # type: ignore
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), FixedBin)
 
     @classmethod
-    def serialize(cls, data: "FixedBin", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: FixedBin, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def serialize_raw(cls, data: "FixedBin", **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: FixedBin, **kwargs: OptionalKwargs) -> bytes:
         return FixedBinWriter(data).write()[0]

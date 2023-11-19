@@ -94,7 +94,7 @@ Removes restrictions. """
         self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
     ) -> None:
         if not self.is_applied(rom, config):
-            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: bytes())
+            table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b"")
             ov = table[10]
             ov10 = bytearray(rom.files[ov.fileID])
             props = HardcodedFixedFloorTables.get_fixed_floor_properties(ov10, config)

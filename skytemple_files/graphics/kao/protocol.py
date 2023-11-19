@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Iterator, Optional, Protocol, Tuple, TypeVar
+from typing import Protocol, TypeVar
+from collections.abc import Iterator
 
 from PIL.Image import Image
 
@@ -25,7 +26,7 @@ from PIL.Image import Image
 class KaoImageProtocol(Protocol):
     @classmethod
     @abstractmethod
-    def create_from_raw(cls, cimg: bytes, pal: bytes) -> "KaoImageProtocol":
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> KaoImageProtocol:
         """Create from raw compressed image and palette data"""
         ...
 
@@ -35,7 +36,7 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
-    def clone(self) -> "KaoImageProtocol":
+    def clone(self) -> KaoImageProtocol:
         ...
 
     @abstractmethod
@@ -43,12 +44,12 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
-    def set(self, pil: Image) -> "KaoImageProtocol":
+    def set(self, pil: Image) -> KaoImageProtocol:
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         ...
 
     @abstractmethod
-    def raw(self) -> Tuple[bytes, bytes]:
+    def raw(self) -> tuple[bytes, bytes]:
         """Returns raw image data and palettes"""
         ...
 
@@ -77,7 +78,7 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def get(self, index: int, subindex: int) -> Optional[T]:
+    def get(self, index: int, subindex: int) -> T | None:
         ...
 
     @abstractmethod
@@ -96,7 +97,7 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def __iter__(self) -> Iterator[Tuple[int, int, Optional[T]]]:
+    def __iter__(self) -> Iterator[tuple[int, int, T | None]]:
         """
         Iterates over all KaoImages.
         Tuple: index, subindex, KaoImage or None

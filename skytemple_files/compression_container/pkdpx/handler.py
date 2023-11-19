@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.compression_container.base_handler import (
     CompressionContainerHandler,
@@ -30,13 +29,13 @@ class PkdpxHandler(CompressionContainerHandler):
         return b"PKDPX"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container.pkdpx.model import Pkdpx
 
         return Pkdpx
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust.st_pkdpx import (
             Pkdpx,
         )

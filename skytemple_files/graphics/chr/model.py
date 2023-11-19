@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Optional, List
 
 from PIL import Image
 
@@ -35,8 +34,8 @@ class Chr(AutoString):
             data = memoryview(data)
         number_entries = len(data) // (CHR_TILE_WIDTH**2)
 
-        self.palette: Optional[Pal] = None
-        self.tiles: List[Image.Image] = []
+        self.palette: Pal | None = None
+        self.tiles: list[Image.Image] = []
         for i in range(number_entries):
             data_raw = data[(CHR_TILE_WIDTH**2) * i : (CHR_TILE_WIDTH**2) * (i + 1)]
             self.tiles.append(
@@ -50,13 +49,13 @@ class Chr(AutoString):
     def set_palette(self, palette: Pal):
         self.palette = palette
 
-    def get_palette_raw(self) -> List[int]:
+    def get_palette_raw(self) -> list[int]:
         if self.palette:
             return self.palette.get_palette_2bpc()
         else:
             return [(i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x100 * 3)]
 
-    def set_palette_raw(self, data: List[int]):
+    def set_palette_raw(self, data: list[int]):
         if self.palette:
             self.palette.set_palette_2bpc(data)
 

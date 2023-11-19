@@ -25,9 +25,9 @@ from skytemple_files.data.inter_d.writer import InterDWriter
 
 class InterDHandler(DataHandler[InterD]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "InterD":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> InterD:
         return InterD(data)
 
     @classmethod
-    def serialize(cls, data: "InterD", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: InterD, **kwargs: OptionalKwargs) -> bytes:
         return InterDWriter(data).write()

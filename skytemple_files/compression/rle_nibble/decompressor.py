@@ -17,8 +17,6 @@
 
 from __future__ import annotations
 
-from typing import List
-
 
 class RleNibbleDecompressor:
     def __init__(self, compressed_data: bytes, decompressed_size: int):
@@ -26,7 +24,7 @@ class RleNibbleDecompressor:
         self.decompressed_size = decompressed_size
 
     def decompress(self) -> bytes:
-        out: List[int] = []
+        out: list[int] = []
         copy_next = -1
         nb_keep = 0
         for b in self.compressed_data:

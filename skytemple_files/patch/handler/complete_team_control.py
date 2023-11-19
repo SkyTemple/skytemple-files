@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, List, Any
+from typing import Callable, Any
 
 from ndspy.rom import NintendoDSRom
 
@@ -39,23 +39,23 @@ ov29EU = 0x022DCB80
 ov29US = 0x022DC240
 ov29JP = 0x022DD8E0
 totaloverlay29checks = 6
-CHECK_EU: List[Any] = [None] * 7
-CHECK_US: List[Any] = [None] * 7
-CHECK_JP: List[Any] = [None] * 7
-BYTES_EU: List[Any] = [None] * 7
-BYTES_US: List[Any] = [None] * 7
-BYTES_JP: List[Any] = [None] * 7
+CHECK_EU: list[Any] = [None] * 7
+CHECK_US: list[Any] = [None] * 7
+CHECK_JP: list[Any] = [None] * 7
+BYTES_EU: list[Any] = [None] * 7
+BYTES_US: list[Any] = [None] * 7
+BYTES_JP: list[Any] = [None] * 7
 
 CHECK_EU[0] = 0x022F2894 - ov29EU  # where the game checks if you're pressing start
 CHECK_US[0] = 0x022F1EE0 - ov29US
 CHECK_JP[0] = 0x022F34D8 - ov29JP
-BYTES_EU[0] = bytes(b"\xB2\x00\xD0\xE1")
+BYTES_EU[0] = b"\xB2\x00\xD0\xE1"
 BYTES_US[0] = BYTES_EU[0]
 BYTES_JP[0] = BYTES_EU[0]
 CHECK_EU[1] = 0x022ECD00 - ov29EU  # end of leader's turn verification algorithm
 CHECK_US[1] = 0x022EC350 - ov29US
 CHECK_JP[1] = 0x022ED9B8 - ov29JP
-BYTES_EU[1] = bytes(b"\xF1\x00\x90\xE1")
+BYTES_EU[1] = b"\xF1\x00\x90\xE1"
 BYTES_US[1] = BYTES_EU[1]
 BYTES_JP[1] = BYTES_EU[1]
 CHECK_EU[2] = (
@@ -63,33 +63,33 @@ CHECK_EU[2] = (
 )  # Jump to the function which executes the leader's action
 CHECK_US[2] = 0x022EC488 - ov29US
 CHECK_JP[2] = 0x022EDAF0 - ov29JP
-BYTES_EU[2] = bytes(b"\x27\x48\x00\xEB")
-BYTES_US[2] = bytes(b"\x0B\x48\x00\xEB")
-BYTES_JP[2] = bytes(b"\x6B\x47\x00\xEB")
+BYTES_EU[2] = b"\x27\x48\x00\xEB"
+BYTES_US[2] = b"\x0B\x48\x00\xEB"
+BYTES_JP[2] = b"\x6B\x47\x00\xEB"
 CHECK_EU[3] = 0x022EC728 - ov29EU  # When the turns of your partners start
 CHECK_US[3] = 0x022EBD78 - ov29US
 CHECK_JP[3] = 0x022ED3E0 - ov29JP
-BYTES_EU[3] = bytes(b"\x00\x50\xA0\xE3")
+BYTES_EU[3] = b"\x00\x50\xA0\xE3"
 BYTES_US[3] = BYTES_EU[3]
 BYTES_JP[3] = BYTES_EU[3]
 CHECK_EU[4] = 0x022F1B2C - ov29EU  # Sets partners to look at you
 CHECK_US[4] = 0x022F1178 - ov29US
 CHECK_JP[4] = 0x022F2770 - ov29JP
-BYTES_EU[4] = bytes(b"\x2A\x51\x00\xEB")
-BYTES_US[4] = bytes(b"\x0C\x51\x00\xEB")
-BYTES_JP[4] = bytes(b"\xE2\x50\x00\xEB")
+BYTES_EU[4] = b"\x2A\x51\x00\xEB"
+BYTES_US[4] = b"\x0C\x51\x00\xEB"
+BYTES_JP[4] = b"\xE2\x50\x00\xEB"
 CHECK_EU[5] = 0x02305A98 - ov29EU  # Also sets partners to look at you
 CHECK_US[5] = 0x0230506C - ov29US
 CHECK_JP[5] = 0x023065BC - ov29JP
-BYTES_EU[5] = bytes(b"\xFE\x17\xD0\xE1")
+BYTES_EU[5] = b"\xFE\x17\xD0\xE1"
 BYTES_US[5] = BYTES_EU[5]
-BYTES_JP[5] = bytes(b"\xFA\x17\xD0\xE1")
+BYTES_JP[5] = b"\xFA\x17\xD0\xE1"
 CHECK_EU[6] = 0x02388154 - 0x02383420  # Jump to team submenu option recorder function
 CHECK_US[6] = 0x02387530 - 0x02382820  # this is in overlay 31
 CHECK_JP[6] = 0x023887AC - 0x02383AA0
-BYTES_EU[6] = bytes(b"\x17\x8F\xFD\xEB")
-BYTES_US[6] = bytes(b"\xB4\x8F\xFD\xEB")
-BYTES_JP[6] = bytes(b"\xAF\x90\xFD\xEB")
+BYTES_EU[6] = b"\x17\x8F\xFD\xEB"
+BYTES_US[6] = b"\xB4\x8F\xFD\xEB"
+BYTES_JP[6] = b"\xAF\x90\xFD\xEB"
 
 STRING_ID0_US = 296
 STRING_ID1_US = 297
@@ -129,7 +129,7 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "1.2.4"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

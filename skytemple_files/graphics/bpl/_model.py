@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import u16_checked, u16
 
@@ -55,7 +54,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         # Read palettes:
         pal_end = 4 + (self.number_palettes * BPL_PAL_SIZE)
         # Format: [ [r,g,b,r,g,b,r,g,b,r,g,b...], ...]
-        self.palettes: List[List[int]] = []
+        self.palettes: list[list[int]] = []
         self.current_palette = [
             0,
             0,
@@ -79,12 +78,12 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         # assert len(data) - pal_end == 0 if not self.has_second_color_table else len(data) - pal_end > 0
 
         # Mapped 1:1 with self.palettes, if exists:
-        self.animation_specs: List[BplAnimationSpec] = []
+        self.animation_specs: list[BplAnimationSpec] = []
 
         # Extra colors - Palette animation
         # Format: [ [r,g,b,r,g,b,r,g,b,r,g,b...], ...]
         # Only 15 colors per frame!
-        self.animation_palette: List[List[int]] = []
+        self.animation_palette: list[list[int]] = []
         if self.has_palette_animation:
             # Read color index table
             cit_end = pal_end + self.number_palettes * BPL_COL_INDEX_ENTRY_LEN
@@ -107,7 +106,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
                     self.animation_palette.append(current_ani_pal)
                     current_ani_pal = []
 
-    def import_palettes(self, palettes: List[List[int]]) -> None:
+    def import_palettes(self, palettes: list[list[int]]) -> None:
         """
         Replace all palettes with the ones passed in
         Animated palette is not changed, but the number of spec entries is adjusted.
@@ -129,7 +128,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
                         )
                     )
 
-    def apply_palette_animations(self, frame: int) -> List[List[int]]:
+    def apply_palette_animations(self, frame: int) -> list[list[int]]:
         """
         Returns a modified copy of self.palettes.
 
@@ -159,11 +158,11 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         spec = self.animation_specs[pal_idx]
         return spec.number_of_frames > 0
 
-    def get_real_palettes(self) -> List[List[int]]:
+    def get_real_palettes(self) -> list[list[int]]:
         """Gets the actual palettes defined (without dummy grayscale entries)."""
         return self.palettes[: self.number_palettes]
 
-    def set_palettes(self, palettes: List[List[int]]) -> None:
+    def set_palettes(self, palettes: list[list[int]]) -> None:
         """Sets the palette properly, adding dummy grayscale entries if needed."""
         self.palettes = palettes
         self.number_palettes = u16_checked(len(palettes))

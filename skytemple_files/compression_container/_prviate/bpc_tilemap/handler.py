@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.compression_container.base_handler import (
     CompressionContainerHandler,
@@ -30,7 +29,7 @@ class BpcTilemapHandler(CompressionContainerHandler):
         return b"BPCTLM"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container._prviate.bpc_tilemap._pymodel import (
             BpcTilemapCompressionContainer,
         )
@@ -38,7 +37,7 @@ class BpcTilemapHandler(CompressionContainerHandler):
         return BpcTilemapCompressionContainer
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust._st_bpc_tilemap_compression import (
             BpcTilemapCompressionContainer,
         )

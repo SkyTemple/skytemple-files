@@ -20,7 +20,7 @@ This can also handle partial data in the XML!
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, no_type_check, TypedDict, List, Optional
+from typing import no_type_check, TypedDict
 from xml.etree.ElementTree import Element
 
 from range_typed_integers import i8_checked, u8_checked, u16_checked, i16_checked, u8
@@ -132,7 +132,7 @@ def mappa_to_xml(mappa: MappaBinProtocol) -> Element:
 
 
 def mappa_from_xml(
-    ele: Element, items: Dict[str, Pmd2DungeonItemCategory]
+    ele: Element, items: dict[str, Pmd2DungeonItemCategory]
 ) -> MappaBinProtocol:
     validate_xml_tag(ele, XML_MAPPA)
     floor_lists = []
@@ -147,7 +147,7 @@ def mappa_from_xml(
 
 def mappa_floor_to_xml(
     floor: MappaFloorProtocol,
-    items_desc: Dict[int, Pmd2DungeonItemCategory],
+    items_desc: dict[int, Pmd2DungeonItemCategory],
     export_layout=True,
     export_monsters=True,
     export_traps=True,
@@ -222,19 +222,19 @@ def mappa_floor_to_xml(
 
 
 class MappaFloorFromXmlDict(TypedDict):
-    layout: Optional[MappaFloorLayoutProtocol]
-    monsters: Optional[List[MappaMonsterProtocol]]
-    traps: Optional[MappaTrapListProtocol]
-    floor_items: Optional[MappaItemListProtocol]
-    shop_items: Optional[MappaItemListProtocol]
-    monster_house_items: Optional[MappaItemListProtocol]
-    buried_items: Optional[MappaItemListProtocol]
-    unk_items1: Optional[MappaItemListProtocol]
-    unk_items2: Optional[MappaItemListProtocol]
+    layout: MappaFloorLayoutProtocol | None
+    monsters: list[MappaMonsterProtocol] | None
+    traps: MappaTrapListProtocol | None
+    floor_items: MappaItemListProtocol | None
+    shop_items: MappaItemListProtocol | None
+    monster_house_items: MappaItemListProtocol | None
+    buried_items: MappaItemListProtocol | None
+    unk_items1: MappaItemListProtocol | None
+    unk_items2: MappaItemListProtocol | None
 
 
 def mappa_floor_from_xml(
-    ele: Element, items: Dict[str, Pmd2DungeonItemCategory]
+    ele: Element, items: dict[str, Pmd2DungeonItemCategory]
 ) -> MappaFloorProtocol:
     data: MappaFloorFromXmlDict = {
         "layout": None,
@@ -304,7 +304,7 @@ def mappa_floor_from_xml(
 
 
 def mappa_floor_xml_import(
-    xml: Element, floor: MappaFloorProtocol, items: Dict[str, Pmd2DungeonItemCategory]
+    xml: Element, floor: MappaFloorProtocol, items: dict[str, Pmd2DungeonItemCategory]
 ):
     """Imports all data available in the mappa floor XML into the given model."""
     for child in xml:
@@ -731,7 +731,7 @@ def mappa_trap_list_from_xml(ele: Element) -> MappaTrapListProtocol:
 
 
 def mappa_item_list_to_xml(
-    item_list: MappaItemListProtocol, items_desc: Dict[int, Pmd2DungeonItemCategory]
+    item_list: MappaItemListProtocol, items_desc: dict[int, Pmd2DungeonItemCategory]
 ) -> Element:
     xml_item_list = Element(XML_ITEM_LIST)
     for category, probability in item_list.categories.items():
@@ -755,7 +755,7 @@ def mappa_item_list_to_xml(
 
 
 def mappa_item_list_from_xml(
-    ele: Element, items_desc: Dict[str, Pmd2DungeonItemCategory]
+    ele: Element, items_desc: dict[str, Pmd2DungeonItemCategory]
 ) -> MappaItemListProtocol:
     validate_xml_tag(ele, XML_ITEM_LIST)
     categories = {}

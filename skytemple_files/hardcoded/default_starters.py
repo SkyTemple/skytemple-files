@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import u16, u8
 
@@ -163,7 +162,7 @@ class HardcodedDefaultStarters:
     @staticmethod
     def get_special_episode_pcs(
         arm9: bytes, config: Pmd2Data
-    ) -> List[SpecialEpisodePc]:
+    ) -> list[SpecialEpisodePc]:
         """
         Gets the special episode player characters
         """
@@ -189,7 +188,7 @@ class HardcodedDefaultStarters:
 
     @staticmethod
     def set_special_episode_pcs(
-        value: List[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data
+        value: list[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the special episode player characters

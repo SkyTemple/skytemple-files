@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
@@ -63,7 +63,7 @@ Depends on the ActorAndLevelLoader patch, as it needs some space provided by thi
     def category(self) -> PatchCategory:
         return PatchCategory.UTILITY
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ActorAndLevelLoader"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:

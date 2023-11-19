@@ -19,7 +19,7 @@ from __future__ import annotations
 import gettext
 from abc import ABC, abstractmethod
 from inspect import currentframe
-from typing import Optional, Any, List
+from typing import Any
 
 
 class AbstractLocaleManager(ABC):
@@ -33,7 +33,7 @@ class AbstractLocaleManager(ABC):
 
 
 class LocaleManager(AbstractLocaleManager):
-    def __init__(self, domain: str, localedir: str, main_languages: List[str]):
+    def __init__(self, domain: str, localedir: str, main_languages: list[str]):
         self.domain = domain
         self.localedir = localedir
         self.main_languages = main_languages
@@ -78,7 +78,7 @@ def get_locales() -> AbstractLocaleManager:
     return _locales
 
 
-def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> None:
+def reload_locale(domain: str, localedir: str, main_languages: list[str]) -> None:
     global _locales
     _locales = LocaleManager(domain, localedir, main_languages)
     _locales.main_translations.install()
@@ -99,7 +99,7 @@ def reload_locale(domain: str, localedir: str, main_languages: List[str]) -> Non
         pass
 
 
-def f(s: str, additional_locals: Optional[Any] = None) -> str:
+def f(s: str, additional_locals: Any | None = None) -> str:
     """f-strings as a function, for use with translatable strings: f'{techticks}' == f('{techticks}')"""
     if additional_locals is None:
         additional_locals = {}

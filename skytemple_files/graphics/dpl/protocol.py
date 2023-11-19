@@ -18,7 +18,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Sequence, Protocol
+from typing import Protocol
+from collections.abc import Sequence
 
 
 class DplProtocol(Protocol):

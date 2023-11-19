@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Union, MutableSequence, Sequence, List, Tuple, Iterable
+from collections.abc import MutableSequence, Sequence, Iterable
 
 from range_typed_integers import u32_checked, u16, u32, u8
 from skytemple_files.common.i18n_util import _
@@ -264,7 +264,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
             )
         )
 
-        self.learnsets: List[MoveLearnset] = []
+        self.learnsets: list[MoveLearnset] = []
         i = 0
         while True:
             if move_learnset_pointer + (i * 12) >= waza_content_pointer:
@@ -310,14 +310,14 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
         cls,
         content_data: bytes,
         data_pointer: u32,
-    ) -> "Sir0Serializable":
+    ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
-        pointer_offsets: List[u32] = []
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
+        pointer_offsets: list[u32] = []
         data = bytearray(3)
         # Learnset
-        learnset_pointers: List[Tuple[u32, u32, u32]] = []
+        learnset_pointers: list[tuple[u32, u32, u32]] = []
         for learnset in self.learnsets:
             # Level Up
             pnt_lvlup = len(data)
@@ -388,6 +388,6 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
     def _decode_ints(data: bytes, pnt_start: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pnt_start, False)
 
-    def _read_moves(self, moves: Union[bytes, memoryview]) -> Iterable[WazaMove]:
+    def _read_moves(self, moves: bytes | memoryview) -> Iterable[WazaMove]:
         for data in chunks(moves, WAZA_MOVE_ENTRY_LEN):
             yield WazaMove(data)  # type: ignore

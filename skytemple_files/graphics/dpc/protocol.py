@@ -15,7 +15,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from abc import abstractmethod
-from typing import Protocol, TypeVar, Sequence, Tuple
+from typing import Protocol, TypeVar
+from collections.abc import Sequence
 
 from PIL import Image
 
@@ -61,7 +62,7 @@ class DpcProtocol(Protocol[CI]):
     @abstractmethod
     def pil_to_chunks(
         self, image: Image.Image, force_import=True
-    ) -> Tuple[Sequence[bytes], Sequence[Sequence[int]]]:
+    ) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tile mappings and returns the new tiles for storing them in a DPCI and the palettes

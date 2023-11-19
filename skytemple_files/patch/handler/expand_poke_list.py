@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, u8
@@ -130,7 +130,7 @@ and to save a backup of your ROM before applying this."""
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:

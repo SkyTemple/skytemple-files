@@ -19,7 +19,6 @@ from __future__ import annotations
 import ssl
 import urllib.request
 from enum import Enum
-from typing import Optional, Tuple
 
 RELEASE_WEB = "https://release.skytemple.org/"
 BANNER_LINK = "banner"
@@ -44,7 +43,7 @@ def check_newest_release(rtype: ReleaseType) -> str:
     )
 
 
-def get_event_banner() -> Tuple[Optional[bytes], Optional[str]]:
+def get_event_banner() -> tuple[bytes | None, str | None]:
     try:
         url = (
             urllib.request.urlopen(RELEASE_WEB + BANNER_LINK, context=create_context())

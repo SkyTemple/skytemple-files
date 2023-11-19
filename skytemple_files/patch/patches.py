@@ -22,7 +22,8 @@ import shutil
 from enum import Enum
 from functools import partial
 from tempfile import TemporaryDirectory
-from typing import Any, Dict, Generator, List, Optional
+from typing import Any
+from collections.abc import Generator
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 from zipfile import ZipFile
@@ -192,12 +193,12 @@ class Patcher:
     ):
         self._rom = rom
         self._config = config
-        self._loaded_patches: Dict[str, AbstractPatchHandler] = {}
+        self._loaded_patches: dict[str, AbstractPatchHandler] = {}
         # Path to the directories, which contain the ASM files for the handlers.
-        self._patch_dirs: Dict[str, str] = {}
+        self._patch_dirs: dict[str, str] = {}
 
         self._arm_patcher = ArmPatcher(self._rom)
-        self._created_tmpdirs: List[TemporaryDirectory[Any]] = []
+        self._created_tmpdirs: list[TemporaryDirectory[Any]] = []
 
         if not skip_core_patches:
             # Load core patches
@@ -213,7 +214,7 @@ class Patcher:
             raise ValueError(f(_("The patch '{name}' was not found.")))
         return self._loaded_patches[name].is_applied(self._rom, self._config)
 
-    def apply(self, name: str, config: Optional[Dict[str, Any]] = None) -> None:
+    def apply(self, name: str, config: dict[str, Any] | None = None) -> None:
         """
         Apply a patch.
         If the patch requires parameters, values for ALL of them must be in the dict `config` (even if default values
@@ -444,8 +445,7 @@ class Patcher:
         self._patch_dirs[handler.name] = patch_base_dir
 
     def list(self) -> Generator[AbstractPatchHandler, None, None]:
-        for handler in self._loaded_patches.values():
-            yield handler
+        yield from self._loaded_patches.values()
 
     def get(self, name: str) -> AbstractPatchHandler:
         return self._loaded_patches[name]

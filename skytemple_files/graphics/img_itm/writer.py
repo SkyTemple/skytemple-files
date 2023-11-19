@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Tuple, List
 
 from range_typed_integers import u32_checked, u32, u8
 
@@ -32,7 +31,7 @@ class ImgItmWriter:
     def __init__(self, model: ImgItm):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         buffer = bytearray()
 
         # Sprites

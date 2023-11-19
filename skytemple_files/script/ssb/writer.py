@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import logging
 import math
-from typing import Dict, Type
 
 from range_typed_integers import u16_checked, u16
 
@@ -69,7 +68,7 @@ class SsbWriter:
 
         logger.debug("Serializing SSB model...")
 
-        header_cls: Type[AbstractSsbHeader]
+        header_cls: type[AbstractSsbHeader]
         if self.static_data.game_region == GAME_REGION_US:
             header_cls = SsbHeaderUs
             header_len = SSB_HEADER_US_LENGTH
@@ -176,7 +175,7 @@ class SsbWriter:
         # Language String Tables and Language Strings
         len_of_string_tables = 2 * number_of_strings
         previous_languages_block_sizes = 0
-        string_lengths: Dict[str, int] = {}
+        string_lengths: dict[str, int] = {}
         if (
             number_of_strings != 0
             and len({len(i) for i in self.model.strings.values()}) != 1

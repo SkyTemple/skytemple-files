@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import List
 
 from range_typed_integers import u16
 
@@ -57,7 +56,7 @@ class Ssa:
         self._scriptdata = scriptdata
 
         self.header = self._init_header(data)
-        self.layer_list: List[SsaLayer] = self._init_layer_list(data)
+        self.layer_list: list[SsaLayer] = self._init_layer_list(data)
 
         self.triggers = self._init_triggers(data)
         self.position_markers = self._init_position_markers(data)

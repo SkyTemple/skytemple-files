@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 import json
-from typing import Dict, List
 
 from ndspy.rom import NintendoDSRom
 
@@ -27,7 +26,7 @@ from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs, create_file_in_rom
 
 SPRCONF_FILENAME = "MONSTER/sprconf.json"
-SprconfType = Dict[int, Dict[int, List[str]]]
+SprconfType = dict[int, dict[int, list[str]]]
 
 
 class SprconfHandler(DataHandler[SprconfType]):

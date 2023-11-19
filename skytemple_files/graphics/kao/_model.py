@@ -20,7 +20,6 @@ from __future__ import annotations
 import math
 import warnings
 from collections.abc import Iterator
-from typing import Optional, Tuple, List, Union, Dict
 
 from PIL import Image
 from range_typed_integers import i32
@@ -65,12 +64,12 @@ class KaoImage(KaoImageProtocol):
         self.compressed_img_data = read_bytes(
             whole_kao_data, start_pnt + KAO_IMG_PAL_B_SIZE, cont_len
         )
-        self.as_pil: Optional[Image.Image] = None  # lazy loading
+        self.as_pil: Image.Image | None = None  # lazy loading
         self.modified = False
         self.empty = False
 
     @classmethod
-    def create_from_raw(cls, cimg: bytes, pal: bytes) -> "KaoImage":
+    def create_from_raw(cls, cimg: bytes, pal: bytes) -> KaoImage:
         """Create from raw compressed image and palette data"""
         return cls(bytes(pal) + bytes(cimg), 0)
 
@@ -80,7 +79,7 @@ class KaoImage(KaoImageProtocol):
             self.as_pil = kao_to_pil(self)
         return self.as_pil
 
-    def clone(self) -> "KaoImage":
+    def clone(self) -> KaoImage:
         return KaoImage(self.get_internal(), 0)
 
     def size(self) -> int:
@@ -90,7 +89,7 @@ class KaoImage(KaoImageProtocol):
         """Returns the portrait as 16 color palette followed by AT compressed image data"""
         return bytes(self.pal_data) + bytes(self.compressed_img_data)
 
-    def set(self, pil: Image.Image) -> "KaoImage":
+    def set(self, pil: Image.Image) -> KaoImage:
         """Sets the portrait using a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         self.pal_data = new_pal
@@ -101,14 +100,14 @@ class KaoImage(KaoImageProtocol):
         return self
 
     @classmethod
-    def new(cls, pil: Image.Image) -> "KaoImage":
+    def new(cls, pil: Image.Image) -> KaoImage:
         """Creates a new KaoImage from a PIL image with 16-bit color palette as input"""
         new_pal, new_img = pil_to_kao(pil)
         new = cls(new_pal + new_img, 0)
         new.modified = True
         return new
 
-    def raw(self) -> Tuple[bytes, bytes]:
+    def raw(self) -> tuple[bytes, bytes]:
         """Returns raw image data and palettes"""
         return bytes(self.compressed_img_data), bytes(self.pal_data)
 
@@ -187,14 +186,14 @@ class Kao(KaoProtocol[KaoImage]):
         self.reset(new_size)
 
     def reset(self, toc_len: int) -> None:
-        self.loaded_kaos: List[List[Optional[KaoImage]]] = [
+        self.loaded_kaos: list[list[KaoImage | None]] = [
             [None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)
         ]
-        self.loaded_kaos_flat: List[
-            Tuple[int, int, KaoImage]
+        self.loaded_kaos_flat: list[
+            tuple[int, int, KaoImage]
         ] = []  # cache for performance
 
-    def get(self, index: int, subindex: int) -> Union[KaoImage, None]:
+    def get(self, index: int, subindex: int) -> KaoImage | None:
         """Get the KaoImage at the specified location or None if no image is specified"""
         if index >= self.toc_len or index < 0:
             raise ValueError(
@@ -227,7 +226,7 @@ class Kao(KaoProtocol[KaoImage]):
         return self._set_impl(index, subindex, img)
 
     def _set_impl(
-        self, index: int, subindex: int, img: Union[KaoImageProtocol, Image.Image]
+        self, index: int, subindex: int, img: KaoImageProtocol | Image.Image
     ) -> None:
         """
         Set the KaoImage at the specified location. This fails,
@@ -274,7 +273,7 @@ class Kao(KaoProtocol[KaoImage]):
         """Returns whether or not a kao image at the specified index was loaded"""
         return self.loaded_kaos[index][subindex] is not None
 
-    def __iter__(self) -> "KaoIterator":
+    def __iter__(self) -> KaoIterator:
         """
         Iterates over all KaoImages.
         """
@@ -289,7 +288,7 @@ class KaoIterator(Iterator):  # type: ignore
         self.max_index = indices
         self.max_subindex = subindices
 
-    def __next__(self) -> Tuple[int, int, Union[KaoImage, None]]:
+    def __next__(self) -> tuple[int, int, KaoImage | None]:
         """Tuple: index, subindex, KaoImage or None"""
         if self.current_index < self.max_index:
             old_index = self.current_index
@@ -355,8 +354,8 @@ def uncompressed_kao_to_pil(
 
 
 def pil_to_kao(
-    pil: Image.Image, allowed_compressions: Optional[List[CommonAtType]] = None
-) -> Tuple[bytes, bytes]:
+    pil: Image.Image, allowed_compressions: list[CommonAtType] | None = None
+) -> tuple[bytes, bytes]:
     """Converts a PIL image (with a 16 bit palette) to a kao palette and at compressed image data"""
     from skytemple_files.common.types.file_types import FileType
 
@@ -414,7 +413,7 @@ def pil_to_kao(
     # Palette reordering algorithm
     # Tries to reorder the palette to have a more favorable data
     # configuration for the PX algorithm
-    pairs: Dict[Tuple[int, int], int] = {}
+    pairs: dict[tuple[int, int], int] = {}
     for x in range(len(new_img) - 1):
         l = [
             new_img[x] % 16,

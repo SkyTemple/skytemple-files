@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 import math
-from typing import List, Tuple, Sequence, Optional
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16_checked, u16
@@ -39,10 +39,10 @@ class BpcLayer(BpcLayerProtocol):
     def __init__(
         self,
         number_tiles: u16,
-        bpas: List[u16],
+        bpas: list[u16],
         chunk_tilemap_len: u16,
-        tiles: List[bytes],
-        tilemap: List[TilemapEntryProtocol],
+        tiles: list[bytes],
+        tilemap: list[TilemapEntryProtocol],
     ) -> None:
         # The actual number of tiles is one lower
         self.number_tiles = u16(number_tiles - 1)
@@ -53,7 +53,7 @@ class BpcLayer(BpcLayerProtocol):
         #       1 here or remove the -1 above.
         self.chunk_tilemap_len = chunk_tilemap_len
         self.tiles = tiles
-        self.tilemap: List[TilemapEntryProtocol] = tilemap
+        self.tilemap: list[TilemapEntryProtocol] = tilemap
 
     def __repr__(self) -> str:
         return (
@@ -89,9 +89,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         # Depending on the number of layers there are now one or two metadata sections
         # for these layers. The layers are completed by a BMA file that comes with this BPC file!
         # The BMA contains tiling w/h and w/h of the map. See bg_list.dat for mapping.
-        self.layers: List[BpcLayer] = []
+        self.layers: list[BpcLayer] = []
         for layer_spec in iter_bytes(data, 12, 4, 4 + (12 * self.number_of_layers)):
-            bpas: List[u16] = [
+            bpas: list[u16] = [
                 read_u16(layer_spec, 2),
                 read_u16(layer_spec, 4),
                 read_u16(layer_spec, 6),
@@ -158,7 +158,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
                 )
             )
 
-    def _read_tile_data(self, data: Tuple[bytes, int]) -> Tuple[List[bytes], int]:
+    def _read_tile_data(self, data: tuple[bytes, int]) -> tuple[list[bytes], int]:
         """Handles the decompressed tile data returned by the BPC_IMAGE decompressor."""
         n_bytes = int(BPC_TILE_DIM * BPC_TILE_DIM / 2)
         # The first tile is not stored, but is always empty
@@ -167,7 +167,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             tiles.append(bytes(tile))
         return tiles, data[1]
 
-    def _read_tilemap_data(self, data: bytes) -> List[TilemapEntryProtocol]:
+    def _read_tilemap_data(self, data: bytes) -> list[TilemapEntryProtocol]:
         """Handles the decompressed tile data returned by the BPC_TILEMAP decompressor."""
         tilemap = []
         # The first chunk is not stored, but is always empty
@@ -238,7 +238,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         layer: int,
         palettes: Sequence[Sequence[int]],
         width_in_tiles: int = 20,
-        single_palette: Optional[int] = None,
+        single_palette: int | None = None,
     ) -> Image.Image:
         """
         Convert all individual tiles of the BPC into one PIL image.
@@ -285,9 +285,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         self,
         layer: int,
         palettes: Sequence[Sequence[int]],
-        bpas: Sequence[Optional[BpaProtocol]],
+        bpas: Sequence[BpaProtocol | None],
         width_in_mtiles: int = 20,
-    ) -> List[Image.Image]:
+    ) -> list[Image.Image]:
         """
         Exports chunks. For general notes see chunks_to_pil.
 
@@ -347,8 +347,8 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         layer: int,
         chunk_idx: int,
         palettes: Sequence[Sequence[int]],
-        bpas: Sequence[Optional[BpaProtocol]],
-    ) -> List[Image.Image]:
+        bpas: Sequence[BpaProtocol | None],
+    ) -> list[Image.Image]:
         """
         Exports a single chunk. For general notes see chunks_to_pil. For notes regarding the animation see
         chunks_animated_to_pil.
@@ -415,7 +415,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
 
     def pil_to_chunks(
         self, layer: int, image: Image.Image, force_import: bool = True
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tiles, tile mappings and therefor also chunks.
@@ -457,12 +457,12 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
     ) -> None:
         self.layers[layer].tilemap[index] = tile_mapping
 
-    def get_chunk(self, layer: int, index: int) -> List[TilemapEntryProtocol]:
+    def get_chunk(self, layer: int, index: int) -> list[TilemapEntryProtocol]:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx : mtidx + 9]
 
     def import_tiles(
-        self, layer: int, tiles: List[bytes], contains_null_tile: bool = False
+        self, layer: int, tiles: list[bytes], contains_null_tile: bool = False
     ) -> None:
         """
         Replace the tiles of the specified layer.
@@ -476,7 +476,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
     def import_tile_mappings(
         self,
         layer: int,
-        tile_mappings: List[TilemapEntryProtocol],
+        tile_mappings: list[TilemapEntryProtocol],
         contains_null_chunk: bool = False,
         correct_tile_ids: bool = True,
     ) -> None:
@@ -499,8 +499,8 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         )
 
     def get_bpas_for_layer(
-        self, layer: int, bpas_from_bg_list: Sequence[Optional[BpaProtocol]]
-    ) -> List[BpaProtocol]:
+        self, layer: int, bpas_from_bg_list: Sequence[BpaProtocol | None]
+    ) -> list[BpaProtocol]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.

@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Optional, Tuple, runtime_checkable, Protocol
+from typing import runtime_checkable, Protocol
 
 from range_typed_integers import u32
 
@@ -25,7 +25,7 @@ from range_typed_integers import u32
 @runtime_checkable
 class Sir0Serializable(Protocol):
     @abstractmethod
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         """
         Prepares this object to be wrapped in Sir0.
         Returns:
@@ -37,7 +37,7 @@ class Sir0Serializable(Protocol):
 
     @classmethod
     @abstractmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> "Sir0Serializable":
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> Sir0Serializable:
         """
         Builds the model from the unwrapped Sir0.
         """

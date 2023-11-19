@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Optional, Protocol, Sequence, TypeVar, Union
+from typing import Protocol, TypeVar
+from collections.abc import Sequence
 
 from skytemple_files.common.protocol import RomFileProviderProtocol
 from skytemple_files.graphics.bma.protocol import BmaProtocol
@@ -35,7 +36,7 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
     bpl_name: str
     bpc_name: str
     bma_name: str
-    bpa_names: Sequence[Optional[str]]
+    bpa_names: Sequence[str | None]
 
     @abstractmethod
     def __init__(
@@ -43,31 +44,31 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
         bpl_name: str,
         bpc_name: str,
         bma_name: str,
-        bpa_names: List[Optional[str]],
+        bpa_names: list[str | None],
     ):
         ...
 
     @abstractmethod
-    def get_bpl(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> L:
+    def get_bpl(self, rom_or_directory_root: str | RomFileProviderProtocol) -> L:
         ...
 
     @abstractmethod
     def get_bpc(
         self,
-        rom_or_directory_root: Union[str, RomFileProviderProtocol],
+        rom_or_directory_root: str | RomFileProviderProtocol,
         bpc_tiling_width: int = 3,
         bpc_tiling_height: int = 3,
     ) -> C:
         ...
 
     @abstractmethod
-    def get_bma(self, rom_or_directory_root: Union[str, RomFileProviderProtocol]) -> M:
+    def get_bma(self, rom_or_directory_root: str | RomFileProviderProtocol) -> M:
         ...
 
     @abstractmethod
     def get_bpas(
-        self, rom_or_directory_root: Union[str, RomFileProviderProtocol]
-    ) -> List[Optional[P]]:
+        self, rom_or_directory_root: str | RomFileProviderProtocol
+    ) -> list[P | None]:
         ...
 
 
@@ -112,6 +113,6 @@ class BgListProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: Optional[str]):
+    def set_level_bpa(self, level_id: int, bpa_id: int, bpa_name: str | None):
         """Overwrites an entry in a level's BPA list."""
         ...

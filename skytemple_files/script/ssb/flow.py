@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from explorerscript.ssb_converting.decompiler.graph_building.graph_minimizer import (
     SsbGraphMinimizer,
@@ -60,7 +60,7 @@ class SsbFlow:
     def __init__(self, ssb: Ssb, static_data: Pmd2Data):
         self._named_routines = static_data.script_data.common_routine_info__by_id
         self._variables_by_name = static_data.script_data.game_variables__by_name
-        routine_ops: List[List[SsbOperation]] = list(
+        routine_ops: list[list[SsbOperation]] = list(
             OpsLabelJumpToResolver(ssb.get_filled_routine_ops())
         )
 
@@ -122,7 +122,7 @@ class SsbFlow:
                     other_iter
                 ), f"My graph ended to early ({self._r_info(i)})."
 
-    def _assert_same_vertex(self, i, self_v: "Vertex", other_v: "Vertex"):
+    def _assert_same_vertex(self, i, self_v: Vertex, other_v: Vertex):
         if self_v is None or other_v is None:
             assert self_v == other_v, f"Both must be None {self._r_info(i)}"
             return
@@ -217,7 +217,7 @@ class SsbFlow:
         return f"Routine {i} (coro name {self._named_routines[i]})"
 
     @staticmethod
-    def bfs_generator(start: "Vertex"):
+    def bfs_generator(start: Vertex):
         """
         Basically the same as graph.bfsiter with advanced (but as a generator).
         However the order of vertices honors the flow_level of it's in edge. It also takes special Ssb flow

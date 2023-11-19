@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import no_type_check, List
+from typing import no_type_check
 
 from range_typed_integers import u8, i8, i16
 
@@ -139,7 +139,7 @@ class DungeonRestriction(AutoString):
         self.random_movement_chance = random_movement_chance
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> "DungeonRestriction":
+    def from_bytes(cls, b: bytes) -> DungeonRestriction:
         bitfield0 = read_u8(b, 0)
         bitfield1 = read_u8(b, 1)
         (
@@ -268,7 +268,7 @@ class MapMarkerPlacement(AutoString):
         self.y = y
 
     @classmethod
-    def from_bytes(cls, b: bytes) -> "MapMarkerPlacement":
+    def from_bytes(cls, b: bytes) -> MapMarkerPlacement:
         return MapMarkerPlacement(
             read_i16(b, 0), read_i16(b, 2), read_i16(b, 4), read_i16(b, 6)
         )
@@ -404,7 +404,7 @@ class TilesetProperties(AutoString):
 
     @classmethod
     @no_type_check
-    def from_bytes(cls, b: bytes) -> "TilesetProperties":
+    def from_bytes(cls, b: bytes) -> TilesetProperties:
         return TilesetProperties(
             TilesetMapColor(read_u32(b, 0)),
             TilesetStirringEffect(read_u8(b, 4)),
@@ -442,7 +442,7 @@ class TilesetProperties(AutoString):
 
 class HardcodedDungeons:
     @staticmethod
-    def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> List[DungeonDefinition]:
+    def get_dungeon_list(arm9bin: bytes, config: Pmd2Data) -> list[DungeonDefinition]:
         """Returns the list of dungeon definitions."""
         block = config.bin_sections.arm9.data.DUNGEON_DATA_LIST
         lst = []
@@ -461,7 +461,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_dungeon_list(
-        value: List[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data
+        value: list[DungeonDefinition], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the dungeon definitions.
@@ -491,7 +491,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_dungeon_restrictions(
         arm9bin: bytes, config: Pmd2Data
-    ) -> List[DungeonRestriction]:
+    ) -> list[DungeonRestriction]:
         """Returns the list of dungeon restrictions."""
         block = config.bin_sections.arm9.data.DUNGEON_RESTRICTIONS
         lst = []
@@ -507,7 +507,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_dungeon_restrictions(
-        value: List[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data
+        value: list[DungeonRestriction], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the dungeon restrictions.
@@ -527,7 +527,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_secondary_terrains(
         arm9bin: bytes, config: Pmd2Data
-    ) -> List[SecondaryTerrainTableEntry]:
+    ) -> list[SecondaryTerrainTableEntry]:
         """Returns the list of secondary terrains."""
         block = config.bin_sections.arm9.data.SECONDARY_TERRAIN_TYPES
         lst = []
@@ -547,7 +547,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_secondary_terrains(
-        value: List[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data
+        value: list[SecondaryTerrainTableEntry], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the secondary terrains.
@@ -571,7 +571,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_marker_placements(
         arm9bin: bytes, config: Pmd2Data
-    ) -> List[MapMarkerPlacement]:
+    ) -> list[MapMarkerPlacement]:
         """Returns the list of secondary terrains."""
         block = config.bin_sections.arm9.data.MAP_MARKER_PLACEMENTS
         lst = []
@@ -587,7 +587,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_marker_placements(
-        value: List[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data
+        value: list[MapMarkerPlacement], arm9bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the secondary terrains.
@@ -607,7 +607,7 @@ class HardcodedDungeons:
     @staticmethod
     def get_tileset_properties(
         ov10: bytes, config: Pmd2Data
-    ) -> List[TilesetProperties]:
+    ) -> list[TilesetProperties]:
         block = config.bin_sections.overlay10.data.TILESET_PROPERTIES
         lst = []
         for i in range(
@@ -620,7 +620,7 @@ class HardcodedDungeons:
 
     @staticmethod
     def set_tileset_properties(
-        value: List[TilesetProperties], ov10: bytearray, config: Pmd2Data
+        value: list[TilesetProperties], ov10: bytearray, config: Pmd2Data
     ) -> None:
         block = config.bin_sections.overlay10.data.TILESET_PROPERTIES
         assert block.length is not None

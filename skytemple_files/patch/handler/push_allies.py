@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
@@ -64,7 +64,7 @@ Uses the same command style as PSMD"""
     def version(self) -> str:
         return "0.0.1"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
 
     @property

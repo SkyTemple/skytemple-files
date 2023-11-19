@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import itertools
 import math
-from typing import List, Sequence
+from collections.abc import Sequence
 
 from PIL import Image
 
@@ -34,7 +34,7 @@ class Dpci(DpciProtocol):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.tiles: List[bytes] = list(
+        self.tiles: list[bytes] = list(
             iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))
         )  # / 2 because 4bpp
 

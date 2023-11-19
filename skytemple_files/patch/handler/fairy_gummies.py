@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, i16_checked
@@ -123,7 +123,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """
     def version(self) -> str:
         return "0.0.1"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ExtractItemCode", "ExtractBarItemList", "AddTypes"]
 
     @property

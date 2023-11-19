@@ -23,7 +23,6 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from typing import Dict, Union
 
 from ndspy.rom import NintendoDSRom
 from pmdsky_debug_py.protocol import SectionProtocol
@@ -66,12 +65,12 @@ class ArmPatcher:
 
     def apply(
         self,
-        patch: Union[Pmd2Patch, Pmd2SimplePatch],
-        binaries: Dict[str, SectionProtocol],
+        patch: Pmd2Patch | Pmd2SimplePatch,
+        binaries: dict[str, SectionProtocol],
         patch_file_dir: str,
         stub_path: str,
         game_id: str,
-        parameter_values: Dict[str, Union[int, str]],
+        parameter_values: dict[str, int | str],
     ):
         with tempfile.TemporaryDirectory() as tmp:
             try:

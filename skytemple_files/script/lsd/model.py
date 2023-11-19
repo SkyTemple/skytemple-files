@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import string
-from typing import Optional, List
 
 from range_typed_integers import u16_checked
 
@@ -28,9 +27,9 @@ MAX_LEN = 8
 
 
 class Lsd:
-    def __init__(self, data: Optional[bytes]):
+    def __init__(self, data: bytes | None):
         if data is None:
-            self.entries: List[str] = []
+            self.entries: list[str] = []
             return
         if not isinstance(data, memoryview):
             data = memoryview(data)

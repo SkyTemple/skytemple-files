@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, Optional, TypeVar
+from typing import Any, TypeVar
 
 from skytemple_files.common.ppmdu_config.dungeon_data import (
     Pmd2BinPackFile,
@@ -35,7 +35,7 @@ class DungeonBinPack(BinPack):
     def __init__(self, data: bytes, files_def: Pmd2DungeonBinFiles):
         super().__init__(data)
         self.files_def = files_def
-        self._loaded_models: Dict[int, Any] = {}
+        self._loaded_models: dict[int, Any] = {}
 
     def get(self, filename: str) -> T:  # type: ignore
         """Returns a file by name."""
@@ -124,7 +124,7 @@ class DungeonBinPack(BinPack):
             )
             return file_bytes
 
-    def _get_handler(self, type_name: str) -> Optional[DataHandler]:
+    def _get_handler(self, type_name: str) -> DataHandler | None:
         from skytemple_files.common.types.file_types import FileType
 
         if hasattr(FileType, type_name):

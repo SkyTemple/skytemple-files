@@ -18,7 +18,8 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import Optional, Iterable, TypeVar, Union, Dict
+from typing import TypeVar, Union
+from collections.abc import Iterable
 
 from explorerscript.ssb_converting.ssb_data_types import (
     DungeonModeConstants,
@@ -140,8 +141,8 @@ class SsbConstant(SsbOpParamConstant):
     def __init__(
         self,
         constant_as_string: str,
-        script_data: Optional[Pmd2ScriptData] = None,
-        value: Optional[SsbConstantPmdScriptMappable] = None,
+        script_data: Pmd2ScriptData | None = None,
+        value: SsbConstantPmdScriptMappable | None = None,
     ):
         """Either script_data or the value argument must be present."""
         super().__init__(constant_as_string)
@@ -156,7 +157,7 @@ class SsbConstant(SsbOpParamConstant):
         self.name = constant_as_string
 
     @classmethod
-    def create_for(cls, value: SsbConstantPmdScriptMappable) -> "SsbConstant":
+    def create_for(cls, value: SsbConstantPmdScriptMappable) -> SsbConstant:
         if isinstance(value, Pmd2ScriptEntity):
             return cls(PREFIX_ACTOR + value.name, value=value)
         elif isinstance(value, Pmd2ScriptObject):
@@ -274,7 +275,7 @@ class SsbConstant(SsbOpParamConstant):
         return "".join(word.title() for word in string.split("_"))
 
     @staticmethod
-    def _in_dict_insensitive(d: Dict[str, T], k: str) -> T:
+    def _in_dict_insensitive(d: dict[str, T], k: str) -> T:
         """Case-insensitive access to a string indexed dict"""
         for dk, dv in d.items():
             if dk.lower() == k.lower():
@@ -288,7 +289,7 @@ class SsbConstant(SsbOpParamConstant):
         return str(self)
 
     @classmethod
-    def collect_all(cls, rom_data: Pmd2ScriptData) -> Iterable["SsbConstant"]:
+    def collect_all(cls, rom_data: Pmd2ScriptData) -> Iterable[SsbConstant]:
         """Collects all possible constants from the given ROM data"""
         for a in rom_data.level_entities:
             yield cls.create_for(a)

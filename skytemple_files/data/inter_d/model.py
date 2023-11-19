@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List
 
 from range_typed_integers import u8, u16
 
@@ -82,7 +81,7 @@ class InterD(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list_dungeons: List[List[InterDEntry]] = []
+        self.list_dungeons: list[list[InterDEntry]] = []
         limit = read_u32(data, 0)
         prev = read_u16(data, 4)
         for x in range(6, limit, 2):

@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import u8_checked, u16_checked, u16, i16
 
@@ -33,8 +32,8 @@ from skytemple_files.data.md_evo import MEVO_ENTRY_LENGTH, MEVO_STATS_LENGTH
 
 
 class MdEvoEntry(AutoString):
-    evos: List[u16]
-    eggs: List[u16]
+    evos: list[u16]
+    eggs: list[u16]
 
     def __init__(self, data: bytes):
         nb_evos = read_u16(data, 0)

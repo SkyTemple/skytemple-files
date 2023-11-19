@@ -18,7 +18,7 @@
 from __future__ import annotations
 
 from enum import Enum, auto
-from typing import Any, List
+from typing import Any
 
 from pmdsky_debug_py.protocol import (
     Overlay1DataProtocol,
@@ -699,14 +699,14 @@ class MenuEntry:
 
 class HardcodedMenus:
     @staticmethod
-    def get_menu(menu: MenuType, binary: bytes, config: Pmd2Data) -> List[MenuEntry]:
+    def get_menu(menu: MenuType, binary: bytes, config: Pmd2Data) -> list[MenuEntry]:
         """
         Gets one menu
         """
         bin_block = getattr(config.bin_sections, menu.binary)
         block = getattr(bin_block.data, menu.block)
         data = binary[block.address : block.address + block.length]
-        menu_list: List[MenuEntry] = []
+        menu_list: list[MenuEntry] = []
         for i in range(len(data) // MENU_ENTRY_LEN):
             if menu.data_type == MenuDataType.NORMAL:
                 name_id = read_u16(data, i * MENU_ENTRY_LEN)
@@ -721,7 +721,7 @@ class HardcodedMenus:
 
     @staticmethod
     def set_menu(
-        menu: MenuType, menu_data: List[MenuEntry], binary: bytearray, config: Pmd2Data
+        menu: MenuType, menu_data: list[MenuEntry], binary: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets one menu

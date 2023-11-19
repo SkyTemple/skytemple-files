@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Tuple
 
 from skytemple_files.common.util import read_u8
 
@@ -37,7 +36,7 @@ class BmaCollisionRleDecompressor:
         self.cursor = 0
         self.bytes_written = 0
 
-    def decompress(self) -> Tuple[bytes, int]:
+    def decompress(self) -> tuple[bytes, int]:
         self.reset()
         if DEBUG:
             print(f"BMA Collision RLE decompression start....")

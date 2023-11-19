@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import u16_checked
 
@@ -30,7 +29,7 @@ class ObjectListBin(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        self.list: List[Pmd2ScriptObject] = []
+        self.list: list[Pmd2ScriptObject] = []
 
         for i in range(0, len(data) // LEN_OBJECT_ENTRY):
             offset = i * LEN_OBJECT_ENTRY

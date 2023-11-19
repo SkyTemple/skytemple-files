@@ -19,7 +19,6 @@
 from __future__ import annotations
 
 import string
-from typing import Optional
 
 from skytemple_files.graphics.bg_list_dat._model import BgList
 
@@ -29,7 +28,7 @@ MAX_LEN = 8
 
 class BgListWriter:
     def __init__(self) -> None:
-        self.data: Optional[bytearray] = None
+        self.data: bytearray | None = None
         self.bytes_written = 0
 
     def write(self, model: BgList) -> bytes:

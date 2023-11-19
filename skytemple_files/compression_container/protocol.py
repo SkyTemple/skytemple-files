@@ -40,7 +40,7 @@ class CompressionContainerProtocol(Protocol):
 
     @classmethod
     @abstractmethod
-    def compress(cls, data: bytes) -> "CompressionContainerProtocol":
+    def compress(cls, data: bytes) -> CompressionContainerProtocol:
         """Create a new compressed container from originally uncompressed data."""
 
 

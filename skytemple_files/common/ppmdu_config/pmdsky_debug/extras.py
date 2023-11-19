@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import Protocol, List, Optional
+from typing import Protocol
 
 from pmdsky_debug_py.eu import EuArm9Section, EuOverlay11Section
 from pmdsky_debug_py.jp import JpArm9Section, JpOverlay11Section
@@ -42,25 +42,25 @@ OV36_DESC = "This is End45's 'extra space' overlay. It requires the 'ExtraSpace'
 
 class ExtraArm9FunctionsProtocol(Protocol):
     DebugPrint2: Symbol[
-        List[int],
+        list[int],
         None,
     ]
 
 
 class ExtraArm9DataProtocol(Protocol):
     COMPRESSED_IQ_GROUP_SKILLS: Symbol[
-        Optional[List[int]],
-        Optional[int],
+        list[int] | None,
+        int | None,
     ]
 
     GUEST_MONSTER_DATA2: Symbol[
-        Optional[List[int]],
-        Optional[int],
+        list[int] | None,
+        int | None,
     ]
 
     EXTRA_DUNGEON_DATA: Symbol[
-        Optional[List[int]],
-        Optional[int],
+        list[int] | None,
+        int | None,
     ]
 
 
@@ -70,8 +70,8 @@ class ExtraOverlay11FunctionsProtocol(Protocol):
 
 class ExtraOverlay11DataProtocol(Protocol):
     MONSTER_GROUND_IDLE_ANIM: Symbol[
-        Optional[List[int]],
-        Optional[int],
+        list[int] | None,
+        int | None,
     ]
 
 
@@ -88,11 +88,11 @@ class ExtraAllSymbolsProtocol(Protocol):
     overlay11: SectionProtocol[
         ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int
     ]
-    overlay36: Optional[
+    overlay36: None | (
         SectionProtocol[
             ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int
         ]
-    ]
+    )
 
 
 # ------------------------------

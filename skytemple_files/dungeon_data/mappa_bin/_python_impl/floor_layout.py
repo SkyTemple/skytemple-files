@@ -198,7 +198,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
         self.iq_booster_boost = iq_booster_boost
 
     @classmethod
-    def from_mappa(cls, read: "MappaBinReadContainer", pointer: int):
+    def from_mappa(cls, read: MappaBinReadContainer, pointer: int):
         terrain_settings_bitflag = read_u8(read.data, pointer + 0x0D)
         terrain_settings = MappaFloorTerrainSettings(
             *(bool(terrain_settings_bitflag >> i & 1) for i in range(8))

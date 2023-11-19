@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, List, Sequence
+from collections.abc import Sequence
 
 from range_typed_integers import u32_checked, u32
 
@@ -29,13 +29,13 @@ from skytemple_files.container.sir0.sir0_util import decode_sir0_pointer_offsets
 class Sir0(Sir0Protocol):
     data_pointer: u32
     content: bytes
-    content_pointer_offsets: List[u32]
+    content_pointer_offsets: list[u32]
 
     def __init__(
         self,
         content: bytes,
-        pointer_offsets: List[u32],
-        data_pointer: Optional[int] = None,
+        pointer_offsets: list[u32],
+        data_pointer: int | None = None,
     ):
         self.content = content
         self.content_pointer_offsets = pointer_offsets
@@ -61,7 +61,7 @@ class Sir0(Sir0Protocol):
 
         # The first two are for the pointers in the header, we remove them now, they are not
         # part of the content pointers
-        content_pointer_offsets: List[u32] = [
+        content_pointer_offsets: list[u32] = [
             u32_checked(pnt - HEADER_LEN) for pnt in pointer_offsets[2:]
         ]
 

@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from PIL import Image
 from range_typed_integers import u32, u16
@@ -80,9 +79,9 @@ class Bgp(BgpProtocol):
             self.data = data
         self.header = BgpHeader(self.data)
 
-        self.palettes: List[List[int]] = []
-        self.tiles: List[bytearray] = []
-        self.tilemap: List[TilemapEntryProtocol] = []
+        self.palettes: list[list[int]] = []
+        self.tiles: list[bytearray] = []
+        self.tilemap: list[TilemapEntryProtocol] = []
 
         self._extract_palette()
         self._extract_tilemap()
@@ -169,7 +168,7 @@ class Bgp(BgpProtocol):
             ignore_flip_bits,
         )
 
-    def to_pil_tiled(self, ignore_flip_bits=False) -> List[Image.Image]:
+    def to_pil_tiled(self, ignore_flip_bits=False) -> list[Image.Image]:
         """
         Convert all tiles of the BGP into separate PIL images.
         Each image has one palette with 16 colors.

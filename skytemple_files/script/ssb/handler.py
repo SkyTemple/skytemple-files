@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Type
 
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
@@ -39,7 +38,7 @@ from skytemple_files.script.ssb.writer import SsbWriter
 
 class SsbHandler(DataHandler[Ssb]):
     @classmethod
-    def deserialize(cls, data: bytes, static_data: Optional[Pmd2Data] = None, **kwargs: OptionalKwargs) -> Ssb:  # type: ignore
+    def deserialize(cls, data: bytes, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs) -> Ssb:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
         ssb_header: AbstractSsbHeader
@@ -61,19 +60,19 @@ class SsbHandler(DataHandler[Ssb]):
         )
 
     @classmethod
-    def serialize(cls, data: Ssb, static_data: Optional[Pmd2Data] = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
+    def serialize(cls, data: Ssb, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 
         return SsbWriter(data, static_data).write()
 
     @classmethod
-    def create(cls, static_data: Optional[Pmd2Data] = None) -> Ssb:
+    def create(cls, static_data: Pmd2Data | None = None) -> Ssb:
         """Create a new empty script"""
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 
-        header_cls: Type[AbstractSsbHeader]
+        header_cls: type[AbstractSsbHeader]
         if static_data.game_region == GAME_REGION_US:
             header_cls = SsbHeaderUs
         elif static_data.game_region == GAME_REGION_EU:

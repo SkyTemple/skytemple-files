@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.common.types.hybrid_data_handler import HybridDataHandler
 from skytemple_files.common.util import OptionalKwargs
@@ -25,7 +24,7 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import MappaItemListProtoco
 
 class ItemListHandler(HybridDataHandler[MappaItemListProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[MappaItemListProtocol]:
+    def load_python_model(cls) -> type[MappaItemListProtocol]:
         from skytemple_files.dungeon_data.mappa_bin._python_impl.item_list import (
             MappaItemList,
         )
@@ -33,7 +32,7 @@ class ItemListHandler(HybridDataHandler[MappaItemListProtocol]):
         return MappaItemList
 
     @classmethod
-    def load_native_model(cls) -> Type[MappaItemListProtocol]:
+    def load_native_model(cls) -> type[MappaItemListProtocol]:
         from skytemple_rust.st_mappa_bin import (
             MappaItemList,
         )  # pylint: disable=no-name-in-module,no-member,import-error

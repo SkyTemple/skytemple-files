@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Tuple, List
 
 from range_typed_integers import u32_checked, u32
 
@@ -31,9 +30,9 @@ class MappaGBinWriter:
         self.data = None
         self.bytes_written = 0
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         """Returns the content and the offsets to the pointers and the sub-header pointer, for Sir0 serialization."""
-        pointer_offsets: List[u32] = []
+        pointer_offsets: list[u32] = []
 
         floor_lists, floor_layouts = self.model.minimize()
         # Floor list data

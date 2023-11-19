@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, Tuple
 
 from range_typed_integers import u32_checked
 
@@ -39,7 +38,7 @@ class FontDatWriter:
         write_u32(buffer, u32_checked(len(self.model.entries)), 0x00)
 
         # Font Data
-        last: Tuple[Optional[int], Optional[int]] = (None, None)
+        last: tuple[int | None, int | None] = (None, None)
         for i, e in enumerate(
             sorted(self.model.entries, key=lambda x: (x.table, x.char))
         ):

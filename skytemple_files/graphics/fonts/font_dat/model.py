@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Dict, List, Tuple, no_type_check
+from typing import no_type_check
 from xml.etree.ElementTree import Element
 
 from PIL import Image
@@ -52,14 +52,14 @@ class FontDatEntry(AbstractFontEntry):
         self.data = data
 
     @classmethod
-    def get_class_properties(cls) -> List[str]:
+    def get_class_properties(cls) -> list[str]:
         return ["char", "width", "bprow"]
 
-    def get_properties(self) -> Dict[str, int]:
+    def get_properties(self) -> dict[str, int]:
         """Returns a dictionnary of the properties of the entry"""
         return {"char": self.char, "width": self.width, "bprow": self.bprow}
 
-    def set_properties(self, properties: Dict[str, int]):
+    def set_properties(self, properties: dict[str, int]):
         """Sets a list of the properties of the entry"""
         if "char" in properties:
             self.char = u8(properties["char"])
@@ -97,7 +97,7 @@ class FontDatEntry(AbstractFontEntry):
     @classmethod
     def from_pil(
         cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8
-    ) -> "FontDatEntry":
+    ) -> FontDatEntry:
         if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         bprow = FONT_DEFAULT_BPROW  # Unused, so always use default
@@ -145,7 +145,7 @@ class FontDat(AbstractFont):
     def get_entry_image_size(self) -> int:
         return FONT_DAT_SIZE
 
-    def get_entry_properties(self) -> List[str]:
+    def get_entry_properties(self) -> list[str]:
         return FontDatEntry.get_class_properties()
 
     def delete_entry(self, entry: AbstractFontEntry):
@@ -158,14 +158,14 @@ class FontDat(AbstractFont):
         self.entries.append(entry)
         return entry
 
-    def get_entries_from_table(self, table: u8) -> List[AbstractFontEntry]:
+    def get_entries_from_table(self, table: u8) -> list[AbstractFontEntry]:
         entries = []
         for item in self.entries:
             if item.table == table:
                 entries.append(item)
         return entries  # type: ignore
 
-    def to_pil(self) -> Dict[int, Image.Image]:
+    def to_pil(self) -> dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
             tables[t] = Image.new(
@@ -183,7 +183,7 @@ class FontDat(AbstractFont):
                 )
         return tables
 
-    def export_to_xml(self) -> Tuple[Element, Dict[int, Image.Image]]:
+    def export_to_xml(self) -> tuple[Element, dict[int, Image.Image]]:
         font_xml = Element(XML_FONT)
 
         tables = dict()
@@ -198,7 +198,7 @@ class FontDat(AbstractFont):
         return font_xml, self.to_pil()
 
     @no_type_check
-    def import_from_xml(self, xml: Element, tables: Dict[int, Image.Image]):
+    def import_from_xml(self, xml: Element, tables: dict[int, Image.Image]):
         self.entries = []
         validate_xml_tag(xml, XML_FONT)
         for child in xml:

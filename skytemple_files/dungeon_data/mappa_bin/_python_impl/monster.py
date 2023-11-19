@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from range_typed_integers import u8, u16
 
@@ -56,8 +56,8 @@ class MappaMonster(MappaMonsterProtocol, AutoString):
 
     @classmethod
     def list_from_mappa(
-        cls, read: "MappaBinReadContainer", pointer: int
-    ) -> List["MappaMonster"]:
+        cls, read: MappaBinReadContainer, pointer: int
+    ) -> list[MappaMonster]:
         monsters = []
         while not cls._is_end_of_entries(read.data, pointer):
             monsters.append(

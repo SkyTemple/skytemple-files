@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable, List, Dict
+from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u16_checked, u32_checked
@@ -66,7 +66,7 @@ EVO_SPEC_BONUS_JP = 0xA2CB8
 
 MAX_TRY = 1000
 
-SPECIAL_EVOS: Dict[int, List[int]] = {
+SPECIAL_EVOS: dict[int, list[int]] = {
     462: [464],
     463: [465],
     1062: [1064],
@@ -83,7 +83,7 @@ SPECIAL_EVOS: Dict[int, List[int]] = {
     454: [],
     1054: [455],
 }
-SPECIAL_EGGS: Dict[int, List[int]] = {
+SPECIAL_EGGS: dict[int, list[int]] = {
     379: [379],
     380: [379],
     381: [379],
@@ -175,7 +175,7 @@ This supposedly removes most of the particular cases the game handles for evolut
 
             mevo_data = bytearray(len(md_model) * MEVO_ENTRY_LENGTH + 4)
             write_u32(mevo_data, u32_checked(len(mevo_data)), 0)
-            next_stage: List[int]
+            next_stage: list[int]
             for i in range(len(md_model)):
                 if i in SPECIAL_EVOS:
                     next_stage = SPECIAL_EVOS[i]

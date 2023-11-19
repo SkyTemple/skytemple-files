@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, Optional, List, Tuple
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (
@@ -66,7 +65,7 @@ ENUM_ARGUMENTS = {
 
 class SkyTempleSsbOperation(SsbOperation):
     def __init__(
-        self, offset: int, op_code: Pmd2ScriptOpCode, params: List[SsbOpParam]
+        self, offset: int, op_code: Pmd2ScriptOpCode, params: list[SsbOpParam]
     ):
         super().__init__(offset, op_code, params)
 
@@ -80,9 +79,9 @@ class Ssb:
 
     def __init__(
         self,
-        data: Optional[bytes],
-        header: Optional[AbstractSsbHeader],
-        begin_data_offset: Optional[int],
+        data: bytes | None,
+        header: AbstractSsbHeader | None,
+        begin_data_offset: int | None,
         scriptdata: Pmd2ScriptData,
         if_empty_supported_langs=None,
         string_codec=string_codec.PMD2_STR_ENCODER,
@@ -94,11 +93,11 @@ class Ssb:
             # Empty model mode, for the ScriptCompiler.
             if if_empty_supported_langs is None:
                 if_empty_supported_langs = []
-            self.original_binary_data = bytes()
-            self.routine_info: List[Tuple[int, SsbRoutineInfo]] = []
-            self.routine_ops: List[List[SkyTempleSsbOperation]] = []
-            self.constants: List[str] = []
-            self.strings: Dict[str, List[str]] = {
+            self.original_binary_data = b""
+            self.routine_info: list[tuple[int, SsbRoutineInfo]] = []
+            self.routine_ops: list[list[SkyTempleSsbOperation]] = []
+            self.constants: list[str] = []
+            self.strings: dict[str, list[str]] = {
                 lang_name: [] for lang_name in if_empty_supported_langs
             }
             return
@@ -257,7 +256,7 @@ class Ssb:
 
         return SkyTempleSsbOperation(opcode_offset, op_code, arguments), cursor
 
-    def to_explorerscript(self) -> Tuple[str, SourceMap]:
+    def to_explorerscript(self) -> tuple[str, SourceMap]:
         self.add_linked_to_names_to_routine_ops()
         return ExplorerScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
@@ -269,7 +268,7 @@ class Ssb:
             SsbConstant.get_dungeon_mode_constants(),
         ).convert()
 
-    def to_ssb_script(self) -> Tuple[str, SourceMap]:
+    def to_ssb_script(self) -> tuple[str, SourceMap]:
         self.add_linked_to_names_to_routine_ops()
         return SsbScriptSsbDecompiler(
             [x[1] for x in self.routine_info],
@@ -294,7 +293,7 @@ class Ssb:
     def get_filled_routine_ops(self):
         """Returns self.routine_ops, but with constant strings, strings and constants from scriptdata filled out"""
         logger.debug("Disassembling SSB model data...")
-        rtns: List[List[SkyTempleSsbOperation]] = []
+        rtns: list[list[SkyTempleSsbOperation]] = []
         pos_marker_increment = 0
         for rtn in self.routine_ops:
             rtn_ops = []
@@ -387,7 +386,7 @@ class Ssb:
             rtns.append(rtn_ops)
         return rtns
 
-    def get_single_string(self, id: int) -> Dict[str, str]:
+    def get_single_string(self, id: int) -> dict[str, str]:
         """Return a single string in all languages"""
         res = {}
         if len(self.strings) < 1:
@@ -415,7 +414,7 @@ class Ssb:
     @classmethod
     def internal__get_all_raw_strings_from(
         cls, data: bytes, region: str
-    ) -> List[bytes]:
+    ) -> list[bytes]:
         """Returns all strings in this file, undecoded."""
 
         def _read_var_length_string_raw(stdata: bytes, start: int = 0):

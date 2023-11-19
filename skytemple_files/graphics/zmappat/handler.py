@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from PIL import Image
 
@@ -33,20 +32,20 @@ class ZMappaTHandler(DataHandler[ZMappaT]):
     """
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "ZMappaT":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> ZMappaT:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), ZMappaT)
 
     @classmethod
-    def serialize(cls, data: "ZMappaT", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: ZMappaT, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
     def new(
-        cls, img: List[Image.Image], mask: List[Image.Image], minimized=False
+        cls, img: list[Image.Image], mask: list[Image.Image], minimized=False
     ) -> ZMappaT:
         zmappat = ZMappaT(None, 0)
         if minimized:
@@ -56,9 +55,9 @@ class ZMappaTHandler(DataHandler[ZMappaT]):
         return zmappat
 
     @classmethod
-    def deserialize_raw(cls, data: bytes, **kwargs) -> "ZMappaT":
+    def deserialize_raw(cls, data: bytes, **kwargs) -> ZMappaT:
         return ZMappaT(data, 0)
 
     @classmethod
-    def serialize_raw(cls, data: "ZMappaT", **kwargs: OptionalKwargs) -> bytes:
+    def serialize_raw(cls, data: ZMappaT, **kwargs: OptionalKwargs) -> bytes:
         return ZMappaTWriter(data).write()[0]

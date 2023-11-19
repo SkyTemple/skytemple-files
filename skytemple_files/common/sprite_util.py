@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 import math
-from typing import Optional, List
 
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.container.bin_pack.model import BinPack
@@ -32,9 +31,9 @@ def check_and_correct_monster_sprite_size(
     md_target: MdEntryProtocol,
     *,
     md_gender1: MdEntryProtocol,
-    md_gender2: Optional[MdEntryProtocol],
+    md_gender2: MdEntryProtocol | None,
     monster_bin: BinPack,
-    sprite_size_table: List[MonsterSpriteDataTableEntry],
+    sprite_size_table: list[MonsterSpriteDataTableEntry],
     is_expand_poke_list_patch_applied: bool = False,
 ) -> bool:
     """

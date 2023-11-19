@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import os
 import re
-from typing import List
 from xml.etree import ElementTree
 from xml.etree.ElementTree import ParseError
 
@@ -44,7 +43,6 @@ from skytemple_files.common.ppmdu_config.data import (
     Pmd2Language,
     Pmd2AsmPatchesConstants,
     Pmd2SimplePatch,
-    Union,
     Pmd2GameEdition,
     Pmd2PatchDir,
     Pmd2LooseBinFile,
@@ -87,7 +85,7 @@ def id_matches_edition(e_game, edition):
 
 class Pmd2XmlReader:
     def __init__(
-        self, file_names: List[str], game_edition: str, translate_strings=True
+        self, file_names: list[str], game_edition: str, translate_strings=True
     ):
         """
         Create a parser.
@@ -245,7 +243,7 @@ class Pmd2XmlReader:
                         for e_sprite in e_game:
                             indices = {}
                             for e_index in e_sprite:
-                                names: List[str] = []
+                                names: list[str] = []
                                 idx = self.xml_int(e_index.attrib["id"])
                                 indices[idx] = Pmd2Index(idx, names)
                                 for e_name in e_index:
@@ -568,7 +566,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
     def read(self, e) -> Pmd2AsmPatchesConstants:
         loose_bin_files = []
         patch_dir = None
-        patches: List[Union[Pmd2Patch, Pmd2SimplePatch]] = []
+        patches: list[Pmd2Patch | Pmd2SimplePatch] = []
         for sub_e in e:
             if sub_e.tag == "LooseBinFiles":
                 for e_game in sub_e:
@@ -654,7 +652,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
                 )
         return Pmd2SimplePatch(e_patch.attrib["id"], includes, string_replacements, [])
 
-    def _read_parameter_node(self, e_patch, edition) -> List[Pmd2PatchParameter]:
+    def _read_parameter_node(self, e_patch, edition) -> list[Pmd2PatchParameter]:
         params = []
         for e_sub in e_patch:
             if e_sub.tag == "Parameters":
@@ -730,9 +728,7 @@ class XmlCombiner:
         # return the string representation
         return ElementTree.ElementTree(self.roots[0])
 
-    def combine_element(
-        self, one, other, merge_config: Union[XmlCombinerMergeConfig, None]
-    ):
+    def combine_element(self, one, other, merge_config: XmlCombinerMergeConfig | None):
         """
         This function recursively updates either the text or the children
         of an element if another element is found in `one`, or adds it

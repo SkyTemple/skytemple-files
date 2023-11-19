@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from range_typed_integers import u8_checked, u32_checked, u32
-from typing import Optional, Tuple, List, Sequence
+from collections.abc import Sequence
 
 from range_typed_integers import u8_checked, u32_checked, u8
 
@@ -51,8 +51,8 @@ class Dpla(DplaProtocol):
             toc_pointers.append(read_u32(data, i))
 
         # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
-        self.colors: List[List[int]] = []
-        self.durations_per_frame_for_colors: List[int] = []
+        self.colors: list[list[int]] = []
+        self.durations_per_frame_for_colors: list[int] = []
         for pnt in toc_pointers:
             # 0x0         2           uint16      (NbColors) The amount of colors in this entry.
             number_colors = read_u16(data, pnt)
@@ -75,7 +75,7 @@ class Dpla(DplaProtocol):
                 )  # just in case it isn't... then we'd have a real alpha channel
             self.colors.append(frame_colors)
 
-    def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> List[int]:
+    def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> list[int]:
         """
         Returns the color palette at the given frame id. Returned is a stream of RGB colors: [R, G, B, R, G, B...].
         Returned are always 16 colors. If the palette file has more than 16 colors, the pal_idx specifies what set
@@ -139,7 +139,7 @@ class Dpla(DplaProtocol):
 
     def apply_palette_animations(
         self, palettes: Sequence[Sequence[int]], frame_idx: int
-    ) -> List[List[int]]:
+    ) -> list[list[int]]:
         """
         Returns a modified copy of `palettes`.
 
@@ -160,14 +160,14 @@ class Dpla(DplaProtocol):
 
         return new_pal
 
-    def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
         data = bytearray()
         pointers = []
         pointer_offsets = []
         for i, color_frames in enumerate(self.colors):
             pointers.append(u32_checked(len(data)))
             number_colors = len(color_frames) // 3
-            buffer_entry = bytearray(((number_colors + 1) * 4))
+            buffer_entry = bytearray((number_colors + 1) * 4)
             # Number colors
             write_u8(buffer_entry, u8_checked(number_colors), 0)
             # Unk
@@ -198,5 +198,5 @@ class Dpla(DplaProtocol):
         return data, pointer_offsets, u32(data_offset)
 
     @classmethod
-    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> "Dpla":
+    def sir0_unwrap(cls, content_data: bytes, data_pointer: int, config=None) -> Dpla:
         return cls(content_data, data_pointer)

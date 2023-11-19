@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.hybrid_data_handler import (
@@ -30,16 +30,20 @@ from skytemple_files.data.md.protocol import (
     MdEntryProtocol,
 )
 
+if TYPE_CHECKING:
+    from skytemple_files.data.md._model import Md as PyMd
+    from skytemple_rust.st_md import Md as NativeMd
+
 
 class MdHandler(HybridDataHandler[MdProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[MdProtocol]:
+    def load_python_model(cls) -> type[MdProtocol]:
         from skytemple_files.data.md._model import Md
 
         return Md
 
     @classmethod
-    def load_native_model(cls) -> Type[MdProtocol]:
+    def load_native_model(cls) -> type[MdProtocol]:
         from skytemple_rust.st_md import (
             Md,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -47,13 +51,13 @@ class MdHandler(HybridDataHandler[MdProtocol]):
         return Md
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyMd"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyMd]]:  # type: ignore
         from skytemple_files.data.md._writer import MdWriter
 
         return MdWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeMd"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeMd]]:  # type: ignore
         from skytemple_rust.st_md import (
             MdWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -74,7 +78,7 @@ class MdHandler(HybridDataHandler[MdProtocol]):
         return MdPropertiesState.instance()
 
     @classmethod
-    def get_entry_model_cls(cls) -> Type[MdEntryProtocol]:
+    def get_entry_model_cls(cls) -> type[MdEntryProtocol]:
         if get_implementation_type() == ImplementationType.NATIVE:
             from skytemple_rust.st_md import (
                 MdEntry as MdEntryNative,

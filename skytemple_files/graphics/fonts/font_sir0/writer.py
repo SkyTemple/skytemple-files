@@ -17,7 +17,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Tuple, List, Optional
 
 from range_typed_integers import u32_checked, u32
 
@@ -37,7 +36,7 @@ class FontSir0Writer:
     def __init__(self, model: FontSir0):
         self.model = model
 
-    def write(self) -> Tuple[bytes, List[u32], Optional[u32]]:
+    def write(self) -> tuple[bytes, list[u32], u32 | None]:
         pointer_offsets = []
 
         sorted_entries = sorted(self.model.entries, key=lambda x: (x.table, x.char))
@@ -51,7 +50,7 @@ class FontSir0Writer:
         # Character pointers
         char_pointer = bytearray(len(self.model.entries) * FONT_SIR0_ENTRY_LEN)
         char_pointer_offset = len(buffer)
-        last: Tuple[Optional[int], Optional[int]] = (None, None)
+        last: tuple[int | None, int | None] = (None, None)
         for i, e in enumerate(sorted_entries):
             if last == (e.char, e.table):
                 raise ValueError(

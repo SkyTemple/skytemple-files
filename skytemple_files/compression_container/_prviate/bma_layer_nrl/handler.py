@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.compression_container.base_handler import (
     CompressionContainerHandler,
@@ -30,7 +29,7 @@ class BmaLayerNrlHandler(CompressionContainerHandler):
         return b"BMANRL"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container._prviate.bma_layer_nrl._pymodel import (
             BmaLayerNrlCompressionContainer,
         )
@@ -38,7 +37,7 @@ class BmaLayerNrlHandler(CompressionContainerHandler):
         return BmaLayerNrlCompressionContainer
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust._st_bma_layer_nrl_compression import (
             BmaLayerNrlCompressionContainer,
         )

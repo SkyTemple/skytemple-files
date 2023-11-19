@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 from range_typed_integers import u16
 
@@ -42,7 +41,7 @@ class SsaPosition(AutoString):
     y_relative: u16
     x_offset: u16
     y_offset: u16
-    direction: Optional[Pmd2ScriptDirection]
+    direction: Pmd2ScriptDirection | None
 
     def __init__(
         self,
@@ -51,7 +50,7 @@ class SsaPosition(AutoString):
         y_pos: u16,
         x_offset: u16,
         y_offset: u16,
-        direction: Optional[u16] = None,
+        direction: u16 | None = None,
     ):
         """
         Common SSA position specification. Direction is optional if not applicable.

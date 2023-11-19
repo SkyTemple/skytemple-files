@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Protocol, Sequence, TypeVar, runtime_checkable, Optional
+from typing import Protocol, TypeVar, runtime_checkable
+from collections.abc import Sequence
 
 from PIL import Image
 from range_typed_integers import u16
@@ -49,7 +50,7 @@ class BpaProtocol(Protocol[T]):
 
     @classmethod
     @abstractmethod
-    def new_empty(cls) -> "BpaProtocol":
+    def new_empty(cls) -> BpaProtocol:
         """Returns a new empty Bpa"""
         ...
 
@@ -59,7 +60,7 @@ class BpaProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def tiles_to_pil(self, palette: Sequence[int]) -> Optional[Image.Image]:
+    def tiles_to_pil(self, palette: Sequence[int]) -> Image.Image | None:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -70,7 +71,7 @@ class BpaProtocol(Protocol[T]):
     @abstractmethod
     def tiles_to_pil_separate(
         self, palette: Sequence[int], width_in_tiles: int = 20
-    ) -> List[Image.Image]:
+    ) -> list[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -87,7 +88,7 @@ class BpaProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def pil_to_tiles_separate(self, images: List[Image.Image]) -> None:
+    def pil_to_tiles_separate(self, images: list[Image.Image]) -> None:
         ...
 
     @abstractmethod

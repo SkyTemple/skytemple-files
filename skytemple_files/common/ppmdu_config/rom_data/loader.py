@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 
 from ndspy.rom import NintendoDSRom
 from range_typed_integers import u32
@@ -41,7 +41,7 @@ class RomDataLoader:
     def __init__(self, rom: NintendoDSRom):
         self.rom = rom
 
-    def load_into(self, config_load_into: "Pmd2Data"):
+    def load_into(self, config_load_into: Pmd2Data):
         self.load_script_var_list_into(config_load_into)
         self.load_actor_list_into(config_load_into, ignore_not_supported=True)
         self.load_level_list_into(config_load_into, ignore_not_supported=True)
@@ -49,7 +49,7 @@ class RomDataLoader:
         self.load_item_categories_into(config_load_into)
         self.load_sprconf_into(config_load_into)
 
-    def load_script_var_list_into(self, config_load_into: "Pmd2Data"):
+    def load_script_var_list_into(self, config_load_into: Pmd2Data):
         from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptGameVar
         from skytemple_rust.st_script_var_table import ScriptVariableTables
 
@@ -92,7 +92,7 @@ class RomDataLoader:
             config_load_into.script_data.game_variables = variables_converted
 
     def load_actor_list_into(
-        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+        self, config_load_into: Pmd2Data, ignore_not_supported=False
     ):
         from skytemple_files.common.types.file_types import FileType
 
@@ -106,7 +106,7 @@ class RomDataLoader:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")
 
     def load_level_list_into(
-        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+        self, config_load_into: Pmd2Data, ignore_not_supported=False
     ):
         from skytemple_files.common.types.file_types import FileType
 
@@ -120,7 +120,7 @@ class RomDataLoader:
             raise LoadNotSupportedError("The ROM does not contain an level list.")
 
     def load_object_list_into(
-        self, config_load_into: "Pmd2Data", ignore_not_supported=False
+        self, config_load_into: Pmd2Data, ignore_not_supported=False
     ):
         from skytemple_files.common.types.file_types import FileType
 
@@ -131,13 +131,13 @@ class RomDataLoader:
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an level list.")
 
-    def load_item_categories_into(self, config_load_into: "Pmd2Data"):
+    def load_item_categories_into(self, config_load_into: Pmd2Data):
         from skytemple_files.common.types.file_types import FileType
 
         item_p_bin = self.rom.getFileByName("BALANCE/item_p.bin")
         item_p = FileType.ITEM_P.deserialize(item_p_bin)
 
-        cats: Dict["Pmd2DungeonItemCategory", List[int]] = {
+        cats: dict[Pmd2DungeonItemCategory, list[int]] = {
             x: [] for x in config_load_into.dungeon_data.item_categories.values()
         }
 
@@ -156,7 +156,7 @@ class RomDataLoader:
 
         sprconf = FileType.SPRCONF.load(self.rom, create=False)
         for idx, config in sprconf.items():
-            indices: Dict[int, Pmd2Index] = {}
+            indices: dict[int, Pmd2Index] = {}
             for idx_index, index in config.items():
                 indices[idx_index] = Pmd2Index(idx_index, index)
             config_load_into.animation_names[idx] = Pmd2Sprite(idx, indices)

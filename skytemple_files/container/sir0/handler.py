@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, List, Type, TypeVar
+from typing import TypeVar, TYPE_CHECKING
 
 from range_typed_integers import u32
 
@@ -28,16 +28,20 @@ from skytemple_files.common.types.hybrid_data_handler import WriterProtocol
 
 T = TypeVar("T", bound=Sir0Serializable)
 
+if TYPE_CHECKING:
+    from skytemple_files.container.sir0._model import Sir0 as PySir0
+    from skytemple_rust.st_sir0 import Sir0 as NativeSir0
+
 
 class Sir0Handler(HybridDataHandler[Sir0Protocol]):
     @classmethod
-    def load_python_model(cls) -> Type[Sir0Protocol]:
+    def load_python_model(cls) -> type[Sir0Protocol]:
         from skytemple_files.container.sir0._model import Sir0
 
         return Sir0
 
     @classmethod
-    def load_native_model(cls) -> Type[Sir0Protocol]:
+    def load_native_model(cls) -> type[Sir0Protocol]:
         from skytemple_rust.st_sir0 import (
             Sir0,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -45,13 +49,13 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
         return Sir0
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PySir0"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PySir0]]:  # type: ignore
         from skytemple_files.container.sir0._writer import Sir0Writer
 
         return Sir0Writer
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeSir0"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeSir0]]:  # type: ignore
         from skytemple_rust.st_sir0 import (
             Sir0Writer,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -77,8 +81,8 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
     def wrap(
         cls,
         content: bytes,
-        pointer_offsets: List[u32],
-        data_pointer: Optional[int] = None,
+        pointer_offsets: list[u32],
+        data_pointer: int | None = None,
     ) -> Sir0Protocol:
         """Wraps existing data in Sir0."""
         return cls.get_model_cls()(content, pointer_offsets, data_pointer)
@@ -88,5 +92,5 @@ class Sir0Handler(HybridDataHandler[Sir0Protocol]):
         return cls.wrap(*obj.sir0_serialize_parts())
 
     @classmethod
-    def unwrap_obj(cls, data: Sir0Protocol, spec: Type[T]) -> T:
+    def unwrap_obj(cls, data: Sir0Protocol, spec: type[T]) -> T:
         return spec.sir0_unwrap(data.content, data.data_pointer)  # type: ignore

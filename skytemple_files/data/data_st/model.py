@@ -17,7 +17,6 @@
 
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import i16
 
@@ -46,7 +45,7 @@ class DataST(AutoString):
     def add_item_struct_id(self, struct_id: i16):
         self.struct_ids.append(struct_id)
 
-    def get_all_of(self, struct_id: int) -> List[int]:
+    def get_all_of(self, struct_id: int) -> list[int]:
         ids = []
         for i, x in enumerate(self.struct_ids):
             if x == struct_id:

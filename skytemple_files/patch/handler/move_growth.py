@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import os
-from typing import Callable, List, cast, Optional
+from typing import Callable, cast
 
 from PIL import Image
 from ndspy.rom import NintendoDSRom
@@ -184,7 +184,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "0.0.0"
 
-    def depends_on(self) -> List[str]:
+    def depends_on(self) -> list[str]:
         return ["ActorAndLevelLoader", "ExtractAnimData", "ChangeMoveStatsDisplay"]
 
     @property
@@ -213,7 +213,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
 
     def is_applied_ms(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         # Taken from patch handler
-        ORIGINAL_BYTESEQ = bytes(b"\x01 \xa0\xe3")
+        ORIGINAL_BYTESEQ = b"\x01 \xa0\xe3"
         OFFSET_EU = 0x158F0
         OFFSET_US = 0x1587C
         OFFSET_JP = 0x1584C
@@ -269,7 +269,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         START_SUB = START_LVL + 9
         bin_before = rom.getFileByName("FONT/markfont.dat")
         model = GraphicFontHandler.deserialize(bin_before)
-        entries: List[Optional[Image.Image]] = []
+        entries: list[Image.Image | None] = []
         for x in range(model.get_nb_entries()):
             entries.append(model.get_entry(x))
         while len(entries) < max(START_LVL + 9, START_SUB + 4, START_EXT + 11):

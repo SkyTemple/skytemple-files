@@ -18,7 +18,8 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from enum import Enum
-from typing import MutableSequence, Protocol, TypeVar, Sequence
+from typing import Protocol, TypeVar
+from collections.abc import MutableSequence, Sequence
 
 from range_typed_integers import u8, u16, u32
 

@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Type
 
 from skytemple_files.compression_container.base_handler import (
     CompressionContainerHandler,
@@ -30,7 +29,7 @@ class BpcImgHandler(CompressionContainerHandler):
         return b"BPCIMG"
 
     @classmethod
-    def load_python_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_python_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_files.compression_container._prviate.bpc_image._pymodel import (
             BpcImageCompressionContainer,
         )
@@ -38,7 +37,7 @@ class BpcImgHandler(CompressionContainerHandler):
         return BpcImageCompressionContainer
 
     @classmethod
-    def load_native_model(cls) -> Type[CompressionContainerProtocol]:
+    def load_native_model(cls) -> type[CompressionContainerProtocol]:
         from skytemple_rust._st_bpc_image_compression import (
             BpcImageCompressionContainer,
         )

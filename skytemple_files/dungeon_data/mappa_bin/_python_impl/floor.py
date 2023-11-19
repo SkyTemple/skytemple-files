@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from range_typed_integers import u16
 
@@ -107,7 +107,7 @@ class MappaFloor(
     def __init__(
         self,
         layout: MappaFloorLayout,
-        monsters: List[MappaMonster],
+        monsters: list[MappaMonster],
         traps: MappaTrapList,
         floor_items: MappaItemList,
         shop_items: MappaItemList,
@@ -117,7 +117,7 @@ class MappaFloor(
         unk_items2: MappaItemList,
     ):
         self.layout: MappaFloorLayout = layout
-        self.monsters: List[MappaMonster] = monsters
+        self.monsters: list[MappaMonster] = monsters
         self.traps: MappaTrapList = traps
         self.floor_items: MappaItemList = floor_items
         self.shop_items: MappaItemList = shop_items
@@ -127,9 +127,7 @@ class MappaFloor(
         self.unk_items2: MappaItemList = unk_items2
 
     @classmethod
-    def from_mappa(
-        cls, read: "MappaBinReadContainer", floor_data: bytes
-    ) -> "MappaFloor":
+    def from_mappa(cls, read: MappaBinReadContainer, floor_data: bytes) -> MappaFloor:
         return cls(
             cls._from_cache(
                 read,

@@ -38,19 +38,12 @@ from io import BytesIO
 from typing import (
     Any,
     Callable,
-    Coroutine,
-    Dict,
-    Iterable,
-    List,
     Literal,
-    Optional,
-    Tuple,
     TypeVar,
-    Union,
     cast,
     overload,
-    Sequence,
 )
+from collections.abc import Coroutine, Iterable, Sequence
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 from zipfile import ZipFile
@@ -110,15 +103,15 @@ class MonsterFormInfo:
     canon: bool
     portraits_phase: Phase
     sprites_phase: Phase
-    portraits_modified_date: Optional[datetime]  # This is None on errors.
-    sprites_modified_date: Optional[datetime]  # This is None on errors.
+    portraits_modified_date: datetime | None  # This is None on errors.
+    sprites_modified_date: datetime | None  # This is None on errors.
 
 
 @dataclass
 class MonsterFormInfoWithPortrait(MonsterFormInfo):
-    preview_portrait: Optional[str]
+    preview_portrait: str | None
 
-    async def fetch_preview_portrait(self) -> Optional[Image.Image]:
+    async def fetch_preview_portrait(self) -> Image.Image | None:
         if self.preview_portrait is not None:
             return await self._request_adapter.fetch_image(self.preview_portrait)
         return None
@@ -133,42 +126,42 @@ class SpriteUrls:
 
 @dataclass
 class MonsterFormDetails(MonsterFormInfo):
-    portraits: Dict[str, str]
+    portraits: dict[str, str]
     portrait_sheet: str
-    sprites: Dict[str, SpriteUrls]
-    sprite_zip: Optional[str]
-    sprites_copy_of: Dict[str, str]
-    portrait_credits: List[Credit]
-    sprite_credits: List[Credit]
+    sprites: dict[str, SpriteUrls]
+    sprite_zip: str | None
+    sprites_copy_of: dict[str, str]
+    portrait_credits: list[Credit]
+    sprite_credits: list[Credit]
 
-    async def fetch_portrait(self, emotion_name: str) -> Optional[Image.Image]:
+    async def fetch_portrait(self, emotion_name: str) -> Image.Image | None:
         if emotion_name in self.portraits:
             return await self._request_adapter.fetch_image(self.portraits[emotion_name])
         return None
 
     async def fetch_portrait_via_face_name(
         self, face_name: Pmd2ScriptFaceName
-    ) -> Optional[Image.Image]:
+    ) -> Image.Image | None:
         emotion_name = self._map_face_name(face_name)
         if emotion_name is not None and emotion_name in self.portraits:
             return await self._request_adapter.fetch_image(self.portraits[emotion_name])
         return None
 
-    async def fetch_sprite_anim(self, action_name: str) -> Optional[Image.Image]:
+    async def fetch_sprite_anim(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
             return await self._request_adapter.fetch_image(
                 self.sprites[action_name].anim
             )
         return None
 
-    async def fetch_sprite_shadows(self, action_name: str) -> Optional[Image.Image]:
+    async def fetch_sprite_shadows(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
             return await self._request_adapter.fetch_image(
                 self.sprites[action_name].shadows
             )
         return None
 
-    async def fetch_sprite_offsets(self, action_name: str) -> Optional[Image.Image]:
+    async def fetch_sprite_offsets(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
             return await self._request_adapter.fetch_image(
                 self.sprites[action_name].offsets
@@ -178,13 +171,13 @@ class MonsterFormDetails(MonsterFormInfo):
     async def fetch_portrait_sheet(self) -> Image.Image:
         return await self._request_adapter.fetch_image(self.portrait_sheet)
 
-    async def fetch_sprite_zip(self) -> Optional[bytes]:
+    async def fetch_sprite_zip(self) -> bytes | None:
         if self.sprite_zip is not None:
             return await self._request_adapter.fetch_bin(self.sprite_zip)
         return None
 
     @staticmethod
-    def _map_face_name(face_name: Pmd2ScriptFaceName) -> Optional[str]:
+    def _map_face_name(face_name: Pmd2ScriptFaceName) -> str | None:
         # This may seem a bit silly,
         # but for historic reasons, we can not
         # assume the server uses the same names
@@ -243,13 +236,13 @@ class SpriteCollabSession:
     @overload
     async def list_monster_forms(
         self, with_preview_portrait: Literal[True]
-    ) -> List[MonsterFormInfoWithPortrait]:
+    ) -> list[MonsterFormInfoWithPortrait]:
         ...
 
     @overload
     async def list_monster_forms(
         self, with_preview_portrait: Literal[False]
-    ) -> List[MonsterFormInfo]:
+    ) -> list[MonsterFormInfo]:
         ...
 
     async def list_monster_forms(self, with_preview_portrait: bool):
@@ -289,7 +282,7 @@ class SpriteCollabSession:
             )
         )
 
-        monsters: List[Union[MonsterFormInfo, MonsterFormInfoWithPortrait]] = []
+        monsters: list[MonsterFormInfo | MonsterFormInfoWithPortrait] = []
 
         for monster in result["monster"]:
             for form in monster["forms"]:
@@ -343,8 +336,8 @@ class SpriteCollabSession:
         return monsters
 
     async def monster_form_details(
-        self, monsters_and_forms: List[Tuple[int, str]]
-    ) -> List[MonsterFormDetails]:
+        self, monsters_and_forms: list[tuple[int, str]]
+    ) -> list[MonsterFormDetails]:
         """
         Returns details about monster forms for a monster, including credits and all portraits and sprites ready to be
         fetched. `monsters_and_forms` is a list of tuples, where the first entry is the
@@ -456,8 +449,8 @@ class SpriteCollabSession:
         )
 
     async def fetch_portraits(
-        self, monsters_and_forms: Sequence[Tuple[int, str]]
-    ) -> List[List[Optional[KaoImageProtocol]]]:
+        self, monsters_and_forms: Sequence[tuple[int, str]]
+    ) -> list[list[KaoImageProtocol | None]]:
         """
         Fetch portraits for the given forms. `monsters_and_forms` is a list of tuples, where the first entry is the
         monster ID and the second the form path.
@@ -471,7 +464,7 @@ class SpriteCollabSession:
 
         async def process_form(
             idx: int, _monster: Monster_Metadata, form: MonsterForm
-        ) -> List[Optional[KaoImageProtocol]]:
+        ) -> list[KaoImageProtocol | None]:
             kao = FileType.KAO.new(1)
 
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
@@ -482,7 +475,7 @@ class SpriteCollabSession:
                 tmp.flush()
                 tmp.close()
 
-                this_sheet: List[Optional[KaoImageProtocol]] = [None] * 40
+                this_sheet: list[KaoImageProtocol | None] = [None] * 40
                 try:
                     for subindex, image in SpriteBotSheet.load(
                         tmp.name, lambda *args: ""
@@ -521,10 +514,10 @@ class SpriteCollabSession:
 
     async def fetch_sprites(
         self,
-        monsters_and_forms: Sequence[Tuple[int, str]],
-        actions: List[Optional[List[str]]],
+        monsters_and_forms: Sequence[tuple[int, str]],
+        actions: list[list[str] | None],
         copy_to_event_sleep_if_missing: bool = False,
-    ) -> List[Optional[Tuple[WanFile, Pmd2Sprite, int]]]:
+    ) -> list[tuple[WanFile, Pmd2Sprite, int] | None]:
         """
         Fetch sprites for the given forms. `monsters_and_forms` is a list of tuples, where the first entry is the
         monster ID and the second the form path.
@@ -550,7 +543,7 @@ class SpriteCollabSession:
 
         async def process_form(
             idx: int, monster: Monster_Metadata, form: MonsterForm
-        ) -> Optional[Tuple[WanFile, Pmd2Sprite, int]]:
+        ) -> tuple[WanFile, Pmd2Sprite, int] | None:
             actions_for_this_form = actions[idx]
             if actions_for_this_form is not None:
                 actions_for_this_form = [x.lower() for x in actions_for_this_form]
@@ -572,7 +565,7 @@ class SpriteCollabSession:
                 try:
                     root = ElementTree.parse(xml_path).getroot()
                     shadow_size = int(root.find("ShadowSize").text)  # type: ignore
-                    anims: List[Element] = root.find("Anims")  # type: ignore
+                    anims: list[Element] = root.find("Anims")  # type: ignore
                     sleep_found = None
                     event_sleep_found = None
                     wake_found = None
@@ -671,7 +664,7 @@ class SpriteCollabSession:
         )
 
     async def execute_query(
-        self, query: DSLQuery, *, fragments: Optional[Iterable[DSLFragment]] = None
+        self, query: DSLQuery, *, fragments: Iterable[DSLFragment] | None = None
     ) -> Query:
         """Note that you should upcast the returned type to match your actual query subtype."""
         if fragments is not None:
@@ -680,7 +673,7 @@ class SpriteCollabSession:
 
     async def _fetch_details(
         self,
-        monsters_and_forms: Sequence[Tuple[int, str]],
+        monsters_and_forms: Sequence[tuple[int, str]],
         selector_fn: Callable[
             [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
@@ -688,7 +681,7 @@ class SpriteCollabSession:
         *,
         include_sprite_fragments: bool = True,
         include_credit_fragments: bool = True,
-    ) -> List[T]:
+    ) -> list[T]:
         sprite = DSLFragment("SpriteUnionAsSprite")
         sprite.on(self.ds.Sprite)
         sprite.select(
@@ -721,7 +714,7 @@ class SpriteCollabSession:
             fragments.append(credit)
 
         # Count the number of unique monsters in the request
-        monster_set = set(monster for monster, _ in monsters_and_forms)
+        monster_set = {monster for monster, _ in monsters_and_forms}
         monster_count = len(monster_set)
         if monster_count < 2:
             coros = await self._fetch_details_single_mon(
@@ -751,7 +744,7 @@ class SpriteCollabSession:
     async def _fetch_details_single_mon(
         self,
         monster_id: int,
-        paths: List[str],
+        paths: list[str],
         fragments: Iterable[DSLFragment],
         sprite: DSLFragment,
         copy_of: DSLFragment,
@@ -760,7 +753,7 @@ class SpriteCollabSession:
             [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
-    ) -> List[Coroutine[Any, Any, T]]:
+    ) -> list[Coroutine[Any, Any, T]]:
         monster_forms = {}
         path_mapping = {}
         i = 0
@@ -806,7 +799,7 @@ class SpriteCollabSession:
     async def _fetch_details_multi_mons(
         self,
         monster_ids: Iterable[int],
-        monsters_and_forms: Sequence[Tuple[int, str]],
+        monsters_and_forms: Sequence[tuple[int, str]],
         fragments: Iterable[DSLFragment],
         sprite: DSLFragment,
         copy_of: DSLFragment,
@@ -815,7 +808,7 @@ class SpriteCollabSession:
             [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
-    ) -> List[Coroutine[Any, Any, T]]:
+    ) -> list[Coroutine[Any, Any, T]]:
         result = await self.execute_query(
             DSLQuery(
                 self.ds.Query.monster(filter=monster_ids).select(
@@ -829,8 +822,8 @@ class SpriteCollabSession:
             fragments=fragments,
         )
 
-        collected_monsters_and_forms: List[Tuple[int, str]] = []
-        collected_form_data: List[Tuple[Monster_Metadata, MonsterForm]] = []
+        collected_monsters_and_forms: list[tuple[int, str]] = []
+        collected_form_data: list[tuple[Monster_Metadata, MonsterForm]] = []
 
         # We pre-process all the results, because we don't want
         # to call the callback, unless we really have everything we need.
@@ -857,14 +850,14 @@ class SpriteCollabClient:
 
     _request_adapter: AioRequestAdapter
     _client: Client
-    _session: Optional[SpriteCollabSession]
+    _session: SpriteCollabSession | None
 
     def __init__(
         self,
         *,
         server_url: str = DEFAULT_SERVER,
         cache_size: int = 5000,
-        request_adapter: Optional[AioRequestAdapter] = None,
+        request_adapter: AioRequestAdapter | None = None,
         use_ssl=True,
         use_certifi_ssl=False,
     ):

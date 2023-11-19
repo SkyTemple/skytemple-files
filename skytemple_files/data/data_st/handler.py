@@ -25,9 +25,9 @@ from skytemple_files.data.data_st.writer import DataSTWriter
 
 class DataSTHandler(DataHandler[DataST]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> "DataST":
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> DataST:
         return DataST(data)
 
     @classmethod
-    def serialize(cls, data: "DataST", **kwargs: OptionalKwargs) -> bytes:
+    def serialize(cls, data: DataST, **kwargs: OptionalKwargs) -> bytes:
         return DataSTWriter(data).write()

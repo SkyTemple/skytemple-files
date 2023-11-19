@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import json
 import os
-from typing import List, Optional, Tuple
 
 from appdirs import user_config_dir
 from explorerscript import EXPLORERSCRIPT_EXT
@@ -69,7 +68,7 @@ class ProjectFileManager:
             hash_file = f.read()
         return hash_file == hash_compare
 
-    def explorerscript_load(self, filename, sourcemap=True) -> Tuple[str, SourceMap]:
+    def explorerscript_load(self, filename, sourcemap=True) -> tuple[str, SourceMap]:
         """Load the ExplorerScript file and it's source map if it exists, otherwise an empty map"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
         with open_utf8(filename, "r") as f:
@@ -93,9 +92,7 @@ class ProjectFileManager:
             source_map = SourceMap.create_empty()
         return source_map
 
-    def explorerscript_save(
-        self, filename, code, source_map: Optional[SourceMap] = None
-    ):
+    def explorerscript_save(self, filename, code, source_map: SourceMap | None = None):
         """Save the ExplorerScript file and it's source map if given"""
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
         with open_utf8(filename, "w") as f:
@@ -116,7 +113,7 @@ class ProjectFileManager:
         filename = self._explorerscript_resolve_filename(
             filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX
         )
-        entries: List[str] = self._explorerscript_get_inclusion_map(filename)
+        entries: list[str] = self._explorerscript_get_inclusion_map(filename)
         if ssb_filename_that_is_included in entries:
             entries.remove(ssb_filename_that_is_included)
         self._explorerscript_save_inclusion_map(filename, entries)
@@ -126,7 +123,7 @@ class ProjectFileManager:
         filename = self._explorerscript_resolve_filename(
             filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX
         )
-        entries: List[str] = self._explorerscript_get_inclusion_map(filename)
+        entries: list[str] = self._explorerscript_get_inclusion_map(filename)
         if ssb_filename_that_is_included not in entries:
             entries.append(ssb_filename_that_is_included)
         self._explorerscript_save_inclusion_map(filename, entries)

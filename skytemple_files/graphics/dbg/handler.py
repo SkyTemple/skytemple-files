@@ -17,7 +17,7 @@
 
 from __future__ import annotations
 
-from typing import Type, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.types.hybrid_data_handler import (
     HybridDataHandler,
@@ -27,18 +27,19 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.dbg.protocol import DbgProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.dbg._model import Dbg as PyDbg
+    from skytemple_rust.st_dbg import Dbg as NativeDbg
 
 
 class DbgHandler(HybridDataHandler[DbgProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[DbgProtocol]:
+    def load_python_model(cls) -> type[DbgProtocol]:
         from skytemple_files.graphics.dbg._model import Dbg
 
         return Dbg
 
     @classmethod
-    def load_native_model(cls) -> Type[DbgProtocol]:
+    def load_native_model(cls) -> type[DbgProtocol]:
         from skytemple_rust.st_dbg import (
             Dbg,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -46,13 +47,13 @@ class DbgHandler(HybridDataHandler[DbgProtocol]):
         return Dbg
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyDbg"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyDbg]]:  # type: ignore
         from skytemple_files.graphics.dbg._writer import DbgWriter
 
         return DbgWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeDbg"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeDbg]]:  # type: ignore
         from skytemple_rust.st_dbg import (
             DbgWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

@@ -16,7 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 
 from skytemple_files.common.types.hybrid_data_handler import (
     HybridDataHandler,
@@ -26,18 +26,19 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.bpc.protocol import BpcProtocol
 
 if TYPE_CHECKING:
-    pass
+    from skytemple_files.graphics.bpc._model import Bpc as PyBpc
+    from skytemple_rust.st_bpc import Bpc as NativeBpc
 
 
 class BpcHandler(HybridDataHandler[BpcProtocol]):
     @classmethod
-    def load_python_model(cls) -> Type[BpcProtocol]:
+    def load_python_model(cls) -> type[BpcProtocol]:
         from skytemple_files.graphics.bpc._model import Bpc
 
         return Bpc
 
     @classmethod
-    def load_native_model(cls) -> Type[BpcProtocol]:
+    def load_native_model(cls) -> type[BpcProtocol]:
         from skytemple_rust.st_bpc import (
             Bpc,
         )  # pylint: disable=no-name-in-module,no-member,import-error
@@ -45,13 +46,13 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
         return Bpc
 
     @classmethod
-    def load_python_writer(cls) -> Type[WriterProtocol["PyBpc"]]:  # type: ignore
+    def load_python_writer(cls) -> type[WriterProtocol[PyBpc]]:  # type: ignore
         from skytemple_files.graphics.bpc._writer import BpcWriter
 
         return BpcWriter
 
     @classmethod
-    def load_native_writer(cls) -> Type[WriterProtocol["NativeBpc"]]:  # type: ignore
+    def load_native_writer(cls) -> type[WriterProtocol[NativeBpc]]:  # type: ignore
         from skytemple_rust.st_bpc import (
             BpcWriter,
         )  # pylint: disable=no-name-in-module,no-member,import-error

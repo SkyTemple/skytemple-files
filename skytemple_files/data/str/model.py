@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List
 
 from range_typed_integers import u32_checked
 
@@ -86,7 +85,7 @@ class Str:
         return result
 
     @classmethod
-    def internal__get_all_raw_strings_from(cls, data: bytes) -> List[bytes]:
+    def internal__get_all_raw_strings_from(cls, data: bytes) -> list[bytes]:
         """Returns all strings in this file, undecoded."""
         if not isinstance(data, memoryview):
             data = memoryview(data)

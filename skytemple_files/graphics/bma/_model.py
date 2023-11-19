@@ -19,7 +19,7 @@ from __future__ import annotations
 import copy
 import itertools
 import math
-from typing import List, Sequence, Tuple, Optional
+from collections.abc import Sequence
 
 from PIL import Image, ImageDraw, ImageFont
 from range_typed_integers import u16
@@ -114,7 +114,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
                 data[0xC:], stop_when_size=number_of_bytes_per_layer
             )
         )
-        self.layer1: Optional[List[int]] = None
+        self.layer1: list[int] | None = None
         compressed_layer1_size = 0
         if self.number_of_layers > 1:
             # Read second layer
@@ -127,7 +127,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
             )
 
         offset_begin_next = 0xC + compressed_layer0_size + compressed_layer1_size
-        self.unknown_data_block: Optional[List[int]] = None
+        self.unknown_data_block: list[int] | None = None
         if self.unk6:
             # Unknown data block in generic NRL for "chat places"?
             # Seems to have something to do with counters? Like shop counters / NPC interactions.
@@ -191,10 +191,10 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
             f"unk6: 0x{self.unk6:04x}"
         )
 
-    def _read_layer(self, data: Tuple[bytes, int]) -> Tuple[List[int], int]:
+    def _read_layer(self, data: tuple[bytes, int]) -> tuple[list[int], int]:
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [0 for _ in range(0, self.map_width_chunks)]
-        layer: List[int] = []
+        layer: list[int] = []
         max_tiles = self.map_width_chunks * self.map_height_chunks
         i = 0
         skipped_on_prev = True
@@ -220,7 +220,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
             i += 1
         return layer, data[1]
 
-    def _read_collision(self, data: Tuple[bytes, int]) -> Tuple[List[bool], int]:
+    def _read_collision(self, data: tuple[bytes, int]) -> tuple[list[bool], int]:
         # To get the actual index of a chunk, the value is XORed with the tile value right above!
         previous_row_values = [False for _ in range(0, self.map_width_camera)]
         col = []
@@ -232,7 +232,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         return col, data[1]
 
     @staticmethod
-    def _read_unknown_data_block(data: Tuple[bytes, int]) -> Tuple[List[int], int]:
+    def _read_unknown_data_block(data: tuple[bytes, int]) -> tuple[list[int], int]:
         # TODO: There doesn't seem to be this XOR thing here?
         unk = []
         for i, chunk in enumerate(data[0]):
@@ -243,7 +243,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         self,
         bpc: Bpc,
         palettes: Sequence[Sequence[int]],
-        bpas: Sequence[Optional[Bpa]],
+        bpas: Sequence[Bpa | None],
         layer: int,
     ) -> Image.Image:
         """
@@ -300,12 +300,12 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         self,
         bpc: Bpc,
         bpl: BplProtocol,
-        bpas: List[Optional[Bpa]],
+        bpas: list[Bpa | None],
         include_collision: bool = True,
         include_unknown_data_block: bool = True,
         pal_ani: bool = True,
         single_frame: bool = False,
-    ) -> List[Image.Image]:
+    ) -> list[Image.Image]:
         """
         Converts the entire map into an image, as shown in the game. Each PIL image in the list returned is one
         frame. The palettes argument can be retrieved from the map's BPL (bpl.palettes).
@@ -479,8 +479,8 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
         self,
         bpc: Bpc,
         bpl: BplProtocol,
-        lower_img: Optional[Image.Image] = None,
-        upper_img: Optional[Image.Image] = None,
+        lower_img: Image.Image | None = None,
+        upper_img: Image.Image | None = None,
         force_import: bool = False,
         how_many_palettes_lower_layer: int = 16,
     ) -> None:
@@ -583,7 +583,7 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
             # in the imported image. Generate chunk mappings.
             chunk_mappings = []
             chunk_mappings_counter = 1
-            tile_mappings: List[TilemapEntryProtocol] = []
+            tile_mappings: list[TilemapEntryProtocol] = []
             tiles_in_chunk = self.tiling_width * self.tiling_height
             for chk_fst_tile_idx in range(
                 0,

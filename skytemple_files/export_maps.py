@@ -44,7 +44,6 @@ import os
 import sys
 import traceback
 import warnings
-from typing import Optional, List, Dict
 
 from PIL import Image, ImageDraw
 from ndspy.rom import NintendoDSRom
@@ -82,10 +81,10 @@ COLOR_PERFORMER = (0, 255, 255, ALPHA_T)
 COLOR_EVENTS = (0, 0, 255, 100)
 BPC_TILE_DIM_H = int(BPC_TILE_DIM / 2)
 
-monster_bin_pack_file: Optional[BinPack] = None
-monster_md: Optional[MdProtocol] = None
-map_bgs: Dict[str, List[Image.Image]] = {}
-map_bg_durations: Dict[str, int] = {}
+monster_bin_pack_file: BinPack | None = None
+monster_md: MdProtocol | None = None
+map_bgs: dict[str, list[Image.Image]] = {}
+map_bg_durations: dict[str, int] = {}
 draw_invisible_actors_objects = False
 
 
@@ -429,9 +428,9 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
 
 
 def draw_scene__merged(
-    map_bg: List[Image.Image],
+    map_bg: list[Image.Image],
     duration,
-    overlays: List[Image.Image],
+    overlays: list[Image.Image],
     file_name,
     dim_w,
     dim_h,
@@ -580,7 +579,7 @@ def run_main(
 
     scriptdata = config.script_data
     if actor_mapping_path:
-        with open(actor_mapping_path, "r") as f:
+        with open(actor_mapping_path) as f:
             actor_mapping = json.load(f)
             for name, entid in actor_mapping.items():
                 scriptdata.level_entities__by_name[name].entid = entid

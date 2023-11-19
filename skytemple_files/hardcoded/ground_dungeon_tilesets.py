@@ -17,7 +17,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import cast, List, Optional, Tuple
+from typing import cast
 
 from range_typed_integers import i16, u8, u32
 
@@ -82,7 +82,7 @@ class HardcodedGroundDungeonTilesets:
     @staticmethod
     def get_ground_dungeon_tilesets(
         overlay11bin: bytes, config: Pmd2Data
-    ) -> List[GroundTilesetMapping]:
+    ) -> list[GroundTilesetMapping]:
         """Returns the list."""
         block = config.bin_sections.overlay11.data.LEVEL_TILEMAP_LIST
         lst = []
@@ -99,7 +99,7 @@ class HardcodedGroundDungeonTilesets:
 
     @staticmethod
     def set_ground_dungeon_tilesets(
-        value: List[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data
+        value: list[GroundTilesetMapping], overlay11bin: bytearray, config: Pmd2Data
     ) -> None:
         """
         Sets the  list.
@@ -120,21 +120,21 @@ class HardcodedGroundDungeonTilesets:
 
 def resolve_mapping_for_level(
     level: Pmd2ScriptLevel,
-    tileset_mappings: List[GroundTilesetMapping],
+    tileset_mappings: list[GroundTilesetMapping],
     mappa: MappaBinProtocol,
     fixed: FixedBin,
     dungeon_bin: DungeonBinPack,
-    dungeons: List[DungeonDefinition],
-) -> Optional[
-    Tuple[
+    dungeons: list[DungeonDefinition],
+) -> None | (
+    tuple[
         DmaProtocol,
         DpcProtocol,
         DpciProtocol,
         DplProtocol,
         DplaProtocol,
-        Optional[FixedFloor],
+        FixedFloor | None,
     ]
-]:
+):
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
     if (
         level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM

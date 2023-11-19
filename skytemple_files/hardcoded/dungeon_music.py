@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Optional, List, Tuple
 
 from range_typed_integers import u16
 
@@ -34,8 +33,8 @@ class DungeonMusicEntry(AutoString):
 
     def __init__(
         self,
-        data: Optional[u16],
-        track_ref: Optional[u16] = None,
+        data: u16 | None,
+        track_ref: u16 | None = None,
         is_random_ref: bool = False,
     ):
         if track_ref is not None:
@@ -55,7 +54,7 @@ class DungeonMusicEntry(AutoString):
 
 class HardcodedDungeonMusic:
     @staticmethod
-    def get_music_list(ov10: bytes, config: Pmd2Data) -> List[DungeonMusicEntry]:
+    def get_music_list(ov10: bytes, config: Pmd2Data) -> list[DungeonMusicEntry]:
         block = config.bin_sections.overlay10.data.MUSIC_ID_TABLE
         lst = []
         for i in range(block.address, block.address + block.length, 2):
@@ -68,7 +67,7 @@ class HardcodedDungeonMusic:
 
     @staticmethod
     def set_music_list(
-        value: List[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data
+        value: list[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data
     ) -> None:
         block = config.bin_sections.overlay10.data.MUSIC_ID_TABLE
         assert block.length is not None
@@ -83,7 +82,7 @@ class HardcodedDungeonMusic:
     @staticmethod
     def get_random_music_list(
         ov10: bytes, config: Pmd2Data
-    ) -> List[Tuple[u16, u16, u16, u16]]:
+    ) -> list[tuple[u16, u16, u16, u16]]:
         block = config.bin_sections.overlay10.data.RANDOM_MUSIC_ID_TABLE
         lst = []
         for i in range(block.address, block.address + block.length, 8):
@@ -99,7 +98,7 @@ class HardcodedDungeonMusic:
 
     @staticmethod
     def set_random_music_list(
-        value: List[Tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data
+        value: list[tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data
     ) -> None:
         block = config.bin_sections.overlay10.data.RANDOM_MUSIC_ID_TABLE
         assert block.length is not None

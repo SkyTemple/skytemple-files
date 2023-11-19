@@ -20,14 +20,13 @@ from range_typed_integers import u16_checked, u16
 
 from skytemple_files.common.util import read_bytes, read_u16
 from skytemple_files.compression_container.common_at.model import CommonAt
-from typing import Optional
 
 
 class At4px(CommonAt):
     length_compressed: u16
     length_decompressed: u16
 
-    def __init__(self, data: Optional[bytes] = None):
+    def __init__(self, data: bytes | None = None):
         """
         Create a AT4PX container from already compressed data.
         Setting data None is private, use compress instead for compressing data.
@@ -66,7 +65,7 @@ class At4px(CommonAt):
         return read_u16(data, byte_offset + 5)
 
     @classmethod
-    def compress(cls, data: bytes) -> "At4px":
+    def compress(cls, data: bytes) -> At4px:
         """Create a new AT4PX container from originally uncompressed data."""
         from skytemple_files.common.types.file_types import FileType
 

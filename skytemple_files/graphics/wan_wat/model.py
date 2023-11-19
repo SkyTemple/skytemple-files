@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import List, Tuple
 
 from PIL import Image, ImageOps
 
@@ -44,8 +43,8 @@ class MetaFramePositioningSpecs:
 
     @classmethod
     def process(
-        cls, items: List["MetaFramePositioningSpecs"]
-    ) -> Tuple[int, int, int, int]:
+        cls, items: list[MetaFramePositioningSpecs]
+    ) -> tuple[int, int, int, int]:
         """
         Returns the full image dimensions and the image's center point and set's
         the final_relative_x/y attributes of all entries
@@ -82,16 +81,16 @@ class Wan:
         self.model: WanImage = WanImage(data)  # type: ignore
 
     @property
-    def frames(self) -> List[Frame]:
+    def frames(self) -> list[Frame]:
         return self.model.frame_store.frames
 
     @property
-    def anim_groups(self) -> List[List[Animation]]:
+    def anim_groups(self) -> list[list[Animation]]:
         return self.model.animation_store.anim_groups
 
-    def render_frame(self, frame: Frame) -> Tuple[Image.Image, Tuple[int, int]]:
+    def render_frame(self, frame: Frame) -> tuple[Image.Image, tuple[int, int]]:
         """Returns the frame group as an image and it's center position as a tuple."""
-        specs: List[MetaFramePositioningSpecs] = []
+        specs: list[MetaFramePositioningSpecs] = []
         for fragment in frame.fragments:
             fragment_bytes: FragmentBytes = (
                 self.model.fragment_bytes_store.fragment_bytes[

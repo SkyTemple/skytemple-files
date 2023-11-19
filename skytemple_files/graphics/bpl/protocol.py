@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import List, Protocol, Sequence, TypeVar, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
+from collections.abc import Sequence
 
 from range_typed_integers import u16
 
@@ -48,7 +49,7 @@ class BplProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def import_palettes(self, palettes: List[List[int]]) -> None:
+    def import_palettes(self, palettes: list[list[int]]) -> None:
         """
         Replace all palettes with the ones passed in
         Animated palette is not changed, but the number of spec entries is adjusted.
@@ -56,7 +57,7 @@ class BplProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def apply_palette_animations(self, frame: int) -> List[List[int]]:
+    def apply_palette_animations(self, frame: int) -> list[list[int]]:
         """
         Returns a modified copy of self.palettes.
 
@@ -76,11 +77,11 @@ class BplProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def get_real_palettes(self) -> List[List[int]]:
+    def get_real_palettes(self) -> list[list[int]]:
         """Gets the actual palettes defined (without dummy grayscale entries)."""
         ...
 
     @abstractmethod
-    def set_palettes(self, palettes: List[List[int]]) -> None:
+    def set_palettes(self, palettes: list[list[int]]) -> None:
         """Sets the palette properly, adding dummy grayscale entries if needed."""
         ...

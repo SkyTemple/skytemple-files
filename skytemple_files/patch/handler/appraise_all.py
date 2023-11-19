@@ -157,7 +157,7 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
                 bin_after = StrHandler.serialize(strings)
                 rom.setFileByName(filename, bin_after)
 
-        table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: bytes())
+        table = loadOverlayTable(rom.arm9OverlayTable, lambda x, y: b"")
         ov = table[25]
         ov.ramSize = overlay_size + OVERLAY25_ADD_SIZE
         rom.arm9OverlayTable = saveOverlayTable(table)

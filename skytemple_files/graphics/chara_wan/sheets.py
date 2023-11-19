@@ -480,7 +480,7 @@ def ImportSheets(inDir, strict=False):
         foundTrans = False
         for count, color in colors:
             if color == transparent:
-                transparent = (0, 127, transparent[3] - 1, 255)
+                transparent = (0, 127, transparent[2] - 1, 255)
                 foundTrans = True
                 break
 

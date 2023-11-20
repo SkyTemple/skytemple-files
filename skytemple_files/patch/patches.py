@@ -52,6 +52,9 @@ from skytemple_files.patch.handler.actor_and_level_loader import (
     ActorAndLevelListLoaderPatchHandler,
 )
 from skytemple_files.patch.handler.add_type import AddTypePatchHandler
+from skytemple_files.patch.handler.add_key_check import (
+    AddKeyCheckPatchHandler,
+)
 from skytemple_files.patch.handler.allow_unrecruitable_mons import (
     AllowUnrecruitableMonsPatchHandler,
 )
@@ -67,6 +70,9 @@ from skytemple_files.patch.handler.change_evo import ChangeEvoSystemPatchHandler
 from skytemple_files.patch.handler.change_ff_prop import (
     ChangeFixedFloorPropertiesPatchHandler,
 )
+from skytemple_files.patch.handler.change_portrait import (
+    ChangePortraitPatchHandler,
+)
 from skytemple_files.patch.handler.change_tbbg import ChangeTextBoxColorPatchHandler
 from skytemple_files.patch.handler.change_text_sound import (
     ChangeTextSoundPatchHandler,
@@ -76,6 +82,9 @@ from skytemple_files.patch.handler.complete_team_control import CompleteTeamCont
 from skytemple_files.patch.handler.compress_iq_data import CompressIQDataPatchHandler
 from skytemple_files.patch.handler.disable_tips import DisableTipsPatch
 from skytemple_files.patch.handler.disarm_one_room_mh import DisarmOneRoomMHPatchHandler
+from skytemple_files.patch.handler.display_script_var import (
+    DisplayScriptVarPatchHandler,
+)
 from skytemple_files.patch.handler.dungeon_interrupt import DungeonInterruptPatchHandler
 from skytemple_files.patch.handler.dynamic_bosses_everywhere import (
     DynamicBossesEverywherePatchHandler,
@@ -185,6 +194,9 @@ class PatchType(Enum):
     ANTI_SOFTLOCK = AntiSoftlockPatchHandler
     BETTER_ENEMY_EVOLUTION = BetterEnemyEvolutionPatchHandler
     NO_WEATHER_STOP = NoWeatherStopPatchHandler
+    ADD_KEY_CHECK = AddKeyCheckPatchHandler
+    DISPLAY_SCRIPT_VAR = DisplayScriptVarPatchHandler
+    CHANGE_PORTRAIT = ChangePortraitPatchHandler
 
 
 class Patcher:

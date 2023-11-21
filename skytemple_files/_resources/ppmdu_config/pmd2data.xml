@@ -1014,6 +1014,36 @@
           </Replace>
         </SimplePatch>
 
+        <Patch id="AddKeyCheck">
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	      <Include filename ="adex_asm_mods/add_key_check/selector_overlay29.asm"/>
+	        </OpenBin>
+	        <OpenBin filepath="overlay/overlay_0036.bin">
+	  	      <Include filename ="adex_asm_mods/add_key_check/selector_overlay36.asm"/>
+          </OpenBin>
+        </Patch>
+
+        <Patch id="DisplayScriptVariable">
+          <OpenBin filepath="arm9.bin">
+	  	      <Include filename ="adex_asm_mods/display_script_var/selector_arm9.asm"/>
+	        </OpenBin>
+	        <OpenBin filepath="overlay/overlay_0036.bin">
+	  	      <Include filename ="adex_asm_mods/display_script_var/selector_overlay36.asm"/>
+          </OpenBin>
+        </Patch>
+
+        <Patch id="ChangePortraitMidText">
+          <OpenBin filepath="arm9.bin">
+	  	      <Include filename ="adex_asm_mods/change_portrait/selector_arm9.asm"/>
+	        </OpenBin>
+          <OpenBin filepath="overlay/overlay_0029.bin">
+	  	      <Include filename ="adex_asm_mods/change_portrait/selector_overlay29.asm"/>
+	        </OpenBin>
+	        <OpenBin filepath="overlay/overlay_0036.bin">
+	  	      <Include filename ="adex_asm_mods/change_portrait/selector_overlay36.asm"/>
+          </OpenBin>
+        </Patch>
+
       </Game>
     </Patches>
 

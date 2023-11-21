@@ -166,10 +166,10 @@ class BmaTestCase(
 
     def test_to_pil_debug(self) -> None:
         # If this is the Rust implementation, drawing collision and unknown data is not supported.
-        if env_use_native():
-            self.skipTest(
-                "This test is only enabled when the Python implementation is tested."
-            )
+        # XXX: Actually for now this entire test is just disabled, see below (#449).
+        self.skipTest(
+            "This test is not supported anymore due to unstable Pillow fonts."
+        )
         kwargs = {
             "include_collision": True,
             "include_unknown_data_block": True,

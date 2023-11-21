@@ -917,7 +917,7 @@ def addFlippedImgData(flipMode: FlipMode, frameData, metaFrame, old_frame, new_f
     for piece in metaFrame:
         newPiece = MetaFramePiece(piece.imgIndex, piece.attr0, piece.attr1, piece.attr2)
         if flipMode == FlipMode.FLIP:
-            newPiece.setHFlip(True)
+            newPiece.setHFlip(not piece.isHFlip())
             # move the piece in the reflected position.
             range = newPiece.GetBounds()
             endX = range[2]

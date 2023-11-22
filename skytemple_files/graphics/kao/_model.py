@@ -467,6 +467,8 @@ def pil_to_kao(
         new_v = (new_order.index(v % 16)) + (new_order.index(v // 16)) * 16
         new_img_new[i] = new_v
     new_palette_new = bytearray(KAO_IMG_PAL_B_SIZE)
+    if len(new_palette) < 256:
+        new_palette.extend([0] * (256 - len(new_palette)))
     for i, v in enumerate(new_order):
         new_palette_new[i * 3] = new_palette[v * 3]
         new_palette_new[i * 3 + 1] = new_palette[v * 3 + 1]

@@ -11,7 +11,7 @@ gql[aiohttp]==3.5.0b8
 graphql-core>=3.2.0
 # TODO: Add speedups extra again if cchardet is no longer required by it
 aiohttp
-lru-dict==1.2.0
+lru-dict==1.3.0
 skytemple-3rdparty-typestubs
 types-Pillow==10.0.0.3
 types-PyYAML==6.0.12.12

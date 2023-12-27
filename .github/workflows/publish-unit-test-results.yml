@@ -2,7 +2,8 @@ name: Test Results
 
 on:
   workflow_run:
-    workflows: ["Build, test and publish"]
+    workflows:
+      - Build, test and publish
     types:
       - completed
 permissions: {}

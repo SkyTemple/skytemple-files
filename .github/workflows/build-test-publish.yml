@@ -227,10 +227,6 @@ jobs:
   test-event-file:
     name: "Publish Test Results Event File"
     runs-on: ubuntu-latest
-    needs:
-      - test
-#      - test_with_rom
-      - typechecks
     steps:
     - name: Upload
       uses: actions/upload-artifact@v3

@@ -2,7 +2,13 @@
 # Deploys to PyPi on "release".
 name: Build, test and publish
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - release
+      - version/*
+  pull_request: {}
 
 jobs:
   cache:
@@ -218,23 +224,15 @@ jobs:
 #        name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native ${{ matrix.native }})"
 #        path: test/pytest.xml
 
-  publish-test-results:
-    name: "Publish Unit Tests Results"
-    needs:
-      - test
-#      - test_with_rom
-      - typechecks
+  test-event-file:
+    name: "Publish Test Results Event File"
     runs-on: ubuntu-latest
-    if: always()
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: artifacts
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: artifacts/**/*.xml
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
 
   build:
     needs:

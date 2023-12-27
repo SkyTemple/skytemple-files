@@ -2,7 +2,13 @@
 # Deploys to PyPi on "release".
 name: Build, test and publish
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+      - release
+      - version/*
+  pull_request: {}
 
 jobs:
   cache:

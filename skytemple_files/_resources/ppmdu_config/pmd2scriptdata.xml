@@ -1415,7 +1415,6 @@
         </OpCode>
         <OpCode id="0x2"   name="back_SetBackEffect"                     params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="effect"/>
-          <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x3"   name="back_SetBackScrollOffset"               params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="offset0"/>
@@ -2793,7 +2792,7 @@
         </OpCode>
         <OpCode id="0x158" name="WaitAnimation"                          params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x159" name="WaitBackEffect"                         params="0"  stringidx="-1" unk2="0"  unk3="0"  />
-        <OpCode id="0x15a" name="WaitBack2Effec"                         params="0"  stringidx="-1" unk2="0"  unk3="0"  />
+        <OpCode id="0x15a" name="WaitBack2Effect"                        params="0"  stringidx="-1" unk2="0"  unk3="0"  />
         <OpCode id="0x15b" name="WaitBgm"                                params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="Bgm" name="bgm_id"/>
         </OpCode>

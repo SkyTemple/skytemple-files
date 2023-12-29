@@ -1556,42 +1556,42 @@
         <OpCode id="0x28"  name="Branch"                                 params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="value"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x29"  name="BranchBit"                              params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="index"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2a"  name="BranchDebug"                            params="2"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="bool" name="param"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="0" type="uint" name="param"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2b"  name="BranchEdit"                             params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="param"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2c"  name="BranchExecuteSub"                       params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2d"  name="BranchPerformance"                      params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <!-- Same as BranchBit for variable PERFORMANCE_PROGRESS_LIST -->
           <Argument id="0" type="uint" name="index"/>
-          <Argument id="1" type="bool" name="value"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="value"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2e"  name="BranchScenarioNow"                      params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="unk1"/>
           <Argument id="2" type="uint" name="unk2"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2f"  name="BranchScenarioNowAfter"                 params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="unk1"/>
           <Argument id="2" type="uint" name="unk2"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x30"  name="BranchScenarioNowBefore"                params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
@@ -1603,41 +1603,41 @@
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="unk1"/>
           <Argument id="2" type="uint" name="unk2"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x32"  name="BranchScenarioBefore"                   params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="unk1"/>
           <Argument id="2" type="uint" name="unk2"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x33"  name="BranchSum"                              params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
           <Argument id="1" type="uint" name="unk1"/>
           <Argument id="2" type="uint" name="unk2"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x34"  name="BranchValue"                            params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="Operator" name="operator"/>
+          <Argument id="1" type="uint" name="operator"/>
           <Argument id="2" type="uint" name="value"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x35"  name="BranchVariable"                         params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="Operator" name="operator"/>
+          <Argument id="1" type="uint" name="operator"/>
           <Argument id="2" type="GameVar" name="cmp_var"/>
-          <Argument id="3" type="Addr" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x36"  name="BranchVariation"                        params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="param"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x37"  name="Call"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Addr" name="jump_address"/>
+          <Argument id="0" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x38"  name="CallCommon"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="Coroutine" name="coro_id"/>
+          <Argument id="0" type="Routine" name="coro_id"/>
         </OpCode>
         <OpCode id="0x39"  name="camera_Move2Default"                    params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="speed"/>
@@ -1783,38 +1783,38 @@
         </OpCode>
         <OpCode id="0x61"  name="CancelCut"                              params="0"  stringidx="-1" unk2="1"  unk3="0"  />
         <OpCode id="0x62"  name="CancelRecoverCommon"                    params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Coroutine" name="coro_id"/>
+          <Argument id="0" type="Routine" name="coro_id"/>
         </OpCode>
         <OpCode id="0x63"  name="Case"                                   params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="uint" name="value"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x64"  name="CaseMenu"                               params="2"  stringidx="0"  unk2="1"  unk3="0"   >
           <Argument id="0" type="String" name="choice"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x65"  name="CaseMenu2"                              params="2"  stringidx="-1" unk2="1"  unk3="0"  >
           <Argument id="0" type="uint" name="choice?"/>
-          <Argument id="1" type="Addr" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x66"  name="CaseScenario"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Operator" name="operator"/>
+          <Argument id="0" type="uint" name="operator"/>
           <Argument id="1" type="uint" name="value"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x67"  name="CaseText"                               params="2"  stringidx="1"  unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="value"/>
           <Argument id="1" type="String" name="display"/>
         </OpCode>
         <OpCode id="0x68"  name="CaseValue"                              params="3"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Operator" name="operator"/>
+          <Argument id="0" type="uint" name="operator"/>
           <Argument id="1" type="uint" name="value"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x69"  name="CaseVariable"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Operator" name="operator"/>
+          <Argument id="0" type="uint" name="operator"/>
           <Argument id="1" type="GameVar" name="var"/>
-          <Argument id="2" type="Addr" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x6a"  name="debug_Assert"                           params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -1840,22 +1840,22 @@
           <Argument id="0" type="uint" name="unk0"/>
         </OpCode>
         <OpCode id="0x73"  name="ExecuteCommon"                          params="2"  stringidx="-1" unk2="0"  unk3="0"  >
-          <Argument id="0" type="Coroutine" name="coro_id"/>
+          <Argument id="0" type="Routine" name="coro_id"/>
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x74"  name="flag_CalcBit"                           params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="uint" name="index"/>
-          <Argument id="2" type="bool" name="value"/>
+          <Argument id="2" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x75"  name="flag_CalcValue"                         params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="CalcOperator" name="calc_operator"/>
+          <Argument id="1" type="uint" name="calc_operator"/>
           <Argument id="2" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x76"  name="flag_CalcVariable"                      params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
-          <Argument id="1" type="CalcOperator" name="calc_operator"/>
+          <Argument id="1" type="uint" name="calc_operator"/>
           <Argument id="2" type="GameVar" name="var_to_set_from"/>
         </OpCode>
         <OpCode id="0x77"  name="flag_Clear"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -1877,7 +1877,7 @@
         </OpCode>
         <OpCode id="0x7d"  name="flag_SetDungeonMode"                    params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="dungeon_id"/>
-          <Argument id="1" type="DungeonMode" name="dungen_mode"/>
+          <Argument id="1" type="uint" name="dungen_mode"/>
         </OpCode>
         <OpCode id="0x7e"  name="flag_SetDungeonResult"                  params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="unk0"/>
@@ -1886,7 +1886,7 @@
         <OpCode id="0x7f"  name="flag_SetPerformance"                    params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <!-- Sets the game variable PERFORMANCE_PROGRESS_LIST -->
           <Argument id="0" type="uint" name="index"/>
-          <Argument id="1" type="bool" name="value"/>
+          <Argument id="1" type="uint" name="value"/>
         </OpCode>
         <OpCode id="0x80"  name="flag_SetScenario"                       params="3"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
@@ -1913,10 +1913,10 @@
           <Argument id="1" type="GameVar" name="var"/>
         </OpCode>
         <OpCode id="0x87"  name="Jump"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Addr" name="jump_address"/>
+          <Argument id="0" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x88"  name="JumpCommon"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="Coroutine" name="coro_id"/>
+          <Argument id="0" type="Routine" name="coro_id"/>
         </OpCode>
         <OpCode id="0x89"  name="lives"                                  params="1"  stringidx="-1" unk2="0"  unk3="0"  >
           <Argument id="0" type="Entity" name="actor_id"/>
@@ -2227,31 +2227,31 @@
           <Argument id="0" type="uint" name="index"/>
         </OpCode>
         <OpCode id="0xd7"  name="screen_FadeChange"                      params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
         </OpCode>
         <OpCode id="0xd8"  name="screen_FadeChangeAll"                   params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
         </OpCode>
         <OpCode id="0xd9"  name="screen_FadeIn"                          params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xda"  name="screen_FadeInAll"                       params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xdb"  name="screen_FadeOut"                         params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xdc"  name="screen_FadeOutAll"                      params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xdd"  name="screen_FlushChange"                     params="8"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -2273,7 +2273,7 @@
           <Argument id="5" type="uint" name="b"/>
         </OpCode>
         <OpCode id="0xdf"  name="screen_FlushOut"                        params="6"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="mode"/>
           <Argument id="3" type="uint" name="r"/>
@@ -2281,13 +2281,13 @@
           <Argument id="5" type="uint" name="b"/>
         </OpCode>
         <OpCode id="0xe0"  name="screen_WhiteChange"                     params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
         </OpCode>
         <OpCode id="0xe1"  name="screen_WhiteChangeAll"                  params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
@@ -2301,15 +2301,15 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0xe4"  name="screen_WhiteOut"                        params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xe5"  name="screen_WhiteOutAll"                     params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xe6"  name="screen2_FadeChange"                     params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
@@ -2321,7 +2321,7 @@
           <Argument id="3" type="uint" name="unk3"/>
         </OpCode>
         <OpCode id="0xe8"  name="screen2_FadeIn"                         params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xe9"  name="screen2_FadeInAll"                      params="2"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -2329,7 +2329,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0xea"  name="screen2_FadeOut"                        params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xeb"  name="screen2_FadeOutAll"                     params="2"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -2347,7 +2347,7 @@
           <Argument id="7" type="uint" name="unk7"/>
         </OpCode>
         <OpCode id="0xed"  name="screen2_FlushIn"                        params="6"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="mode"/>
           <Argument id="3" type="uint" name="r"/>
@@ -2355,7 +2355,7 @@
           <Argument id="5" type="uint" name="b"/>
         </OpCode>
         <OpCode id="0xee"  name="screen2_FlushOut"                       params="6"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="mode"/>
           <Argument id="3" type="uint" name="r"/>
@@ -2363,7 +2363,7 @@
           <Argument id="5" type="uint" name="b"/>
         </OpCode>
         <OpCode id="0xef"  name="screen2_WhiteChange"                    params="4"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
           <Argument id="2" type="uint" name="start_brightness"/>
           <Argument id="3" type="uint" name="end_brightness"/>
@@ -2383,7 +2383,7 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0xf3"  name="screen2_WhiteOut"                       params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="bool" name="suspension_flag"/>
+          <Argument id="0" type="uint" name="suspension_flag"/>
           <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0xf4"  name="screen2_WhiteOutAll"                    params="2"  stringidx="-1" unk2="0"  unk3="0"   >
@@ -2634,7 +2634,7 @@
           <Argument id="2" type="uint" name="unk2"/>
         </OpCode>
         <OpCode id="0x12e" name="supervision_ExecuteCommon"              params="1"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="Coroutine" name="coro_id"/>
+          <Argument id="0" type="Routine" name="coro_id"/>
         </OpCode>
         <OpCode id="0x12f" name="supervision_ExecuteEnter"               params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="level_id"/>

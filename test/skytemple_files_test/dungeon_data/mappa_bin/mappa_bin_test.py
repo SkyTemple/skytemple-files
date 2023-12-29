@@ -301,7 +301,7 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             u8(0),
             u8(0),
             u8(0),
-            i8(0),
+            u8(0),
             u8(0),
             u8(0),
             u8(0),

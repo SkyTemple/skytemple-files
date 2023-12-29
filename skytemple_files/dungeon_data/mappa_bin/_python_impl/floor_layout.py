@@ -210,7 +210,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
             music_id=read_u8(read.data, pointer + 0x03),
             weather=read_u8(read.data, pointer + 0x04),
             floor_connectivity=read_u8(read.data, pointer + 0x05),
-            initial_enemy_density=read_i8(read.data, pointer + 0x06),
+            initial_enemy_density=read_u8(read.data, pointer + 0x06),
             kecleon_shop_chance=read_u8(read.data, pointer + 0x07),
             monster_house_chance=read_u8(read.data, pointer + 0x08),
             unused_chance=read_u8(read.data, pointer + 0x09),

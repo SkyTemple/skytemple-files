@@ -588,7 +588,7 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
         floor_connectivity=u8_checked(
             int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY))
         ),
-        initial_enemy_density=i8_checked(
+        initial_enemy_density=u8_checked(
             int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY))
         ),
         kecleon_shop_chance=u8_checked(

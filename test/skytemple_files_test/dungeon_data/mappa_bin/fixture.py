@@ -211,7 +211,7 @@ class MappaFloorLayoutStub(MappaFloorLayoutProtocol, AutoString):
     music_id: u8
     weather: u8
     floor_connectivity: u8
-    initial_enemy_density: i8
+    initial_enemy_density: u8
     kecleon_shop_chance: u8
     monster_house_chance: u8
     unused_chance: u8
@@ -244,7 +244,7 @@ class MappaFloorLayoutStub(MappaFloorLayoutProtocol, AutoString):
         music_id: u8,
         weather: u8,
         floor_connectivity: u8,
-        initial_enemy_density: i8,
+        initial_enemy_density: u8,
         kecleon_shop_chance: u8,
         monster_house_chance: u8,
         unused_chance: u8,

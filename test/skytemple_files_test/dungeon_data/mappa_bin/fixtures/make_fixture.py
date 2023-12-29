@@ -85,7 +85,7 @@ def randomize_floor_layout_protocol() -> MappaFloorLayout:
         music_id=u8(random.randint(0, 255)),
         weather=u8(random.choice(list(MappaFloorWeather)).value),
         floor_connectivity=u8(random.randint(0, 255)),
-        initial_enemy_density=i8(random.randint(-128, 127)),
+        initial_enemy_density=u8(random.randint(0, 255)),
         kecleon_shop_chance=u8(random.randint(0, 255)),
         monster_house_chance=u8(random.randint(0, 255)),
         unused_chance=u8(random.randint(0, 255)),

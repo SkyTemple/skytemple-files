@@ -107,7 +107,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
     music_id: u8
     weather: _MappaFloorWeather
     floor_connectivity: u8
-    initial_enemy_density: i8
+    initial_enemy_density: u8
     kecleon_shop_chance: u8
     monster_house_chance: u8
     unused_chance: u8
@@ -140,7 +140,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
         music_id: u8,
         weather: _MappaFloorWeather,
         floor_connectivity: u8,
-        initial_enemy_density: i8,
+        initial_enemy_density: u8,
         kecleon_shop_chance: u8,
         monster_house_chance: u8,
         unused_chance: u8,
@@ -244,7 +244,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
         write_u8(data, self.music_id, 0x03)
         write_u8(data, self.weather, 0x04)
         write_u8(data, self.floor_connectivity, 0x05)
-        write_i8(data, self.initial_enemy_density, 0x06)
+        write_u8(data, self.initial_enemy_density, 0x06)
         write_u8(data, self.kecleon_shop_chance, 0x07)
         write_u8(data, self.monster_house_chance, 0x08)
         write_u8(data, self.unused_chance, 0x09)

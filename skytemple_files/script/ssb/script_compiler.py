@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import Callable, Optional
 
 from explorerscript.error import ParseError, SsbCompilerError
@@ -34,6 +35,7 @@ from explorerscript.ssb_converting.ssb_data_types import (
 )
 from explorerscript.ssb_converting.ssb_special_ops import OPS_WITH_JUMP_TO_MEM_OFFSET
 from explorerscript.ssb_script.ssb_converting.ssb_compiler import SsbScriptSsbCompiler
+from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.data import GAME_REGION_EU, Pmd2Data
@@ -237,6 +239,15 @@ class ScriptCompiler:
                 else:
                     bytes_written_last_rtn = 0
                     for in_op in input_ops:
+                        # Bugfix Compatibility with 1.6.0/1.6.1
+                        if in_op.op_code.name == "WaitBack2Effec":
+                            in_op.op_code.name = "WaitBack2Effect"
+                            warnings.warn(
+                                DeprecatedToBeRemovedWarning(
+                                    "The typo of the opcode 'WaitBack2Effect' has been fixed in 1.6.2. The alias 'WaitBack2Effec' will be removed in 1.7.0.",
+                                    (1, 7, 0),
+                                ),
+                            )
                         if (
                             in_op.op_code.name
                             not in self.rom_data.script_data.op_codes__by_name

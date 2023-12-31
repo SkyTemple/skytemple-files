@@ -50,12 +50,17 @@ CheckMove:
 	mov r6,r0
 	mov r4,#0
 loop_move:
+	ldrb r0,[r5,#+0x0]
+	tst r0,#0x1
+	beq loop_move_next_iter
 	strh r6,[r5,#+0x2]
 	mov r0,r5
 	bl GetMovePPWithBonus
 	strb r0,[r5,#+0x6]
+loop_move_next_iter:
 	add r4,r4,#1
 	add r5,r5,#8
+	cmp r4,#4
 	blt loop_move
 	ldmia r13!, {r4,r5,r6}
 	b EndCheckMove

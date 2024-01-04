@@ -122,7 +122,7 @@ from skytemple_files.patch.handler.fix_nocash_saves import FixNocashSavesPatchHa
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.negative_enemy_density import (
-	NegativeEnemyDensityPatchHandler,
+    NegativeEnemyDensityPatchHandler,
 )
 from skytemple_files.patch.handler.no_weather_stop import NoWeatherStopPatchHandler
 from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandler

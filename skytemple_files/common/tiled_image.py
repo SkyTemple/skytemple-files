@@ -227,6 +227,7 @@ def from_pil(
     force_import=False,
     optimize=True,
     palette_offset=0,
+    no_flipped_duplicates=False,
 ) -> tuple[list[bytearray], list[TilemapEntryProtocol], list[list[int]]]:
     """
     Modify the image data in the tiled image by importing the passed PIL.
@@ -400,7 +401,10 @@ def from_pil(
         flip_y = False
         if optimize:
             reusable_tile_idx, flip_x, flip_y = search_for_tile_with_sum(
-                final_tiles_with_sum, tile_with_sum, tile_dim
+                final_tiles_with_sum,
+                tile_with_sum,
+                tile_dim,
+                no_flipped_duplicates=no_flipped_duplicates,
             )
         if reusable_tile_idx is not None:
             tile_id_to_use = reusable_tile_idx
@@ -451,6 +455,7 @@ def search_for_tile_with_sum(
     tiles_with_sum: list[tuple[int, bytearray]],
     tile_with_sum: tuple[int, bytearray],
     tile_dim: int,
+    no_flipped_duplicates: bool,
 ) -> tuple[int | None, bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
@@ -464,13 +469,14 @@ def search_for_tile_with_sum(
             tile_in_tiles = tile_tuple[1]
             if tile_in_tiles == tile:
                 return i, False, False
-            x_flipped = _flip_tile_x(tile_in_tiles, tile_dim)
-            if x_flipped == tile:
-                return i, True, False
-            if _flip_tile_y(tile_in_tiles, tile_dim) == tile:
-                return i, False, True
-            if _flip_tile_y(x_flipped, tile_dim) == tile:
-                return i, True, True
+            if not no_flipped_duplicates:
+                x_flipped = _flip_tile_x(tile_in_tiles, tile_dim)
+                if x_flipped == tile:
+                    return i, True, False
+                if _flip_tile_y(tile_in_tiles, tile_dim) == tile:
+                    return i, False, True
+                if _flip_tile_y(x_flipped, tile_dim) == tile:
+                    return i, True, True
     return None, False, False
 
 

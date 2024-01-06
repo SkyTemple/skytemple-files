@@ -8,6 +8,7 @@ on:
       - master
       - release
       - version/*
+    tags: {}
   pull_request: {}
 
 jobs:

@@ -56,8 +56,8 @@
 	mov r0,1h
 	pop r4,r15
 
-.org NA_0231AACC
-	bl @SpecialOrbCheck ; Prevent allies from recalculating a target when using orbs in Manual Mode!
+.org NA_0231AACC	;Prevent allies from recalculating a target when using orbs in manual mode!
+	bl @SpecialOrbCheck	;original: ldrb r0,[r5,7h]
 
 .close
 
@@ -350,7 +350,7 @@ roundover:
 	mov r3,0h
 	b NA_022EC094		;skipping the turns of partners
 
-@SpecialOrbCheck:
+@SpecialOrbCheck: ;Non-leader party members update their target upon using an orb, so we check for manual mode to ensure allies use the orb in the direction we want.
 	ldrb r0,[r5,7h]
 	ldr r1,=@ManualModeOn
 	ldrb r1,[r1]

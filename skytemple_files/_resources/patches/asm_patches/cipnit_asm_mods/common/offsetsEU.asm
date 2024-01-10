@@ -29,6 +29,7 @@ CTC_MANUAL_STRINGID equ 129h
 .definelabel NA_0230506C, 02305A98h	;Operation - partner direction setter 2
 .definelabel NA_02305160, 02305B8Ch	;Operation - some line at the end of the partner direction setter
 .definelabel NA_0230579C, 023061C8h	;Operation - prevents partners from triggering hidden traps
+.definelabel NA_0231AACC, 0231B52Ch	;Operation - checks leader byte during orb use
 .definelabel NA_0234B714, 0234C314h	;Function - puts a message in the dialogue
 .definelabel NA_02352284, 02352E90h	;Variable - used in turn verification algorithm
 .definelabel NA_02353538, 02354138h	;Variable - pointer to beginning of dungeon data. beginning of dungeon data +12B28 is the beginning of the list of pokemon entity addresses.

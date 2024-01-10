@@ -77,7 +77,6 @@ class ImgItm(Sir0Serializable):
             TILE_DIM,
             TILE_DIM * CHUNK_DIM,
             TILE_DIM * CHUNK_DIM,
-            no_flipped_duplicates=True,
         )
         self.sprites[index] = tiles
         if import_palettes:

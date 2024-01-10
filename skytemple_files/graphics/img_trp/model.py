@@ -77,6 +77,7 @@ class ImgTrp(Sir0Serializable):
             TILE_DIM,
             TILE_DIM * CHUNK_DIM,
             TILE_DIM * CHUNK_DIM,
+            optimize=False,
         )
         self.sprites[index] = tiles
         if import_palettes:

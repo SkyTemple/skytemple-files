@@ -19,3 +19,4 @@
 from __future__ import annotations
 
 DPLA_COLORS_PER_PALETTE = 16
+DPLA_MAX_COLORS = 32

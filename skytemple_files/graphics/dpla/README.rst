@@ -14,6 +14,8 @@ This file format, used together with `DPL`_ is the equivalent of `BPL`_ files bu
 
 The name is not official.
 
+A DPLA file can not have more than 32 colors. In fact it should always have exactly 32.
+
 The file can only be found SIR0 wrapped in the dungeon.bin file. The pointers point to the start
 of each color entry.
 

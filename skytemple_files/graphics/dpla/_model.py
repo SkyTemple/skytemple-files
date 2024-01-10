@@ -16,13 +16,15 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import logging
+
 from range_typed_integers import u8_checked, u32_checked, u32
 from collections.abc import Sequence
 
 from range_typed_integers import u8_checked, u32_checked, u8
 
 from skytemple_files.common.i18n_util import _
-from skytemple_files.graphics.dpla import DPLA_COLORS_PER_PALETTE
+from skytemple_files.graphics.dpla import DPLA_COLORS_PER_PALETTE, DPLA_MAX_COLORS
 from skytemple_files.graphics.dpla.protocol import DplaProtocol, chunk
 
 from skytemple_files.common.i18n_util import _
@@ -38,6 +40,8 @@ from skytemple_files.common.util import (
 # noinspection PyUnresolvedReferences
 from skytemple_files.common.util import chunks  # nopycln: import
 
+logger = logging.getLogger(__name__)
+
 
 class Dpla(DplaProtocol):
     """
@@ -49,6 +53,12 @@ class Dpla(DplaProtocol):
         toc_pointers = []
         for i in range(pointer_to_pointers, len(data), 4):
             toc_pointers.append(read_u32(data, i))
+
+        if len(toc_pointers) > DPLA_MAX_COLORS:
+            logger.warning(
+                f"DPLA contained more than 32 potential colors. All additional entries were discarded."
+            )
+            toc_pointers = toc_pointers[:32]
 
         # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
         self.colors: list[list[int]] = []

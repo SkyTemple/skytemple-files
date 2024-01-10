@@ -45,6 +45,10 @@ class DplaTestCase(SkyTempleFilesTestCase[DplaHandler, DplaProtocol]):
         saved = self._save_and_reload_main_fixture(self.one)
         self.assertEqual(saved.colors, new_colors)
 
+    def test_read_with_invalid_toc_pointers(self):
+        two: DplaProtocol = self._load_main_fixture(self._fix_path2())
+        self.assertIsNotNone(two)
+
     def test_get_durations_per_frame_for_colors(self):
         # fmt: off
         self.assertEqual([18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 6, 6, 6, 18, 18, 18, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3], self.one.durations_per_frame_for_colors)
@@ -170,3 +174,9 @@ class DplaTestCase(SkyTempleFilesTestCase[DplaHandler, DplaProtocol]):
     @fixpath
     def _fix_path1(cls):
         return "fixtures", "one.dpla"
+
+    @typing.no_type_check
+    @classmethod
+    @fixpath
+    def _fix_path2(cls):
+        return "fixtures", "two.dpla"

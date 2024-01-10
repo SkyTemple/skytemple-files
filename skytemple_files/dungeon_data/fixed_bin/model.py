@@ -167,25 +167,25 @@ class TileRuleType(Enum):
     )
     FL_WA_ROOM_FLAG_0C = (
         0x0C,
-        _("F/W, Room; Key Door (0xC)"),
+        _("F/W, Room; Key Door"),
         FloorType.FLOOR_OR_WALL,
         RoomType.ROOM,
         True,
         False,
         _(
-            "Tile flag 0xC is set to 1 and spawns a key Door. "
+            "Spawns a locked Key Door. "
             "If the fixed room id is &lt; 0xA5, this will be a Wall. Otherwise it will be Floor."
         ),
     )
     FL_WA_ROOM_FLAG_0D = (
         0x0D,
-        _("F/W, Room; Key Door (0xD)"),
+        _("F/W, Room; Key Door (Escort)"),
         FloorType.FLOOR_OR_WALL,
         RoomType.ROOM,
         True,
         False,
         _(
-            "Tile flag 0xD is set to 1 and spawns a key Door. "
+            "Spawns a locked Key Door (meant to be opened by an escort mission client). "
             "If the fixed room id is &lt; 0xA5, this will be a Wall. Otherwise it will be Floor."
         ),
     )

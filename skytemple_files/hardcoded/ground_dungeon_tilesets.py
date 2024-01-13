@@ -153,8 +153,12 @@ def resolve_mapping_for_level(
     mappa_idx = dungeons[dungeon_id].mappa_index
     start_offset = dungeons[dungeon_id].start_after
     length = dungeons[dungeon_id].number_floors
-    floor_id = cast(u8, min(length - 1, floor_id - 1))  # type: ignore
-    layout = mappa.floor_lists[mappa_idx][start_offset + floor_id].layout
+    floor_id = cast(u8, min(length - 1, floor_id - 1))
+    final_floor_id = start_offset + floor_id
+    # The same failsafe the game uses: Make sure the floor id is not out of bounds for the floor list.
+    if final_floor_id >= len(mappa.floor_lists[mappa_idx]):
+        final_floor_id = len(mappa.floor_lists[mappa_idx]) - 1
+    layout = mappa.floor_lists[mappa_idx][final_floor_id].layout
     tileset_id = layout.tileset_id
     if tileset_id > 169:
         tileset_id = u8(0)

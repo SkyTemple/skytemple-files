@@ -1437,8 +1437,8 @@
           <Argument id="5" type="String" name="title"/>
         </OpCode>
         <OpCode id="0x7"   name="back_SetEffect"                         params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="duration"/>
-          <Argument id="1" type="uint" name="effect"/>
+          <Argument id="0" type="uint" name="effect"/>
+          <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0x8"   name="back_SetDungeonBanner"                  params="2"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="uint" name="dungeon_id"/>
@@ -1493,8 +1493,8 @@
           <Argument id="1" type="uint" name="unk1"/>
         </OpCode>
         <OpCode id="0x16"  name="back2_SetEffect"                        params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="uint" name="duration"/>
-          <Argument id="1" type="uint" name="effect"/>
+          <Argument id="0" type="uint" name="effect"/>
+          <Argument id="1" type="uint" name="duration"/>
         </OpCode>
         <OpCode id="0x17"  name="back2_SetGround"                        params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="Level" name="level"/>

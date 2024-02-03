@@ -123,11 +123,11 @@ class BmaLayerNrlDecompressor:
         v2 = ((0x0000FF & pattern_to_write) << 4) + (
             (0x00F000 & pattern_to_write) >> 12
         )
-        self.decompressed_data[
-            self.bytes_written : self.bytes_written + 1
-        ] = v1.to_bytes(2, "little")
+        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = (
+            v1.to_bytes(2, "little")
+        )
         self.bytes_written += 2
-        self.decompressed_data[
-            self.bytes_written : self.bytes_written + 1
-        ] = v2.to_bytes(2, "little")
+        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = (
+            v2.to_bytes(2, "little")
+        )
         self.bytes_written += 2

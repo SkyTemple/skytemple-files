@@ -30,8 +30,7 @@ class BpaFrameInfoProtocol(Protocol):
     unk2: u16
 
     @abstractmethod
-    def __init__(self, duration_per_frame: int, unk2: int):
-        ...
+    def __init__(self, duration_per_frame: int, unk2: int): ...
 
 
 T = TypeVar("T", bound=BpaFrameInfoProtocol)
@@ -45,8 +44,7 @@ class BpaProtocol(Protocol[T]):
     frame_info: Sequence[T]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @classmethod
     @abstractmethod
@@ -88,8 +86,7 @@ class BpaProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def pil_to_tiles_separate(self, images: list[Image.Image]) -> None:
-        ...
+    def pil_to_tiles_separate(self, images: list[Image.Image]) -> None: ...
 
     @abstractmethod
     def tiles_for_frame(self, frame: int) -> Sequence[bytes]:

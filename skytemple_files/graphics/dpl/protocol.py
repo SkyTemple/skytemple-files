@@ -26,5 +26,4 @@ class DplProtocol(Protocol):
     palettes: Sequence[Sequence[int]]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...

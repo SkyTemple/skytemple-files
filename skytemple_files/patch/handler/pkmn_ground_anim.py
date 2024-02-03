@@ -137,9 +137,9 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
             lst_calls = []
             for x in main_calls:
                 lst_calls.append(lst_func.index(x))
-            ov11[
-                start_table - start_ov11 + 4 : start_table - start_ov11 + 2052
-            ] = bytes(lst_calls)
+            ov11[start_table - start_ov11 + 4 : start_table - start_ov11 + 2052] = (
+                bytes(lst_calls)
+            )
             rom.files[ov.fileID] = bytes(ov11)
 
         try:

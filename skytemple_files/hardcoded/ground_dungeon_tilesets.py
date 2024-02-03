@@ -1,4 +1,5 @@
 """Module for editing the hardcoded table mapping of ground levels to dungeon tilesets."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -113,9 +114,9 @@ class HardcodedGroundDungeonTilesets:
                 f"The list must have exactly the length of {expected_length} entries."
             )
         for i, entry in enumerate(value):
-            overlay11bin[
-                block.address + i * 8 : block.address + (i + 1) * 8
-            ] = entry.to_bytes()
+            overlay11bin[block.address + i * 8 : block.address + (i + 1) * 8] = (
+                entry.to_bytes()
+            )
 
 
 def resolve_mapping_for_level(

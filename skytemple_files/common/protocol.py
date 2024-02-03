@@ -25,8 +25,7 @@ from range_typed_integers import u16
 @runtime_checkable
 class RomFileProviderProtocol(Protocol):
     @abstractmethod
-    def getFileByName(self, filename: str) -> bytes:
-        ...
+    def getFileByName(self, filename: str) -> bytes: ...
 
 
 class TilemapEntryProtocol(Protocol):
@@ -43,14 +42,11 @@ class TilemapEntryProtocol(Protocol):
         flip_y: bool,
         pal_idx: int,
         ignore_too_large: bool = False,
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def to_int(self) -> u16:
-        ...
+    def to_int(self) -> u16: ...
 
     @classmethod
     @abstractmethod
-    def from_int(cls, entry: u16) -> TilemapEntryProtocol:
-        ...
+    def from_int(cls, entry: u16) -> TilemapEntryProtocol: ...

@@ -223,9 +223,9 @@ class BpcImageDecompressor:
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""
-        self.decompressed_data[
-            self.bytes_written : self.bytes_written + 2
-        ] = pattern_to_write.to_bytes(2, "little")
+        self.decompressed_data[self.bytes_written : self.bytes_written + 2] = (
+            pattern_to_write.to_bytes(2, "little")
+        )
         self.bytes_written += 2
 
     def _read(self, bytes=1):

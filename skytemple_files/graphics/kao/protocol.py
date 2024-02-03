@@ -36,12 +36,10 @@ class KaoImageProtocol(Protocol):
         ...
 
     @abstractmethod
-    def clone(self) -> KaoImageProtocol:
-        ...
+    def clone(self) -> KaoImageProtocol: ...
 
     @abstractmethod
-    def size(self) -> int:
-        ...
+    def size(self) -> int: ...
 
     @abstractmethod
     def set(self, pil: Image) -> KaoImageProtocol:
@@ -59,8 +57,7 @@ T = TypeVar("T", bound=KaoImageProtocol)
 
 class KaoProtocol(Protocol[T]):
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @classmethod
     @abstractmethod
@@ -74,12 +71,10 @@ class KaoProtocol(Protocol[T]):
         ...
 
     @abstractmethod
-    def expand(self, new_size: int) -> None:
-        ...
+    def expand(self, new_size: int) -> None: ...
 
     @abstractmethod
-    def get(self, index: int, subindex: int) -> T | None:
-        ...
+    def get(self, index: int, subindex: int) -> T | None: ...
 
     @abstractmethod
     def set(self, index: int, subindex: int, img: T) -> None:

@@ -2,6 +2,7 @@
 Imports and exports data from/to XML and mappa floor models.
 This can also handle partial data in the XML!
 """
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

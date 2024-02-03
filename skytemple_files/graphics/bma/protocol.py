@@ -68,8 +68,7 @@ class BmaProtocol(Protocol[P, C, L]):
     collision2: Sequence[bool] | None
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def to_pil_single_layer(

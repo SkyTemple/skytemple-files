@@ -1,4 +1,5 @@
 """Utility module for (de)serializing objects from and to XML."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

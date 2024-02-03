@@ -1,4 +1,5 @@
 """NDS rom icon banner, contains the localized rom name and icon"""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

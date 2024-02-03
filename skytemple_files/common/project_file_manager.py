@@ -1,4 +1,5 @@
 """A project file manager for storing non-ROM related files for SkyTemple projects."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

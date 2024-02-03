@@ -1,4 +1,5 @@
 """Module to read ppmdu "PMD2" XML files into the config data model"""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -380,9 +381,11 @@ class Pmd2XmlReader:
                                 Pmd2ScriptBgm(
                                     i,
                                     e_bgm.text,
-                                    self._xml_bool(e_bgm.attrib["loops"])
-                                    if "loops" in e_bgm.attrib
-                                    else False,
+                                    (
+                                        self._xml_bool(e_bgm.attrib["loops"])
+                                        if "loops" in e_bgm.attrib
+                                        else False
+                                    ),
                                 )
                             )
                     ###########################
@@ -393,9 +396,11 @@ class Pmd2XmlReader:
                                     self.xml_int(e_level.attrib["_id"]),
                                     self.xml_int(e_level.attrib["mapid"]),
                                     e_level.attrib["name"],
-                                    self.xml_int(e_level.attrib["mapty"])
-                                    if "mapty" in e_level.attrib
-                                    else None,
+                                    (
+                                        self.xml_int(e_level.attrib["mapty"])
+                                        if "mapty" in e_level.attrib
+                                        else None
+                                    ),
                                     self.xml_int(e_level.attrib["unk2"]),
                                     self.xml_int(e_level.attrib["unk4"]),
                                 )
@@ -460,12 +465,12 @@ class Pmd2XmlReader:
                             )
                     elif e.tag == "GroundStateStructs":
                         for e_code in e:
-                            ground_state_structs[
-                                e_code.tag
-                            ] = Pmd2ScriptGroundStateStruct(
-                                self.xml_int(e_code.attrib["offset"]),
-                                self.xml_int(e_code.attrib["entrylength"]),
-                                self.xml_int(e_code.attrib["maxentries"]),
+                            ground_state_structs[e_code.tag] = (
+                                Pmd2ScriptGroundStateStruct(
+                                    self.xml_int(e_code.attrib["offset"]),
+                                    self.xml_int(e_code.attrib["entrylength"]),
+                                    self.xml_int(e_code.attrib["maxentries"]),
+                                )
                             )
         return Pmd2ScriptData(
             game_variables_table,
@@ -499,9 +504,11 @@ class Pmd2XmlReader:
                             files.append(
                                 Pmd2BinPackFile(
                                     self.xml_int(e_var.attrib["idxfirst"]),
-                                    self.xml_int(e_var.attrib["idxlast"])
-                                    if "idxlast" in e_var.attrib
-                                    else None,
+                                    (
+                                        self.xml_int(e_var.attrib["idxlast"])
+                                        if "idxlast" in e_var.attrib
+                                        else None
+                                    ),
                                     e_var.attrib["type"],
                                     e_var.attrib["name"],
                                 )
@@ -675,12 +682,16 @@ class Pmd2AsmPatchesConstantsXmlReader:
                 options.append(
                     Pmd2PatchParameterOption(
                         type=value_type,
-                        value=Pmd2XmlReader.xml_int(e_option.text)
-                        if value_type == Pmd2PatchParameterType.INTEGER
-                        else e_option.text,
-                        label=e_option.attrib["label"]
-                        if "label" in e_option.attrib
-                        else e_option.attrib["value"],
+                        value=(
+                            Pmd2XmlReader.xml_int(e_option.text)
+                            if value_type == Pmd2PatchParameterType.INTEGER
+                            else e_option.text
+                        ),
+                        label=(
+                            e_option.attrib["label"]
+                            if "label" in e_option.attrib
+                            else e_option.attrib["value"]
+                        ),
                     )
                 )
         param_type = Pmd2PatchParameterType(e_param.attrib["type"])
@@ -694,15 +705,21 @@ class Pmd2AsmPatchesConstantsXmlReader:
         return Pmd2PatchParameter(
             name=e_param.attrib["name"],
             type=param_type,
-            label=e_param.attrib["label"]
-            if "label" in e_param.attrib
-            else e_param.attrib["name"],
-            min=Pmd2XmlReader.xml_int(e_param.attrib["min"])
-            if "min" in e_param.attrib
-            else None,
-            max=Pmd2XmlReader.xml_int(e_param.attrib["max"])
-            if "max" in e_param.attrib
-            else None,
+            label=(
+                e_param.attrib["label"]
+                if "label" in e_param.attrib
+                else e_param.attrib["name"]
+            ),
+            min=(
+                Pmd2XmlReader.xml_int(e_param.attrib["min"])
+                if "min" in e_param.attrib
+                else None
+            ),
+            max=(
+                Pmd2XmlReader.xml_int(e_param.attrib["max"])
+                if "max" in e_param.attrib
+                else None
+            ),
             options=options,
             default=default,
         )

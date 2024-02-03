@@ -34,8 +34,7 @@ class DbgProtocol(Protocol[C, CI, L]):
     mappings: Sequence[int]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def place_chunk(self, x: int, y: int, chunk_index: int) -> None:
@@ -45,8 +44,7 @@ class DbgProtocol(Protocol[C, CI, L]):
     @abstractmethod
     def to_pil(
         self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
-        ...
+    ) -> Image.Image: ...
 
     @abstractmethod
     def from_pil(

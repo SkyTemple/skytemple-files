@@ -51,8 +51,7 @@ class DmaProtocol(Protocol):
     chunk_mappings: Sequence[int]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def get(self, get_type: _DmaType, neighbors_same: int) -> Sequence[int]:

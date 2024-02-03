@@ -1,4 +1,5 @@
 """Generates output for xgettext for the PPMDU config."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

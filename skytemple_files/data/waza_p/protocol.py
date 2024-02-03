@@ -181,12 +181,10 @@ class LevelUpMoveProtocol(Protocol):
     level_id: u16
 
     @abstractmethod
-    def __init__(self, move_id: u16, level_id: u16):
-        ...
+    def __init__(self, move_id: u16, level_id: u16): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 LUM = TypeVar("LUM", bound=LevelUpMoveProtocol)
@@ -203,12 +201,10 @@ class MoveLearnsetProtocol(Protocol[LUM]):
         level_up_moves: Sequence[LUM],
         tm_hm_moves: Sequence[u32],
         egg_moves: Sequence[u32],
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 class WazaMoveRangeSettingsProtocol(Protocol):
@@ -218,16 +214,13 @@ class WazaMoveRangeSettingsProtocol(Protocol):
     unused: int
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
-    def __int__(self):
-        ...
+    def __int__(self): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 R = TypeVar("R", bound=WazaMoveRangeSettingsProtocol)
@@ -257,16 +250,13 @@ class WazaMoveProtocol(Protocol[R]):
     message_id: u8
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
-    def to_bytes(self) -> bytes:
-        ...
+    def to_bytes(self) -> bytes: ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 M = TypeVar("M", bound=WazaMoveProtocol)
@@ -278,9 +268,7 @@ class WazaPProtocol(Sir0Serializable, Protocol[M, L]):
     learnsets: MutableSequence[L]
 
     @abstractmethod
-    def __init__(self, data: bytes, waza_content_pointer: int):
-        ...
+    def __init__(self, data: bytes, waza_content_pointer: int): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...

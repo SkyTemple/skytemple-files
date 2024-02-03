@@ -259,9 +259,11 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             dummy_tile_map.append(
                 TilemapEntry(
                     idx=i,
-                    pal_idx=single_palette
-                    if single_palette is not None
-                    else self._get_palette_for_tile(layer, i),
+                    pal_idx=(
+                        single_palette
+                        if single_palette is not None
+                        else self._get_palette_for_tile(layer, i)
+                    ),
                     flip_x=False,
                     flip_y=False,
                 )
@@ -325,9 +327,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
-                ldata.tiles[
-                    previous_end_of_tiles:new_end_of_tiles
-                ] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = (
+                    bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+                )
 
                 previous_end_of_tiles = new_end_of_tiles
                 bpa_animation_indices[bpaidx] += 1
@@ -379,9 +381,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
-                ldata.tiles[
-                    previous_end_of_tiles:new_end_of_tiles
-                ] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = (
+                    bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
+                )
 
                 previous_end_of_tiles = new_end_of_tiles
                 if bpa.number_of_frames > 0:

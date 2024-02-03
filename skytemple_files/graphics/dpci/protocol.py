@@ -25,8 +25,7 @@ class DpciProtocol(Protocol):
     tiles: Sequence[bytes]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def tiles_to_pil(

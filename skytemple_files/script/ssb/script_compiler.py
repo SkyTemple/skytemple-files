@@ -255,11 +255,11 @@ class ScriptCompiler:
                             raise SsbCompilerError(
                                 f(_("Unknown operation {in_op.op_code.name}."))
                             )
-                        op_codes: list[
-                            Pmd2ScriptOpCode
-                        ] = self.rom_data.script_data.op_codes__by_name[
-                            in_op.op_code.name
-                        ]
+                        op_codes: list[Pmd2ScriptOpCode] = (
+                            self.rom_data.script_data.op_codes__by_name[
+                                in_op.op_code.name
+                            ]
+                        )
                         if len(op_codes) > 1:
                             # Can be either a variable length opcode or the "normal" variant.
                             var_len_op_code = next(

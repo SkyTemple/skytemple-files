@@ -143,9 +143,9 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
                 chain.from_iterable(monster.to_mappa() for monster in monster_list)
             ) + bytes(8)
             len_single = len(single_monster_list_data)
-            monster_data[
-                monster_data_cursor : monster_data_cursor + len_single
-            ] = single_monster_list_data
+            monster_data[monster_data_cursor : monster_data_cursor + len_single] = (
+                single_monster_list_data
+            )
             monster_data_cursor += len_single
         data += monster_data
         # Padding
@@ -172,9 +172,9 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
 
             len_single = len(single_trap_list_data)
             assert len_single == 50
-            trap_data[
-                trap_data_cursor : trap_data_cursor + len_single
-            ] = single_trap_list_data
+            trap_data[trap_data_cursor : trap_data_cursor + len_single] = (
+                single_trap_list_data
+            )
             trap_data_cursor += len_single
         assert trap_data_cursor == len(trap_lists) * 50
         data += trap_data
@@ -200,9 +200,9 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
             assert item_data_cursor + len_single < len(item_data)
-            item_data[
-                item_data_cursor : item_data_cursor + len_single
-            ] = single_item_list_data
+            item_data[item_data_cursor : item_data_cursor + len_single] = (
+                single_item_list_data
+            )
             item_data_cursor += len_single
         data += item_data[:item_data_cursor]
         # Padding

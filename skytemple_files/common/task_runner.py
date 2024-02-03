@@ -2,6 +2,7 @@
 Utility class for multi threaded/asynchronous tasks:
 Manages asyncio event loop in a separate loop handler thread.
 """
+
 from __future__ import annotations
 
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors

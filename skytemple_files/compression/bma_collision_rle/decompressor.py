@@ -77,7 +77,7 @@ class BmaCollisionRleDecompressor:
 
     def _write(self, pattern_to_write):
         """Writes a byte"""
-        self.decompressed_data[
-            self.bytes_written : self.bytes_written + 1
-        ] = pattern_to_write.to_bytes(1, "big")
+        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = (
+            pattern_to_write.to_bytes(1, "big")
+        )
         self.bytes_written += 1

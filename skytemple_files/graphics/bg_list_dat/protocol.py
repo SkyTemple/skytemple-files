@@ -45,12 +45,10 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
         bpc_name: str,
         bma_name: str,
         bpa_names: list[str | None],
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def get_bpl(self, rom_or_directory_root: str | RomFileProviderProtocol) -> L:
-        ...
+    def get_bpl(self, rom_or_directory_root: str | RomFileProviderProtocol) -> L: ...
 
     @abstractmethod
     def get_bpc(
@@ -58,18 +56,15 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
         rom_or_directory_root: str | RomFileProviderProtocol,
         bpc_tiling_width: int = 3,
         bpc_tiling_height: int = 3,
-    ) -> C:
-        ...
+    ) -> C: ...
 
     @abstractmethod
-    def get_bma(self, rom_or_directory_root: str | RomFileProviderProtocol) -> M:
-        ...
+    def get_bma(self, rom_or_directory_root: str | RomFileProviderProtocol) -> M: ...
 
     @abstractmethod
     def get_bpas(
         self, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> list[P | None]:
-        ...
+    ) -> list[P | None]: ...
 
 
 T = TypeVar("T", bound=BgListEntryProtocol)
@@ -79,8 +74,7 @@ class BgListProtocol(Protocol[T]):
     level: Sequence[T]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def find_bma(self, name: str) -> int:

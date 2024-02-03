@@ -202,12 +202,10 @@ class MappaTrapListProtocol(Protocol):
     weights: dict[_MappaTrapType, u16]
 
     @abstractmethod
-    def __init__(self, weights: list[u16] | dict[_MappaTrapType, u16]):
-        ...
+    def __init__(self, weights: list[u16] | dict[_MappaTrapType, u16]): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 class MappaMonsterProtocol(Protocol):
@@ -230,8 +228,7 @@ class MappaMonsterProtocol(Protocol):
         self.md_index = md_index
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 class MappaItemListProtocol(Protocol):
@@ -243,21 +240,17 @@ class MappaItemListProtocol(Protocol):
         self,
         categories: dict[_MappaItemCategory, Probability],
         items: dict[_MappaItem, Probability],
-    ):
-        ...
+    ): ...
 
     @classmethod
     @abstractmethod
-    def from_bytes(cls, data: bytes, pointer: int) -> MappaItemListProtocol:
-        ...
+    def from_bytes(cls, data: bytes, pointer: int) -> MappaItemListProtocol: ...
 
     @abstractmethod
-    def to_bytes(self) -> bytes:
-        ...
+    def to_bytes(self) -> bytes: ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 class MappaFloorTerrainSettingsProtocol(Protocol):
@@ -281,12 +274,10 @@ class MappaFloorTerrainSettingsProtocol(Protocol):
         unk5: bool,
         unk6: bool,
         unk7: bool,
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 TS = TypeVar("TS", bound=MappaFloorTerrainSettingsProtocol)
@@ -357,12 +348,10 @@ class MappaFloorLayoutProtocol(Protocol[TS]):
         hidden_stairs_spawn_chance: u8,
         enemy_iq: u16,
         iq_booster_boost: i16,
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 L = TypeVar("L", bound=MappaFloorLayoutProtocol)
@@ -395,12 +384,10 @@ class MappaFloorProtocol(Protocol[L, M, TL, IL]):
         buried_items: IL,
         unk_items1: IL,
         unk_items2: IL,
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 F = TypeVar("F", bound=MappaFloorProtocol)
@@ -410,31 +397,24 @@ class MappaBinProtocol(Sir0Serializable, Protocol[F]):
     floor_lists: Sequence[Sequence[F]]
 
     @abstractmethod
-    def __init__(self, floor_lists: list[list[F]]):
-        ...
+    def __init__(self, floor_lists: list[list[F]]): ...
 
     @abstractmethod
-    def add_floor_list(self, floor_list: list[F]):
-        ...
+    def add_floor_list(self, floor_list: list[F]): ...
 
     @abstractmethod
-    def remove_floor_list(self, index: int):
-        ...
+    def remove_floor_list(self, index: int): ...
 
     @abstractmethod
-    def add_floor_to_floor_list(self, floor_list_index: int, floor: F):
-        ...
+    def add_floor_to_floor_list(self, floor_list_index: int, floor: F): ...
 
     @abstractmethod
     def insert_floor_in_floor_list(
         self, floor_list_index: int, insert_index: int, floor: F
-    ):
-        ...
+    ): ...
 
     @abstractmethod
-    def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
-        ...
+    def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int): ...
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...

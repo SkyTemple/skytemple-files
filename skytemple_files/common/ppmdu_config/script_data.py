@@ -2,6 +2,7 @@
 The script_data section of the main static configuration.
 For now, the documentation of fields is in the pmd2scriptdata.xml.
 """
+
 from __future__ import annotations
 
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors

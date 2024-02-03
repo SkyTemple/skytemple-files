@@ -29,8 +29,7 @@ class BplAnimationSpecProtocol(Protocol):
     number_of_frames: u16
 
     @abstractmethod
-    def __init__(self, duration_per_frame: u16, number_of_frames: u16):
-        ...
+    def __init__(self, duration_per_frame: u16, number_of_frames: u16): ...
 
 
 T = TypeVar("T", bound=BplAnimationSpecProtocol)
@@ -45,8 +44,7 @@ class BplProtocol(Protocol[T]):
     animation_palette: Sequence[Sequence[int]]
 
     @abstractmethod
-    def __init__(self, data: bytes) -> None:
-        ...
+    def __init__(self, data: bytes) -> None: ...
 
     @abstractmethod
     def import_palettes(self, palettes: list[list[int]]) -> None:

@@ -30,15 +30,13 @@ from skytemple_files.common.util import read_u8, write_u8
 class HardcodedMainMenuMusic:
     @staticmethod
     @overload
-    def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: None = None) -> u8:
-        ...
+    def get_main_menu_music(ov00: bytes, config: Pmd2Data, ov09: None = None) -> u8: ...
 
     @staticmethod
     @overload
     def get_main_menu_music(
         ov00: bytes, config: Pmd2Data, ov09: bytes
-    ) -> tuple[u8, u8]:
-        ...
+    ) -> tuple[u8, u8]: ...
 
     @staticmethod
     def get_main_menu_music(

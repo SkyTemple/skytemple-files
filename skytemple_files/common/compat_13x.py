@@ -1,4 +1,5 @@
 """Compatibility with skytemple-files 1.3.x."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

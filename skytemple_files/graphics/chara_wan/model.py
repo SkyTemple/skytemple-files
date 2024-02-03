@@ -548,9 +548,9 @@ class MetaFramePiece:
                         else:
                             color = paletteData[paletteIndex][paletteElement]
                         imgPosition = (xx * TEX_SIZE + px, yy * TEX_SIZE + py)
-                        datas[
-                            imgPosition[1] * twidth * TEX_SIZE + imgPosition[0]
-                        ] = color
+                        datas[imgPosition[1] * twidth * TEX_SIZE + imgPosition[0]] = (
+                            color
+                        )
 
         newImg.putdata(datas)
         return newImg

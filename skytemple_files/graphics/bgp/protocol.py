@@ -29,8 +29,7 @@ class BgpProtocol(Protocol):
     tilemap: Sequence[TilemapEntryProtocol] = []
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def to_pil(self, ignore_flip_bits=False) -> Image.Image:

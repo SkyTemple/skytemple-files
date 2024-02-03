@@ -30,8 +30,7 @@ class DpcProtocol(Protocol[CI]):
     chunks: Sequence[Sequence[TilemapEntryProtocol]]
 
     @abstractmethod
-    def __init__(self, data: bytes):
-        ...
+    def __init__(self, data: bytes): ...
 
     @abstractmethod
     def chunks_to_pil(

@@ -1,4 +1,5 @@
 """Models for the headers of the various regions"""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

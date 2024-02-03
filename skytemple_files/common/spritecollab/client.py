@@ -10,6 +10,7 @@ documentation at the server.
 
 Use `SpriteCollabClient` to get started.
 """
+
 from __future__ import annotations
 
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
@@ -236,14 +237,12 @@ class SpriteCollabSession:
     @overload
     async def list_monster_forms(
         self, with_preview_portrait: Literal[True]
-    ) -> list[MonsterFormInfoWithPortrait]:
-        ...
+    ) -> list[MonsterFormInfoWithPortrait]: ...
 
     @overload
     async def list_monster_forms(
         self, with_preview_portrait: Literal[False]
-    ) -> list[MonsterFormInfo]:
-        ...
+    ) -> list[MonsterFormInfo]: ...
 
     async def list_monster_forms(self, with_preview_portrait: bool):
         """

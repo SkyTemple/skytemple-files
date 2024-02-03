@@ -135,9 +135,9 @@ class BmaLayerNrlCompressor:
         )
         if DEBUG:
             print(f"W {int1:02x} and {int2:02x} as {pair24:06x}")
-        self.compressed_data[
-            self.bytes_written : self.bytes_written + 3
-        ] = pair24.to_bytes(3, "big")
+        self.compressed_data[self.bytes_written : self.bytes_written + 3] = (
+            pair24.to_bytes(3, "big")
+        )
         self.bytes_written += 3
 
     def _look_ahead_repeats(self, data: bytes):

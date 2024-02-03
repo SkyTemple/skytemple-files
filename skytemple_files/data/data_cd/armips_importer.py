@@ -84,9 +84,11 @@ class ArmipsImporter:
                     PatchError,
                     _("ARMIPS reported an error while applying the patch."),
                     str(result.stdout.read(), "utf-8"),  # type: ignore
-                    str(result.stderr.read(), "utf-8")  # type: ignore
-                    if result.stderr
-                    else "",
+                    (
+                        str(result.stderr.read(), "utf-8")  # type: ignore
+                        if result.stderr
+                        else ""
+                    ),
                 )
 
             out_bin_path = os.path.join(tmp, OUT_BIN)

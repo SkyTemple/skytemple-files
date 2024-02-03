@@ -160,9 +160,11 @@ class ArmPatcher:
                     parameters += [
                         "-equ",
                         param_name,
-                        f'"{param_value}"'
-                        if isinstance(param_value, str)
-                        else str(param_value),
+                        (
+                            f'"{param_value}"'
+                            if isinstance(param_value, str)
+                            else str(param_value)
+                        ),
                     ]
 
                 # Run armips
@@ -205,9 +207,11 @@ class ArmPatcher:
                         PatchError,
                         _("ARMIPS reported an error while applying the patch."),
                         str(result.stdout.read(), "utf-8"),  # type: ignore
-                        str(result.stderr.read(), "utf-8")  # type: ignore
-                        if result.stderr
-                        else "",
+                        (
+                            str(result.stderr.read(), "utf-8")  # type: ignore
+                            if result.stderr
+                            else ""
+                        ),
                     )
 
                 # Load the binaries back into the ROM

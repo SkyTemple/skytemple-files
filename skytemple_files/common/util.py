@@ -482,13 +482,11 @@ def _mpcu__check(
 
 
 @overload
-def get_resources_dir(*, as_string: Literal[True] = True) -> str:
-    ...
+def get_resources_dir(*, as_string: Literal[True] = True) -> str: ...
 
 
 @overload
-def get_resources_dir(*, as_string: Literal[False]) -> Path:
-    ...
+def get_resources_dir(*, as_string: Literal[False]) -> Path: ...
 
 
 def get_resources_dir(*, as_string: bool = True) -> str | Path:

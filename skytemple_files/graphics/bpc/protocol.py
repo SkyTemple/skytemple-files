@@ -47,8 +47,7 @@ class BpcLayerProtocol(Protocol):
         chunk_tilemap_len: int,
         tiles: list[bytes],
         tilemap: list[TilemapEntryProtocol],
-    ) -> None:
-        ...
+    ) -> None: ...
 
 
 T = TypeVar("T", bound=BpcLayerProtocol)
@@ -201,18 +200,15 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def get_tile(self, layer: int, index: int) -> TilemapEntryProtocol:
-        ...
+    def get_tile(self, layer: int, index: int) -> TilemapEntryProtocol: ...
 
     @abstractmethod
     def set_tile(
         self, layer: int, index: int, tile_mapping: TilemapEntryProtocol
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
-    def get_chunk(self, layer: int, index: int) -> Sequence[TilemapEntryProtocol]:
-        ...
+    def get_chunk(self, layer: int, index: int) -> Sequence[TilemapEntryProtocol]: ...
 
     @abstractmethod
     def import_tiles(
@@ -258,8 +254,7 @@ class BpcProtocol(Protocol[T, P]):
     @abstractmethod
     def set_chunk(
         self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]
-    ) -> None:
-        ...
+    ) -> None: ...
 
     @abstractmethod
     def remove_upper_layer(self) -> None:

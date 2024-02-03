@@ -43,8 +43,7 @@ class ItemPEntryProtocol(Protocol):
     ai_flag_3: bool
 
     @abstractmethod
-    def __eq__(self, other: object) -> bool:
-        ...
+    def __eq__(self, other: object) -> bool: ...
 
 
 E = TypeVar("E", bound=ItemPEntryProtocol)
@@ -53,5 +52,4 @@ E = TypeVar("E", bound=ItemPEntryProtocol)
 class ItemPProtocol(Sir0Serializable, Protocol[E]):
     item_list: MutableSequence[E]
 
-    def __init__(self, data: bytes, pointer_to_pointers: int):
-        ...
+    def __init__(self, data: bytes, pointer_to_pointers: int): ...

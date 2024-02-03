@@ -3,6 +3,7 @@ Types of the GraphQL schema represented as python types.
 
 Types with expensive fields are split-off into partial types..
 """
+
 from __future__ import annotations
 
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors

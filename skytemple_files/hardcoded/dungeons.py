@@ -1,4 +1,5 @@
 """Module for editing hardcoded data for the dungeons."""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -562,10 +563,10 @@ class HardcodedDungeons:
             )
         for i, entry in enumerate(value):
             start = block.address + (i * SECONDARY_TERRAINS_ENTRY_LEN)
-            arm9bin[
-                start : start + SECONDARY_TERRAINS_ENTRY_LEN
-            ] = entry.value.to_bytes(
-                SECONDARY_TERRAINS_ENTRY_LEN, "little", signed=False
+            arm9bin[start : start + SECONDARY_TERRAINS_ENTRY_LEN] = (
+                entry.value.to_bytes(
+                    SECONDARY_TERRAINS_ENTRY_LEN, "little", signed=False
+                )
             )
 
     @staticmethod

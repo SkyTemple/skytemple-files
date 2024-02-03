@@ -31,8 +31,7 @@ from PIL import Image
 
 class AioRequestAdapter(ABC):
     @abstractmethod
-    async def fetch_bin(self, url: str) -> bytes:
-        ...
+    async def fetch_bin(self, url: str) -> bytes: ...
 
     @abstractmethod
     def graphql_transport(self, url: str) -> AsyncTransport | GraphQLSchema:

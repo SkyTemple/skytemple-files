@@ -4,6 +4,7 @@ This table is stored in ARM9 and has two entries for every Pokémon base form.
   Pokémon's sprite will take up.
 - The second is unknown, but also related to the sprite size?
 """
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

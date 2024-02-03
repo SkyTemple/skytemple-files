@@ -136,9 +136,9 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
                 strings = StrHandler.deserialize(
                     bin_before, string_encoding=config.string_encoding
                 )
-                strings.strings[
-                    int(param["MenuOptionStringID"]) - 1
-                ] = get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))
+                strings.strings[int(param["MenuOptionStringID"]) - 1] = (
+                    get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))
+                )
                 strings.strings[
                     int(param["AppraiseAllConfirmStringID"]) - 1
                 ] = get_locales().translate(

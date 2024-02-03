@@ -1,4 +1,5 @@
 """Utility functions for dealing with sprites"""
+
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -94,9 +95,9 @@ def check_and_correct_monster_sprite_size(
         if is_expand_poke_list_patch_applied:
             md_target.unk18 = max_file_size_needed
         else:
-            sprite_size_table[
-                getattr(md_gender1, effective_base_attr)
-            ].unk1 = max_file_size_needed
+            sprite_size_table[getattr(md_gender1, effective_base_attr)].unk1 = (
+                max_file_size_needed
+            )
 
         changed = True
     return changed

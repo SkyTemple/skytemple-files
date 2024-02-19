@@ -13,7 +13,7 @@ graphql-core>=3.2.0
 aiohttp
 lru-dict==1.2.0
 skytemple-3rdparty-typestubs
-types-Pillow==10.0.0.3
+types-Pillow==10.2.0.20240213
 types-PyYAML==6.0.12.12
 types-setuptools
 pytest

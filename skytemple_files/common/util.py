@@ -39,6 +39,8 @@ from typing import (
     Union,
     overload,
     Literal,
+    NewType,
+    Annotated,
 )
 from collections.abc import Generator, Iterable, Sequence
 
@@ -54,6 +56,7 @@ from range_typed_integers import (
     u8,
     u16,
     u32,
+    ValueRange,
 )
 
 from skytemple_files.common import string_codec
@@ -104,6 +107,12 @@ Capturable = Union[
     CapturableProtocol,
 ]  # type: ignore
 Captured = Union[int, str, bool, list["Captured"], dict[str, "Captured"], None]  # type: ignore
+
+# Additional integer types
+u24 = NewType("u24", Annotated[int, ValueRange(0, 16_777_215)])
+u11 = NewType("u11", Annotated[int, ValueRange(0, 2047)])
+u10 = NewType("u10", Annotated[int, ValueRange(0, 1023)])
+u4 = NewType("u4", Annotated[int, ValueRange(0, 15)])
 
 
 # noinspection PyProtectedMember

@@ -2,6 +2,7 @@
 pytest configuration.
 Collects all packages called "test" within skytemple_files to run tests from.
 """
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -20,12 +21,15 @@ Collects all packages called "test" within skytemple_files to run tests from.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import os
 from os.path import isdir
-TEST_DIR_NAME = 'test'
-os.environ['RUST_BACKTRACE'] = '1'
+
+TEST_DIR_NAME = "test"
+os.environ["RUST_BACKTRACE"] = "1"
 
 
 def pytest_ignore_collect(path):
     if isdir(path.strpath):
         return False
     parts = path.strpath.split(path.sep)
-    return not (len(parts) > 1 and parts[-2] == TEST_DIR_NAME and parts[-1].endswith('_test.py'))
+    return not (
+        len(parts) > 1 and parts[-2] == TEST_DIR_NAME and parts[-1].endswith("_test.py")
+    )

@@ -203,7 +203,6 @@ class HardcodedDefaultStarters:
             )
         for i, entry in enumerate(value):
             arm9[
-                block.address
-                + i * SE_PC_LNTRY_LEN : block.address
+                block.address + i * SE_PC_LNTRY_LEN : block.address
                 + (i + 1) * SE_PC_LNTRY_LEN
             ] = entry.to_bytes()

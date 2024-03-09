@@ -84,13 +84,9 @@ class KaoWriter:
                 )
                 pnt = read_i32(kao.original_data, current_toc_offset)
                 if pnt < 0:
-                    current_image_offset = (
-                        -pnt
-                    )  # pylint: disable=invalid-unary-operand-type
+                    current_image_offset = -pnt  # pylint: disable=invalid-unary-operand-type
                 else:
-                    current_image_offset = (
-                        pnt  # pylint: disable=invalid-unary-operand-type
-                    )
+                    current_image_offset = pnt  # pylint: disable=invalid-unary-operand-type
                 self.new_data[0:current_image_offset] = kao.original_data[
                     0:current_image_offset
                 ]
@@ -105,9 +101,7 @@ class KaoWriter:
             current_toc_offset = kao.first_toc
             current_image_offset = current_toc_offset + size_toc
 
-        current_null_pointer = (
-            -current_image_offset
-        )  # Always start at that null pointer!  # pylint: disable=invalid-unary-operand-type
+        current_null_pointer = -current_image_offset  # Always start at that null pointer!  # pylint: disable=invalid-unary-operand-type
         # Otherwise, stuff will break since a 0 pointer is considered as valid in the model!
 
         # Rebuild KAO

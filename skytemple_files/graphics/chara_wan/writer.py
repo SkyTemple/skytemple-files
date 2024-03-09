@@ -58,7 +58,7 @@ def ExportWan(wan):
                 groupSequencesPtrs.append(groupSequencesPtrs[-1])
         animSeqPtrList.append(groupSequencesPtrs)
 
-    padUntilDiv(out_file, b"\xAA", 4)
+    padUntilDiv(out_file, b"\xaa", 4)
 
     # img data
     ptrImgs = []
@@ -222,7 +222,7 @@ def ExportWan(wan):
     out_file.write((0).to_bytes(2, "little"))
 
     # fill with AA until divisible by 16
-    padUntilDiv(out_file, b"\xAA", 16)
+    padUntilDiv(out_file, b"\xaa", 16)
 
     # sir0 pointers
     # dont worry about this it'll be wrapped

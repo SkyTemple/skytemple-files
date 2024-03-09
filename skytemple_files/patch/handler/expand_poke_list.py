@@ -222,8 +222,7 @@ and to save a backup of your ROM before applying this."""
                 sorted_list = list(
                     enumerate(
                         strings.strings[
-                            new_pkmn_str_region
-                            - 1 : new_pkmn_str_region
+                            new_pkmn_str_region - 1 : new_pkmn_str_region
                             - 1
                             + NUM_NEW_ENTRIES
                         ]
@@ -305,9 +304,7 @@ and to save a backup of your ROM before applying this."""
             x = table_sf
             while read_u16(rom.arm9, x) != 0:
                 pkmn_id = read_u16(rom.arm9, x)
-                new_entries[pkmn_id].bitfield1_3 = (
-                    True  # pylint: disable=invalid-sequence-index
-                )
+                new_entries[pkmn_id].bitfield1_3 = True  # pylint: disable=invalid-sequence-index
                 if (
                     new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
                     != Gender.INVALID.value
@@ -317,9 +314,7 @@ and to save a backup of your ROM before applying this."""
             x = table_mf
             while read_u16(rom.arm9, x) != 0:
                 pkmn_id = read_u16(rom.arm9, x)
-                new_entries[pkmn_id].bitfield1_2 = (
-                    True  # pylint: disable=invalid-sequence-index
-                )
+                new_entries[pkmn_id].bitfield1_2 = True  # pylint: disable=invalid-sequence-index
                 if (
                     new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender
                     != Gender.INVALID.value
@@ -329,12 +324,8 @@ and to save a backup of your ROM before applying this."""
             ov19 = rom.loadArm9Overlays([19])[19].data
             for x in range(table_sp, table_sp + TABLE_SP_SIZE, 2):
                 pkmn_id = read_u16(ov19, x)
-                new_entries[pkmn_id].bitfield1_1 = (
-                    True  # pylint: disable=invalid-sequence-index
-                )
-                new_entries[pkmn_id].bitfield1_0 = (
-                    True  # pylint: disable=invalid-sequence-index
-                )
+                new_entries[pkmn_id].bitfield1_1 = True  # pylint: disable=invalid-sequence-index
+                new_entries[pkmn_id].bitfield1_0 = True  # pylint: disable=invalid-sequence-index
                 if new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].gender != Gender.INVALID:
                     new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_1 = True
                     new_entries[NUM_PREVIOUS_ENTRIES + pkmn_id].bitfield1_0 = True

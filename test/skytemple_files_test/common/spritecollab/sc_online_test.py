@@ -1,4 +1,5 @@
 """SpriteCollab client tests that require the main server to be online and functioning."""
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.

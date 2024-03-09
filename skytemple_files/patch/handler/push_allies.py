@@ -109,10 +109,8 @@ Uses the same command style as PSMD"""
                     strings = StrHandler.deserialize(
                         bin_before, string_encoding=config.string_encoding
                     )
-                    strings.strings[
-                        int(param["PushStringID"]) - 1
-                    ] = get_locales().translate(
-                        PUSH_DIALOGUE, lang.locale.replace("-", "_")
+                    strings.strings[int(param["PushStringID"]) - 1] = (
+                        get_locales().translate(PUSH_DIALOGUE, lang.locale.replace("-", "_"))
                     )
                     bin_after = StrHandler.serialize(strings)
                     rom.setFileByName(filename, bin_after)

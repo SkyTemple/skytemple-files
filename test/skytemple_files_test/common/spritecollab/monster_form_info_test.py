@@ -47,7 +47,7 @@ class MonsterFormInfoTestCase(IsolatedAsyncioTestCase):
         )
 
     async def test_fetch_preview_portrait(self):
-        for (url, fpath) in FIX_TEST_FILES_WITH_NONE:
+        for url, fpath in FIX_TEST_FILES_WITH_NONE:
             self.obj.preview_portrait = url
 
             if fpath is None:

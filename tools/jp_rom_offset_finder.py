@@ -90,26 +90,29 @@ INTERESTING_BLOCKS = [
     "UNIONALL_RAM_ADDRESS",
 ]
 
-JP_ROM = os.getenv('JP_ROM', '/tmp/rom_jp.nds')
-EU_ROM = os.getenv('EU_ROM', '/tmp/rom_eu.nds')
-OFFSETS_REGEX = re.compile(r'0[xX]([\da-fA-F]+) \(absolute\): 0[xX]([\da-fA-F]+)')
-ARM5FIND_REGEX = re.compile(r' {2}- \[(.*?)]: 0[xX]([\da-fA-F]+)\.\.0[xX]([\da-fA-F]+)')
+JP_ROM = os.getenv("JP_ROM", "/tmp/rom_jp.nds")
+EU_ROM = os.getenv("EU_ROM", "/tmp/rom_eu.nds")
+OFFSETS_REGEX = re.compile(r"0[xX]([\da-fA-F]+) \(absolute\): 0[xX]([\da-fA-F]+)")
+ARM5FIND_REGEX = re.compile(r" {2}- \[(.*?)]: 0[xX]([\da-fA-F]+)\.\.0[xX]([\da-fA-F]+)")
 
 THRESHOLD = 0x08
 
 
 class RomDir:
     """Temporary directory context manager"""
+
     def __init__(self, rom_path: str):
         self.tempdir = TemporaryDirectory()
         self.rom = NintendoDSRom.fromFile(rom_path)
 
     def __enter__(self):
         self.tempdir.__enter__()
-        with open(os.path.join(self.tempdir.name, 'arm9.bin'), 'wb') as f:
+        with open(os.path.join(self.tempdir.name, "arm9.bin"), "wb") as f:
             f.write(self.rom.arm9)
         for ov_id, ov in self.rom.loadArm9Overlays().items():
-            with open(os.path.join(self.tempdir.name, f'overlay{ov_id}.bin'), 'wb') as f:
+            with open(
+                os.path.join(self.tempdir.name, f"overlay{ov_id}.bin"), "wb"
+            ) as f:
                 f.write(ov.data)
         return self
 
@@ -134,10 +137,10 @@ def call(args: list[str]) -> Tuple[int, str]:
     Returns both the return code and stdout.
     """
     result = subprocess.run(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    ret = result.stdout.decode('utf-8')
-    #print("$ " + " ".join(args) + " -> " + str(result.returncode))
-    #print(ret)
-    #print(result.stderr.decode('utf-8'), file=sys.stderr)
+    ret = result.stdout.decode("utf-8")
+    # print("$ " + " ".join(args) + " -> " + str(result.returncode))
+    # print(ret)
+    # print(result.stderr.decode('utf-8'), file=sys.stderr)
     return result.returncode, ret
 
 
@@ -152,10 +155,12 @@ def run_offsets(version: str, binary: str, offset: int) -> int:
     Run the offset finder for the given version and binary.
     """
     args = [
-        'python',
-        path_to('../skytemple_files/_resources/pmdsky-debug/tools/offsets.py'),
-        '-v', version,
-        '-b', binary,
+        "python",
+        path_to("../skytemple_files/_resources/pmdsky-debug/tools/offsets.py"),
+        "-v",
+        version,
+        "-b",
+        binary,
         str(offset),
     ]
     result = call_checked(args)
@@ -168,10 +173,13 @@ def run_offsets(version: str, binary: str, offset: int) -> int:
 
 def run_arm5find(offset: int, length: int, source: str, target: str) -> list[int]:
     args = [
-        'python',
-        path_to('../skytemple_files/_resources/pmdsky-debug/tools/arm5find.py'),
-        '-d', str(offset), str(length),
-        source, target
+        "python",
+        path_to("../skytemple_files/_resources/pmdsky-debug/tools/arm5find.py"),
+        "-d",
+        str(offset),
+        str(length),
+        source,
+        target,
     ]
     res = call_checked(args)
     matches = []
@@ -184,21 +192,30 @@ def run_arm5find(offset: int, length: int, source: str, target: str) -> list[int
 
 
 def save_yml(path: str, data: dict):
-    with open(path, 'w') as f:
+    with open(path, "w") as f:
         yaml.dump(data, f)
-    call_checked([
-        "cargo", "run", "--release",
-        f"--manifest-path={path_to('../skytemple_files/_resources/pmdsky-debug/Cargo.toml')}",
-        "fmt", path
-    ])
+    call_checked(
+        [
+            "cargo",
+            "run",
+            "--release",
+            f"--manifest-path={path_to('../skytemple_files/_resources/pmdsky-debug/Cargo.toml')}",
+            "fmt",
+            path,
+        ]
+    )
 
 
 def process(
-        block_name: str, binary_name: str,
-        addresses_dict: dict, length_dict: Optional[dict],
-        eu_address: int, length: int,
-        rom_dir_eu: RomDir, rom_dir_jp: RomDir,
-        jp_binary_start_addr: int
+    block_name: str,
+    binary_name: str,
+    addresses_dict: dict,
+    length_dict: Optional[dict],
+    eu_address: int,
+    length: int,
+    rom_dir_eu: RomDir,
+    rom_dir_jp: RomDir,
+    jp_binary_start_addr: int,
 ):
     print(f">> {block_name} in {binary_name}")
     print(f"   Length: 0x{length:0x}")
@@ -212,20 +229,30 @@ def process(
         eu_address -= offset_in_search
         length = THRESHOLD
 
-    translated_search_offset = run_offsets('eu', binary_name, eu_address)
-    found_offsets = run_arm5find(translated_search_offset, length, rom_dir_eu.get(binary_name), rom_dir_jp.get(binary_name))
+    translated_search_offset = run_offsets("eu", binary_name, eu_address)
+    found_offsets = run_arm5find(
+        translated_search_offset,
+        length,
+        rom_dir_eu.get(binary_name),
+        rom_dir_jp.get(binary_name),
+    )
     translated_found_offsets = [jp_binary_start_addr + x for x in found_offsets]
 
     if len(translated_found_offsets) < 1:
         print("-- No matches found.")
     elif len(translated_found_offsets) == 1:
         print(f"++ Found! 0x{translated_found_offsets[0]:0x}")
-        addresses_dict["JP"] = jp_binary_start_addr + translated_found_offsets[0] + offset_in_search
+        addresses_dict["JP"] = (
+            jp_binary_start_addr + translated_found_offsets[0] + offset_in_search
+        )
         if length_dict is not None:
             length_dict["JP"] = orig_length
         return True
     else:
-        print("?? Multiple matches found: " + ", ".join(f"0x{x:0x}" for x in translated_found_offsets))
+        print(
+            "?? Multiple matches found: "
+            + ", ".join(f"0x{x:0x}" for x in translated_found_offsets)
+        )
 
     return False
 
@@ -237,14 +264,18 @@ def main():
             print(f"Pre-processing...")
             # We pre-process the JP offsets since the literal file doesn't contain them
             binary_jp_addresses = {}
-            for yml_path in glob(path_to('../skytemple_files/_resources/pmdsky-debug/symbols/*.yml')):
+            for yml_path in glob(
+                path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")
+            ):
                 with open(yml_path) as f:
                     yml = yaml.load(f, Loader=yaml.SafeLoader)
                     for binary_name, binary in yml.items():
                         if "address" in binary and "JP" in binary["address"]:
                             binary_jp_addresses[binary_name] = binary["address"]["JP"]
 
-            for yml_path in glob(path_to('../skytemple_files/_resources/pmdsky-debug/symbols/*.yml')):
+            for yml_path in glob(
+                path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")
+            ):
                 print(f"Processing {yml_path}...")
                 with open(yml_path) as f:
                     yml = yaml.load(f, Loader=yaml.SafeLoader)
@@ -253,7 +284,10 @@ def main():
                     for binary_name, binary in yml.items():
                         if "data" in binary:
                             for blk in binary["data"]:
-                                if blk["name"] in INTERESTING_BLOCKS and "EU" in blk["address"]:
+                                if (
+                                    blk["name"] in INTERESTING_BLOCKS
+                                    and "EU" in blk["address"]
+                                ):
                                     eu_address = blk["address"]["EU"]
                                     if yml_path.endswith("ram.yml"):
                                         print(f">> {blk['name']} in {binary_name}")
@@ -267,19 +301,30 @@ def main():
                                     if "length" in blk:
                                         length = blk["length"]["EU"]
                                         if "NA" in blk["length"]:
-                                            if blk["length"]["NA"] != blk["length"]["EU"]:
-                                                print(f">> {blk['name']} in {binary_name}")
-                                                print(f'-- Warning: Skipped: NA [{blk["length"]["NA"]}] '
-                                                      f'and EU [{blk["length"]["EU"]}] length not the same.')
+                                            if (
+                                                blk["length"]["NA"]
+                                                != blk["length"]["EU"]
+                                            ):
+                                                print(
+                                                    f">> {blk['name']} in {binary_name}"
+                                                )
+                                                print(
+                                                    f'-- Warning: Skipped: NA [{blk["length"]["NA"]}] '
+                                                    f'and EU [{blk["length"]["EU"]}] length not the same.'
+                                                )
                                                 continue
                                     else:
                                         length = 1
                                     processed = process(
-                                        blk['name'], binary_name,
-                                        blk["address"], blk["length"] if "length" in blk else None,
-                                        eu_address, length,
-                                        rom_dir_eu, rom_dir_jp,
-                                        binary_jp_addresses[binary_name]
+                                        blk["name"],
+                                        binary_name,
+                                        blk["address"],
+                                        blk["length"] if "length" in blk else None,
+                                        eu_address,
+                                        length,
+                                        rom_dir_eu,
+                                        rom_dir_jp,
+                                        binary_jp_addresses[binary_name],
                                     )
                                     if processed:
                                         found.add(blk["name"])
@@ -292,5 +337,5 @@ def main():
             print(set(INTERESTING_BLOCKS) - found)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

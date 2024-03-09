@@ -106,7 +106,15 @@ class CapturableProtocol(Protocol):
 
 # A type that can be captured and serialized in structured events, such as for error reports
 # Mypy can't handle cyclic dependencies yet :(
-Capturable = Union[int, str, bool, Iterable["Capturable"], dict[str, "Capturable"], None, CapturableProtocol]  # type: ignore
+Capturable = Union[
+    int,
+    str,
+    bool,
+    Iterable["Capturable"],
+    dict[str, "Capturable"],
+    None,
+    CapturableProtocol,
+]  # type: ignore
 Captured = Union[int, str, bool, list["Captured"], dict[str, "Captured"], None]  # type: ignore
 
 

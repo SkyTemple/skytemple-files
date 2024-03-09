@@ -32,12 +32,10 @@ from skytemple_files_test.case import SkyTempleFilesTestCase, romtest
 
 
 class _TstStringProtocol(Protocol):
-    def __init__(self, _data: bytes):
-        ...
+    def __init__(self, _data: bytes): ...
 
     @abstractmethod
-    def __str__(self) -> str:
-        ...
+    def __str__(self) -> str: ...
 
 
 class _TstStringHandler(HybridDataHandler[_TstStringProtocol]):

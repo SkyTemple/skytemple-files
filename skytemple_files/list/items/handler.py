@@ -48,7 +48,9 @@ class ItemListHandler(HybridDataHandler[MappaItemListProtocol]):
         raise NotImplementedError("Not applicable.")
 
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> MappaItemListProtocol:  # type: ignore
+    def deserialize(
+        cls, data: bytes, **kwargs: OptionalKwargs
+    ) -> MappaItemListProtocol:  # type: ignore
         return cls.get_model_cls().from_bytes(data, 0)
 
     @classmethod

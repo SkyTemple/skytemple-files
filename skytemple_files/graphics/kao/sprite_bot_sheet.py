@@ -67,13 +67,16 @@ class SpriteBotSheet:
             for yy, o in enumerate(column):
                 if o:
                     si = cls._convert_index(yy * PORTRAIT_TILE_X + xx)
-                    yield si, img.crop(
-                        (
-                            xx * PORTRAIT_SIZE,
-                            yy * PORTRAIT_SIZE,
-                            (xx + 1) * PORTRAIT_SIZE,
-                            (yy + 1) * PORTRAIT_SIZE,
-                        )
+                    yield (
+                        si,
+                        img.crop(
+                            (
+                                xx * PORTRAIT_SIZE,
+                                yy * PORTRAIT_SIZE,
+                                (xx + 1) * PORTRAIT_SIZE,
+                                (yy + 1) * PORTRAIT_SIZE,
+                            )
+                        ),
                     )
 
     @classmethod

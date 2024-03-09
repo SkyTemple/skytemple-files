@@ -539,8 +539,12 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
             and how_many_palettes_lower_layer < BPL_MAX_PAL
         ):
             # Combine palettes
-            lower_palette = lower_img.getpalette()[: how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3]  # type: ignore
-            upper_palette = upper_img.getpalette()[: (BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3]  # type: ignore
+            lower_palette = lower_img.getpalette()[
+                : how_many_palettes_lower_layer * (BPL_PAL_LEN + 1) * 3
+            ]  # type: ignore
+            upper_palette = upper_img.getpalette()[
+                : (BPL_MAX_PAL - how_many_palettes_lower_layer) * (BPL_PAL_LEN + 1) * 3
+            ]  # type: ignore
             new_palette = lower_palette + upper_palette
             lower_img.putpalette(new_palette)
             upper_img.putpalette(new_palette)

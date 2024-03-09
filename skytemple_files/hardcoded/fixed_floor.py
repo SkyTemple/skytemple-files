@@ -170,24 +170,29 @@ class MonsterSpawnType(Enum):
     UNKNOWN_F = 0xF, _("Unknown 5")
 
     # The one that welcomes you in the bazaar
-    BAZAAR_HOST = 0x10, _(
-        "Bazaar Host"
+    BAZAAR_HOST = (
+        0x10,
+        _("Bazaar Host"),
     )  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you heal all your HP, PP and belly
-    BAZAAR_HEAL = 0x11, _(
-        "Bazaar Healer"
+    BAZAAR_HEAL = (
+        0x11,
+        _("Bazaar Healer"),
     )  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you buy surprise boxes which contain a random item
-    BAZAAR_SURPRISE = 0x12, _(
-        "Bazaar Surprise"
+    BAZAAR_SURPRISE = (
+        0x12,
+        _("Bazaar Surprise"),
     )  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you clean all your sticky items
-    BAZAAR_CLEAN = 0x13, _(
-        "Bazaar Clean Sticky Items"
+    BAZAAR_CLEAN = (
+        0x13,
+        _("Bazaar Clean Sticky Items"),
     )  # TRANSLATORS: 'Name' of one of the Bazar NPC types
     # The shop that lets you escape the dungeon
-    BAZAAR_ESCAPE = 0x14, _(
-        "Bazaar Escape"
+    BAZAAR_ESCAPE = (
+        0x14,
+        _("Bazaar Escape"),
     )  # TRANSLATORS: 'Name' of one of the Bazar NPC types
 
     def __new__(cls, *args, **kwargs):  # type: ignore
@@ -640,7 +645,14 @@ class HardcodedFixedFloorTables:
             overlay29[i] = entry
 
     @classmethod
-    def _set(cls, binary: bytearray, values: list[Any], config: Pmd2Data, block: Symbol, entry_len: int) -> None:  # type: ignore
+    def _set(
+        cls,
+        binary: bytearray,
+        values: list[Any],
+        config: Pmd2Data,
+        block: Symbol,
+        entry_len: int,
+    ) -> None:  # type: ignore
         expected_length = int(block.length / entry_len)
         if len(values) != expected_length:
             raise ValueError(

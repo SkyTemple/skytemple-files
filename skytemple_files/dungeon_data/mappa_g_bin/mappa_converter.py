@@ -1,4 +1,4 @@
-""""Module to convert mappa_*.bin to mappa_g*.bin."""
+""" "Module to convert mappa_*.bin to mappa_g*.bin."""
 
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #

@@ -36,12 +36,10 @@ U = TypeVar("U")
 
 class BoundDataHandler(Protocol[U]):
     @classmethod
-    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> U:
-        ...
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> U: ...
 
     @classmethod
-    def serialize(cls, data: U, **kwargs: OptionalKwargs) -> bytes:
-        ...
+    def serialize(cls, data: U, **kwargs: OptionalKwargs) -> bytes: ...
 
 
 T = TypeVar("T", bound=BoundDataHandler)  # type: ignore

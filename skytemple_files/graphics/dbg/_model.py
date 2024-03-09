@@ -170,7 +170,9 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
                 chunk_mappings.append(u16(chunk_mappings_counter))
                 chunk_mappings_counter += 1
 
-        dpc.import_tile_mappings(list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM)))  # type: ignore
+        dpc.import_tile_mappings(
+            list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM))
+        )  # type: ignore
         self.mappings = chunk_mappings
 
         # Import palettes

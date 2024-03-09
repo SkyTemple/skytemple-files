@@ -542,7 +542,10 @@ class Pmd2XmlReader:
                                         citems,
                                     )
         return Pmd2DungeonData(
-            dungeon_bin_files, items, dungeons, item_categories  # type: ignore
+            dungeon_bin_files,
+            items,
+            dungeons,
+            item_categories,  # type: ignore
         )
 
     @staticmethod

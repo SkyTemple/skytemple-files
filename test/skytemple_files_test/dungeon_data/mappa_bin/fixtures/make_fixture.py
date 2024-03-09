@@ -19,7 +19,8 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import (
     MappaFloorStructureType,
     MappaFloorWeather,
     MappaFloorDarknessLevel,
-    GUARANTEED, MAX_ITEM_ID,
+    GUARANTEED,
+    MAX_ITEM_ID,
 )
 
 
@@ -143,9 +144,7 @@ MappaFloorTerrainSettingsStub({p_floor_terrain_settings(layout.terrain_settings)
 {layout.hidden_stairs_spawn_chance},
 {layout.enemy_iq},
 i16({layout.iq_booster_boost})
-""".replace(
-        "\n", ""
-    )
+""".replace("\n", "")
 
 
 def p_floor_terrain_settings(settings: MappaFloorTerrainSettings):
@@ -157,9 +156,7 @@ def p_floor_terrain_settings(settings: MappaFloorTerrainSettings):
 {settings.unk5},
 {settings.unk6},
 {settings.unk7}
-""".replace(
-        "\n", ""
-    )
+""".replace("\n", "")
 
 
 def p_monster(monster: MappaMonster) -> str:
@@ -167,9 +164,7 @@ def p_monster(monster: MappaMonster) -> str:
 {monster.main_spawn_weight},
 {monster.monster_house_spawn_weight},
 {monster.md_index}
-""".replace(
-        "\n", ""
-    )
+""".replace("\n", "")
 
 
 def p_trap_list(trap_list: MappaTrapList) -> str:
@@ -201,7 +196,7 @@ if __name__ == "__main__":
         item_lists.append(ilist)
 
         if i < 10:
-            with open(f'item_list{i}.bin', 'wb') as f:
+            with open(f"item_list{i}.bin", "wb") as f:
                 f.write(ilist.to_bytes())
 
     for _ in range(0, 10):
@@ -256,7 +251,9 @@ if __name__ == "__main__":
 
     print("FIX_TERRAIN_SETTINGS_LISTS = (")
     for terrain_settings_list in terrain_settings_lists:
-        print(f"    MappaFloorTerrainSettingsStub({p_floor_terrain_settings(terrain_settings_list)}),")
+        print(
+            f"    MappaFloorTerrainSettingsStub({p_floor_terrain_settings(terrain_settings_list)}),"
+        )
     print(")")
     print("")
 

@@ -60,7 +60,13 @@ class BpcHandler(HybridDataHandler[BpcProtocol]):
         return BpcWriter
 
     @classmethod
-    def deserialize(cls, data: bytes, tiling_width: int = 3, tiling_height: int = 3, **kwargs: OptionalKwargs) -> BpcProtocol:  # type: ignore
+    def deserialize(
+        cls,
+        data: bytes,
+        tiling_width: int = 3,
+        tiling_height: int = 3,
+        **kwargs: OptionalKwargs,
+    ) -> BpcProtocol:  # type: ignore
         """
         Creates a BPC. A BPC contains two layers of image data. The image data is
         grouped in 8x8 tiles, and these tiles are grouped in {tiling_width}x{tiling_height}

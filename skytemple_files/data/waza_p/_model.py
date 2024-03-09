@@ -270,8 +270,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
             if move_learnset_pointer + (i * 12) >= waza_content_pointer:
                 break
             list_pointers = data[
-                move_learnset_pointer
-                + (i * 12) : move_learnset_pointer
+                move_learnset_pointer + (i * 12) : move_learnset_pointer
                 + ((i + 1) * 12)
             ]
             level_up = []

@@ -350,7 +350,9 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
 
     try:
         sprite = FileType.WAN.deserialize(
-            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()  # type: ignore
+            FileType.COMMON_AT.deserialize(
+                monster_bin_pack_file[actor_sprite_id]
+            ).decompress()  # type: ignore
         )
         ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
@@ -569,7 +571,11 @@ def run_main(
     actor_mapping_path=None,
     opt_draw_invisible_actors_objects=True,
 ):
-    global monster_bin_pack_file, monster_md, draw_invisible_actors_objects, ground_dungeon_tilesets
+    global \
+        monster_bin_pack_file, \
+        monster_md, \
+        draw_invisible_actors_objects, \
+        ground_dungeon_tilesets
     draw_invisible_actors_objects = opt_draw_invisible_actors_objects
 
     print("Loading ROM and core files...")

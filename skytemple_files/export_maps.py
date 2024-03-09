@@ -96,15 +96,15 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
     bg_list = FileType.BG_LIST_DAT.deserialize(bin)
 
     count = len(bg_list.level)
-    for i, l in enumerate(bg_list.level):
+    for i, level in enumerate(bg_list.level):
         try:
-            bma = l.get_bma(rom)
-            print(f"{i + 1}/{count} - {l.bpl_name}")
+            bma = level.get_bma(rom)
+            print(f"{i + 1}/{count} - {level.bpl_name}")
 
-            bpas = l.get_bpas(rom)
+            bpas = level.get_bpas(rom)
             non_none_bpas = [b for b in bpas if b is not None]
-            bpc = l.get_bpc(rom)
-            bpl = l.get_bpl(rom)
+            bpc = level.get_bpc(rom)
+            bpl = level.get_bpl(rom)
 
             # Saving animated map!
             bpa_duration = -1
@@ -131,18 +131,18 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
                 include_unknown_data_block=False,
             )
             frames[0].save(
-                os.path.join(map_bg_dir, l.bpl_name + ".gif"),
+                os.path.join(map_bg_dir, level.bpl_name + ".gif"),
                 save_all=True,
                 append_images=frames[1:],
                 duration=duration,
                 loop=0,
                 optimize=False,
             )
-            frames[0].save(os.path.join(map_bg_dir, l.bpl_name + ".png"))
-            map_bgs[l.bpl_name] = frames
-            map_bg_durations[l.bpl_name] = duration
+            frames[0].save(os.path.join(map_bg_dir, level.bpl_name + ".png"))
+            map_bgs[level.bpl_name] = frames
+            map_bg_durations[level.bpl_name] = duration
         except (NotImplementedError, SystemError) as ex:
-            print(f"error for {l.bma_name}: {repr(ex)}", file=sys.stderr)
+            print(f"error for {level.bma_name}: {repr(ex)}", file=sys.stderr)
             print(
                 "".join(
                     traceback.format_exception(type(ex), value=ex, tb=ex.__traceback__)
@@ -350,7 +350,9 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
 
     try:
         sprite = FileType.WAN.deserialize(
-            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()  # type: ignore
+            FileType.COMMON_AT.deserialize(
+                monster_bin_pack_file[actor_sprite_id]
+            ).decompress()  # type: ignore
         )
         ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
@@ -569,7 +571,11 @@ def run_main(
     actor_mapping_path=None,
     opt_draw_invisible_actors_objects=True,
 ):
-    global monster_bin_pack_file, monster_md, draw_invisible_actors_objects, ground_dungeon_tilesets
+    global \
+        monster_bin_pack_file, \
+        monster_md, \
+        draw_invisible_actors_objects, \
+        ground_dungeon_tilesets
     draw_invisible_actors_objects = opt_draw_invisible_actors_objects
 
     print("Loading ROM and core files...")

@@ -332,15 +332,18 @@ class TilesetStirringEffect(TilesetBaseEnum):
 class TilesetSecretPowerEffect(TilesetBaseEnum):
     UNK_0 = 0, _("???") + " (0)"
     SLEEP = 1, _("Sleep")  # TRANSLATORS: Move name
-    SPEED_DOWN = 2, _(
-        "Speed -1"
+    SPEED_DOWN = (
+        2,
+        _("Speed -1"),
     )  # TRANSLATORS: Effect of a tileset's secret power move
-    ATTACK_DOWN = 3, _(
-        "Attack -1"
+    ATTACK_DOWN = (
+        3,
+        _("Attack -1"),
     )  # TRANSLATORS: Effect of a tileset's secret power move
     UNK_4 = 4, _("???") + " (4)"
-    ACCURACY_DOWN = 5, _(
-        "Accuracy -1"
+    ACCURACY_DOWN = (
+        5,
+        _("Accuracy -1"),
     )  # TRANSLATORS: Effect of a tileset's secret power move
     UNK_6 = 6, _("???") + " (6)"
     CRINGE = 7, _("Cringe")  # TRANSLATORS: Move name
@@ -477,8 +480,7 @@ class HardcodedDungeons:
             )
         for i, entry in enumerate(value):
             arm9bin[
-                block.address
-                + i * DUNGEON_LIST_ENTRY_LEN : block.address
+                block.address + i * DUNGEON_LIST_ENTRY_LEN : block.address
                 + (i + 1) * DUNGEON_LIST_ENTRY_LEN
             ] = bytes(
                 [

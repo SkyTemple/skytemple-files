@@ -10,9 +10,6 @@ documentation at the server.
 
 Use `SpriteCollabClient` to get started.
 """
-
-from __future__ import annotations
-
 #  Copyright 2020-2023 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -29,6 +26,9 @@ from __future__ import annotations
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
 import asyncio
 import logging
 import os.path
@@ -833,7 +833,7 @@ class SpriteCollabSession:
                     collected_form_data.append((monster, form))
 
         if len(collected_monsters_and_forms) < len(monsters_and_forms):
-            raise ValueError(f"Some monsters or forms were not found.")
+            raise ValueError("Some monsters or forms were not found.")
 
         coros = []
         for i, (monster_m, form_m) in enumerate(collected_form_data):

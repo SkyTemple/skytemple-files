@@ -200,7 +200,9 @@ class ArmPatcher:
                     print("ARMIPS OUTPUT:")
                     if result is not None:
                         print(str(result.stdout.read(), "utf-8"))  # type: ignore
-                        print(str(result.stderr.read(), "utf-8") if result.stderr else "")  # type: ignore
+                        print(
+                            str(result.stderr.read(), "utf-8") if result.stderr else ""
+                        )  # type: ignore
 
                 if retcode != 0:
                     raise make_user_err(

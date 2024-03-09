@@ -24,7 +24,9 @@ from skytemple_files.list.actor.model import ActorListBin
 
 class ActorListBinHandler(DataHandler[ActorListBin]):
     @classmethod
-    def deserialize(cls, data: bytes, *, header_start, **kwargs: OptionalKwargs) -> ActorListBin:  # type: ignore
+    def deserialize(  # type: ignore
+        cls, data: bytes, *, header_start, **kwargs: OptionalKwargs
+    ) -> ActorListBin:
         return ActorListBin(data, header_start)
 
     @classmethod

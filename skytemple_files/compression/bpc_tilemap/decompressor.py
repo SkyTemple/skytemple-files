@@ -45,14 +45,14 @@ class BpcTilemapDecompressor:
     def decompress(self) -> bytes:
         self.reset()
         if DEBUG:
-            print(f"BPC tilemap decompression start....")
+            print("BPC tilemap decompression start....")
 
         # Handle high bytes
         while self.cursor < self.max_size and self.bytes_written < self.stop_when_size:
             self._process_phase1()
 
         if DEBUG:
-            print(f"End Phase 1. Begin Phase 2")
+            print("End Phase 1. Begin Phase 2")
             print(f"Cursor begin phase 2: {self.cursor}")
 
         if self.bytes_written != self.stop_when_size:

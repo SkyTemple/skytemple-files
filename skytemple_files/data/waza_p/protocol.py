@@ -99,8 +99,9 @@ class WazaMoveRangeRange(Enum):
     TRHEE_IN_FRONT = 1, _("In front + adjacent (like Wide Slash)")
     AROUND = 2, _("8 tiles around user")
     ROOM = 3, _("Room")
-    TWO_TILES = 4, _(
-        "Two tiles away"
+    TWO_TILES = (
+        4,
+        _("Two tiles away"),
     )  # Also cuts corners, but the AI doesn't account for that
     STRAIGHT_LINE = 5, _("Straight line")
     FLOOR = 6, _("Floor")
@@ -143,8 +144,9 @@ class WazaMoveRangeCondition(Enum):
     NEGATIVE_STATUS = 3, _("Has at least one negative status condition")
     ASLEEP = 4, _("Is asleep, in a nightmare or napping")
     GHOST = 5, _("Is a ghost-type Pokémon and does not have the exposed status")
-    CRITICAL_HP_NEGATIVE_STATUS = 6, _(
-        "Current HP <= 25% or has at least one negative status condition"
+    CRITICAL_HP_NEGATIVE_STATUS = (
+        6,
+        _("Current HP <= 25% or has at least one negative status condition"),
     )
     U7 = 7, _("Invalid ") + "7"
     U8 = 8, _("Invalid ") + "8"

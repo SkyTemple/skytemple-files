@@ -22,11 +22,13 @@ from skytemple_files.common.i18n_util import _
 
 
 class PatchCategory(Enum):
-    IMPROVEMENT_TWEAK = auto(), _(
-        "Improvements and Tweaks"
+    IMPROVEMENT_TWEAK = (
+        auto(),
+        _("Improvements and Tweaks"),
     )  # TRANSLATORS: Name for the category of ASM patch
-    NEW_MECHANIC = auto(), _(
-        "New Mechanics"
+    NEW_MECHANIC = (
+        auto(),
+        _("New Mechanics"),
     )  # TRANSLATORS: Name for the category of ASM patch
     BUGFIXES = auto(), _("Bugfixes")  # TRANSLATORS: Name for the category of ASM patch
     UTILITY = auto(), _("Utility")  # TRANSLATORS: Name for the category of ASM patch

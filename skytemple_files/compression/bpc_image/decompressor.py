@@ -88,7 +88,7 @@ class BpcImageDecompressor:
             cursor_was_at = self.cursor
         cmd = self._read()
         if DEBUG:
-            print(f"-----------------------")
+            print("-----------------------")
             print(f"Reading CMD {cmd:02x}")
         number_of_bytes_to_output = self._read_nb_bytes_to_output(cmd)
         if DEBUG:
@@ -97,11 +97,11 @@ class BpcImageDecompressor:
         # Perform the special pattern operations based on the current CMD's value:
         if self._should_cycle_pattern(cmd):
             if DEBUG:
-                print(f"Cycling.")
+                print("Cycling.")
             self._cycle_pattern()
         if self._is_loading_pattern_from_next_byte(cmd):
             if DEBUG:
-                print(f"Reading pattern.")
+                print("Reading pattern.")
             self.pattern = self._read()
 
         # Check if we have leftover byte patterns to add:
@@ -125,7 +125,7 @@ class BpcImageDecompressor:
         #   -> bb bb xx ...
         if self.has_leftover:
             if DEBUG:
-                print(f"Have leftover.")
+                print("Have leftover.")
             if self._is_pattern_op(cmd):
                 final_pattern = self.leftover | (self.pattern << 8)
             else:
@@ -146,7 +146,7 @@ class BpcImageDecompressor:
         if self._is_pattern_op(cmd):
             # We are writing the stored pattern!
             if DEBUG:
-                print(f"Writing pattern.")
+                print("Writing pattern.")
             # Convert current stored pattern in a 2 byte repeating pattern
             pattern = self.pattern | (self.pattern << 8)
             for count_of_copy in range(
@@ -156,7 +156,7 @@ class BpcImageDecompressor:
         else:
             # We are copying whatever comes next!
             if DEBUG:
-                print(f"Copying next.")
+                print("Copying next.")
             for count_of_copy in range(0, number_of_bytes_to_output, 2):
                 pattern = self._read(2)
                 self._write(pattern)

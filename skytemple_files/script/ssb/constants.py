@@ -150,7 +150,7 @@ class SsbConstant(SsbOpParamConstant):
         # Init value if not set
         if not value:
             if not script_data:
-                raise ValueError(f"Either value or script_data must be provided.")
+                raise ValueError("Either value or script_data must be provided.")
             value = self._map_back(constant_as_string, script_data)
 
         self.value = value
@@ -191,7 +191,7 @@ class SsbConstant(SsbOpParamConstant):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=value)
         elif isinstance(value, DungeonMode):
             return cls(PREFIX_DMODE + value.name, value=value)
-        raise TypeError(f"value must be of type SsbConstantPmdScriptMappable.")
+        raise TypeError("value must be of type SsbConstantPmdScriptMappable.")
 
     @classmethod
     def _map_back(
@@ -301,8 +301,8 @@ class SsbConstant(SsbOpParamConstant):
             yield cls.create_for(d)
         for e in rom_data.face_position_modes:
             yield cls.create_for(e)
-        for f in rom_data.game_variables:
-            yield cls.create_for(f)
+        for ff in rom_data.game_variables:
+            yield cls.create_for(ff)
         for g in rom_data.level_list:
             yield cls.create_for(g)
         for h in rom_data.menus:
@@ -313,8 +313,8 @@ class SsbConstant(SsbOpParamConstant):
             yield cls.create_for(j)
         for k in rom_data.sprite_effects:
             yield cls.create_for(k)
-        for l in rom_data.directions.values():
-            yield cls.create_for(l)
+        for ll in rom_data.directions.values():
+            yield cls.create_for(ll)
         for m in [
             DungeonMode.CLOSED,
             DungeonMode.OPEN,

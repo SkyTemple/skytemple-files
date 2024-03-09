@@ -84,11 +84,11 @@ class PxDecompressor:
                 break
             if ctrl_bit == 1:
                 if DEBUG:
-                    print(f"> Handling uncompressed.")
+                    print("> Handling uncompressed.")
                 self.uncompressed_data.append(self._read_next_byte())
             else:
                 if DEBUG:
-                    print(f"> Handling special case.")
+                    print("> Handling special case.")
                 self._handle_special_case()
 
     def _handle_special_case(self):

@@ -139,20 +139,14 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
                 strings.strings[int(param["MenuOptionStringID"]) - 1] = (
                     get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))
                 )
-                strings.strings[
-                    int(param["AppraiseAllConfirmStringID"]) - 1
-                ] = get_locales().translate(
-                    APPRAISE_ALL_CONFIRM, lang.locale.replace("-", "_")
+                strings.strings[int(param["AppraiseAllConfirmStringID"]) - 1] = (
+                    get_locales().translate(APPRAISE_ALL_CONFIRM, lang.locale.replace("-", "_"))
                 )
-                strings.strings[
-                    int(param["AppraiseRevealBeforeStringID"]) - 1
-                ] = get_locales().translate(
-                    APPRAISE_REVEAL_BEFORE, lang.locale.replace("-", "_")
+                strings.strings[int(param["AppraiseRevealBeforeStringID"]) - 1] = (
+                    get_locales().translate(APPRAISE_REVEAL_BEFORE, lang.locale.replace("-", "_"))
                 )
-                strings.strings[
-                    int(param["AppraiseRevealItemStringID"]) - 1
-                ] = get_locales().translate(
-                    APPRAISE_REVEAL_ITEM, lang.locale.replace("-", "_")
+                strings.strings[int(param["AppraiseRevealItemStringID"]) - 1] = (
+                    get_locales().translate(APPRAISE_REVEAL_ITEM, lang.locale.replace("-", "_"))
                 )
                 bin_after = StrHandler.serialize(strings)
                 rom.setFileByName(filename, bin_after)

@@ -72,7 +72,7 @@ class GenericNrlCompressor:
         if len_seq > NRL_MIN_SEQ_LEN:
             # CMD_COPY_BYTES
             if DEBUG:
-                print(f"CMD_COPY_BYTES")
+                print("CMD_COPY_BYTES")
             self.cursor += len_seq * cursor_process_multiplier
             cmd_byte = CMD_COPY_BYTES + (len_seq - 1)
             self._write(cmd_byte)
@@ -86,7 +86,7 @@ class GenericNrlCompressor:
             self.cursor += repeats * cursor_process_multiplier
             if current_byte == 0:
                 if DEBUG:
-                    print(f"CMD_ZERO_OUT")
+                    print("CMD_ZERO_OUT")
                 # CMD_ZERO_OUT
                 assert repeats < CMD_ZERO_OUT
                 cmd_byte = repeats
@@ -94,7 +94,7 @@ class GenericNrlCompressor:
             else:
                 # CMD_FILL_OUT
                 if DEBUG:
-                    print(f"CMD_FILL_OUT")
+                    print("CMD_FILL_OUT")
                 # To big for one cmd, just make it into two.
                 if repeats > NRL_LOOKAHEAD_FILL_MAX_BYTES:
                     repeats_byte1 = repeats - NRL_LOOKAHEAD_FILL_MAX_BYTES

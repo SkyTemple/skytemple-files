@@ -21,13 +21,12 @@ import logging
 from range_typed_integers import u8_checked, u32_checked, u32
 from collections.abc import Sequence
 
-from range_typed_integers import u8_checked, u32_checked, u8
+from range_typed_integers import u8
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.graphics.dpla import DPLA_COLORS_PER_PALETTE, DPLA_MAX_COLORS
 from skytemple_files.graphics.dpla.protocol import DplaProtocol, chunk
 
-from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import (
     write_u32,
     read_u16,
@@ -38,7 +37,6 @@ from skytemple_files.common.util import (
 
 # XXX: Removing this re-export his is a breaking change in skytemple-dtef due to a typo.
 # noinspection PyUnresolvedReferences
-from skytemple_files.common.util import chunks  # nopycln: import
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +54,7 @@ class Dpla(DplaProtocol):
 
         if len(toc_pointers) > DPLA_MAX_COLORS:
             logger.warning(
-                f"DPLA contained more than 32 potential colors. All additional entries were discarded."
+                "DPLA contained more than 32 potential colors. All additional entries were discarded."
             )
             toc_pointers = toc_pointers[:32]
 

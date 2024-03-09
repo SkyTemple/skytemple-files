@@ -78,6 +78,6 @@ class Custom999Decompressor:
         # return bytes(decompressed)
 
         new_data = []
-        for l, h in chunks(decompressed, 2):
-            new_data.append(l + h * 16)
+        for low, high in chunks(decompressed, 2):
+            new_data.append(low + high * 16)
         return bytes(new_data)

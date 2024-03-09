@@ -54,18 +54,21 @@ class MappaFloorStructureType(Enum):
     SMALL = 1, _("Small")  # Max 2x3
     SINGLE_MONSTER_HOUSE = 2, _("Single Monster House")
     RING = 3, _("Ring")  # Outer ring with 8 rooms inside in a 4 x 2 shape
-    CROSSROADS = 4, _(
-        "Crossroads"
+    CROSSROADS = (
+        4,
+        _("Crossroads"),
     )  # Crossroads (3 rooms at the top, 3 at the bottom, 2 on each side)
-    TWO_ROOMS_ONE_MH = 5, _(
-        "Two Rooms, One Monster House"
+    TWO_ROOMS_ONE_MH = (
+        5,
+        _("Two Rooms, One Monster House"),
     )  # Two rooms, one is a monster house
     LINE = 6, _("Line")  # 1 horizontal line with 5 rooms in a row
     CROSS = 7, _("Cross")  # 5 rooms: up, down, left, right, center
     SMALL_MEDIUM = 8, _("Small Medium")  # Max. 4x2
     BETTLE = 9, _("Beetle")  # 1 big room in the center with 3 a on each side
-    OUTER_ROOMS = 10, _(
-        "Outer Rooms"
+    OUTER_ROOMS = (
+        10,
+        _("Outer Rooms"),
     )  # All the rooms are in the map borders, none in the center (Max 6x4)
     MEDIUM = 11, _("Medium")  # Max 3x3
     MEDIUM_LARGE_12 = 12, _("Medium Large (12)")  # Max 6x4

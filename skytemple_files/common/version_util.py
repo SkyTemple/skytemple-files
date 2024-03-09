@@ -55,7 +55,7 @@ def get_event_banner() -> tuple[bytes | None, str | None]:
             RELEASE_WEB + BANNER_IMG, context=create_context()
         ).read()
         return img, url
-    except:
+    except Exception:
         return None, None
 
 

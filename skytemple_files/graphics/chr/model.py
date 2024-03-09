@@ -92,7 +92,16 @@ class Chr(AutoString):
         self.tiles = []
         for y in range(img.height // CHR_TILE_WIDTH):
             for x in range(img.width // CHR_TILE_WIDTH):
-                self.tiles.append(img.crop([x * CHR_TILE_WIDTH, y * CHR_TILE_WIDTH, (x + 1) * CHR_TILE_WIDTH, (y + 1) * CHR_TILE_WIDTH]))  # type: ignore
+                self.tiles.append(
+                    img.crop(
+                        (
+                            x * CHR_TILE_WIDTH,
+                            y * CHR_TILE_WIDTH,
+                            (x + 1) * CHR_TILE_WIDTH,
+                            (y + 1) * CHR_TILE_WIDTH,
+                        )
+                    )
+                )
         self.set_palette_raw(list(img.palette.palette))
 
     def __eq__(self, other: object) -> bool:

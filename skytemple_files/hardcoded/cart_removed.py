@@ -43,8 +43,8 @@ class HardcodedCartRemoved:
         data = arm9[block.address : block.address + block.length]
         img_data = CommonAtHandler.deserialize(data).decompress()
         raw_data = []
-        for l, h in iter_bytes(img_data, 2):
-            v = l + h * 256
+        for low, high in iter_bytes(img_data, 2):
+            v = low + high * 256
             raw_data.append((v % 32) * 8)
             raw_data.append(((v >> 5) % 32) * 8)
             raw_data.append(((v >> 10) % 32) * 8)

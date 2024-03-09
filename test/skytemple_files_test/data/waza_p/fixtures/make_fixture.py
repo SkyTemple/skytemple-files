@@ -5,15 +5,18 @@ from range_typed_integers import u16, u8, u32
 from skytemple_files.container.sir0.handler import Sir0Handler
 from skytemple_files.data.md.protocol import PokeType
 
-from skytemple_files.data.waza_p._model import LevelUpMove, MoveLearnset, WazaMove, WazaMoveRangeSettings
+from skytemple_files.data.waza_p._model import (
+    LevelUpMove,
+    MoveLearnset,
+    WazaMove,
+    WazaMoveRangeSettings,
+)
 from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.waza_p.protocol import WazaMoveCategory
 
 
 def randomize_level_up_move() -> LevelUpMove:
-    return LevelUpMove(
-        u16(random.randint(1, 65_535)), u16(random.randint(1, 65_535))
-    )
+    return LevelUpMove(u16(random.randint(1, 65_535)), u16(random.randint(1, 65_535)))
 
 
 def randomize_move_learnset() -> MoveLearnset:
@@ -34,8 +37,12 @@ def randomize_move() -> WazaMove:
     move.base_power = u16(random.randint(0, 65_535))
     move.type = u8(random.choice(list(PokeType)).value)
     move.category = u8(random.choice(list(WazaMoveCategory)).value)
-    move.settings_range = WazaMoveRangeSettings(random.randint(0, 65_535).to_bytes(2, 'little'))
-    move.settings_range_ai = WazaMoveRangeSettings(random.randint(0, 65_535).to_bytes(2, 'little'))
+    move.settings_range = WazaMoveRangeSettings(
+        random.randint(0, 65_535).to_bytes(2, "little")
+    )
+    move.settings_range_ai = WazaMoveRangeSettings(
+        random.randint(0, 65_535).to_bytes(2, "little")
+    )
     move.base_pp = u8(random.randint(0, 255))
     move.ai_weight = u8(random.randint(0, 255))
     move.miss_accuracy = u8(random.randint(0, 255))
@@ -83,36 +90,40 @@ if __name__ == "__main__":
     print("")
     print("FIX_MOVES = (")
     for entry in waza_p.moves:
-        print(f"    WazaMoveStub.stub_new("
-              f"u16({entry.base_power}), "
-              f"u8({entry.type}), "
-              f"u8({entry.category}), "
-              f"{int(entry.settings_range)}, "
-              f"{int(entry.settings_range_ai)}, "
-              f"u8({entry.base_pp}), "
-              f"u8({entry.ai_weight}), "
-              f"u8({entry.miss_accuracy}), "
-              f"u8({entry.accuracy}), "
-              f"u8({entry.ai_condition1_chance}), "
-              f"u8({entry.number_chained_hits}), "
-              f"u8({entry.max_upgrade_level}), "
-              f"u8({entry.crit_chance}), "
-              f"{entry.affected_by_magic_coat}, "
-              f"{entry.is_snatchable}, "
-              f"{entry.uses_mouth}, "
-              f"{entry.ai_frozen_check}, "
-              f"{entry.ignores_taunted}, "
-              f"u8({entry.range_check_text}), "
-              f"u16({entry.move_id}), "
-              f"u8({entry.message_id}), "
-              f"),")
+        print(
+            f"    WazaMoveStub.stub_new("
+            f"u16({entry.base_power}), "
+            f"u8({entry.type}), "
+            f"u8({entry.category}), "
+            f"{int(entry.settings_range)}, "
+            f"{int(entry.settings_range_ai)}, "
+            f"u8({entry.base_pp}), "
+            f"u8({entry.ai_weight}), "
+            f"u8({entry.miss_accuracy}), "
+            f"u8({entry.accuracy}), "
+            f"u8({entry.ai_condition1_chance}), "
+            f"u8({entry.number_chained_hits}), "
+            f"u8({entry.max_upgrade_level}), "
+            f"u8({entry.crit_chance}), "
+            f"{entry.affected_by_magic_coat}, "
+            f"{entry.is_snatchable}, "
+            f"{entry.uses_mouth}, "
+            f"{entry.ai_frozen_check}, "
+            f"{entry.ignores_taunted}, "
+            f"u8({entry.range_check_text}), "
+            f"u16({entry.move_id}), "
+            f"u8({entry.message_id}), "
+            f"),"
+        )
     print(")")
     print("")
     print("FIX_LEARNSETS = (")
     for entry in waza_p.learnsets:
-        print(f"    WazaLearnsetStub.stub_new(\n"
-              f"        [{', '.join([f'LevelUpMoveStub.stub_new({m.level_id}, {m.move_id})' for m in entry.level_up_moves])}],\n"
-              f"        {repr(entry.tm_hm_moves)},\n"
-              f"        {repr(entry.egg_moves)},\n"
-              f"    ),")
+        print(
+            f"    WazaLearnsetStub.stub_new(\n"
+            f"        [{', '.join([f'LevelUpMoveStub.stub_new({m.level_id}, {m.move_id})' for m in entry.level_up_moves])}],\n"
+            f"        {repr(entry.tm_hm_moves)},\n"
+            f"        {repr(entry.egg_moves)},\n"
+            f"    ),"
+        )
     print(")")

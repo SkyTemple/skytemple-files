@@ -21,12 +21,22 @@ from typing import List, Dict, Union, Tuple, Optional, Sequence
 from range_typed_integers import u16, u8, i8, i16, u32
 
 from skytemple_files.common.util import AutoString
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaTrapListProtocol, Probability, MappaMonsterProtocol, \
-    MappaItemListProtocol, MappaFloorTerrainSettingsProtocol, MappaFloorLayoutProtocol, MappaFloorProtocol, \
-    MappaBinProtocol, F
+from skytemple_files.dungeon_data.mappa_bin.protocol import (
+    MappaTrapListProtocol,
+    Probability,
+    MappaMonsterProtocol,
+    MappaItemListProtocol,
+    MappaFloorTerrainSettingsProtocol,
+    MappaFloorLayoutProtocol,
+    MappaFloorProtocol,
+    MappaBinProtocol,
+    F,
+)
 
 
-def eq_mappa_trap_list_protocol(one: MappaTrapListProtocol, two: MappaTrapListProtocol) -> bool:
+def eq_mappa_trap_list_protocol(
+    one: MappaTrapListProtocol, two: MappaTrapListProtocol
+) -> bool:
     return one.weights == two.weights
 
 
@@ -55,7 +65,9 @@ class MappaTrapListStub(MappaTrapListProtocol, AutoString):
         raise NotImplementedError()
 
 
-def eq_mappa_monster_list_protocol(one: Sequence[MappaMonsterProtocol], two: Sequence[MappaMonsterProtocol]) -> bool:
+def eq_mappa_monster_list_protocol(
+    one: Sequence[MappaMonsterProtocol], two: Sequence[MappaMonsterProtocol]
+) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -64,12 +76,14 @@ def eq_mappa_monster_list_protocol(one: Sequence[MappaMonsterProtocol], two: Seq
     return True
 
 
-def eq_mappa_monster_protocol(one: MappaMonsterProtocol, two: MappaMonsterProtocol) -> bool:
+def eq_mappa_monster_protocol(
+    one: MappaMonsterProtocol, two: MappaMonsterProtocol
+) -> bool:
     return (
-        one.level == two.level and
-        one.main_spawn_weight == two.main_spawn_weight and
-        one.monster_house_spawn_weight == two.monster_house_spawn_weight and
-        one.md_index == two.md_index
+        one.level == two.level
+        and one.main_spawn_weight == two.main_spawn_weight
+        and one.monster_house_spawn_weight == two.monster_house_spawn_weight
+        and one.md_index == two.md_index
     )
 
 
@@ -79,7 +93,13 @@ class MappaMonsterStub(MappaMonsterProtocol, AutoString):
     monster_house_spawn_weight: u16
     md_index: u16
 
-    def __init__(self, level: u8, main_spawn_weight: u16, monster_house_spawn_weight: u16, md_index: u16):
+    def __init__(
+        self,
+        level: u8,
+        main_spawn_weight: u16,
+        monster_house_spawn_weight: u16,
+        md_index: u16,
+    ):
         self.level = level
         self.main_spawn_weight = main_spawn_weight
         self.monster_house_spawn_weight = monster_house_spawn_weight
@@ -89,11 +109,10 @@ class MappaMonsterStub(MappaMonsterProtocol, AutoString):
         raise NotImplementedError()
 
 
-def eq_mappa_item_list_protocol(one: MappaItemListProtocol, two: MappaItemListProtocol) -> bool:
-    return (
-        one.categories == two.categories and
-        one.items == two.items
-    )
+def eq_mappa_item_list_protocol(
+    one: MappaItemListProtocol, two: MappaItemListProtocol
+) -> bool:
+    return one.categories == two.categories and one.items == two.items
 
 
 class MappaItemListStub(MappaItemListProtocol, AutoString):
@@ -119,16 +138,18 @@ class MappaItemListStub(MappaItemListProtocol, AutoString):
         raise NotImplementedError()
 
 
-def eq_mappa_floor_terrain_settings_protocol(one: MappaFloorTerrainSettingsProtocol, two: MappaFloorTerrainSettingsProtocol) -> bool:
+def eq_mappa_floor_terrain_settings_protocol(
+    one: MappaFloorTerrainSettingsProtocol, two: MappaFloorTerrainSettingsProtocol
+) -> bool:
     return (
-        one.has_secondary_terrain == two.has_secondary_terrain and
-        one.unk1 == two.unk1 and
-        one.generate_imperfect_rooms == two.generate_imperfect_rooms and
-        one.unk3 == two.unk3 and
-        one.unk4 == two.unk4 and
-        one.unk5 == two.unk5 and
-        one.unk6 == two.unk6 and
-        one.unk7 == two.unk7
+        one.has_secondary_terrain == two.has_secondary_terrain
+        and one.unk1 == two.unk1
+        and one.generate_imperfect_rooms == two.generate_imperfect_rooms
+        and one.unk3 == two.unk3
+        and one.unk4 == two.unk4
+        and one.unk5 == two.unk5
+        and one.unk6 == two.unk6
+        and one.unk7 == two.unk7
     )
 
 
@@ -166,41 +187,46 @@ class MappaFloorTerrainSettingsStub(MappaFloorTerrainSettingsProtocol, AutoStrin
         raise NotImplementedError()
 
 
-def eq_mappa_floor_layout_protocol(one: MappaFloorLayoutProtocol, two: MappaFloorLayoutProtocol) -> bool:
+def eq_mappa_floor_layout_protocol(
+    one: MappaFloorLayoutProtocol, two: MappaFloorLayoutProtocol
+) -> bool:
     return (
-        one.structure == two.structure and
-        one.room_density == two.room_density and
-        one.tileset_id == two.tileset_id and
-        one.music_id == two.music_id and
-        one.weather == two.weather and
-        one.floor_connectivity == two.floor_connectivity and
-        one.initial_enemy_density == two.initial_enemy_density and
-        one.kecleon_shop_chance == two.kecleon_shop_chance and
-        one.monster_house_chance == two.monster_house_chance and
-        one.unused_chance == two.unused_chance and
-        one.sticky_item_chance == two.sticky_item_chance and
-        one.dead_ends == two.dead_ends and
-        one.secondary_terrain == two.secondary_terrain and
-        eq_mappa_floor_terrain_settings_protocol(one.terrain_settings, two.terrain_settings) and
-        one.unk_e == two.unk_e and
-        one.item_density == two.item_density and
-        one.trap_density == two.trap_density and
-        one.floor_number == two.floor_number and
-        one.fixed_floor_id == two.fixed_floor_id and
-        one.extra_hallway_density == two.extra_hallway_density and
-        one.buried_item_density == two.buried_item_density and
-        one.water_density == two.water_density and
-        one.darkness_level == two.darkness_level and
+        one.structure == two.structure
+        and one.room_density == two.room_density
+        and one.tileset_id == two.tileset_id
+        and one.music_id == two.music_id
+        and one.weather == two.weather
+        and one.floor_connectivity == two.floor_connectivity
+        and one.initial_enemy_density == two.initial_enemy_density
+        and one.kecleon_shop_chance == two.kecleon_shop_chance
+        and one.monster_house_chance == two.monster_house_chance
+        and one.unused_chance == two.unused_chance
+        and one.sticky_item_chance == two.sticky_item_chance
+        and one.dead_ends == two.dead_ends
+        and one.secondary_terrain == two.secondary_terrain
+        and eq_mappa_floor_terrain_settings_protocol(
+            one.terrain_settings, two.terrain_settings
+        )
+        and one.unk_e == two.unk_e
+        and one.item_density == two.item_density
+        and one.trap_density == two.trap_density
+        and one.floor_number == two.floor_number
+        and one.fixed_floor_id == two.fixed_floor_id
+        and one.extra_hallway_density == two.extra_hallway_density
+        and one.buried_item_density == two.buried_item_density
+        and one.water_density == two.water_density
+        and one.darkness_level == two.darkness_level
+        and
         # Coin amounts don't need to be equal, but they do need to result in the same value
         # when converted to the raw value and back
         # (it's up to the implementors to decide how they want to store this information in the model)
-        (one.max_coin_amount // 5 * 5) == (two.max_coin_amount // 5 * 5) and
-        one.kecleon_shop_item_positions == two.kecleon_shop_item_positions and
-        one.empty_monster_house_chance == two.empty_monster_house_chance and
-        one.unk_hidden_stairs == two.unk_hidden_stairs and
-        one.hidden_stairs_spawn_chance == two.hidden_stairs_spawn_chance and
-        one.enemy_iq == two.enemy_iq and
-        one.iq_booster_boost == two.iq_booster_boost
+        (one.max_coin_amount // 5 * 5) == (two.max_coin_amount // 5 * 5)
+        and one.kecleon_shop_item_positions == two.kecleon_shop_item_positions
+        and one.empty_monster_house_chance == two.empty_monster_house_chance
+        and one.unk_hidden_stairs == two.unk_hidden_stairs
+        and one.hidden_stairs_spawn_chance == two.hidden_stairs_spawn_chance
+        and one.enemy_iq == two.enemy_iq
+        and one.iq_booster_boost == two.iq_booster_boost
     )
 
 
@@ -306,15 +332,17 @@ class MappaFloorLayoutStub(MappaFloorLayoutProtocol, AutoString):
 
 def eq_mappa_floor_protocol(one: MappaFloorProtocol, two: MappaFloorProtocol) -> bool:
     return (
-        eq_mappa_floor_layout_protocol(one.layout, two.layout) and
-        eq_mappa_monster_list_protocol(one.monsters, two.monsters) and
-        eq_mappa_trap_list_protocol(one.traps, two.traps) and
-        eq_mappa_item_list_protocol(one.floor_items, two.floor_items) and
-        eq_mappa_item_list_protocol(one.shop_items, two.shop_items) and
-        eq_mappa_item_list_protocol(one.monster_house_items, two.monster_house_items) and
-        eq_mappa_item_list_protocol(one.buried_items, two.buried_items) and
-        eq_mappa_item_list_protocol(one.unk_items1, two.unk_items1) and
-        eq_mappa_item_list_protocol(one.unk_items2, two.unk_items2)
+        eq_mappa_floor_layout_protocol(one.layout, two.layout)
+        and eq_mappa_monster_list_protocol(one.monsters, two.monsters)
+        and eq_mappa_trap_list_protocol(one.traps, two.traps)
+        and eq_mappa_item_list_protocol(one.floor_items, two.floor_items)
+        and eq_mappa_item_list_protocol(one.shop_items, two.shop_items)
+        and eq_mappa_item_list_protocol(
+            one.monster_house_items, two.monster_house_items
+        )
+        and eq_mappa_item_list_protocol(one.buried_items, two.buried_items)
+        and eq_mappa_item_list_protocol(one.unk_items1, two.unk_items1)
+        and eq_mappa_item_list_protocol(one.unk_items2, two.unk_items2)
     )
 
 
@@ -370,8 +398,7 @@ def eq_mappa_protocol(one: MappaBinProtocol, two: MappaBinProtocol) -> bool:
 class MappaBinStub(MappaBinProtocol, AutoString):
     floor_lists: List[List[MappaFloorStub]]
 
-    def __init__(self, floor_lists: List[List[MappaFloorStub]]):
-        ...
+    def __init__(self, floor_lists: List[List[MappaFloorStub]]): ...
 
     def add_floor_list(self, floor_list: List[MappaFloorStub]):
         raise NotImplementedError()
@@ -382,7 +409,9 @@ class MappaBinStub(MappaBinProtocol, AutoString):
     def add_floor_to_floor_list(self, floor_list_index: int, floor: MappaFloorStub):
         raise NotImplementedError()
 
-    def insert_floor_in_floor_list(self, floor_list_index: int, insert_index: int, floor: F):
+    def insert_floor_in_floor_list(
+        self, floor_list_index: int, insert_index: int, floor: F
+    ):
         pass
 
     def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
@@ -390,7 +419,7 @@ class MappaBinStub(MappaBinProtocol, AutoString):
 
     def __eq__(self, other: object) -> bool:
         raise NotImplementedError()
-    
+
     def sir0_serialize_parts(self) -> Tuple[bytes, List[u32], Optional[u32]]:
         raise NotImplementedError()
 

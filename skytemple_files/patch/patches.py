@@ -476,7 +476,9 @@ class PatchPackageConfigMerger:
     def merge(self, into: Pmd2AsmPatchesConstants) -> None:
         for e in self._root:
             if e.tag == "ASMPatchesConstants":
-                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)  # type: ignore
+                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(
+                    self._game_edition
+                ).read(e)  # type: ignore
                 into.patches.update(content_of_xml.patches)
                 into.loose_bin_files.update(content_of_xml.loose_bin_files)
                 return

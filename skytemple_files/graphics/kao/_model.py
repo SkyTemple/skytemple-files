@@ -189,9 +189,9 @@ class Kao(KaoProtocol[KaoImage]):
         self.loaded_kaos: list[list[KaoImage | None]] = [
             [None for __ in range(0, SUBENTRIES)] for _ in range(0, toc_len)
         ]
-        self.loaded_kaos_flat: list[tuple[int, int, KaoImage]] = (
-            []
-        )  # cache for performance
+        self.loaded_kaos_flat: list[
+            tuple[int, int, KaoImage]
+        ] = []  # cache for performance
 
     def get(self, index: int, subindex: int) -> KaoImage | None:
         """Get the KaoImage at the specified location or None if no image is specified"""
@@ -214,7 +214,9 @@ class Kao(KaoProtocol[KaoImage]):
                 # NULL pointer
                 return None
             self.loaded_kaos[index][subindex] = KaoImage(self.original_data, pnt)
-            self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
+            self.loaded_kaos_flat.append(
+                (index, subindex, self.loaded_kaos[index][subindex])  # type: ignore
+            )
         elif self.loaded_kaos[index][subindex].empty:  # type: ignore
             return None
         return self.loaded_kaos[index][subindex]
@@ -258,7 +260,9 @@ class Kao(KaoProtocol[KaoImage]):
                 return
 
             self.loaded_kaos[index][subindex] = KaoImage.new(img)  # type: ignore
-            self.loaded_kaos_flat.append((index, subindex, self.loaded_kaos[index][subindex]))  # type: ignore
+            self.loaded_kaos_flat.append(
+                (index, subindex, self.loaded_kaos[index][subindex])  # type: ignore
+            )
 
     def delete(self, index: int, subindex: int) -> None:
         try:
@@ -296,7 +300,7 @@ class KaoIterator(Iterator):  # type: ignore
             ret = None
             try:
                 ret = self.kao.get(self.current_index, self.current_subindex)
-            except ValueError as ex:
+            except ValueError:
                 warnings.warn(
                     f(_("Could not load KAO at {old_index},{old_subindex}: {ex}"))
                 )
@@ -415,7 +419,7 @@ def pil_to_kao(
     # configuration for the PX algorithm
     pairs: dict[tuple[int, int], int] = {}
     for x in range(len(new_img) - 1):
-        l = [
+        l = [  # noqa:E741
             new_img[x] % 16,
             new_img[x] // 16,
             new_img[x + 1] % 16,
@@ -460,7 +464,7 @@ def pil_to_kao(
     while -1 in new_order:
         new_order.remove(-1)
     for x in range(16):
-        if not x in new_order:
+        if x not in new_order:
             new_order.append(x)
     new_img_new = bytearray(800)
     for i, v in enumerate(new_img):

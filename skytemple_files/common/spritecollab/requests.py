@@ -56,7 +56,8 @@ class AioRequestAdapterImpl(AioRequestAdapter):
 
     def graphql_transport(self, url: str) -> AsyncTransport:
         if self.use_certifi_ssl:
-            import certifi, ssl  # type: ignore  #  pylint: disable=no-name-in-module,no-member,import-error
+            import certifi  # type: ignore
+            import ssl  # type: ignore
 
             return AIOHTTPTransport(
                 url=url, ssl=ssl.create_default_context(cafile=certifi.where())
@@ -97,7 +98,8 @@ class CachedAIOHTTPTransport(AsyncTransport):
 
     def __init__(self, url: str, cache: CachedRequestAdapter, use_certifi_ssl=False):
         if use_certifi_ssl:
-            import certifi, ssl  # type: ignore  #  pylint: disable=no-name-in-module,no-member,import-error
+            import certifi
+            import ssl  # type: ignore  #  pylint: disable=no-name-in-module,no-member,import-error
 
             self._transport = AIOHTTPTransport(
                 url=url, ssl=ssl.create_default_context(cafile=certifi.where())

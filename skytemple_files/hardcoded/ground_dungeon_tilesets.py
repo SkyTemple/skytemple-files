@@ -126,15 +126,18 @@ def resolve_mapping_for_level(
     fixed: FixedBin,
     dungeon_bin: DungeonBinPack,
     dungeons: list[DungeonDefinition],
-) -> None | (
-    tuple[
-        DmaProtocol,
-        DpcProtocol,
-        DpciProtocol,
-        DplProtocol,
-        DplaProtocol,
-        FixedFloor | None,
-    ]
+) -> (
+    None
+    | (
+        tuple[
+            DmaProtocol,
+            DpcProtocol,
+            DpciProtocol,
+            DplProtocol,
+            DplaProtocol,
+            FixedFloor | None,
+        ]
+    )
 ):
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
     if (

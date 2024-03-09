@@ -62,10 +62,10 @@ class FloorAttribute:
                 group_id = t_switch[0]
                 start = t_switch[1]
                 end = t_switch[2]
-                if start == None:
+                if start is None:
                     start = 0
                 start += 1  # type: ignore
-                if end == None:
+                if end is None:
                     end = len(self.attrs[group_id])
                 end += 1  # type: ignore
                 new_attrs[-1].extend(self.attrs[group_id][start:end])

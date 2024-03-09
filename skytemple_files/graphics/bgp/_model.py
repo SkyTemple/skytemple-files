@@ -210,7 +210,7 @@ class Bgp(BgpProtocol):
         )
 
         if len(self.tiles) == 0x3FF:
-            raise AttributeError(f"Error when importing: max tile count reached.")
+            raise AttributeError("Error when importing: max tile count reached.")
 
         # Add the 0 tile (used to clear bgs)
         self.tiles.insert(0, bytearray(int(BGP_TILE_DIM * BGP_TILE_DIM / 2)))

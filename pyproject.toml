@@ -56,3 +56,13 @@ spritecollab = [
 
 [project.scripts]
 skytemple_export_maps = "skytemple_files.export_maps:main"
+
+[tool.ruff]
+extend-exclude = [
+    "fixture_autogen.py",
+    "fixture_autogen.pyi",
+]
+
+[tools.ruff.lint]
+select = [ "W", "E", "F", "ARG"]
+

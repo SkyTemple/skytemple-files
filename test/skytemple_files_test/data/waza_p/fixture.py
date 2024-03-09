@@ -21,10 +21,16 @@ from typing import MutableSequence, Sequence
 from range_typed_integers import u16, u8, u32
 
 from skytemple_files.common.util import AutoString
-from skytemple_files.data.waza_p.protocol import LevelUpMoveProtocol, MoveLearnsetProtocol, WazaMoveProtocol
+from skytemple_files.data.waza_p.protocol import (
+    LevelUpMoveProtocol,
+    MoveLearnsetProtocol,
+    WazaMoveProtocol,
+)
 
 
-def eq_level_up_move_list(one: Sequence[LevelUpMoveProtocol], two: Sequence[LevelUpMoveProtocol]) -> bool:
+def eq_level_up_move_list(
+    one: Sequence[LevelUpMoveProtocol], two: Sequence[LevelUpMoveProtocol]
+) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -34,13 +40,12 @@ def eq_level_up_move_list(one: Sequence[LevelUpMoveProtocol], two: Sequence[Leve
 
 
 def eq_level_up_move(one: LevelUpMoveProtocol, two: LevelUpMoveProtocol) -> bool:
-    return (
-        one.move_id == two.move_id and
-        one.level_id == two.level_id
-    )
+    return one.move_id == two.move_id and one.level_id == two.level_id
 
 
-def eq_learnset_list(one: Sequence[MoveLearnsetProtocol], two: Sequence[MoveLearnsetProtocol]) -> bool:
+def eq_learnset_list(
+    one: Sequence[MoveLearnsetProtocol], two: Sequence[MoveLearnsetProtocol]
+) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -51,13 +56,15 @@ def eq_learnset_list(one: Sequence[MoveLearnsetProtocol], two: Sequence[MoveLear
 
 def eq_learnset(one: MoveLearnsetProtocol, two: MoveLearnsetProtocol) -> bool:
     return (
-        eq_level_up_move_list(one.level_up_moves, two.level_up_moves) and
-        list(one.egg_moves) == list(two.egg_moves) and
-        list(one.tm_hm_moves) == list(two.tm_hm_moves)
+        eq_level_up_move_list(one.level_up_moves, two.level_up_moves)
+        and list(one.egg_moves) == list(two.egg_moves)
+        and list(one.tm_hm_moves) == list(two.tm_hm_moves)
     )
 
 
-def eq_move_list(one: Sequence[WazaMoveProtocol], two: Sequence[WazaMoveProtocol]) -> bool:
+def eq_move_list(
+    one: Sequence[WazaMoveProtocol], two: Sequence[WazaMoveProtocol]
+) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -68,27 +75,27 @@ def eq_move_list(one: Sequence[WazaMoveProtocol], two: Sequence[WazaMoveProtocol
 
 def eq_move(one: WazaMoveProtocol, two: WazaMoveProtocol) -> bool:
     return (
-        one.base_power == two.base_power and
-        one.type == two.type and
-        one.category == two.category and
-        int(one.settings_range) == int(two.settings_range) and
-        int(one.settings_range_ai) == int(two.settings_range_ai) and
-        one.base_pp == two.base_pp and
-        one.ai_weight == two.ai_weight and
-        one.miss_accuracy == two.miss_accuracy and
-        one.accuracy == two.accuracy and
-        one.ai_condition1_chance == two.ai_condition1_chance and
-        one.number_chained_hits == two.number_chained_hits and
-        one.max_upgrade_level == two.max_upgrade_level and
-        one.crit_chance == two.crit_chance and
-        one.affected_by_magic_coat == two.affected_by_magic_coat and
-        one.is_snatchable == two.is_snatchable and
-        one.uses_mouth == two.uses_mouth and
-        one.ai_frozen_check == two.ai_frozen_check and
-        one.ignores_taunted == two.ignores_taunted and
-        one.range_check_text == two.range_check_text and
-        one.move_id == two.move_id and
-        one.message_id == two.message_id
+        one.base_power == two.base_power
+        and one.type == two.type
+        and one.category == two.category
+        and int(one.settings_range) == int(two.settings_range)
+        and int(one.settings_range_ai) == int(two.settings_range_ai)
+        and one.base_pp == two.base_pp
+        and one.ai_weight == two.ai_weight
+        and one.miss_accuracy == two.miss_accuracy
+        and one.accuracy == two.accuracy
+        and one.ai_condition1_chance == two.ai_condition1_chance
+        and one.number_chained_hits == two.number_chained_hits
+        and one.max_upgrade_level == two.max_upgrade_level
+        and one.crit_chance == two.crit_chance
+        and one.affected_by_magic_coat == two.affected_by_magic_coat
+        and one.is_snatchable == two.is_snatchable
+        and one.uses_mouth == two.uses_mouth
+        and one.ai_frozen_check == two.ai_frozen_check
+        and one.ignores_taunted == two.ignores_taunted
+        and one.range_check_text == two.range_check_text
+        and one.move_id == two.move_id
+        and one.message_id == two.message_id
     )
 
 
@@ -117,7 +124,12 @@ class WazaLearnsetStub(MoveLearnsetProtocol[LevelUpMoveStub]):
     tm_hm_moves: MutableSequence[u32]
     egg_moves: MutableSequence[u32]
 
-    def __init__(self, level_up_moves: Sequence[LevelUpMoveStub], tm_hm_moves: Sequence[u32], egg_moves: Sequence[u32]):
+    def __init__(
+        self,
+        level_up_moves: Sequence[LevelUpMoveStub],
+        tm_hm_moves: Sequence[u32],
+        egg_moves: Sequence[u32],
+    ):
         self.level_up_moves = list(level_up_moves)
         self.tm_hm_moves = list(tm_hm_moves)
         self.egg_moves = list(egg_moves)
@@ -157,7 +169,7 @@ class WazaMoveStub(WazaMoveProtocol[int]):  # type: ignore
     range_check_text: u8
     move_id: u16
     message_id: u8
-    
+
     @classmethod
     def stub_new(
         cls,
@@ -218,9 +230,25 @@ class WazaMoveStub(WazaMoveProtocol[int]):  # type: ignore
 
 
 FIX_MOVE_RANGE_SETTINGS = [
-    (bytes([0x00, 0x00]), {'target': 0, 'range': 0, 'condition': 0, 'unused': 0}, 0),
-    (bytes([0x34, 0x12]), {'target': 4, 'range': 3, 'condition': 2, 'unused': 1}, 0x1234),
-    (bytes([0x12, 0x34]), {'target': 2, 'range': 1, 'condition': 4, 'unused': 3}, 0x3412),
-    (bytes([0xCD, 0xEF]), {'target': 13, 'range': 12, 'condition': 15, 'unused': 14}, 0xEFCD),
-    (bytes([0xFA, 0xB1]), {'target': 10, 'range': 15, 'condition': 1, 'unused': 11}, 0xB1FA),
+    (bytes([0x00, 0x00]), {"target": 0, "range": 0, "condition": 0, "unused": 0}, 0),
+    (
+        bytes([0x34, 0x12]),
+        {"target": 4, "range": 3, "condition": 2, "unused": 1},
+        0x1234,
+    ),
+    (
+        bytes([0x12, 0x34]),
+        {"target": 2, "range": 1, "condition": 4, "unused": 3},
+        0x3412,
+    ),
+    (
+        bytes([0xCD, 0xEF]),
+        {"target": 13, "range": 12, "condition": 15, "unused": 14},
+        0xEFCD,
+    ),
+    (
+        bytes([0xFA, 0xB1]),
+        {"target": 10, "range": 15, "condition": 1, "unused": 11},
+        0xB1FA,
+    ),
 ]

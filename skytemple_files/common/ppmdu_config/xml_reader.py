@@ -137,7 +137,6 @@ class Pmd2XmlReader:
         """
         game_editions = []
         game_constants = {}
-        binaries = []
         string_index_data = None
         asm_patches_constants = None
         script_data = None
@@ -542,7 +541,10 @@ class Pmd2XmlReader:
                                         citems,
                                     )
         return Pmd2DungeonData(
-            dungeon_bin_files, items, dungeons, item_categories  # type: ignore
+            dungeon_bin_files,
+            items,
+            dungeons,
+            item_categories,  # type: ignore
         )
 
     @staticmethod

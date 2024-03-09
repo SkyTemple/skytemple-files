@@ -33,7 +33,9 @@ from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 NULL_TILE = bytes([0] * 32)
 
 
-class BpcTestCase(SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtocol, BpaMock]]):  # type: ignore
+class BpcTestCase(
+    SkyTempleFilesTestCase[BpcHandler, BpcProtocol[BpcLayerProtocol, BpaMock]]
+):  # type: ignore
     handler = BpcHandler
 
     def setUp(self) -> None:

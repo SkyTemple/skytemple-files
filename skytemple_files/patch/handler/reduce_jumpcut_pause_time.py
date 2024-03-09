@@ -33,7 +33,7 @@ from skytemple_files.common.util import get_binary_from_rom
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
-ORIGINAL_BYTESEQ = b"\x3C\x00\x50\xE3"
+ORIGINAL_BYTESEQ = b"\x3c\x00\x50\xe3"
 OFFSET_EU = 0x022FA32C - 0x022DCB80
 OFFSET_US = 0x022F9920 - 0x022DC240
 OFFSET_JP = 0x022FAED8 - 0x022DD8E0

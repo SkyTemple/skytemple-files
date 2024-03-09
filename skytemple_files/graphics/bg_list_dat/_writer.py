@@ -36,14 +36,14 @@ class BgListWriter:
         # At max we will need 11 8 character cstrings for each entry:
         self.data = bytearray(len(model.level) * 11 * 9)
         self.bytes_written = 0
-        for l in model.level:
+        for level in model.level:
             # BPL
-            self._write_string(l.bpl_name)
-            self._write_string(l.bpc_name)
-            self._write_string(l.bma_name)
+            self._write_string(level.bpl_name)
+            self._write_string(level.bpc_name)
+            self._write_string(level.bma_name)
             for i in range(0, 8):
-                if l.bpa_names[i] is not None:
-                    self._write_string(l.bpa_names[i])  # type: ignore
+                if level.bpa_names[i] is not None:
+                    self._write_string(level.bpa_names[i])  # type: ignore
                 else:
                     self._write_string("")
 

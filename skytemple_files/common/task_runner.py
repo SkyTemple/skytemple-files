@@ -75,4 +75,4 @@ class AsyncTaskRunner(Thread):
         try:
             return await asyncio.ensure_future(coro)
         except BaseException as ex:
-            logger.error(f"Uncaught AsyncTaskRunner task exception.", exc_info=ex)
+            logger.error("Uncaught AsyncTaskRunner task exception.", exc_info=ex)

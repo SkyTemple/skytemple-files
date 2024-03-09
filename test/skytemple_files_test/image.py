@@ -71,7 +71,9 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
         if palette_filter is not None:
             assert expected.mode == "P"
             self.assertEqual("P", input_img.mode)
-            expected.putpalette(palette_filter(expected.getpalette(), input_img.getpalette()))  # type: ignore
+            expected.putpalette(
+                palette_filter(expected.getpalette(), input_img.getpalette())
+            )  # type: ignore
         try:
             if equal:
                 self.assertTrue(

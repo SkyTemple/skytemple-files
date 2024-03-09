@@ -91,7 +91,6 @@ class ItemPTestCase(
         self.assertEqual(e.ai_flag_2, False)
         self.assertEqual(e.ai_flag_3, True)
 
-
     def test_write_bin(self) -> None:
         item_p_after = self._save_and_reload_main_fixture(self.fixture)
         with open(self._fix_path(), "rb") as f:

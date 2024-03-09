@@ -117,7 +117,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
         )
 
     async def test_fetch_portrait(self):
-        for (emotion, (_, fpath)) in self.fixtures_emotions:
+        for emotion, (_, fpath) in self.fixtures_emotions:
             if fpath is None:
                 self.assertEqual(None, await self.obj.fetch_portrait(emotion))
 
@@ -174,12 +174,12 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
             ("Foo", FIX_TEST_FILES_WITH_NONE[-1]),  # None, None
         ]
         urls = {}
-        for (emotion, (url, _)) in fixtures_emotions:
+        for emotion, (url, _) in fixtures_emotions:
             if url is not None:
                 urls[emotion] = url
         self.obj.portraits = urls
 
-        for (emotion, (_, fpath)) in fixtures_emotions:
+        for emotion, (_, fpath) in fixtures_emotions:
             renamed_emotion = emotion_map[emotion]
             face_name = Pmd2ScriptFaceName(-1, renamed_emotion)
             if fpath is None:
@@ -195,7 +195,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
                 )
 
     async def test_fetch_sprite_anim(self):
-        for (action, fpaths) in self.fixtures_actions:
+        for action, fpaths in self.fixtures_actions:
             fpath = fpaths["anim"][1]
             if fpath is None:
                 self.assertEqual(None, await self.obj.fetch_sprite_anim(action))
@@ -206,7 +206,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
                 self.assertEqual(data, await self.obj.fetch_sprite_anim(action))
 
     async def test_fetch_sprite_shadows(self):
-        for (action, fpaths) in self.fixtures_actions:
+        for action, fpaths in self.fixtures_actions:
             fpath = fpaths["shadows"][1]
             if fpath is None:
                 self.assertEqual(None, await self.obj.fetch_sprite_shadows(action))
@@ -217,7 +217,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
                 self.assertEqual(data, await self.obj.fetch_sprite_shadows(action))
 
     async def test_fetch_sprite_offsets(self):
-        for (action, fpaths) in self.fixtures_actions:
+        for action, fpaths in self.fixtures_actions:
             fpath = fpaths["offsets"][1]
             if fpath is None:
                 self.assertEqual(None, await self.obj.fetch_sprite_offsets(action))
@@ -228,7 +228,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
                 self.assertEqual(data, await self.obj.fetch_sprite_offsets(action))
 
     async def test_fetch_portrait_sheet(self):
-        for (url, fpath) in FIX_TEST_FILES:
+        for url, fpath in FIX_TEST_FILES:
             self.obj.portrait_sheet = url
 
             if fpath is None:
@@ -240,7 +240,7 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
                 self.assertEqual(data, await self.obj.fetch_portrait_sheet())
 
     async def test_fetch_sprite_zip(self):
-        for (url, fpath) in FIX_TEST_FILES_WITH_NONE:
+        for url, fpath in FIX_TEST_FILES_WITH_NONE:
             self.obj.sprite_zip = url
 
             if fpath is None:

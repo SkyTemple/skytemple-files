@@ -1,4 +1,5 @@
 """SpriteCollab client tests that use a local schema to mock the data."""
+
 #  Copyright 2020-2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -202,13 +203,18 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
             self.assertEqual(result, QUERY_API_VERSION_FIX)
 
     def assertSpritesEqual(
-        self, expected_dir: str,
-        sprite: Optional[WanFile], sprite_names: Pmd2Sprite, _shadow_size: int
+        self,
+        expected_dir: str,
+        sprite: Optional[WanFile],
+        sprite_names: Pmd2Sprite,
+        _shadow_size: int,
     ):
         self.assertIsNotNone(sprite)
         with tempfile.TemporaryDirectory() as tempdir:
             FileType.WAN.CHARA.export_sheets(
-                tempdir, sprite, sprite_names  # type: ignore
+                tempdir,
+                sprite,
+                sprite_names,  # type: ignore
             )
 
             cmp = dircmp(tempdir, expected_dir)

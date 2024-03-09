@@ -20,7 +20,6 @@ from collections.abc import Sequence
 
 from PIL import Image
 
-from skytemple_files.common.util import chunks
 from skytemple_files.graphics.dma.protocol import DmaType, DmaExtraType, DmaProtocol
 from skytemple_files.graphics.dma.util import get_tile_neighbors
 from skytemple_files.graphics.dpc._model import Dpc

@@ -39,7 +39,7 @@ class BmaCollisionRleDecompressor:
     def decompress(self) -> tuple[bytes, int]:
         self.reset()
         if DEBUG:
-            print(f"BMA Collision RLE decompression start....")
+            print("BMA Collision RLE decompression start....")
 
         # Handle data
         while self.cursor < self.max_size and self.bytes_written < self.stop_when_size:

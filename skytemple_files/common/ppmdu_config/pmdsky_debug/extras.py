@@ -88,10 +88,13 @@ class ExtraAllSymbolsProtocol(Protocol):
     overlay11: SectionProtocol[
         ExtraOverlay11FunctionsProtocol, ExtraOverlay11DataProtocol, int
     ]
-    overlay36: None | (
-        SectionProtocol[
-            ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int
-        ]
+    overlay36: (
+        None
+        | (
+            SectionProtocol[
+                ExtraOverlay36FunctionsProtocol, ExtraOverlay36DataProtocol, int
+            ]
+        )
     )
 
 

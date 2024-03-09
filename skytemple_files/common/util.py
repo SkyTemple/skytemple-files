@@ -84,18 +84,6 @@ logger = logging.getLogger(__name__)
 
 # Explicit re-exports for backwards-compatibility
 # noinspection PyUnresolvedReferences
-from skytemple_files.common.compat_13x import (  # nopycln: import
-    read_sintbe,
-    read_sintle,
-    read_uintbe,
-    read_uintle,
-    write_sintbe,
-    write_sintle,
-    write_uintbe,
-    write_uintle,
-    get_binary_from_rom_ppmdu,
-    set_binary_in_rom_ppmdu,
-)
 
 
 class CapturableProtocol(Protocol):
@@ -106,7 +94,15 @@ class CapturableProtocol(Protocol):
 
 # A type that can be captured and serialized in structured events, such as for error reports
 # Mypy can't handle cyclic dependencies yet :(
-Capturable = Union[int, str, bool, Iterable["Capturable"], dict[str, "Capturable"], None, CapturableProtocol]  # type: ignore
+Capturable = Union[
+    int,
+    str,
+    bool,
+    Iterable["Capturable"],
+    dict[str, "Capturable"],
+    None,
+    CapturableProtocol,
+]  # type: ignore
 Captured = Union[int, str, bool, list["Captured"], dict[str, "Captured"], None]  # type: ignore
 
 
@@ -655,7 +651,7 @@ def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:
     def recursive_increment_folder_start_idx(rfolder: Folder, new_idx: int) -> None:
         if rfolder != folder and rfolder.firstID >= new_idx:
             rfolder.firstID += 1
-        for _, sfolder in rfolder.folders:
+        for __, sfolder in rfolder.folders:
             recursive_increment_folder_start_idx(sfolder, new_idx)
 
     recursive_increment_folder_start_idx(rom.filenames, folder_first_file_id)
@@ -756,9 +752,9 @@ def mutate_sequence(obj: object, attr: str) -> Generator[list[Any], None, None]:
     TODO: Better typing (probably impossible?)
     """
     seq: Sequence[Any] = getattr(obj, attr)
-    l = list(seq)
-    yield l
-    setattr(obj, attr, l)
+    lst = list(seq)
+    yield lst
+    setattr(obj, attr, lst)
 
 
 class AutoString:

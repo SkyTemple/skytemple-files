@@ -167,7 +167,9 @@ class Dpc(DpcProtocol[Dpci]):
                 for entry in chunk:
                     entry.idx += 1
         if not contains_null_chunk:
-            tile_mappings = [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] + tile_mappings  # type: ignore
+            tile_mappings = [
+                [TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]
+            ] + tile_mappings  # type: ignore
         self.chunks = tile_mappings
         self.re_fill_chunks()
 
@@ -176,4 +178,6 @@ class Dpc(DpcProtocol[Dpci]):
             raise ValueError(
                 _("A dungeon background or tilemap can not have more than 400 chunks.")
             )
-        self.chunks += [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] * (400 - len(self.chunks))  # type: ignore
+        self.chunks += [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] * (
+            400 - len(self.chunks)
+        )  # type: ignore

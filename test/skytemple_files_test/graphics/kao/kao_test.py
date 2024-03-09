@@ -127,7 +127,6 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
         self.assertIsNone(new_kao.get(1153, 0))
 
     def test_delete(self) -> None:
-        img = self._load_image(self._fix_path_png(0, 1))
         self.kao.delete(552, 4)
         self.kao.delete(1232132, 432131)
         self.kao.delete(552, 1)
@@ -315,4 +314,4 @@ class KaoTestCase(SkyTempleFilesTestCase[KaoHandler, KaoProtocol[KaoImageProtoco
     @classmethod
     @fixpath
     def _fix_path_complex_png(cls, sidx: int) -> str:
-        return "fixtures", f"complex", f"1_{sidx}.png"
+        return "fixtures", "complex", f"1_{sidx}.png"

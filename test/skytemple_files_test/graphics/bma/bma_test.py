@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import typing
 
-from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.graphics.bma.handler import BmaHandler
 from skytemple_files.graphics.bma.protocol import BmaProtocol
 from skytemple_files_test.graphics.mocks.bpa_mock import BpaMock

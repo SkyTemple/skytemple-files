@@ -64,7 +64,7 @@ class BmaLayerNrlCompressor:
         if len_seq > NRL_MIN_SEQ_LEN:
             # CMD_COPY_BYTES
             if DEBUG:
-                print(f"CMD_COPY_BYTES")
+                print("CMD_COPY_BYTES")
             self.cursor += len_seq * 4
             cmd_byte = CMD_COPY_BYTES + (len_seq - 1)
             self._write_cmd(cmd_byte)
@@ -78,14 +78,14 @@ class BmaLayerNrlCompressor:
             self.cursor += repeats * 4
             if read_u32(current_int_pair, 0) == 0:
                 if DEBUG:
-                    print(f"CMD_ZERO_OUT")
+                    print("CMD_ZERO_OUT")
                 # CMD_ZERO_OUT
                 cmd_byte = repeats
                 self._write_cmd(cmd_byte)
             else:
                 # CMD_FILL_OUT
                 if DEBUG:
-                    print(f"CMD_FILL_OUT")
+                    print("CMD_FILL_OUT")
                 # To big for one cmd, just make it into two.
                 if repeats > NRL_LOOKAHEAD_FILL_MAX_BYTES:
                     repeats_byte1 = repeats - NRL_LOOKAHEAD_FILL_MAX_BYTES

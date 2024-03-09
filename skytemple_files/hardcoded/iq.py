@@ -245,15 +245,13 @@ class HardcodedIq:
             )
         for i, entry in enumerate(value):
             arm9bin[
-                block.address
-                + i * IQ_SKILL_ENTRY_LEN : block.address
+                block.address + i * IQ_SKILL_ENTRY_LEN : block.address
                 + (i + 1) * IQ_SKILL_ENTRY_LEN
             ] = entry.iq_required.to_bytes(
                 IQ_SKILL_ENTRY_LEN, byteorder="little", signed=True
             )
             arm9bin[
-                block_restr.address
-                + i * IQ_SKILL_RESTR_ENTRY_LEN : block_restr.address
+                block_restr.address + i * IQ_SKILL_RESTR_ENTRY_LEN : block_restr.address
                 + (i + 1) * IQ_SKILL_RESTR_ENTRY_LEN
             ] = entry.restriction_group.to_bytes(
                 IQ_SKILL_RESTR_ENTRY_LEN, byteorder="little", signed=True

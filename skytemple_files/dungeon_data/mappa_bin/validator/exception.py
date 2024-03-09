@@ -70,7 +70,7 @@ class FloorReusedError(DungeonValidatorError):
         return _("Re-uses Floor")
 
     def __str__(self) -> str:
-        name = (
+        name = (  # noqa: F841
             self.reused_of_dungeon_name
             if self.reused_of_dungeon_name is not None
             else f'{_("dungeon")} {self.reused_of_dungeon_with_id}'

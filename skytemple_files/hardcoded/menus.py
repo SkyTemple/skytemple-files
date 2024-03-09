@@ -732,7 +732,7 @@ class HardcodedMenus:
         data = bytearray(len(menu_data) * MENU_ENTRY_LEN)
         if len(data) != block.length:
             # noinspection PyUnusedLocal
-            num_entries = block.length // MENU_ENTRY_LEN
+            num_entries = block.length // MENU_ENTRY_LEN  # noqa:F841
             raise Exception(f(_("This menu must have {num_entries} entries!")))
         for i, m in enumerate(menu_data):
             if menu.data_type == MenuDataType.NORMAL:

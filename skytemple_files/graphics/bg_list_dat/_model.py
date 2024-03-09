@@ -180,32 +180,32 @@ class BgList(BgListProtocol[BgListEntry]):
     def find_bma(self, name: str) -> int:
         """Count all occurrences of this BMA in the list."""
         count = 0
-        for l in self.level:
-            if l.bma_name == name:
+        for level in self.level:
+            if level.bma_name == name:
                 count += 1
         return count
 
     def find_bpl(self, name: str) -> int:
         """Count all occurrences of this BPL in the list."""
         count = 0
-        for l in self.level:
-            if l.bpl_name == name:
+        for level in self.level:
+            if level.bpl_name == name:
                 count += 1
         return count
 
     def find_bpc(self, name: str) -> int:
         """Count all occurrences of this BPL in the list."""
         count = 0
-        for l in self.level:
-            if l.bpc_name == name:
+        for level in self.level:
+            if level.bpc_name == name:
                 count += 1
         return count
 
     def find_bpa(self, name: str) -> int:
         """Count all occurrences of this BPA in the list."""
         count = 0
-        for l in self.level:
-            for bpa in l.bpa_names:
+        for level in self.level:
+            for bpa in level.bpa_names:
                 if bpa == name:
                     count += 1
         return count

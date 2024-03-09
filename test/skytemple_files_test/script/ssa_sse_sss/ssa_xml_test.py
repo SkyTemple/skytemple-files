@@ -26,7 +26,7 @@ from skytemple_files.common.xml_util import XmlValidateError
 from skytemple_files.script.ssa_sse_sss.handler import SsaHandler
 from skytemple_files.script.ssa_sse_sss.ssa_xml import ssa_to_xml, ssa_from_xml
 
-from skytemple_files_test.case import fixpath, SkyTempleFilesTestCase, T
+from skytemple_files_test.case import fixpath, SkyTempleFilesTestCase
 from skytemple_files_test.xml import XmlTestCaseAbc
 
 

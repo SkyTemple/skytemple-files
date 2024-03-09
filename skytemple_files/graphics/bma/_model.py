@@ -726,13 +726,13 @@ class Bma(BmaProtocol[Bpa, Bpc, Bpl]):
 
         # Shrink / enlarge the grid
         # Y: Enlarge
-        for _ in range(0, new_h - len(rows)):
+        for __ in range(0, new_h - len(rows)):
             rows.append([])
         # Y: Shrink
         rows = rows[:new_h]
         for row_i, row in enumerate(rows):
             # X: Enlarge
-            for _ in range(0, new_w - len(row)):
+            for __ in range(0, new_w - len(row)):
                 row.append(empty_elem)
             # X: Shrink
             rows[row_i] = row[:new_w]

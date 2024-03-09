@@ -36,7 +36,7 @@ def get_tile_neighbors(
         y += 1
         wall_matrix = (
             [[1] * (len(wall_matrix[0]) + 2)]
-            + [[1] + l + [1] for l in wall_matrix]
+            + [[1] + ll + [1] for ll in wall_matrix]
             + [[1] * (len(wall_matrix[0]) + 2)]
         )
     # SOUTH

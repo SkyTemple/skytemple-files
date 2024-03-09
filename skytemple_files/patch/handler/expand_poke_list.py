@@ -373,7 +373,7 @@ and to save a backup of your ROM before applying this."""
                                 != Gender.INVALID.value
                             ):
                                 entry.md_index += NUM_PREVIOUS_ENTRIES
-                    except:
+                    except Exception:
                         print(f"{dungeon.mappa_index}, {f} is not valid.")
             rom.setFileByName(
                 "BALANCE/mappa_s.bin", MappaBinHandler.serialize(mappa_model)

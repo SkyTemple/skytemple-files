@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 import typing
-from typing import Optional
 
 from range_typed_integers import u8, u16, u32
 
@@ -35,10 +34,8 @@ from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
 from skytemple_files_test.data.waza_p.fixture import (
     eq_move,
     eq_move_list,
-    eq_learnset,
     eq_learnset_list,
     FIX_MOVE_RANGE_SETTINGS,
-    WazaLearnsetStub,
     LevelUpMoveStub,
     eq_level_up_move_list,
 )

@@ -631,13 +631,11 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
     frames_bounds_tight = []
     piece_imgs = {}
     for idx, metaFrame in enumerate(wan.frameData):
-        has_minus = False
         draw_queue = []
         for mt_idx, metaFramePiece in enumerate(metaFrame):
             # create the piece
             parent_idx = MINUS_FRAME
             if metaFramePiece.imgIndex == MINUS_FRAME:
-                has_minus = True
                 prev_idx = mt_idx - 1
                 while (
                     metaFrame[prev_idx].imgIndex == MINUS_FRAME

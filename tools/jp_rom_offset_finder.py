@@ -261,7 +261,7 @@ def main():
     found = set()
     with RomDir(EU_ROM) as rom_dir_eu:
         with RomDir(JP_ROM) as rom_dir_jp:
-            print(f"Pre-processing...")
+            print("Pre-processing...")
             # We pre-process the JP offsets since the literal file doesn't contain them
             binary_jp_addresses = {}
             for yml_path in glob(

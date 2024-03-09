@@ -26,7 +26,7 @@ from skytemple_files.common.util import (
     write_u32,
     write_u8,
 )
-from skytemple_files.graphics.fonts.font_dat import model, FONT_DAT_ENTRY_LEN
+from skytemple_files.graphics.fonts.font_dat import FONT_DAT_ENTRY_LEN
 from skytemple_files.graphics.fonts.font_dat.model import FontDat
 
 

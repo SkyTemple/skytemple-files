@@ -28,7 +28,6 @@ from skytemple_files.common.util import (
 
 # XXX: Removing this re-export his is a breaking change in skytemple < 1.5 due to a typo.
 # noinspection PyUnresolvedReferences
-from skytemple_files.common.util import open_utf8  # nopycln: import
 
 
 class Str:

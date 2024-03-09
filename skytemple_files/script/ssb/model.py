@@ -390,7 +390,7 @@ class Ssb:
         """Return a single string in all languages"""
         res = {}
         if len(self.strings) < 1:
-            raise IndexError(f"No strings exist.")
+            raise IndexError("No strings exist.")
         for key, strs in self.strings.items():
             res[key] = strs[id]
         return res

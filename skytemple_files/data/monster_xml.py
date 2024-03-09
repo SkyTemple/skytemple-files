@@ -699,32 +699,32 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
                 elif xml_stat.tag == XML_STATS_GROWTH_LEVEL__SP_DEFENSE:
                     sp_defense = int(xml_stat.text)
             if required_exp is None:
-                x = XML_STATS_GROWTH_LEVEL__REQUIRED_EXP
+                x = XML_STATS_GROWTH_LEVEL__REQUIRED_EXP  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if hp is None:
-                x = XML_STATS_GROWTH_LEVEL__HP
+                x = XML_STATS_GROWTH_LEVEL__HP  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if attack is None:
-                x = XML_STATS_GROWTH_LEVEL__ATTACK
+                x = XML_STATS_GROWTH_LEVEL__ATTACK  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if sp_attack is None:
-                x = XML_STATS_GROWTH_LEVEL__SP_ATTACK
+                x = XML_STATS_GROWTH_LEVEL__SP_ATTACK  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if defense is None:
-                x = XML_STATS_GROWTH_LEVEL__DEFENSE
+                x = XML_STATS_GROWTH_LEVEL__DEFENSE  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )
             if sp_defense is None:
-                x = XML_STATS_GROWTH_LEVEL__SP_DEFENSE
+                x = XML_STATS_GROWTH_LEVEL__SP_DEFENSE  # noqa:F841
                 raise XmlValidateError(
                     f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
                 )

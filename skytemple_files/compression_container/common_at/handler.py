@@ -96,7 +96,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
             # For native handler:
             cls.allowed_types.remove(compression_type)
             del os.environ["SKYTEMPLE_ALLOW_ATUPX"]
-        except KeyError as ke:
+        except KeyError:
             pass  # TODO, add warning
         if DEBUG:
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
@@ -144,7 +144,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
                     if new_data is None or size < new_size:
                         new_data = cont
                         new_size = size
-                except:
+                except Exception:
                     pass
         if DEBUG:
             print("*** COMMON AT DEBUG: Compress End")

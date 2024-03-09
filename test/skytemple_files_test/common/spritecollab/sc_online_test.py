@@ -18,9 +18,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import sys
 from typing import Any, get_args, get_origin, get_type_hints
-from unittest import IsolatedAsyncioTestCase, skipIf
+from unittest import IsolatedAsyncioTestCase
 
 from gql.dsl import DSLQuery
 

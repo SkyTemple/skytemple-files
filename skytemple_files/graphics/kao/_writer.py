@@ -72,7 +72,7 @@ class KaoWriter:
 
             if start_index == maxsize:
                 if DEBUG:
-                    print(f"KaoWriter: Nothing changed, returning original")
+                    print("KaoWriter: Nothing changed, returning original")
                 # Nothing was changed
                 return kao.original_data
             else:

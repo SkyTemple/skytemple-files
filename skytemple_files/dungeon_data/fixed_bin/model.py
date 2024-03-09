@@ -432,13 +432,13 @@ class FixedFloor:
 
         # Shrink / enlarge the grid
         # Y: Enlarge
-        for _ in range(0, height - len(rows)):
+        for __ in range(0, height - len(rows)):
             rows.append([])
         # Y: Shrink
         rows = rows[:height]
         for row_i, row in enumerate(rows):
             # X: Enlarge
-            for _ in range(0, width - len(row)):
+            for __ in range(0, width - len(row)):
                 row.append(TileRule(TileRuleType.FLOOR_ROOM, None))
             # X: Shrink
             rows[row_i] = row[:width]

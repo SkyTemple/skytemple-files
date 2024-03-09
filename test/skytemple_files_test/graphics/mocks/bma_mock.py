@@ -19,7 +19,7 @@ from __future__ import annotations
 from typing import List, Optional, Sequence
 
 from PIL import Image
-from range_typed_integers import *
+from range_typed_integers import u8, u16
 
 from skytemple_files.graphics.bma.protocol import BmaProtocol, C, L, P
 

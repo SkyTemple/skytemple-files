@@ -19,7 +19,6 @@ from __future__ import annotations
 from collections.abc import MutableSequence, Sequence, Iterable
 
 from range_typed_integers import u32_checked, u16, u32, u8
-from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import (
     AutoString,
     chunks,

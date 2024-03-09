@@ -40,7 +40,7 @@ class BpcTilemapCompressor(GenericNrlCompressor):
             self._process(2)
 
         if DEBUG:
-            print(f"End Phase 1. Begin Phase 2.")
+            print("End Phase 1. Begin Phase 2.")
             print(f"Cursor begin phase 2: {self.bytes_written}")
 
         # And then all the low bytes (LE)

@@ -296,7 +296,7 @@ class AsmFunction:
                         ][1]
                     reg_list[15] += 0x4
                 elif code & AL_OP_MASK == AL_OP_CODE:
-                    opcode = code & OPCODE_MASK
+                    opcode = code & OPCODE_MASK  # noqa: F841
                     op2 = get_imm_value(
                         reg_list, code & IMMEDIATE_FIELD, code & OPCODE_IMM
                     )

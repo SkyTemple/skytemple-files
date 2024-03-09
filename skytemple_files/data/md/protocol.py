@@ -421,7 +421,7 @@ class IQGroup(Enum):
     H = 0x7, "H"
     UNUSED8 = 0x8, _("Unused") + " 8"
     UNUSED9 = 0x9, _("Unused") + " 9"
-    I = 0xA, "I"
+    I = 0xA, "I"  # noqa: E741
     J = 0xB, "J"
     UNUSEDC = 0xC, _("Unused") + " C"
     UNUSEDD = 0xD, _("Unused") + " D"

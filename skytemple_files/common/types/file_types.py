@@ -50,7 +50,6 @@ from skytemple_files.data.waza_p.handler import WazaPHandler
 from skytemple_files.data.item_p.handler import ItemPHandler
 from skytemple_files.data.md_evo.handler import MdEvoHandler
 from skytemple_files.data.sprconf.handler import SprconfHandler
-from skytemple_files.data.str.handler import StrHandler
 from skytemple_files.data.tbl_talk.handler import TblTalkHandler
 from skytemple_files.dungeon_data.fixed_bin.handler import FixedBinHandler
 from skytemple_files.dungeon_data.mappa_bin.handler import MappaBinHandler

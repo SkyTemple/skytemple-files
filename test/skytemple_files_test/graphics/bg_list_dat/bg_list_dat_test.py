@@ -2730,17 +2730,17 @@ class BgListDatTestCase(
                 "C2_BPA8",
             ],
         )
-        with mutate_sequence(self.bg_list, "level") as l:
-            l.append(mdl)
+        with mutate_sequence(self.bg_list, "level") as entry:
+            entry.append(mdl)
         expected.append(self.format_entry(mdl))  # type: ignore
         # Remove first entry
-        with mutate_sequence(self.bg_list, "level") as l:
-            l.pop(0)
+        with mutate_sequence(self.bg_list, "level") as entry:
+            entry.pop(0)
         expected.pop(0)
         # Change third entry
         self.bg_list.level[2].bma_name = "THRD_BMA"
-        with mutate_sequence(self.bg_list.level[2], "bpa_names") as l:
-            l[1] = "12345678"
+        with mutate_sequence(self.bg_list.level[2], "bpa_names") as entry:
+            entry[1] = "12345678"
         expected[2]["bma_name"] = "THRD_BMA"  # type: ignore
         expected[2]["bpa_names"][1] = "12345678"  # type: ignore
         self.assertEqual(expected, self.format_list(self.bg_list))
@@ -2763,8 +2763,8 @@ class BgListDatTestCase(
             self._save_and_reload_main_fixture(self.bg_list)
 
     def test_write_too_long_bpa(self) -> None:
-        with mutate_sequence(self.bg_list.level[0], "bpa_names") as l:
-            l[0] = "Way too long"
+        with mutate_sequence(self.bg_list.level[0], "bpa_names") as entry:
+            entry[0] = "Way too long"
         with self.assertRaises(ValueError):
             self._save_and_reload_main_fixture(self.bg_list)
 
@@ -2840,8 +2840,8 @@ class BgListDatTestCase(
                 "C2_BPA8",
             ],
         )
-        with mutate_sequence(self.bg_list, "level") as l:
-            l.append(mdl)
+        with mutate_sequence(self.bg_list, "level") as entry:
+            entry.append(mdl)
         self.assertEqual(1, self.bg_list.find_bma("G01P01A"))
         self.assertEqual(0, self.bg_list.find_bma("nope"))
         self.assertEqual(2, self.bg_list.find_bma("COCO"))
@@ -2862,8 +2862,8 @@ class BgListDatTestCase(
                 "C2_BPA8",
             ],
         )
-        with mutate_sequence(self.bg_list, "level") as l:
-            l.append(mdl)
+        with mutate_sequence(self.bg_list, "level") as entry:
+            entry.append(mdl)
         self.assertEqual(1, self.bg_list.find_bpl("G01P01A"))
         self.assertEqual(0, self.bg_list.find_bpl("nope"))
         self.assertEqual(2, self.bg_list.find_bpl("COCO"))

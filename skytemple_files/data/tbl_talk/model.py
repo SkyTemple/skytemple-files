@@ -74,7 +74,7 @@ class TblTalk:
     def add_group(self):
         # IMPORTANT! This doesn't work because the game needs a specific number of groups
         self.groups.append([])
-        for _ in range(TBL_TALK_PERSONALITY_LEN):
+        for __ in range(TBL_TALK_PERSONALITY_LEN):
             self.groups[-1].append([])
 
     def get_dialogues(self, group: int, talk_type: TalkType) -> list[u16]:

@@ -97,7 +97,7 @@ jobs:
       name: Run type checks
       with:
         path: 'skytemple_files'
-        mypy_flags: '--config-file mypy.ini --junit-xml mypy.xml'
+        mypy_flags: '--config-file mypy.ini --junit-xml mypy-${{ matrix.python-version }}.xml'
         requirements: '-r requirements.txt'
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results
@@ -140,6 +140,7 @@ jobs:
     - name: Test with tox
       run: tox -- -m "not romtest"
       working-directory: test
+    - run: mv test/pytest.xml test/pytest-${{ matrix.python-version }}-${{ matrix.native }}.xml
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v4
@@ -178,6 +179,7 @@ jobs:
      working-directory: test
      env:
        SKYTEMPLE_TEST_ROM: /rom.nds
+   - run: mv test/pytest.xml test/pytest-romtest-${{ matrix.python-version }}-${{ matrix.native }}.xml
    - name: Upload Test Results
      if: always()
      uses: actions/upload-artifact@v4

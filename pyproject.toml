@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "skytemple-files"
-version = "1.6.3"
+version = "1.6.4"
 authors = [
     {name = 'Marco "Capypara" Köpcke', email = "hello@capypara.de"},
     # see About dialog or GitHub contributors list for additional people.
@@ -31,7 +31,7 @@ dependencies = [
     "Pillow >= 6.1.0",
     "appdirs >= 1.4.0",
     "explorerscript >= 0.1.5",
-    "skytemple-rust >= 1.6.3, < 1.7.0",
+    "skytemple-rust >= 1.6.4, < 1.7.0",
     'pyobjc==9.2; sys_platform == "darwin"',
     "dungeon-eos==0.0.5",
     'typing_extensions >= 3.9; python_version < "3.9"',
@@ -50,8 +50,7 @@ Discord = "https://discord.gg/skytemple"
 spritecollab = [
     "gql[aiohttp] >= 3.5.0b8",
     "graphql-core >= 3.2.0",
-    # TODO: Add speedups extra again if cchardet is no longer required by it
-    "aiohttp",
+    "aiohttp[speedups]",
     "lru-dict >= 1.1.8",
 ]
 

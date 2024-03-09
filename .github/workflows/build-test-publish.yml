@@ -135,7 +135,7 @@ jobs:
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MyPy Test Results (Python ${{ matrix.python-version }})
         path: mypy.xml
@@ -179,7 +179,7 @@ jobs:
       working-directory: test
     - name: Upload Test Results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: "Pytest Test Results (Python ${{ matrix.python-version }} - Native ${{ matrix.native }})"
         path: test/pytest.xml
@@ -221,7 +221,7 @@ jobs:
        SKYTEMPLE_TEST_ROM: /rom.nds
    - name: Upload Test Results
      if: always()
-     uses: actions/upload-artifact@v3
+     uses: actions/upload-artifact@v4
      with:
        name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native ${{ matrix.native }})"
        path: test/pytest.xml
@@ -231,7 +231,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Event File
         path: ${{ github.event_path }}

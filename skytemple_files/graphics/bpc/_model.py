@@ -495,8 +495,9 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
                 entry.idx += 1
         if not contains_null_chunk:
             tile_mappings = [
-                TilemapEntry.from_int(0) for _ in range(0, nb_tiles_in_chunk)
-            ] + tile_mappings  # type: ignore
+                TilemapEntry.from_int(0)  # type: ignore
+                for _ in range(0, nb_tiles_in_chunk)
+            ] + tile_mappings
         self.layers[layer].tilemap = tile_mappings
         self.layers[layer].chunk_tilemap_len = u16_checked(
             int(len(tile_mappings) / self.tiling_width / self.tiling_height)

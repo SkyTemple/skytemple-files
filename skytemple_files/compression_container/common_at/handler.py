@@ -113,8 +113,8 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
                         print("*** COMMON AT DEBUG: Opened =", t)
                     return t.handler.deserialize(data, **kwargs)
         raise ValueError(
-            f"The provided data is not an AT container ({read_bytes(data, 0, 5)})."
-        )  # type: ignore
+            f"The provided data is not an AT container ({read_bytes(data, 0, 5)})."  # type: ignore
+        )
 
     @classmethod
     def serialize(

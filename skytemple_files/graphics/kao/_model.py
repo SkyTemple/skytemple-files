@@ -215,8 +215,8 @@ class Kao(KaoProtocol[KaoImage]):
                 return None
             self.loaded_kaos[index][subindex] = KaoImage(self.original_data, pnt)
             self.loaded_kaos_flat.append(
-                (index, subindex, self.loaded_kaos[index][subindex])
-            )  # type: ignore
+                (index, subindex, self.loaded_kaos[index][subindex])  # type: ignore
+            )
         elif self.loaded_kaos[index][subindex].empty:  # type: ignore
             return None
         return self.loaded_kaos[index][subindex]
@@ -261,8 +261,8 @@ class Kao(KaoProtocol[KaoImage]):
 
             self.loaded_kaos[index][subindex] = KaoImage.new(img)  # type: ignore
             self.loaded_kaos_flat.append(
-                (index, subindex, self.loaded_kaos[index][subindex])
-            )  # type: ignore
+                (index, subindex, self.loaded_kaos[index][subindex])  # type: ignore
+            )
 
     def delete(self, index: int, subindex: int) -> None:
         try:

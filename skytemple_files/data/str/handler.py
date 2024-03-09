@@ -24,13 +24,13 @@ from skytemple_files.data.str.model import Str
 
 class StrHandler(DataHandler[Str]):
     @classmethod
-    def deserialize(
+    def deserialize(  # type: ignore
         cls,
         data: bytes,
         *,
         string_encoding: str = PMD2_STR_ENCODER,
         **kwargs: OptionalKwargs,
-    ) -> Str:  # type: ignore
+    ) -> Str:
         return Str(data, string_encoding)
 
     @classmethod

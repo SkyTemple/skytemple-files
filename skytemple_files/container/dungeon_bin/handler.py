@@ -25,9 +25,9 @@ from skytemple_files.container.dungeon_bin.model import DungeonBinPack
 
 class DungeonBinHandler(DataHandler[DungeonBinPack]):
     @classmethod
-    def deserialize(
+    def deserialize(  # type: ignore
         cls, data: bytes, static_data: Pmd2Data, **kwargs: OptionalKwargs
-    ) -> DungeonBinPack:  # type: ignore
+    ) -> DungeonBinPack:
         return DungeonBinPack(data, static_data.dungeon_data.dungeon_bin_files)
 
     @classmethod

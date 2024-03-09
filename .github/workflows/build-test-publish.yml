@@ -29,12 +29,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Set up Rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        default: true
-        override: true
-        profile: minimal
+      uses: dtolnay/rust-toolchain@stable
     - uses: actions/cache@v4
       with:
         # We do this per Run, since the requirements.txt contains references to Git repos that might have changed.
@@ -135,10 +130,10 @@ jobs:
         python_version: '${{ matrix.python-version }}'
     - name: Upload Unit Test Results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MyPy Test Results (Python ${{ matrix.python-version }})
-        path: mypy.xml
+        path: mypy-${{ matrix.python-version }}.xml
 
   test:
     runs-on: ubuntu-latest
@@ -169,20 +164,16 @@ jobs:
       if: matrix.native
       run: |
         echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
-    - uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        default: true
-        override: true
+    - uses: dtolnay/rust-toolchain@stable
     - name: Test with tox
       run: tox -- -m "not romtest"
       working-directory: test
     - name: Upload Test Results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: "Pytest Test Results (Python ${{ matrix.python-version }} - Native ${{ matrix.native }})"
-        path: test/pytest.xml
+        path: test/pytest-${{ matrix.python-version }}-${{ matrix.native }}.xml
 
   test_with_rom:
    # This uses a self-hosted runner with access to the ROM at /rom.nds.
@@ -209,11 +200,7 @@ jobs:
      if: matrix.native
      run: |
        echo "SKYTEMPLE_USE_NATIVE=1" >> $GITHUB_ENV
-   - uses: actions-rs/toolchain@v1
-     with:
-       toolchain: stable
-       default: true
-       override: true
+   - uses: dtolnay/rust-toolchain@stable
    - name: Test with tox
      run: tox -- -m "romtest"
      working-directory: test
@@ -221,17 +208,17 @@ jobs:
        SKYTEMPLE_TEST_ROM: /rom.nds
    - name: Upload Test Results
      if: always()
-     uses: actions/upload-artifact@v3
+     uses: actions/upload-artifact@v4
      with:
        name: "Pytest ROM Test Results (Python ${{ matrix.python-version }}) - Native ${{ matrix.native }})"
-       path: test/pytest.xml
+       path: test/pytest-romtest-${{ matrix.python-version }}-${{ matrix.native }}.xml
 
   test-event-file:
     name: "Publish Test Results Event File"
     runs-on: ubuntu-latest
     steps:
     - name: Upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Event File
         path: ${{ github.event_path }}

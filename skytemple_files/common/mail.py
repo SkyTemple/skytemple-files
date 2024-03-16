@@ -357,9 +357,9 @@ class WonderMailS(Mail):
         self.mission_subtype = mission_subtype if mission_subtype is not None else u4(0)
         self.mission_type = mission_type
 
-        self._data[
-            Mail._OFFSET_MAIL_TYPE : Mail._OFFSET_MAIL_TYPE_END
-        ] = WonderMailS.MAIL_TYPE
+        self._data[Mail._OFFSET_MAIL_TYPE : Mail._OFFSET_MAIL_TYPE_END] = (
+            WonderMailS.MAIL_TYPE
+        )
 
     @property
     def null_bits(self) -> u8:

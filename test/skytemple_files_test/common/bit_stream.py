@@ -44,7 +44,7 @@ class BitStreamTestCase(unittest.TestCase):
         self.assertEqual(expected, list(BitStream(input_list)))
 
     def test_init_bytes(self):
-        input_list = b"\x04\x1E"
+        input_list = b"\x04\x1e"
         # fmt: off
         expected = [
             # 128   64     32     16     8      4      2      1
@@ -77,7 +77,7 @@ class BitStreamTestCase(unittest.TestCase):
         self.assertRaises(StopIteration, lambda: next(iter(bs_second)))
 
     def test_to_bytes(self):
-        self.assertEqual(bytes(b"\x04\x1E"), BitStream(b"\x04\x1E").to_bytes())
+        self.assertEqual(bytes(b"\x04\x1e"), BitStream(b"\x04\x1e").to_bytes())
         self.assertEqual(
             bytes([136]), BitStream([True, False, False, False, True]).to_bytes()
         )
@@ -85,17 +85,17 @@ class BitStreamTestCase(unittest.TestCase):
     def test_to_bytes_subview(self):
         # 00000100 00011110
         #  00001000 001/////
-        self.assertEqual(bytes(b"\x08\x20"), BitStream(b"\x04\x1E")[1:12].to_bytes())
+        self.assertEqual(bytes(b"\x08\x20"), BitStream(b"\x04\x1e")[1:12].to_bytes())
 
     def test_to_number(self):
         self.assertEqual(17, BitStream([True, False, False, False, True]).to_number())
-        self.assertEqual(0x041E, BitStream(b"\x04\x1E").to_number())
-        self.assertEqual(0x041E, BitStream(b"\x04\x1E").to_number("big"))
-        self.assertEqual(0x1E04, BitStream(b"\x04\x1E").to_number("little"))
-        self.assertEqual(0x041E, BitStream(b"\x04\x1E").to_number("big", signed=True))
-        self.assertEqual(0x041E, BitStream(b"\x04\x1E").to_number("big", False))
-        self.assertEqual(-3042, BitStream(b"\xF4\x1E").to_number("big", signed=True))
-        self.assertEqual(0xF41E, BitStream(b"\xF4\x1E").to_number("big", False))
+        self.assertEqual(0x041E, BitStream(b"\x04\x1e").to_number())
+        self.assertEqual(0x041E, BitStream(b"\x04\x1e").to_number("big"))
+        self.assertEqual(0x1E04, BitStream(b"\x04\x1e").to_number("little"))
+        self.assertEqual(0x041E, BitStream(b"\x04\x1e").to_number("big", signed=True))
+        self.assertEqual(0x041E, BitStream(b"\x04\x1e").to_number("big", False))
+        self.assertEqual(-3042, BitStream(b"\xf4\x1e").to_number("big", signed=True))
+        self.assertEqual(0xF41E, BitStream(b"\xf4\x1e").to_number("big", False))
         # fmt: off
         twelve = [
             # byte 1:

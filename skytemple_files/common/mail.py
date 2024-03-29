@@ -285,7 +285,16 @@ class Mail:
                     raise IntegerBoundError(
                         f"Value {value} is out of range for {typ} (must be between {r.min} and {r.max})"
                     )
-        self._data[offset : offset + length] = value
+        bits = [True if x == "1" else False for x in bin(value)[2:]]
+        # Convert to LE:
+        # TODO: This is probably completely broken for signed numbers. It's also stupid.
+        remainder = length - len(bits)
+        if remainder != 0:
+            bits = ([False] * remainder) + bits
+        bits_ch: list[bool] = []
+        for bit_chunk in chunks(bits, 8):
+            bits_ch = list(bit_chunk) + bits_ch
+        self._data[offset : offset + length] = bits_ch
 
     def __str__(self):
         return self.to_code(GAME_REGION_EU)

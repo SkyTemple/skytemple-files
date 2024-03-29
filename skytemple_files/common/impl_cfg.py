@@ -12,7 +12,7 @@ If it is set, it defaults to the native implementations.
 
 from __future__ import annotations
 
-#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

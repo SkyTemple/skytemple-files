@@ -1,6 +1,6 @@
 """Module for editing hardcoded data regarding the starters and the personality test."""
 
-#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

@@ -3,7 +3,7 @@ XML export / import for MD, WAZA_P and LEVEL_BIN_ENTRY.
 Theoretically compatible with ppmdu, but contains some new field names for some things.
 """
 
-#  Copyright 2020-2023 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

@@ -114,6 +114,8 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
             sprites_copy_of={},
             portrait_credits=[],
             sprite_credits=[],
+            portrait_history=[],
+            sprite_history=[],
         )
 
     async def test_fetch_portrait(self):

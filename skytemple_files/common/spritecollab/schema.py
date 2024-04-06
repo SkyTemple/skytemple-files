@@ -59,6 +59,18 @@ Phase = Union[
     Literal["FULL"],
     Literal["UNKNOWN"],
 ]
+LICENSE_UNKNOWN: Literal["UNKNOWN"] = "UNKNOWN"
+LICENSE_UNSPECIFIED: Literal["UNSPECIFIED"] = "UNSPECIFIED"
+LICENSE_PMDCOLLAB1: Literal["PMDCOLLAB1"] = "PMDCOLLAB1"
+LICENSE_PMDCOLLAB2: Literal["PMDCOLLAB2"] = "PMDCOLLAB2"
+LICENSE_CC_BY_NC4: Literal["CC_BY_NC4"] = "CC_BY_NC4"
+KnownLicenseType = Union[
+    Literal["UNKNOWN"],
+    Literal["UNSPECIFIED"],
+    Literal["PMDCOLLAB1"],
+    Literal["PMDCOLLAB2"],
+    Literal["CC_BY_NC4"],
+]
 
 
 class OtherBounty(TypedDict):
@@ -72,6 +84,25 @@ class MonsterBounty(TypedDict):
     exists: int | None
     full: int | None
     other: list[OtherBounty]
+
+
+class KnownLicense(TypedDict):
+    license: KnownLicenseType
+
+
+class OtherLicense(TypedDict):
+    name: str
+
+
+License = Union[KnownLicense, OtherLicense]
+
+
+class MonsterHistory(TypedDict):
+    credit: Credit
+    modifiedDate: str
+    modifications: list[str]
+    obsolete: bool
+    license: License
 
 
 class ActionId(TypedDict):
@@ -115,6 +146,8 @@ class MonsterFormSprites_Metadata(TypedDict):
     zipUrl: str | None
     recolorSheetUrl: str | None
     modifiedDate: str
+    history: list[MonsterHistory]
+    historyUrl: str
 
 
 # noinspection PyPep8Naming
@@ -144,6 +177,8 @@ class MonsterFormPortraits_Metadata(TypedDict):
     sheetUrl: str
     recolorSheetUrl: str
     modifiedDate: str
+    history: list[MonsterHistory]
+    historyUrl: str
 
 
 # noinspection PyPep8Naming

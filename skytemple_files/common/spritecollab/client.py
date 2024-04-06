@@ -72,6 +72,7 @@ from skytemple_files.common.spritecollab.schema import (
     Phase,
     Query,
     Sprite,
+    MonsterHistory,
 )
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.xml_util import prettify
@@ -134,6 +135,8 @@ class MonsterFormDetails(MonsterFormInfo):
     sprites_copy_of: dict[str, str]
     portrait_credits: list[Credit]
     sprite_credits: list[Credit]
+    portrait_history: list[MonsterHistory]
+    sprite_history: list[MonsterHistory]
 
     async def fetch_portrait(self, emotion_name: str) -> Image.Image | None:
         if emotion_name in self.portraits:
@@ -412,11 +415,13 @@ class SpriteCollabSession:
                 sprites_copy_of=sprites_copy_of,
                 portrait_credits=portrait_credits,
                 sprite_credits=sprite_credits,
+                sprite_history=form["sprites"]["history"],
+                portrait_history=form["portraits"]["history"],
             )
 
         return await self._fetch_details(
             monsters_and_forms,
-            lambda credit, sprite, copy_of: (
+            lambda credit, history, sprite, copy_of: (
                 self.ds.MonsterForm.path,
                 self.ds.MonsterForm.fullName,
                 self.ds.MonsterForm.isShiny,
@@ -434,6 +439,8 @@ class SpriteCollabSession:
                     self.ds.MonsterFormPortraits.sheetUrl,
                     self.ds.MonsterFormPortraits.creditPrimary.select(credit),
                     self.ds.MonsterFormPortraits.creditSecondary.select(credit),
+                    self.ds.MonsterFormPortraits.history.select(history),
+                    self.ds.MonsterFormPortraits.history.select(history),
                 ),
                 self.ds.MonsterForm.sprites.select(
                     self.ds.MonsterFormSprites.phase,
@@ -442,6 +449,8 @@ class SpriteCollabSession:
                     self.ds.MonsterFormSprites.zipUrl,
                     self.ds.MonsterFormSprites.creditPrimary.select(credit),
                     self.ds.MonsterFormSprites.creditSecondary.select(credit),
+                    self.ds.MonsterFormSprites.history.select(history),
+                    self.ds.MonsterFormSprites.history.select(history),
                 ),
             ),
             process_form,
@@ -501,14 +510,14 @@ class SpriteCollabSession:
 
         return await self._fetch_details(
             monsters_and_forms,
-            lambda _credit, _sprite, copy_of: (
+            lambda _credit, _history, _sprite, copy_of: (
                 self.ds.MonsterForm.portraits.select(
                     self.ds.MonsterFormPortraits.sheetUrl
                 ),
             ),
             process_form,
             include_sprite_fragments=False,
-            include_credit_fragments=False,
+            include_credit_and_history_fragments=False,
         )
 
     async def fetch_sprites(
@@ -654,12 +663,12 @@ class SpriteCollabSession:
 
         return await self._fetch_details(
             monsters_and_forms,
-            lambda _credit, _sprite, copy_of: (
+            lambda _credit, _history, _sprite, copy_of: (
                 self.ds.MonsterForm.sprites.select(self.ds.MonsterFormSprites.zipUrl),
             ),
             process_form,
             include_sprite_fragments=False,
-            include_credit_fragments=False,
+            include_credit_and_history_fragments=False,
         )
 
     async def execute_query(
@@ -674,12 +683,12 @@ class SpriteCollabSession:
         self,
         monsters_and_forms: Sequence[tuple[int, str]],
         selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
+            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
         *,
         include_sprite_fragments: bool = True,
-        include_credit_fragments: bool = True,
+        include_credit_and_history_fragments: bool = True,
     ) -> list[T]:
         sprite = DSLFragment("SpriteUnionAsSprite")
         sprite.on(self.ds.Sprite)
@@ -705,12 +714,39 @@ class SpriteCollabSession:
             self.ds.Credit.discordHandle,
         )
 
+        license_frag_known = DSLFragment("KnownLicenseFields")
+        license_frag_known.on(self.ds.KnownLicense)
+        license_frag_known.select(
+            self.ds.KnownLicense.license,
+        )
+
+        license_frag_other = DSLFragment("OtherLicenseFields")
+        license_frag_other.on(self.ds.OtherLicense)
+        license_frag_other.select(
+            self.ds.OtherLicense.name,
+        )
+
+        history = DSLFragment("HistoryFields")
+        history.on(self.ds.MonsterHistory)
+        history.select(
+            self.ds.MonsterHistory.credit.select(credit),
+            self.ds.MonsterHistory.modifiedDate,
+            self.ds.MonsterHistory.modifications,
+            self.ds.MonsterHistory.obsolete,
+            self.ds.MonsterHistory.license.select(
+                license_frag_known, license_frag_other
+            ),
+        )
+
         fragments = []
         if include_sprite_fragments:
             fragments.append(sprite)
             fragments.append(copy_of)
-        if include_credit_fragments:
+        if include_credit_and_history_fragments:
             fragments.append(credit)
+            fragments.append(history)
+            fragments.append(license_frag_known)
+            fragments.append(license_frag_other)
 
         # Count the number of unique monsters in the request
         monster_set = {monster for monster, _ in monsters_and_forms}
@@ -723,6 +759,7 @@ class SpriteCollabSession:
                 sprite,
                 copy_of,
                 credit,
+                history,
                 selector_fn,
                 form_cb,
             )
@@ -734,6 +771,7 @@ class SpriteCollabSession:
                 sprite,
                 copy_of,
                 credit,
+                history,
                 selector_fn,
                 form_cb,
             )
@@ -748,8 +786,9 @@ class SpriteCollabSession:
         sprite: DSLFragment,
         copy_of: DSLFragment,
         credit: DSLFragment,
+        history: DSLFragment,
         selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
+            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
     ) -> list[Coroutine[Any, Any, T]]:
@@ -759,7 +798,7 @@ class SpriteCollabSession:
         for path in paths:
             key = f"f_{i}"
             monster_forms[key] = self.ds.Monster.manual(path=path).select(
-                *selector_fn(credit, sprite, copy_of)
+                *selector_fn(credit, history, sprite, copy_of)
             )
             path_mapping[path] = key
             i += 1
@@ -803,8 +842,9 @@ class SpriteCollabSession:
         sprite: DSLFragment,
         copy_of: DSLFragment,
         credit: DSLFragment,
+        history: DSLFragment,
         selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
+            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
         ],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
     ) -> list[Coroutine[Any, Any, T]]:
@@ -814,7 +854,7 @@ class SpriteCollabSession:
                     self.ds.Monster.id,
                     self.ds.Monster.name,
                     self.ds.Monster.forms().select(
-                        *selector_fn(credit, sprite, copy_of)
+                        *selector_fn(credit, history, sprite, copy_of)
                     ),
                 )
             ),

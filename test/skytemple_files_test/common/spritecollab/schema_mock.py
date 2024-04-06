@@ -114,6 +114,8 @@ def mock_monster____all_forms(
                         "locked": False,
                         "url": "test-portrait:Special3.png",
                     },
+                    "history": [],
+                    "historyUrl": "dummy-1",
                 },
                 "sprites": {
                     "required": True,
@@ -127,6 +129,8 @@ def mock_monster____all_forms(
                     "recolorSheetUrl": "dummy",
                     "modifiedDate": "2001-03-02T04:12:03.000098+00:00",
                     "actions": [],
+                    "history": [],
+                    "historyUrl": "dummy-2",
                 },
             },
         }
@@ -378,6 +382,45 @@ def mock_monster____all_forms(
                         "locked": False,
                         "url": "test-portrait:Normal.png",
                     },
+                    "history": [
+                        {
+                            "credit": {
+                                "id": "CREDIT1",
+                                "name": None,
+                                "contact": None,
+                                "discordHandle": None,
+                            },
+                            "modifiedDate": "2020-10-07T17:58:43.588731+00:00",
+                            "modifications": ["NORMAL"],
+                            "obsolete": True,
+                            "license": {"license": "UNSPECIFIED"},
+                        },
+                        {
+                            "credit": {
+                                "id": "CREDIT2",
+                                "name": "Credit 2",
+                                "contact": "Credit 2 Contact",
+                                "discordHandle": None,
+                            },
+                            "modifiedDate": "2021-10-07T17:58:43.588731+00:00",
+                            "modifications": ["HAPPY"],
+                            "obsolete": False,
+                            "license": {"license": "CC_BY_NC4"},
+                        },
+                        {
+                            "credit": {
+                                "id": "CREDIT3",
+                                "name": None,
+                                "contact": None,
+                                "discordHandle": None,
+                            },
+                            "modifiedDate": "2022-10-07T17:58:43.588731+00:00",
+                            "modifications": ["NORMAL"],
+                            "obsolete": False,
+                            "license": {"name": "Test"},
+                        },
+                    ],
+                    "historyUrl": "dummy-3",
                 },
                 "sprites": {
                     "required": True,
@@ -472,6 +515,8 @@ def mock_monster____all_forms(
                             "copyOf": "Sleep",
                         },
                     ],
+                    "history": [],
+                    "historyUrl": "dummy-4",
                 },
             },
             ("9999/9999", (9999, False, True)): {
@@ -512,6 +557,8 @@ def mock_monster____all_forms(
                     ],
                     "emotionsFlipped": [],
                     "previewEmotion": None,
+                    "history": [],
+                    "historyUrl": "dummy-5",
                 },
                 "sprites": {
                     "required": True,
@@ -533,6 +580,8 @@ def mock_monster____all_forms(
                             "shadowsUrl": "test-sprite:2:Idle-Shadow.png",
                         }
                     ],
+                    "history": [],
+                    "historyUrl": "dummy-6",
                 },
             },
         }
@@ -707,6 +756,107 @@ credit_type = GraphQLObjectType(
 # scalar DateTimeUtc
 date_time_utc_type = GraphQLScalarType("DateTimeUtc")
 
+# """An unknown license. The name is the identifier for the license."""
+# type OtherLicense {
+#   name: String!
+# }
+other_license_type = GraphQLObjectType(
+    "OtherLicense",
+    lambda: {
+        "name": GraphQLField(GraphQLNonNull(GraphQLString)),
+    },
+)
+
+# """A known license from a common list of options."""
+# enum KnownLicenseType {
+#   """The license could not be determined."""
+#   UNKNOWN
+#
+#   """The license is not specified / the work is unlicensed."""
+#   UNSPECIFIED
+#
+#   """Original license: When using, you must credit the contributors."""
+#   PMDCOLLAB1
+#
+#   """
+#   License for works between May 2023 - March 2024: You are free to use, copy
+#   redistribute or modify sprites and portraits from this repository for your own
+#   projects and contributions. When using portraits or sprites from this
+#   repository, you must credit the contributors for each portrait and sprite you use.
+#   """
+#   PMDCOLLAB2
+#
+#   """
+#   Licensed under Creative Commons Attribution-NonCommercial 4.0 International
+#   """
+#   CC_BY_NC4
+# }
+known_license_type_type = GraphQLEnumType(
+    "KnownLicenseType",
+    {
+        "UNKNOWN": None,
+        "UNSPECIFIED": None,
+        "PMDCOLLAB1": None,
+        "PMDCOLLAB2": None,
+        "CC_BY_NC4": None,
+    },
+    names_as_values=True,
+)
+
+# """A known license from a common list of options."""
+# type KnownLicense {
+#   license: KnownLicenseType!
+# }
+known_license_type = GraphQLObjectType(
+    "KnownLicense",
+    lambda: {
+        "license": GraphQLField(GraphQLNonNull(known_license_type_type)),
+    },
+)
+
+# """
+# The license that applies to the image of a sprite action or portrait emotion.
+# """
+# union License = KnownLicense | OtherLicense
+license_union_type = GraphQLUnionType(
+    "License",
+    [known_license_type, other_license_type],
+    resolve_type=lambda value, _, __: "KnownLicense"
+    if "license" in value.keys()
+    else "OtherLicense",
+)
+
+# type MonsterHistory {
+#   """The author that contributed for this history entry."""
+#   credit: Credit
+#
+#   """The date of the history entry submission."""
+#   modifiedDate: DateTimeUtc!
+#
+#   """A list of emotions or actions that were changed in this history entry."""
+#   modifications: [String!]!
+#
+#   """
+#   True if the credit for this history entry was marked as no longer relevant for the current portraits or sprites.
+#   """
+#   obsolete: Boolean!
+#
+#   """The license applying to this modification."""
+#   license: License!
+# }
+monster_history_type = GraphQLObjectType(
+    "MonsterHistory",
+    lambda: {
+        "credit": GraphQLField(credit_type),
+        "modifiedDate": GraphQLField(GraphQLNonNull(date_time_utc_type)),
+        "modifications": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
+        ),
+        "obsolete": GraphQLField(GraphQLNonNull(GraphQLBoolean)),
+        "license": GraphQLField(GraphQLNonNull(license_union_type)),
+    },
+)
+
 # """The current phase of the sprite or portrait."""
 # enum Phase {
 #   INCOMPLETE
@@ -877,6 +1027,11 @@ monster_bounty_type = GraphQLObjectType(
 #   """A single portrait for a given emotion."""
 #   emotion(emotion: String!): Portrait
 #
+#   """
+#   A single portrait. Return the 'Normal' portrait if avalaible, but may return another one if not present.
+#   """
+#   previewEmotion: Portrait
+#
 #   """A list of all existing flipped portraits for the emotions."""
 #   emotionsFlipped: [Portrait!]!
 #
@@ -885,6 +1040,14 @@ monster_bounty_type = GraphQLObjectType(
 #
 #   """The date and time this portrait set was last updated."""
 #   modifiedDate: DateTimeUtc
+#
+#   """List of all modifications made to those portraits since its creation."""
+#   history: [MonsterHistory!]!
+#
+#   """
+#   Returns a URL to retrieve the credits text file for the portraits for this form.
+#   """
+#   historyUrl: String
 # }
 monster_form_portraits_type = GraphQLObjectType(
     "MonsterFormPortraits",
@@ -921,6 +1084,10 @@ monster_form_portraits_type = GraphQLObjectType(
         ),
         "previewEmotion": GraphQLField(portrait_type),
         "modifiedDate": GraphQLField(date_time_utc_type),
+        "history": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))
+        ),
+        "historyUrl": GraphQLField(GraphQLString),
     },
 )
 
@@ -960,6 +1127,14 @@ monster_form_portraits_type = GraphQLObjectType(
 #
 #   """The date and time this sprite set was last updated."""
 #   modifiedDate: DateTimeUtc
+#
+#   """List of all modifications made to those sprites since its creation."""
+#   history: [MonsterHistory!]!
+#
+#   """
+#   Returns a URL to retrieve the credits text file for the sprites for this form.
+#   """
+#   historyUrl: String
 # }
 monster_form_sprites_type = GraphQLObjectType(
     "MonsterFormSprites",
@@ -986,6 +1161,10 @@ monster_form_sprites_type = GraphQLObjectType(
             resolve=lambda source, _info, action: mock_action(source, action),
         ),
         "modifiedDate": GraphQLField(date_time_utc_type),
+        "history": GraphQLField(
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))
+        ),
+        "historyUrl": GraphQLField(GraphQLString),
     },
 )
 

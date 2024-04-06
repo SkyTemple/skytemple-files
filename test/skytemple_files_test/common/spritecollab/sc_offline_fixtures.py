@@ -482,6 +482,45 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
             },
         ],
         sprite_credits=[],
+        portrait_history=[
+            {
+                "credit": {
+                    "id": "CREDIT1",
+                    "name": None,
+                    "contact": None,
+                    "discordHandle": None,
+                },
+                "modifiedDate": "2020-10-07T17:58:43.588731+00:00",
+                "modifications": ["NORMAL"],
+                "obsolete": True,
+                "license": {"license": "UNSPECIFIED"},
+            },
+            {
+                "credit": {
+                    "id": "CREDIT2",
+                    "name": "Credit 2",
+                    "contact": "Credit 2 Contact",
+                    "discordHandle": None,
+                },
+                "modifiedDate": "2021-10-07T17:58:43.588731+00:00",
+                "modifications": ["HAPPY"],
+                "obsolete": False,
+                "license": {"license": "CC_BY_NC4"},
+            },
+            {
+                "credit": {
+                    "id": "CREDIT3",
+                    "name": None,
+                    "contact": None,
+                    "discordHandle": None,
+                },
+                "modifiedDate": "2022-10-07T17:58:43.588731+00:00",
+                "modifications": ["NORMAL"],
+                "obsolete": False,
+                "license": {"name": "Test"},
+            },
+        ],
+        sprite_history=[],
     ),
     MonsterFormDetails(
         _request_adapter=AioRequestAdapterMock(),
@@ -517,6 +556,8 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         sprites_copy_of={},
         portrait_credits=[],
         sprite_credits=[],
+        portrait_history=[],
+        sprite_history=[],
     ),
 ]
 
@@ -546,6 +587,8 @@ MONSTER_FORM_DETAILS_FIX_MULTI_MON = [
         sprite_zip="test-sprite-zip:0",
         sprites_copy_of={},
         portrait_credits=[],
+        portrait_history=[],
+        sprite_history=[],
         sprite_credits=[],
     ),
 ] + MONSTER_FORM_DETAILS_FIX

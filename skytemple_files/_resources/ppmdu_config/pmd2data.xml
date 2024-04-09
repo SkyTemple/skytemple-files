@@ -87,86 +87,176 @@
         </Language>
       </Languages>
       <StringBlocks>
-        <StringBlock name="Explorer Ranks Names"                   beg="374"  end="387"/>
-        <StringBlock name="Default Team Names"                     beg="561"  end="567"/>
-        <StringBlock name="Job Debriefing Related Strings"         beg="606"  end="672"/>
-        <StringBlock name="Member Joined Menu"                     beg="676"  end="682"/>
-        <StringBlock name="Some Item Menu Strings"                 beg="682"  end="696"/>
-        <StringBlock name="Gummi Eating Strings"                   beg="696"  end="708"/>
-        <StringBlock name="Items and Pokemon Menu Strings"         beg="711"  end="777"/>
-        <StringBlock name="Kangaskhan Storage Strings"             beg="783"  end="812"/>
-        <StringBlock name="Evolution Strings"                      beg="1068"  end="1097"/>
-        <StringBlock name="Music tracks names"                     beg="1276"  end="1418"/>
-        <StringBlock name="Personality Quiz Questions"             beg="1418"  end="1485"/>
-        <StringBlock name="Personality Quiz Answers"               beg="1485"  end="1660"/>
-        <StringBlock name="Personality Quiz result strings"        beg="1660"  end="1708"/>
-        <StringBlock name="Personality string natures"             beg="1737"  end="1741"/>
-        <StringBlock name="Weather Change Feedback"                beg="2628"  end="2636"/>
-        <StringBlock name="Weather Names"                          beg="2636"  end="2644"/>
-        <StringBlock name="Floor-Wide Status Names+Desc"           beg="2644"  end="2674"/>
-        <StringBlock name="IQ Skills Menu"                         beg="2674"  end="2678"/>
-        <StringBlock name="Test Dungeon"                           beg="2679"  end="2680"/>
-        <StringBlock name="Mission Objectives"                     beg="2680"  end="2862"/>
-        <StringBlock name="Mission Failure/Faint Strings"          beg="2862"  end="2878"/>
-        <StringBlock name="Speed Change Feedback"                  beg="2878"  end="2883"/>
-        <StringBlock name="Potential Recruit Strings"              beg="2883"  end="2886"/>
-        <StringBlock name="Gummi Feedback"                         beg="2886"  end="2897"/>
-        <StringBlock name="Traps Feedback"                         beg="2897"  end="2922"/>
-        <StringBlock name="More Dungeon Feedback"                  beg="2922"  end="3068"/>
-        <StringBlock name="Something's Stirring String"            beg="3068"  end="3076"/>
-        <StringBlock name="More Dungeon Feedback"                  beg="3076"  end="3171"/>
-        <StringBlock name="Some Fake items Dialogue"               beg="3171"  end="3184"/>
-        <StringBlock name="Shaymin Form Change Strings"            beg="3184"  end="3190"/>
-        <StringBlock name="Recruited A Pokemon Strings"            beg="3190"  end="3201"/>
-        <StringBlock name="Battle Feedback Messages"               beg="3201"  end="3589"/>
-        <StringBlock name="Misson Feedback"                        beg="3589"  end="3656"/>
-        <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
-        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
-        <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
-        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="3889"  end="3890"/>
-        <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>
-        <StringBlock name="Shedinja Shop Strings"                  beg="3902"  end="3913"/>
-        <StringBlock name="Mime Jr. Spa Strings"                   beg="3913"  end="3923"/>
-        <StringBlock name="Swalot's Shop Strings"                  beg="3923"  end="3933"/>
-        <StringBlock name="Team Tactics Menu strings"              beg="3933"  end="3937"/>
-        <StringBlock name="Item Became Sticky"                     beg="3937"  end="3938"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialogue"              beg="3938"  end="4283"/>
-        <StringBlock name="Pokemon WAIT Dialogue"                  beg="4283"  end="4628"/>
-        <StringBlock name="Pokemon HEALTHY Dialogue"               beg="4628"  end="5738"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialogue"             beg="5738"  end="6083"/>
-        <StringBlock name="Pokemon PINCH Dialogue"                 beg="6083"  end="6428"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialogue"           beg="6428"  end="6773"/>
-        <StringBlock name="Item Names"                             beg="6773"  end="8173"/>
-        <StringBlock name="Move Names"                             beg="8173"  end="8734"/>
-        <StringBlock name="Pokemon Names"                          beg="8734"  end="9334"/>
-        <StringBlock name="Pokemon Categories"                     beg="9334"  end="9934"/>
-        <StringBlock name="Tactics Names"                          beg="9934"  end="9945"/>
-        <StringBlock name="Tactics Descriptions"                   beg="9945"  end="9957"/>
-        <StringBlock name="IQ Skills Names"                        beg="9957"  end="10025"/>
-        <StringBlock name="IQ Skills Descriptions"                 beg="10025"  end="10094"/>
-        <StringBlock name="Move Targets Strings"                   beg="10094"  end="10126"/>
-        <StringBlock name="Accuracy/Power Stars Ratings"           beg="10126"  end="10145"/>
-        <StringBlock name="Move Descriptions"                      beg="10145"  end="10704"/>
-        <StringBlock name="Item Long Descriptions"                 beg="10704"  end="12104"/>
-        <StringBlock name="Item Short Descriptions"                beg="12104"  end="13504"/>
-        <StringBlock name="Trap Names"                             beg="13504"  end="13530"/>
-        <StringBlock name="Trap Descriptions"                      beg="13530"  end="13554"/>
-        <StringBlock name="Statuses Names and Descriptions"        beg="13554"  end="13761"/>
-        <StringBlock name="Type Names"                             beg="13770"  end="13789"/>
-        <StringBlock name="Ability Names"                          beg="13789"  end="13913"/>
-        <StringBlock name="Ability Descriptions"                   beg="13913"  end="14037"/>
-        <StringBlock name="Debug Menu Strings"                     beg="15459"  end="15971"/>
-        <StringBlock name="Portrait Names"                         beg="16076"  end="16108"/>
-        <StringBlock name="Ground Map Names"                       beg="16434"  end="16564"/>
-        <StringBlock name="Dungeon Names (Main)"                   beg="16564"  end="16820"/>
-        <StringBlock name="Dungeon Names (Selection)"              beg="16823"  end="17079"/>
-        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="17082"  end="17338"/>
-        <StringBlock name="Dungeon Names (Banner)"                 beg="17339"  end="17595"/>
-        <StringBlock name="Spinda's Juice Bar Strings"             beg="17800"  end="17900"/>
-        <StringBlock name="Recycle Shop Strings"                   beg="17900"  end="17960"/>
-        <StringBlock name="Staff Roll"                             beg="17960"  end="18451"/>
-        <StringBlock name="New Pokemon Names"                      beg="18451"  end="20499"/>
-        <StringBlock name="New Pokemon Categories"                 beg="20499"  end="22547"/>
+        <StringBlock name="Friend Rescue Set Phrases"                  beg="0"     end="252"/>
+        <StringBlock name="Friend Rescue Message Input Strings"        beg="252"   end="311"/>
+        <StringBlock name="Debug Strings (Game Init)"                  beg="311"   end="361"/>
+        <StringBlock name="Util Strings"                               beg="361"   end="366"/>
+        <StringBlock name="Chapter and Special Episode Strings"        beg="366"   end="374"/>
+        <StringBlock name="Explorer Ranks Names"                       beg="374"   end="387"/>
+        <StringBlock name="Default Menu Strings 1"                     beg="387"   end="434"/>
+        <StringBlock name="Default Menu Strings 2"                     beg="434"   end="490"/>
+        <StringBlock name="Debug Strings (Main Menu)"                  beg="490"   end="502"/>
+        <StringBlock name="Default Team Names"                         beg="561"   end="567"/>
+        <StringBlock name="Save Data Strings"                          beg="567"   end="599"/>
+        <StringBlock name="Prize Ticket Strings"                       beg="599"   end="606"/>
+        <StringBlock name="Job Debriefing Related Strings (Primary)"   beg="606"   end="621"/>
+        <StringBlock name="Job Debriefing Related Strings (Secondary)" beg="621"   end="682"/>
+        <StringBlock name="Dungeon Item Action Menu Strings"           beg="682"   end="696"/>
+        <StringBlock name="Gummi Feedback"                             beg="696"   end="708"/>
+        <StringBlock name="Dungeon Item Pickup Menu Strings"           beg="711"   end="716"/>
+        <StringBlock name="Storage Space Full Strings"                 beg="716"   end="726"/>
+        <StringBlock name="Treasure Bag Full Strings"                  beg="726"   end="735"/>
+        <StringBlock name="New Recruit Full Strings"                   beg="735"   end="748"/>
+        <StringBlock name="Kangaskhan Storage Filter Strings"          beg="754"   end="765"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="783"   end="812"/>
+        <StringBlock name="Kecleon Market Strings"                     beg="812"   end="878"/>
+        <StringBlock name="Duskull Bank Strings"                       beg="878"   end="903"/>
+        <StringBlock name="Chansey Day Care Strings"                   beg="905"   end="933"/>
+        <StringBlock name="Croagunk Swap Shop Strings"                 beg="938"   end="976"/>
+        <StringBlock name="Xatu Appraisal Strings"                     beg="976"   end="1000"/>
+        <StringBlock name="Electivire Link Shop Strings"               beg="1000"  end="1040"/>
+        <StringBlock name="Chimecho Assembly Strings"                  beg="1040"  end="1068"/>
+        <StringBlock name="Luminous Spring Strings"                    beg="1068"  end="1097"/>
+        <StringBlock name="Diary Strings"                              beg="1097"  end="1189"/>
+        <StringBlock name="Level Up Strings"                           beg="1189"  end="1201"/>
+        <StringBlock name="Exclusive Items Strings"                    beg="1201"  end="1207"/>
+        <StringBlock name="Special Episode Item Handling Strings"      beg="1207"  end="1244"/>
+        <StringBlock name="Demo Dungeon Strings"                       beg="1244"  end="1261"/>
+        <StringBlock name="Sky Jukebox Menu Strings"                   beg="1261"  end="1277"/>
+        <StringBlock name="Music Tracks"                               beg="1277"  end="1418"/>
+        <StringBlock name="Personality Quiz Questions"                 beg="1418"  end="1485"/>
+        <StringBlock name="Personality Quiz Answers"                   beg="1485"  end="1660"/>
+        <StringBlock name="Personality Quiz Results"                   beg="1660"  end="1708"/>
+        <StringBlock name="Personality Quiz Aura"                      beg="1708"  end="1729"/>
+        <StringBlock name="Partner Selection Strings"                  beg="1729"  end="1735"/>
+        <StringBlock name="New Game Welcome"                           beg="1735"  end="1736"/>
+        <StringBlock name="Personality Quiz Aura Finger Move"          beg="1736"  end="1737"/>
+        <StringBlock name="Personality Quiz Debug (Breakdown)"         beg="1737"  end="1741"/>
+        <StringBlock name="Personality Quiz Debug (Colored)"           beg="1741"  end="1751"/>
+        <StringBlock name="Sentry Duty Strings"                        beg="1751"  end="1782"/>
+        <StringBlock name="Sentry Duty Hints"                          beg="1782"  end="2186"/>
+        <StringBlock name="Dungeon Item Usage (Basic)"                 beg="2186"  end="2218"/>
+        <StringBlock name="Dungeon Menu Strings (Primary)"             beg="2220"  end="2280"/>
+        <StringBlock name="Dungeon Status Effect Strings"              beg="2280"  end="2382"/>
+        <StringBlock name="Dungeon Menu Strings (Details)"             beg="2382"  end="2438"/>
+        <StringBlock name="Dungeon Menu Strings (Secondary)"           beg="2438"  end="2506"/>
+        <StringBlock name="Dungeon Defeated Dialog Strings"            beg="2506"  end="2592"/>
+        <StringBlock name="Dungeon Cleared Dialog Strings"             beg="2592"  end="2613"/>
+        <StringBlock name="Dungeon Item Usage (Bag)"                   beg="2613"  end="2624"/>
+        <StringBlock name="Weather Change Feedback"                    beg="2628"  end="2636"/>
+        <StringBlock name="Weather Names"                              beg="2636"  end="2644"/>
+        <StringBlock name="Floor-Wide Status"                          beg="2644"  end="2674"/>
+        <StringBlock name="Story Mission Objectives"                   beg="2679"  end="2862"/>
+        <StringBlock name="Mission Failure/Faint Strings"              beg="2862"  end="2878"/>
+        <StringBlock name="Speed Change Feedback"                      beg="2878"  end="2883"/>
+        <StringBlock name="Dungeon Potential Recruit Strings"          beg="2883"  end="2887"/>
+        <StringBlock name="Dungeon Gummi Feedback"                     beg="2887"  end="2896"/>
+        <StringBlock name="Traps Feedback (Primary)"                   beg="2897"  end="2921"/>
+        <StringBlock name="Nothing At Feet String"                     beg="2921"  end="2922"/>
+        <StringBlock name="Dungeon Friend Rescue Strings"              beg="2922"  end="2933"/>
+        <StringBlock name="Dungeon General Feedback 1"                 beg="2933"  end="2965"/>
+        <StringBlock name="Dungeon General Feedback 2"                 beg="2965"  end="3068"/>
+        <StringBlock name="Something's Stirring Strings"               beg="3068"  end="3076"/>
+        <StringBlock name="Dungeon General Feedback 3"                 beg="3076"  end="3190"/>
+        <StringBlock name="Dungeon New Recruit Strings"                beg="3190"  end="3201"/>
+        <StringBlock name="Dungeon General Feedback 4"                 beg="3201"  end="3206"/>
+        <StringBlock name="Status Effect Resolved Feedback"            beg="3206"  end="3273"/>
+        <StringBlock name="Status Effect Apply Feedback"               beg="3273"  end="3469"/>
+        <StringBlock name="Pokemon Stats Change Feedback 1"            beg="3469"  end="3487"/>
+        <StringBlock name="Status Effect Protect Feedback 1"           beg="3487"  end="3506"/>
+        <StringBlock name="PP Recover Strings"                         beg="3506"  end="3508"/>
+        <StringBlock name="Conversion/Sketch Strings"                  beg="3508"  end="3512"/>
+        <StringBlock name="Status Effect Protect Feedback 2"           beg="3512"  end="3525"/>
+        <StringBlock name="Dungeon Pokemon Stat Names"                 beg="3525"  end="3532"/>
+        <StringBlock name="Pokemon Stats Change Feedback 2"            beg="3532"  end="3548"/>
+        <StringBlock name="Dungeon General Feedback 5"                 beg="3548"  end="3587"/>
+        <StringBlock name="Mission Feedback"                           beg="3587"  end="3652"/>
+        <StringBlock name="Dungeon General Feedback 6"                 beg="3652"  end="3656"/>
+        <StringBlock name="Kecleon Dungeon Shop Strings"               beg="3656"  end="3668"/>
+        <StringBlock name="Anchored Feedback"                          beg="3668"  end="3670"/>
+        <StringBlock name="Traps Feedback (Secondary)"                 beg="3670"  end="3701"/>
+        <StringBlock name="Dungeon General Feedback 7"                 beg="3701"  end="3859"/>
+        <StringBlock name="Move Feedback (Primary)"                    beg="3859"  end="3863"/>
+        <StringBlock name="Dungeon Level Up Detail Strings"            beg="3863"  end="3888"/>
+        <StringBlock name="Kirlia Secret Bazaar Strings"               beg="3888"  end="3890"/>
+        <StringBlock name="Grab Bags Shop Strings"                     beg="3890"  end="3902"/>
+        <StringBlock name="Shedinja Shop Strings"                      beg="3902"  end="3913"/>
+        <StringBlock name="Mime Jr. Spa Strings"                       beg="3913"  end="3923"/>
+        <StringBlock name="Swalot's Shop Strings"                      beg="3923"  end="3933"/>
+        <StringBlock name="Team Tactics Menu Strings"                  beg="3933"  end="3937"/>
+        <StringBlock name="Item Became Sticky String"                  beg="3937"  end="3938"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="3938"  end="4283"/>
+        <StringBlock name="Pokemon WAIT Dialog"                        beg="4283"  end="4628"/>
+        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="4628"  end="5738"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="5738"  end="6083"/>
+        <StringBlock name="Pokemon PINCH Dialog"                       beg="6083"  end="6428"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="6428"  end="6773"/>
+        <StringBlock name="Item Names"                                 beg="6773"  end="8173"/>
+        <StringBlock name="Move Names"                                 beg="8173"  end="8734"/>
+        <StringBlock name="Pokemon Names"                              beg="8734"  end="9334"/>
+        <StringBlock name="Pokemon Categories"                         beg="9334"  end="9934"/>
+        <StringBlock name="Tactics Names"                              beg="9934"  end="9945"/>
+        <StringBlock name="Tactics Descriptions"                       beg="9945"  end="9956"/>
+        <StringBlock name="IQ Skills Names"                            beg="9956"  end="10025"/>
+        <StringBlock name="IQ Skills Descriptions"                     beg="10025" end="10094"/>
+        <StringBlock name="Move Targets Strings"                       beg="10094" end="10126"/>
+        <StringBlock name="Accuracy/Power Stars Ratings"               beg="10126" end="10143"/>
+        <StringBlock name="Always Hit/No Damage Strings"               beg="10143" end="10145"/>
+        <StringBlock name="Move Descriptions"                          beg="10145" end="10704"/>
+        <StringBlock name="Item Long Descriptions"                     beg="10704" end="12104"/>
+        <StringBlock name="Item Short Descriptions"                    beg="12104" end="13504"/>
+        <StringBlock name="Trap Names"                                 beg="13504" end="13529"/>
+        <StringBlock name="Trap Descriptions"                          beg="13529" end="13554"/>
+        <StringBlock name="Status Names and Descriptions"              beg="13554" end="13760"/>
+        <StringBlock name="Auxiliary Move Descriptions"                beg="13760" end="13770"/>
+        <StringBlock name="Type Names"                                 beg="13770" end="13790"/>
+        <StringBlock name="Ability Names"                              beg="13790" end="13913"/>
+        <StringBlock name="Ability Descriptions"                       beg="13913" end="14037"/>
+        <StringBlock name="Wireless Connection Strings"                beg="14037" end="14066"/>
+        <StringBlock name="Friend Code Strings"                        beg="14066" end="14121"/>
+        <StringBlock name="Email Strings"                              beg="14121" end="14169"/>
+        <StringBlock name="Wi-fi Connection Strings"                   beg="14169" end="14214"/>
+        <StringBlock name="Wonder Mail S Strings"                      beg="14214" end="14261"/>
+        <StringBlock name="Game Trade Strings"                         beg="14261" end="14343"/>
+        <StringBlock name="Mission Board Strings"                      beg="14343" end="14376"/>
+        <StringBlock name="SOS Mail Strings"                           beg="14376" end="14560"/>
+        <StringBlock name="Mission Title Set Phrases"                  beg="14560" end="14876"/>
+        <StringBlock name="Mission Description Set Phrases"            beg="14876" end="15389"/>
+        <StringBlock name="Mission Detail Strings"                     beg="15389" end="15415"/>
+        <StringBlock name="Mission Objective Strings"                  beg="15415" end="15431"/>
+        <StringBlock name="Debug Strings (Mission)"                    beg="15431" end="15459"/>
+        <StringBlock name="Debug Strings (Switch)"                     beg="15459" end="15491"/>
+        <StringBlock name="Debug Strings (Data)"                       beg="15491" end="15497"/>
+        <StringBlock name="Debug Strings (Checks)"                     beg="15497" end="15505"/>
+        <StringBlock name="Debug Strings (General)"                    beg="15505" end="15643"/>
+        <StringBlock name="Debug Strings (Manipulation)"               beg="15643" end="15648"/>
+        <StringBlock name="Debug Strings (Testing)"                    beg="15648" end="15707"/>
+        <StringBlock name="Debug Strings (Scripts)"                    beg="15707" end="15736"/>
+        <StringBlock name="Debug Strings (Menu)"                       beg="15736" end="15971"/>
+        <StringBlock name="Debug Strings (Status)"                     beg="15971" end="16051"/>
+        <StringBlock name="Debug Strings (Dungeon)"                    beg="16051" end="16120"/>
+        <StringBlock name="Debug Strings (Message)"                    beg="16121" end="16125"/>
+        <StringBlock name="Debug Strings (Triggers)"                   beg="16125" end="16143"/>
+        <StringBlock name="Debug Strings (Bulletin 1)"                 beg="16143" end="16157"/>
+        <StringBlock name="Debug Strings (Bulletin 2)"                 beg="16157" end="16277"/>
+        <StringBlock name="Debug Strings (Mail)"                       beg="16277" end="16282"/>
+        <StringBlock name="Debug Strings (Name)"                       beg="16282" end="16283"/>
+        <StringBlock name="Debug Strings (Parameters)"                 beg="16283" end="16292"/>
+        <StringBlock name="Debug Strings (Counter)"                    beg="16292" end="16294"/>
+        <StringBlock name="Game and Dungeon Hints"                     beg="16294" end="16360"/>
+        <StringBlock name="Adventure Log Entries"                      beg="16360" end="16434"/>
+        <StringBlock name="Ground Map Names"                           beg="16434" end="16564"/>
+        <StringBlock name="Dungeon Names (Main)"                       beg="16564" end="16820"/>
+        <StringBlock name="Dungeon Names (Selection)"                  beg="16823" end="17079"/>
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="17082" end="17338"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="17340" end="17595"/>
+        <StringBlock name="Staff Roll 1"                               beg="17598" end="17781"/>
+        <StringBlock name="Special Mission Strings"                    beg="17781" end="17793"/>
+        <StringBlock name="Super Hasbrello and Bidoof Family"          beg="17793" end="17799"/>
+        <StringBlock name="Spinda's Juice Bar Strings"                 beg="17799" end="17900"/>
+        <StringBlock name="Recycle Shop Strings"                       beg="17900" end="17960"/>
+        <StringBlock name="Staff Roll 2"                               beg="17960" end="18236"/>
+        <StringBlock name="Staff Roll 3"                               beg="18236" end="18451"/>
       </StringBlocks>
     </Game>
 
@@ -203,85 +293,178 @@
         </Language>
       </Languages>
       <StringBlocks>
-        <!-- TODO: Experimental! -->
-        <StringBlock name="Explorer Ranks Names"                   beg="894"  end="907"/>
-        <StringBlock name="Default Team Names"                     beg="1218"  end="1224"/>
-        <!--<StringBlock name="Job Debriefing Related Strings"         beg="1278"  end="673"/> --><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Member Joined Menu"                     beg="9336"  end="9342"/>
-        <StringBlock name="Some Item Menu Strings"                 beg="12234"  end="12248"/>
-        <StringBlock name="Gummi Eating Strings"                   beg="12248"  end="12260"/>
-        <StringBlock name="Items and Pokemon Menu Strings"         beg="12263"  end="12277"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Kangaskhan Storage Strings"             beg="12876"  end="12905"/>
-        <StringBlock name="Evolution Strings"                      beg="13004"  end="13033"/>
-        <StringBlock name="Music tracks names"                     beg="1350"  end="1492"/>
-        <StringBlock name="Personality Quiz Questions"             beg="12422"  end="12489"/>
-        <StringBlock name="Personality Quiz Answers"               beg="12489"  end="12664"/>
-        <StringBlock name="Personality Quiz result strings"        beg="12664"  end="12712"/>
-        <StringBlock name="Personality string natures"             beg="12741"  end="12745"/>
-        <StringBlock name="Weather Change Feedback"                beg="3157"  end="3165"/>  <!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Weather Names"                          beg="16116"  end="16124"/>
-        <StringBlock name="Floor-Wide Status Names+Desc"           beg="18511"  end="18533"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="IQ Skills Menu"                         beg="2674"  end="2679"/>  <!-- Darkaim: Needs a lot of work -->
-        <StringBlock name="Test Dungeon"                           beg="711"  end="712"/>    <!-- Darkaim: Maybe right? (also 452, also maybe 711?) -->
-        <StringBlock name="Mission Objectives"                     beg="712"  end="894"/>
-        <StringBlock name="Mission Failure/Faint Strings"          beg="1584"  end="1600"/>
-        <StringBlock name="Speed Change Feedback"                  beg="1600"  end="1605"/>
-        <StringBlock name="Potential Recruit Strings"              beg="1605"  end="1608"/>
-        <StringBlock name="Gummi Feedback"                         beg="1608"  end="1619"/>
-        <StringBlock name="Traps Feedback"                         beg="1619"  end="1643"/>  <!-- Darkaim: Go over again with Capypara (No "There is nothing at [string:0]'s feet.") -->
-        <StringBlock name="More Dungeon Feedback"                  beg="2922"  end="3069"/>  <!-- Darkaim: Redundant?? -->
-        <StringBlock name="Something's Stirring String"            beg="2363"  end="2371"/>
-        <StringBlock name="More Dungeon Feedback"                  beg="2371"  end="2466"/>
-        <StringBlock name="Some Fake items Dialogue"               beg="2466"  end="2479"/>
-        <StringBlock name="Shaymin Form Change Strings"            beg="2479"  end="2485"/>
-        <StringBlock name="Recruited A Pokemon Strings"            beg="2486"  end="2497"/>
-        <StringBlock name="Battle Feedback Messages"               beg="2497"  end="2886"/>  <!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Misson Feedback"                        beg="2886"  end="2953"/>
-        <StringBlock name="Kecleon Dungeon Shop Strings"           beg="2954"  end="2966"/>
-        <!--<StringBlock name="Misc Battle Events Strings"             beg="2966"  end="3157??"/> --><!-- Darkaim: Go over again with Capypara (This one needs a lot of work) -->
-        <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3890"/>  <!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="2216"  end="2217"/>  <!-- Darkaim: Go over again with Capypara (?) -->
-        <StringBlock name="Grab Bags Shop Strings"                 beg="2217"  end="2229"/>
-        <StringBlock name="Shedinja Shop Strings"                  beg="2229"  end="2240"/>
-        <StringBlock name="Mime Jr. Spa Strings"                   beg="2240"  end="2250"/>
-        <StringBlock name="Swalot's Shop Strings"                  beg="2250"  end="2260"/>
-        <StringBlock name="Team Tactics Menu strings"              beg="5514"  end="5518"/>
-        <StringBlock name="Item Became Sticky"                     beg="2485"  end="2486"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialogue"              beg="11167"  end="11512"/>
-        <StringBlock name="Pokemon WAIT Dialogue"                  beg="11512"  end="11857"/>
-        <StringBlock name="Pokemon HEALTHY Dialogue"               beg="9367"  end="10477"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialogue"             beg="10477"  end="10822"/>
-        <StringBlock name="Pokemon PINCH Dialogue"                 beg="10822"  end="11167"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialogue"           beg="11857"  end="12202"/>
-        <StringBlock name="Item Names"                             beg="3474"  end="4874"/>
-        <StringBlock name="Move Names"                             beg="4874"  end="5435"/>
-        <StringBlock name="Pokemon Names"                          beg="5519"  end="6119"/>  <!-- Darkaim: Go over again with Capypara (Also English names in text) -->
-        <StringBlock name="Pokemon Categories"                     beg="6719"  end="7319"/>
-        <StringBlock name="Tactics Names"                          beg="16124"  end="16135"/>
-        <StringBlock name="Tactics Descriptions"                   beg="16135"  end="16145"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="IQ Skills Names"                        beg="16147"  end="16216"/><!-- Darkaim: Go over again with Capypara -->
-        <StringBlock name="IQ Skills Descriptions"                 beg="16216"  end="16285"/>
-        <StringBlock name="Move Targets Strings"                   beg="18808"  end="18840"/>
-        <StringBlock name="Accuracy/Power Stars Ratings"           beg="18840"  end="18857"/><!-- Darkaim: Go over again with Capypara ("Always Hit" and "No Damage" found in 16284 and 16285) -->
-        <StringBlock name="Move Descriptions"                      beg="16286"  end="16844"/>
-        <StringBlock name="Item Long Descriptions"                 beg="16844"  end="18245"/>
-        <StringBlock name="Item Short Descriptions"                beg="7488"  end="8888"/>  <!-- Darkaim: Go over again with Capypara (Is "-" needed?) -->
-        <StringBlock name="Trap Names"                             beg="18245"  end="18270"/>
-        <StringBlock name="Trap Descriptions"                      beg="18270"  end="18294"/><!-- Darkaim: Go over again with Capypara (Possibly out of order) -->
-        <StringBlock name="Statuses Names and Descriptions"        beg="18294"  end="18506"/><!-- Darkaim: Go over again with Capypara (Missing "Stair Spotter", Extra = 18507 to 18510) -->
-        <StringBlock name="Type Names"                             beg="18541"  end="18560"/>
-        <StringBlock name="Ability Names"                          beg="18560"  end="18684"/>
-        <StringBlock name="Ability Descriptions"                   beg="18684"  end="18808"/><!-- Darkaim: WiFi related strings are 13143 to 14496 -->
-        <StringBlock name="Debug Menu Strings"                     beg="954"  end="3394"/>   <!-- Darkaim: Go over again with Capypara (15971 to 16075 are 3394 to 3473, but doesn't include 16052 to 16075) -->
-        <StringBlock name="Portrait Names"                         beg="5465"  end="5497"/>  <!-- Darkaim: 16108 to 16433 are 5497 to 5518, but doesn't include 16122 to 16433) -->
-        <StringBlock name="Ground Map Names"                       beg="63"  end="193"/>
-        <StringBlock name="Dungeon Names (Main)"                   beg="193"  end="449"/>    <!-- Darkaim: 16802 to 16822 are 449 to 451[Dungeons possibly enterchangable] -->
-        <StringBlock name="Dungeon Names (Selection)"              beg="452"  end="708"/>    <!-- Darkaim: 17079 to 17081 are 708 to 710 -->
-        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="1902"  end="2158"/>  <!-- Darkaim: 17339 is 2158 -->
-        <StringBlock name="Dungeon Names (Banner)"                 beg="1643"  end="1899"/>  <!-- Darkaim: 17595 to 17799 is 1899 to 1901 and 12278 to 12421 (missing a lot of lines, kind of all over the place, papa and mama are 1276 and 1277) -->
-        <StringBlock name="Spinda's Juice Bar Strings"             beg="14702"  end="14800"/>
-        <StringBlock name="Recycle Shop Strings"                   beg="7336"  end="7396"/>
-        <StringBlock name="Staff Roll"                             beg="14815"  end="15306"/>
+        <StringBlock name="Debug Strings (Game Init)"                  beg="0"     end="50"/>
+        <StringBlock name="Util Strings"                               beg="50"    end="55"/>
+        <StringBlock name="Chapter and Special Episode Strings"        beg="55"    end="63"/>
+        <StringBlock name="Ground Map Names"                           beg="63"    end="193"/>
+        <StringBlock name="Dungeon Names (Main)"                       beg="193"   end="449"/>
+        <StringBlock name="Dungeon Names (Selection)"                  beg="452"   end="708"/>
+        <StringBlock name="Story Mission Objectives"                   beg="711"   end="894"/>
+        <StringBlock name="Explorer Ranks Names"                       beg="894"   end="907"/>
+        <StringBlock name="Default Menu Strings 1"                     beg="907"   end="954"/>
+        <StringBlock name="Debug Strings (Switch)"                     beg="954"   end="986"/>
+        <StringBlock name="Default Menu Strings 2"                     beg="986"   end="1042"/>
+        <StringBlock name="Debug Strings (Main Menu)"                  beg="1042"  end="1054"/>
+        <StringBlock name="Debug Strings (General)"                    beg="1080"  end="1218"/>
+        <StringBlock name="Default Team Names"                         beg="1218"  end="1224"/>
+        <StringBlock name="Save Data Strings"                          beg="1224"  end="1256"/>
+        <StringBlock name="Debug Strings (Data)"                       beg="1256"  end="1262"/>
+        <StringBlock name="Enter Dungeon Strings"                      beg="1262"  end="1265"/>
+        <StringBlock name="Prize Ticket Strings"                       beg="1265"  end="1272"/>
+        <StringBlock name="Super Hasbrello and Bidoof Family"          beg="1272"  end="1278"/>
+        <StringBlock name="Job Debriefing Related Strings (Primary)"   beg="1278"  end="1293"/>
+        <StringBlock name="Debug Strings (Manipulation)"               beg="1293"  end="1298"/>
+        <StringBlock name="Special Episode Item Handling Strings"      beg="1298"  end="1335"/>
+        <StringBlock name="Sky Jukebox Menu Strings"                   beg="1335"  end="1351"/>
+        <StringBlock name="Music Tracks"                               beg="1351"  end="1492"/>
+        <StringBlock name="Debug Strings (Testing)"                    beg="1492"  end="1551"/>
+        <StringBlock name="Debug Strings (Scripts)"                    beg="1551"  end="1580"/>
+        <StringBlock name="Debug Strings (Counter)"                    beg="1580"  end="1582"/>
+        <StringBlock name="Mission Failure/Faint Strings"              beg="1584"  end="1600"/>
+        <StringBlock name="Speed Change Feedback"                      beg="1600"  end="1605"/>
+        <StringBlock name="Dungeon Potential Recruit Strings"          beg="1605"  end="1609"/>
+        <StringBlock name="Dungeon Gummi Feedback"                     beg="1609"  end="1618"/>
+        <StringBlock name="Traps Feedback (Primary)"                   beg="1619"  end="1643"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="1644"  end="1899"/>
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="1902"  end="2158"/>
+        <StringBlock name="Nothing At Feet String"                     beg="2159"  end="2160"/>
+        <StringBlock name="Dungeon Item Usage (Bag)"                   beg="2160"  end="2171"/>
+        <StringBlock name="Dungeon Friend Rescue Strings"              beg="2171"  end="2182"/>
+        <StringBlock name="Dungeon General Feedback 1"                 beg="2182"  end="2215"/>
+        <StringBlock name="Kirlia Secret Bazaar Strings"               beg="2215"  end="2217"/>
+        <StringBlock name="Grab Bags Shop Strings"                     beg="2217"  end="2229"/>
+        <StringBlock name="Shedinja Shop Strings"                      beg="2229"  end="2240"/>
+        <StringBlock name="Mime Jr. Spa Strings"                       beg="2240"  end="2250"/>
+        <StringBlock name="Swalot's Shop Strings"                      beg="2250"  end="2260"/>
+        <StringBlock name="Dungeon General Feedback 2"                 beg="2260"  end="2363"/>
+        <StringBlock name="Something's Stirring Strings"               beg="2363"  end="2371"/>
+        <StringBlock name="Dungeon General Feedback 3"                 beg="2371"  end="2485"/>
+        <StringBlock name="Item Became Sticky String"                  beg="2485"  end="2486"/>
+        <StringBlock name="Dungeon New Recruit Strings"                beg="2486"  end="2497"/>
+        <StringBlock name="Dungeon General Feedback 4"                 beg="2497"  end="2502"/>
+        <StringBlock name="Status Effect Resolved Feedback"            beg="2502"  end="2569"/>
+        <StringBlock name="Status Effect Apply Feedback"               beg="2569"  end="2765"/>
+        <StringBlock name="Pokemon Stats Change Feedback 1"            beg="2765"  end="2783"/>
+        <StringBlock name="Status Effect Protect Feedback 1"           beg="2783"  end="2802"/>
+        <StringBlock name="PP Recover Strings"                         beg="2802"  end="2804"/>
+        <StringBlock name="Conversion/Sketch Strings"                  beg="2804"  end="2808"/>
+        <StringBlock name="Status Effect Protect Feedback 2"           beg="2808"  end="2821"/>
+        <StringBlock name="Dungeon Pokemon Stat Names"                 beg="2821"  end="2828"/>
+        <StringBlock name="Pokemon Stats Change Feedback 2"            beg="2828"  end="2844"/>
+        <StringBlock name="Dungeon General Feedback 5"                 beg="2844"  end="2884"/>
+        <StringBlock name="Mission Feedback"                           beg="2884"  end="2949"/>
+        <StringBlock name="Dungeon General Feedback 6"                 beg="2949"  end="2953"/>
+        <StringBlock name="Kecleon Dungeon Shop Strings"               beg="2954"  end="2966"/>
+        <StringBlock name="Anchored Feedback"                          beg="2966"  end="2968"/>
+        <StringBlock name="Traps Feedback (Secondary)"                 beg="2968"  end="2999"/>
+        <StringBlock name="Dungeon General Feedback 7"                 beg="2999"  end="3157"/>
+        <StringBlock name="Weather Change Feedback"                    beg="3157"  end="3165"/>
+        <StringBlock name="Debug Strings (Menu)"                       beg="3165"  end="3394"/>
+        <StringBlock name="Debug Strings (Status)"                     beg="3394"  end="3474"/>
+        <StringBlock name="Item Names"                                 beg="3474"  end="4874"/>
+        <StringBlock name="Move Names"                                 beg="4874"  end="5435"/>
+        <StringBlock name="Move Feedback (Primary)"                    beg="5435"  end="5439"/>
+        <StringBlock name="Debug Strings (Dungeon)"                    beg="5440"  end="5509"/>
+        <StringBlock name="Team Tactics Menu Strings"                  beg="5514"  end="5518"/>
+        <StringBlock name="Pokemon Names"                              beg="5519"  end="6119"/>
+        <StringBlock name="English Pokemon Names"                      beg="6119"  end="6719"/>
+        <StringBlock name="Pokemon Categories"                         beg="6719"  end="7319"/>
+        <StringBlock name="Demo Dungeon Strings"                       beg="7319"  end="7336"/>
+        <StringBlock name="Recycle Shop Strings"                       beg="7336"  end="7396"/>
+        <StringBlock name="Dungeon Item Usage (Basic)"                 beg="7396"  end="7428"/>
+        <StringBlock name="Dungeon Menu Strings (Primary)"             beg="7428"  end="7488"/>
+        <StringBlock name="Item Short Descriptions"                    beg="7488"  end="8888"/>
+        <StringBlock name="Dungeon Status Effect Strings"              beg="8888"  end="8990"/>
+        <StringBlock name="Dungeon Menu Strings (Details)"             beg="8990"  end="9046"/>
+        <StringBlock name="Dungeon Menu Strings (Secondary)"           beg="9046"  end="9114"/>
+        <StringBlock name="Kangaskhan Storage Filter Strings"          beg="9114"  end="9125"/>
+        <StringBlock name="Dungeon Defeated Dialog Strings"            beg="9141"  end="9227"/>
+        <StringBlock name="Dungeon Cleared Dialog Strings"             beg="9227"  end="9248"/>
+        <StringBlock name="Job Debriefing Related Strings (Secondary)" beg="9281"  end="9342"/>
+        <StringBlock name="Dungeon Level Up Detail Strings"            beg="9342"  end="9367"/>
+        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="9367"  end="10477"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="10477" end="10822"/>
+        <StringBlock name="Pokemon PINCH Dialog"                       beg="10822" end="11167"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="11167" end="11512"/>
+        <StringBlock name="Pokemon WAIT Dialog"                        beg="11512" end="11857"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="11857" end="12202"/>
+        <StringBlock name="Treasure Bag Full Strings"                  beg="12202" end="12211"/>
+        <StringBlock name="New Recruit Full Strings"                   beg="12211" end="12224"/>
+        <StringBlock name="Storage Space Full Strings"                 beg="12224" end="12234"/>
+        <StringBlock name="Dungeon Item Action Menu Strings"           beg="12234" end="12248"/>
+        <StringBlock name="Gummi Feedback"                             beg="12248" end="12260"/>
+        <StringBlock name="Dungeon Item Pickup Menu Strings"           beg="12263" end="12268"/>
+        <StringBlock name="Debug Strings (Message)"                    beg="12274" end="12278"/>
+        <StringBlock name="Staff Roll 1"                               beg="12278" end="12422"/>
+        <StringBlock name="Personality Quiz Questions"                 beg="12422" end="12489"/>
+        <StringBlock name="Personality Quiz Answers"                   beg="12489" end="12664"/>
+        <StringBlock name="Personality Quiz Results"                   beg="12664" end="12712"/>
+        <StringBlock name="Personality Quiz Aura"                      beg="12712" end="12733"/>
+        <StringBlock name="Partner Selection Strings"                  beg="12733" end="12739"/>
+        <StringBlock name="New Game Welcome"                           beg="12739" end="12740"/>
+        <StringBlock name="Personality Quiz Aura Finger Move"          beg="12740" end="12741"/>
+        <StringBlock name="Personality Quiz Debug (Breakdown)"         beg="12741" end="12745"/>
+        <StringBlock name="Friend Rescue Message Input Strings"        beg="12745" end="15602"/>
+        <StringBlock name="Debug Strings (Checks)"                     beg="12777" end="12785"/>
+        <StringBlock name="Kecleon Market Strings"                     beg="12785" end="12851"/>
+        <StringBlock name="Duskull Bank Strings"                       beg="12851" end="12876"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="12876" end="12905"/>
+        <StringBlock name="Chansey Day Care Strings"                   beg="12909" end="12937"/>
+        <StringBlock name="Croagunk Swap Shop Strings"                 beg="12937" end="12975"/>
+        <StringBlock name="Xatu Appraisal Strings"                     beg="12980" end="13004"/>
+        <StringBlock name="Luminous Spring Strings"                    beg="13004" end="13033"/>
+        <StringBlock name="Debug Strings (Triggers)"                   beg="13033" end="13051"/>
+        <StringBlock name="Diary Strings"                              beg="13051" end="13143"/>
+        <StringBlock name="Wireless Connection Strings"                beg="13143" end="13172"/>
+        <StringBlock name="Friend Code Strings"                        beg="13172" end="13227"/>
+        <StringBlock name="Email Strings"                              beg="13227" end="13275"/>
+        <StringBlock name="Wi-fi Connection Strings"                   beg="13275" end="13320"/>
+        <StringBlock name="Wonder Mail S Strings"                      beg="13320" end="13367"/>
+        <StringBlock name="Debug Strings (Bulletin 1)"                 beg="13367" end="13381"/>
+        <StringBlock name="Mission Board Strings"                      beg="13381" end="13414"/>
+        <StringBlock name="SOS Mail Strings"                           beg="13414" end="13598"/>
+        <StringBlock name="Mission Title Set Phrases"                  beg="13598" end="13914"/>
+        <StringBlock name="Mission Description Set Phrases"            beg="13914" end="14427"/>
+        <StringBlock name="Mission Detail Strings"                     beg="14427" end="14453"/>
+        <StringBlock name="Mission Objective Strings"                  beg="14453" end="14469"/>
+        <StringBlock name="Debug Strings (Mission)"                    beg="14469" end="14497"/>
+        <StringBlock name="Debug Strings (Bulletin 2)"                 beg="14497" end="14617"/>
+        <StringBlock name="Game Trade Strings"                         beg="14617" end="14699"/>
+        <StringBlock name="Spinda's Juice Bar Strings"                 beg="14699" end="14800"/>
+        <StringBlock name="Debug Strings (Parameters)"                 beg="14800" end="14809"/>
+        <StringBlock name="Exclusive Items Strings"                    beg="14809" end="14815"/>
+        <StringBlock name="Staff Roll 3"                               beg="14815" end="15030"/>
+        <StringBlock name="Staff Roll 2"                               beg="15030" end="15306"/>
+        <StringBlock name="Level Up Strings"                           beg="15306" end="15318"/>
+        <StringBlock name="Debug Strings (Mail)"                       beg="15318" end="15323"/>
+        <StringBlock name="Friend Rescue Set Phrases"                  beg="15323" end="15575"/>
+        <StringBlock name="Chimecho Assembly Strings"                  beg="15602" end="15630"/>
+        <StringBlock name="Electivire Link Shop Strings"               beg="15630" end="15670"/>
+        <StringBlock name="Personality Quiz Debug (Colored)"           beg="15670" end="15680"/>
+        <StringBlock name="Sentry Duty Strings"                        beg="15680" end="15711"/>
+        <StringBlock name="Sentry Duty Hints"                          beg="15711" end="16115"/>
+        <StringBlock name="Debug Strings (Name)"                       beg="16115" end="16116"/>
+        <StringBlock name="Weather Names"                              beg="16116" end="16124"/>
+        <StringBlock name="Tactics Names"                              beg="16124" end="16135"/>
+        <StringBlock name="Tactics Descriptions"                       beg="16135" end="16146"/>
+        <StringBlock name="IQ Skills Names"                            beg="16146" end="16215"/>
+        <StringBlock name="IQ Skills Descriptions"                     beg="16215" end="16284"/>
+        <StringBlock name="Always Hit/No Damage Strings"               beg="16284" end="16286"/>
+        <StringBlock name="Move Descriptions"                          beg="16286" end="16845"/>
+        <StringBlock name="Item Long Descriptions"                     beg="16845" end="18245"/>
+        <StringBlock name="Trap Names"                                 beg="18245" end="18270"/>
+        <StringBlock name="Trap Descriptions"                          beg="18270" end="18295"/>
+        <StringBlock name="Status Names and Descriptions"              beg="18295" end="18501"/>
+        <StringBlock name="Auxiliary Move Descriptions"                beg="18501" end="18511"/>
+        <StringBlock name="Floor-Wide Status"                          beg="18511" end="18541"/>
+        <StringBlock name="Type Names"                                 beg="18541" end="18561"/>
+        <StringBlock name="Ability Names"                              beg="18561" end="18684"/>
+        <StringBlock name="Ability Descriptions"                       beg="18684" end="18808"/>
+        <StringBlock name="Move Targets Strings"                       beg="18808" end="18840"/>
+        <StringBlock name="Accuracy/Power Stars Ratings"               beg="18840" end="18857"/>
+        <StringBlock name="Game and Dungeon Hints"                     beg="18857" end="18923"/>
+        <StringBlock name="Adventure Log Entries"                      beg="18923" end="18997"/>
+        <StringBlock name="Special Mission Strings"                    beg="18997" end="19009"/>
       </StringBlocks>
     </Game>
 
@@ -325,85 +508,176 @@
         </Language>
       </Languages>
       <StringBlocks>
-        <StringBlock name="Explorer Ranks Names"                   beg="374"  end="387"/>
-        <StringBlock name="Default Team Names"                     beg="561"  end="567"/>
-        <StringBlock name="Job Debriefing Related Strings"         beg="606"  end="672"/>
-        <StringBlock name="Member Joined Menu"                     beg="676"  end="682"/>
-        <StringBlock name="Some Item Menu Strings"                 beg="682"  end="696"/>
-        <StringBlock name="Gummi Eating Strings"                   beg="696"  end="708"/>
-        <StringBlock name="Items and Pokemon Menu Strings"         beg="711"  end="777"/>
-        <StringBlock name="Kangaskhan Storage Strings"             beg="783"  end="812"/>
-        <StringBlock name="Evolution Strings"                      beg="1068"  end="1097"/>
-        <StringBlock name="Music tracks names"                     beg="1276"  end="1418"/>
-        <StringBlock name="Personality Quiz Questions"             beg="1418"  end="1485"/>
-        <StringBlock name="Personality Quiz Answers"               beg="1485"  end="1660"/>
-        <StringBlock name="Personality Quiz result strings"        beg="1660"  end="1708"/>
-        <StringBlock name="Personality string natures"             beg="1737"  end="1741"/>
-        <StringBlock name="Weather Change Feedback"                beg="2628"  end="2636"/>
-        <StringBlock name="Weather Names"                          beg="2636"  end="2644"/>
-        <StringBlock name="Floor-Wide Status Names+Desc"           beg="2644"  end="2674"/>
-        <StringBlock name="IQ Skills Menu"                         beg="2674"  end="2678"/>
-        <StringBlock name="Test Dungeon"                           beg="2679"  end="2680"/>
-        <StringBlock name="Mission Objectives"                     beg="2680"  end="2862"/>
-        <StringBlock name="Mission Failure/Faint Strings"          beg="2862"  end="2878"/>
-        <StringBlock name="Speed Change Feedback"                  beg="2878"  end="2883"/>
-        <StringBlock name="Potential Recruit Strings"              beg="2883"  end="2886"/>
-        <StringBlock name="Gummi Feedback"                         beg="2886"  end="2897"/>
-        <StringBlock name="Traps Feedback"                         beg="2897"  end="2922"/>
-        <StringBlock name="More Dungeon Feedback"                  beg="3076"  end="3171"/>
-        <StringBlock name="Something's Stirring String"            beg="3068"  end="3076"/>
-        <StringBlock name="Some Fake items Dialogue"               beg="3171"  end="3184"/>
-        <StringBlock name="Shaymin Form Change Strings"            beg="3184"  end="3190"/>
-        <StringBlock name="Recruited A Pokemon Strings"            beg="3190"  end="3201"/>
-        <StringBlock name="Battle Feedback Messages"               beg="3201"  end="3589"/>
-        <StringBlock name="Misson Feedback"                        beg="3589"  end="3656"/>
-        <StringBlock name="Kecleon Dungeon Shop Strings"           beg="3656"  end="3668"/>
-        <StringBlock name="Misc Battle Events Strings"             beg="3668"  end="3888"/>
-        <StringBlock name="Secret Bazaar Stairs Found"             beg="3888"  end="3889"/>
-        <StringBlock name="Kirlia Secret Bazaar Greeting"          beg="3889"  end="3890"/>
-        <StringBlock name="Grab Bags Shop Strings"                 beg="3890"  end="3902"/>
-        <StringBlock name="Shedinja Shop Strings"                  beg="3902"  end="3913"/>
-        <StringBlock name="Mime Jr. Spa Strings"                   beg="3913"  end="3923"/>
-        <StringBlock name="Swalot's Shop Strings"                  beg="3923"  end="3933"/>
-        <StringBlock name="Team Tactics Menu strings"              beg="3933"  end="3937"/>
-        <StringBlock name="Item Became Sticky"                     beg="3937"  end="3938"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialogue"              beg="3940"  end="4285"/>
-        <StringBlock name="Pokemon WAIT Dialogue"                  beg="4285"  end="4630"/>
-        <StringBlock name="Pokemon HEALTHY Dialogue"               beg="4630"  end="5740"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialogue"             beg="5740"  end="6085"/>
-        <StringBlock name="Pokemon PINCH Dialogue"                 beg="6085"  end="6430"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialogue"           beg="6430"  end="6775"/>
-        <StringBlock name="Item Names"                             beg="6775"  end="8175"/>
-        <StringBlock name="Move Names"                             beg="8175"  end="8736"/>
-        <StringBlock name="Pokemon Names"                          beg="8736"  end="9336"/>
-        <StringBlock name="Pokemon Categories"                     beg="9336"  end="9936"/>
-        <StringBlock name="Tactics Names"                          beg="9936"  end="9947"/>
-        <StringBlock name="Tactics Descriptions"                   beg="9947"  end="9959"/>
-        <StringBlock name="IQ Skills Names"                        beg="9959"  end="10027"/>
-        <StringBlock name="IQ Skills Descriptions"                 beg="10027"  end="10096"/>
-        <StringBlock name="Move Targets Strings"                   beg="10096"  end="10128"/>
-        <StringBlock name="Accuracy/Power Stars Ratings"           beg="10128"  end="10147"/>
-        <StringBlock name="Move Descriptions"                      beg="10147"  end="10706"/>
-        <StringBlock name="Item Long Descriptions"                 beg="10706"  end="12106"/>
-        <StringBlock name="Item Short Descriptions"                beg="12106"  end="13506"/>
-        <StringBlock name="Trap Names"                             beg="13506"  end="13531"/>
-        <StringBlock name="Trap Descriptions"                      beg="13531"  end="13556"/>
-        <StringBlock name="Statuses Names and Descriptions"        beg="13556"  end="13763"/>
-        <StringBlock name="Type Names"                             beg="13772"  end="13791"/>
-        <StringBlock name="Ability Names"                          beg="13791"  end="13915"/>
-        <StringBlock name="Ability Descriptions"                   beg="13915"  end="14039"/>
-        <StringBlock name="Debug Menu Strings"                     beg="15461"  end="15973"/>
-        <StringBlock name="Portrait Names"                         beg="16078"  end="16110"/>
-        <StringBlock name="Ground Map Names"                       beg="16436"  end="16566"/>
-        <StringBlock name="Dungeon Names (Main)"                   beg="16566"  end="16822"/>
-        <StringBlock name="Dungeon Names (Selection)"              beg="16825"  end="17081"/>
-        <StringBlock name="Dungeon Names (SetDungeonBanner)"       beg="17084"  end="17340"/>
-        <StringBlock name="Dungeon Names (Banner)"                 beg="17341"  end="17597"/>
-        <StringBlock name="Spinda's Juice Bar Strings"             beg="17831"  end="17931"/>
-        <StringBlock name="Recycle Shop Strings"                   beg="17931"  end="17991"/>
-        <StringBlock name="Staff Roll"                             beg="17991"  end="18482"/>
-        <StringBlock name="New Pokemon Names"                      beg="18482"  end="20530"/>
-        <StringBlock name="New Pokemon Categories"                 beg="20530"  end="22578"/>
+        <StringBlock name="Friend Rescue Set Phrases"                  beg="0"     end="252"/>
+        <StringBlock name="Friend Rescue Message Input Strings"        beg="252"   end="311"/>
+        <StringBlock name="Debug Strings (Game Init)"                  beg="311"   end="361"/>
+        <StringBlock name="Util Strings"                               beg="361"   end="366"/>
+        <StringBlock name="Chapter and Special Episode Strings"        beg="366"   end="374"/>
+        <StringBlock name="Explorer Ranks Names"                       beg="374"   end="387"/>
+        <StringBlock name="Default Menu Strings 1"                     beg="387"   end="434"/>
+        <StringBlock name="Default Menu Strings 2"                     beg="434"   end="490"/>
+        <StringBlock name="Debug Strings (Main Menu)"                  beg="490"   end="502"/>
+        <StringBlock name="Default Team Names"                         beg="561"   end="567"/>
+        <StringBlock name="Save Data Strings"                          beg="567"   end="599"/>
+        <StringBlock name="Prize Ticket Strings"                       beg="599"   end="606"/>
+        <StringBlock name="Job Debriefing Related Strings (Primary)"   beg="606"   end="621"/>
+        <StringBlock name="Job Debriefing Related Strings (Secondary)" beg="621"   end="682"/>
+        <StringBlock name="Dungeon Item Action Menu Strings"           beg="682"   end="696"/>
+        <StringBlock name="Gummi Feedback"                             beg="696"   end="708"/>
+        <StringBlock name="Dungeon Item Pickup Menu Strings"           beg="711"   end="716"/>
+        <StringBlock name="Storage Space Full Strings"                 beg="716"   end="726"/>
+        <StringBlock name="Treasure Bag Full Strings"                  beg="726"   end="735"/>
+        <StringBlock name="New Recruit Full Strings"                   beg="735"   end="748"/>
+        <StringBlock name="Kangaskhan Storage Filter Strings"          beg="754"   end="765"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="783"   end="812"/>
+        <StringBlock name="Kecleon Market Strings"                     beg="812"   end="878"/>
+        <StringBlock name="Duskull Bank Strings"                       beg="878"   end="903"/>
+        <StringBlock name="Chansey Day Care Strings"                   beg="905"   end="933"/>
+        <StringBlock name="Croagunk Swap Shop Strings"                 beg="938"   end="976"/>
+        <StringBlock name="Xatu Appraisal Strings"                     beg="976"   end="1000"/>
+        <StringBlock name="Electivire Link Shop Strings"               beg="1000"  end="1040"/>
+        <StringBlock name="Chimecho Assembly Strings"                  beg="1040"  end="1068"/>
+        <StringBlock name="Luminous Spring Strings"                    beg="1068"  end="1097"/>
+        <StringBlock name="Diary Strings"                              beg="1097"  end="1189"/>
+        <StringBlock name="Level Up Strings"                           beg="1189"  end="1201"/>
+        <StringBlock name="Exclusive Items Strings"                    beg="1201"  end="1207"/>
+        <StringBlock name="Special Episode Item Handling Strings"      beg="1207"  end="1244"/>
+        <StringBlock name="Demo Dungeon Strings"                       beg="1244"  end="1261"/>
+        <StringBlock name="Sky Jukebox Menu Strings"                   beg="1261"  end="1277"/>
+        <StringBlock name="Music Tracks"                               beg="1277"  end="1418"/>
+        <StringBlock name="Personality Quiz Questions"                 beg="1418"  end="1485"/>
+        <StringBlock name="Personality Quiz Answers"                   beg="1485"  end="1660"/>
+        <StringBlock name="Personality Quiz Results"                   beg="1660"  end="1708"/>
+        <StringBlock name="Personality Quiz Aura"                      beg="1708"  end="1729"/>
+        <StringBlock name="Partner Selection Strings"                  beg="1729"  end="1735"/>
+        <StringBlock name="New Game Welcome"                           beg="1735"  end="1736"/>
+        <StringBlock name="Personality Quiz Aura Finger Move"          beg="1736"  end="1737"/>
+        <StringBlock name="Personality Quiz Debug (Breakdown)"         beg="1737"  end="1741"/>
+        <StringBlock name="Personality Quiz Debug (Colored)"           beg="1741"  end="1751"/>
+        <StringBlock name="Sentry Duty Strings"                        beg="1751"  end="1782"/>
+        <StringBlock name="Sentry Duty Hints"                          beg="1782"  end="2186"/>
+        <StringBlock name="Dungeon Item Usage (Basic)"                 beg="2186"  end="2218"/>
+        <StringBlock name="Dungeon Menu Strings (Primary)"             beg="2220"  end="2280"/>
+        <StringBlock name="Dungeon Status Effect Strings"              beg="2280"  end="2382"/>
+        <StringBlock name="Dungeon Menu Strings (Details)"             beg="2382"  end="2438"/>
+        <StringBlock name="Dungeon Menu Strings (Secondary)"           beg="2438"  end="2506"/>
+        <StringBlock name="Dungeon Defeated Dialog Strings"            beg="2506"  end="2592"/>
+        <StringBlock name="Dungeon Cleared Dialog Strings"             beg="2592"  end="2613"/>
+        <StringBlock name="Dungeon Item Usage (Bag)"                   beg="2613"  end="2624"/>
+        <StringBlock name="Weather Change Feedback"                    beg="2628"  end="2636"/>
+        <StringBlock name="Weather Names"                              beg="2636"  end="2644"/>
+        <StringBlock name="Floor-Wide Status"                          beg="2644"  end="2674"/>
+        <StringBlock name="Story Mission Objectives"                   beg="2679"  end="2862"/>
+        <StringBlock name="Mission Failure/Faint Strings"              beg="2862"  end="2878"/>
+        <StringBlock name="Speed Change Feedback"                      beg="2878"  end="2883"/>
+        <StringBlock name="Dungeon Potential Recruit Strings"          beg="2883"  end="2887"/>
+        <StringBlock name="Dungeon Gummi Feedback"                     beg="2887"  end="2896"/>
+        <StringBlock name="Traps Feedback (Primary)"                   beg="2897"  end="2921"/>
+        <StringBlock name="Nothing At Feet String"                     beg="2921"  end="2922"/>
+        <StringBlock name="Dungeon Friend Rescue Strings"              beg="2922"  end="2933"/>
+        <StringBlock name="Dungeon General Feedback 1"                 beg="2933"  end="2965"/>
+        <StringBlock name="Dungeon General Feedback 2"                 beg="2965"  end="3068"/>
+        <StringBlock name="Something's Stirring Strings"               beg="3068"  end="3076"/>
+        <StringBlock name="Dungeon General Feedback 3"                 beg="3076"  end="3190"/>
+        <StringBlock name="Dungeon New Recruit Strings"                beg="3190"  end="3201"/>
+        <StringBlock name="Dungeon General Feedback 4"                 beg="3201"  end="3206"/>
+        <StringBlock name="Status Effect Resolved Feedback"            beg="3206"  end="3273"/>
+        <StringBlock name="Status Effect Apply Feedback"               beg="3273"  end="3469"/>
+        <StringBlock name="Pokemon Stats Change Feedback 1"            beg="3469"  end="3487"/>
+        <StringBlock name="Status Effect Protect Feedback 1"           beg="3487"  end="3506"/>
+        <StringBlock name="PP Recover Strings"                         beg="3506"  end="3508"/>
+        <StringBlock name="Conversion/Sketch Strings"                  beg="3508"  end="3512"/>
+        <StringBlock name="Status Effect Protect Feedback 2"           beg="3512"  end="3525"/>
+        <StringBlock name="Dungeon Pokemon Stat Names"                 beg="3525"  end="3532"/>
+        <StringBlock name="Pokemon Stats Change Feedback 2"            beg="3532"  end="3548"/>
+        <StringBlock name="Dungeon General Feedback 5"                 beg="3548"  end="3587"/>
+        <StringBlock name="Mission Feedback"                           beg="3587"  end="3652"/>
+        <StringBlock name="Dungeon General Feedback 6"                 beg="3652"  end="3656"/>
+        <StringBlock name="Kecleon Dungeon Shop Strings"               beg="3656"  end="3668"/>
+        <StringBlock name="Anchored Feedback"                          beg="3668"  end="3670"/>
+        <StringBlock name="Traps Feedback (Secondary)"                 beg="3670"  end="3701"/>
+        <StringBlock name="Dungeon General Feedback 7"                 beg="3701"  end="3859"/>
+        <StringBlock name="Move Feedback (Primary)"                    beg="3859"  end="3863"/>
+        <StringBlock name="Dungeon Level Up Detail Strings"            beg="3863"  end="3888"/>
+        <StringBlock name="Kirlia Secret Bazaar Strings"               beg="3888"  end="3890"/>
+        <StringBlock name="Grab Bags Shop Strings"                     beg="3890"  end="3902"/>
+        <StringBlock name="Shedinja Shop Strings"                      beg="3902"  end="3913"/>
+        <StringBlock name="Mime Jr. Spa Strings"                       beg="3913"  end="3923"/>
+        <StringBlock name="Swalot's Shop Strings"                      beg="3923"  end="3933"/>
+        <StringBlock name="Team Tactics Menu Strings"                  beg="3933"  end="3937"/>
+        <StringBlock name="Item Became Sticky String"                  beg="3937"  end="3938"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="3940"  end="4285"/>
+        <StringBlock name="Pokemon WAIT Dialog"                        beg="4285"  end="4630"/>
+        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="4630"  end="5740"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="5740"  end="6085"/>
+        <StringBlock name="Pokemon PINCH Dialog"                       beg="6085"  end="6430"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="6430"  end="6775"/>
+        <StringBlock name="Item Names"                                 beg="6775"  end="8175"/>
+        <StringBlock name="Move Names"                                 beg="8175"  end="8736"/>
+        <StringBlock name="Pokemon Names"                              beg="8736"  end="9336"/>
+        <StringBlock name="Pokemon Categories"                         beg="9336"  end="9936"/>
+        <StringBlock name="Tactics Names"                              beg="9936"  end="9947"/>
+        <StringBlock name="Tactics Descriptions"                       beg="9947"  end="9958"/>
+        <StringBlock name="IQ Skills Names"                            beg="9958"  end="10027"/>
+        <StringBlock name="IQ Skills Descriptions"                     beg="10027" end="10096"/>
+        <StringBlock name="Move Targets Strings"                       beg="10096" end="10128"/>
+        <StringBlock name="Accuracy/Power Stars Ratings"               beg="10128" end="10145"/>
+        <StringBlock name="Always Hit/No Damage Strings"               beg="10145" end="10147"/>
+        <StringBlock name="Move Descriptions"                          beg="10147" end="10706"/>
+        <StringBlock name="Item Long Descriptions"                     beg="10706" end="12106"/>
+        <StringBlock name="Item Short Descriptions"                    beg="12106" end="13506"/>
+        <StringBlock name="Trap Names"                                 beg="13506" end="13531"/>
+        <StringBlock name="Trap Descriptions"                          beg="13531" end="13556"/>
+        <StringBlock name="Status Names and Descriptions"              beg="13556" end="13762"/>
+        <StringBlock name="Auxiliary Move Descriptions"                beg="13762" end="13772"/>
+        <StringBlock name="Type Names"                                 beg="13772" end="13792"/>
+        <StringBlock name="Ability Names"                              beg="13792" end="13915"/>
+        <StringBlock name="Ability Descriptions"                       beg="13915" end="14039"/>
+        <StringBlock name="Wireless Connection Strings"                beg="14039" end="14068"/>
+        <StringBlock name="Friend Code Strings"                        beg="14068" end="14123"/>
+        <StringBlock name="Email Strings"                              beg="14123" end="14171"/>
+        <StringBlock name="Wi-fi Connection Strings"                   beg="14171" end="14216"/>
+        <StringBlock name="Wonder Mail S Strings"                      beg="14216" end="14263"/>
+        <StringBlock name="Game Trade Strings"                         beg="14263" end="14345"/>
+        <StringBlock name="Mission Board Strings"                      beg="14345" end="14378"/>
+        <StringBlock name="SOS Mail Strings"                           beg="14378" end="14562"/>
+        <StringBlock name="Mission Title Set Phrases"                  beg="14562" end="14878"/>
+        <StringBlock name="Mission Description Set Phrases"            beg="14878" end="15391"/>
+        <StringBlock name="Mission Detail Strings"                     beg="15391" end="15417"/>
+        <StringBlock name="Mission Objective Strings"                  beg="15417" end="15433"/>
+        <StringBlock name="Debug Strings (Mission)"                    beg="15433" end="15461"/>
+        <StringBlock name="Debug Strings (Switch)"                     beg="15461" end="15493"/>
+        <StringBlock name="Debug Strings (Data)"                       beg="15493" end="15499"/>
+        <StringBlock name="Debug Strings (Checks)"                     beg="15499" end="15507"/>
+        <StringBlock name="Debug Strings (General)"                    beg="15507" end="15645"/>
+        <StringBlock name="Debug Strings (Manipulation)"               beg="15645" end="15650"/>
+        <StringBlock name="Debug Strings (Testing)"                    beg="15650" end="15709"/>
+        <StringBlock name="Debug Strings (Scripts)"                    beg="15709" end="15738"/>
+        <StringBlock name="Debug Strings (Menu)"                       beg="15738" end="15973"/>
+        <StringBlock name="Debug Strings (Status)"                     beg="15973" end="16053"/>
+        <StringBlock name="Debug Strings (Dungeon)"                    beg="16053" end="16122"/>
+        <StringBlock name="Debug Strings (Message)"                    beg="16123" end="16127"/>
+        <StringBlock name="Debug Strings (Triggers)"                   beg="16127" end="16145"/>
+        <StringBlock name="Debug Strings (Bulletin 1)"                 beg="16145" end="16159"/>
+        <StringBlock name="Debug Strings (Bulletin 2)"                 beg="16159" end="16279"/>
+        <StringBlock name="Debug Strings (Mail)"                       beg="16279" end="16284"/>
+        <StringBlock name="Debug Strings (Name)"                       beg="16284" end="16285"/>
+        <StringBlock name="Debug Strings (Parameters)"                 beg="16285" end="16294"/>
+        <StringBlock name="Debug Strings (Counter)"                    beg="16294" end="16296"/>
+        <StringBlock name="Game and Dungeon Hints"                     beg="16296" end="16362"/>
+        <StringBlock name="Adventure Log Entries"                      beg="16362" end="16436"/>
+        <StringBlock name="Ground Map Names"                           beg="16436" end="16566"/>
+        <StringBlock name="Dungeon Names (Main)"                       beg="16566" end="16822"/>
+        <StringBlock name="Dungeon Names (Selection)"                  beg="16825" end="17081"/>
+        <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="17084" end="17340"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="17342" end="17597"/>
+        <StringBlock name="Staff Roll 1"                               beg="17600" end="17812"/>
+        <StringBlock name="Special Mission Strings"                    beg="17812" end="17824"/>
+        <StringBlock name="Super Hasbrello and Bidoof Family"          beg="17824" end="17830"/>
+        <StringBlock name="Spinda's Juice Bar Strings"                 beg="17830" end="17931"/>
+        <StringBlock name="Recycle Shop Strings"                       beg="17931" end="17991"/>
+        <StringBlock name="Staff Roll 2"                               beg="17991" end="18267"/>
+        <StringBlock name="Staff Roll 3"                               beg="18267" end="18482"/>
       </StringBlocks>
     </Game>
 

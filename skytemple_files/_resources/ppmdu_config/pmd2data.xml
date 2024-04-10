@@ -140,8 +140,8 @@
         <StringBlock name="Dungeon Status Effect Strings"              beg="2280"  end="2382"/>
         <StringBlock name="Dungeon Menu Strings (Details)"             beg="2382"  end="2438"/>
         <StringBlock name="Dungeon Menu Strings (Secondary)"           beg="2438"  end="2506"/>
-        <StringBlock name="Dungeon Defeated Dialog Strings"            beg="2506"  end="2592"/>
-        <StringBlock name="Dungeon Cleared Dialog Strings"             beg="2592"  end="2613"/>
+        <StringBlock name="Dungeon Defeated Dialogue Strings"          beg="2506"  end="2592"/>
+        <StringBlock name="Dungeon Cleared Dialogue Strings"           beg="2592"  end="2613"/>
         <StringBlock name="Dungeon Item Usage (Bag)"                   beg="2613"  end="2624"/>
         <StringBlock name="Weather Change Feedback"                    beg="2628"  end="2636"/>
         <StringBlock name="Weather Names"                              beg="2636"  end="2644"/>
@@ -185,12 +185,12 @@
         <StringBlock name="Swalot's Shop Strings"                      beg="3923"  end="3933"/>
         <StringBlock name="Team Tactics Menu Strings"                  beg="3933"  end="3937"/>
         <StringBlock name="Item Became Sticky String"                  beg="3937"  end="3938"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="3938"  end="4283"/>
-        <StringBlock name="Pokemon WAIT Dialog"                        beg="4283"  end="4628"/>
-        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="4628"  end="5738"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="5738"  end="6083"/>
-        <StringBlock name="Pokemon PINCH Dialog"                       beg="6083"  end="6428"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="6428"  end="6773"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialogue"                  beg="3938"  end="4283"/>
+        <StringBlock name="Pokemon WAIT Dialogue"                      beg="4283"  end="4628"/>
+        <StringBlock name="Pokemon HEALTHY Dialogue"                   beg="4628"  end="5738"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialogue"                 beg="5738"  end="6083"/>
+        <StringBlock name="Pokemon PINCH Dialogue"                     beg="6083"  end="6428"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialogue"               beg="6428"  end="6773"/>
         <StringBlock name="Item Names"                                 beg="6773"  end="8173"/>
         <StringBlock name="Move Names"                                 beg="8173"  end="8734"/>
         <StringBlock name="Pokemon Names"                              beg="8734"  end="9334"/>
@@ -209,8 +209,8 @@
         <StringBlock name="Trap Descriptions"                          beg="13529" end="13554"/>
         <StringBlock name="Status Names and Descriptions"              beg="13554" end="13760"/>
         <StringBlock name="Auxiliary Move Descriptions"                beg="13760" end="13770"/>
-        <StringBlock name="Type Names"                                 beg="13770" end="13790"/>
-        <StringBlock name="Ability Names"                              beg="13790" end="13913"/>
+        <StringBlock name="Type Names"                                 beg="13770" end="13789"/>
+        <StringBlock name="Ability Names"                              beg="13789" end="13913"/>
         <StringBlock name="Ability Descriptions"                       beg="13913" end="14037"/>
         <StringBlock name="Wireless Connection Strings"                beg="14037" end="14066"/>
         <StringBlock name="Friend Code Strings"                        beg="14066" end="14121"/>
@@ -234,7 +234,10 @@
         <StringBlock name="Debug Strings (Scripts)"                    beg="15707" end="15736"/>
         <StringBlock name="Debug Strings (Menu)"                       beg="15736" end="15971"/>
         <StringBlock name="Debug Strings (Status)"                     beg="15971" end="16051"/>
-        <StringBlock name="Debug Strings (Dungeon)"                    beg="16051" end="16120"/>
+        <StringBlock name="Debug Strings (Dungeon 1)"                  beg="16051" end="16076"/>
+        <StringBlock name="Portrait Names"                             beg="16076" end="16108"/>
+        <StringBlock name="Debug Strings (Dungeon 2)"                  beg="16108" end="16120"/>
+        <StringBlock name="Debug Strings (PKMN Storage)"               beg="16120" end="16121"/>
         <StringBlock name="Debug Strings (Message)"                    beg="16121" end="16125"/>
         <StringBlock name="Debug Strings (Triggers)"                   beg="16125" end="16143"/>
         <StringBlock name="Debug Strings (Bulletin 1)"                 beg="16143" end="16157"/>
@@ -249,7 +252,7 @@
         <StringBlock name="Dungeon Names (Main)"                       beg="16564" end="16820"/>
         <StringBlock name="Dungeon Names (Selection)"                  beg="16823" end="17079"/>
         <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="17082" end="17338"/>
-        <StringBlock name="Dungeon Names (Banner)"                     beg="17340" end="17595"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="17339" end="17595"/>
         <StringBlock name="Staff Roll 1"                               beg="17598" end="17781"/>
         <StringBlock name="Special Mission Strings"                    beg="17781" end="17793"/>
         <StringBlock name="Super Hasbrello and Bidoof Family"          beg="17793" end="17799"/>
@@ -325,7 +328,7 @@
         <StringBlock name="Dungeon Potential Recruit Strings"          beg="1605"  end="1609"/>
         <StringBlock name="Dungeon Gummi Feedback"                     beg="1609"  end="1618"/>
         <StringBlock name="Traps Feedback (Primary)"                   beg="1619"  end="1643"/>
-        <StringBlock name="Dungeon Names (Banner)"                     beg="1644"  end="1899"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="1643"  end="1899"/>
         <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="1902"  end="2158"/>
         <StringBlock name="Nothing At Feet String"                     beg="2159"  end="2160"/>
         <StringBlock name="Dungeon Item Usage (Bag)"                   beg="2160"  end="2171"/>
@@ -364,8 +367,11 @@
         <StringBlock name="Item Names"                                 beg="3474"  end="4874"/>
         <StringBlock name="Move Names"                                 beg="4874"  end="5435"/>
         <StringBlock name="Move Feedback (Primary)"                    beg="5435"  end="5439"/>
-        <StringBlock name="Debug Strings (Dungeon)"                    beg="5440"  end="5509"/>
+        <StringBlock name="Debug Strings (Dungeon 1)"                  beg="5440"  end="5465"/>
+        <StringBlock name="Portrait Names"                             beg="5465"  end="5497"/>
+        <StringBlock name="Debug Strings (Dungeon 2)"                  beg="5497"  end="5509"/>
         <StringBlock name="Team Tactics Menu Strings"                  beg="5514"  end="5518"/>
+        <StringBlock name="Debug Strings (PKMN Storage)"               beg="5518"  end="5519"/>
         <StringBlock name="Pokemon Names"                              beg="5519"  end="6119"/>
         <StringBlock name="English Pokemon Names"                      beg="6119"  end="6719"/>
         <StringBlock name="Pokemon Categories"                         beg="6719"  end="7319"/>
@@ -457,8 +463,8 @@
         <StringBlock name="Status Names and Descriptions"              beg="18295" end="18501"/>
         <StringBlock name="Auxiliary Move Descriptions"                beg="18501" end="18511"/>
         <StringBlock name="Floor-Wide Status"                          beg="18511" end="18541"/>
-        <StringBlock name="Type Names"                                 beg="18541" end="18561"/>
-        <StringBlock name="Ability Names"                              beg="18561" end="18684"/>
+        <StringBlock name="Type Names"                                 beg="18541" end="18560"/>
+        <StringBlock name="Ability Names"                              beg="18560" end="18684"/>
         <StringBlock name="Ability Descriptions"                       beg="18684" end="18808"/>
         <StringBlock name="Move Targets Strings"                       beg="18808" end="18840"/>
         <StringBlock name="Accuracy/Power Stars Ratings"               beg="18840" end="18857"/>
@@ -630,8 +636,8 @@
         <StringBlock name="Trap Descriptions"                          beg="13531" end="13556"/>
         <StringBlock name="Status Names and Descriptions"              beg="13556" end="13762"/>
         <StringBlock name="Auxiliary Move Descriptions"                beg="13762" end="13772"/>
-        <StringBlock name="Type Names"                                 beg="13772" end="13792"/>
-        <StringBlock name="Ability Names"                              beg="13792" end="13915"/>
+        <StringBlock name="Type Names"                                 beg="13772" end="13791"/>
+        <StringBlock name="Ability Names"                              beg="13791" end="13915"/>
         <StringBlock name="Ability Descriptions"                       beg="13915" end="14039"/>
         <StringBlock name="Wireless Connection Strings"                beg="14039" end="14068"/>
         <StringBlock name="Friend Code Strings"                        beg="14068" end="14123"/>
@@ -655,7 +661,10 @@
         <StringBlock name="Debug Strings (Scripts)"                    beg="15709" end="15738"/>
         <StringBlock name="Debug Strings (Menu)"                       beg="15738" end="15973"/>
         <StringBlock name="Debug Strings (Status)"                     beg="15973" end="16053"/>
-        <StringBlock name="Debug Strings (Dungeon)"                    beg="16053" end="16122"/>
+        <StringBlock name="Debug Strings (Dungeon 1)"                  beg="16053" end="16078"/>
+        <StringBlock name="Portrait Names"                             beg="16078" end="16110"/>
+        <StringBlock name="Debug Strings (Dungeon 2)"                  beg="16110" end="16122"/>
+        <StringBlock name="Debug Strings (PKMN Storage)"               beg="16122" end="16123"/>
         <StringBlock name="Debug Strings (Message)"                    beg="16123" end="16127"/>
         <StringBlock name="Debug Strings (Triggers)"                   beg="16127" end="16145"/>
         <StringBlock name="Debug Strings (Bulletin 1)"                 beg="16145" end="16159"/>
@@ -670,7 +679,7 @@
         <StringBlock name="Dungeon Names (Main)"                       beg="16566" end="16822"/>
         <StringBlock name="Dungeon Names (Selection)"                  beg="16825" end="17081"/>
         <StringBlock name="Dungeon Names (SetDungeonBanner)"           beg="17084" end="17340"/>
-        <StringBlock name="Dungeon Names (Banner)"                     beg="17342" end="17597"/>
+        <StringBlock name="Dungeon Names (Banner)"                     beg="17341" end="17597"/>
         <StringBlock name="Staff Roll 1"                               beg="17600" end="17812"/>
         <StringBlock name="Special Mission Strings"                    beg="17812" end="17824"/>
         <StringBlock name="Super Hasbrello and Bidoof Family"          beg="17824" end="17830"/>

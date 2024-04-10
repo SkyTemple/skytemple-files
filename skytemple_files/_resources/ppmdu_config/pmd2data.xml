@@ -108,7 +108,7 @@
         <StringBlock name="Treasure Bag Full Strings"                  beg="726"   end="735"/>
         <StringBlock name="New Recruit Full Strings"                   beg="735"   end="748"/>
         <StringBlock name="Kangaskhan Storage Filter Strings"          beg="754"   end="765"/>
-        <StringBlock name="Kangaskhan Storage Strings"                 beg="783"   end="812"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="781"   end="812"/>
         <StringBlock name="Kecleon Market Strings"                     beg="812"   end="878"/>
         <StringBlock name="Duskull Bank Strings"                       beg="878"   end="903"/>
         <StringBlock name="Chansey Day Care Strings"                   beg="905"   end="933"/>
@@ -414,7 +414,7 @@
         <StringBlock name="Debug Strings (Checks)"                     beg="12777" end="12785"/>
         <StringBlock name="Kecleon Market Strings"                     beg="12785" end="12851"/>
         <StringBlock name="Duskull Bank Strings"                       beg="12851" end="12876"/>
-        <StringBlock name="Kangaskhan Storage Strings"                 beg="12876" end="12905"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="12876" end="12907"/>
         <StringBlock name="Chansey Day Care Strings"                   beg="12909" end="12937"/>
         <StringBlock name="Croagunk Swap Shop Strings"                 beg="12937" end="12975"/>
         <StringBlock name="Xatu Appraisal Strings"                     beg="12980" end="13004"/>
@@ -535,7 +535,7 @@
         <StringBlock name="Treasure Bag Full Strings"                  beg="726"   end="735"/>
         <StringBlock name="New Recruit Full Strings"                   beg="735"   end="748"/>
         <StringBlock name="Kangaskhan Storage Filter Strings"          beg="754"   end="765"/>
-        <StringBlock name="Kangaskhan Storage Strings"                 beg="783"   end="812"/>
+        <StringBlock name="Kangaskhan Storage Strings"                 beg="781"   end="812"/>
         <StringBlock name="Kecleon Market Strings"                     beg="812"   end="878"/>
         <StringBlock name="Duskull Bank Strings"                       beg="878"   end="903"/>
         <StringBlock name="Chansey Day Care Strings"                   beg="905"   end="933"/>

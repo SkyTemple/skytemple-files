@@ -388,12 +388,12 @@
         <StringBlock name="Dungeon Cleared Dialog Strings"             beg="9227"  end="9248"/>
         <StringBlock name="Job Debriefing Related Strings (Secondary)" beg="9281"  end="9342"/>
         <StringBlock name="Dungeon Level Up Detail Strings"            beg="9342"  end="9367"/>
-        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="9367"  end="10477"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="10477" end="10822"/>
-        <StringBlock name="Pokemon PINCH Dialog"                       beg="10822" end="11167"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="11167" end="11512"/>
-        <StringBlock name="Pokemon WAIT Dialog"                        beg="11512" end="11857"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="11857" end="12202"/>
+        <StringBlock name="Pokemon HEALTHY Dialogue"                     beg="9367"  end="10477"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialogue"                   beg="10477" end="10822"/>
+        <StringBlock name="Pokemon PINCH Dialogue"                       beg="10822" end="11167"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialogue"                    beg="11167" end="11512"/>
+        <StringBlock name="Pokemon WAIT Dialogue"                        beg="11512" end="11857"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialogue"                 beg="11857" end="12202"/>
         <StringBlock name="Treasure Bag Full Strings"                  beg="12202" end="12211"/>
         <StringBlock name="New Recruit Full Strings"                   beg="12211" end="12224"/>
         <StringBlock name="Storage Space Full Strings"                 beg="12224" end="12234"/>
@@ -612,12 +612,12 @@
         <StringBlock name="Swalot's Shop Strings"                      beg="3923"  end="3933"/>
         <StringBlock name="Team Tactics Menu Strings"                  beg="3933"  end="3937"/>
         <StringBlock name="Item Became Sticky String"                  beg="3937"  end="3938"/>
-        <StringBlock name="Pokemon LEVEL_UP Dialog"                    beg="3940"  end="4285"/>
-        <StringBlock name="Pokemon WAIT Dialog"                        beg="4285"  end="4630"/>
-        <StringBlock name="Pokemon HEALTHY Dialog"                     beg="4630"  end="5740"/>
-        <StringBlock name="Pokemon HALF_LIFE Dialog"                   beg="5740"  end="6085"/>
-        <StringBlock name="Pokemon PINCH Dialog"                       beg="6085"  end="6430"/>
-        <StringBlock name="Pokemon GROUND_WAIT Dialog"                 beg="6430"  end="6775"/>
+        <StringBlock name="Pokemon LEVEL_UP Dialogue"                    beg="3940"  end="4285"/>
+        <StringBlock name="Pokemon WAIT Dialogue"                        beg="4285"  end="4630"/>
+        <StringBlock name="Pokemon HEALTHY Dialogue"                     beg="4630"  end="5740"/>
+        <StringBlock name="Pokemon HALF_LIFE Dialogue"                   beg="5740"  end="6085"/>
+        <StringBlock name="Pokemon PINCH Dialogue"                       beg="6085"  end="6430"/>
+        <StringBlock name="Pokemon GROUND_WAIT Dialogue"                 beg="6430"  end="6775"/>
         <StringBlock name="Item Names"                                 beg="6775"  end="8175"/>
         <StringBlock name="Move Names"                                 beg="8175"  end="8736"/>
         <StringBlock name="Pokemon Names"                              beg="8736"  end="9336"/>

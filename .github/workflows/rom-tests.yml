@@ -2,6 +2,14 @@ name: ROM Tests
 
 on:
   workflow_dispatch: {}
+  push:
+    branches:
+      - master
+      - release
+      - version/*
+    tags:
+      - "*"
+  pull_request: {}
 
 jobs:
   test_with_rom:

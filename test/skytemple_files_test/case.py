@@ -20,7 +20,7 @@ import functools
 import os
 import sys
 import typing
-from abc import ABC, abstractmethod
+from abc import ABC
 from tempfile import TemporaryFile
 from typing import Any, Generic, Mapping, Optional, Protocol, Type, TypeVar
 
@@ -46,11 +46,7 @@ T = TypeVar("T", bound=BoundDataHandler)  # type: ignore
 
 
 class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
-    @classmethod
-    @property
-    @abstractmethod
-    def handler(cls) -> Type[T]:
-        pass  # type: ignore
+    handler: Type[T]
 
     @classmethod
     def _load_main_fixture(cls, path: str, **kwargs: OptionalKwargs) -> U:  # type: ignore

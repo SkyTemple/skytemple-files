@@ -10,8 +10,10 @@ HookVLetter:
 	ldr r0,[r13, StackThing+4]
 	bl GetTagParameter
 	mov r5,r0
-	ldr r0,[r13, StackThing+8]
-	bl GetTagParameter
+	cmp r6,#2
+	moveq r0,#0
+	ldrne r0,[r13, StackThing+8]
+	blne GetTagParameter
 	mov r2,r0
 	mov r1,r5
 	mov r0,#0

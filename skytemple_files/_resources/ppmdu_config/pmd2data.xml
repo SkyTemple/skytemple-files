@@ -1336,6 +1336,15 @@
           </Replace>
         </SimplePatch>
 
+        <SimplePatch id="RemoveBodySizeCheck">
+          <Include filename="end_asm_mods/src/RemoveBodySizeCheck.asm"/>
+          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+            <Game id="EoS_NA" replace='_REGION equ "US"'/>
+            <Game id="EoS_EU" replace='_REGION equ "EU"'/>
+            <Game id="EoS_JP" replace='_REGION equ "JP"'/>
+          </Replace>
+        </SimplePatch>
+
       </Game>
     </Patches>
 

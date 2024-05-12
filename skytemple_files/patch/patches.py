@@ -137,6 +137,9 @@ from skytemple_files.patch.handler.push_allies import PushAlliesPatchHandler
 from skytemple_files.patch.handler.reduce_jumpcut_pause_time import (
     ReduceJumpcutPauseTime,
 )
+from skytemple_files.patch.handler.remove_body_size_check import (
+    RemoveBodySizeCheckPatchHandler,
+)
 from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
@@ -201,6 +204,7 @@ class PatchType(Enum):
     DISPLAY_SCRIPT_VAR = DisplayScriptVarPatchHandler
     CHANGE_PORTRAIT = ChangePortraitPatchHandler
     NEGATIVE_ENEMY_DENSITY = NegativeEnemyDensityPatchHandler
+    REMOVE_BODY_SIZE_CHECK = RemoveBodySizeCheckPatchHandler
 
 
 class Patcher:

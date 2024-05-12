@@ -45,9 +45,7 @@ class RemoveBodySizeCheckPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Removes the total body size check before entering a dungeon."
-        )
+        return _("Removes the total body size check before entering a dungeon.")
 
     @property
     def author(self) -> str:
@@ -66,11 +64,20 @@ class RemoveBodySizeCheckPatchHandler(AbstractPatchHandler):
         arm9_bytes = rom.arm9
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_EU:
-                return read_u32(arm9_bytes, OFFSET_RAM_EU - arm9.loadaddress) == NEW_INSTRUCTION
+                return (
+                    read_u32(arm9_bytes, OFFSET_RAM_EU - arm9.loadaddress)
+                    == NEW_INSTRUCTION
+                )
             elif config.game_region == GAME_REGION_US:
-                return read_u32(arm9_bytes, OFFSET_RAM_US - arm9.loadaddress) == NEW_INSTRUCTION
+                return (
+                    read_u32(arm9_bytes, OFFSET_RAM_US - arm9.loadaddress)
+                    == NEW_INSTRUCTION
+                )
             elif config.game_region == GAME_REGION_JP:
-                return read_u32(arm9_bytes, OFFSET_RAM_JP - arm9.loadaddress) == NEW_INSTRUCTION
+                return (
+                    read_u32(arm9_bytes, OFFSET_RAM_JP - arm9.loadaddress)
+                    == NEW_INSTRUCTION
+                )
         raise NotImplementedError()
 
     def apply(

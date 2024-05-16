@@ -11,7 +11,7 @@ Functions like `read_uintle` and `write_sintle` in `skytemple_files.common.util`
 with more specialized functions like `read_u8` or `write_u32`. If integers of dynamic sizes based on paremters need to
 be read, `read_dynamic` can be used instead.
 
-The deprecated functions will be removed in SkyTemple Files 1.7.0.
+The deprecated functions was removed in SkyTemple Files 1.7.1 after being announced to be removed from 1.7.0.
 
 Example
 ~~~~~~~

@@ -1421,8 +1421,8 @@
           <Argument id="1" type="sint" name="offset1"/>
         </OpCode>
         <OpCode id="0x4"   name="back_SetBackScrollSpeed"                params="2"  stringidx="-1" unk2="0"  unk3="0"   >
-          <Argument id="0" type="sint" name="speed0"/>
-          <Argument id="1" type="sint" name="speed1"/>
+          <Argument id="0" type="sint16" name="speed0"/>
+          <Argument id="1" type="sint16" name="speed1"/>
         </OpCode>
         <OpCode id="0x5"   name="back_SetBanner"                         params="2"  stringidx="1"  unk2="0"  unk3="0"   >
           <Argument id="0" type="sint" name="chapter_number"/>

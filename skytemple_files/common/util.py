@@ -263,6 +263,11 @@ def read_var_length_string(data: bytes, start: int = 0, codec: str = string_code
     return cursor - start, str(bytes_of_string, codec)
 
 
+def write_bytes(data: bytearray, to_write: bytes, start: int = 0, length: int = 1):
+    """Writes the given bytes into the bytearray at the given position."""
+    data[start : start + length] = to_write
+
+
 def write_u8(data: bytearray, to_write: u8, start: int = 0):
     """Writes an unsigned 8-bit integer into the bytearray at the given position."""
     data[start : start + 1] = to_write.to_bytes(1, byteorder="little", signed=False)

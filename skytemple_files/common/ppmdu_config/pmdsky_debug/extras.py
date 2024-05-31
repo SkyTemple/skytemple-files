@@ -106,7 +106,7 @@ class ExtraAllSymbolsProtocol(Protocol):
 class ExtraEuArm9Functions:
     # TODO: Is this really the same as DebugPrint0 for EU???
     DebugPrint2 = Symbol(
-        [0x200C284 - EuArm9Section.loadaddress], [0x200C284], None, DEBUG_PRINT2_DESC
+        [0x200C284 - EuArm9Section.loadaddress], [0x200C284], None, "DebugPrint2", DEBUG_PRINT2_DESC, None
     )
 
 
@@ -115,19 +115,25 @@ class ExtraEuArm9Data:
         [0x20A2314 - EuArm9Section.loadaddress],
         [0x20A2314],
         0x90,
+        "COMPRESSED_IQ_GROUP_SKILLS",
         COMPRESSED_IQ_GROUP_SKILLS_DESC,
+        None,
     )
     GUEST_MONSTER_DATA2 = Symbol(
         [0x204F148 - EuArm9Section.loadaddress],
         [0x204F148],
         0x1D0,
+        "GUEST_MONSTER_DATA2",
         GUEST_MONSTER_DATA2_DESC,
+        None,
     )
     EXTRA_DUNGEON_DATA = Symbol(
         [0x204EFE0 - EuArm9Section.loadaddress],
         [0x204EFE0],
         0x168,
+        "EXTRA_DUNGEON_DATA",
         EXTRA_DUNGEON_DATA_DESC,
+        None,
     )
 
 
@@ -149,7 +155,9 @@ class ExtraEuOverlay11Data:
         [0x22F66F4 - EuOverlay11Section.loadaddress],
         [0x22F66F4],
         0x800,
+        "MONSTER_GROUND_IDLE_ANIM",
         MONSTER_GROUND_IDLE_ANIM_DESC,
+        None,
     )
 
 
@@ -192,7 +200,7 @@ class ExtraEuSections:
 
 class ExtraNaArm9Functions:
     DebugPrint2 = Symbol(
-        [0x200C30C - NaArm9Section.loadaddress], [0x200C30C], None, DEBUG_PRINT2_DESC
+        [0x200C30C - NaArm9Section.loadaddress], [0x200C30C], None, "DebugPrint2", DEBUG_PRINT2_DESC, None
     )
 
 
@@ -201,19 +209,25 @@ class ExtraNaArm9Data:
         [0x20A1D90 - NaArm9Section.loadaddress],
         [0x20A1D90],
         0x90,
+        "COMPRESSED_IQ_GROUP_SKILLS",
         COMPRESSED_IQ_GROUP_SKILLS_DESC,
+        None,
     )
     GUEST_MONSTER_DATA2 = Symbol(
         [0x204EE10 - NaArm9Section.loadaddress],
         [0x204EE10],
         0x1D0,
+        "GUEST_MONSTER_DATA2",
         GUEST_MONSTER_DATA2_DESC,
+        None,
     )
     EXTRA_DUNGEON_DATA = Symbol(
         [0x204ECA8 - NaArm9Section.loadaddress],
         [0x204ECA8],
         0x168,
+        "EXTRA_DUNGEON_DATA",
         EXTRA_DUNGEON_DATA_DESC,
+        None,
     )
 
 
@@ -235,7 +249,9 @@ class ExtraNaOverlay11Data:
         [0x22F5D54 - NaOverlay11Section.loadaddress],
         [0x22F5D54],
         0x800,
+        "MONSTER_GROUND_IDLE_ANIM",
         MONSTER_GROUND_IDLE_ANIM_DESC,
+        None,
     )
 
 
@@ -277,7 +293,7 @@ class ExtraNaSections:
 
 
 class ExtraJpArm9Functions:
-    DebugPrint2 = Symbol(None, None, None, DEBUG_PRINT2_DESC)
+    DebugPrint2 = Symbol(None, None, None, "DebugPrint2", DEBUG_PRINT2_DESC, None)
 
 
 class ExtraJpArm9Data:
@@ -285,19 +301,25 @@ class ExtraJpArm9Data:
         [0x20A3164 - JpArm9Section.loadaddress],
         [0x20A3164],
         0x90,
+        "COMPRESSED_IQ_GROUP_SKILLS",
         COMPRESSED_IQ_GROUP_SKILLS_DESC,
+        None,
     )
     GUEST_MONSTER_DATA2 = Symbol(
         [0x204F168 - JpArm9Section.loadaddress],
         [0x204F168],
         0x1D0,
+        "GUEST_MONSTER_DATA2",
         GUEST_MONSTER_DATA2_DESC,
+        None,
     )
     EXTRA_DUNGEON_DATA = Symbol(
         [0x204F000 - JpArm9Section.loadaddress],
         [0x204F000],
         0x168,
+        "EXTRA_DUNGEON_DATA",
         EXTRA_DUNGEON_DATA_DESC,
+        None,
     )
 
 
@@ -319,7 +341,9 @@ class ExtraJpOverlay11Data:
         [0x22F73D8 - JpOverlay11Section.loadaddress],
         [0x22F73D8],
         0x800,
+        "MONSTER_GROUND_IDLE_ANIM",
         MONSTER_GROUND_IDLE_ANIM_DESC,
+        None,
     )
 
 

@@ -67,11 +67,11 @@ class RWValue(ABC):
             return RWInt8Value(binary, offset)
         elif type_str == "uint8" or type_str == "uint8_t" or type_str == "bool":
             return RWInt8Value(binary, offset)
-        elif type_str == "fx64" or type_str == "fx64_16":  # TODO: Confirm this is the final name
+        elif type_str == "struct fx64_16":
             return RWFx6416Value(binary, offset)
-        elif type_str == "fx32_16":  # TODO: Confirm this is the final name
+        elif type_str == "fx32_16":
             return RWFx3216Value(binary, offset)
-        elif type_str == "fx32_8":  # TODO: Confirm this is the final name
+        elif type_str == "fx32_8":  # Other fx types are currently unsupported since no relevant symbols use them
             return RWFx328Value(binary, offset)
         elif type_str == "shifted_immediate":  # TODO: Confirm this is the final name
             return RWShiftedImmediateValue(binary, offset)

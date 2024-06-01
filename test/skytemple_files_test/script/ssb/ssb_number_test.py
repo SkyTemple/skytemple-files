@@ -60,6 +60,10 @@ class SsbNumberTestCase(unittest.TestCase):
             SsbOpParamFixedPoint(SsbOpParamFixedPoint.NegativeZero, "0078"),
             parse_ssb_encoding(FP + 0x7FFE),
         )
+        self.assertEqual(
+            SsbOpParamFixedPoint(-10, "0"),
+            parse_ssb_encoding(FP + 0x7600),
+        )
 
     def test_fixed_point_to_ssb_encoding(self):
         self.assertEqual(FP + 0, fixed_point_to_ssb_encoding(SsbOpParamFixedPoint(0, "0")))
@@ -77,6 +81,10 @@ class SsbNumberTestCase(unittest.TestCase):
         self.assertEqual(
             FP + 0x7FFE,
             fixed_point_to_ssb_encoding(SsbOpParamFixedPoint(SsbOpParamFixedPoint.NegativeZero, "0078")),
+        )
+        self.assertEqual(
+            FP + 0x7600,
+            fixed_point_to_ssb_encoding(SsbOpParamFixedPoint(-10, "0")),
         )
 
     def test_fixed_point_to_ssb_encoding_out_of_bounds(self):

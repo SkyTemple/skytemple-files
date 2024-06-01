@@ -4,7 +4,10 @@ pyyaml==6.0.1
 range-typed-integers==1.0.1
 Pillow==10.2.0
 appdirs==1.4.4
-explorerscript==0.1.5
+# TODO
+#explorerscript==0.2.0
+git+https://github.com/skytemple/explorerscript@testing#egg=explorerscript
+# END TODO
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 dungeon-eos==0.0.5
 gql[aiohttp]==3.5.0

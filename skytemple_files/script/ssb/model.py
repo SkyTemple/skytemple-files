@@ -286,7 +286,9 @@ class Ssb:
                         continue
                     argument_spec = self._get_argument_spec(op.op_code, i)
                     if argument_spec is not None:
-                        if argument_spec.type == "Number":
+                        if argument_spec.type == "uint":
+                            new_params.append(param)
+                        elif argument_spec.type == "Number":
                             new_params.append(parse_ssb_encoding(param))
                         elif argument_spec.type in ENUM_ARGUMENTS:
                             const_data = getattr(self._scriptdata, ENUM_ARGUMENTS[argument_spec.type])

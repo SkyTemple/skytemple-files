@@ -1556,85 +1556,85 @@
         <OpCode id="0x28"  name="Branch"                                 params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="value"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x29"  name="BranchBit"                              params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="index"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2a"  name="BranchDebug"                            params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="param"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2b"  name="BranchEdit"                             params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="param"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2c"  name="BranchExecuteSub"                       params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="unk0"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2d"  name="BranchPerformance"                      params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <!-- Same as BranchBit for variable PERFORMANCE_PROGRESS_LIST -->
           <Argument id="0" type="Number" name="index"/>
           <Argument id="1" type="Number" name="value"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2e"  name="BranchScenarioNow"                      params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x2f"  name="BranchScenarioNowAfter"                 params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x30"  name="BranchScenarioNowBefore"                params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x31"  name="BranchScenarioAfter"                    params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x32"  name="BranchScenarioBefore"                   params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x33"  name="BranchSum"                              params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="unk0"/>
           <Argument id="1" type="Number" name="unk1"/>
           <Argument id="2" type="Number" name="unk2"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x34"  name="BranchValue"                            params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="operator"/>
           <Argument id="2" type="Number" name="value"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x35"  name="BranchVariable"                         params="4"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="GameVar" name="var"/>
           <Argument id="1" type="Number" name="operator"/>
           <Argument id="2" type="GameVar" name="cmp_var"/>
-          <Argument id="3" type="Number" name="jump_address"/>
+          <Argument id="3" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x36"  name="BranchVariation"                        params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="param"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x37"  name="Call"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Number" name="jump_address"/>
+          <Argument id="0" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x38"  name="CallCommon"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="Routine" name="coro_id"/>
@@ -1787,20 +1787,20 @@
         </OpCode>
         <OpCode id="0x63"  name="Case"                                   params="2"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="value"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x64"  name="CaseMenu"                               params="2"  stringidx="0"  unk2="1"  unk3="0"   >
           <Argument id="0" type="String" name="choice"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x65"  name="CaseMenu2"                              params="2"  stringidx="-1" unk2="1"  unk3="0"  >
           <Argument id="0" type="Number" name="choice?"/>
-          <Argument id="1" type="Number" name="jump_address"/>
+          <Argument id="1" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x66"  name="CaseScenario"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="operator"/>
           <Argument id="1" type="Number" name="value"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x67"  name="CaseText"                               params="2"  stringidx="1"  unk2="0"  unk3="0"   >
           <Argument id="0" type="Number" name="value"/>
@@ -1809,12 +1809,12 @@
         <OpCode id="0x68"  name="CaseValue"                              params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="operator"/>
           <Argument id="1" type="Number" name="value"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x69"  name="CaseVariable"                           params="3"  stringidx="-1" unk2="1"  unk3="0"   >
           <Argument id="0" type="Number" name="operator"/>
           <Argument id="1" type="GameVar" name="var"/>
-          <Argument id="2" type="Number" name="jump_address"/>
+          <Argument id="2" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x6a"  name="debug_Assert"                           params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="Number" name="unk0"/>
@@ -1913,7 +1913,7 @@
           <Argument id="1" type="GameVar" name="var"/>
         </OpCode>
         <OpCode id="0x87"  name="Jump"                                   params="1"  stringidx="-1" unk2="1"  unk3="0"   >
-          <Argument id="0" type="Number" name="jump_address"/>
+          <Argument id="0" type="uint" name="jump_address"/>
         </OpCode>
         <OpCode id="0x88"  name="JumpCommon"                             params="1"  stringidx="-1" unk2="0"  unk3="0"   >
           <Argument id="0" type="Routine" name="coro_id"/>

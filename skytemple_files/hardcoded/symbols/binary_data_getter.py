@@ -21,9 +21,9 @@ from pmdsky_debug_py.protocol import SectionProtocol, Symbol
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 
 
-class SymbolDataGetter:
+class BinaryDataGetter:
     """
-    Class used to retrieve information about Symbols and binary sections defined for the current ROM.
+    Class used to retrieve information about binary sections defined for the current ROM and their symbols.
     """
 
     pmd2_data: Pmd2Data
@@ -45,6 +45,18 @@ class SymbolDataGetter:
             if starting_with is None or self._starts_with_any(section, starting_with):
                 result.append(section)
         return result
+
+    def get_binary_section_protocol(self, binary: str) -> SectionProtocol:
+        """
+        Given the name of a binary, returns its corresponding SectionProtocol instance on the current ROM.
+        :param binary: Name of the binary to get
+        :return: The SectionProtocol that corresponds to the given binary
+        :raises ValueError: If a binary with the given name does not exist
+        """
+        try:
+            return self.sections_dict[binary]
+        except KeyError:
+            raise ValueError("The given binary does not exist.")
 
     def has_data_symbols(self, binary: str) -> bool:
         """

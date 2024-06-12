@@ -26,6 +26,7 @@ from skytemple_files.hardcoded.symbols.unsupported_type_error import Unsupported
 
 
 CHAR_ARRAY_REGEX = re.compile(r"char\[(\d+)]$")
+DATA_PROCESSING_INSTRUCTION_TYPE = "struct data_processing_instruction"
 
 
 class RWValue(ABC):
@@ -73,7 +74,9 @@ class RWValue(ABC):
             return RWFx3216Value(binary, offset)
         elif type_str == "fx32_8":  # Other fx types are currently unsupported since no relevant symbols use them
             return RWFx328Value(binary, offset)
-        elif type_str == "shifted_immediate":  # TODO: Confirm this is the final name
+        elif type_str == DATA_PROCESSING_INSTRUCTION_TYPE:
+            # The only part of a data processing instruction that might be interesting to edit is its shifted immediate
+            # value (first 3 nibbles), so we only process that part.
             return RWShiftedImmediateValue(binary, offset)
         else:
             # Check for char arrays

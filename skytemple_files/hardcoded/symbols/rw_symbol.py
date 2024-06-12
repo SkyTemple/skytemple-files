@@ -135,12 +135,12 @@ class RWSimpleSymbol(RWSymbol):
         """
         return self._rw_value
 
-    def read_str_with_path(self, path: str) -> str:
+    def read_str_with_path(self, path: SymbolPath) -> str:
         if path != "":
             raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
         return self._rw_value.read_str()
 
-    def write_str_with_path(self, path: str, value: str):
+    def write_str_with_path(self, path: SymbolPath, value: str):
         if path != "":
             raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
         self._rw_value.write_str(value)

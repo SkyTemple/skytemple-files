@@ -20,7 +20,7 @@ from abc import ABC, abstractmethod
 from range_typed_integers import *
 from skytemple_files.common.i18n_util import _
 
-from skytemple_files.common.util import ByteReadable, write_i32, read_i32, read_i16, write_i16, read_i8, write_i8, \
+from skytemple_files.common.util import write_i32, read_i32, read_i16, write_i16, read_i8, write_i8, \
     read_u32, write_u32, read_u16, write_u16, read_u8, write_u8, read_bytes, write_bytes
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 
@@ -38,59 +38,56 @@ class RWValue(ABC):
     concrete data types.
     """
 
-    # The binary to read/write to. No idea why they have to be different types depending on the operation performed,
-    # this just copies the implementation of the read_xx and write_xx methods in utils.py.
-    binary: ByteReadable | bytearray
     # The offset within the binary to read/write to.
     offset: int
 
     @classmethod
-    def from_c_type(cls, type_str: str, binary: ByteReadable | bytearray, offset: int) -> "RWValue":
+    def from_c_type(cls, type_str: str, offset: int) -> "RWValue":
         """
         Used to create an instance of one of the subclasses of this class depending on the specified C type.
         Pmdsky-debug custom types are also supported.
         :param type_str: String that represents the C type to use as a reference to create the instance. Must be one
         of the types supported by the subclasses of this class.
-        :param binary: Binary to read/write to.
         :param offset: Offset within the binary to read/write to.
         :return: The new instance of one of the subclasses of this class
         :raises UnsupportedTypeError: If the specified C type is not supported
         """
         if type_str == "int" or type_str == "int32" or type_str == "int32_t":
-            return RWInt32Value(binary, offset)
+            return RWInt32Value(offset)
         elif type_str == "uint" or type_str == "uint32" or type_str == "uint32_t":
-            return RWUInt32Value(binary, offset)
+            return RWUInt32Value(offset)
         elif type_str == "int16" or type_str == "int16_t":
-            return RWInt16Value(binary, offset)
+            return RWInt16Value(offset)
         elif type_str == "uint16" or type_str == "uint16_t":
-            return RWInt16Value(binary, offset)
+            return RWInt16Value(offset)
         elif type_str == "int8" or type_str == "int8_t":
-            return RWInt8Value(binary, offset)
+            return RWInt8Value(offset)
         elif type_str == "uint8" or type_str == "uint8_t" or type_str == "bool":
-            return RWInt8Value(binary, offset)
+            return RWInt8Value(offset)
         elif type_str == "struct fx64_16":
-            return RWFx6416Value(binary, offset)
+            return RWFx6416Value(offset)
         elif type_str == "fx32_16":
-            return RWFx3216Value(binary, offset)
+            return RWFx3216Value(offset)
         elif type_str == "fx32_8":  # Other fx types are currently unsupported since no relevant symbols use them
-            return RWFx328Value(binary, offset)
+            return RWFx328Value(offset)
         elif type_str == DATA_PROCESSING_INSTRUCTION_TYPE:
             # The only part of a data processing instruction that might be interesting to edit is its shifted immediate
             # value (first 3 nibbles), so we only process that part.
-            return RWShiftedImmediateValue(binary, offset)
+            return RWShiftedImmediateValue(offset)
         else:
             # Check for char arrays
             match = re.match(CHAR_ARRAY_REGEX, type_str)
             if match:
                 size = int(match.group(1))
-                return RWCharArrayValue(binary, offset, size)
+                return RWCharArrayValue(offset, size)
             else:
                 raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
 
     @abstractmethod
-    def read_str(self, index: int = 0) -> str:
+    def read_str(self, binary: bytes, index: int = 0) -> str:
         """
         Reads the value from the binary and offset specified when instantiating the class and converts it to a string.
+        :param binary: Binary the data should be read from
         :param index: If > 0, the operation will be treated as an array element access, and the array element on the
         given index will be returned.
         :return: The value represented by this instance, as a string.
@@ -98,10 +95,11 @@ class RWValue(ABC):
         ...
 
     @abstractmethod
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         """
         Writes the given value to the binary and offset specified when instantiating the class. This method will
         attempt to convert the given string to the type represented by this instance.
+        :param binary: Binary the data should be written to
         :param value: Value to write
         :param index: If > 0, the operation will be treated as an array element access, and the array element on the
         given index will be overwritten.
@@ -120,25 +118,24 @@ class RWValue(ABC):
 
 class RWInt32Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> i32:
-        return read_i32(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> i32:
+        return read_i32(binary, self.offset + index * self._type_size)
 
-    def write(self, value: i32, index: int = 0):
-        write_i32(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: i32, index: int = 0):
+        write_i32(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = i32_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -147,25 +144,24 @@ class RWInt32Value(RWValue):
 
 class RWInt16Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> i16:
-        return read_i16(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> i16:
+        return read_i16(binary, self.offset + index * self._type_size)
 
-    def write(self, value: i16, index: int = 0):
-        write_i16(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: i16, index: int = 0):
+        write_i16(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = i16_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -174,25 +170,24 @@ class RWInt16Value(RWValue):
 
 class RWInt8Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> i8:
-        return read_i8(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> i8:
+        return read_i8(binary, self.offset + index * self._type_size)
 
-    def write(self, value: i8, index: int = 0):
-        write_i8(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: i8, index: int = 0):
+        write_i8(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = i8_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -201,25 +196,24 @@ class RWInt8Value(RWValue):
 
 class RWUInt32Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> u32:
-        return read_u32(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> u32:
+        return read_u32(binary, self.offset + index * self._type_size)
 
-    def write(self, value: u32, index: int = 0):
-        write_u32(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: u32, index: int = 0):
+        write_u32(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = u32_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -228,25 +222,24 @@ class RWUInt32Value(RWValue):
 
 class RWUInt16Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> u16:
-        return read_u16(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> u16:
+        return read_u16(binary, self.offset + index * self._type_size)
 
-    def write(self, value: u16, index: int = 0):
-        write_u16(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: u16, index: int = 0):
+        write_u16(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = u16_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -255,25 +248,24 @@ class RWUInt16Value(RWValue):
 
 class RWUInt8Value(RWValue):
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> u8:
-        return read_u8(self.binary, self.offset + index * self._type_size)
+    def read(self, binary: bytes, index: int = 0) -> u8:
+        return read_u8(binary, self.offset + index * self._type_size)
 
-    def write(self, value: u8, index: int = 0):
-        write_u8(self.binary, value, self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: u8, index: int = 0):
+        write_u8(binary, value, self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         try:
             converted_value = u8_checked(int(value))
         except OverflowError as e:
             raise ValueError(e)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -286,31 +278,30 @@ class RWFx6416Value(RWValue):
     It represents the number (upper << 16) + (lower >> 16) + (lower & 0xFFFF) * 2^-16.
     """
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> float:
-        upper_bytes = read_bytes(self.binary, self.offset + index * self._type_size, 4)
-        lower_bytes = read_bytes(self.binary, self.offset + 4 + index * self._type_size, 4)
+    def read(self, binary: bytes, index: int = 0) -> float:
+        upper_bytes = read_bytes(binary, self.offset + index * self._type_size, 4)
+        lower_bytes = read_bytes(binary, self.offset + 4 + index * self._type_size, 4)
         value_big_endian = upper_bytes[::-1] + lower_bytes[::-1]
 
         int_val = int.from_bytes(value_big_endian, "big", signed=True)
         return i64_checked(int_val) * 2**-16
 
-    def write(self, value: float, index: int = 0):
+    def write(self, binary: bytearray, value: float, index: int = 0):
         value_as_bytes = i64_checked(round(value * 2**16)).to_bytes(8, "big")
         upper_bytes_le = value_as_bytes[3::-1]
         lower_bytes_le = value_as_bytes[7:3:-1]
-        write_bytes(self.binary, upper_bytes_le, self.offset + index * self._type_size, 4)
-        write_bytes(self.binary, lower_bytes_le, self.offset + 4 + index * self._type_size, 4)
+        write_bytes(binary, upper_bytes_le, self.offset + index * self._type_size, 4)
+        write_bytes(binary, lower_bytes_le, self.offset + 4 + index * self._type_size, 4)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         converted_value = float(value)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -323,22 +314,21 @@ class RWFx3216Value(RWValue):
     It represents the number (value >> 16) + (value & 0xFFFF) * 2^-16.
     """
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> float:
-        return read_i32(self.binary, self.offset + index * self._type_size) / 2**16
+    def read(self, binary: bytes, index: int = 0) -> float:
+        return read_i32(binary, self.offset + index * self._type_size) / 2**16
 
-    def write(self, value: float, index: int = 0):
-        write_i32(self.binary, i32_checked(round(value * 2**16)), self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: float, index: int = 0):
+        write_i32(binary, i32_checked(round(value * 2**16)), self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         converted_value = float(value)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -351,22 +341,21 @@ class RWFx328Value(RWValue):
     It represents the number (value >> 24) + (value & 0xFF) * 2^-8.
     """
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self, index: int = 0) -> float:
-        return read_i32(self.binary, self.offset + index * self._type_size) / 2**8
+    def read(self, binary: bytes, index: int = 0) -> float:
+        return read_i32(binary, self.offset + index * self._type_size) / 2**8
 
-    def write(self, value: float, index: int = 0):
-        write_i32(self.binary, i32_checked(round(value * 2**8)), self.offset + index * self._type_size)
+    def write(self, binary: bytearray, value: float, index: int = 0):
+        write_i32(binary, i32_checked(round(value * 2**8)), self.offset + index * self._type_size)
 
-    def read_str(self, index: int = 0) -> str:
-        return str(self.read(index))
+    def read_str(self, binary: bytes, index: int = 0) -> str:
+        return str(self.read(binary, index))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         converted_value = float(value)
-        self.write(converted_value, index)
+        self.write(binary, converted_value, index)
 
     @property
     def _type_size(self) -> int:
@@ -381,33 +370,32 @@ class RWShiftedImmediateValue(RWValue):
     This class does not support array indexing.
     """
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int):
-        self.binary = binary
+    def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self) -> int:
-        base = read_u8(self.binary, self.offset)
-        rot_amount = (read_u8(self.binary, self.offset + 1) & 0xF) * 2
+    def read(self,  binary: bytes) -> int:
+        base = read_u8(binary, self.offset)
+        rot_amount = (read_u8(binary, self.offset + 1) & 0xF) * 2
         return (base >> rot_amount) | (base << (32 - rot_amount) & 0xFFFFFFFF)
 
-    def write(self, value: int):
+    def write(self, binary: bytearray, value: int):
         base, rot_param = self._get_shifted_immediate(value)
-        write_u8(self.binary, u8(base), self.offset)
+        write_u8(binary, u8(base), self.offset)
         # Make sure we don't overwrite the instruction's nibble 3
-        nibble_3 = read_u8(self.binary, self.offset + 1) & 0xF0
-        write_u8(self.binary, u8(nibble_3 + rot_param), self.offset + 1)
+        nibble_3 = read_u8(binary, self.offset + 1) & 0xF0
+        write_u8(binary, u8(nibble_3 + rot_param), self.offset + 1)
 
-    def read_str(self, index: int = 0) -> str:
+    def read_str(self, binary: bytes, index: int = 0) -> str:
         if index != 0:
             raise ValueError("Shifted immediates do not support array indexing")
-        return str(self.read())
+        return str(self.read(binary))
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         if index != 0:
             raise ValueError("Shifted immediates do not support array indexing")
 
         converted_value = int(value)
-        self.write(converted_value)
+        self.write(binary, converted_value)
 
     @property
     def _type_size(self) -> int:
@@ -437,37 +425,36 @@ class RWCharArrayValue(RWValue):
     # Size in bytes
     size: int
 
-    def __init__(self, binary: ByteReadable | bytearray, offset: int, size: int):
-        self.binary = binary
+    def __init__(self, offset: int, size: int):
         self.offset = offset
         self.size = size
 
-    def read(self) -> str:
-        _bytes = read_bytes(self.binary, self.offset, self.size)
+    def read(self,  binary: bytes) -> str:
+        _bytes = read_bytes(binary, self.offset, self.size)
         end = _bytes.find(b"\0")
         if end == -1:
             return _bytes.decode("ascii")
         else:
             return _bytes[:end].decode("ascii")
 
-    def write(self, value: str):
+    def write(self, binary: bytearray, value: str):
         # Check there's enough space to write the string and the null terminator
         if len(value) + 1 <= self.size:
             _bytes = value.encode("ascii")
             _bytes = _bytes + b"\0"
-            write_bytes(self.binary, _bytes, self.offset)
+            write_bytes(binary, _bytes, self.offset)
         else:
             raise ValueError("String too large to fit on char array.")
 
-    def read_str(self, index: int = 0) -> str:
+    def read_str(self, binary: bytes, index: int = 0) -> str:
         if index != 0:
             raise ValueError("Char arrays do not support array indexing")
-        return self.read()
+        return self.read(binary)
 
-    def write_str(self, value: str, index: int = 0):
+    def write_str(self, binary: bytearray, value: str, index: int = 0):
         if index != 0:
             raise ValueError("Char arrays do not support array indexing")
-        self.write(value)
+        self.write(binary, value)
 
     @property
     def _type_size(self) -> int:

@@ -19,7 +19,6 @@ from abc import ABC, abstractmethod
 from typing import List, Dict
 
 from pmdsky_debug_py.protocol import Symbol
-from skytemple_files.common.util import ByteReadable
 
 from skytemple_files.common.rw_value import RWValue
 from skytemple_files.hardcoded.symbols.c_type import CType, get_simplified_type
@@ -38,12 +37,11 @@ class RWSymbol(ABC):
     name: str
 
     @classmethod
-    def from_basic_data(cls, name: str, binary: ByteReadable | bytearray, offset: int, type_str: str) -> "RWSymbol":
+    def from_basic_data(cls, name: str, offset: int, type_str: str) -> "RWSymbol":
         """
         Attempts to create a new instance of this class given basic symbol information. The exact subclass of the
         instance will depend on the specified type string.
         :param name: Name of the symbol
-        :param binary: Binary where the value of the symbol should be read from and written to
         :param offset: Offset within the binary where data will be read and written to
         :param type_str: Type of the symbol
         :return: New RWSymbol instance
@@ -60,7 +58,7 @@ class RWSymbol(ABC):
                     raise UnsupportedTypeError("Unsupported symbol type \"" + type_str + "\" due to unknown or "
                          "variable array size.")
                 else:
-                    return RWArraySymbol(name, binary, offset, type_str)
+                    return RWArraySymbol(name, offset, type_str)
             else:
                 # Simplify the type if possible
                 type_str = get_simplified_type(type_str)
@@ -69,18 +67,17 @@ class RWSymbol(ABC):
                     # Check if it's one of the struct types that have been manually implemented.
                     # If the type is not supported, this call raises UnsupportedTypeError.
                     struct_fields = get_struct_fields(type_str)
-                    return RWStructSymbol(name, binary, offset, struct_fields)
+                    return RWStructSymbol(name, offset, struct_fields)
                 else:
                     # Try to create the symbol with this type. If the type is not supported, this call raises
                     # UnsupportedTypeError.
-                    return RWSimpleSymbol(name, binary, offset, type_str)
+                    return RWSimpleSymbol(name, offset, type_str)
 
     @classmethod
-    def from_symbol(cls, symbol: Symbol, binary: ByteReadable | bytearray) -> "RWSymbol":
+    def from_symbol(cls, symbol: Symbol) -> "RWSymbol":
         """
         Attempts to create a new RWSymbol with the information from the given symbol.
         :param symbol: Symbol to use to create the RWSymbol. Must have exactly one address and a type.
-        :param binary: Binary where the value of the symbol should be read from and written to
         :return: New RWSymbol instance
         :raises UnsupportedTypeError: If the type of the input symbol is not supported by the RWSymbol subclasses.
         :raises ValueError: If the provided symbol does not have exactly one address or it does not have a type.
@@ -92,13 +89,14 @@ class RWSymbol(ABC):
         if symbol.c_type is None:
             raise ValueError("Cannot instantiate RWSymbol with a Symbol that does not have a type.")
 
-        return cls.from_basic_data(symbol.name, binary, symbol.addresses[0], symbol.c_type)
+        return cls.from_basic_data(symbol.name, symbol.addresses[0], symbol.c_type)
 
     @abstractmethod
-    def read_str_with_path(self, path: SymbolPath) -> str:
+    def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         """
         Allows reading the value of this symbol. If it's a compound symbol (like an array or a struct), this method
         allows reading the value of any sub-symbols contained in this symbol.
+        :param binary: Binary to read the data from
         :param path: Path to the symbol to read
         :return: The value of the specified symbol or sub-symbol, as a string
         :raises ValueError: If the specified path is invalid
@@ -106,10 +104,11 @@ class RWSymbol(ABC):
         ...
 
     @abstractmethod
-    def write_str_with_path(self, path: SymbolPath, value: str):
+    def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         """
         Allows writing a value to this symbol. If it's a compound symbol (like an array or a struct), this method
         allows writing a value to any sub-symbols contained in this symbol.
+        :param binary: Binary to write the data to
         :param path: Path to the symbol to read
         :param value: Value to write, as a string. It will be converted to the appropriate type beforehand.
         :raises ValueError: If the specified path is invalid
@@ -124,9 +123,9 @@ class RWSimpleSymbol(RWSymbol):
 
     _rw_value: RWValue
 
-    def __init__(self, name: str, binary: ByteReadable | bytearray, offset: int, type_str: str):
+    def __init__(self, name: str, offset: int, type_str: str):
         self.name = name
-        self._rw_value = RWValue.from_c_type(type_str, binary, offset)
+        self._rw_value = RWValue.from_c_type(type_str, offset)
 
     def get_rw_value(self) -> RWValue:
         """
@@ -135,15 +134,15 @@ class RWSimpleSymbol(RWSymbol):
         """
         return self._rw_value
 
-    def read_str_with_path(self, path: SymbolPath) -> str:
+    def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         if path != "":
             raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
-        return self._rw_value.read_str()
+        return self._rw_value.read_str(binary)
 
-    def write_str_with_path(self, path: SymbolPath, value: str):
+    def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         if path != "":
             raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
-        self._rw_value.write_str(value)
+        self._rw_value.write_str(binary, value)
 
 
 class RWArraySymbol(RWSymbol):
@@ -153,7 +152,7 @@ class RWArraySymbol(RWSymbol):
 
     elements: List[RWSymbol]
 
-    def __init__(self, name: str, binary: ByteReadable | bytearray, offset: int, type_str: str):
+    def __init__(self, name: str, offset: int, type_str: str):
         c_type = CType.from_str(type_str)
         base_type_size = c_type.get_base_type_size()
 
@@ -162,16 +161,16 @@ class RWArraySymbol(RWSymbol):
 
         # Create sub-symbols
         for i in range(c_type.get_total_num_elements()):
-            self.elements.append(RWSymbol.from_basic_data(self.name + "[" + str(i) + "]", binary,
+            self.elements.append(RWSymbol.from_basic_data(self.name + "[" + str(i) + "]",
                 offset + i * base_type_size, c_type.base_type))
 
-    def read_str_with_path(self, path: SymbolPath) -> str:
+    def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         index, rest_of_path = path.get_next_array_flat()
-        return self.elements[index].read_str_with_path(rest_of_path)
+        return self.elements[index].read_str_with_path(binary, rest_of_path)
 
-    def write_str_with_path(self, path: SymbolPath, value: str):
+    def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         index, rest_of_path = path.get_next_array_flat()
-        self.elements[index].write_str_with_path(rest_of_path, value)
+        self.elements[index].write_str_with_path(binary, rest_of_path, value)
 
 
 class RWStructSymbol(RWSymbol):
@@ -181,7 +180,7 @@ class RWStructSymbol(RWSymbol):
 
     fields: Dict[str, RWSymbol]
 
-    def __init__(self, name: str, binary: ByteReadable | bytearray, offset: int, fields: List[StructField]):
+    def __init__(self, name: str, offset: int, fields: List[StructField]):
         """
         Creates a new instance of this class
         :param fields: List containing information about the fields of this struct
@@ -190,19 +189,19 @@ class RWStructSymbol(RWSymbol):
         self.fields = {}
 
         for field in fields:
-            self.fields[field.name] = RWSymbol.from_basic_data(name + "." + field.name, binary, offset + field.offset,
+            self.fields[field.name] = RWSymbol.from_basic_data(name + "." + field.name, offset + field.offset,
                 field.type)
 
-    def read_str_with_path(self, path: SymbolPath) -> str:
+    def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         field_name, rest_of_path = path.get_next_field()
         try:
-            return self.fields[field_name].read_str_with_path(rest_of_path)
+            return self.fields[field_name].read_str_with_path(binary, rest_of_path)
         except KeyError:
             raise ValueError("Struct symbol " + self.name + " has no field named \"" + field_name + "\".")
 
-    def write_str_with_path(self, path: SymbolPath, value: str):
+    def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         field_name, rest_of_path = path.get_next_field()
         try:
-            return self.fields[field_name].write_str_with_path(rest_of_path, value)
+            return self.fields[field_name].write_str_with_path(binary, rest_of_path, value)
         except KeyError:
             raise ValueError("Struct symbol " + self.name + " has no field named \"" + field_name + "\".")

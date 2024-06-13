@@ -111,7 +111,7 @@ class ExtraEuArm9Functions:
         None,
         "DebugPrint2",
         DEBUG_PRINT2_DESC,
-        "",
+        None,
     )
 
 
@@ -210,7 +210,7 @@ class ExtraNaArm9Functions:
         None,
         "DebugPrint2",
         DEBUG_PRINT2_DESC,
-        "",
+        None,
     )
 
 
@@ -303,7 +303,7 @@ class ExtraNaSections:
 
 
 class ExtraJpArm9Functions:
-    DebugPrint2 = Symbol(None, None, None, "DebugPrint2", DEBUG_PRINT2_DESC, "")
+    DebugPrint2 = Symbol(None, None, None, "DebugPrint2", DEBUG_PRINT2_DESC, None)
 
 
 class ExtraJpArm9Data:

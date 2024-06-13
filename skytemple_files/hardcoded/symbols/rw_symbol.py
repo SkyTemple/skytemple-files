@@ -63,15 +63,23 @@ class RWSymbol(ABC):
                 # Simplify the type if possible
                 type_str = get_simplified_type(type_str)
 
+                # Try to create a simple symbol first (some structs are handled as simple symbols, such as
+                # struct fx_64_16)
+                try:
+                    return RWSimpleSymbol(name, offset, type_str)
+                except UnsupportedTypeError:
+                    pass
+
+                # Check if it's a struct type and try to handle it as such if so
                 if "struct" in type_str:
                     # Check if it's one of the struct types that have been manually implemented.
                     # If the type is not supported, this call raises UnsupportedTypeError.
                     struct_fields = get_struct_fields(type_str)
                     return RWStructSymbol(name, offset, struct_fields)
                 else:
-                    # Try to create the symbol with this type. If the type is not supported, this call raises
-                    # UnsupportedTypeError.
-                    return RWSimpleSymbol(name, offset, type_str)
+                    # This type is not an array type, is not supported by RWSimpleSymbol and it's not a supported
+                    # struct type either, raise an error.
+                    raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
 
     @classmethod
     def from_symbol(cls, symbol: Symbol) -> "RWSymbol":
@@ -82,6 +90,8 @@ class RWSymbol(ABC):
         :raises UnsupportedTypeError: If the type of the input symbol is not supported by the RWSymbol subclasses.
         :raises ValueError: If the provided symbol does not have exactly one address or it does not have a type.
         """
+        if symbol.addresses is None:
+            raise ValueError("Cannot instantiate RWSymbol with a Symbol that has no addresses.")
         if len(symbol.addresses) != 1:
             # TODO: Maybe support symbols with multiple addresses? Although it's uncommon for data symbols.
             raise ValueError("Cannot instantiate RWSymbol with a Symbol that has " + str(len(symbol.addresses)) +

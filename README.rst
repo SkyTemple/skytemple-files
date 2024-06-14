@@ -99,7 +99,7 @@ APIs that the "File API v2" uses:
 
 Example
 ~~~~~~~
-Directly in the package (``skytemple_files`` directory) you can find a few an example script that help with understanding
+Directly in the package (``skytemple_files`` directory) you can find an example script that help with understanding
 how to use this library. After installing the package you will have is as a cli command: ``skytemple_export_maps``.
 
 The example script does not use the new File API, it uses the classic APIs.

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "skytemple-files"
-version = "1.8.0"
+version = "2.0.0a1"
 authors = [
     {name = 'Marco "Capypara" Köpcke', email = "hello@capypara.de"},
     # see About dialog or GitHub contributors list for additional people.
@@ -49,6 +49,9 @@ spritecollab = [
     "graphql-core >= 3.2.0",
     "aiohttp[speedups]",
     "lru-dict >= 1.1.8",
+]
+cli = [
+    "click >= 8.1, < 9.0",
 ]
 
 [project.scripts]

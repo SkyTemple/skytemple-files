@@ -206,10 +206,10 @@ class RomProject:
         return assets
 
     def list_files(
-        self, search_project_dir: bool = True, search_rom: bool = True
-    ) -> list[Path]:
+        self, *, search_project_dir: bool = True, search_rom: bool = True
+    ) -> list[dict[Path, type[DataHandler[T]]]]:
         """
-        Returns a list of all assets in the project.
+        Returns a list of all files in the project and their corresponding handlers.
 
         The list is built from information in the project directory and ROM by default.
         """

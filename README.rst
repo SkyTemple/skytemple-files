@@ -46,7 +46,7 @@ data from the game, as well as patches.
 This API provides two types of data access:
 
 - Assets: Machine- and human-readable versions of the files stored in the game. These are always used primarily if
-  they exist. They are specified as part of PMDCollab eos-asset-spec_ for support for best other ROM hacking tools.
+  they exist. They are specified as part of PMDCollab eos-asset-spec_.
 - ROM: The actual ROM file where all of the binary serialized files are stored.
 
 If the contents of assets does not match the contents of the file in the ROM, this can be handled in different ways.

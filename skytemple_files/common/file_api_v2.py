@@ -228,8 +228,7 @@ class RomProject:
         Loads this model from assets from the asset storage or ROM.
 
         Reads from assets if they exist, otherwise falls back to ROM if all assets are missing.
-        Raises `AssetHashMismatchError` if the hash of any asset mismatches and that asset path
-        is not in `force`.
+        Raises `AssetHashMismatchError` if the hash of any asset mismatches and `force` is not True.
         If only some but not all assets are missing, raises a `AssetHashMismatchError` with no hashes
         but `missing_asset` set to `True`.
         May raise any other exception if an asset exists but is not loadable.

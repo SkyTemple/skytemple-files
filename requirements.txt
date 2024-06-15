@@ -5,8 +5,7 @@ range-typed-integers==1.0.1
 Pillow==10.2.0
 appdirs==1.4.4
 # TODO
-#explorerscript==0.2.0
-git+https://github.com/skytemple/explorerscript@testing#egg=explorerscript
+explorerscript==0.2.0
 # END TODO
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 dungeon-eos==0.0.5

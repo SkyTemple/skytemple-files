@@ -37,10 +37,30 @@ class Asset:
     spec: AssetSpec
     expected_rom_obj_hash: bytes | None  # may be None if no hash info was stored yet.
     actual_rom_obj_hash: bytes | None  # may be None if the file does not exist in ROM.
+    expected_asset_hash: bytes | None  # may be None if no hash info was stored yet.
+    actual_asset_hash: bytes | None  # may be None if no hash info was stored yet.
     data: bytes
 
-    def do_hashes_match(self):
+    def do_rom_hashes_match(self):
+        """
+        Check if the expected hash of the binary object file matches the hash of the binary file built using this asset.
+
+        If they mismatch but `self.do_asset_hashes_match` returns True for this and all other assets used to build this
+        object, then the file in the ROM was changed externally. Otherwise, if for any asset
+        `self.do_asset_hashes_match` returns False, then there were changes in both the ROM and the assets.
+        """
         return self.expected_rom_obj_hash == self.actual_rom_obj_hash
+
+    def do_asset_hashes_match(self):
+        """
+        Check if the asset is unchanged since it was last used to build the ROM. If this returns True, then this
+        asset file was not changed since the ROM object was last built, otherwise this asset file was changed, and
+        the ROM object should be re-built.
+        """
+        return self.expected_asset_hash == self.actual_asset_hash
+
+    def do_hashes_match(self):
+        return self.do_rom_hashes_match() and self.do_asset_hashes_match()
 
 
 class FileStorage(Protocol):
@@ -78,13 +98,9 @@ class AssetHashMismatchError(Exception):
         message,
         path_asset: Path,
         path_rom_file: Path,
-        hash_expected: bytes | None,
-        hash_in_rom: bytes | None,
-        missing_asset: bool,
+        asset: Asset | None,  # If None, the asset was missing
     ):
         super().__init__(message)
         self.path_asset = path_asset
         self.path_rom_file = path_rom_file
-        self.hash_expected = hash_expected
-        self.hash_in_rom = hash_in_rom
-        self.missing_asset = missing_asset
+        self.asset = asset

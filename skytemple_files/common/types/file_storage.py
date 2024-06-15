@@ -16,9 +16,14 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import abc
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Protocol
+from typing import Protocol, NewType
+
+# Hash of an asset. How this is generated depends on the implementation of FileStorage.
+# Can be used like a string.
+AssetHash = NewType("AssetHash", str)
 
 
 @dataclass
@@ -64,6 +69,7 @@ class Asset:
 
 
 class FileStorage(Protocol):
+    @abc.abstractmethod
     def get_from_rom(self, path: Path) -> bytes:
         """
         Get the bytes of a file from ROM.
@@ -71,10 +77,12 @@ class FileStorage(Protocol):
         """
         ...
 
+    @abc.abstractmethod
     def store_in_rom(self, path: Path, data: bytes) -> bytes:
         """Store a file in the ROM."""
         ...
 
+    @abc.abstractmethod
     def get_asset(self, path: Path, for_rom_path: Path) -> Asset:
         """
         Returns the bytes of an asset file and its corresponding hash (if any).
@@ -82,8 +90,19 @@ class FileStorage(Protocol):
         """
         ...
 
-    def store_asset(self, path: Path, for_rom_path: Path, data: bytes) -> bytes:
+    @abc.abstractmethod
+    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes) -> bytes:
         """Store an asset file."""
+        ...
+
+    @abc.abstractmethod
+    def hash_of_rom_object(self, path: Path) -> AssetHash | None:
+        """Returns the hash of an object in ROM or None if file not found."""
+        ...
+
+    @abc.abstractmethod
+    def hash_of_asset(self, path: Path) -> AssetHash | None:
+        """Returns the hash of an asset or None if file not found."""
         ...
 
 

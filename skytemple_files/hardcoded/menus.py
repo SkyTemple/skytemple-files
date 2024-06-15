@@ -88,576 +88,576 @@ class MenuType(Enum):
         103,
         MenuDataType.NORMAL,
         "overlay1",
-        "MAIN_DEBUG_MENU_1",
-        lambda: Overlay1DataProtocol.MAIN_DEBUG_MENU_1,
+        "MAIN_DEBUG_MENU_ITEMS_1",
+        lambda: Overlay1DataProtocol.MAIN_DEBUG_MENU_ITEMS_1,
         _("Main Debug Menu") + " 1",
     )
     DEBUG_MENU_2 = (
         104,
         MenuDataType.NORMAL,
         "overlay1",
-        "MAIN_DEBUG_MENU_2",
-        lambda: Overlay1DataProtocol.MAIN_DEBUG_MENU_2,
+        "MAIN_DEBUG_MENU_ITEMS_2",
+        lambda: Overlay1DataProtocol.MAIN_DEBUG_MENU_ITEMS_2,
         _("Main Debug Menu") + " 2",
     )
     UNK_MENU_1 = (
         1300,
         MenuDataType.NORMAL,
         "overlay13",
-        "QUIZ_DEBUG_MENU",
-        lambda: Overlay13DataProtocol.QUIZ_DEBUG_MENU,
+        "QUIZ_DEBUG_MENU_ITEMS",
+        lambda: Overlay13DataProtocol.QUIZ_DEBUG_MENU_ITEMS,
         _("Quiz Debug Menu"),
     )
     FOOT_DEBUG_MENU_1 = (
         1400,
         MenuDataType.NORMAL,
         "overlay14",
-        "FOOTPRINT_DEBUG_MENU",
-        lambda: Overlay14DataProtocol.FOOTPRINT_DEBUG_MENU,
+        "SENTRY_DEBUG_MENU_ITEMS",
+        lambda: Overlay14DataProtocol.SENTRY_DEBUG_MENU_ITEMS,
         _("Footprint Debug Menu"),
     )
     BANK_MENU = (
         1500,
         MenuDataType.NORMAL,
         "overlay15",
-        "BANK_MAIN_MENU",
-        lambda: Overlay15DataProtocol.BANK_MAIN_MENU,
+        "BANK_MAIN_MENU_ITEMS",
+        lambda: Overlay15DataProtocol.BANK_MAIN_MENU_ITEMS,
         _("Bank Main Menu"),
     )
     EVO_MENU_CONFIRM = (
         1601,
         MenuDataType.NORMAL,
         "overlay16",
-        "EVO_MENU_CONFIRM",
-        lambda: Overlay16DataProtocol.EVO_MENU_CONFIRM,
+        "EVO_MENU_ITEMS_CONFIRM",
+        lambda: Overlay16DataProtocol.EVO_MENU_ITEMS_CONFIRM,
         _("Evolution Menu Confirm"),
     )
     EVO_SUB_MENU = (
         1602,
         MenuDataType.NORMAL,
         "overlay16",
-        "EVO_SUBMENU",
-        lambda: Overlay16DataProtocol.EVO_SUBMENU,
+        "EVO_SUBMENU_ITEMS",
+        lambda: Overlay16DataProtocol.EVO_SUBMENU_ITEMS,
         _("Evolution Sub Menu"),
     )
     EVO_MAIN_MENU = (
         1603,
         MenuDataType.NORMAL,
         "overlay16",
-        "EVO_MAIN_MENU",
-        lambda: Overlay16DataProtocol.EVO_MAIN_MENU,
+        "EVO_MAIN_MENU_ITEMS",
+        lambda: Overlay16DataProtocol.EVO_MAIN_MENU_ITEMS,
         _("Evolution Main Menu"),
     )
     ASSEMBLY_MENU_CONFIRM = (
         1700,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_MENU_CONFIRM",
-        lambda: Overlay17DataProtocol.ASSEMBLY_MENU_CONFIRM,
+        "ASSEMBLY_MENU_ITEMS_CONFIRM",
+        lambda: Overlay17DataProtocol.ASSEMBLY_MENU_ITEMS_CONFIRM,
         _("Assembly Menu Confirm"),
     )
     ASSEMBLY_MAIN_MENU_1 = (
         1701,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_MAIN_MENU_1",
-        lambda: Overlay17DataProtocol.ASSEMBLY_MAIN_MENU_1,
+        "ASSEMBLY_MAIN_MENU_ITEMS_1",
+        lambda: Overlay17DataProtocol.ASSEMBLY_MAIN_MENU_ITEMS_1,
         _("Assembly Main Menu") + " 1",
     )
     ASSEMBLY_MAIN_MENU_2 = (
         1702,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_MAIN_MENU_2",
-        lambda: Overlay17DataProtocol.ASSEMBLY_MAIN_MENU_2,
+        "ASSEMBLY_MAIN_MENU_ITEMS_2",
+        lambda: Overlay17DataProtocol.ASSEMBLY_MAIN_MENU_ITEMS_2,
         _("Assembly Main Menu") + " 2",
     )
     ASSEMBLY_SUB_MENU_1 = (
         1703,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_1",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_1,
+        "ASSEMBLY_SUBMENU_ITEMS_1",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_1,
         _("Assembly Sub Menu") + " 1",
     )
     ASSEMBLY_SUB_MENU_2 = (
         1704,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_2",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_2,
+        "ASSEMBLY_SUBMENU_ITEMS_2",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_2,
         _("Assembly Sub Menu") + " 2",
     )
     ASSEMBLY_SUB_MENU_3 = (
         1705,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_3",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_3,
+        "ASSEMBLY_SUBMENU_ITEMS_3",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_3,
         _("Assembly Sub Menu") + " 3",
     )
     ASSEMBLY_SUB_MENU_4 = (
         1706,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_4",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_4,
+        "ASSEMBLY_SUBMENU_ITEMS_4",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_4,
         _("Assembly Sub Menu") + " 4",
     )
     ASSEMBLY_SUB_MENU_5 = (
         1707,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_5",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_5,
+        "ASSEMBLY_SUBMENU_ITEMS_5",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_5,
         _("Assembly Sub Menu") + " 5",
     )
     ASSEMBLY_SUB_MENU_6 = (
         1708,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_6",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_6,
+        "ASSEMBLY_SUBMENU_ITEMS_6",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_6,
         _("Assembly Sub Menu") + " 6",
     )
     ASSEMBLY_SUB_MENU_7 = (
         1709,
         MenuDataType.NORMAL,
         "overlay17",
-        "ASSEMBLY_SUBMENU_7",
-        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_7,
+        "ASSEMBLY_SUBMENU_ITEMS_7",
+        lambda: Overlay17DataProtocol.ASSEMBLY_SUBMENU_ITEMS_7,
         _("Assembly Sub Menu") + " 7",
     )
     MOVES_MENU_CONFIRM = (
         1800,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_MENU_CONFIRM",
-        lambda: Overlay18DataProtocol.MOVES_MENU_CONFIRM,
+        "LINK_SHOP_MENU_ITEMS_CONFIRM",
+        lambda: Overlay18DataProtocol.LINK_SHOP_MENU_ITEMS_CONFIRM,
         _("Moves Menu Confirm"),
     )
     MOVES_SUB_MENU_1 = (
         1801,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_1",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_1,
+        "LINK_SHOP_SUBMENU_ITEMS_1",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_1,
         _("Moves Sub Menu") + " 1",
     )
     MOVES_SUB_MENU_2 = (
         1802,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_2",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_2,
+        "LINK_SHOP_SUBMENU_ITEMS_2",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_2,
         _("Moves Sub Menu") + " 2",
     )
     MOVES_MAIN_MENU = (
         1803,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_MAIN_MENU",
-        lambda: Overlay18DataProtocol.MOVES_MAIN_MENU,
+        "LINK_SHOP_MAIN_MENU_ITEMS",
+        lambda: Overlay18DataProtocol.LINK_SHOP_MAIN_MENU_ITEMS,
         _("Moves Main Menu"),
     )
     MOVES_SUB_MENU_3 = (
         1804,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_3",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_3,
+        "LINK_SHOP_SUBMENU_ITEMS_3",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_3,
         _("Moves Sub Menu") + " 3",
     )
     MOVES_SUB_MENU_4 = (
         1805,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_4",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_4,
+        "LINK_SHOP_SUBMENU_ITEMS_4",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_4,
         _("Moves Sub Menu") + " 4",
     )
     MOVES_SUB_MENU_5 = (
         1806,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_5",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_5,
+        "LINK_SHOP_SUBMENU_ITEMS_5",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_5,
         _("Moves Sub Menu") + " 5",
     )
     MOVES_SUB_MENU_6 = (
         1807,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_6",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_6,
+        "LINK_SHOP_SUBMENU_ITEMS_6",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_6,
         _("Moves Sub Menu") + " 6",
     )
     MOVES_SUB_MENU_7 = (
         1808,
         MenuDataType.NORMAL,
         "overlay18",
-        "MOVES_SUBMENU_7",
-        lambda: Overlay18DataProtocol.MOVES_SUBMENU_7,
+        "LINK_SHOP_SUBMENU_ITEMS_7",
+        lambda: Overlay18DataProtocol.LINK_SHOP_SUBMENU_ITEMS_7,
         _("Moves Sub Menu") + " 7",
     )
     BAR_MENU_CONFIRM_1 = (
         1900,
         MenuDataType.NORMAL,
         "overlay19",
-        "BAR_MENU_CONFIRM_1",
-        lambda: Overlay19DataProtocol.BAR_MENU_CONFIRM_1,
+        "BAR_MENU_ITEMS_CONFIRM_1",
+        lambda: Overlay19DataProtocol.BAR_MENU_ITEMS_CONFIRM_1,
         _("Bar Menu Confirm") + " 1",
     )
     BAR_MENU_CONFIRM_2 = (
         1901,
         MenuDataType.NORMAL,
         "overlay19",
-        "BAR_MENU_CONFIRM_2",
-        lambda: Overlay19DataProtocol.BAR_MENU_CONFIRM_2,
+        "BAR_MENU_ITEMS_CONFIRM_2",
+        lambda: Overlay19DataProtocol.BAR_MENU_ITEMS_CONFIRM_2,
         _("Bar Menu Confirm") + " 2",
     )
     BAR_MAIN_MENU = (
         1902,
         MenuDataType.NORMAL,
         "overlay19",
-        "BAR_MAIN_MENU",
-        lambda: Overlay19DataProtocol.BAR_MAIN_MENU,
+        "BAR_MAIN_MENU_ITEMS",
+        lambda: Overlay19DataProtocol.BAR_MAIN_MENU_ITEMS,
         _("Bar Main Menu"),
     )
     BAR_SUB_MENU_1 = (
         1903,
         MenuDataType.NORMAL,
         "overlay19",
-        "BAR_SUBMENU_1",
-        lambda: Overlay19DataProtocol.BAR_SUBMENU_1,
+        "BAR_SUBMENU_ITEMS_1",
+        lambda: Overlay19DataProtocol.BAR_SUBMENU_ITEMS_1,
         _("Bar Sub Menu") + " 1",
     )
     BAR_SUB_MENU_2 = (
         1904,
         MenuDataType.NORMAL,
         "overlay19",
-        "BAR_SUBMENU_2",
-        lambda: Overlay19DataProtocol.BAR_SUBMENU_2,
+        "BAR_SUBMENU_ITEMS_2",
+        lambda: Overlay19DataProtocol.BAR_SUBMENU_ITEMS_2,
         _("Bar Sub Menu") + " 2",
     )
     RECYCLE_MENU_CONFIRM_1 = (
         2000,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_MENU_CONFIRM_1",
-        lambda: Overlay20DataProtocol.RECYCLE_MENU_CONFIRM_1,
+        "RECYCLE_MENU_ITEMS_CONFIRM_1",
+        lambda: Overlay20DataProtocol.RECYCLE_MENU_ITEMS_CONFIRM_1,
         _("Recycle Menu Confirm") + " 1",
     )
     RECYCLE_MENU_CONFIRM_2 = (
         2001,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_MENU_CONFIRM_2",
-        lambda: Overlay20DataProtocol.RECYCLE_MENU_CONFIRM_2,
+        "RECYCLE_MENU_ITEMS_CONFIRM_2",
+        lambda: Overlay20DataProtocol.RECYCLE_MENU_ITEMS_CONFIRM_2,
         _("Recycle Menu Confirm") + " 2",
     )
     RECYCLE_SUB_MENU_1 = (
         2002,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_SUBMENU_1",
-        lambda: Overlay20DataProtocol.RECYCLE_SUBMENU_1,
+        "RECYCLE_SUBMENU_ITEMS_1",
+        lambda: Overlay20DataProtocol.RECYCLE_SUBMENU_ITEMS_1,
         _("Recycle Sub Menu") + " 1",
     )
     RECYCLE_SUB_MENU_2 = (
         2003,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_SUBMENU_2",
-        lambda: Overlay20DataProtocol.RECYCLE_SUBMENU_2,
+        "RECYCLE_SUBMENU_ITEMS_2",
+        lambda: Overlay20DataProtocol.RECYCLE_SUBMENU_ITEMS_2,
         _("Recycle Sub Menu") + " 2",
     )
     RECYCLE_MAIN_MENU_1 = (
         2004,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_MAIN_MENU_1",
-        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_1,
+        "RECYCLE_MAIN_MENU_ITEMS_1",
+        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_ITEMS_1,
         _("Recycle Main Menu") + " 1",
     )
     RECYCLE_MAIN_MENU_2 = (
         2005,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_MAIN_MENU_2",
-        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_2,
+        "RECYCLE_MAIN_MENU_ITEMS_2",
+        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_ITEMS_2,
         _("Recycle Main Menu") + " 2",
     )
     RECYCLE_MAIN_MENU_3 = (
         2006,
         MenuDataType.NORMAL,
         "overlay20",
-        "RECYCLE_MAIN_MENU_3",
-        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_3,
+        "RECYCLE_MAIN_MENU_ITEMS_3",
+        lambda: Overlay20DataProtocol.RECYCLE_MAIN_MENU_ITEMS_3,
         _("Recycle Main Menu") + " 3",
     )
     SYNTH_MENU_CONFIRM = (
         2100,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_MENU_CONFIRM",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_MENU_CONFIRM,
+        "SWAP_SHOP_MENU_ITEMS_CONFIRM",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_MENU_ITEMS_CONFIRM,
         _("Synthesis Menu Confirm"),
     )
     SYNTH_SUB_MENU_1 = (
         2101,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_SUBMENU_1",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_1,
+        "SWAP_SHOP_SUBMENU_ITEMS_1",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_ITEMS_1,
         _("Synthesis Sub Menu") + " 1",
     )
     SYNTH_SUB_MENU_2 = (
         2102,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_SUBMENU_2",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_2,
+        "SWAP_SHOP_SUBMENU_ITEMS_2",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_ITEMS_2,
         _("Synthesis Sub Menu") + " 2",
     )
     SYNTH_MAIN_MENU_1 = (
         2103,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_MAIN_MENU_1",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_MAIN_MENU_1,
+        "SWAP_SHOP_MAIN_MENU_ITEMS_1",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_MAIN_MENU_ITEMS_1,
         _("Synthesis Main Menu") + " 1",
     )
     SYNTH_MAIN_MENU_2 = (
         2104,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_MAIN_MENU_2",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_MAIN_MENU_2,
+        "SWAP_SHOP_MAIN_MENU_ITEMS_2",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_MAIN_MENU_ITEMS_2,
         _("Synthesis Main Menu") + " 2",
     )
     SYNTH_SUB_MENU_3 = (
         2105,
         MenuDataType.NORMAL,
         "overlay21",
-        "SWAP_SHOP_SUBMENU_3",
-        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_3,
+        "SWAP_SHOP_SUBMENU_ITEMS_3",
+        lambda: Overlay21DataProtocol.SWAP_SHOP_SUBMENU_ITEMS_3,
         _("Synthesis Sub Menu") + " 3",
     )
     SHOP_MENU_CONFIRM = (
         2200,
         MenuDataType.NORMAL,
         "overlay22",
-        "SHOP_MENU_CONFIRM",
-        lambda: Overlay22DataProtocol.SHOP_MENU_CONFIRM,
+        "SHOP_MENU_ITEMS_CONFIRM",
+        lambda: Overlay22DataProtocol.SHOP_MENU_ITEMS_CONFIRM,
         _("Shop Menu Confirm"),
     )
     SHOP_MAIN_MENU_1 = (
         2201,
         MenuDataType.NORMAL,
         "overlay22",
-        "SHOP_MAIN_MENU_1",
-        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_1,
+        "SHOP_MAIN_MENU_ITEMS_1",
+        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_ITEMS_1,
         _("Shop Main Menu") + " 1",
     )
     SHOP_MAIN_MENU_2 = (
         2202,
         MenuDataType.NORMAL,
         "overlay22",
-        "SHOP_MAIN_MENU_2",
-        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_2,
+        "SHOP_MAIN_MENU_ITEMS_2",
+        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_ITEMS_2,
         _("Shop Main Menu") + " 2",
     )
     SHOP_MAIN_MENU_3 = (
         2203,
         MenuDataType.NORMAL,
         "overlay22",
-        "SHOP_MAIN_MENU_3",
-        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_3,
+        "SHOP_MAIN_MENU_ITEMS_3",
+        lambda: Overlay22DataProtocol.SHOP_MAIN_MENU_ITEMS_3,
         _("Shop Main Menu") + " 3",
     )
     STORAGE_MENU_CONFIRM = (
         2300,
         MenuDataType.NORMAL,
         "overlay23",
-        "STORAGE_MENU_CONFIRM",
-        lambda: Overlay23DataProtocol.STORAGE_MENU_CONFIRM,
+        "STORAGE_MENU_ITEMS_CONFIRM",
+        lambda: Overlay23DataProtocol.STORAGE_MENU_ITEMS_CONFIRM,
         _("Storage Menu Confirm"),
     )
     STORAGE_MAIN_MENU_1 = (
         2301,
         MenuDataType.NORMAL,
         "overlay23",
-        "STORAGE_MAIN_MENU_1",
-        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_1,
+        "STORAGE_MAIN_MENU_ITEMS_1",
+        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_ITEMS_1,
         _("Storage Main Menu") + " 1",
     )
     STORAGE_MAIN_MENU_2 = (
         2302,
         MenuDataType.NORMAL,
         "overlay23",
-        "STORAGE_MAIN_MENU_2",
-        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_2,
+        "STORAGE_MAIN_MENU_ITEMS_2",
+        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_ITEMS_2,
         _("Storage Main Menu") + " 2",
     )
     STORAGE_MAIN_MENU_3 = (
         2303,
         MenuDataType.NORMAL,
         "overlay23",
-        "STORAGE_MAIN_MENU_3",
-        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_3,
+        "STORAGE_MAIN_MENU_ITEMS_3",
+        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_ITEMS_3,
         _("Storage Main Menu") + " 3",
     )
     STORAGE_MAIN_MENU_4 = (
         2304,
         MenuDataType.NORMAL,
         "overlay23",
-        "STORAGE_MAIN_MENU_4",
-        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_4,
+        "STORAGE_MAIN_MENU_ITEMS_4",
+        lambda: Overlay23DataProtocol.STORAGE_MAIN_MENU_ITEMS_4,
         _("Storage Main Menu") + " 4",
     )
     HATCHER_MENU_CONFIRM = (
         2400,
         MenuDataType.NORMAL,
         "overlay24",
-        "DAYCARE_MENU_CONFIRM",
-        lambda: Overlay24DataProtocol.DAYCARE_MENU_CONFIRM,
+        "DAYCARE_MENU_ITEMS_CONFIRM",
+        lambda: Overlay24DataProtocol.DAYCARE_MENU_ITEMS_CONFIRM,
         _("Hatcher Menu Confirm"),
     )
     HATCHER_MAIN_MENU = (
         2401,
         MenuDataType.NORMAL,
         "overlay24",
-        "DAYCARE_MAIN_MENU",
-        lambda: Overlay24DataProtocol.DAYCARE_MAIN_MENU,
+        "DAYCARE_MAIN_MENU_ITEMS",
+        lambda: Overlay24DataProtocol.DAYCARE_MAIN_MENU_ITEMS,
         _("Hatcher Main Menu"),
     )
     APPRAISER_MENU_CONFIRM = (
         2500,
         MenuDataType.NORMAL,
         "overlay25",
-        "APPRAISAL_MENU_CONFIRM",
-        lambda: Overlay25DataProtocol.APPRAISAL_MENU_CONFIRM,
+        "APPRAISAL_MENU_ITEMS_CONFIRM",
+        lambda: Overlay25DataProtocol.APPRAISAL_MENU_ITEMS_CONFIRM,
         _("Appraiser Menu Confirm"),
     )
     APPRAISER_MAIN_MENU = (
         2501,
         MenuDataType.NORMAL,
         "overlay25",
-        "APPRAISAL_MAIN_MENU",
-        lambda: Overlay25DataProtocol.APPRAISAL_MAIN_MENU,
+        "APPRAISAL_MAIN_MENU_ITEMS",
+        lambda: Overlay25DataProtocol.APPRAISAL_MAIN_MENU_ITEMS,
         _("Appraiser Main Menu"),
     )
     APPRAISER_SUB_MENU = (
         2502,
         MenuDataType.NORMAL,
         "overlay25",
-        "APPRAISAL_SUBMENU",
-        lambda: Overlay25DataProtocol.APPRAISAL_SUBMENU,
+        "APPRAISAL_SUBMENU_ITEMS",
+        lambda: Overlay25DataProtocol.APPRAISAL_SUBMENU_ITEMS,
         _("Appraiser Sub Menu"),
     )
     DISCARD_MENU_CONFIRM = (
         2700,
         MenuDataType.NORMAL,
         "overlay27",
-        "DISCARD_ITEMS_MENU_CONFIRM",
-        lambda: Overlay27DataProtocol.DISCARD_ITEMS_MENU_CONFIRM,
+        "DISCARD_ITEMS_MENU_ITEMS_CONFIRM",
+        lambda: Overlay27DataProtocol.DISCARD_ITEMS_MENU_ITEMS_CONFIRM,
         _("Discard Items Menu Confirm"),
     )
     DISCARD_SUB_MENU_1 = (
         2701,
         MenuDataType.NORMAL,
         "overlay27",
-        "DISCARD_ITEMS_SUBMENU_1",
-        lambda: Overlay27DataProtocol.DISCARD_ITEMS_SUBMENU_1,
+        "DISCARD_ITEMS_SUBMENU_ITEMS_1",
+        lambda: Overlay27DataProtocol.DISCARD_ITEMS_SUBMENU_ITEMS_1,
         _("Discard Items Sub Menu") + " 1",
     )
     DISCARD_SUB_MENU_2 = (
         2702,
         MenuDataType.NORMAL,
         "overlay27",
-        "DISCARD_ITEMS_SUBMENU_2",
-        lambda: Overlay27DataProtocol.DISCARD_ITEMS_SUBMENU_2,
+        "DISCARD_ITEMS_SUBMENU_ITEMS_2",
+        lambda: Overlay27DataProtocol.DISCARD_ITEMS_SUBMENU_ITEMS_2,
         _("Discard Items Sub Menu") + " 2",
     )
     DISCARD_MAIN_MENU = (
         2703,
         MenuDataType.NORMAL,
         "overlay27",
-        "DISCARD_ITEMS_MAIN_MENU",
-        lambda: Overlay27DataProtocol.DISCARD_ITEMS_MAIN_MENU,
+        "DISCARD_ITEMS_MAIN_MENU_ITEMS",
+        lambda: Overlay27DataProtocol.DISCARD_ITEMS_MAIN_MENU_ITEMS,
         _("Discard Items Main Menu"),
     )
     DUNGEON_MAIN_MENU = (
         3100,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_MAIN_MENU",
-        lambda: Overlay31DataProtocol.DUNGEON_MAIN_MENU,
+        "DUNGEON_MAIN_MENU_ITEMS",
+        lambda: Overlay31DataProtocol.DUNGEON_MAIN_MENU_ITEMS,
         _("Dungeon Main Menu"),
     )
     DUNGEON_SUB_MENU_1 = (
         3101,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_1",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_1,
+        "DUNGEON_SUBMENU_ITEMS_1",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_1,
         _("Dungeon Sub Menu") + " 1",
     )
     DUNGEON_SUB_MENU_2 = (
         3102,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_2",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_2,
+        "DUNGEON_SUBMENU_ITEMS_2",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_2,
         _("Dungeon Sub Menu") + " 2",
     )
     DUNGEON_SUB_MENU_3 = (
         3103,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_3",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_3,
+        "DUNGEON_SUBMENU_ITEMS_3",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_3,
         _("Dungeon Sub Menu") + " 3",
     )
     DUNGEON_SUB_MENU_4 = (
         3104,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_4",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_4,
+        "DUNGEON_SUBMENU_ITEMS_4",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_4,
         _("Dungeon Sub Menu") + " 4",
     )
     DUNGEON_SUB_MENU_5 = (
         3105,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_5",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_5,
+        "DUNGEON_SUBMENU_ITEMS_5",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_5,
         _("Dungeon Sub Menu") + " 5",
     )
     DUNGEON_SUB_MENU_6 = (
         3106,
         MenuDataType.NORMAL,
         "overlay31",
-        "DUNGEON_SUBMENU_6",
-        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_6,
+        "DUNGEON_SUBMENU_ITEMS_6",
+        lambda: Overlay31DataProtocol.DUNGEON_SUBMENU_ITEMS_6,
         _("Dungeon Sub Menu") + " 6",
     )
     UNKNOWN_MENU_CONFIRM = (
         3400,
         MenuDataType.NORMAL,
         "overlay34",
-        "START_MENU_CONFIRM",
-        lambda: Overlay34DataProtocol.START_MENU_CONFIRM,
+        "START_MENU_ITEMS_CONFIRM",
+        lambda: Overlay34DataProtocol.START_MENU_ITEMS_CONFIRM,
         _("Start Menu Confirm"),
     )
     DUNGEON_DEBUG_MENU = (
         3401,
         MenuDataType.NORMAL,
         "overlay34",
-        "DUNGEON_DEBUG_MENU",
-        lambda: Overlay34DataProtocol.DUNGEON_DEBUG_MENU,
+        "DUNGEON_DEBUG_MENU_ITEMS",
+        lambda: Overlay34DataProtocol.DUNGEON_DEBUG_MENU_ITEMS,
         _("Dungeon Debug Menu"),
     )
 

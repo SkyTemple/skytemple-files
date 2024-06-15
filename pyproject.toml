@@ -24,7 +24,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "pmdsky-debug-py == 8.0.4",
+    "pmdsky-debug-py == 10.0.16",
     "ndspy >= 3.0.0",
     "pyyaml >= 6.0.0",
     "range-typed-integers >= 1.0.1",

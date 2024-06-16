@@ -60,7 +60,8 @@ class BinaryDataGetter:
 
     def has_data_symbols(self, binary: str) -> bool:
         """
-        Checks if a given binary has at least one data symbol
+        Checks if a given binary has at least one data symbol.
+        This method ignores deprecated symbols.
         :param binary: Name of the binary to check
         :return: True if the binary has at least one data symbol, false otherwise
         :raises ValueError: If a binary with the given name does not exist
@@ -70,14 +71,15 @@ class BinaryDataGetter:
         except KeyError:
             raise ValueError("The given binary does not exist.")
 
-        for symbol_name in dict(vars(section.data)).keys():
-            if not symbol_name.startswith("_"):
+        for field in dict(vars(section.data)).values():
+            if isinstance(field, Symbol):
                 return True
         return False
 
     def get_data_symbols(self, binary: str) -> List[Symbol]:
         """
         Given the name of a binary, returns the list of data symbols it contains.
+        This method ignores deprecated symbols.
         :param binary: Name of the binary to retrieve symbols from
         :return: List of data symbols for the given binary
         :raises ValueError: If a binary with the given name does not exist
@@ -88,11 +90,9 @@ class BinaryDataGetter:
             raise ValueError("The given binary does not exist.")
 
         result = []
-        for symbol_name in dict(vars(section.data)).keys():
-            if not symbol_name.startswith("_"):
-                symbol: Symbol = getattr(section.data, symbol_name)
-                if symbol is not None:
-                    result.append(symbol)
+        for field in dict(vars(section.data)).values():
+            if isinstance(field, Symbol):
+                result.append(field)
 
         return result
 

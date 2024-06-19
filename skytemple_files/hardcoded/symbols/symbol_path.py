@@ -16,8 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import re
-from typing import List
-
+from typing import List, Tuple
 
 NEXT_ARRAY_SECTION_REGEX = re.compile(r"((\[\d+])+)(.*)")
 ARRAY_SECTION_INDEX_REGEX = re.compile(r"\[(\d+)]")
@@ -38,7 +37,7 @@ class SymbolPath(str):
     def __init__(self, path_str: str):
         self.path_str = path_str
 
-    def get_next_array(self) -> (List[int], "SymbolPath"):
+    def get_next_array(self) -> Tuple[List[int], "SymbolPath"]:
         """
         Returns the next section of the path, assuming it's an array section. Also returns the rest of the path
         after removing the first section.
@@ -56,11 +55,11 @@ class SymbolPath(str):
             indexes = []
             for index in re.findall(ARRAY_SECTION_INDEX_REGEX, next_section_str):
                 indexes.append(int(index))
-            return indexes, rest_of_path
+            return indexes, SymbolPath(rest_of_path)
         else:
             raise ValueError("Next section of path \"" + self.path_str + "\" is not an array section.")
 
-    def get_next_array_flat(self) -> (int, "SymbolPath"):
+    def get_next_array_flat(self) -> Tuple[int, "SymbolPath"]:
         """
         Same as get_next_array, but all dimensions of the array section will be merged together. Their total size
         will be returned as a single integer.
@@ -71,7 +70,7 @@ class SymbolPath(str):
             merged_size *= element
         return merged_size, rest_of_path
 
-    def get_next_field(self) -> (str, "SymbolPath"):
+    def get_next_field(self) -> Tuple[str, "SymbolPath"]:
         """
         Returns the next section of the path, assuming it's a struct field. Also returns the rest of the path
         after removing the first section.
@@ -84,6 +83,6 @@ class SymbolPath(str):
         if next_symbol_match:
             next_symbol_name = next_symbol_match.group(2)
             rest_of_path = next_symbol_match.group(3)
-            return next_symbol_name, rest_of_path
+            return next_symbol_name, SymbolPath(rest_of_path)
         else:
             raise ValueError("Next section of path \"" + self.path_str + "\" is not a struct field.")

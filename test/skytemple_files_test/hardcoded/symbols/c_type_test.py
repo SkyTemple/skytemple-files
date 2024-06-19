@@ -82,7 +82,7 @@ class CTypeTestCase(unittest.TestCase):
     def test_dim_down_array_4(self):
         c_type = CType.from_str("int")
         with self.assertRaises(ValueError):
-            new_type = CType.dim_down_array_type(c_type)
+            CType.dim_down_array_type(c_type)
 
     def test_get_total_num_elements_1(self):
         c_type = CType.from_str("int")

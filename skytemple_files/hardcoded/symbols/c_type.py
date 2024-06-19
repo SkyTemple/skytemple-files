@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import re
-from typing import List
+from typing import List, Optional
 
 from skytemple_files.common.rw_value import DATA_PROCESSING_INSTRUCTION_TYPE
 from skytemple_files.hardcoded.symbols.manual.equivalent_types import get_size_equivalent_type
@@ -36,7 +36,7 @@ class CType:
     # Size of each array dimension. Empty if the type is not an array type.
     dim_sizes: List[int]
 
-    def __init__(self, base_type: str, dim_sizes: List[int] = None):
+    def __init__(self, base_type: str, dim_sizes: Optional[List[int]] = None):
         if dim_sizes is None:
             dim_sizes = []
         self.base_type = base_type

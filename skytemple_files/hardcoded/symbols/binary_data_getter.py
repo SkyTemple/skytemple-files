@@ -14,7 +14,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from pmdsky_debug_py.protocol import SectionProtocol, Symbol
 
@@ -33,7 +33,7 @@ class BinaryDataGetter:
         self.pmd2_data = pmd2_data
         self.sections_dict = dict(vars(pmd2_data.bin_sections))
 
-    def get_binary_names(self, starting_with: List[str] = None) -> List[str]:
+    def get_binary_names(self, starting_with: Optional[List[str]] = None) -> List[str]:
         """
         Returns the names of all binaries that start with one of the specified strings, or all binaries if
         starting_with is not specified.

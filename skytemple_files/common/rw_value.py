@@ -16,8 +16,11 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import re
 from abc import ABC, abstractmethod
+from typing import Tuple
 
-from range_typed_integers import *
+from range_typed_integers import i32, i32_checked, i16, i16_checked, i8, i8_checked, u32, u32_checked, u16, u16_checked, \
+    u8, u8_checked, i64_checked
+
 from skytemple_files.common.i18n_util import _
 
 from skytemple_files.common.util import write_i32, read_i32, read_i16, write_i16, read_i8, write_i8, \
@@ -401,7 +404,7 @@ class RWShiftedImmediateValue(RWValue):
     def _type_size(self) -> int:
         return 2
 
-    def _get_shifted_immediate(self, value: int) -> (int, int):
+    def _get_shifted_immediate(self, value: int) -> Tuple[int, int]:
         """
         Given an integer, attempts to encode it as a shifted immediate
         :param value: Original value to encode

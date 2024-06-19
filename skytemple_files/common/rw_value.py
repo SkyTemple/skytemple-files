@@ -59,11 +59,11 @@ class RWValue(ABC):
         elif type_str == "int16" or type_str == "int16_t":
             return RWInt16Value(offset)
         elif type_str == "uint16" or type_str == "uint16_t":
-            return RWInt16Value(offset)
+            return RWUInt16Value(offset)
         elif type_str == "int8" or type_str == "int8_t":
             return RWInt8Value(offset)
         elif type_str == "uint8" or type_str == "uint8_t" or type_str == "bool":
-            return RWInt8Value(offset)
+            return RWUInt8Value(offset)
         elif type_str == "struct fx64_16":
             return RWFx6416Value(offset)
         elif type_str == "fx32_16":

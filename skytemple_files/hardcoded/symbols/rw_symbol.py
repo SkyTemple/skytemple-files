@@ -21,7 +21,7 @@ from typing import List, Dict
 from pmdsky_debug_py.protocol import Symbol
 
 from skytemple_files.common.rw_value import RWValue
-from skytemple_files.hardcoded.symbols.c_type import CType, get_simplified_type
+from skytemple_files.hardcoded.symbols.c_type import CType, get_size_equivalent_type
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 from skytemple_files.hardcoded.symbols.manual.structs import StructField, get_struct_fields
 from skytemple_files.hardcoded.symbols.symbol_path import SymbolPath
@@ -51,7 +51,7 @@ class RWSymbol(ABC):
             raise UnsupportedTypeError("Pointer types are unsupported by RWSymbol.")
         else:
             c_type = CType.from_str(type_str)
-            if len(c_type.dim_sizes) > 0 and not c_type.base_type == "char":
+            if c_type.is_array_type() and not c_type.base_type == "char":
                 # Array type
                 if 0 in c_type.dim_sizes:
                     # Unknown or variable size, unsupported
@@ -60,8 +60,13 @@ class RWSymbol(ABC):
                 else:
                     return RWArraySymbol(name, offset, type_str)
             else:
+                if c_type.is_array_type() and c_type.base_type == "char" and 0 in c_type.dim_sizes:
+                    # Unknown or variable-length string, unsupported
+                    raise UnsupportedTypeError("Unsupported symbol type \"" + type_str + "\" due to unknown or "
+                         "variable string length.")
+
                 # Simplify the type if possible
-                type_str = get_simplified_type(type_str)
+                type_str = get_size_equivalent_type(type_str)
 
                 # Try to create a simple symbol first (some structs are handled as simple symbols, such as
                 # struct fx_64_16)

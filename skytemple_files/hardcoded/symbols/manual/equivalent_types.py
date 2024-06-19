@@ -21,18 +21,20 @@ import re
 # actually have one of those strings at the end of its name. We list them here so we know they need to be
 # interpreted as structs, not simplified types.
 KNOWN_STRUCTS_WITH_8_OR_16_SUFFIX = ["struct uvec2_16", "struct vec2_16", "struct fx64_16"]
-STRUCT_8_REGEX = re.compile(r"struct [\d\w_]+_8")
-STRUCT_16_REGEX = re.compile(r"struct [\d\w_]+_16")
+STRUCT_8_REGEX = re.compile(r"struct [\d\w_]+_8$")
+STRUCT_16_REGEX = re.compile(r"struct [\d\w_]+_16$")
+STRUCT_8_OR_16_REGEX = re.compile(r"struct ([\d\w_]+)_(8|16)$")
 
 
-def get_simplified_type(type_str: str) -> str:
+def get_size_equivalent_type(type_str: str) -> str:
     """
     In terms of size, some custom pmdsky-debug types are equivalent to simpler types. For example,
     "struct monster_id_16" is equivalent to "uint16", and "enum monster_id" is equivalent to "uint32". This methods
-    attempts to simplify a known complex type. If successful, returns the simplified type. Otherwise, returns the
-    original type.
+    attempts to get the size equivalent of a known complex type. If successful, returns the size equivalent type.
+    Otherwise, returns the original type.
     :param type_str: Original type
-    :return: Simplified type if the original type can be simplified, same type otherwise.
+    :return If the original type has a simpler size equivalent type, returns that new type. Otherwise, returns the
+    original type.
     """
     if type_str.startswith("enum "):
         return "uint32"
@@ -48,3 +50,27 @@ def get_simplified_type(type_str: str) -> str:
                 return "uint16"
             else:
                 return type_str
+
+
+def get_enum_equivalent_type(type_str: str) -> str:
+    """
+    Given a string that represents a C type, tries to convert it to its equivalent enum type representation.
+    For example, "struct monster_id_16" is equivalent to "enum monster_id".
+    If successful, returns the equivalent enum type. If not, returns the original type.
+    :param type_str: Original type
+    :return If the original type has a simpler enum equivalent type, returns that new type. Otherwise, returns the
+    original type.
+    """
+    if type_str.startswith("struct "):
+        if type_str in KNOWN_STRUCTS_WITH_8_OR_16_SUFFIX:
+            # Actually a struct, return as-is
+            return type_str
+        else:
+            match = re.match(STRUCT_8_OR_16_REGEX, type_str)
+            if match:
+                type_name = match.group(1)
+                return "enum " + type_name
+            else:
+                return type_str
+    else:
+        return type_str

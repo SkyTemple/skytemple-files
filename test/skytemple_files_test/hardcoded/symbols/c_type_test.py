@@ -61,6 +61,29 @@ class CTypeTestCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             CType.from_str("")
 
+    def test_dim_down_array_1(self):
+        c_type = CType.from_str("int[10][5][3]")
+        new_type = CType.dim_down_array_type(c_type)
+        self.assertEqual("int", new_type.base_type)
+        self.assertEqual([5, 3], new_type.dim_sizes)
+
+    def test_dim_down_array_2(self):
+        c_type = CType.from_str("int[5][3]")
+        new_type = CType.dim_down_array_type(c_type)
+        self.assertEqual("int", new_type.base_type)
+        self.assertEqual([3], new_type.dim_sizes)
+
+    def test_dim_down_array_3(self):
+        c_type = CType.from_str("int[3]")
+        new_type = CType.dim_down_array_type(c_type)
+        self.assertEqual("int", new_type.base_type)
+        self.assertEqual([], new_type.dim_sizes)
+
+    def test_dim_down_array_4(self):
+        c_type = CType.from_str("int")
+        with self.assertRaises(ValueError):
+            new_type = CType.dim_down_array_type(c_type)
+
     def test_get_total_num_elements_1(self):
         c_type = CType.from_str("int")
         self.assertEqual(1, c_type.get_total_num_elements())

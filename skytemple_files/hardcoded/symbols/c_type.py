@@ -17,7 +17,8 @@
 import re
 from typing import List
 
-from skytemple_files.hardcoded.symbols.manual.simplified_types import get_simplified_type
+from skytemple_files.common.rw_value import DATA_PROCESSING_INSTRUCTION_TYPE
+from skytemple_files.hardcoded.symbols.manual.equivalent_types import get_size_equivalent_type
 from skytemple_files.hardcoded.symbols.manual.structs import get_struct_size
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 
@@ -62,6 +63,38 @@ class CType:
         else:
             raise ValueError("Invalid C type string")
 
+    @classmethod
+    def dim_down_array_type(cls, array_type: "CType"):
+        """
+        Creates a new instance of the class by taking an existing type that represents an array type and removing the
+        first of its dimensions.
+        :param array_type: Existing array type
+        :return: New instance of the class
+        :raises ValueError: If ther provided type is not an array type
+        """
+        if not array_type.is_array_type():
+            raise ValueError("Cannot create a lower dimension type from a non-array type")
+
+        return CType(array_type.base_type, array_type.dim_sizes[1:])
+
+    def __str__(self) -> str:
+        if self.is_array_type():
+            return self.base_type + "".join(["[" + str(size) + "]" for size in self.dim_sizes])
+        else:
+            return self.base_type
+
+    def is_array_type(self) -> bool:
+        """
+        :return: True if the current type represents an array type, false otherwise.
+        """
+        return len(self.dim_sizes) > 0
+
+    def is_struct_type(self) -> bool:
+        """
+        :return: True if the current type represents a struct type, false otherwise.
+        """
+        return "struct" in self.base_type
+
     def get_total_num_elements(self) -> int:
         """
         Returns the total number of elements this type contains across all its dimensions.
@@ -80,7 +113,7 @@ class CType:
         :raises UnsupportedTypeError: If this type does not support this operation.
         """
         # Attempt to convert it to a simple type, if possible
-        simplified_base_type = get_simplified_type(self.base_type)
+        simplified_base_type = get_size_equivalent_type(self.base_type)
 
         if simplified_base_type == "int" or simplified_base_type == "int32" or simplified_base_type == "int32_t":
             return 4
@@ -94,14 +127,14 @@ class CType:
             return 1
         elif simplified_base_type == "uint8" or simplified_base_type == "uint8_t" or simplified_base_type == "bool":
             return 1
-        elif simplified_base_type == "fx64" or simplified_base_type == "fx64_16":  # TODO: Confirm this is the final name
+        elif simplified_base_type == "struct fx64_16":
             return 8
-        elif simplified_base_type == "fx32_16":  # TODO: Confirm this is the final name
+        elif simplified_base_type == "fx32_16":
             return 4
-        elif simplified_base_type == "fx32_8":  # TODO: Confirm this is the final name
+        elif simplified_base_type == "fx32_8":
             return 4
-        elif simplified_base_type == "shifted_immediate":  # TODO: Confirm this is the final name
-            return 2
+        elif simplified_base_type == DATA_PROCESSING_INSTRUCTION_TYPE:
+            return 4
         elif simplified_base_type.startswith("struct "):
             return get_struct_size(simplified_base_type)
         else:
@@ -114,3 +147,26 @@ class CType:
         :raises UnsupportedTypeError: If this type does not support this operation.
         """
         return self.get_base_type_size() * self.get_total_num_elements()
+
+    def get_multi_dimension_index(self, linear_index: int) -> List[int]:
+        """
+        Given a linear index between 0 and the product of all elements in self.array_size (upper bound exclusive),
+        returns the equivalent index for each dimension.
+        For example, if array_size is [10][3], and linear_index is 5, the result would be [1, 2].
+        :param linear_index: Linear index to convert
+        :return: Indexes on each of the dimensions of this type that correspond to the provided linear index
+        :raises ValueError If this type is not an array type
+        """
+        if not self.is_array_type():
+            raise ValueError("Cannot convert a linear index using a non-array type")
+
+        current_linear_index = linear_index
+        result = []
+        for i in range(len(self.dim_sizes)):
+            division_factor = 1
+            for j in range(i + 1, len(self.dim_sizes)):
+                division_factor *= self.dim_sizes[j]
+            current_dim_index = current_linear_index // division_factor
+            current_linear_index = current_linear_index % division_factor
+            result.append(current_dim_index)
+        return result

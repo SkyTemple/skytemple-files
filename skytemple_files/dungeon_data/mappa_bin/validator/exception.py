@@ -49,9 +49,7 @@ class InvalidFloorReferencedError(DungeonValidatorError):
         return _("Invalid Floor")
 
     def __str__(self) -> str:
-        return _(
-            "References floor that is out of bounds in the floor list for this group."
-        )
+        return _("References floor that is out of bounds in the floor list for this group.")
 
 
 class FloorReusedError(DungeonValidatorError):

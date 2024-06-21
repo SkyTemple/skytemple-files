@@ -1916,9 +1916,7 @@ def _generate_mock_data():
         bpl = FileType.BPL.deserialize(f.read())
 
     for animation_spec in bpl.animation_specs:
-        print(
-            f"BplAnimationSpecMock({animation_spec.duration_per_frame}, {animation_spec.number_of_frames})"
-        )
+        print(f"BplAnimationSpecMock({animation_spec.duration_per_frame}, {animation_spec.number_of_frames})")
 
     print(f"self._number_palettes = {bpl.number_palettes}")
     print(f"self._has_palette_animation = {bpl.has_palette_animation}")

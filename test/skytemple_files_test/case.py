@@ -106,10 +106,7 @@ def romtest(*, file_names=None, file_ext=None, path):
         from parameterized import parameterized
 
         rom = None
-        if (
-            "SKYTEMPLE_TEST_ROM" in os.environ
-            and os.environ["SKYTEMPLE_TEST_ROM"] != ""
-        ):
+        if "SKYTEMPLE_TEST_ROM" in os.environ and os.environ["SKYTEMPLE_TEST_ROM"] != "":
             rom = NintendoDSRom.fromFile(os.environ["SKYTEMPLE_TEST_ROM"])
 
         if rom:
@@ -118,9 +115,7 @@ def romtest(*, file_names=None, file_ext=None, path):
                 return f"{testcase_func.__name__}/{param.args[0]}"
 
             if file_ext is not None and file_names is not None:
-                raise TypeError(
-                    "file_ext and file_names can not be set at the same time."
-                )
+                raise TypeError("file_ext and file_names can not be set at the same time.")
             if file_ext is not None:
                 files = [
                     (x, rom.getFileByName(x))
@@ -130,9 +125,7 @@ def romtest(*, file_names=None, file_ext=None, path):
             elif file_names is not None:
                 files = [(x, rom.getFileByName(path + x)) for x in file_names]
             else:
-                raise TypeError(
-                    "Either file_ext or file_names can not be set at the same time."
-                )
+                raise TypeError("Either file_ext or file_names can not be set at the same time.")
 
             if len(files) < 1:
 
@@ -150,13 +143,9 @@ def romtest(*, file_names=None, file_ext=None, path):
 
                     pmd2datawrapper.__name__ = wrapped_function.__name__
 
-                    parameterized.expand(files, name_func=dataset_name_func)(
-                        pytest.mark.romtest(pmd2datawrapper)
-                    )
+                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(pmd2datawrapper))
                 else:
-                    parameterized.expand(files, name_func=dataset_name_func)(
-                        pytest.mark.romtest(wrapped_function)
-                    )
+                    parameterized.expand(files, name_func=dataset_name_func)(pytest.mark.romtest(wrapped_function))
                 # since expands now adds the tests to our locals, we need to pass them back...
                 # this isn't hacky at all wdym??????ßßß
                 frame_locals = inspect.currentframe().f_back.f_locals  # type: ignore

@@ -66,9 +66,7 @@ class Chr(AutoString):
         return (len(self.get_palette_raw()) // 3) // 16
 
     def to_pil(self, color_variation=0) -> Image.Image:
-        img = Image.new(
-            mode="P", size=(CHR_TILE_WIDTH * len(self.tiles), CHR_TILE_WIDTH), color=0
-        )
+        img = Image.new(mode="P", size=(CHR_TILE_WIDTH * len(self.tiles), CHR_TILE_WIDTH), color=0)
         for i, t in enumerate(self.tiles):
             img.paste(t, box=(i * CHR_TILE_WIDTH, 0))
         img.putpalette(self.get_palette_raw()[color_variation * 16 * 3 :])
@@ -76,18 +74,10 @@ class Chr(AutoString):
 
     def from_pil(self, img: Image.Image):
         if img.mode != "P":
-            raise AttributeError(
-                _(
-                    "Cannot convert PIL image to CHR: Must be indexed image (=using a palette)"
-                )
-            )
+            raise AttributeError(_("Cannot convert PIL image to CHR: Must be indexed image (=using a palette)"))
         if img.width % CHR_TILE_WIDTH != 0 or img.height % CHR_TILE_WIDTH != 0:
             raise AttributeError(
-                f(
-                    _(
-                        "Cannot convert PIL image to CHR: width and height must be a multiple of {CHR_TILE_WIDTH}"
-                    )
-                )
+                f(_("Cannot convert PIL image to CHR: width and height must be a multiple of {CHR_TILE_WIDTH}"))
             )
         self.tiles = []
         for y in range(img.height // CHR_TILE_WIDTH):

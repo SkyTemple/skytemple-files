@@ -53,9 +53,7 @@ class Dpc(DpcProtocol[Dpci]):
             chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM)
         )
 
-    def chunks_to_pil(
-        self, dpci: Dpci, palettes: Sequence[Sequence[int]], width_in_mtiles=16
-    ) -> Image.Image:
+    def chunks_to_pil(self, dpci: Dpci, palettes: Sequence[Sequence[int]], width_in_mtiles=16) -> Image.Image:
         """
         Convert all chunks of the DPC to one big PIL image.
         The chunks are all placed next to each other.
@@ -68,11 +66,7 @@ class Dpc(DpcProtocol[Dpci]):
 
         """
         width = width_in_mtiles * DPC_TILING_DIM * DPCI_TILE_DIM
-        height = (
-            math.ceil(len(self.chunks) / width_in_mtiles)
-            * DPC_TILING_DIM
-            * DPCI_TILE_DIM
-        )
+        height = math.ceil(len(self.chunks) / width_in_mtiles) * DPC_TILING_DIM * DPCI_TILE_DIM
         return to_pil(
             list(itertools.chain.from_iterable(self.chunks)),
             dpci.tiles,
@@ -84,9 +78,7 @@ class Dpc(DpcProtocol[Dpci]):
             DPC_TILING_DIM,
         )
 
-    def single_chunk_to_pil(
-        self, chunk_idx, dpci: Dpci, palettes: Sequence[Sequence[int]]
-    ):
+    def single_chunk_to_pil(self, chunk_idx, dpci: Dpci, palettes: Sequence[Sequence[int]]):
         """
         Convert a single chunk of the DPC into a PIL image. For general notes, see chunks_to_pil.
         """
@@ -101,9 +93,7 @@ class Dpc(DpcProtocol[Dpci]):
             DPC_TILING_DIM,
         )
 
-    def pil_to_chunks(
-        self, image: Image.Image, force_import=True
-    ) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
+    def pil_to_chunks(self, image: Image.Image, force_import=True) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tile mappings and returns the new tiles for storing them in a DPCI and the palettes
@@ -131,12 +121,7 @@ class Dpc(DpcProtocol[Dpci]):
         for tm in all_tilemaps:
             if tm.pal_idx > DPL_MAX_PAL - 1:
                 raise ValueError(
-                    f(
-                        _(
-                            "The image to import can only use the first 12 palettes. "
-                            "Tried to use palette {tm.pal_idx}"
-                        )
-                    )
+                    f(_("The image to import can only use the first 12 palettes. " "Tried to use palette {tm.pal_idx}"))
                 )
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
         self.re_fill_chunks()
@@ -167,17 +152,11 @@ class Dpc(DpcProtocol[Dpci]):
                 for entry in chunk:
                     entry.idx += 1
         if not contains_null_chunk:
-            tile_mappings = [
-                [TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]
-            ] + tile_mappings  # type: ignore
+            tile_mappings = [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] + tile_mappings  # type: ignore
         self.chunks = tile_mappings
         self.re_fill_chunks()
 
     def re_fill_chunks(self):
         if len(self.chunks) > 400:
-            raise ValueError(
-                _("A dungeon background or tilemap can not have more than 400 chunks.")
-            )
-        self.chunks += [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] * (
-            400 - len(self.chunks)
-        )  # type: ignore
+            raise ValueError(_("A dungeon background or tilemap can not have more than 400 chunks."))
+        self.chunks += [[TilemapEntry.from_int(u16(0)) for _ in range(0, 9)]] * (400 - len(self.chunks))  # type: ignore

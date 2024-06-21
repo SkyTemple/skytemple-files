@@ -95,30 +95,22 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED_US
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED_JP
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 start_ov29 = START_OV29_US
@@ -191,9 +183,7 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
             # Metronome
             data = rom.loadArm9Overlays([10])[10].data
             file_data = bytearray(METRONOME_DATA_LENGTH // 2)
-            for z in range(
-                start_metronome_data, start_metronome_data + METRONOME_DATA_LENGTH, 8
-            ):
+            for z in range(start_metronome_data, start_metronome_data + METRONOME_DATA_LENGTH, 8):
                 write_u32(file_data, read_u32(data, z), (z - start_metronome_data) // 2)
             create_file_in_rom(rom, METRONOME_DATA_PATH, file_data)
         try:
@@ -201,7 +191,5 @@ class ExtractMoveCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

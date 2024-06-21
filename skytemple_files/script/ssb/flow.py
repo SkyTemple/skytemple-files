@@ -60,9 +60,7 @@ class SsbFlow:
     def __init__(self, ssb: Ssb, static_data: Pmd2Data):
         self._named_routines = static_data.script_data.common_routine_info__by_id
         self._variables_by_name = static_data.script_data.game_variables__by_name
-        routine_ops: list[list[SsbOperation]] = list(
-            OpsLabelJumpToResolver(ssb.get_filled_routine_ops())
-        )
+        routine_ops: list[list[SsbOperation]] = list(OpsLabelJumpToResolver(ssb.get_filled_routine_ops()))
 
         # Check if the last operation ends control flow, if it doesn't, insert a return for more accurate
         # checking with ExplorerScript opcode order changes.
@@ -89,15 +87,12 @@ class SsbFlow:
         """Assert that self and other are equal. If they are not, the raised AssertionError will contain details."""
         if not isinstance(other, SsbFlow):
             raise AssertionError("other is not an SsbFlow.")
-        for i, (g_self, g_other) in enumerate(
-            zip(self.get_graphs(), other.get_graphs())
-        ):
+        for i, (g_self, g_other) in enumerate(zip(self.get_graphs(), other.get_graphs())):
             if output_print:
                 print(f"Checking routine {i}...")
             if len(g_self.vs) == 0 or len(g_other.vs) == 0:
                 assert len(g_self.vs) == len(g_other.vs), (
-                    f"If one graph is empty, "
-                    f"the other must be too ({self._r_info(i)})"
+                    f"If one graph is empty, " f"the other must be too ({self._r_info(i)})"
                 )
                 continue
             self_iter = iter(self.bfs_generator(g_self.vs[0]))
@@ -108,19 +103,14 @@ class SsbFlow:
                     self_v, self_distance, self_parent = next(self_iter)
                     other_v, other_distance, other_parent = next(other_iter)
                     assert self_distance == other_distance, (
-                        f"While running BFS, the distances changed unexpectedly "
-                        f"({self._r_info(i)})."
+                        f"While running BFS, the distances changed unexpectedly " f"({self._r_info(i)})."
                     )
                     self._assert_same_vertex(i, self_v, other_v)
                     self._assert_same_vertex(i, self_parent, other_parent)
             except StopIteration:
                 # Both need to be ended
-                assert self._iter_is_at_end(
-                    self_iter
-                ), f"The other graph ended to early ({self._r_info(i)})."
-                assert self._iter_is_at_end(
-                    other_iter
-                ), f"My graph ended to early ({self._r_info(i)})."
+                assert self._iter_is_at_end(self_iter), f"The other graph ended to early ({self._r_info(i)})."
+                assert self._iter_is_at_end(other_iter), f"My graph ended to early ({self._r_info(i)})."
 
     def _assert_same_vertex(self, i, self_v: Vertex, other_v: Vertex):
         if self_v is None or other_v is None:
@@ -130,9 +120,7 @@ class SsbFlow:
         self_op: SsbOperation = self_v["op"]
         other_op: SsbOperation = other_v["op"]
         # We can't really check foreign jumps
-        if isinstance(self_op, SsbForeignLabel) or isinstance(
-            other_op, SsbForeignLabel
-        ):
+        if isinstance(self_op, SsbForeignLabel) or isinstance(other_op, SsbForeignLabel):
             assert isinstance(self_op, SsbForeignLabel) and isinstance(
                 other_op, SsbForeignLabel
             ), f"If one is foreign label, both must be ({self._r_info(i)})."
@@ -145,34 +133,24 @@ class SsbFlow:
 
         # OPCODES EXCEPTIONS
         # We replace flag_CalcValue with the ASSIGN operator with flag_Set
-        if (
-            self_op.op_code.name == OPS_FLAG__CALC_VALUE
-            and self_op.params[1] == SsbCalcOperator.ASSIGN.value
-        ):
+        if self_op.op_code.name == OPS_FLAG__CALC_VALUE and self_op.params[1] == SsbCalcOperator.ASSIGN.value:
             self_op.op_code = SsbOpCode(-1, OPS_FLAG__SET)
             self_op.params = [self_op.params[0], self_op.params[2]]
-        if (
-            other_op.op_code.name == OPS_FLAG__CALC_VALUE
-            and other_op.params[1] == SsbCalcOperator.ASSIGN.value
-        ):
+        if other_op.op_code.name == OPS_FLAG__CALC_VALUE and other_op.params[1] == SsbCalcOperator.ASSIGN.value:
             other_op.op_code = SsbOpCode(-1, OPS_FLAG__SET)
             other_op.params = [other_op.params[0], other_op.params[2]]
         # We replace BranchBit + PERFORMANCE_PROGRESS_LIST with BranchPerformance
         if (
             self_op.op_code.name == OP_BRANCH_BIT
             and self_op.params[0].name
-            == SsbConstant.create_for(
-                self._variables_by_name["PERFORMANCE_PROGRESS_LIST"]
-            ).name
+            == SsbConstant.create_for(self._variables_by_name["PERFORMANCE_PROGRESS_LIST"]).name
         ):
             self_op.op_code.name = SsbOpCode(-1, OP_BRANCH_PERFORMANCE)
             self_op.params = [self_op.params[1], 1]
         if (
             other_op.op_code.name == OP_BRANCH_BIT
             and other_op.params[0].name
-            == SsbConstant.create_for(
-                self._variables_by_name["PERFORMANCE_PROGRESS_LIST"]
-            ).name
+            == SsbConstant.create_for(self._variables_by_name["PERFORMANCE_PROGRESS_LIST"]).name
         ):
             other_op.op_code.name = SsbOpCode(-1, OP_BRANCH_PERFORMANCE)
             other_op.params = [other_op.params[1], 1]

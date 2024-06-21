@@ -95,6 +95,4 @@ class MdEvo(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MdEvo):
             return False
-        return (
-            self.evo_entries == other.evo_entries and self.evo_stats == other.evo_stats
-        )
+        return self.evo_entries == other.evo_entries and self.evo_stats == other.evo_stats

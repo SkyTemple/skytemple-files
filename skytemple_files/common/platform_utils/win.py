@@ -33,9 +33,7 @@ WIN_THEME_REG_KEY = "AppsUseLightTheme"
 def win_use_light_theme():
     """Function to check if the current Windows theme is the light theme or the dark theme"""
     try:
-        registry_key = winreg.OpenKey(
-            winreg.HKEY_CURRENT_USER, WIN_THEME_REG_PATH, 0, winreg.KEY_READ
-        )
+        registry_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, WIN_THEME_REG_PATH, 0, winreg.KEY_READ)
         value, regtype = winreg.QueryValueEx(registry_key, WIN_THEME_REG_KEY)
         winreg.CloseKey(registry_key)
         return value != 0

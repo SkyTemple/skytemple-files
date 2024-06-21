@@ -208,9 +208,7 @@ class PatchType(Enum):
 
 
 class Patcher:
-    def __init__(
-        self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches: bool = False
-    ):
+    def __init__(self, rom: NintendoDSRom, config: Pmd2Data, skip_core_patches: bool = False):
         self._rom = rom
         self._config = config
         self._loaded_patches: dict[str, AbstractPatchHandler] = {}
@@ -248,12 +246,7 @@ class Patcher:
                 try:
                     if not self.is_applied(patch_name):
                         raise PatchDependencyError(
-                            f(
-                                _(
-                                    "The patch '{patch_name}' needs to be applied before you can "
-                                    "apply '{name}'."
-                                )
-                            )
+                            f(_("The patch '{patch_name}' needs to be applied before you can " "apply '{name}'."))
                         )
                 except ValueError as err:
                     raise PatchDependencyError(
@@ -269,14 +262,10 @@ class Patcher:
         patch_data = self._config.asm_patches_constants.patches[name]
         if patch_data.has_parameters():
             if config is None:
-                raise PatchNotConfiguredError(
-                    _("No configuration was given."), "*", "No configuration was given."
-                )
+                raise PatchNotConfiguredError(_("No configuration was given."), "*", "No configuration was given.")
             for param in patch_data.parameters.values():
                 if param.name not in config:
-                    raise PatchNotConfiguredError(
-                        _("Missing configuration value."), param.name, "Not given."
-                    )
+                    raise PatchNotConfiguredError(_("Missing configuration value."), param.name, "Not given.")
                 if param.type == Pmd2PatchParameterType.INTEGER:
                     val = config[param.name]
                     if not isinstance(val, int):
@@ -309,10 +298,7 @@ class Patcher:
                     val = config[param.name]
                     found = False
                     for option in param.options:  # type: ignore
-                        if (
-                            not isinstance(val, type(option.value))
-                            or option.value != val
-                        ):
+                        if not isinstance(val, type(option.value)) or option.value != val:
                             continue
                         found = True
                         break
@@ -372,10 +358,7 @@ class Patcher:
         }
 
         if self._config.extra_bin_sections.overlay36 is not None:
-            if (
-                is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36)
-                or name == "ExtraSpace"
-            ):
+            if is_binary_in_rom(self._rom, self._config.extra_bin_sections.overlay36) or name == "ExtraSpace":
                 binaries["overlay36"] = self._config.extra_bin_sections.overlay36
 
         self._arm_patcher.apply(
@@ -406,62 +389,41 @@ class Patcher:
         # Load the configuration
         try:
             config_xml = os.path.join(tmpdir.name, "config.xml")
-            PatchPackageConfigMerger(config_xml, self._config.game_edition).merge(
-                self._config.asm_patches_constants
-            )
+            PatchPackageConfigMerger(config_xml, self._config.game_edition).merge(self._config.asm_patches_constants)
         except FileNotFoundError as ex:
             raise PatchPackageError(_("config.xml missing in patch package.")) from ex
         except ParseError as ex:
-            raise PatchPackageError(
-                _("Syntax error in the config.xml while reading patch package.")
-            ) from ex
+            raise PatchPackageError(_("Syntax error in the config.xml while reading patch package.")) from ex
 
         # Evalulate the module
         try:
             module_name = f"skytemple_files.__patches.p{f_id}"
-            spec = importlib.util.spec_from_file_location(
-                module_name, os.path.join(tmpdir.name, "patch.py")
-            )
+            spec = importlib.util.spec_from_file_location(module_name, os.path.join(tmpdir.name, "patch.py"))
             assert spec is not None
             patch = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(patch)  # type: ignore
         except FileNotFoundError as ex:
             raise PatchPackageError(_("patch.py missing in patch package.")) from ex
         except SyntaxError as ex:
-            raise PatchPackageError(
-                _("The patch.py of the patch package contains a syntax error.")
-            ) from ex
+            raise PatchPackageError(_("The patch.py of the patch package contains a syntax error.")) from ex
 
         try:
             handler = patch.PatchHandler()  # type: ignore
         except AttributeError as ex:
-            raise PatchPackageError(
-                _(
-                    "The patch.py of the patch package does not contain a 'PatchHandler'."
-                )
-            ) from ex
+            raise PatchPackageError(_("The patch.py of the patch package does not contain a 'PatchHandler'.")) from ex
 
         try:
             self.add_manually(handler, tmpdir.name)
         except ValueError as ex:
             raise PatchPackageError(
-                _(
-                    "The patch package does not contain an entry for the handler's patch name "
-                    "in the config.xml."
-                )
+                _("The patch package does not contain an entry for the handler's patch name " "in the config.xml.")
             ) from ex
         return handler
 
     def add_manually(self, handler: AbstractPatchHandler, patch_base_dir: str) -> None:
         # Try to find the patch in the config
         if handler.name not in self._config.asm_patches_constants.patches.keys():
-            raise ValueError(
-                f(
-                    _(
-                        "No patch for handler '{handler.name}' found in the configuration."
-                    )
-                )
-            )
+            raise ValueError(f(_("No patch for handler '{handler.name}' found in the configuration.")))
         self._loaded_patches[handler.name] = handler
         self._patch_dirs[handler.name] = patch_base_dir
 
@@ -480,9 +442,7 @@ class PatchPackageConfigMerger:
     def merge(self, into: Pmd2AsmPatchesConstants) -> None:
         for e in self._root:
             if e.tag == "ASMPatchesConstants":
-                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(
-                    self._game_edition
-                ).read(e)  # type: ignore
+                content_of_xml = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)  # type: ignore
                 into.patches.update(content_of_xml.patches)
                 into.loose_bin_files.update(content_of_xml.loose_bin_files)
                 return

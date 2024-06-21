@@ -72,13 +72,9 @@ class AddKeyCheckPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

@@ -51,10 +51,7 @@ class IqSkill:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, IqSkill):
             return False
-        return (
-            self.iq_required == other.iq_required
-            and self.restriction_group == other.restriction_group
-        )
+        return self.iq_required == other.iq_required and self.restriction_group == other.restriction_group
 
 
 class HardcodedIq:
@@ -64,9 +61,7 @@ class HardcodedIq:
         return read_u16(arm9, block.address)
 
     @staticmethod
-    def set_min_iq_for_exclusive_move_user(
-        value: u16, arm9: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_min_iq_for_exclusive_move_user(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.arm9.data.MIN_IQ_EXCLUSIVE_MOVE_USER
         write_u16(arm9, value, block.address)
 
@@ -76,9 +71,7 @@ class HardcodedIq:
         return read_u16(arm9, block.address)
 
     @staticmethod
-    def set_min_iq_for_item_master(
-        value: u16, arm9: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_min_iq_for_item_master(value: u16, arm9: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.arm9.data.MIN_IQ_ITEM_MASTER
         write_u16(arm9, value, block.address)
 
@@ -93,9 +86,7 @@ class HardcodedIq:
         write_u16(ov10, value, block.address)
 
     @staticmethod
-    def get_gummi_iq_gains(
-        arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool
-    ) -> list[list[int]]:
+    def get_gummi_iq_gains(arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool) -> list[list[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.bin_sections.arm9.data.IQ_GUMMI_GAIN_TABLE
         lst = []
@@ -134,9 +125,7 @@ class HardcodedIq:
                 write_u16(arm9, u16_checked(b), block.address + i * byte_size)
 
     @staticmethod
-    def get_gummi_belly_heal(
-        arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool
-    ) -> list[list[int]]:
+    def get_gummi_belly_heal(arm9: bytes, config: Pmd2Data, add_types_patch_applied: bool) -> list[list[int]]:
         dim, byte_size = IQ_GAINS_TABLES[add_types_patch_applied]
         block = config.bin_sections.arm9.data.GUMMI_BELLY_RESTORE_TABLE
         lst = []
@@ -210,52 +199,35 @@ class HardcodedIq:
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
         assert block_restr.length is not None
-        assert (
-            block.length // IQ_SKILL_ENTRY_LEN
-            == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
-        )
+        assert block.length // IQ_SKILL_ENTRY_LEN == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
         lst = []
         for i in range(0, block.length // IQ_SKILL_ENTRY_LEN):
             lst.append(
                 IqSkill(
                     read_i32(arm9bin, block.address + (i * IQ_SKILL_ENTRY_LEN)),
-                    read_i16(
-                        arm9bin, block_restr.address + (i * IQ_SKILL_RESTR_ENTRY_LEN)
-                    ),
+                    read_i16(arm9bin, block_restr.address + (i * IQ_SKILL_RESTR_ENTRY_LEN)),
                 )
             )
         return lst
 
     @staticmethod
-    def set_iq_skills(
-        value: list[IqSkill], arm9bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_iq_skills(value: list[IqSkill], arm9bin: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.arm9.data.IQ_SKILLS
         block_restr = config.bin_sections.arm9.data.IQ_SKILL_RESTRICTIONS
         assert block.length is not None
         assert block_restr.length is not None
-        assert (
-            block.length // IQ_SKILL_ENTRY_LEN
-            == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
-        )
+        assert block.length // IQ_SKILL_ENTRY_LEN == block_restr.length // IQ_SKILL_RESTR_ENTRY_LEN
         expected_length = int(block.length / IQ_SKILL_ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            arm9bin[
-                block.address + i * IQ_SKILL_ENTRY_LEN : block.address
-                + (i + 1) * IQ_SKILL_ENTRY_LEN
-            ] = entry.iq_required.to_bytes(
-                IQ_SKILL_ENTRY_LEN, byteorder="little", signed=True
+            arm9bin[block.address + i * IQ_SKILL_ENTRY_LEN : block.address + (i + 1) * IQ_SKILL_ENTRY_LEN] = (
+                entry.iq_required.to_bytes(IQ_SKILL_ENTRY_LEN, byteorder="little", signed=True)
             )
             arm9bin[
                 block_restr.address + i * IQ_SKILL_RESTR_ENTRY_LEN : block_restr.address
                 + (i + 1) * IQ_SKILL_RESTR_ENTRY_LEN
-            ] = entry.restriction_group.to_bytes(
-                IQ_SKILL_RESTR_ENTRY_LEN, byteorder="little", signed=True
-            )
+            ] = entry.restriction_group.to_bytes(IQ_SKILL_RESTR_ENTRY_LEN, byteorder="little", signed=True)
 
 
 class IqGroupsSkills:
@@ -277,9 +249,7 @@ class IqGroupsSkills:
     def read_compressed(arm9: bytes, config: Pmd2Data) -> list[list[u8]]:
         block = config.extra_bin_sections.arm9.data.COMPRESSED_IQ_GROUP_SKILLS
         ret = []
-        for i in range(
-            block.address, block.address + block.length, IQ_GROUP_COMPRESSED_LIST_LEN
-        ):
+        for i in range(block.address, block.address + block.length, IQ_GROUP_COMPRESSED_LIST_LEN):
             skill_list = []
             for j in range(0, IQ_GROUP_COMPRESSED_LIST_LEN):
                 current_byte = arm9[i + j]
@@ -290,23 +260,17 @@ class IqGroupsSkills:
         return ret
 
     @staticmethod
-    def write_compressed(
-        arm9: bytearray, data: list[list[u8]], config: Pmd2Data
-    ) -> None:
+    def write_compressed(arm9: bytearray, data: list[list[u8]], config: Pmd2Data) -> None:
         block = config.extra_bin_sections.arm9.data.COMPRESSED_IQ_GROUP_SKILLS
         assert block.length is not None
         expected_length = int(block.length / IQ_GROUP_COMPRESSED_LIST_LEN)
         if len(data) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
 
         for i, group in enumerate(data):
             group_offset = block.address + i * IQ_GROUP_COMPRESSED_LIST_LEN
             # Clear current group before writing anything
-            arm9[group_offset : group_offset + IQ_GROUP_COMPRESSED_LIST_LEN] = [
-                0
-            ] * IQ_GROUP_COMPRESSED_LIST_LEN
+            arm9[group_offset : group_offset + IQ_GROUP_COMPRESSED_LIST_LEN] = [0] * IQ_GROUP_COMPRESSED_LIST_LEN
 
             for skill in group:
                 byte = skill >> 3

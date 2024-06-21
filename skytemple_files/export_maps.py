@@ -110,15 +110,9 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
             bpa_duration = -1
             pal_ani_duration = -1
             if len(non_none_bpas) > 0:
-                bpa_duration = round(
-                    1000 / 60 * non_none_bpas[0].frame_info[0].duration_per_frame
-                )
+                bpa_duration = round(1000 / 60 * non_none_bpas[0].frame_info[0].duration_per_frame)
             if bpl.has_palette_animation:
-                pal_ani_duration = round(
-                    1000
-                    / 60
-                    * max(spec.duration_per_frame for spec in bpl.animation_specs)
-                )
+                pal_ani_duration = round(1000 / 60 * max(spec.duration_per_frame for spec in bpl.animation_specs))
             duration = max(bpa_duration, pal_ani_duration)
             if duration == -1:
                 # Default for only one frame, doesn't really matter
@@ -144,28 +138,20 @@ def draw_map_bgs(rom: NintendoDSRom, map_bg_dir):
         except (NotImplementedError, SystemError) as ex:
             print(f"error for {level.bma_name}: {repr(ex)}", file=sys.stderr)
             print(
-                "".join(
-                    traceback.format_exception(type(ex), value=ex, tb=ex.__traceback__)
-                ),
+                "".join(traceback.format_exception(type(ex), value=ex, tb=ex.__traceback__)),
                 file=sys.stderr,
             )
 
 
 def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
     os.makedirs(dungeon_map_bg_dir, exist_ok=True)
-    dungeon_bin = FileType.DUNGEON_BIN.deserialize(
-        rom.getFileByName("DUNGEON/dungeon.bin"), config
-    )
+    dungeon_bin = FileType.DUNGEON_BIN.deserialize(rom.getFileByName("DUNGEON/dungeon.bin"), config)
 
-    ground_dungeon_tilesets = (
-        HardcodedGroundDungeonTilesets.get_ground_dungeon_tilesets(
-            get_binary_from_rom(rom, config.bin_sections.overlay11),
-            config,
-        )
+    ground_dungeon_tilesets = HardcodedGroundDungeonTilesets.get_ground_dungeon_tilesets(
+        get_binary_from_rom(rom, config.bin_sections.overlay11),
+        config,
     )
-    dungeons = HardcodedDungeons.get_dungeon_list(
-        get_binary_from_rom(rom, config.bin_sections.arm9), config
-    )
+    dungeons = HardcodedDungeons.get_dungeon_list(get_binary_from_rom(rom, config.bin_sections.arm9), config)
     mappa = FileType.MAPPA_BIN.deserialize(rom.getFileByName("BALANCE/mappa_s.bin"))
 
     levels_by_id = config.script_data.level_list__by_id
@@ -189,9 +175,7 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
         if entry.unk2 == 1:
             tileset_id = mappa.floor_lists[mappa_idx][start_offset].layout.tileset_id
         elif entry.unk2 == 100:
-            tileset_id = mappa.floor_lists[mappa_idx][
-                start_offset + length - 1
-            ].layout.tileset_id
+            tileset_id = mappa.floor_lists[mappa_idx][start_offset + length - 1].layout.tileset_id
         else:
             raise ValueError("Unknown unk2")
         if tileset_id == 170:
@@ -208,9 +192,7 @@ def draw_dungeon_map_bgs(rom, dungeon_map_bg_dir, config):
 
         drawer = DmaDrawer(dma)
         rules = drawer.rules_from_bma(bma)
-        mappings = drawer.get_mappings_for_rules(
-            rules, treat_outside_as_wall=True, variation_index=0
-        )
+        mappings = drawer.get_mappings_for_rules(rules, treat_outside_as_wall=True, variation_index=0)
         frames = drawer.draw(mappings, dpci, dpc, dpl, dpla)
         frames[0].save(
             os.path.join(dungeon_map_bg_dir, level.name + ".gif"),
@@ -262,9 +244,7 @@ def draw_maps(rom: NintendoDSRom, map_dir, scriptdata: Pmd2ScriptData):
             )
 
 
-def draw_scene_for__objects(
-    rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer
-) -> Image.Image:
+def draw_scene_for__objects(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer) -> Image.Image:
     img = Image.new("RGBA", (dim_w, dim_h), (255, 0, 0, 0))
     draw = ImageDraw.Draw(img, "RGBA")
     has_written_something = False
@@ -279,9 +259,7 @@ def draw_scene_for__objects(
     return img
 
 
-def draw_scene_for__actors(
-    rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer
-) -> Image.Image:
+def draw_scene_for__actors(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer) -> Image.Image:
     img = Image.new("RGBA", (dim_w, dim_h), (255, 0, 0, 0))
     draw = ImageDraw.Draw(img, "RGBA")
     has_written_something = False
@@ -296,9 +274,7 @@ def draw_scene_for__actors(
     return img
 
 
-def draw_scene_for__rest(
-    rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer
-) -> Image.Image:
+def draw_scene_for__rest(rom: NintendoDSRom, file_name, dim_w, dim_h, layer: SsaLayer) -> Image.Image:
     img = Image.new("RGBA", (dim_w, dim_h), (255, 0, 0, 0))
     draw = ImageDraw.Draw(img, "RGBA")
     has_written_something = False
@@ -350,15 +326,11 @@ def draw_actor(img: Image.Image, draw, actor: SsaActor):
 
     try:
         sprite = FileType.WAN.deserialize(
-            FileType.COMMON_AT.deserialize(
-                monster_bin_pack_file[actor_sprite_id]
-            ).decompress()  # type: ignore
+            FileType.COMMON_AT.deserialize(monster_bin_pack_file[actor_sprite_id]).decompress()  # type: ignore
         )
         ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
-        warnings.warn(
-            f"Failed to render a sprite, replaced with placeholder ({actor}, {actor_sprite_id}): {e}"
-        )
+        warnings.warn(f"Failed to render a sprite, replaced with placeholder ({actor}, {actor_sprite_id}): {e}")
         if not draw_invisible_actors_objects:
             return
         return triangle(
@@ -400,14 +372,10 @@ def draw_object(img: Image.Image, draw, obj: SsaObject, rom: NintendoDSRom):
         return
 
     try:
-        sprite = FileType.WAN.deserialize(
-            rom.getFileByName(f"GROUND/{obj.object.name}.wan")
-        )
+        sprite = FileType.WAN.deserialize(rom.getFileByName(f"GROUND/{obj.object.name}.wan"))
         ani_group = sprite.anim_groups[0]
     except (ValueError, TypeError) as e:
-        warnings.warn(
-            f"Failed to render a sprite, replaced with placeholder ({obj}): {e}"
-        )
+        warnings.warn(f"Failed to render a sprite, replaced with placeholder ({obj}): {e}")
         if not draw_invisible_actors_objects:
             return
         return triangle(
@@ -454,9 +422,7 @@ def draw_scene__merged(
     )
 
 
-def draw_scenes_for(
-    rom, i, count, dir_name, map_name, scene_name, file_name, scriptdata: Pmd2ScriptData
-):
+def draw_scenes_for(rom, i, count, dir_name, map_name, scene_name, file_name, scriptdata: Pmd2ScriptData):
     os.makedirs(os.path.join(dir_name, "ACTORS"), exist_ok=True)
     os.makedirs(os.path.join(dir_name, "OBJECTS"), exist_ok=True)
     os.makedirs(os.path.join(dir_name, "PERF_TRIGGER"), exist_ok=True)
@@ -478,9 +444,7 @@ def draw_scenes_for(
         imgs.append(draw_scene_for__actors(rom, png_name_actobjs, dim_w, dim_h, layer))
         # PERF_TRIGGER
         # -> .png
-        png_name_perftrgs = os.path.join(
-            dir_name, "PERF_TRIGGER", f"layer_{layer_id}.png"
-        )
+        png_name_perftrgs = os.path.join(dir_name, "PERF_TRIGGER", f"layer_{layer_id}.png")
         imgs.append(draw_scene_for__rest(rom, png_name_perftrgs, dim_w, dim_h, layer))
 
     # {map_name}_{scene_name}_all_merged.webp
@@ -571,11 +535,7 @@ def run_main(
     actor_mapping_path=None,
     opt_draw_invisible_actors_objects=True,
 ):
-    global \
-        monster_bin_pack_file, \
-        monster_md, \
-        draw_invisible_actors_objects, \
-        ground_dungeon_tilesets
+    global monster_bin_pack_file, monster_md, draw_invisible_actors_objects, ground_dungeon_tilesets
     draw_invisible_actors_objects = opt_draw_invisible_actors_objects
 
     print("Loading ROM and core files...")
@@ -590,9 +550,7 @@ def run_main(
             for name, entid in actor_mapping.items():
                 scriptdata.level_entities__by_name[name].entid = entid
 
-    monster_bin_pack_file = FileType.BIN_PACK.deserialize(
-        rom.getFileByName("MONSTER/monster.bin")
-    )
+    monster_bin_pack_file = FileType.BIN_PACK.deserialize(rom.getFileByName("MONSTER/monster.bin"))
     monster_md = FileType.MD.deserialize(rom.getFileByName("BALANCE/monster.md"))
 
     map_bg_dir = os.path.join(export_dir, "MAP_BG")
@@ -635,9 +593,7 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter,
     )
     parser.add_argument("rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
-    parser.add_argument(
-        "export_dir", metavar="EXPORT_DIR", help="Directory to export into."
-    )
+    parser.add_argument("export_dir", metavar="EXPORT_DIR", help="Directory to export into.")
     parser.add_argument(
         "-a",
         "--actors",

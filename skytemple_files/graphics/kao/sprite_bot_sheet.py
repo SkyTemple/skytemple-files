@@ -39,28 +39,18 @@ PORTRAIT_TILE_Y = 8
 
 class SpriteBotSheet:
     @classmethod
-    def create(
-        cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int
-    ) -> Image.Image:
-        image = Image.new(
-            "RGBA", (PORTRAIT_SIZE * PORTRAIT_TILE_X, PORTRAIT_SIZE * PORTRAIT_TILE_Y)
-        )
+    def create(cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int) -> Image.Image:
+        image = Image.new("RGBA", (PORTRAIT_SIZE * PORTRAIT_TILE_X, PORTRAIT_SIZE * PORTRAIT_TILE_Y))
         max_x = 1
         max_y = 1
-        for idx, (unflipped, flipped) in enumerate(
-            cls._iter_portraits(kao, portrait_item_id)
-        ):
-            max_x, max_y = cls._place_portrait(
-                image, idx, max_x, max_y, unflipped, False
-            )
+        for idx, (unflipped, flipped) in enumerate(cls._iter_portraits(kao, portrait_item_id)):
+            max_x, max_y = cls._place_portrait(image, idx, max_x, max_y, unflipped, False)
             max_x, max_y = cls._place_portrait(image, idx, max_x, max_y, flipped, True)
 
         return image.crop((0, 0, max_x, max_y))
 
     @classmethod
-    def load(
-        cls, fn: str, portrait_name_fn: Callable[[int], str]
-    ) -> Generator[tuple[int, Image.Image], None, None]:
+    def load(cls, fn: str, portrait_name_fn: Callable[[int], str]) -> Generator[tuple[int, Image.Image], None, None]:
         img = Image.open(fn)
         occupied = cls._verify_portraits(img, portrait_name_fn)
         for xx, column in enumerate(occupied):
@@ -108,9 +98,7 @@ class SpriteBotSheet:
         return max(max_x, place_x + PORTRAIT_SIZE), max(max_y, place_y + PORTRAIT_SIZE)
 
     @classmethod
-    def _verify_portraits(
-        cls, img: Image.Image, portrait_name_fn: Callable[[int], str]
-    ) -> list[list[bool | None]]:
+    def _verify_portraits(cls, img: Image.Image, portrait_name_fn: Callable[[int], str]) -> list[list[bool | None]]:
         """
         Verifies the input sheet and returns a matrix of occupied portraits.
 
@@ -119,23 +107,13 @@ class SpriteBotSheet:
         # make sure the dimensions are sound
         if img.size[0] % PORTRAIT_SIZE != 0 or img.size[1] % PORTRAIT_SIZE != 0:
             raise UserValueError(
-                f(
-                    _(
-                        "Portrait has an invalid size of {img.size}, Not divisble by {PORTRAIT_SIZE}x{PORTRAIT_SIZE}"
-                    )
-                )
+                f(_("Portrait has an invalid size of {img.size}, Not divisble by {PORTRAIT_SIZE}x{PORTRAIT_SIZE}"))
             )
 
         img_tile_size = (img.size[0] // PORTRAIT_SIZE, img.size[1] // PORTRAIT_SIZE)
         max_size = (PORTRAIT_TILE_X * PORTRAIT_SIZE, PORTRAIT_TILE_Y * PORTRAIT_SIZE)
         if img.size[0] > max_size[0] or img.size[1] > max_size[1]:
-            raise UserValueError(
-                f(
-                    _(
-                        "Portrait has an invalid size of {img.size}, exceeding max of {max_size}"
-                    )
-                )
-            )
+            raise UserValueError(f(_("Portrait has an invalid size of {img.size}, exceeding max of {max_size}")))
 
         in_data = img.convert("RGBA").getdata()
         occupied: list[list[bool | None]] = [[]] * PORTRAIT_TILE_X
@@ -167,19 +145,13 @@ class SpriteBotSheet:
                     if is_rogue:
                         break
                 if is_rogue:
-                    rogue_str = portrait_name_fn(
-                        cls._convert_index(yy * PORTRAIT_TILE_X + xx)
-                    )
+                    rogue_str = portrait_name_fn(cls._convert_index(yy * PORTRAIT_TILE_X + xx))
                     rogue_tiles.append(rogue_str)
 
         if len(rogue_pixels) > 0:
-            raise UserValueError(
-                f(_("Semi-transparent pixels found at: {rogue_pixels}"))
-            )
+            raise UserValueError(f(_("Semi-transparent pixels found at: {rogue_pixels}")))
         if len(rogue_tiles) > 0:
-            raise UserValueError(
-                f(_("The following emotions have transparent pixels: {rogue_tiles}"))
-            )
+            raise UserValueError(f(_("The following emotions have transparent pixels: {rogue_tiles}")))
 
         # make sure all mirrored emotions have their original emotions
         # make sure if there is one mirrored emotion, there is all mirrored emotions
@@ -193,18 +165,12 @@ class SpriteBotSheet:
                 if occupied[xx][yy]:
                     has_one_flip = True
                 if occupied[xx][yy] and not occupied[xx][yy - halfway]:
-                    rogue_str = portrait_name_fn(
-                        cls._convert_index(yy * PORTRAIT_TILE_X + xx)
-                    )
+                    rogue_str = portrait_name_fn(cls._convert_index(yy * PORTRAIT_TILE_X + xx))
                     flipped_tiles.append(rogue_str)
 
         if has_one_flip and len(flipped_tiles) > 0:
             raise UserValueError(
-                f(
-                    _(
-                        "File should have original and flipped versions of emotions: {str(flipped_tiles)}"
-                    )
-                )
+                f(_("File should have original and flipped versions of emotions: {str(flipped_tiles)}"))
             )
 
         return occupied

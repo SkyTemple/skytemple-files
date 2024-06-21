@@ -51,9 +51,7 @@ class SsaEvent(AutoString):
             self.trigger_id = trigger_pointer
         else:
             try:
-                self.trigger_id = (
-                    trigger_pointer - trigger_table_start
-                ) // TRIGGER_ENTRY_LEN
+                self.trigger_id = (trigger_pointer - trigger_table_start) // TRIGGER_ENTRY_LEN
             except TypeError:
                 # If this fails, this event has somehow no trigger assigned.
                 self.trigger_id = INVALID_TRIGGER

@@ -37,12 +37,8 @@ def randomize_move() -> WazaMove:
     move.base_power = u16(random.randint(0, 65_535))
     move.type = u8(random.choice(list(PokeType)).value)
     move.category = u8(random.choice(list(WazaMoveCategory)).value)
-    move.settings_range = WazaMoveRangeSettings(
-        random.randint(0, 65_535).to_bytes(2, "little")
-    )
-    move.settings_range_ai = WazaMoveRangeSettings(
-        random.randint(0, 65_535).to_bytes(2, "little")
-    )
+    move.settings_range = WazaMoveRangeSettings(random.randint(0, 65_535).to_bytes(2, "little"))
+    move.settings_range_ai = WazaMoveRangeSettings(random.randint(0, 65_535).to_bytes(2, "little"))
     move.base_pp = u8(random.randint(0, 255))
     move.ai_weight = u8(random.randint(0, 255))
     move.miss_accuracy = u8(random.randint(0, 255))

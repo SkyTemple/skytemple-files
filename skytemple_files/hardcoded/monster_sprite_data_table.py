@@ -51,10 +51,7 @@ class MonsterSpriteDataTableEntry(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MonsterSpriteDataTableEntry):
             return False
-        return (
-            self.sprite_tile_slots == other.sprite_tile_slots
-            and self.unk1 == other.unk1
-        )
+        return self.sprite_tile_slots == other.sprite_tile_slots and self.unk1 == other.unk1
 
 
 class HardcodedMonsterSpriteDataTable:
@@ -64,11 +61,7 @@ class HardcodedMonsterSpriteDataTable:
         block = config.bin_sections.arm9.data.MONSTER_SPRITE_DATA
         lst = []
         for i in range(block.address, block.address + block.length, ENTRY_LEN):
-            lst.append(
-                MonsterSpriteDataTableEntry(
-                    read_u8(arm9bin, i + 0x00), read_u8(arm9bin, i + 0x01)
-                )
-            )
+            lst.append(MonsterSpriteDataTableEntry(read_u8(arm9bin, i + 0x00), read_u8(arm9bin, i + 0x01)))
         return lst
 
     @classmethod
@@ -86,13 +79,9 @@ class HardcodedMonsterSpriteDataTable:
         assert block.length is not None
         expected_length = int(block.length / ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            arm9bin[
-                block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)
-            ] = entry.to_bytes()
+            arm9bin[block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)] = entry.to_bytes()
 
 
 class IdleAnimType(Enum):
@@ -121,9 +110,7 @@ class HardcodedMonsterGroundIdleAnimTable:
         return lst
 
     @classmethod
-    def set(
-        cls, values: list[IdleAnimType], ov11bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set(cls, values: list[IdleAnimType], ov11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the list.
         The length of the list must exactly match the original ROM's length (see get).
@@ -132,9 +119,5 @@ class HardcodedMonsterGroundIdleAnimTable:
         assert block.length is not None
         expected_length = block.length
         if len(values) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
-        ov11bin[block.address : block.address + block.length] = bytes(
-            [x.value for x in values]
-        )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
+        ov11bin[block.address : block.address + block.length] = bytes([x.value for x in values])

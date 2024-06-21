@@ -100,12 +100,7 @@ class WazaMoveRangeSettings(WazaMoveRangeSettingsProtocol, AutoString):
         self.unused = int(n4)
 
     def __int__(self):
-        return (
-            (self.unused << 12)
-            + (self.condition << 8)
-            + (self.range << 4)
-            + self.target
-        )
+        return (self.unused << 12) + (self.condition << 8) + (self.range << 4) + self.target
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, WazaMoveRangeSettings):
@@ -255,12 +250,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
         move_learnset_pointer = read_u32(data, waza_content_pointer + 4)
 
         self.moves = list(
-            self._read_moves(
-                data[
-                    move_data_pointer : move_data_pointer
-                    + (MOVE_COUNT * MOVE_ENTRY_BYTELEN)
-                ]
-            )
+            self._read_moves(data[move_data_pointer : move_data_pointer + (MOVE_COUNT * MOVE_ENTRY_BYTELEN)])
         )
 
         self.learnsets: list[MoveLearnset] = []
@@ -268,10 +258,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
         while True:
             if move_learnset_pointer + (i * 12) >= waza_content_pointer:
                 break
-            list_pointers = data[
-                move_learnset_pointer + (i * 12) : move_learnset_pointer
-                + ((i + 1) * 12)
-            ]
+            list_pointers = data[move_learnset_pointer + (i * 12) : move_learnset_pointer + ((i + 1) * 12)]
             level_up = []
             tm_hm: Sequence[u32] = []
             egg: Sequence[u32] = []
@@ -279,11 +266,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
             pointer_level_up = read_u32(list_pointers, 0)
             pointer_tm_hm = read_u32(list_pointers, 4)
             pointer_egg = read_u32(list_pointers, 8)
-            if (
-                pointer_level_up == 0xAAAAAAAA
-                or pointer_tm_hm == 0xAAAAAAAA
-                or pointer_egg == 0xAAAAAAAA
-            ):
+            if pointer_level_up == 0xAAAAAAAA or pointer_tm_hm == 0xAAAAAAAA or pointer_egg == 0xAAAAAAAA:
                 break
 
             # Read Level Up Data
@@ -337,9 +320,7 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
             c = encode_sir0_pointer_offsets(buff, learnset.egg_moves, False)
             data += buff[:c]
 
-            learnset_pointers.append(
-                (u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg))
-            )
+            learnset_pointers.append((u32_checked(pnt_lvlup), u32_checked(pnt_tm_hm), u32_checked(pnt_egg)))
         # Padding
         if len(data) % 16 != 0:
             data += bytes(0xAA for _ in range(0, 16 - (len(data) % 16)))

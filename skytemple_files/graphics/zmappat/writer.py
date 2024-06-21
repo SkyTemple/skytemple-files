@@ -41,9 +41,7 @@ class ZMappaTWriter:
             current_mask = self.model.masks[i]
             current_tile = self.model.tiles[i]
             for x in range(ZMAPPAT_TILE_SIZE // 8):
-                buffer += (
-                    current_mask[x * 4 : x * 4 + 4] + current_tile[x * 4 : x * 4 + 4]
-                )
+                buffer += current_mask[x * 4 : x * 4 + 4] + current_tile[x * 4 : x * 4 + 4]
 
         # Insert the tile pointers table
         table = bytearray(len(tile_table) * 4)

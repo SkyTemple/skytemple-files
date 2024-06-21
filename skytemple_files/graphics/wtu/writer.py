@@ -29,9 +29,7 @@ class WtuWriter:
         self.model = model
 
     def write(self) -> bytes:
-        buffer = bytearray(
-            self.model.header_size + WTU_ENTRY_LEN * len(self.model.entries)
-        )
+        buffer = bytearray(self.model.header_size + WTU_ENTRY_LEN * len(self.model.entries))
         buffer[0:4] = MAGIC_NUMBER
         write_u32(buffer, u32_checked(len(self.model.entries)), 0x4)
         write_u32(buffer, self.model.image_mode, 0x8)
@@ -40,11 +38,7 @@ class WtuWriter:
         for i, e in enumerate(self.model.entries):
             write_u16(buffer, e.x, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x00)
             write_u16(buffer, e.y, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x02)
-            write_u16(
-                buffer, e.width, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x04
-            )
-            write_u16(
-                buffer, e.height, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x06
-            )
+            write_u16(buffer, e.width, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x04)
+            write_u16(buffer, e.height, self.model.header_size + (i * WTU_ENTRY_LEN) + 0x06)
 
         return buffer

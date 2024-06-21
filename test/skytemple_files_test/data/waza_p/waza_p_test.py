@@ -153,9 +153,7 @@ class WazaPTestCase(
             self.assertEqual(expected_int, int(subject))
 
     def test_move_range_settings__eq__(self):
-        subject_not_same = self.handler.get_range_settings_model()(
-            FIX_MOVE_RANGE_SETTINGS[0][0]
-        )
+        subject_not_same = self.handler.get_range_settings_model()(FIX_MOVE_RANGE_SETTINGS[0][0])
         for inp, _, _ in FIX_MOVE_RANGE_SETTINGS[1:]:
             subject1 = self.handler.get_range_settings_model()(inp)
             subject2 = self.handler.get_range_settings_model()(inp)
@@ -184,9 +182,7 @@ class WazaPTestCase(
         waza2 = self._load_main_fixture(self._fix_path())
         subject_not_same = waza.learnsets[0]
         for subject1, subject2 in zip(waza.learnsets[1:], waza2.learnsets[1:]):
-            self.assertEqual(
-                list(subject1.level_up_moves), list(subject2.level_up_moves)
-            )
+            self.assertEqual(list(subject1.level_up_moves), list(subject2.level_up_moves))
             self.assertEqual(subject1.level_up_moves, subject2.level_up_moves)
             self.assertEqual(list(subject1.tm_hm_moves), list(subject2.tm_hm_moves))
             self.assertEqual(subject1.tm_hm_moves, subject2.tm_hm_moves)
@@ -200,24 +196,13 @@ class WazaPTestCase(
     def test_move_learnset_attrs(self):
         subject = self._load_main_fixture(self._fix_path()).learnsets[0]
 
-        self.assertTrue(
-            eq_level_up_move_list(
-                FIX_LEARNSETS[0].level_up_moves, subject.level_up_moves
-            )
-        )
+        self.assertTrue(eq_level_up_move_list(FIX_LEARNSETS[0].level_up_moves, subject.level_up_moves))
         self.assertEqual(FIX_LEARNSETS[0].tm_hm_moves, list(subject.tm_hm_moves))
         self.assertEqual(FIX_LEARNSETS[0].egg_moves, list(subject.egg_moves))
 
         subject.level_up_moves.pop()
-        self.assertTrue(
-            eq_level_up_move_list(
-                FIX_LEARNSETS[0].level_up_moves[:-1], subject.level_up_moves
-            )
-        )
-        cloned = [
-            LevelUpMoveStub.stub_new(x.level_id, x.move_id)
-            for x in FIX_LEARNSETS[0].level_up_moves[:-1]
-        ]
+        self.assertTrue(eq_level_up_move_list(FIX_LEARNSETS[0].level_up_moves[:-1], subject.level_up_moves))
+        cloned = [LevelUpMoveStub.stub_new(x.level_id, x.move_id) for x in FIX_LEARNSETS[0].level_up_moves[:-1]]
         subject.level_up_moves[0].level_id = 1234
         subject.level_up_moves[0].move_id = 5678
         cloned[0].level_id = 1234
@@ -242,9 +227,7 @@ class WazaPTestCase(
         waza = self._load_main_fixture(self._fix_path())
         waza2 = self._load_main_fixture(self._fix_path())
         subject_not_same = waza.learnsets[0].level_up_moves[0]
-        for subject1, subject2 in zip(
-            waza.learnsets[0].level_up_moves[1:], waza2.learnsets[0].level_up_moves[1:]
-        ):
+        for subject1, subject2 in zip(waza.learnsets[0].level_up_moves[1:], waza2.learnsets[0].level_up_moves[1:]):
             self.assertEqual(subject1, subject2)
             self.assertEqual(subject2, subject1)
             self.assertNotEqual(subject1, subject_not_same)
@@ -256,13 +239,8 @@ class WazaPTestCase(
         self.assertTrue(eq_level_up_move_list(FIX_LEARNSETS[0].level_up_moves, subject))
 
         subject.pop()
-        self.assertTrue(
-            eq_level_up_move_list(FIX_LEARNSETS[0].level_up_moves[:-1], subject)
-        )
-        cloned = [
-            LevelUpMoveStub.stub_new(x.level_id, x.move_id)
-            for x in FIX_LEARNSETS[0].level_up_moves[:-1]
-        ]
+        self.assertTrue(eq_level_up_move_list(FIX_LEARNSETS[0].level_up_moves[:-1], subject))
+        cloned = [LevelUpMoveStub.stub_new(x.level_id, x.move_id) for x in FIX_LEARNSETS[0].level_up_moves[:-1]]
         subject[0].level_id = 1234
         subject[0].move_id = 5678
         cloned[0].level_id = 1234
@@ -272,9 +250,7 @@ class WazaPTestCase(
     def test_wazap__init__(self):
         with open(self._fix_path(), "rb") as f:
             sir0 = Sir0Handler.load_python_model().from_bin(f.read())
-        actual: WazaPProtocol = self.handler.get_model_cls()(
-            sir0.content, sir0.data_pointer
-        )
+        actual: WazaPProtocol = self.handler.get_model_cls()(sir0.content, sir0.data_pointer)
 
         self.assertTrue(eq_move_list(FIX_MOVES, actual.moves))
         self.assertTrue(eq_learnset_list(FIX_LEARNSETS, actual.learnsets))
@@ -353,41 +329,27 @@ class WazaPTestCase(
     def test_cross_native_implementation(self):
         """Tests the native implementation against the Python implementation."""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
             return
         with open(self._fix_path(), "rb") as f:
             sir0 = Sir0Handler.deserialize(f.read())
-        loaded_py = self.handler.load_python_model().sir0_unwrap(
-            sir0.content, sir0.data_pointer
-        )
-        loaded_rs = self.handler.load_native_model().sir0_unwrap(
-            sir0.content, sir0.data_pointer
-        )
+        loaded_py = self.handler.load_python_model().sir0_unwrap(sir0.content, sir0.data_pointer)
+        loaded_rs = self.handler.load_native_model().sir0_unwrap(sir0.content, sir0.data_pointer)
 
         loaded_py_sir0 = Sir0Handler.wrap_obj(loaded_py)
         loaded_rs_sir0 = Sir0Handler.wrap_obj(loaded_rs)
-        loaded_py_reloaded_with_rs: WazaPProtocol = (
-            self.handler.load_native_model().sir0_unwrap(  # type: ignore
-                loaded_py_sir0.content, loaded_py_sir0.data_pointer
-            )
+        loaded_py_reloaded_with_rs: WazaPProtocol = self.handler.load_native_model().sir0_unwrap(  # type: ignore
+            loaded_py_sir0.content, loaded_py_sir0.data_pointer
         )
-        loaded_rs_reloaded_with_py: WazaPProtocol = (
-            self.handler.load_python_model().sir0_unwrap(  # type: ignore
-                loaded_rs_sir0.content, loaded_rs_sir0.data_pointer
-            )
+        loaded_rs_reloaded_with_py: WazaPProtocol = self.handler.load_python_model().sir0_unwrap(  # type: ignore
+            loaded_rs_sir0.content, loaded_rs_sir0.data_pointer
         )
 
         self.assertTrue(eq_move_list(FIX_MOVES, loaded_py_reloaded_with_rs.moves))
-        self.assertTrue(
-            eq_learnset_list(FIX_LEARNSETS, loaded_py_reloaded_with_rs.learnsets)
-        )
+        self.assertTrue(eq_learnset_list(FIX_LEARNSETS, loaded_py_reloaded_with_rs.learnsets))
 
         self.assertTrue(eq_move_list(FIX_MOVES, loaded_rs_reloaded_with_py.moves))
-        self.assertTrue(
-            eq_learnset_list(FIX_LEARNSETS, loaded_rs_reloaded_with_py.learnsets)
-        )
+        self.assertTrue(eq_learnset_list(FIX_LEARNSETS, loaded_rs_reloaded_with_py.learnsets))
 
     @romtest(file_names=["waza_p.bin", "waza_p2.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):

@@ -30,9 +30,7 @@ from skytemple_files.common.util import read_dynamic, write_u16, write_u8
 
 class HardcodedRecruitmentTables:
     @classmethod
-    def get_monster_species_list(
-        cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> list[u16]:
+    def get_monster_species_list(cls, overlay11bin: bytes, config: Pmd2Data) -> list[u16]:
         """Returns the list of Pokémon species from the recruitment table."""
         return cast(
             list[u16],
@@ -44,9 +42,7 @@ class HardcodedRecruitmentTables:
         )
 
     @classmethod
-    def set_monster_species_list(
-        cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_monster_species_list(cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment species list.
         The length of the list must exactly match the original ROM's length (see get_monster_species_list).
@@ -59,9 +55,7 @@ class HardcodedRecruitmentTables:
         )
 
     @classmethod
-    def get_monster_levels_list(
-        cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> list[u16]:
+    def get_monster_levels_list(cls, overlay11bin: bytes, config: Pmd2Data) -> list[u16]:
         """Returns the list of Pokémon levels from the recruitment table."""
         return cast(
             list[u16],
@@ -73,9 +67,7 @@ class HardcodedRecruitmentTables:
         )
 
     @classmethod
-    def set_monster_levels_list(
-        cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_monster_levels_list(cls, value: list[u16], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment levels list.
         The length of the list must exactly match the original ROM's length (see get_monster_levels_list).
@@ -88,9 +80,7 @@ class HardcodedRecruitmentTables:
         )
 
     @classmethod
-    def get_monster_locations_list(
-        cls, overlay11bin: bytes, config: Pmd2Data
-    ) -> list[u8]:
+    def get_monster_locations_list(cls, overlay11bin: bytes, config: Pmd2Data) -> list[u8]:
         """Returns the list of Pokémon locations from the recruitment table."""
         return cast(
             list[u8],
@@ -102,9 +92,7 @@ class HardcodedRecruitmentTables:
         )
 
     @classmethod
-    def set_monster_locations_list(
-        cls, value: list[u8], overlay11bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_monster_locations_list(cls, value: list[u8], overlay11bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the recruitment locations list.
         The length of the list must exactly match the original ROM's length (see get_monster_locations_list).
@@ -120,9 +108,7 @@ class HardcodedRecruitmentTables:
     def _get_generic(ov11: bytes, block: Symbol, bytelen: int) -> list[int]:
         lst = []
         for i in range(block.address, block.address + block.length, bytelen):
-            lst.append(
-                read_dynamic(ov11, i, length=bytelen, big_endian=False, signed=False)
-            )
+            lst.append(read_dynamic(ov11, i, length=bytelen, big_endian=False, signed=False))
         return lst
 
     @staticmethod
@@ -134,9 +120,7 @@ class HardcodedRecruitmentTables:
     ) -> None:
         expected_length = int(block.length / bytelen)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
             if bytelen == 1:
                 write_u8(ov11, u8(entry), block.address + i * bytelen)

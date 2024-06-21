@@ -54,9 +54,7 @@ class SsaWriter:
             trigger_bytes += self.uint16(trigger.unk2)
             trigger_bytes += self.uint16(trigger.unk3)
             if trigger.script_id < 0:
-                raise ValueError(
-                    _("Can not save a scene event without a defined triggered script.")
-                )
+                raise ValueError(_("Can not save a scene event without a defined triggered script."))
             trigger_bytes += self.uint16(trigger.script_id)
 
         # Collect all the data that is referenced by layers
@@ -118,9 +116,7 @@ class SsaWriter:
                 event_bytes += self.uint16(evt.pos.y_relative)
                 event_bytes += self.uint16(evt.pos.x_offset)
                 event_bytes += self.uint16(evt.pos.y_offset)
-                event_bytes += self.uint16(
-                    trigger_start + evt.trigger_id * int(TRIGGER_LEN / 2)
-                )
+                event_bytes += self.uint16(trigger_start + evt.trigger_id * int(TRIGGER_LEN / 2))
                 event_bytes += self.uint16(evt.unkE)
 
             # unk10

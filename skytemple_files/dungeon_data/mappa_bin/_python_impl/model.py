@@ -74,9 +74,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
     def add_floor_to_floor_list(self, floor_list_index: int, floor: MappaFloor):
         self.floor_lists[floor_list_index].append(floor)
 
-    def insert_floor_in_floor_list(
-        self, floor_list_index: int, insert_index: int, floor: MappaFloor
-    ):
+    def insert_floor_in_floor_list(self, floor_list_index: int, insert_index: int, floor: MappaFloor):
         self.floor_lists[floor_list_index].insert(insert_index, floor)
 
     def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):
@@ -111,9 +109,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(u32_checked(start_floor_list_lut + i * 4))
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
-            cursor_floor_data = u32_checked(
-                cursor_floor_data + (len(floor_list) + 1) * 18
-            )
+            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 18)
         data += floor_list_lut
         # Padding
         if len(data) % 4 != 0:
@@ -129,23 +125,17 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
             data += bytes(0xAA for _ in range(0, 4 - (len(data) % 4)))
         # Monster spawn data
         monster_data_start = len(data)
-        monster_data = bytearray(
-            sum((len(monsters) + 1) * 8 for monsters in monster_lists)
-        )
+        monster_data = bytearray(sum((len(monsters) + 1) * 8 for monsters in monster_lists))
         monster_data_cursor = 0
         monster_data_pointer = []
         for i, monster_list in enumerate(monster_lists):
-            monster_data_pointer.append(
-                u32_checked(monster_data_start + monster_data_cursor)
-            )
+            monster_data_pointer.append(u32_checked(monster_data_start + monster_data_cursor))
 
             single_monster_list_data = bytes(
                 chain.from_iterable(monster.to_mappa() for monster in monster_list)
             ) + bytes(8)
             len_single = len(single_monster_list_data)
-            monster_data[monster_data_cursor : monster_data_cursor + len_single] = (
-                single_monster_list_data
-            )
+            monster_data[monster_data_cursor : monster_data_cursor + len_single] = single_monster_list_data
             monster_data_cursor += len_single
         data += monster_data
         # Padding
@@ -172,9 +162,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
 
             len_single = len(single_trap_list_data)
             assert len_single == 50
-            trap_data[trap_data_cursor : trap_data_cursor + len_single] = (
-                single_trap_list_data
-            )
+            trap_data[trap_data_cursor : trap_data_cursor + len_single] = single_trap_list_data
             trap_data_cursor += len_single
         assert trap_data_cursor == len(trap_lists) * 50
         data += trap_data
@@ -200,9 +188,7 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
             single_item_list_data = item_list.to_mappa()
             len_single = len(single_item_list_data)
             assert item_data_cursor + len_single < len(item_data)
-            item_data[item_data_cursor : item_data_cursor + len_single] = (
-                single_item_list_data
-            )
+            item_data[item_data_cursor : item_data_cursor + len_single] = single_item_list_data
             item_data_cursor += len_single
         data += item_data[:item_data_cursor]
         # Padding
@@ -302,39 +288,23 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
             stub_floor_list = []
             for floor in floor_list:
                 # Layout
-                layout_idx = self._find_if_not_exists_insert(
-                    floor_layouts, floor.layout
-                )
+                layout_idx = self._find_if_not_exists_insert(floor_layouts, floor.layout)
                 # Monsters
-                monsters_idx = self._find_if_not_exists_insert(
-                    monster_lists, floor.monsters
-                )
+                monsters_idx = self._find_if_not_exists_insert(monster_lists, floor.monsters)
                 # Traps
                 traps_idx = self._find_if_not_exists_insert(trap_lists, floor.traps)
                 # Floor items
-                floor_items_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.floor_items
-                )
+                floor_items_idx = self._find_if_not_exists_insert(item_lists, floor.floor_items)
                 # Shop items
-                shop_items_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.shop_items
-                )
+                shop_items_idx = self._find_if_not_exists_insert(item_lists, floor.shop_items)
                 # Monster house items
-                monster_house_items_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.monster_house_items
-                )
+                monster_house_items_idx = self._find_if_not_exists_insert(item_lists, floor.monster_house_items)
                 # Buried items
-                buried_items_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.buried_items
-                )
+                buried_items_idx = self._find_if_not_exists_insert(item_lists, floor.buried_items)
                 # Unk items 1
-                unk_items1_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.unk_items1
-                )
+                unk_items1_idx = self._find_if_not_exists_insert(item_lists, floor.unk_items1)
                 # Unk items 2
-                unk_items2_idx = self._find_if_not_exists_insert(
-                    item_lists, floor.unk_items2
-                )
+                unk_items2_idx = self._find_if_not_exists_insert(item_lists, floor.unk_items2)
 
                 stub_floor_list.append(
                     StubMappaFloor(

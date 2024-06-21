@@ -52,9 +52,7 @@ from skytemple_files.graphics.fonts.font_sir0 import (
 
 
 class FontSir0Entry(AbstractFontEntry):
-    def __init__(
-        self, char: u8, table: u8, width: u32, cat: u8, padding: u8, data: bytes
-    ):
+    def __init__(self, char: u8, table: u8, width: u32, cat: u8, padding: u8, data: bytes):
         self.char = char
         self.table = table
         self.width = width
@@ -64,9 +62,7 @@ class FontSir0Entry(AbstractFontEntry):
 
     def to_pil(self) -> Image.Image:
         data = b"".join([bytes([v % 16, v // 16]) for v in self.data])
-        image = Image.frombytes(
-            mode="P", size=(FONT_SIR0_SIZE, FONT_SIR0_SIZE), data=data
-        )
+        image = Image.frombytes(mode="P", size=(FONT_SIR0_SIZE, FONT_SIR0_SIZE), data=data)
         return image
 
     def to_xml(self) -> Element:
@@ -103,9 +99,7 @@ class FontSir0Entry(AbstractFontEntry):
             self.padding = u8(properties["padding"])
 
     @classmethod
-    def from_pil(
-        cls, img: Image.Image, char: u8, table: u8, width: u32, cat: u8, padding: u8
-    ) -> FontSir0Entry:
+    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: u32, cat: u8, padding: u8) -> FontSir0Entry:
         if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         data = []
@@ -200,9 +194,7 @@ class FontSir0(Sir0Serializable, AbstractFont):
     def to_pil(self) -> dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(
-                mode="P", size=(FONT_SIR0_SIZE * 16, FONT_SIR0_SIZE * 16), color=0
-            )
+            tables[t] = Image.new(mode="P", size=(FONT_SIR0_SIZE * 16, FONT_SIR0_SIZE * 16), color=0)
             tables[t].putpalette([min(255, 256 - (i // 3) * 16) for i in range(16 * 3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
@@ -244,16 +236,12 @@ class FontSir0(Sir0Serializable, AbstractFont):
                     charid = int(char.get(XML_CHAR__ID))
                     width = int(char.get(XML_CHAR__WIDTH))
                     cat = int(char.get(XML_CHAR__CAT, default=FONT_DEFAULT_CAT))
-                    padding = int(
-                        char.get(XML_CHAR__PADDING, default=FONT_DEFAULT_PADDING)
-                    )
+                    padding = int(char.get(XML_CHAR__PADDING, default=FONT_DEFAULT_PADDING))
                     x = (charid % 16) * FONT_SIR0_SIZE
                     y = (charid // 16) * FONT_SIR0_SIZE
                     self.entries.append(
                         FontSir0Entry.from_pil(
-                            tables[t].crop(
-                                box=[x, y, x + FONT_SIR0_SIZE, y + FONT_SIR0_SIZE]
-                            ),
+                            tables[t].crop(box=[x, y, x + FONT_SIR0_SIZE, y + FONT_SIR0_SIZE]),
                             charid,
                             t,
                             width,

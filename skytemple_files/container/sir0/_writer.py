@@ -103,7 +103,5 @@ class Sir0Writer:
 
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-    def _encode_pointer_offsets(
-        self, buffer: bytearray, pointer_offsets: Sequence[int]
-    ) -> u32:
+    def _encode_pointer_offsets(self, buffer: bytearray, pointer_offsets: Sequence[int]) -> u32:
         return encode_sir0_pointer_offsets(buffer, pointer_offsets)

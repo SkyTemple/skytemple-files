@@ -55,9 +55,7 @@ class AioRequestAdapterMock(AioRequestAdapter):
                     for file in files:
                         zipf.write(
                             os.path.join(root, file),
-                            os.path.relpath(
-                                os.path.join(root, file), os.path.join(dpath)
-                            ),
+                            os.path.relpath(os.path.join(root, file), os.path.join(dpath)),
                         )
             return data.getvalue()
 

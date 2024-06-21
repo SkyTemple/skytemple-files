@@ -28,28 +28,20 @@ class DbinSir0At4pxHandler(DataHandler[CompressionContainerProtocol]):
     """A proxy data handler for At wrapped in Sir0."""
 
     @classmethod
-    def deserialize(
-        cls, data: bytes, **kwargs: OptionalKwargs
-    ) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         from skytemple_files.common.types.file_types import FileType
 
         sir0 = FileType.SIR0.deserialize(data)
         # We don't support more than the two default pointers, since we will also on serialize with those!
-        assert (
-            len(sir0.content_pointer_offsets) == 0
-        ), "The Sir0 contains an unexpected amount of pointers."
+        assert len(sir0.content_pointer_offsets) == 0, "The Sir0 contains an unexpected amount of pointers."
         # We don't support a data pointer, because we will also serialize without.
-        assert (
-            sir0.data_pointer == 0
-        ), "The Sir0 contains a data pointer. That is not supported."
+        assert sir0.data_pointer == 0, "The Sir0 contains a data pointer. That is not supported."
         # XXX: The developers messed up and somehow managed to include parts of
         # the sir0 "footer" in the compressed size.
         return FileType.COMMON_AT.deserialize(sir0.content)
 
     @classmethod
-    def serialize(
-        cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs
-    ) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         sir0 = FileType.SIR0.wrap(FileType.COMMON_AT.serialize(data), [], None)

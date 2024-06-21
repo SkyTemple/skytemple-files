@@ -91,37 +91,27 @@ class RomDataLoader:
                 )
             config_load_into.script_data.game_variables = variables_converted
 
-    def load_actor_list_into(
-        self, config_load_into: Pmd2Data, ignore_not_supported=False
-    ):
+    def load_actor_list_into(self, config_load_into: Pmd2Data, ignore_not_supported=False):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_ACTOR_LIST in self.rom.filenames:
             list_bin = self.rom.getFileByName(FILENAME_ACTOR_LIST)
-            actor_list = FileType.SIR0.unwrap_obj(
-                FileType.SIR0.deserialize(list_bin), FileType.ACTOR_LIST_BIN.type()
-            )
+            actor_list = FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(list_bin), FileType.ACTOR_LIST_BIN.type())
             config_load_into.script_data.level_entities = actor_list.list
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an actor list.")
 
-    def load_level_list_into(
-        self, config_load_into: Pmd2Data, ignore_not_supported=False
-    ):
+    def load_level_list_into(self, config_load_into: Pmd2Data, ignore_not_supported=False):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_LEVEL_LIST in self.rom.filenames:
             list_bin = self.rom.getFileByName(FILENAME_LEVEL_LIST)
-            level_list = FileType.SIR0.unwrap_obj(
-                FileType.SIR0.deserialize(list_bin), FileType.LEVEL_LIST_BIN.type()
-            )
+            level_list = FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(list_bin), FileType.LEVEL_LIST_BIN.type())
             config_load_into.script_data.level_list = level_list.list
         elif not ignore_not_supported:
             raise LoadNotSupportedError("The ROM does not contain an level list.")
 
-    def load_object_list_into(
-        self, config_load_into: Pmd2Data, ignore_not_supported=False
-    ):
+    def load_object_list_into(self, config_load_into: Pmd2Data, ignore_not_supported=False):
         from skytemple_files.common.types.file_types import FileType
 
         if FILENAME_OBJECT_LIST in self.rom.filenames:
@@ -142,9 +132,7 @@ class RomDataLoader:
         }
 
         for idx, entry in enumerate(item_p.item_list):
-            cats[config_load_into.dungeon_data.item_categories[entry.category]].append(
-                idx
-            )
+            cats[config_load_into.dungeon_data.item_categories[entry.category]].append(idx)
 
         for category in config_load_into.dungeon_data.item_categories.values():
             category.items = cats[category]

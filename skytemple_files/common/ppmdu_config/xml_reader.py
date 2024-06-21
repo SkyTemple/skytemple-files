@@ -85,9 +85,7 @@ def id_matches_edition(e_game, edition):
 
 
 class Pmd2XmlReader:
-    def __init__(
-        self, file_names: list[str], game_edition: str, translate_strings=True
-    ):
+    def __init__(self, file_names: list[str], game_edition: str, translate_strings=True):
         """
         Create a parser.
         :param file_names: XML files. these will be merged.
@@ -103,11 +101,7 @@ class Pmd2XmlReader:
                 if elem.tag == "External":
                     filepath = os.path.join(os.path.dirname(f), elem.attrib["filepath"])
                     this_file_root = (
-                        XmlCombiner(
-                            [this_file_root, ElementTree.parse(filepath).getroot()]
-                        )
-                        .combine()
-                        .getroot()
+                        XmlCombiner([this_file_root, ElementTree.parse(filepath).getroot()]).combine().getroot()
                     )
             roots.append(this_file_root)
         self._root = XmlCombiner(roots).combine().getroot()
@@ -162,28 +156,15 @@ class Pmd2XmlReader:
             elif e.tag == "GameConstants":
                 for e_game in e:
                     if (
-                        (
-                            "version" in e_game.attrib
-                            and e_game.attrib["version"] == self._game_version
-                        )
-                        or (
-                            "version2" in e_game.attrib
-                            and e_game.attrib["version2"] == self._game_version
-                        )
-                        or (
-                            "version3" in e_game.attrib
-                            and e_game.attrib["version3"] == self._game_version
-                        )
+                        ("version" in e_game.attrib and e_game.attrib["version"] == self._game_version)
+                        or ("version2" in e_game.attrib and e_game.attrib["version2"] == self._game_version)
+                        or ("version3" in e_game.attrib and e_game.attrib["version3"] == self._game_version)
                     ):
                         for e_value in e_game:
-                            game_constants[e_value.attrib["id"]] = self.xml_int(
-                                e_value.attrib["value"]
-                            )
+                            game_constants[e_value.attrib["id"]] = self.xml_int(e_value.attrib["value"])
             ###########################
             elif e.tag == "ASMPatchesConstants":
-                asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(
-                    self._game_edition
-                ).read(e)
+                asm_patches_constants = Pmd2AsmPatchesConstantsXmlReader(self._game_edition).read(e)
             ###########################
             elif e.tag == "StringIndexData":
                 for e_game in e:
@@ -222,9 +203,7 @@ class Pmd2XmlReader:
                                             self.xml_int(e_string_block.attrib["end"]),
                                         )
                                     )
-                        string_index_data = Pmd2StringIndexData(
-                            languages, string_blocks
-                        )
+                        string_index_data = Pmd2StringIndexData(languages, string_blocks)
             ###########################
             elif e.tag == "ScriptData":
                 script_data = self._parse_script_data(e)
@@ -257,9 +236,7 @@ class Pmd2XmlReader:
                 game_edition_for_this_rom = game_edition
                 break
         if game_edition_for_this_rom is None:
-            raise ValueError(
-                f"Game edition {self._game_edition} is not defined in the XML."
-            )
+            raise ValueError(f"Game edition {self._game_edition} is not defined in the XML.")
         return Pmd2Data(
             game_edition_for_this_rom,
             game_editions,
@@ -291,10 +268,7 @@ class Pmd2XmlReader:
             if id_matches_edition(e_game, self._game_edition):
                 for e in e_game:
                     ###########################
-                    if (
-                        e.tag == "GameVariablesTable"
-                        or e.tag == "GameVariablesTableExtended"
-                    ):
+                    if e.tag == "GameVariablesTable" or e.tag == "GameVariablesTableExtended":
                         for i, e_var in enumerate(e):
                             game_variables_table.append(
                                 Pmd2ScriptGameVar(
@@ -328,9 +302,7 @@ class Pmd2XmlReader:
                     ###########################
                     elif e.tag == "FacePositionModes":
                         for i, e_mode in enumerate(e):
-                            face_position_modes.append(
-                                Pmd2ScriptFacePositionMode(i, e_mode.text)
-                            )
+                            face_position_modes.append(Pmd2ScriptFacePositionMode(i, e_mode.text))
                     ###########################
                     elif e.tag == "Directions":
                         for idx, e_dir in enumerate(e):
@@ -380,11 +352,7 @@ class Pmd2XmlReader:
                                 Pmd2ScriptBgm(
                                     i,
                                     e_bgm.text,
-                                    (
-                                        self._xml_bool(e_bgm.attrib["loops"])
-                                        if "loops" in e_bgm.attrib
-                                        else False
-                                    ),
+                                    (self._xml_bool(e_bgm.attrib["loops"]) if "loops" in e_bgm.attrib else False),
                                 )
                             )
                     ###########################
@@ -395,11 +363,7 @@ class Pmd2XmlReader:
                                     self.xml_int(e_level.attrib["_id"]),
                                     self.xml_int(e_level.attrib["mapid"]),
                                     e_level.attrib["name"],
-                                    (
-                                        self.xml_int(e_level.attrib["mapty"])
-                                        if "mapty" in e_level.attrib
-                                        else None
-                                    ),
+                                    (self.xml_int(e_level.attrib["mapty"]) if "mapty" in e_level.attrib else None),
                                     self.xml_int(e_level.attrib["unk2"]),
                                     self.xml_int(e_level.attrib["unk4"]),
                                 )
@@ -443,11 +407,9 @@ class Pmd2XmlReader:
                                                 e_arg_group_arg.attrib["name"],
                                             )
                                         )
-                                    repeating_argument_group = (
-                                        Pmd2ScriptOpCodeRepeatingArgumentGroup(
-                                            self.xml_int(e_argument.attrib["id"]),
-                                            arg_group_args,
-                                        )
+                                    repeating_argument_group = Pmd2ScriptOpCodeRepeatingArgumentGroup(
+                                        self.xml_int(e_argument.attrib["id"]),
+                                        arg_group_args,
                                     )
                             arguments = sorted(arguments, key=lambda a: a.id)
                             op_codes.append(
@@ -464,12 +426,10 @@ class Pmd2XmlReader:
                             )
                     elif e.tag == "GroundStateStructs":
                         for e_code in e:
-                            ground_state_structs[e_code.tag] = (
-                                Pmd2ScriptGroundStateStruct(
-                                    self.xml_int(e_code.attrib["offset"]),
-                                    self.xml_int(e_code.attrib["entrylength"]),
-                                    self.xml_int(e_code.attrib["maxentries"]),
-                                )
+                            ground_state_structs[e_code.tag] = Pmd2ScriptGroundStateStruct(
+                                self.xml_int(e_code.attrib["offset"]),
+                                self.xml_int(e_code.attrib["entrylength"]),
+                                self.xml_int(e_code.attrib["maxentries"]),
                             )
         return Pmd2ScriptData(
             game_variables_table,
@@ -503,11 +463,7 @@ class Pmd2XmlReader:
                             files.append(
                                 Pmd2BinPackFile(
                                     self.xml_int(e_var.attrib["idxfirst"]),
-                                    (
-                                        self.xml_int(e_var.attrib["idxlast"])
-                                        if "idxlast" in e_var.attrib
-                                        else None
-                                    ),
+                                    (self.xml_int(e_var.attrib["idxlast"]) if "idxlast" in e_var.attrib else None),
                                     e_var.attrib["type"],
                                     e_var.attrib["name"],
                                 )
@@ -529,13 +485,9 @@ class Pmd2XmlReader:
                                     citems = []
                                     for e_item in e_item_cat:
                                         if e_item.tag != "Item":
-                                            raise ValueError(
-                                                "Excpeted Item as subtag for ItemCategory."
-                                            )
+                                            raise ValueError("Excpeted Item as subtag for ItemCategory.")
                                         citems.append(self.xml_int(e_item.text))
-                                    item_categories[
-                                        self.xml_int(e_item_cat.attrib["id"])
-                                    ] = Pmd2DungeonItemCategory(
+                                    item_categories[self.xml_int(e_item_cat.attrib["id"])] = Pmd2DungeonItemCategory(
                                         self.xml_int(e_item_cat.attrib["id"]),
                                         e_item_cat.attrib["name"],
                                         citems,
@@ -590,9 +542,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
             elif sub_e.tag == "PatchesDir":
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
-                        patch_dir = Pmd2PatchDir(
-                            e_game.attrib["filepath"], e_game.attrib["stubpath"]
-                        )
+                        patch_dir = Pmd2PatchDir(e_game.attrib["filepath"], e_game.attrib["stubpath"])
             elif sub_e.tag == "Patches":
                 for e_game in sub_e:
                     if id_matches_edition(e_game, self._game_edition):
@@ -600,19 +550,13 @@ class Pmd2AsmPatchesConstantsXmlReader:
                             if e_node.tag == "Patch":
                                 patch = self._parse_patch(e_node)
                                 patch.parameters = {
-                                    param.name: param
-                                    for param in self._read_parameter_node(
-                                        e_node, self._game_edition
-                                    )
+                                    param.name: param for param in self._read_parameter_node(e_node, self._game_edition)
                                 }
                                 patches.append(patch)
                             if e_node.tag == "SimplePatch":
                                 spatch = self._parse_simple_patch(e_node)
                                 spatch.parameters = {
-                                    param.name: param
-                                    for param in self._read_parameter_node(
-                                        e_node, self._game_edition
-                                    )
+                                    param.name: param for param in self._read_parameter_node(e_node, self._game_edition)
                                 }
                                 patches.append(spatch)
         return Pmd2AsmPatchesConstants(
@@ -630,12 +574,8 @@ class Pmd2AsmPatchesConstantsXmlReader:
             if e_sub.tag == "OpenBin":
                 open_bin_includes = []
                 for e_include in e_sub:
-                    open_bin_includes.append(
-                        Pmd2PatchInclude(e_include.attrib["filename"])
-                    )
-                open_bins.append(
-                    Pmd2PatchOpenBin(e_sub.attrib["filepath"], open_bin_includes)
-                )
+                    open_bin_includes.append(Pmd2PatchInclude(e_include.attrib["filename"]))
+                open_bins.append(Pmd2PatchOpenBin(e_sub.attrib["filepath"], open_bin_includes))
         return Pmd2Patch(e_patch.attrib["id"], includes, open_bins, [])
 
     def _parse_simple_patch(self, e_patch) -> Pmd2SimplePatch:
@@ -647,11 +587,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
             if e_sub.tag == "Replace":
                 games = []
                 for e_game in e_sub:
-                    games.append(
-                        Pmd2PatchStringReplacementGame(
-                            e_game.attrib["id"], e_game.attrib["replace"]
-                        )
-                    )
+                    games.append(Pmd2PatchStringReplacementGame(e_game.attrib["id"], e_game.attrib["replace"]))
                 string_replacements.append(
                     Pmd2PatchStringReplacement(
                         e_sub.attrib["filename"],
@@ -689,11 +625,7 @@ class Pmd2AsmPatchesConstantsXmlReader:
                             if value_type == Pmd2PatchParameterType.INTEGER
                             else e_option.text
                         ),
-                        label=(
-                            e_option.attrib["label"]
-                            if "label" in e_option.attrib
-                            else e_option.attrib["value"]
-                        ),
+                        label=(e_option.attrib["label"] if "label" in e_option.attrib else e_option.attrib["value"]),
                     )
                 )
         param_type = Pmd2PatchParameterType(e_param.attrib["type"])
@@ -707,21 +639,9 @@ class Pmd2AsmPatchesConstantsXmlReader:
         return Pmd2PatchParameter(
             name=e_param.attrib["name"],
             type=param_type,
-            label=(
-                e_param.attrib["label"]
-                if "label" in e_param.attrib
-                else e_param.attrib["name"]
-            ),
-            min=(
-                Pmd2XmlReader.xml_int(e_param.attrib["min"])
-                if "min" in e_param.attrib
-                else None
-            ),
-            max=(
-                Pmd2XmlReader.xml_int(e_param.attrib["max"])
-                if "max" in e_param.attrib
-                else None
-            ),
+            label=(e_param.attrib["label"] if "label" in e_param.attrib else e_param.attrib["name"]),
+            min=(Pmd2XmlReader.xml_int(e_param.attrib["min"]) if "min" in e_param.attrib else None),
+            max=(Pmd2XmlReader.xml_int(e_param.attrib["max"]) if "max" in e_param.attrib else None),
             options=options,
             default=default,
         )

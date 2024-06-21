@@ -72,9 +72,7 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            """Adds an extra menu in box appraisal to appraise all boxes at once. """
-        )
+        return _("""Adds an extra menu in box appraisal to appraise all boxes at once. """)
 
     @property
     def author(self) -> str:
@@ -116,9 +114,7 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 overlay_size = OVERLAY25_INITAL_SIZE_US
@@ -133,20 +129,18 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
             for lang in config.string_index_data.languages:
                 filename = "MESSAGE/" + lang.filename
                 bin_before = rom.getFileByName(filename)
-                strings = StrHandler.deserialize(
-                    bin_before, string_encoding=config.string_encoding
+                strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+                strings.strings[int(param["MenuOptionStringID"]) - 1] = get_locales().translate(
+                    MENU_OPTION, lang.locale.replace("-", "_")
                 )
-                strings.strings[int(param["MenuOptionStringID"]) - 1] = (
-                    get_locales().translate(MENU_OPTION, lang.locale.replace("-", "_"))
+                strings.strings[int(param["AppraiseAllConfirmStringID"]) - 1] = get_locales().translate(
+                    APPRAISE_ALL_CONFIRM, lang.locale.replace("-", "_")
                 )
-                strings.strings[int(param["AppraiseAllConfirmStringID"]) - 1] = (
-                    get_locales().translate(APPRAISE_ALL_CONFIRM, lang.locale.replace("-", "_"))
+                strings.strings[int(param["AppraiseRevealBeforeStringID"]) - 1] = get_locales().translate(
+                    APPRAISE_REVEAL_BEFORE, lang.locale.replace("-", "_")
                 )
-                strings.strings[int(param["AppraiseRevealBeforeStringID"]) - 1] = (
-                    get_locales().translate(APPRAISE_REVEAL_BEFORE, lang.locale.replace("-", "_"))
-                )
-                strings.strings[int(param["AppraiseRevealItemStringID"]) - 1] = (
-                    get_locales().translate(APPRAISE_REVEAL_ITEM, lang.locale.replace("-", "_"))
+                strings.strings[int(param["AppraiseRevealItemStringID"]) - 1] = get_locales().translate(
+                    APPRAISE_REVEAL_ITEM, lang.locale.replace("-", "_")
                 )
                 bin_after = StrHandler.serialize(strings)
                 rom.setFileByName(filename, bin_after)
@@ -162,7 +156,5 @@ class AppraiseAllPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

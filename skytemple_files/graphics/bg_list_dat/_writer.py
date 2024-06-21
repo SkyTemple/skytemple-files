@@ -62,10 +62,7 @@ class BgListWriter:
             )
         length = len(string)
         if length > MAX_LEN:
-            raise ValueError(
-                f"The string '{string}' is too long for bg_list.dat. Max size "
-                f"is {MAX_LEN}"
-            )
+            raise ValueError(f"The string '{string}' is too long for bg_list.dat. Max size " f"is {MAX_LEN}")
         out = bytearray(MAX_LEN)
         out[0:length] = bytearray(string, "ascii")
         return out

@@ -44,43 +44,27 @@ class EntitySpawnEntry(AutoString):
         tile_spawn_pointer: u32,
     ):
         self._overlay29bin = overlay29bin
-        self.item_id = (
-            item_spawn_pointer
-            - self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address
-        ) // 8
+        self.item_id = (item_spawn_pointer - self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address) // 8
         self.monster_id = (
-            monster_spawn_pointer
-            - self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address
+            monster_spawn_pointer - self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address
         ) // 4
-        self.tile_id = (
-            tile_spawn_pointer
-            - self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address
-        ) // 4
+        self.tile_id = (tile_spawn_pointer - self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address) // 4
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(12)
         write_u32(
             buffer,
-            u32_checked(
-                self.item_id * 8
-                + self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address
-            ),
+            u32_checked(self.item_id * 8 + self._overlay29bin.data.FIXED_ROOM_ITEM_SPAWN_TABLE.absolute_address),
             0,
         )
         write_u32(
             buffer,
-            u32_checked(
-                self.monster_id * 4
-                + self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address
-            ),
+            u32_checked(self.monster_id * 4 + self._overlay29bin.data.FIXED_ROOM_MONSTER_SPAWN_TABLE.absolute_address),
             4,
         )
         write_u32(
             buffer,
-            u32_checked(
-                self.tile_id * 4
-                + self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address
-            ),
+            u32_checked(self.tile_id * 4 + self._overlay29bin.data.FIXED_ROOM_TILE_SPAWN_TABLE.absolute_address),
             8,
         )
         return buffer
@@ -88,11 +72,7 @@ class EntitySpawnEntry(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, EntitySpawnEntry):
             return False
-        return (
-            self.item_id == other.item_id
-            and self.monster_id == other.monster_id
-            and self.tile_id == other.tile_id
-        )
+        return self.item_id == other.item_id and self.monster_id == other.monster_id and self.tile_id == other.tile_id
 
 
 class ItemSpawn(AutoString):
@@ -387,17 +367,14 @@ class FixedFloorProperties(AutoString):
             and self.orbs_enabled == other.orbs_enabled
             and self.unk8 == other.unk8
             and self.unk9 == other.unk9
-            and self.exit_floor_when_defeating_enemies
-            == other.exit_floor_when_defeating_enemies
+            and self.exit_floor_when_defeating_enemies == other.exit_floor_when_defeating_enemies
             and self.null == other.null
         )
 
 
 class HardcodedFixedFloorTables:
     @classmethod
-    def get_entity_spawn_table(
-        cls, overlay29: bytes, config: Pmd2Data
-    ) -> list[EntitySpawnEntry]:
+    def get_entity_spawn_table(cls, overlay29: bytes, config: Pmd2Data) -> list[EntitySpawnEntry]:
         """
         Returns the list of entity spawns. Each entry has three references, one to each of
         the other three tables (item spawn, monster spawn, tile type).
@@ -417,9 +394,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_entity_spawn_table(
-        cls, overlay29: bytearray, values: list[EntitySpawnEntry], config: Pmd2Data
-    ) -> None:
+    def set_entity_spawn_table(cls, overlay29: bytearray, values: list[EntitySpawnEntry], config: Pmd2Data) -> None:
         """
         Sets the list of entity spawns.
         The length of the list must exactly match the original ROM's length (see get_entity_spawn_table).
@@ -451,9 +426,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_item_spawn_list(
-        cls, overlay29: bytearray, values: list[ItemSpawn], config: Pmd2Data
-    ) -> None:
+    def set_item_spawn_list(cls, overlay29: bytearray, values: list[ItemSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of items that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_item_spawn_list).
@@ -467,9 +440,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_monster_spawn_list(
-        cls, overlay29: bytes, config: Pmd2Data
-    ) -> list[MonsterSpawn]:
+    def get_monster_spawn_list(cls, overlay29: bytes, config: Pmd2Data) -> list[MonsterSpawn]:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
@@ -486,9 +457,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_monster_spawn_list(
-        cls, overlay29: bytearray, values: list[MonsterSpawn], config: Pmd2Data
-    ) -> None:
+    def set_monster_spawn_list(cls, overlay29: bytearray, values: list[MonsterSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_monster_spawn_list).
@@ -520,9 +489,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_tile_spawn_list(
-        cls, overlay29: bytearray, values: list[TileSpawn], config: Pmd2Data
-    ) -> None:
+    def set_tile_spawn_list(cls, overlay29: bytearray, values: list[TileSpawn], config: Pmd2Data) -> None:
         """
         Returns the list of tiles that can be spawned in fixed floors.
         The length of the list must exactly match the original ROM's length (see get_tile_spawn_list).
@@ -536,9 +503,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_monster_spawn_stats_table(
-        cls, overlay10: bytes, config: Pmd2Data
-    ) -> list[MonsterSpawnStats]:
+    def get_monster_spawn_stats_table(cls, overlay10: bytes, config: Pmd2Data) -> list[MonsterSpawnStats]:
         """
         Returns the list of monsters that can be spawned in fixed floors.
         """
@@ -576,9 +541,7 @@ class HardcodedFixedFloorTables:
         )
 
     @classmethod
-    def get_fixed_floor_properties(
-        cls, overlay10: bytes, config: Pmd2Data
-    ) -> list[FixedFloorProperties]:
+    def get_fixed_floor_properties(cls, overlay10: bytes, config: Pmd2Data) -> list[FixedFloorProperties]:
         """
         Returns the list of properties for fixed floors.
         """
@@ -628,9 +591,7 @@ class HardcodedFixedFloorTables:
         return lst
 
     @classmethod
-    def set_fixed_floor_overrides(
-        cls, overlay29: bytearray, values: list[u8], config: Pmd2Data
-    ) -> None:
+    def set_fixed_floor_overrides(cls, overlay29: bytearray, values: list[u8], config: Pmd2Data) -> None:
         """
         Sets the list of overrides for fixed floors.
         The length of the list must exactly match the original ROM's length (see get_fixed_floor_overrides).
@@ -638,9 +599,7 @@ class HardcodedFixedFloorTables:
         block = config.bin_sections.overlay29.data.FIXED_ROOM_REVISIT_OVERRIDES
         expected_length = block.length
         if len(values) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for entry, i in zip(values, range(block.address, block.address + block.length)):
             overlay29[i] = entry
 
@@ -655,10 +614,6 @@ class HardcodedFixedFloorTables:
     ) -> None:  # type: ignore
         expected_length = int(block.length / entry_len)
         if len(values) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(values):
-            binary[
-                block.address + (i * entry_len) : block.address + ((i + 1) * entry_len)
-            ] = entry.to_bytes()
+            binary[block.address + (i * entry_len) : block.address + ((i + 1) * entry_len)] = entry.to_bytes()

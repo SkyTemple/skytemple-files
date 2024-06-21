@@ -38,18 +38,14 @@ class MappaTrapList(MappaTrapListProtocol, AutoString):
     def __init__(self, weights: list[u16] | dict[_MappaTrapType, u16]):
         if isinstance(weights, list):
             if len(weights) != 25:
-                raise ValueError(
-                    "MappaTrapList constructor needs a weight value for all of the 25 traps."
-                )
+                raise ValueError("MappaTrapList constructor needs a weight value for all of the 25 traps.")
             self.weights = {}
             for i, value in enumerate(weights):
                 self.weights[u8(i)] = value
         elif isinstance(weights, dict):
             self.weights = weights
             if set(self.weights.keys()) != set(range(0, 25)):
-                raise ValueError(
-                    "MappaTrapList constructor needs a weight value for all of the 25 traps."
-                )
+                raise ValueError("MappaTrapList constructor needs a weight value for all of the 25 traps.")
         else:
             raise ValueError(f"Invalid type for MappaTrapList {type(weights)}")
 

@@ -45,9 +45,7 @@ class DmaDrawer:
     def __init__(self, dma: DmaProtocol):
         self.dma = dma
 
-    def rules_from_bma(
-        self, bma: BmaProtocol | Iterable[int], width_in_chunks=None
-    ) -> list[list[_DmaType]]:
+    def rules_from_bma(self, bma: BmaProtocol | Iterable[int], width_in_chunks=None) -> list[list[_DmaType]]:
         rules = []
         active_row = None
         layer: Sequence[int] = bma  # type: ignore

@@ -55,11 +55,7 @@ class FontSir0Writer:
         for i, e in enumerate(sorted_entries):
             if last == (e.char, e.table):
                 raise ValueError(
-                    f(
-                        _(
-                            "Character {e.char} in table {e.table} is be defined multiple times in a font file!"
-                        )
-                    )
+                    f(_("Character {e.char} in table {e.table} is be defined multiple times in a font file!"))
                 )
             last = (e.char, e.table)
             pointer_offsets.append(u32(len(buffer) + i * FONT_SIR0_ENTRY_LEN))

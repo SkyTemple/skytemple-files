@@ -48,21 +48,15 @@ class HardcodedCartRemoved:
             raw_data.append((v % 32) * 8)
             raw_data.append(((v >> 5) % 32) * 8)
             raw_data.append(((v >> 10) % 32) * 8)
-        return Image.frombytes(
-            mode="RGB", size=(IMG_WIDTH, IMG_HEIGHT), data=bytes(raw_data)
-        )
+        return Image.frombytes(mode="RGB", size=(IMG_WIDTH, IMG_HEIGHT), data=bytes(raw_data))
 
     @staticmethod
-    def set_cart_removed_data(
-        img: Image.Image, arm9: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_cart_removed_data(img: Image.Image, arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the cartridge removed data
         """
         if img.width != IMG_WIDTH and img.height != IMG_HEIGHT:
-            raise AttributeError(
-                f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}."))
-            )
+            raise AttributeError(f(_("The image must have dimensions {IMG_WIDTH}x{IMG_HEIGHT}.")))
         block = config.bin_sections.arm9.data.CART_REMOVED_IMG_DATA
         img = img.convert("RGB")
         raw_data = img.tobytes()
@@ -71,9 +65,7 @@ class HardcodedCartRemoved:
             v = (r // 8) + ((g // 8) << 5) + ((b // 8) << 10)
             img_data.append(v % 256)
             img_data.append(v // 256)
-        data = CommonAtHandler.serialize(
-            CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX])
-        )
+        data = CommonAtHandler.serialize(CommonAtHandler.compress(bytes(img_data), [CommonAtType.AT3PX]))
         assert block.length is not None
         if len(data) > block.length:
             raise AttributeError(
@@ -83,6 +75,4 @@ class HardcodedCartRemoved:
                     )
                 )
             )
-        arm9[block.address : block.address + block.length] = data + bytes(
-            block.length - len(data)
-        )
+        arm9[block.address : block.address + block.length] = data + bytes(block.length - len(data))

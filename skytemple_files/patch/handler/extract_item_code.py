@@ -92,30 +92,22 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED_US
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED_EU
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED_JP
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -170,9 +162,7 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
                     main_func[start] = AsmFunction(func_data, start)
                     ext_data = main_func[start].process()[1]
                     if i >= len(unique_main_calls) - 3:
-                        new_baddr = (
-                            end_m_functions - len(func_data) - start_m_functions - 0x8
-                        ) // 0x4
+                        new_baddr = (end_m_functions - len(func_data) - start_m_functions - 0x8) // 0x4
                         if new_baddr < 0:
                             new_baddr += 2 * 0x800000
                         main_func[start].add_instructions(
@@ -222,7 +212,5 @@ class ExtractItemCodePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

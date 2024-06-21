@@ -78,18 +78,14 @@ class KaoWriter:
             else:
                 # Copy image data from beginning to that point - this will also copy the old TOC but we will write over that
                 current_toc_offset = (
-                    kao.first_toc
-                    + (start_index * SUBENTRIES * SUBENTRY_LEN)
-                    + start_subindex * SUBENTRY_LEN
+                    kao.first_toc + (start_index * SUBENTRIES * SUBENTRY_LEN) + start_subindex * SUBENTRY_LEN
                 )
                 pnt = read_i32(kao.original_data, current_toc_offset)
                 if pnt < 0:
                     current_image_offset = -pnt  # pylint: disable=invalid-unary-operand-type
                 else:
                     current_image_offset = pnt  # pylint: disable=invalid-unary-operand-type
-                self.new_data[0:current_image_offset] = kao.original_data[
-                    0:current_image_offset
-                ]
+                self.new_data[0:current_image_offset] = kao.original_data[0:current_image_offset]
                 if DEBUG:
                     print(
                         f"KaoWriter: First modified image: {start_index}, {start_subindex} "
@@ -101,7 +97,9 @@ class KaoWriter:
             current_toc_offset = kao.first_toc
             current_image_offset = current_toc_offset + size_toc
 
-        current_null_pointer = -current_image_offset  # Always start at that null pointer!  # pylint: disable=invalid-unary-operand-type
+        current_null_pointer = (
+            -current_image_offset
+        )  # Always start at that null pointer!  # pylint: disable=invalid-unary-operand-type
         # Otherwise, stuff will break since a 0 pointer is considered as valid in the model!
 
         # Rebuild KAO
@@ -113,9 +111,7 @@ class KaoWriter:
                     if kao_image is None:
                         self._update_toc_entry(
                             current_toc_offset,
-                            current_null_pointer.to_bytes(
-                                SUBENTRY_LEN, "little", signed=True
-                            ),
+                            current_null_pointer.to_bytes(SUBENTRY_LEN, "little", signed=True),
                         )
                         current_toc_offset += SUBENTRY_LEN
                         continue
@@ -135,9 +131,7 @@ class KaoWriter:
                         # Write NULL pointer
                         self._update_toc_entry(
                             current_toc_offset,
-                            current_null_pointer.to_bytes(
-                                SUBENTRY_LEN, "little", signed=True
-                            ),
+                            current_null_pointer.to_bytes(SUBENTRY_LEN, "little", signed=True),
                         )
                         current_toc_offset += SUBENTRY_LEN
                         continue
@@ -146,9 +140,7 @@ class KaoWriter:
                     image_data_end = (
                         image_data_start
                         + KAO_IMG_PAL_B_SIZE
-                        + FileType.COMMON_AT.cont_size(
-                            image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE
-                        )
+                        + FileType.COMMON_AT.cont_size(image_data_bs, image_data_start + KAO_IMG_PAL_B_SIZE)
                     )
                 # Update the TOC entry to point to the current image offset
                 self._update_toc_entry(
@@ -156,13 +148,9 @@ class KaoWriter:
                     current_image_offset.to_bytes(SUBENTRY_LEN, "little", signed=True),
                 )
                 # assert len(self.new_data) / 8 == current_size  # Size must not have changed
-                current_image_end = current_image_offset + (
-                    image_data_end - image_data_start
-                )
+                current_image_end = current_image_offset + (image_data_end - image_data_start)
                 # Write image data starting at current offset
-                self.new_data[current_image_offset:current_image_end] = image_data_bs[
-                    image_data_start:image_data_end
-                ]
+                self.new_data[current_image_offset:current_image_end] = image_data_bs[image_data_start:image_data_end]
                 # assert len(self.new_data) / 8 == current_size  # Size must not have changed
                 # Update NULL pointer
                 current_null_pointer = -current_image_end
@@ -176,9 +164,7 @@ class KaoWriter:
                 current_image_offset = current_image_end
                 current_toc_offset += SUBENTRY_LEN
 
-            start_subindex = (
-                0  # For all next passes always start with the first image of course!
-            )
+            start_subindex = 0  # For all next passes always start with the first image of course!
 
         # Cut off image buffer, but make sure it keeps being 16 byte aligned.
         remainder = current_image_offset % KAO_FILE_BYTE_ALIGNMENT

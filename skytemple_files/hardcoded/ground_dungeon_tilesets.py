@@ -81,9 +81,7 @@ class GroundTilesetMapping(AutoString):
 
 class HardcodedGroundDungeonTilesets:
     @staticmethod
-    def get_ground_dungeon_tilesets(
-        overlay11bin: bytes, config: Pmd2Data
-    ) -> list[GroundTilesetMapping]:
+    def get_ground_dungeon_tilesets(overlay11bin: bytes, config: Pmd2Data) -> list[GroundTilesetMapping]:
         """Returns the list."""
         block = config.bin_sections.overlay11.data.LEVEL_TILEMAP_LIST
         lst = []
@@ -110,13 +108,9 @@ class HardcodedGroundDungeonTilesets:
         assert block.length is not None
         expected_length = int(block.length / 8)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            overlay11bin[block.address + i * 8 : block.address + (i + 1) * 8] = (
-                entry.to_bytes()
-            )
+            overlay11bin[block.address + i * 8 : block.address + (i + 1) * 8] = entry.to_bytes()
 
 
 def resolve_mapping_for_level(
@@ -140,10 +134,7 @@ def resolve_mapping_for_level(
     )
 ):
     """Returns tileset data and fixed floor data (if applicable) for the given level"""
-    if (
-        level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM
-        and level.mapty_enum != Pmd2ScriptLevelMapType.TILESET
-    ):
+    if level.mapty_enum != Pmd2ScriptLevelMapType.FIXED_ROOM and level.mapty_enum != Pmd2ScriptLevelMapType.TILESET:
         return None
     dungeon_id, floor_id = None, None
     for mapping in tileset_mappings:

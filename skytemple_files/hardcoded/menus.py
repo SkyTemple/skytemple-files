@@ -721,9 +721,7 @@ class HardcodedMenus:
         return menu_list
 
     @staticmethod
-    def set_menu(
-        menu: MenuType, menu_data: list[MenuEntry], binary: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_menu(menu: MenuType, menu_data: list[MenuEntry], binary: bytearray, config: Pmd2Data) -> None:
         """
         Sets one menu
         """

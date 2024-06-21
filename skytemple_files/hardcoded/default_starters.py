@@ -161,9 +161,7 @@ class HardcodedDefaultStarters:
         write_u8(arm9, value, block.address)
 
     @staticmethod
-    def get_special_episode_pcs(
-        arm9: bytes, config: Pmd2Data
-    ) -> list[SpecialEpisodePc]:
+    def get_special_episode_pcs(arm9: bytes, config: Pmd2Data) -> list[SpecialEpisodePc]:
         """
         Gets the special episode player characters
         """
@@ -188,9 +186,7 @@ class HardcodedDefaultStarters:
         return lst
 
     @staticmethod
-    def set_special_episode_pcs(
-        value: list[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_special_episode_pcs(value: list[SpecialEpisodePc], arm9: bytearray, config: Pmd2Data) -> None:
         """
         Sets the special episode player characters
         """
@@ -198,11 +194,6 @@ class HardcodedDefaultStarters:
         assert block.length is not None
         expected_length = int(block.length / SE_PC_LNTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            arm9[
-                block.address + i * SE_PC_LNTRY_LEN : block.address
-                + (i + 1) * SE_PC_LNTRY_LEN
-            ] = entry.to_bytes()
+            arm9[block.address + i * SE_PC_LNTRY_LEN : block.address + (i + 1) * SE_PC_LNTRY_LEN] = entry.to_bytes()

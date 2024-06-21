@@ -53,9 +53,7 @@ class Dpla(DplaProtocol):
             toc_pointers.append(read_u32(data, i))
 
         if len(toc_pointers) > DPLA_MAX_COLORS:
-            logger.warning(
-                "DPLA contained more than 32 potential colors. All additional entries were discarded."
-            )
+            logger.warning("DPLA contained more than 32 potential colors. All additional entries were discarded.")
             toc_pointers = toc_pointers[:32]
 
         # A list of colors stored in this file. The colors are lists of RGB values: [R, G, B, R, G, B...]
@@ -72,15 +70,11 @@ class Dpla(DplaProtocol):
             #     ...
             # ]
             frame_colors = []
-            for r, g, b, x in iter_bytes(
-                data, 4, pnt + 4, pnt + 4 + (number_colors * 4)
-            ):
+            for r, g, b, x in iter_bytes(data, 4, pnt + 4, pnt + 4 + (number_colors * 4)):
                 frame_colors.append(r)
                 frame_colors.append(g)
                 frame_colors.append(b)
-                assert (
-                    x == 128
-                )  # just in case it isn't... then we'd have a real alpha channel
+                assert x == 128  # just in case it isn't... then we'd have a real alpha channel
             self.colors.append(frame_colors)
 
     def get_palette_for_frame(self, pal_idx: int, frame_id: int) -> list[int]:
@@ -95,9 +89,7 @@ class Dpla(DplaProtocol):
             color_len = int(len(color) / 3)
             if len(color) < 1:
                 color = [0, 0, 0]
-            frame_pal += color[
-                (frame_id % color_len) * 3 : ((frame_id % color_len) * 3) + 3
-            ]
+            frame_pal += color[(frame_id % color_len) * 3 : ((frame_id % color_len) * 3) + 3]
 
         return frame_pal
 
@@ -114,16 +106,16 @@ class Dpla(DplaProtocol):
     def enable_for_palette(self, palid: int):
         if not self.has_for_palette(palid):
             # Add one entry, this enables it.
-            self.colors[
-                palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
-            ] = [[0, 0, 0] for _ in range(0, 16)]
+            self.colors[palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE] = [
+                [0, 0, 0] for _ in range(0, 16)
+            ]
 
     def disable_for_palette(self, palid: int):
         if self.has_for_palette(palid):
             # Remove all entries, this disables ist.
-            self.colors[
-                palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
-            ] = [[] for _ in range(0, 16)]
+            self.colors[palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE] = [
+                [] for _ in range(0, 16)
+            ]
 
     def get_duration_for_palette(self, palette_idx: int) -> int:
         """
@@ -131,9 +123,7 @@ class Dpla(DplaProtocol):
         We are asuming there's one speed for the entire palette.
         This could be inaccurate.
         """
-        return self.durations_per_frame_for_colors[
-            palette_idx * DPLA_COLORS_PER_PALETTE
-        ]
+        return self.durations_per_frame_for_colors[palette_idx * DPLA_COLORS_PER_PALETTE]
 
     def set_duration_for_palette(self, palid: int, duration: int) -> None:
         """
@@ -141,13 +131,11 @@ class Dpla(DplaProtocol):
         We are asuming there's one speed for the entire palette.
         This could be inaccurate.
         """
-        self.durations_per_frame_for_colors[
-            palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE
-        ] = [duration] * 16
+        self.durations_per_frame_for_colors[palid * DPLA_COLORS_PER_PALETTE : (palid + 1) * DPLA_COLORS_PER_PALETTE] = [
+            duration
+        ] * 16
 
-    def apply_palette_animations(
-        self, palettes: Sequence[Sequence[int]], frame_idx: int
-    ) -> list[list[int]]:
+    def apply_palette_animations(self, palettes: Sequence[Sequence[int]], frame_idx: int) -> list[list[int]]:
         """
         Returns a modified copy of `palettes`.
 
@@ -179,9 +167,7 @@ class Dpla(DplaProtocol):
             # Number colors
             write_u8(buffer_entry, u8_checked(number_colors), 0)
             # Unk
-            write_u8(
-                buffer_entry, u8_checked(self.durations_per_frame_for_colors[i]), 2
-            )
+            write_u8(buffer_entry, u8_checked(self.durations_per_frame_for_colors[i]), 2)
             # Always one null color
             null_color = False
             if len(color_frames) == 0:

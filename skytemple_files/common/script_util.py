@@ -59,9 +59,7 @@ class ScriptFiles(TypedDict):
     maps: dict[str, MapEntry]
 
 
-def load_script_files(
-    script_folder: Folder, level_list: LevelListBin | None = None
-) -> ScriptFiles:
+def load_script_files(script_folder: Folder, level_list: LevelListBin | None = None) -> ScriptFiles:
     """Returns information about the files used by the script engine in an 'introspectable' way."""
     script_files = ScriptFiles(common=[], maps=OrderedDict())
     for map_or_common_name, folder in script_folder.folders:
@@ -107,9 +105,7 @@ def load_script_files(
                 if ssb_stem in ssa_stems:
                     # SSB is for SSA file:
                     map["ssas"].append((ssb_stem + SSA_EXT, ssb))
-                for subscript_name, list_of_ssbs_for_subscript in map[
-                    "subscripts"
-                ].items():
+                for subscript_name, list_of_ssbs_for_subscript in map["subscripts"].items():
                     # SSB is for subscript
                     if ssb_stem.startswith(subscript_name[: -len(SSS_EXT)]):
                         list_of_ssbs_for_subscript.append(ssb)

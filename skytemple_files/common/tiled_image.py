@@ -78,9 +78,7 @@ class TilemapEntry(TilemapEntryProtocol):
         xf = 1 if self.flip_x else 0
         yf = 1 if self.flip_y else 0
         # '0010000000100101'
-        return u16(
-            (self.idx & 0x3FF) + (xf << 10) + (yf << 11) + ((self.pal_idx & 0x3F) << 12)
-        )
+        return u16((self.idx & 0x3FF) + (xf << 10) + (yf << 11) + ((self.pal_idx & 0x3F) << 12))
 
     @classmethod
     def from_int(cls, entry: u16) -> TilemapEntry:
@@ -130,17 +128,11 @@ def to_pil(
 
     for i in range(0, number_tiles):
         tiles_in_chunks = tiling_width * tiling_height
-        chunk_x = math.floor(
-            math.floor(i / tiles_in_chunks) % (img_width_in_tiles / tiling_width)
-        )
-        chunk_y = math.floor(
-            math.floor(i / tiles_in_chunks) / (img_width_in_tiles / tiling_width)
-        )
+        chunk_x = math.floor(math.floor(i / tiles_in_chunks) % (img_width_in_tiles / tiling_width))
+        chunk_y = math.floor(math.floor(i / tiles_in_chunks) / (img_width_in_tiles / tiling_width))
 
         tile_x = (chunk_x * tiling_width) + (i % tiling_width)
-        tile_y = (chunk_y * tiling_height) + (
-            math.floor(i / tiling_width) % tiling_height
-        )
+        tile_y = (chunk_y * tiling_height) + (math.floor(i / tiling_width) % tiling_height)
         tile_mapping = tilemap[i]
         try:
             tile_data = tiles[tile_mapping.idx]
@@ -148,8 +140,7 @@ def to_pil(
             # This happens when exporting a BPCs chunk without "loading" the BPAs, because the BPA tiles
             # take up slots after the BPC slots.
             logger.warning(
-                f"TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. "
-                f"Replaced with 0."
+                f"TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. " f"Replaced with 0."
             )
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
@@ -254,9 +245,7 @@ def from_pil(
     max_len_pal = single_palette_size * max_nb_palettes
     if pil.mode != "P":
         raise UserValueError(
-            _(
-                "Can not convert PIL image to PMD tiled image: Must be indexed image (=using a palette)"
-            )
+            _("Can not convert PIL image to PMD tiled image: Must be indexed image (=using a palette)")
         )
     if (
         pil.palette.mode != "RGB"
@@ -294,9 +283,7 @@ def from_pil(
     raw_pil_image = pil.tobytes("raw", "P")
     number_of_tiles = int(len(raw_pil_image) / tile_dim / tile_dim)
 
-    tiles_with_sum: list[tuple[int, bytearray]] = [
-        None for __ in range(0, number_of_tiles)
-    ]
+    tiles_with_sum: list[tuple[int, bytearray]] = [None for __ in range(0, number_of_tiles)]
     tilemap: list[TilemapEntryProtocol] = [None for __ in range(0, number_of_tiles)]
     the_two_px_to_write = [0, 0]
 
@@ -315,21 +302,11 @@ def from_pil(
             # I'm so sorry for this, if someone wants to rewrite this, please go ahead!
             chunk_x = math.floor(x / (tile_dim * tiling_width))
             chunk_y = math.floor(y / (tile_dim * tiling_height))
-            tiles_up_to_current_chunk_y = int(
-                img_width / tile_dim * chunk_y * tiling_height
-            )
+            tiles_up_to_current_chunk_y = int(img_width / tile_dim * chunk_y * tiling_height)
 
-            tile_x = (chunk_x * tiling_width * tiling_height) + (
-                math.floor(x / tile_dim) - (chunk_x * tiling_width)
-            )
-            tile_y = (chunk_y * tiling_height) + (
-                math.floor(y / tile_dim) - (chunk_y * tiling_height)
-            )
-            tile_id = (
-                tiles_up_to_current_chunk_y
-                + ((tile_y - tiling_height * chunk_y) * tiling_width)
-                + tile_x
-            )
+            tile_x = (chunk_x * tiling_width * tiling_height) + (math.floor(x / tile_dim) - (chunk_x * tiling_width))
+            tile_y = (chunk_y * tiling_height) + (math.floor(y / tile_dim) - (chunk_y * tiling_height))
+            tile_id = tiles_up_to_current_chunk_y + ((tile_y - tiling_height * chunk_y) * tiling_width) + tile_x
 
             in_tile_x = x - tile_dim * math.floor(x / tile_dim)
             in_tile_y = y - tile_dim * math.floor(y / tile_dim)
@@ -385,12 +362,8 @@ def from_pil(
         # Only store when we are on the second pixel
         if idx % 2 == 1:
             # Little endian:
-            tiles_with_sum[tile_id][0] += (
-                the_two_px_to_write[0] + the_two_px_to_write[1]
-            )
-            tiles_with_sum[tile_id][1][nidx] = the_two_px_to_write[0] + (
-                the_two_px_to_write[1] << 4
-            )
+            tiles_with_sum[tile_id][0] += the_two_px_to_write[0] + the_two_px_to_write[1]
+            tiles_with_sum[tile_id][1][nidx] = the_two_px_to_write[0] + (the_two_px_to_write[1] << 4)
 
     final_tiles_with_sum: list[tuple[int, bytearray]] = []
     len_final_tiles = 0
@@ -400,9 +373,7 @@ def from_pil(
         flip_x = False
         flip_y = False
         if optimize:
-            reusable_tile_idx, flip_x, flip_y = search_for_tile_with_sum(
-                final_tiles_with_sum, tile_with_sum, tile_dim
-            )
+            reusable_tile_idx, flip_x, flip_y = search_for_tile_with_sum(final_tiles_with_sum, tile_with_sum, tile_dim)
         if reusable_tile_idx is not None:
             tile_id_to_use = reusable_tile_idx
         else:
@@ -433,9 +404,7 @@ def from_pil(
     return final_tiles, tilemap, palettes
 
 
-def search_for_chunk(
-    chunk: list[TilemapEntryProtocol], tile_mappings: list[TilemapEntryProtocol]
-) -> int | None:
+def search_for_chunk(chunk: list[TilemapEntryProtocol], tile_mappings: list[TilemapEntryProtocol]) -> int | None:
     """
     In the provided list of tile mappings, find an existing chunk.
     Returns the position of the first tile of the chunk or None if not found.
@@ -475,9 +444,7 @@ def search_for_tile_with_sum(
     return None, False, False
 
 
-def search_for_tile(
-    tiles: list[bytes], tile: bytes, tile_dim: int
-) -> tuple[int | None, bool, bool]:
+def search_for_tile(tiles: list[bytes], tile: bytes, tile_dim: int) -> tuple[int | None, bool, bool]:
     """
     Search for the tile, or a flipped version of it, in tiles and return the index and flipped state
     """
@@ -500,9 +467,7 @@ def _flip_tile_x(tile: bytes, tile_dim: int) -> bytes:
     for i, b in enumerate(tile):
         row_idx = (i * 2) % tile_dim
         col_idx = math.floor((i * 2) / tile_dim)
-        tile_flipped[int((col_idx * tile_dim + (tile_dim - 1 - row_idx)) / 2)] = (
-            b & 0x0F
-        ) << 4 | (b & 0xF0) >> 4
+        tile_flipped[int((col_idx * tile_dim + (tile_dim - 1 - row_idx)) / 2)] = (b & 0x0F) << 4 | (b & 0xF0) >> 4
     return tile_flipped
 
 
@@ -516,9 +481,7 @@ def _flip_tile_y(tile: bytes, tile_dim: int) -> bytes:
     return tile_flipped
 
 
-def _px_pos_flipped(
-    x: int, y: int, w: int, h: int, flip_x: bool, flip_y: bool
-) -> tuple[int, int]:
+def _px_pos_flipped(x: int, y: int, w: int, h: int, flip_x: bool, flip_y: bool) -> tuple[int, int]:
     """
     Returns the flipped x and y position for a pixel in a fixed size image.
     If x and/or y actually get flipped is controled by the flip_ params.

@@ -21,12 +21,6 @@ SUBENTRIES = 40  # Subentries of one 80 byte TOC entry
 SUBENTRY_LEN = 4  # Length of the subentry pointers
 KAO_IMG_PAL_B_SIZE = 48  # Size of KaoImage palette block in bytes (16*3)
 KAO_IMG_PIXEL_DEPTH = 4  # one byte in a kao image are two pixels
-KAO_IMG_METAPIXELS_DIM = (
-    8  # How many pixels build a meta-pixel / tile per dim. (8x8)=48
-)
-KAO_IMG_IMG_DIM = (
-    5  # How many meta-pixels / tiles build an image per dimension (5x5)=25
-)
-KAO_FILE_BYTE_ALIGNMENT = (
-    16  # The size of the kao file has to be divisble by this number of bytes
-)
+KAO_IMG_METAPIXELS_DIM = 8  # How many pixels build a meta-pixel / tile per dim. (8x8)=48
+KAO_IMG_IMG_DIM = 5  # How many meta-pixels / tiles build an image per dimension (5x5)=25
+KAO_FILE_BYTE_ALIGNMENT = 16  # The size of the kao file has to be divisble by this number of bytes

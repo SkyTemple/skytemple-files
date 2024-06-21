@@ -62,9 +62,7 @@ class BgListEntryProtocol(Protocol[M, P, C, L]):
     def get_bma(self, rom_or_directory_root: str | RomFileProviderProtocol) -> M: ...
 
     @abstractmethod
-    def get_bpas(
-        self, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> list[P | None]: ...
+    def get_bpas(self, rom_or_directory_root: str | RomFileProviderProtocol) -> list[P | None]: ...
 
 
 T = TypeVar("T", bound=BgListEntryProtocol)

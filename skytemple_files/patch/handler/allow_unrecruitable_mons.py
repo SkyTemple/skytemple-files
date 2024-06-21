@@ -45,9 +45,7 @@ class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Allows recruiting the other Deoxys forms and the regis inside dungeons."
-        )
+        return _("Allows recruiting the other Deoxys forms and the regis inside dungeons.")
 
     @property
     def author(self) -> str:
@@ -64,29 +62,16 @@ class AllowUnrecruitableMonsPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_US)
-                    != ORIGINAL_INSTRUCTION
-                )
+                return read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_US) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_EU)
-                    != ORIGINAL_INSTRUCTION
-                )
+                return read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_EU) != ORIGINAL_INSTRUCTION
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_JP)
-                    != ORIGINAL_INSTRUCTION
-                )
+                return read_u32(rom.loadArm9Overlays([29])[29].data, OFFSET_JP) != ORIGINAL_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

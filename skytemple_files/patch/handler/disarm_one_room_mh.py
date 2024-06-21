@@ -67,17 +67,11 @@ class DisarmOneRoomMHPatchHandler(AbstractPatchHandler):
             offset = OFFSETS.get(config.game_region)
             if offset is not None:
                 overlay29 = get_binary_from_rom(rom, config.bin_sections.overlay29)
-                return (
-                    overlay29[offset : offset + len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
-                )
+                return overlay29[offset : offset + len(ORIGINAL_BYTES)] != ORIGINAL_BYTES
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

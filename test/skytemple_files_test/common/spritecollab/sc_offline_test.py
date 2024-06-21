@@ -73,16 +73,12 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
 
     async def test_monster_form_details_multi_mon(self):
         async with self.client as session:
-            result = await session.monster_form_details(
-                [(9998, ""), (9999, ""), (9999, "9999/9999")]
-            )
+            result = await session.monster_form_details([(9998, ""), (9999, ""), (9999, "9999/9999")])
             self.assertEqual(result, MONSTER_FORM_DETAILS_FIX_MULTI_MON)
 
     async def test_monster_form_details_single_mon(self):
         async with self.client as session:
-            result = await session.monster_form_details(
-                [(9999, ""), (9999, "9999/9999")]
-            )
+            result = await session.monster_form_details([(9999, ""), (9999, "9999/9999")])
             self.assertEqual(result, MONSTER_FORM_DETAILS_FIX)
 
     async def test_fetch_portraits(self):
@@ -105,27 +101,19 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
 
                 result_sheet = SpriteBotSheet.create(kao, 0)
                 resized_result_sheet = Image.new("RGBA", (200, 320))
-                resized_result_sheet.paste(
-                    result_sheet, (0, 0, result_sheet.width, result_sheet.height)
-                )
+                resized_result_sheet.paste(result_sheet, (0, 0, result_sheet.width, result_sheet.height))
 
                 self.assertImagesEqual(expected_sheet, resized_result_sheet)
 
     async def test_fetch_sprites_unfiltered(self):
         async with self.client as session:
-            result = await session.fetch_sprites(
-                [(9999, ""), (9999, "9999/9999")], [None, None]
-            )
+            result = await session.fetch_sprites([(9999, ""), (9999, "9999/9999")], [None, None])
 
             self.assertEqual(2, len(result))
             assert result[0] is not None  # we do it like this for mypy
             assert result[1] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(FIXTURES_DIR, "sprite", "1"), *result[0]
-            )
-            self.assertSpritesEqual(
-                os.path.join(FIXTURES_DIR, "sprite", "2"), *result[1]
-            )
+            self.assertSpritesEqual(os.path.join(FIXTURES_DIR, "sprite", "1"), *result[0])
+            self.assertSpritesEqual(os.path.join(FIXTURES_DIR, "sprite", "2"), *result[1])
 
     async def test_fetch_sprites_filtered(self):
         async with self.client as session:
@@ -137,36 +125,24 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
             self.assertEqual(2, len(result))
             assert result[0] is not None  # we do it like this for mypy
             assert result[1] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(EXPECTED_DIR, "sprite", "filtered1"), *result[0]
-            )
-            self.assertSpritesEqual(
-                os.path.join(FIXTURES_DIR, "sprite", "2"), *result[1]
-            )
+            self.assertSpritesEqual(os.path.join(EXPECTED_DIR, "sprite", "filtered1"), *result[0])
+            self.assertSpritesEqual(os.path.join(FIXTURES_DIR, "sprite", "2"), *result[1])
 
     async def test_fetch_sprites_copy_event_sleep_no_target(self):
         async with self.client as session:
-            result = await session.fetch_sprites(
-                [(9999, "")], [["Idle", "Walk"]], copy_to_event_sleep_if_missing=True
-            )
+            result = await session.fetch_sprites([(9999, "")], [["Idle", "Walk"]], copy_to_event_sleep_if_missing=True)
 
             self.assertEqual(1, len(result))
             assert result[0] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(EXPECTED_DIR, "sprite", "event_sleep1"), *result[0]
-            )
+            self.assertSpritesEqual(os.path.join(EXPECTED_DIR, "sprite", "event_sleep1"), *result[0])
 
     async def test_fetch_sprites_copy_event_sleep(self):
         async with self.client as session:
-            result = await session.fetch_sprites(
-                [(9999, "")], [None], copy_to_event_sleep_if_missing=True
-            )
+            result = await session.fetch_sprites([(9999, "")], [None], copy_to_event_sleep_if_missing=True)
 
             self.assertEqual(1, len(result))
             assert result[0] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(EXPECTED_DIR, "sprite", "event_sleep2"), *result[0]
-            )
+            self.assertSpritesEqual(os.path.join(EXPECTED_DIR, "sprite", "event_sleep2"), *result[0])
 
     async def test_fetch_sprites_copy_event_sleep_partial(self):
         async with self.client as session:
@@ -178,9 +154,7 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
 
             self.assertEqual(1, len(result))
             assert result[0] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(EXPECTED_DIR, "sprite", "event_sleep4"), *result[0]
-            )
+            self.assertSpritesEqual(os.path.join(EXPECTED_DIR, "sprite", "event_sleep4"), *result[0])
 
     async def test_fetch_sprites_copy_event_sleep_no_effect(self):
         """Kinda like above, but this time the sprite already has EventSleep, so the flag has no effect for that."""
@@ -193,9 +167,7 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
 
             self.assertEqual(1, len(result))
             assert result[0] is not None  # we do it like this for mypy
-            self.assertSpritesEqual(
-                os.path.join(EXPECTED_DIR, "sprite", "event_sleep3"), *result[0]
-            )
+            self.assertSpritesEqual(os.path.join(EXPECTED_DIR, "sprite", "event_sleep3"), *result[0])
 
     async def test_execute_query(self):
         async with self.client as session:

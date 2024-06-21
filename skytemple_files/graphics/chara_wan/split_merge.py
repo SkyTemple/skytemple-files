@@ -28,9 +28,7 @@ def MergeWan(wan_files):
     frameData = []
     offsetData = []
     for wan in wan_files:
-        mapFrameData(
-            wan.frameData, frameData, wan.offsetData, offsetData, wan.animGroupData
-        )
+        mapFrameData(wan.frameData, frameData, wan.offsetData, offsetData, wan.animGroupData)
 
     # merge all anim groups - if multiple sources have an anim on the same index, choose any.
     # theyre proven all the same
@@ -71,9 +69,7 @@ def SplitWan(wan, anim_presence):
         offsetData = []
         # adds only necessary frames to frameData, and remaps frame references in animGroupData
         # offset data included
-        transferStrippedFrameData(
-            wan.frameData, frameData, wan.offsetData, offsetData, animGroupData
-        )
+        transferStrippedFrameData(wan.frameData, frameData, wan.offsetData, offsetData, animGroupData)
         # add only necessary pieces to imgData, and remaps the image piece references in frameData
         imgData = []
         transferStrippedImgData(wan.imgData, imgData, frameData)
@@ -163,9 +159,7 @@ def mapFrameData(inputFrameData, frameData, inputOffsetData, offsetData, animGro
                 animFrame.frameIndex = mapping[animFrame.frameIndex]
 
 
-def transferStrippedFrameData(
-    inputFrameData, frameData, inputOffsetData, offsetData, animGroupData
-):
+def transferStrippedFrameData(inputFrameData, frameData, inputOffsetData, offsetData, animGroupData):
     frame_map = {}
     for anim_group in animGroupData:
         for anim_seq in anim_group:
@@ -173,12 +167,8 @@ def transferStrippedFrameData(
                 frame_idx = frame.frameIndex
                 if frame_idx not in frame_map:
                     frame_map[frame_idx] = len(frameData)
-                    frameData.append(
-                        exWanUtils.duplicateMetaFrame(inputFrameData[frame_idx])
-                    )
-                    offsetData.append(
-                        exWanUtils.duplicateOffset(inputOffsetData[frame_idx])
-                    )
+                    frameData.append(exWanUtils.duplicateMetaFrame(inputFrameData[frame_idx]))
+                    offsetData.append(exWanUtils.duplicateOffset(inputOffsetData[frame_idx]))
                 frame.frameIndex = frame_map[frame_idx]
 
 

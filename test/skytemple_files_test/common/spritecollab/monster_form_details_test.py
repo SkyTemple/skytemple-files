@@ -185,16 +185,12 @@ class MonsterFormDetailsTestCase(IsolatedAsyncioTestCase):
             renamed_emotion = emotion_map[emotion]
             face_name = Pmd2ScriptFaceName(-1, renamed_emotion)
             if fpath is None:
-                self.assertEqual(
-                    None, await self.obj.fetch_portrait_via_face_name(face_name)
-                )
+                self.assertEqual(None, await self.obj.fetch_portrait_via_face_name(face_name))
 
             else:
                 data = Image.open(fpath)
 
-                self.assertEqual(
-                    data, await self.obj.fetch_portrait_via_face_name(face_name)
-                )
+                self.assertEqual(data, await self.obj.fetch_portrait_via_face_name(face_name))
 
     async def test_fetch_sprite_anim(self):
         for action, fpaths in self.fixtures_actions:

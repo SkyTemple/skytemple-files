@@ -67,9 +67,7 @@ class MdPropertiesState(_MdPropertiesProtocol):
     @classmethod
     def instance(cls) -> MdPropertiesState:
         if cls._instance is None:
-            cls._instance = MdPropertiesState(
-                DEFAULT_NUM_ENTITIES, DEFAULT_MAX_POSSIBLE
-            )
+            cls._instance = MdPropertiesState(DEFAULT_NUM_ENTITIES, DEFAULT_MAX_POSSIBLE)
         return cls._instance
 
 

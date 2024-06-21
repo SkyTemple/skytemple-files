@@ -114,11 +114,7 @@ class ScriptCompiler:
         )
 
         base_compiler = ExplorerScriptSsbCompiler(
-            SsbConstant.create_for(
-                self.rom_data.script_data.game_variables__by_name[
-                    "PERFORMANCE_PROGRESS_LIST"
-                ]
-            ).name,
+            SsbConstant.create_for(self.rom_data.script_data.game_variables__by_name["PERFORMANCE_PROGRESS_LIST"]).name,
             lookup_paths,
         )
         try:
@@ -150,11 +146,7 @@ class ScriptCompiler:
 
         model = Ssb.create_empty(self.rom_data.script_data)
         if len(routine_ops) != len(routine_ops) != len(named_coroutines):
-            raise SsbCompilerError(
-                _(
-                    "The routine data lists for the decompiler must have the same lengths."
-                )
-            )
+            raise SsbCompilerError(_("The routine data lists for the decompiler must have the same lengths."))
 
         # Build routines and opcodes.
         if len(routine_ops) > 0:
@@ -162,34 +154,27 @@ class ScriptCompiler:
             if self.rom_data.game_region == GAME_REGION_EU:
                 header_class = SsbHeaderEu
 
-            built_strings: dict[str, list[str]] = {
-                lang: [] for lang in header_class.supported_langs()
-            }
+            built_strings: dict[str, list[str]] = {lang: [] for lang in header_class.supported_langs()}
             built_constants: list[str] = []
 
             for i, r in enumerate(routine_infos):
                 if r is None:
                     raise SsbCompilerError(f(_("Routine {i} not found.")))
 
-            input_routine_structure: list[
-                tuple[SsbRoutineInfo, str, list[SsbOperation]]
-            ] = list(zip(routine_infos, named_coroutines, routine_ops))
+            input_routine_structure: list[tuple[SsbRoutineInfo, str, list[SsbOperation]]] = list(
+                zip(routine_infos, named_coroutines, routine_ops)
+            )
 
             # The cursor position of the written routine opcodes.
             # The opcodes start after the routine info, which has a fixed length, based on the number of routines.
-            opcode_cursor = (
-                SSB_LEN_ROUTINE_INFO_ENTRY * len(input_routine_structure)
-                + SSB_PADDING_BEFORE_ROUTINE_INFO
-            )
+            opcode_cursor = SSB_LEN_ROUTINE_INFO_ENTRY * len(input_routine_structure) + SSB_PADDING_BEFORE_ROUTINE_INFO
             # If it has any coroutines, they all have to be.
             has_coroutines = routine_infos[0].type == SsbRoutineType.COROUTINE
 
             # Run coroutine checks and sortings.
             if has_coroutines:
                 # Assert, that the data contains all coroutines from the ROM schema and sort all three lists by this
-                if len(input_routine_structure) != len(
-                    self.rom_data.script_data.common_routine_info
-                ):
+                if len(input_routine_structure) != len(self.rom_data.script_data.common_routine_info):
                     raise SsbCompilerError(
                         f(
                             _(
@@ -198,15 +183,11 @@ class ScriptCompiler:
                         )
                     )
                 if len(routine_infos) != len(set(named_coroutines)):
-                    raise SsbCompilerError(
-                        f(_("The script must not contain any duplicate coroutines."))
-                    )
+                    raise SsbCompilerError(f(_("The script must not contain any duplicate coroutines.")))
                 try:
                     input_routine_structure = sorted(
                         input_routine_structure,
-                        key=lambda k: self.rom_data.script_data.common_routine_info__by_name[
-                            k[1]
-                        ].id,
+                        key=lambda k: self.rom_data.script_data.common_routine_info__by_name[k[1]].id,
                     )
                 except KeyError as err:
                     raise SsbCompilerError(f(_("Unknown coroutine {err}"))) from err
@@ -222,13 +203,7 @@ class ScriptCompiler:
                 if (has_coroutines and input_info.type != SsbRoutineType.COROUTINE) or (
                     not has_coroutines and input_info.type == SsbRoutineType.COROUTINE
                 ):
-                    raise SsbCompilerError(
-                        f(
-                            _(
-                                "Coroutines and regular routines can not be mixed in a script file."
-                            )
-                        )
-                    )
+                    raise SsbCompilerError(f(_("Coroutines and regular routines can not be mixed in a script file.")))
 
                 routine_start_cursor = opcode_cursor
                 # Build OPs
@@ -248,33 +223,18 @@ class ScriptCompiler:
                                     (1, 7, 0),
                                 ),
                             )
-                        if (
+                        if in_op.op_code.name not in self.rom_data.script_data.op_codes__by_name:
+                            raise SsbCompilerError(f(_("Unknown operation {in_op.op_code.name}.")))
+                        op_codes: list[Pmd2ScriptOpCode] = self.rom_data.script_data.op_codes__by_name[
                             in_op.op_code.name
-                            not in self.rom_data.script_data.op_codes__by_name
-                        ):
-                            raise SsbCompilerError(
-                                f(_("Unknown operation {in_op.op_code.name}."))
-                            )
-                        op_codes: list[Pmd2ScriptOpCode] = (
-                            self.rom_data.script_data.op_codes__by_name[
-                                in_op.op_code.name
-                            ]
-                        )
+                        ]
                         if len(op_codes) > 1:
                             # Can be either a variable length opcode or the "normal" variant.
-                            var_len_op_code = next(
-                                o for o in op_codes if o.params == -1
-                            )
+                            var_len_op_code = next(o for o in op_codes if o.params == -1)
                             normal_op_code = next(o for o in op_codes if o.params != -1)
-                            if (
-                                self._correct_param_list_len(in_op.params)
-                                == normal_op_code.params
-                            ):
+                            if self._correct_param_list_len(in_op.params) == normal_op_code.params:
                                 op_code = normal_op_code
-                            elif (
-                                self._correct_param_list_len(in_op.params)
-                                > normal_op_code.params
-                            ):
+                            elif self._correct_param_list_len(in_op.params) > normal_op_code.params:
                                 op_code = var_len_op_code
                             else:
                                 raise SsbCompilerError(
@@ -294,9 +254,7 @@ class ScriptCompiler:
                             # ... nothing to do here! Writing the first "meta-argument" for the number of arguments
                             # is the job of the writer later!
                             op_len += 2
-                        elif (
-                            self._correct_param_list_len(in_op.params) != op_code.params
-                        ):
+                        elif self._correct_param_list_len(in_op.params) != op_code.params:
                             # TODO: This might be a confusing count for end users in the case of position markers.
                             raise SsbCompilerError(
                                 f(
@@ -316,33 +274,21 @@ class ScriptCompiler:
                                 op_len += 8
                             else:
                                 # Handle the rest
-                                new_params.append(
-                                    self._parse_param(
-                                        param, built_strings, built_constants
-                                    )
-                                )
+                                new_params.append(self._parse_param(param, built_strings, built_constants))
                                 op_len += 2
-                        built_ops.append(
-                            SkyTempleSsbOperation(opcode_cursor, op_code, new_params)
-                        )
+                        built_ops.append(SkyTempleSsbOperation(opcode_cursor, op_code, new_params))
 
                         # Create actual offset mapping for this opcode and update source map
-                        opcode_index_mem_offset_mapping[in_op.offset] = int(
-                            opcode_cursor / 2
-                        )
+                        opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
 
                         bytes_written_last_rtn += op_len
                         opcode_cursor += op_len
 
                 # Find out the target for this routine if it's specified by name
                 if input_info.linked_to == -1:
-                    input_info.linked_to = SsbConstant(
-                        input_info.linked_to_name, self.rom_data.script_data
-                    ).value.id
+                    input_info.linked_to = SsbConstant(input_info.linked_to_name, self.rom_data.script_data).value.id
 
-                built_routine_info_with_offset.append(
-                    (routine_start_cursor, input_info)
-                )
+                built_routine_info_with_offset.append((routine_start_cursor, input_info))
                 built_routine_ops.append(built_ops)
 
             # Second pass: Update all jumps to their correct place and update string index positions
@@ -351,9 +297,7 @@ class ScriptCompiler:
                     if op.op_code.name in OPS_WITH_JUMP_TO_MEM_OFFSET:
                         param_id = OPS_WITH_JUMP_TO_MEM_OFFSET[op.op_code.name]
                         index_to_jump_to = op.params[param_id]
-                        op.params[param_id] = opcode_index_mem_offset_mapping[
-                            index_to_jump_to
-                        ]
+                        op.params[param_id] = opcode_index_mem_offset_mapping[index_to_jump_to]
                     for i, param in enumerate(op.params):
                         if isinstance(param, StringIndexPlaceholder):
                             # If the parameter is a reference to a language string, the length of the constants
@@ -405,15 +349,11 @@ class ScriptCompiler:
                 # Multi language regular case. All languages must be known.
                 for lang, string in param.strings.items():
                     if lang not in built_strings:
-                        raise SsbCompilerError(
-                            f(_("Unknown language for string: {lang}"))
-                        )
+                        raise SsbCompilerError(f(_("Unknown language for string: {lang}")))
                     built_strings[lang].append(string)
             return StringIndexPlaceholder(i)
 
-        raise SsbCompilerError(
-            f(_("Invalid parameter supplied for an operation: {param}"))
-        )
+        raise SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}")))
 
     @staticmethod
     def _correct_param_list_len(params: list[SsbOpParam]) -> int:

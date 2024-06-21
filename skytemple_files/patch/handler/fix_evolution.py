@@ -61,22 +61,16 @@ class FixEvolutionPatchHandler(AbstractPatchHandler):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([16])[16].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED_US
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

@@ -390,9 +390,7 @@ def nrl_dataset():
     ]
 
 
-class BmaLayerNrlTestCase(
-    SkyTempleFilesTestCase[BmaLayerNrlHandler, CompressionContainerProtocol]
-):
+class BmaLayerNrlTestCase(SkyTempleFilesTestCase[BmaLayerNrlHandler, CompressionContainerProtocol]):
     @classmethod
     def handler(cls) -> Type[BmaLayerNrlHandler]:
         return BmaLayerNrlHandler
@@ -412,9 +410,7 @@ class BmaLayerNrlTestCase(
     def test_cross_native_implementation_compress(self, _, in_bytes):
         """Tests the native implementation against the Python implementation (assuming this one works) -- Using the main dataset."""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
         py_cls = self.handler().load_python_model()
         rs_cls = self.handler().load_native_model()
         result_rs = rs_cls.compress(in_bytes).to_bytes()
@@ -429,9 +425,7 @@ class BmaLayerNrlTestCase(
     def test_cross_native_implementation_decompress(self, _, in_bytes):
         """Tests the native implementation against the Python implementation -- Using the main dataset."""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
         py_cls = self.handler().load_python_model()
         rs_cls = self.handler().load_native_model()
         result_py = py_cls.compress(in_bytes).to_bytes()

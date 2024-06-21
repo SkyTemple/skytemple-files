@@ -64,29 +64,16 @@ class RemoveBodySizeCheckPatchHandler(AbstractPatchHandler):
         arm9_bytes = rom.arm9
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(arm9_bytes, OFFSET_RAM_EU - arm9.loadaddress)
-                    == NEW_INSTRUCTION
-                )
+                return read_u32(arm9_bytes, OFFSET_RAM_EU - arm9.loadaddress) == NEW_INSTRUCTION
             elif config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(arm9_bytes, OFFSET_RAM_US - arm9.loadaddress)
-                    == NEW_INSTRUCTION
-                )
+                return read_u32(arm9_bytes, OFFSET_RAM_US - arm9.loadaddress) == NEW_INSTRUCTION
             elif config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(arm9_bytes, OFFSET_RAM_JP - arm9.loadaddress)
-                    == NEW_INSTRUCTION
-                )
+                return read_u32(arm9_bytes, OFFSET_RAM_JP - arm9.loadaddress) == NEW_INSTRUCTION
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

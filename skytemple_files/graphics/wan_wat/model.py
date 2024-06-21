@@ -29,9 +29,7 @@ from skytemple_rust.pmd_wan import (
 
 
 class MetaFramePositioningSpecs:
-    def __init__(
-        self, img: Image.Image, width: int, height: int, x_offset: int, y_offset: int
-    ):
+    def __init__(self, img: Image.Image, width: int, height: int, x_offset: int, y_offset: int):
         self.img = img
         self.width = width
         self.height = height
@@ -42,9 +40,7 @@ class MetaFramePositioningSpecs:
         self.final_relative_y = None
 
     @classmethod
-    def process(
-        cls, items: list[MetaFramePositioningSpecs]
-    ) -> tuple[int, int, int, int]:
+    def process(cls, items: list[MetaFramePositioningSpecs]) -> tuple[int, int, int, int]:
         """
         Returns the full image dimensions and the image's center point and set's
         the final_relative_x/y attributes of all entries
@@ -92,11 +88,9 @@ class Wan:
         """Returns the frame group as an image and it's center position as a tuple."""
         specs: list[MetaFramePositioningSpecs] = []
         for fragment in frame.fragments:
-            fragment_bytes: FragmentBytes = (
-                self.model.fragment_bytes_store.fragment_bytes[
-                    fragment.fragment_bytes_index
-                ]
-            )
+            fragment_bytes: FragmentBytes = self.model.fragment_bytes_store.fragment_bytes[
+                fragment.fragment_bytes_index
+            ]
 
             im = Image.frombuffer(
                 "RGBA",

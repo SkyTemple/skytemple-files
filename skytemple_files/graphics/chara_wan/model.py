@@ -133,9 +133,7 @@ class WanFile(Sir0Serializable):
             raise ValueError("Null pointer in Wan Header!")
         imgType = int.from_bytes(in_file.read(2), "little")
         if imgType != 1:
-            raise NotImplementedError(
-                "Non-character sprite import currently not supported."
-            )
+            raise NotImplementedError("Non-character sprite import currently not supported.")
 
         updateUnusedStats([], "Unk#12", int.from_bytes(in_file.read(2), "little"))
 
@@ -421,9 +419,7 @@ class MetaFramePiece:
         return (ATTR0_MosaicMask & self.attr0) != 0
 
     def isDisabled(self):
-        return not self.isRotAndScalingOn() and (
-            (ATTR0_DblSzDisabled & self.attr0) != 0
-        )
+        return not self.isRotAndScalingOn() and ((ATTR0_DblSzDisabled & self.attr0) != 0)
 
     def isDoubleSize(self):
         return self.isRotAndScalingOn() and ((ATTR0_DblSzDisabled & self.attr0) != 0)
@@ -498,9 +494,7 @@ class MetaFramePiece:
         return (ATTR2_PriorityMask & self.attr2) >> 10
 
     def setPriority(self, priority):
-        self.attr2 = (self.attr2 & ~ATTR2_PriorityMask) | (
-            ATTR2_PriorityMask & priority
-        )
+        self.attr2 = (self.attr2 & ~ATTR2_PriorityMask) | (ATTR2_PriorityMask & priority)
 
     def getTileNum(self):
         return ATTR2_TileNumMask & self.attr2
@@ -509,9 +503,7 @@ class MetaFramePiece:
         self.attr2 = (self.attr2 & ~ATTR2_TileNumMask) | (ATTR2_TileNumMask & tileNum)
 
     def getResolutionType(self):
-        return ((self.attr1 & ATTR01_ResMask) >> 14) | (
-            (self.attr0 & ATTR01_ResMask) >> 12
-        )
+        return ((self.attr1 & ATTR01_ResMask) >> 14) | ((self.attr0 & ATTR01_ResMask) >> 12)
 
     def setResolutionType(self, res):
         self.attr1 = (self.attr1 & ~ATTR01_ResMask) | ((res << 14) & ATTR01_ResMask)
@@ -520,9 +512,7 @@ class MetaFramePiece:
     def GeneratePiece(self, imgData, paletteData, parentFrameIdx):
         ##creates a tex piece out of the imgdata, with the specified piece index and dimensions
         twidth, theight = DIM_TABLE[self.getResolutionType()]
-        newImg = Image.new(
-            "RGBA", (twidth * TEX_SIZE, theight * TEX_SIZE), (0, 0, 0, 0)
-        )
+        newImg = Image.new("RGBA", (twidth * TEX_SIZE, theight * TEX_SIZE), (0, 0, 0, 0))
         datas = [(0, 0, 0, 0)] * (twidth * TEX_SIZE * theight * TEX_SIZE)
 
         imgPx0 = imgData[parentFrameIdx].imgPx
@@ -548,9 +538,7 @@ class MetaFramePiece:
                         else:
                             color = paletteData[paletteIndex][paletteElement]
                         imgPosition = (xx * TEX_SIZE + px, yy * TEX_SIZE + py)
-                        datas[imgPosition[1] * twidth * TEX_SIZE + imgPosition[0]] = (
-                            color
-                        )
+                        datas[imgPosition[1] * twidth * TEX_SIZE + imgPosition[0]] = color
 
         newImg.putdata(datas)
         return newImg
@@ -575,9 +563,7 @@ class MetaFramePiece:
             imgPiece = imgPiece.transpose(Image.FLIP_TOP_BOTTOM)
 
         start = self.getStart()
-        inImg.paste(
-            imgPiece, (start[0] - exOffset[0], start[1] - exOffset[1]), imgPiece
-        )
+        inImg.paste(imgPiece, (start[0] - exOffset[0], start[1] - exOffset[1]), imgPiece)
 
 
 class FrameOffset:

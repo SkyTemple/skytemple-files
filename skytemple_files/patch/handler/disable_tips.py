@@ -45,9 +45,7 @@ class DisableTipsPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Disables the tip textboxes shown in dungeons at the beginning of the game."
-        )
+        return _("Disables the tip textboxes shown in dungeons at the beginning of the game.")
 
     @property
     def author(self) -> str:
@@ -72,13 +70,9 @@ class DisableTipsPatch(AbstractPatchHandler):
                 return overlay29[OFFSET_JP : OFFSET_JP + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

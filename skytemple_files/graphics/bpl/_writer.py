@@ -40,9 +40,7 @@ class BplWriter:
         animation_size = 0
         if model.has_palette_animation:
             animation_palette_size = len(model.animation_palette) * BPL_PAL_ENTRY_LEN
-            animation_size = (
-                model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
-            )
+            animation_size = model.number_palettes * BPL_COL_INDEX_ENTRY_LEN + animation_palette_size
 
         # 4 byte header + palettes + animation
         data = bytearray(4 + (model.number_palettes * BPL_PAL_SIZE) + animation_size)

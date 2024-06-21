@@ -56,9 +56,7 @@ class ExportImportExplorerScriptTest(unittest.TestCase):
         # and checking the generated ssb script.
         compiler = ScriptCompiler(pmd2_data)
 
-        ssb_after, source_map_after = compiler.compile_explorerscript(
-            explorer_script, path.split("/")[-1]
-        )
+        ssb_after, source_map_after = compiler.compile_explorerscript(explorer_script, path.split("/")[-1])
 
         file_after = SsbHandler.serialize(ssb_after, pmd2_data)
         ssb_after = SsbHandler.deserialize(file_after, pmd2_data)

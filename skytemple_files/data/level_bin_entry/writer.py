@@ -32,17 +32,11 @@ class LevelBinEntryWriter:
     def write(self) -> bytes:
         data = bytearray(LEVEL_BIN_ENTRY_LEVEL_LEN * len(self.model.levels))
         for i, level in enumerate(self.model.levels):
-            write_i32(
-                data, level.experience_required, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x0
-            )
+            write_i32(data, level.experience_required, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x0)
             write_u16(data, level.hp_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x4)
             write_u8(data, level.attack_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x6)
-            write_u8(
-                data, level.special_attack_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x7
-            )
+            write_u8(data, level.special_attack_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x7)
             write_u8(data, level.defense_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x8)
-            write_u8(
-                data, level.special_defense_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x9
-            )
+            write_u8(data, level.special_defense_growth, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0x9)
             write_u16(data, level.null, i * LEVEL_BIN_ENTRY_LEVEL_LEN + 0xA)
         return data

@@ -75,9 +75,7 @@ class ItemSPType(Enum):
         "***",
         None,
         ItemSPExclusiveType.MONSTER,
-        _(
-            "? (Only all the Eeveelutions, and the Tyrogue line have items with this type!)"
-        ),
+        _("? (Only all the Eeveelutions, and the Tyrogue line have items with this type!)"),
     )
 
     def __new__(cls, *args, **kwargs):  # type: ignore

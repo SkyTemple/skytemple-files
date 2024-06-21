@@ -68,16 +68,12 @@ class BgpHandler(HybridDataHandler[BgpProtocol]):
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> BgpProtocol:
         from skytemple_files.common.types.file_types import FileType
 
-        return cls.get_model_cls()(
-            bytes(FileType.COMMON_AT.deserialize(data).decompress())
-        )
+        return cls.get_model_cls()(bytes(FileType.COMMON_AT.deserialize(data).decompress()))
 
     @classmethod
     def serialize(cls, data: BgpProtocol, **kwargs: OptionalKwargs) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
         return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(
-                cls.get_writer_cls()().write(data), COMMON_AT_MUST_COMPRESS_4
-            )
+            FileType.COMMON_AT.compress(cls.get_writer_cls()().write(data), COMMON_AT_MUST_COMPRESS_4)
         )

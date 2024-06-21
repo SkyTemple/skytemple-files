@@ -45,9 +45,7 @@ class CommonAtType(Enum):
         return obj
 
     # ignore the first param since it's already set by __new__
-    def __init__(
-        self, _: int, handler: CompressionContainerHandler, auto_allowed: bool
-    ):
+    def __init__(self, _: int, handler: CompressionContainerHandler, auto_allowed: bool):
         self.handler = handler
         self.auto_allowed = auto_allowed
 
@@ -102,9 +100,7 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
             print("*** COMMON AT DEBUG: Allowed types =", cls.allowed_types)
 
     @classmethod
-    def deserialize(
-        cls, data: bytes, **kwargs: OptionalKwargs
-    ) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         """Load a Common At container into a high-level representation"""
         for t in CommonAtType:
             if t.handler is not None:
@@ -117,16 +113,12 @@ class CommonAtHandler(DataHandler[CompressionContainerProtocol]):
         )
 
     @classmethod
-    def serialize(
-        cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs
-    ) -> bytes:
+    def serialize(cls, data: CompressionContainerProtocol, **kwargs: OptionalKwargs) -> bytes:
         """Convert the high-level AT representation back into a BitStream."""
         return data.to_bytes()
 
     @classmethod
-    def compress(
-        cls, data: bytes, compression_type: list[CommonAtType] | None = None
-    ) -> CompressionContainerProtocol:
+    def compress(cls, data: bytes, compression_type: list[CommonAtType] | None = None) -> CompressionContainerProtocol:
         """Turn uncompressed data into a new AT container"""
         if compression_type is None:
             compression_type = COMMON_AT_BEST_4

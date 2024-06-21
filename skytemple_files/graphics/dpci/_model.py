@@ -34,13 +34,9 @@ class Dpci(DpciProtocol):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        self.tiles: list[bytes] = list(
-            iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))
-        )  # / 2 because 4bpp
+        self.tiles: list[bytes] = list(iter_bytes(data, int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2)))  # / 2 because 4bpp
 
-    def tiles_to_pil(
-        self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0
-    ) -> Image.Image:
+    def tiles_to_pil(self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
         """
         Convert all individual tiles of the DPCI into one PIL image.
         The image contains all tiles next to each other, the image width is tile_width tiles.

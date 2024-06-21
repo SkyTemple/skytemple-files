@@ -94,9 +94,7 @@ class Bgp(BgpProtocol):
         self.palettes = []
         current_palette = []
         colors_read_for_current_palette = 0
-        for pal_entry in iter_bytes(
-            self.data, BGP_PAL_ENTRY_LEN, self.header.palette_begin, pal_end
-        ):
+        for pal_entry in iter_bytes(self.data, BGP_PAL_ENTRY_LEN, self.header.palette_begin, pal_end):
             r, g, b, unk = pal_entry
             current_palette.append(r)
             current_palette.append(g)
@@ -120,9 +118,7 @@ class Bgp(BgpProtocol):
         ):
             # NOTE: There will likely be more than 768 (BGP_TOTAL_NUMBER_TILES) tiles. Why is unknown, but the
             #       rest is just zero padding.
-            self.tilemap.append(
-                TilemapEntry.from_int(u16(int.from_bytes(entry, "little")))
-            )
+            self.tilemap.append(TilemapEntry.from_int(u16(int.from_bytes(entry, "little"))))
         if len(self.tilemap) < BGP_TOTAL_NUMBER_TILES:
             raise ValueError(
                 f"Invalid BGP image: Too few tiles ({len(self.tilemap)}) in tile mapping."

@@ -40,9 +40,7 @@ class ArmipsImporter:
     def assemble(self, patch_asm: str):
         with tempfile.TemporaryDirectory() as tmp:
             shutil.copytree(
-                os.path.join(
-                    get_resources_dir(), "patches", "asm_patches", "eos_move_effects"
-                ),
+                os.path.join(get_resources_dir(), "patches", "asm_patches", "eos_move_effects"),
                 tmp,
                 dirs_exist_ok=True,
                 symlinks=True,
@@ -58,9 +56,7 @@ class ArmipsImporter:
             try:
                 prefix = ""
                 # Under Windows, try to load from SkyTemple _resources dir first.
-                if sys.platform.startswith("win") and os.path.exists(
-                    os.path.join(get_resources_dir(), "armips.exe")
-                ):
+                if sys.platform.startswith("win") and os.path.exists(os.path.join(get_resources_dir(), "armips.exe")):
                     prefix = os.path.join(get_resources_dir(), "")
                 exec_name = os.getenv("SKYTEMPLE_ARMIPS_EXEC", f"{prefix}armips")
                 result = subprocess.Popen(
@@ -73,10 +69,7 @@ class ArmipsImporter:
             except FileNotFoundError as ex:
                 raise make_user_err(
                     ArmipsNotInstalledError,
-                    _(
-                        "ARMIPS could not be found. Make sure, that "
-                        "'armips' is inside your system's PATH."
-                    ),
+                    _("ARMIPS could not be found. Make sure, that " "'armips' is inside your system's PATH."),
                 ) from ex
 
             if retcode != 0:
@@ -93,8 +86,6 @@ class ArmipsImporter:
 
             out_bin_path = os.path.join(tmp, OUT_BIN)
             if not os.path.exists(out_bin_path):
-                raise ValueError(
-                    f(_("The armips source file did not create a {OUT_BIN}."))
-                )
+                raise ValueError(f(_("The armips source file did not create a {OUT_BIN}.")))
             with open(out_bin_path, "rb") as file:
                 return file.read()

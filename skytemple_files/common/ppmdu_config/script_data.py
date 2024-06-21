@@ -166,9 +166,7 @@ class Pmd2ScriptLevelMapType(Enum):
 
 
 class Pmd2ScriptLevel(AutoString):
-    def __init__(
-        self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: i16
-    ):
+    def __init__(self, id: int, mapid: u16, name: str, mapty: u16, nameid: u16, weather: i16):
         self.id = id
         self.mapid = mapid
         self.name = name
@@ -268,12 +266,8 @@ class Pmd2ScriptOpCode(SsbOpCode):
         self.unk2 = unk2
         self.unk3 = unk3
         self.arguments: list[Pmd2ScriptOpCodeArgument] = arguments
-        self.arguments__by_id: dict[int, Pmd2ScriptOpCodeArgument] = {
-            o.id: o for o in self.arguments
-        }
-        self.repeating_argument_group: None | (
-            Pmd2ScriptOpCodeRepeatingArgumentGroup
-        ) = repeating_argument_group
+        self.arguments__by_id: dict[int, Pmd2ScriptOpCodeArgument] = {o.id: o for o in self.arguments}
+        self.repeating_argument_group: None | (Pmd2ScriptOpCodeRepeatingArgumentGroup) = repeating_argument_group
         self.description = _("This function has no description.")  # todo
 
 

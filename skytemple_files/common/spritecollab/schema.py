@@ -160,9 +160,7 @@ class MonsterFormSprites_Action(TypedDict):
     action: OptionalSpriteUnion
 
 
-class MonsterFormSprites(
-    MonsterFormSprites_Metadata, MonsterFormSprites_Actions, MonsterFormSprites_Action
-):
+class MonsterFormSprites(MonsterFormSprites_Metadata, MonsterFormSprites_Actions, MonsterFormSprites_Action):
     pass
 
 

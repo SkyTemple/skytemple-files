@@ -32,11 +32,7 @@ class BpaWriter:
 
     def write(self, model: Bpa) -> bytes:
         # 4 byte header + animation info for each + images
-        data = bytearray(
-            4
-            + (model.number_of_frames * 4)
-            + int(model.number_of_tiles * model.number_of_frames / 2)
-        )
+        data = bytearray(4 + (model.number_of_frames * 4) + int(model.number_of_tiles * model.number_of_frames / 2))
 
         self._write_16uintle(data, model.number_of_tiles)
         self._write_16uintle(data, model.number_of_frames)

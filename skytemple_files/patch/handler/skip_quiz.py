@@ -78,30 +78,22 @@ Needs ChooseStarter patch to be applied. """
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([13])[13].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 string_id = STRING_ID_US
@@ -114,12 +106,8 @@ Needs ChooseStarter patch to be applied. """
         for lang in config.string_index_data.languages:
             filename = "MESSAGE/" + lang.filename
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(
-                bin_before, string_encoding=config.string_encoding
-            )
-            strings.strings[string_id - 1] = get_locales().translate(
-                MESSAGE, lang.locale.replace("-", "_")
-            )
+            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+            strings.strings[string_id - 1] = get_locales().translate(MESSAGE, lang.locale.replace("-", "_"))
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
         try:
@@ -127,7 +115,5 @@ Needs ChooseStarter patch to be applied. """
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

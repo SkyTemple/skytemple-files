@@ -92,7 +92,4 @@ class DataCD(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataCD):
             return False
-        return (
-            self.items_effects == other.items_effects
-            and self.effects_code == other.effects_code
-        )
+        return self.items_effects == other.items_effects and self.effects_code == other.effects_code

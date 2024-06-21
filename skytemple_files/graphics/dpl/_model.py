@@ -42,9 +42,7 @@ class Dpl(DplProtocol):
             pal.append(r)
             pal.append(g)
             pal.append(b)
-            assert (
-                x == DPL_FOURTH_COLOR
-            )  # just in case it isn't... then we'd have a real alpha channel
+            assert x == DPL_FOURTH_COLOR  # just in case it isn't... then we'd have a real alpha channel
             if i % DPL_PAL_LEN == DPL_PAL_LEN - 1:
                 self.palettes.append(pal)
                 pal = []

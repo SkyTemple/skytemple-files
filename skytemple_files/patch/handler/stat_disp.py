@@ -84,38 +84,19 @@ This patch may not be compatible if the markfont.dat file has been modified."""
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
                 raise NotImplementedError()  # TODO STAT_DISP: Causes a hard crash on hardware when attempting to view Move Descriptions. Then again, EU also softlocks...
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         START_ACCURACY = cast(int, self.get_parameter("StartGraphicPos"))
         START_POWER = START_ACCURACY + 12
-        MAX_POWER = (
-            f"[M:B{START_POWER}]"
-            + (f"[M:B{START_POWER + 10}]") * 9
-            + f"[M:B{START_POWER + 9}]"
-        )
-        MAX_ACCU = (
-            f"[M:B{START_POWER}]"
-            + (f"[M:B{START_ACCURACY + 11}]") * 10
-            + f"[M:B{START_POWER}]"
-        )
+        MAX_POWER = f"[M:B{START_POWER}]" + (f"[M:B{START_POWER + 10}]") * 9 + f"[M:B{START_POWER + 9}]"
+        MAX_ACCU = f"[M:B{START_POWER}]" + (f"[M:B{START_ACCURACY + 11}]") * 10 + f"[M:B{START_POWER}]"
         DESC_CHANGES = {
             8: MAX_POWER,
             60: MAX_POWER,
@@ -140,14 +121,10 @@ This patch may not be compatible if the markfont.dat file has been modified."""
             entries.append(None)
 
         for x in range(START_ACCURACY, START_ACCURACY + 12):
-            img = Image.open(
-                os.path.join(SRC_DIR, "accu_%02d.png" % (x - START_ACCURACY)), "r"
-            )
+            img = Image.open(os.path.join(SRC_DIR, "accu_%02d.png" % (x - START_ACCURACY)), "r")
             entries[x] = img
         for x in range(START_POWER, START_POWER + 11):
-            img = Image.open(
-                os.path.join(SRC_DIR, "pow_%02d.png" % (x - START_POWER)), "r"
-            )
+            img = Image.open(os.path.join(SRC_DIR, "pow_%02d.png" % (x - START_POWER)), "r")
             entries[x] = img
         model.set_entries(entries)
         bin_after = GraphicFontHandler.serialize(model)
@@ -156,14 +133,10 @@ This patch may not be compatible if the markfont.dat file has been modified."""
         # Change some move descriptions
         for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(
-                bin_before, string_encoding=config.string_encoding
-            )
+            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
             block = config.string_index_data.string_blocks["Move Descriptions"]
             for k, v in DESC_CHANGES.items():
-                strings.strings[block.begin + k] = strings.strings[
-                    block.begin + k
-                ].replace(OLD_STAT, v)
+                strings.strings[block.begin + k] = strings.strings[block.begin + k].replace(OLD_STAT, v)
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
 
@@ -172,7 +145,5 @@ This patch may not be compatible if the markfont.dat file has been modified."""
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

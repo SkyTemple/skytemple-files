@@ -166,10 +166,7 @@ class GenericNrlCompressor:
                 seq_len -= NRL_MIN_SEQ_LEN
                 break
 
-            if (
-                seq_len + 1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES
-                or nc >= self.length_input
-            ):
+            if seq_len + 1 >= NRL_LOOKAHEAD_COPY_BYTES_MAX_BYTES or nc >= self.length_input:
                 break
 
             seq_len += 1

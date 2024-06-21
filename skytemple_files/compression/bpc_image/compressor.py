@@ -108,9 +108,7 @@ class BpcImageCompressor:
         if DEBUG:
             print("----------------------")
             print(f"@0x{self.bytes_written:08x} [in input @0x{self.cursor:08x}]")
-            print(
-                f"Pattern buffer before: {self.pattern:02x} and {self.pattern_buffer:02x}"
-            )
+            print(f"Pattern buffer before: {self.pattern:02x} and {self.pattern_buffer:02x}")
         op = BpcImageCompressorOperation()
 
         # Check if byte repeats
@@ -145,9 +143,7 @@ class BpcImageCompressor:
         self._run_operation(op)
 
         if DEBUG:
-            print(
-                f"Pattern buffer after: {self.pattern:02x} and {self.pattern_buffer:02x}"
-            )
+            print(f"Pattern buffer after: {self.pattern:02x} and {self.pattern_buffer:02x}")
 
     def _run_operation(self, op: BpcImageCompressorOperation):
         """Actually write the operation"""
@@ -176,8 +172,7 @@ class BpcImageCompressor:
 
         # Determine the length
         if op.repeats <= BPC_IMGC_REPEAT_MAX_CMD or (
-            op.repeats <= BPC_IMGC_REPEAT_MAX_CMD_LOAD_AS_PATTERN
-            and op.where_pattern == WherePattern.WRITE_AS_BYTE
+            op.repeats <= BPC_IMGC_REPEAT_MAX_CMD_LOAD_AS_PATTERN and op.where_pattern == WherePattern.WRITE_AS_BYTE
         ):
             # Fits in CMD
             cmd += op.repeats
@@ -214,9 +209,7 @@ class BpcImageCompressor:
         # + 1 since we are counting repeats and always have 1
         len_of_seq = op.repeats + 1
         # assert len_of_seq == len(op.byte_or_sequence)
-        self.compressed_data[self.bytes_written : self.bytes_written + len_of_seq] = (
-            op.byte_or_sequence
-        )
+        self.compressed_data[self.bytes_written : self.bytes_written + len_of_seq] = op.byte_or_sequence
         # Don't forget to advance the cursors.
         self.bytes_written += len_of_seq
 
@@ -231,9 +224,7 @@ class BpcImageCompressor:
         """Writes to the output as 16 byte LE"""
         if DEBUG:
             print(f"W {data:04x}")
-        self.compressed_data[self.bytes_written : self.bytes_written + 1] = (
-            data.to_bytes(2, "little")
-        )
+        self.compressed_data[self.bytes_written : self.bytes_written + 1] = data.to_bytes(2, "little")
         self.bytes_written += 2
 
     def _look_ahead_repeats(self):
@@ -259,9 +250,7 @@ class BpcImageCompressor:
         previous_byt_at_pos = 0x100  # Impossible "null" value for now
         nc = self.cursor
         while True:
-            byt_at_pos = read_dynamic(
-                self.uncompressed_data, nc, length=1, big_endian=False, signed=False
-            )
+            byt_at_pos = read_dynamic(self.uncompressed_data, nc, length=1, big_endian=False, signed=False)
             if byt_at_pos == previous_byt_at_pos:
                 repeat_counter += 1
             else:

@@ -33,19 +33,13 @@ class GraphicFont(AutoString):
 
         self.palette: Pal | None = None
         self.entries: list[Image.Image | None] = []
-        for i in range(
-            0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN
-        ):
+        for i in range(0, number_entries * GRAPHIC_FONT_ENTRY_LEN, GRAPHIC_FONT_ENTRY_LEN):
             width = read_u8(data, i + 0x00)
             height = read_u8(data, i + 0x01)
             offset = read_u16(data, i + 0x02)
             if width > 0 or height > 0:
                 data_raw = data[offset : offset + width * height]
-                self.entries.append(
-                    Image.frombytes(
-                        mode="P", size=(width, height), data=bytes(data_raw)
-                    )
-                )
+                self.entries.append(Image.frombytes(mode="P", size=(width, height), data=bytes(data_raw)))
             else:
                 self.entries.append(None)
 
@@ -56,9 +50,7 @@ class GraphicFont(AutoString):
         if self.palette:
             return [0, 0, 255] * 0x80 + self.palette.get_palette_4bpc()[: 0x80 * 3]
         else:
-            return [0, 0, 255] * 0x80 + [
-                (i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)
-            ]
+            return [0, 0, 255] * 0x80 + [(i // 3) % 16 * 16 + (i // 3) // 16 for i in range(0x80 * 3)]
 
     def set_palette_raw(self, data: list[int]):
         if self.palette:

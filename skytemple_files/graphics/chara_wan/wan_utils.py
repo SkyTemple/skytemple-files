@@ -53,9 +53,7 @@ def duplicateAnimGroup(anim):
     for anim_seq in anim:
         new_seq = []
         for frame in anim_seq:
-            new_frame = SequenceFrame(
-                frame.frameIndex, frame.duration, frame.flag, frame.offset, frame.shadow
-            )
+            new_frame = SequenceFrame(frame.frameIndex, frame.duration, frame.flag, frame.offset, frame.shadow)
             new_frame.SetRushPoint(frame.IsRushPoint())
             new_seq.append(new_frame)
         new_group.append(new_seq)
@@ -65,9 +63,7 @@ def duplicateAnimGroup(anim):
 def duplicateMetaFrame(frame):
     new_frame = []
     for piece in frame:
-        new_piece = MetaFramePiece(
-            piece.imgIndex, piece.attr0, piece.attr1, piece.attr2
-        )
+        new_piece = MetaFramePiece(piece.imgIndex, piece.attr0, piece.attr1, piece.attr2)
         new_frame.append(new_piece)
     return new_frame
 

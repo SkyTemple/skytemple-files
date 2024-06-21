@@ -182,9 +182,7 @@ def read_bytes(data: bytes, start: int = 0, length: int = 1) -> bytes:
     return data[start : (start + length)]
 
 
-def read_dynamic(
-    data: ByteReadable, start: int = 0, *, length: int, signed: bool, big_endian: bool
-) -> int:
+def read_dynamic(data: ByteReadable, start: int = 0, *, length: int, signed: bool, big_endian: bool) -> int:
     """
     Return an integer from the bytes-like object at the given position.
     """
@@ -249,9 +247,7 @@ def read_i32(data: ByteReadable, start: int = 0, *, big_endian: bool = False) ->
     )
 
 
-def read_var_length_string(
-    data: bytes, start: int = 0, codec: str = string_codec.PMD2_STR_ENCODER
-) -> tuple[int, str]:
+def read_var_length_string(data: bytes, start: int = 0, codec: str = string_codec.PMD2_STR_ENCODER) -> tuple[int, str]:
     """Reads a zero terminated string of characters."""
     if codec == string_codec.PMD2_STR_ENCODER:
         string_codec.init()
@@ -277,40 +273,24 @@ def write_i8(data: bytearray, to_write: i8, start: int = 0):
     data[start : start + 1] = to_write.to_bytes(1, byteorder="little", signed=True)
 
 
-def write_u16(
-    data: bytearray, to_write: u16, start: int = 0, *, big_endian: bool = False
-):
+def write_u16(data: bytearray, to_write: u16, start: int = 0, *, big_endian: bool = False):
     """Writes an unsigned 16-bit integer into the bytearray at the given position."""
-    data[start : start + 2] = to_write.to_bytes(
-        2, byteorder="big" if big_endian else "little", signed=False
-    )
+    data[start : start + 2] = to_write.to_bytes(2, byteorder="big" if big_endian else "little", signed=False)
 
 
-def write_i16(
-    data: bytearray, to_write: i16, start: int = 0, *, big_endian: bool = False
-):
+def write_i16(data: bytearray, to_write: i16, start: int = 0, *, big_endian: bool = False):
     """Writes a signed 16-bit integer into the bytearray at the given position."""
-    data[start : start + 2] = to_write.to_bytes(
-        2, byteorder="big" if big_endian else "little", signed=True
-    )
+    data[start : start + 2] = to_write.to_bytes(2, byteorder="big" if big_endian else "little", signed=True)
 
 
-def write_u32(
-    data: bytearray, to_write: u32, start: int = 0, *, big_endian: bool = False
-):
+def write_u32(data: bytearray, to_write: u32, start: int = 0, *, big_endian: bool = False):
     """Writes an unsigned 32-bit integer into the bytearray at the given position."""
-    data[start : start + 4] = to_write.to_bytes(
-        4, byteorder="big" if big_endian else "little", signed=False
-    )
+    data[start : start + 4] = to_write.to_bytes(4, byteorder="big" if big_endian else "little", signed=False)
 
 
-def write_i32(
-    data: bytearray, to_write: i32, start: int = 0, *, big_endian: bool = False
-):
+def write_i32(data: bytearray, to_write: i32, start: int = 0, *, big_endian: bool = False):
     """Writes a signed 32-bit integer into the bytearray at the given position."""
-    data[start : start + 4] = to_write.to_bytes(
-        4, byteorder="big" if big_endian else "little", signed=True
-    )
+    data[start : start + 4] = to_write.to_bytes(4, byteorder="big" if big_endian else "little", signed=True)
 
 
 def iter_bits(number: int) -> Iterable[int]:
@@ -324,9 +304,7 @@ def iter_bits(number: int) -> Iterable[int]:
         bit >>= 1
 
 
-def iter_bytes(
-    data: bytes, slice_size: int, start: int = 0, end: int | None = None
-) -> Iterable[bytes]:
+def iter_bytes(data: bytes, slice_size: int, start: int = 0, end: int | None = None) -> Iterable[bytes]:
     if end is None:
         end = len(data)
     _check_memoryview(data)
@@ -334,9 +312,7 @@ def iter_bytes(
         yield data[i : i + slice_size]
 
 
-def iter_bytes_4bit_le(
-    data: bytes, start: int = 0, end: int | None = None
-) -> Iterable[int]:
+def iter_bytes_4bit_le(data: bytes, start: int = 0, end: int | None = None) -> Iterable[int]:
     """
     Generator that generates two 4 bit integers for each byte in the bytes-like object data.
     The 4 bit integers are expected to be stored little endian in the bytes.
@@ -368,18 +344,14 @@ def get_files_from_folder_with_extension(folder: Folder, ext: str) -> list[str]:
     return _get_files_from_rom_with_extension__recursion("", folder, ext)
 
 
-def _get_files_from_rom_with_extension__recursion(
-    path: str, folder: Folder, ext: str
-) -> list[str]:
+def _get_files_from_rom_with_extension__recursion(path: str, folder: Folder, ext: str) -> list[str]:
     if ext == "":
         # Use all files
         files = [path + x for x in folder.files]
     else:
         files = [path + x for x in folder.files if x.endswith("." + ext)]
     for subfolder in folder.folders:
-        files += _get_files_from_rom_with_extension__recursion(
-            path + subfolder[0] + "/", subfolder[1], ext
-        )
+        files += _get_files_from_rom_with_extension__recursion(path + subfolder[0] + "/", subfolder[1], ext)
     return files
 
 
@@ -472,9 +444,7 @@ def _mpcu__check(
         new_change_next = (change_next + 1) % 8
         if new_change_next == 0:
             change_amount += 1
-        return _mpcu__check(
-            new_color, already_collected_colors, new_change_next, change_amount
-        )
+        return _mpcu__check(new_color, already_collected_colors, new_change_next, change_amount)
 
 
 @overload
@@ -516,17 +486,11 @@ def get_ppmdu_config_for_rom(rom: NintendoDSRom) -> Pmd2Data:
         game_code = rom.idCode.decode("ascii")
         arm9off14 = read_u16(rom.arm9[0xE:0x10], 0)
     except (ValueError, IndexError):
-        raise UserValueError(
-            _("The file you tried to open does not seem to be a valid NDS ROM file.")
-        )
+        raise UserValueError(_("The file you tried to open does not seem to be a valid NDS ROM file."))
 
     matched_edition = None
     for edition_name, edition in data_general.game_editions.items():
-        if (
-            edition.issupported
-            and edition.gamecode == game_code
-            and edition.arm9off14 == arm9off14
-        ):
+        if edition.issupported and edition.gamecode == game_code and edition.arm9off14 == arm9off14:
             matched_edition = edition_name
             break
 
@@ -703,9 +667,7 @@ def shrink_list(lst: list[T]) -> list[tuple[T, int]]:
     return [(element, len(list(i))) for element, i in groupby(lst)]
 
 
-def list_insert_enlarge(
-    lst: list[T], index: int, value: T, filler_fn: Callable[[], T]
-) -> None:
+def list_insert_enlarge(lst: list[T], index: int, value: T, filler_fn: Callable[[], T]) -> None:
     """Inserts an element value at index index in lst. If the list is not big enough,
     it is enlarged and empty slots are filled with the return value of filler_fn."""
     if len(lst) <= index:
@@ -781,9 +743,7 @@ class EnumCompatibleInt(int):
     @property
     def value(self) -> int:
         warnings.warn(
-            DeprecatedToBeRemovedWarning(
-                self._DEPR_WARN.format(self._former), self._DEPR_VER
-            ),
+            DeprecatedToBeRemovedWarning(self._DEPR_WARN.format(self._former), self._DEPR_VER),
             stacklevel=2,
         )
         logger.warning(self._DEPR_WARN.format(self._former))
@@ -792,9 +752,7 @@ class EnumCompatibleInt(int):
     @property
     def name(self) -> str:
         warnings.warn(
-            DeprecatedToBeRemovedWarning(
-                self._DEPR_WARN.format(self._former), self._DEPR_VER
-            ),
+            DeprecatedToBeRemovedWarning(self._DEPR_WARN.format(self._former), self._DEPR_VER),
             stacklevel=2,
         )
         logger.warning(self._DEPR_WARN.format(self._former))

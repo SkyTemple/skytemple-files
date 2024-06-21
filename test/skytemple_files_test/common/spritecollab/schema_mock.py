@@ -585,18 +585,14 @@ def mock_monster____all_forms(
                 },
             },
         }
-    raise NotImplementedError(
-        f"This mock is not implemented for monster {source['id']}."
-    )
+    raise NotImplementedError(f"This mock is not implemented for monster {source['id']}.")
 
 
 def mock_monster__forms(source: Monster_Metadata) -> List[MonsterForm]:
     return list(mock_monster____all_forms(source).values())
 
 
-def mock_monster__get(
-    source: Monster_Metadata, form_id: int, shiny: bool, female: bool
-) -> Optional[MonsterForm]:
+def mock_monster__get(source: Monster_Metadata, form_id: int, shiny: bool, female: bool) -> Optional[MonsterForm]:
     all_forms = mock_monster____all_forms(source)
     for (_, key_get), value in all_forms.items():
         if (form_id, shiny, female) == key_get:
@@ -679,25 +675,15 @@ config_type = GraphQLObjectType(
         "portraitSize": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "portraitTileX": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "portraitTileY": GraphQLField(GraphQLNonNull(GraphQLInt)),
-        "emotions": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
-        ),
-        "actions": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
-        ),
+        "emotions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))),
+        "actions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))),
         "completionEmotions": GraphQLField(
-            GraphQLNonNull(
-                GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt))))
-            )
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt)))))
         ),
         "completionActions": GraphQLField(
-            GraphQLNonNull(
-                GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt))))
-            )
+            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLInt)))))
         ),
-        "actionMap": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(action_id_type)))
-        ),
+        "actionMap": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(action_id_type)))),
     },
 )
 
@@ -821,9 +807,7 @@ known_license_type = GraphQLObjectType(
 license_union_type = GraphQLUnionType(
     "License",
     [known_license_type, other_license_type],
-    resolve_type=lambda value, _, __: "KnownLicense"
-    if "license" in value.keys()
-    else "OtherLicense",
+    resolve_type=lambda value, _, __: "KnownLicense" if "license" in value.keys() else "OtherLicense",
 )
 
 # type MonsterHistory {
@@ -849,9 +833,7 @@ monster_history_type = GraphQLObjectType(
     lambda: {
         "credit": GraphQLField(credit_type),
         "modifiedDate": GraphQLField(GraphQLNonNull(date_time_utc_type)),
-        "modifications": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))
-        ),
+        "modifications": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(GraphQLString)))),
         "obsolete": GraphQLField(GraphQLNonNull(GraphQLBoolean)),
         "license": GraphQLField(GraphQLNonNull(license_union_type)),
     },
@@ -945,9 +927,7 @@ sprite_type = GraphQLObjectType(
 sprite_union_type = GraphQLUnionType(
     "SpriteUnion",
     [sprite_type, copy_of_type],
-    resolve_type=lambda value, _, __: "CopyOf"
-    if "copyOf" in value.keys()
-    else "Sprite",
+    resolve_type=lambda value, _, __: "CopyOf" if "copyOf" in value.keys() else "Sprite",
 )
 
 # """A bounty for a non-standard phase."""
@@ -990,9 +970,7 @@ monster_bounty_type = GraphQLObjectType(
         "incomplete": GraphQLField(GraphQLInt),
         "exists": GraphQLField(GraphQLInt),
         "full": GraphQLField(GraphQLInt),
-        "other": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(other_bounty_type)))
-        ),
+        "other": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(other_bounty_type)))),
     },
 )
 
@@ -1057,14 +1035,10 @@ monster_form_portraits_type = GraphQLObjectType(
         "phase": GraphQLField(GraphQLNonNull(phase_type)),
         "phaseRaw": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "creditPrimary": GraphQLField(credit_type),
-        "creditSecondary": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))
-        ),
+        "creditSecondary": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))),
         "sheetUrl": GraphQLField(GraphQLNonNull(GraphQLString)),
         "recolorSheetUrl": GraphQLField(GraphQLNonNull(GraphQLString)),
-        "emotions": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))
-        ),
+        "emotions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))),
         "emotion": GraphQLField(
             portrait_type,
             args={
@@ -1072,9 +1046,7 @@ monster_form_portraits_type = GraphQLObjectType(
             },
             resolve=lambda source, _info, emotion: mock_emotion(source, emotion, False),
         ),
-        "emotionsFlipped": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))
-        ),
+        "emotionsFlipped": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(portrait_type)))),
         "emotionFlipped": GraphQLField(
             portrait_type,
             args={
@@ -1084,9 +1056,7 @@ monster_form_portraits_type = GraphQLObjectType(
         ),
         "previewEmotion": GraphQLField(portrait_type),
         "modifiedDate": GraphQLField(date_time_utc_type),
-        "history": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))
-        ),
+        "history": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))),
         "historyUrl": GraphQLField(GraphQLString),
     },
 )
@@ -1144,15 +1114,11 @@ monster_form_sprites_type = GraphQLObjectType(
         "phase": GraphQLField(GraphQLNonNull(phase_type)),
         "phaseRaw": GraphQLField(GraphQLNonNull(GraphQLInt)),
         "creditPrimary": GraphQLField(credit_type),
-        "creditSecondary": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))
-        ),
+        "creditSecondary": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(credit_type)))),
         "animDataXml": GraphQLField(GraphQLString),
         "zipUrl": GraphQLField(GraphQLString),
         "recolorSheetUrl": GraphQLField(GraphQLString),
-        "actions": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(sprite_union_type)))
-        ),
+        "actions": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(sprite_union_type)))),
         "action": GraphQLField(
             sprite_union_type,
             args={
@@ -1161,9 +1127,7 @@ monster_form_sprites_type = GraphQLObjectType(
             resolve=lambda source, _info, action: mock_action(source, action),
         ),
         "modifiedDate": GraphQLField(date_time_utc_type),
-        "history": GraphQLField(
-            GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))
-        ),
+        "history": GraphQLField(GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_history_type)))),
         "historyUrl": GraphQLField(GraphQLString),
     },
 )
@@ -1265,9 +1229,7 @@ monster_type = GraphQLObjectType(
                 "shiny": GraphQLArgument(GraphQLNonNull(GraphQLBoolean)),
                 "female": GraphQLArgument(GraphQLNonNull(GraphQLBoolean)),
             },
-            resolve=lambda source, _info, form_id, shiny, female: mock_monster__get(
-                source, form_id, shiny, female
-            ),
+            resolve=lambda source, _info, form_id, shiny, female: mock_monster__get(source, form_id, shiny, female),
         ),
         "manual": GraphQLField(
             monster_form_type,
@@ -1319,9 +1281,7 @@ query_type = GraphQLObjectType(
             args={
                 "monsterName": GraphQLArgument(GraphQLNonNull(GraphQLString)),
             },
-            resolve=lambda _source, _info, monsterName: mock_search_monster(
-                monsterName
-            ),
+            resolve=lambda _source, _info, monsterName: mock_search_monster(monsterName),
         ),
         "monster": GraphQLField(
             GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_type))),

@@ -65,19 +65,13 @@ def check_and_correct_monster_sprite_size(
         effective_base_attr = "entid"
         check_value = md_target.unk17
         check_value_file = md_target.unk18
-        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(
-            monster_bin, md_target
-        )
+        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, md_target)
     else:
         check_value = sprite_size_table[md_gender1.md_index_base].sprite_tile_slots
         check_value_file = sprite_size_table[md_gender1.md_index_base].unk1
-        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(
-            monster_bin, md_gender1
-        )
+        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, md_gender1)
         if md_gender2 is not None:
-            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(
-                monster_bin, md_gender2
-            )
+            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(monster_bin, md_gender2)
             max_tile_slots_needed = max(max_tile_slots_needed, max_tile_slots_needed2)
             max_file_size_needed = max(max_file_size_needed, max_file_size_needed2)
 
@@ -85,9 +79,7 @@ def check_and_correct_monster_sprite_size(
         if is_expand_poke_list_patch_applied:
             md_target.unk17 = max_tile_slots_needed
         else:
-            sprite_size_table[
-                getattr(md_gender1, effective_base_attr)
-            ].sprite_tile_slots = max_tile_slots_needed
+            sprite_size_table[getattr(md_gender1, effective_base_attr)].sprite_tile_slots = max_tile_slots_needed
 
         changed = True
 
@@ -95,9 +87,7 @@ def check_and_correct_monster_sprite_size(
         if is_expand_poke_list_patch_applied:
             md_target.unk18 = max_file_size_needed
         else:
-            sprite_size_table[
-                getattr(md_gender1, effective_base_attr)
-            ].unk1 = max_file_size_needed
+            sprite_size_table[getattr(md_gender1, effective_base_attr)].unk1 = max_file_size_needed
 
         changed = True
     return changed

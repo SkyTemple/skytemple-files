@@ -34,7 +34,5 @@ def dataset_name_func(testcase_func, _, param):
 
 
 def _get_fixture_paths() -> Generator[str, None, None]:
-    for file in glob(
-        os.path.join(os.path.realpath(os.path.dirname(__file__)), "fixtures", "*.png")
-    ):
+    for file in glob(os.path.join(os.path.realpath(os.path.dirname(__file__)), "fixtures", "*.png")):
         yield file

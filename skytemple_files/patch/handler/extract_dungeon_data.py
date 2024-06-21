@@ -192,25 +192,14 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED_US
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED_US
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED_EU
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED_EU
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED_JP
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED_JP
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -242,9 +231,7 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
                     if rom.arm9[x] == i:
                         fdata[rom.arm9[x + 1]] = 1
                     x += 2
-                rom.arm9 = (
-                    rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
-                )
+                rom.arm9 = rom.arm9[:start] + bytes([0xCC] * (end - start)) + rom.arm9[end:]
                 write_u32(header, current_ptr, i * 4)
                 rank_data += bytearray(rdata)
                 forbid_data += bytearray(fdata)
@@ -281,7 +268,5 @@ class ExtractDungeonDataPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

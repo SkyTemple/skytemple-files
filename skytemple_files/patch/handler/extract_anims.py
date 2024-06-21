@@ -52,9 +52,7 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _(
-            "Extracts animation data and put it in files. \nNeeds ActorAndLevelLoader patch to free some space. "
-        )
+        return _("Extracts animation data and put it in files. \nNeeds ActorAndLevelLoader patch to free some space. ")
 
     @property
     def author(self) -> str:
@@ -75,30 +73,22 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([10])[10].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -123,7 +113,5 @@ class ExtractAnimDataPatchHandler(AbstractPatchHandler, DependantPatch):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

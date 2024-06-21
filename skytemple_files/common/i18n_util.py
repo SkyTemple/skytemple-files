@@ -38,15 +38,11 @@ class LocaleManager(AbstractLocaleManager):
         self.localedir = localedir
         self.main_languages = main_languages
 
-        self.main_translations = gettext.translation(
-            domain, localedir=localedir, languages=main_languages
-        )
+        self.main_translations = gettext.translation(domain, localedir=localedir, languages=main_languages)
 
     def translate(self, message: str, locale_code: str) -> str:
         try:
-            return gettext.translation(
-                self.domain, localedir=self.localedir, languages=[locale_code]
-            ).gettext(message)
+            return gettext.translation(self.domain, localedir=self.localedir, languages=[locale_code]).gettext(message)
         except Exception:
             return message
 

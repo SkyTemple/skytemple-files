@@ -28,9 +28,7 @@ class DpciProtocol(Protocol):
     def __init__(self, data: bytes): ...
 
     @abstractmethod
-    def tiles_to_pil(
-        self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0
-    ) -> Image.Image:
+    def tiles_to_pil(self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
         """
         Convert all individual tiles of the DPCI into one PIL image.
         The image contains all tiles next to each other, the image width is tile_width tiles.

@@ -149,11 +149,7 @@ class AsmFunction:
                 if baddr >= BRANCH_NEG:
                     baddr -= 2 * BRANCH_NEG
                 baddr = baddr * 0x4 + offset + 0x8
-                if not (
-                    self.old_start_address
-                    <= baddr
-                    < self.old_start_address + len(self.data)
-                ):
+                if not (self.old_start_address <= baddr < self.old_start_address + len(self.data)):
                     self.external_calls[x] = (False, baddr, "b")
                     calls.add(baddr)
             elif code & LDR_MASK == LDR_CODE:
@@ -163,11 +159,7 @@ class AsmFunction:
                 offset += 0x8
                 datapos = x + offset // 4
                 baddr = datapos * 4 + self.old_start_address
-                if not (
-                    self.old_start_address
-                    <= datapos
-                    < self.old_start_address + len(self.data)
-                ):
+                if not (self.old_start_address <= datapos < self.old_start_address + len(self.data)):
                     self.external_calls[x] = (False, baddr, "ldrdata")
                     ext_data.add(baddr)
                 else:
@@ -258,11 +250,7 @@ class AsmFunction:
 
     def exec(self, reg_list: list[int]):
         flags = [False, False, False, False]
-        while (
-            self.old_start_address
-            <= reg_list[15] - 0x8
-            < self.old_start_address + len(self.data)
-        ):
+        while self.old_start_address <= reg_list[15] - 0x8 < self.old_start_address + len(self.data):
             offset = reg_list[15] - 0x8
             # print(hex(offset), flags)
             x = (offset - self.old_start_address) // 0x4
@@ -280,26 +268,16 @@ class AsmFunction:
                         offset = -offset
                     offset += 0x8
                     datapos = x + offset // 4
-                    if not (
-                        self.old_start_address
-                        <= datapos
-                        < self.old_start_address + len(self.data)
-                    ):
+                    if not (self.old_start_address <= datapos < self.old_start_address + len(self.data)):
                         if not self.external_calls[x][0]:
-                            raise Exception(
-                                "Data not found at " + hex(reg_list[15] - 0x8)
-                            )
+                            raise Exception("Data not found at " + hex(reg_list[15] - 0x8))
                         reg_list[(code & REG_DEST) >> 12] = self.external_calls[x][1]
                     else:
-                        reg_list[(code & REG_DEST) >> 12] = self.external_calls[
-                            datapos
-                        ][1]
+                        reg_list[(code & REG_DEST) >> 12] = self.external_calls[datapos][1]
                     reg_list[15] += 0x4
                 elif code & AL_OP_MASK == AL_OP_CODE:
                     opcode = code & OPCODE_MASK  # noqa: F841
-                    op2 = get_imm_value(
-                        reg_list, code & IMMEDIATE_FIELD, code & OPCODE_IMM
-                    )
+                    op2 = get_imm_value(reg_list, code & IMMEDIATE_FIELD, code & OPCODE_IMM)
                     dest = (code & REG_DEST) >> 12
                     reg_op = (code & REG_SRC) >> 16
                     op1 = reg_list[reg_op]
@@ -325,22 +303,16 @@ class AsmFunction:
                         res = op2
                         reg_list[dest] = (res) & ALL
                     else:
-                        raise Exception(
-                            "Opcode not supported at " + hex(reg_list[15] - 0x8)
-                        )
+                        raise Exception("Opcode not supported at " + hex(reg_list[15] - 0x8))
                     if set_flags:
                         flags[0] = (res) & ALL == 0
                         flags[1] = res >= (2**32) or res < -(2**32)
                         flags[2] = ((res) & ALL) & REG_NEG == ALL & REG_NEG
-                        flags[3] = (op1 & REG_NEG) == (op2 & REG_NEG) and (
-                            op1 & REG_NEG
-                        ) != (res & REG_NEG)
+                        flags[3] = (op1 & REG_NEG) == (op2 & REG_NEG) and (op1 & REG_NEG) != (res & REG_NEG)
                     if dest != 15:
                         reg_list[15] += 0x4
                 else:
-                    raise Exception(
-                        "Instruction not supported at " + hex(reg_list[15] - 0x8)
-                    )
+                    raise Exception("Instruction not supported at " + hex(reg_list[15] - 0x8))
             else:
                 reg_list[15] += 0x4
         return reg_list

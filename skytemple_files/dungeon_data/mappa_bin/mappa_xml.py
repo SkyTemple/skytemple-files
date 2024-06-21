@@ -132,9 +132,7 @@ def mappa_to_xml(mappa: MappaBinProtocol) -> Element:
     return mappa_xml
 
 
-def mappa_from_xml(
-    ele: Element, items: dict[str, Pmd2DungeonItemCategory]
-) -> MappaBinProtocol:
+def mappa_from_xml(ele: Element, items: dict[str, Pmd2DungeonItemCategory]) -> MappaBinProtocol:
     validate_xml_tag(ele, XML_MAPPA)
     floor_lists = []
     for x_floor_list in ele:
@@ -192,13 +190,9 @@ def mappa_floor_to_xml(
         floor_xml.append(shop_items_xml)
 
     if export_monster_house_items:
-        monster_house_items_xml = mappa_item_list_to_xml(
-            floor.monster_house_items, items_desc
-        )
+        monster_house_items_xml = mappa_item_list_to_xml(floor.monster_house_items, items_desc)
         validate_xml_tag(monster_house_items_xml, XML_ITEM_LIST)
-        monster_house_items_xml.set(
-            XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE
-        )
+        monster_house_items_xml.set(XML_ITEM_LIST__TYPE, XML_ITEM_LIST__TYPE__MONSTER_HOUSE)
         floor_xml.append(monster_house_items_xml)
 
     if export_buried_items:
@@ -234,9 +228,7 @@ class MappaFloorFromXmlDict(TypedDict):
     unk_items2: MappaItemListProtocol | None
 
 
-def mappa_floor_from_xml(
-    ele: Element, items: dict[str, Pmd2DungeonItemCategory]
-) -> MappaFloorProtocol:
+def mappa_floor_from_xml(ele: Element, items: dict[str, Pmd2DungeonItemCategory]) -> MappaFloorProtocol:
     data: MappaFloorFromXmlDict = {
         "layout": None,
         "monsters": None,
@@ -304,9 +296,7 @@ def mappa_floor_from_xml(
     return MappaBinHandler.get_floor_model()(**data)  # type: ignore
 
 
-def mappa_floor_xml_import(
-    xml: Element, floor: MappaFloorProtocol, items: dict[str, Pmd2DungeonItemCategory]
-):
+def mappa_floor_xml_import(xml: Element, floor: MappaFloorProtocol, items: dict[str, Pmd2DungeonItemCategory]):
     """Imports all data available in the mappa floor XML into the given model."""
     for child in xml:
         if child.tag == XML_FLOOR_LAYOUT:
@@ -320,35 +310,17 @@ def mappa_floor_xml_import(
             floor.monsters = monsters
         elif child.tag == XML_TRAP_LIST:
             floor.traps = mappa_trap_list_from_xml(child)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__FLOOR
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__FLOOR:
             floor.floor_items = mappa_item_list_from_xml(child, items)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__SHOP
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__SHOP:
             floor.shop_items = mappa_item_list_from_xml(child, items)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__MONSTER_HOUSE
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__MONSTER_HOUSE:
             floor.monster_house_items = mappa_item_list_from_xml(child, items)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__BURIED
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__BURIED:
             floor.buried_items = mappa_item_list_from_xml(child, items)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK1
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK1:
             floor.unk_items1 = mappa_item_list_from_xml(child, items)
-        elif (
-            child.tag == XML_ITEM_LIST
-            and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2
-        ):
+        elif child.tag == XML_ITEM_LIST and child.get(XML_ITEM_LIST__TYPE) == XML_ITEM_LIST__TYPE__UNK2:
             floor.unk_items2 = mappa_item_list_from_xml(child, items)
         else:
             raise XmlValidateError(f(_("Floor parsing: Unexpected {child.tag}")))
@@ -364,9 +336,7 @@ def mappa_floor_layout_to_xml(mfl: MappaFloorLayoutProtocol) -> Element:
             XML_FLOOR_LAYOUT__WEATHER: MappaFloorWeather(mfl.weather).name,
             XML_FLOOR_LAYOUT__NUMBER: str(mfl.floor_number),
             XML_FLOOR_LAYOUT__FIXED_FLOOR_ID: str(mfl.fixed_floor_id),
-            XML_FLOOR_LAYOUT__DARKNESS_LEVEL: MappaFloorDarknessLevel(
-                mfl.darkness_level
-            ).name,
+            XML_FLOOR_LAYOUT__DARKNESS_LEVEL: MappaFloorDarknessLevel(mfl.darkness_level).name,
         },
     )
     xml_generator_settings = Element(
@@ -374,15 +344,11 @@ def mappa_floor_layout_to_xml(mfl: MappaFloorLayoutProtocol) -> Element:
         {
             XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY: str(mfl.room_density),
             XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY: str(mfl.floor_connectivity),
-            XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY: str(
-                mfl.initial_enemy_density
-            ),
+            XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY: str(mfl.initial_enemy_density),
             XML_FLOOR_LAYOUT__GENSET__DEAD_ENDS: str(int(mfl.dead_ends)),
             XML_FLOOR_LAYOUT__GENSET__ITEM_DENSITY: str(mfl.item_density),
             XML_FLOOR_LAYOUT__GENSET__TRAP_DENSITY: str(mfl.trap_density),
-            XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY: str(
-                mfl.extra_hallway_density
-            ),
+            XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY: str(mfl.extra_hallway_density),
             XML_FLOOR_LAYOUT__GENSET__BURIED_ITEM_DENSITY: str(mfl.buried_item_density),
             XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY: str(mfl.water_density),
             XML_FLOOR_LAYOUT__GENSET__MAX_COIN_AMOUNT: str(mfl.max_coin_amount),
@@ -395,24 +361,16 @@ def mappa_floor_layout_to_xml(mfl: MappaFloorLayoutProtocol) -> Element:
             XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE: str(mfl.monster_house_chance),
             XML_FLOOR_LAYOUT__CHANCES__UNUSED: str(mfl.unused_chance),
             XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM: str(mfl.sticky_item_chance),
-            XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE: str(
-                mfl.empty_monster_house_chance
-            ),
-            XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS: str(
-                mfl.hidden_stairs_spawn_chance
-            ),
+            XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE: str(mfl.empty_monster_house_chance),
+            XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS: str(mfl.hidden_stairs_spawn_chance),
         },
     )
     xml_terrain_settings = Element(
         XML_FLOOR_LAYOUT__TERRAINSET,
         {
-            XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED: str(
-                int(mfl.terrain_settings.has_secondary_terrain)
-            ),
+            XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED: str(int(mfl.terrain_settings.has_secondary_terrain)),
             XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE: str(mfl.secondary_terrain),
-            XML_FLOOR_LAYOUT__TERRAINSET__IMPERFECT_ROOMS: str(
-                int(mfl.terrain_settings.generate_imperfect_rooms)
-            ),
+            XML_FLOOR_LAYOUT__TERRAINSET__IMPERFECT_ROOMS: str(int(mfl.terrain_settings.generate_imperfect_rooms)),
             XML_FLOOR_LAYOUT__TERRAINSET__UNK1: str(int(mfl.terrain_settings.unk1)),
             XML_FLOOR_LAYOUT__TERRAINSET__UNK3: str(int(mfl.terrain_settings.unk3)),
             XML_FLOOR_LAYOUT__TERRAINSET__UNK4: str(int(mfl.terrain_settings.unk4)),
@@ -425,9 +383,7 @@ def mappa_floor_layout_to_xml(mfl: MappaFloorLayoutProtocol) -> Element:
         XML_FLOOR_LAYOUT__MISCSET,
         {
             XML_FLOOR_LAYOUT__MISCSET__UNKE: str(int(mfl.unk_e)),
-            XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS: str(
-                mfl.kecleon_shop_item_positions
-            ),
+            XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS: str(mfl.kecleon_shop_item_positions),
             XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS: str(mfl.unk_hidden_stairs),
             XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ: str(mfl.enemy_iq),
             XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST: str(mfl.iq_booster_boost),
@@ -459,29 +415,19 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
         elif child.tag == XML_FLOOR_LAYOUT__MISCSET:
             misc = child
         else:
-            raise XmlValidateError(
-                f(_("Unexpected sub-node for {XML_FLOOR_LAYOUT}: {child.tag}"))
-            )
+            raise XmlValidateError(f(_("Unexpected sub-node for {XML_FLOOR_LAYOUT}: {child.tag}")))
 
     if generator_settings is None:
-        raise XmlValidateError(
-            f(_("{XML_FLOOR_LAYOUT__GENSET} missing for {XML_FLOOR_LAYOUT}."))
-        )
+        raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__GENSET} missing for {XML_FLOOR_LAYOUT}.")))
 
     if chances is None:
-        raise XmlValidateError(
-            f(_("{XML_FLOOR_LAYOUT__CHANCES} missing for {XML_FLOOR_LAYOUT}."))
-        )
+        raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__CHANCES} missing for {XML_FLOOR_LAYOUT}.")))
 
     if terrain_settings is None:
-        raise XmlValidateError(
-            f(_("{XML_FLOOR_LAYOUT__TERRAINSET} missing for {XML_FLOOR_LAYOUT}."))
-        )
+        raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__TERRAINSET} missing for {XML_FLOOR_LAYOUT}.")))
 
     if misc is None:
-        raise XmlValidateError(
-            f(_("{XML_FLOOR_LAYOUT__MISCSET} missing for {XML_FLOOR_LAYOUT}."))
-        )
+        raise XmlValidateError(f(_("{XML_FLOOR_LAYOUT__MISCSET} missing for {XML_FLOOR_LAYOUT}.")))
 
     validate_xml_attribs(
         ele,
@@ -551,71 +497,35 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
     )
 
     if not hasattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)):
-        raise XmlValidateError(
-            f(_("Invalid structure type {ele.get(XML_FLOOR_LAYOUT__STRUCTURE)}"))
-        )
-    structure = u8(
-        getattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)).value
-    )
+        raise XmlValidateError(f(_("Invalid structure type {ele.get(XML_FLOOR_LAYOUT__STRUCTURE)}")))
+    structure = u8(getattr(MappaFloorStructureType, ele.get(XML_FLOOR_LAYOUT__STRUCTURE)).value)
 
     if not hasattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER)):
-        raise XmlValidateError(
-            f(_("Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}"))
-        )
+        raise XmlValidateError(f(_("Invalid weather type {ele.get(XML_FLOOR_LAYOUT__WEATHER)}")))
     weather = u8(getattr(MappaFloorWeather, ele.get(XML_FLOOR_LAYOUT__WEATHER)).value)
 
     if not hasattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)):
-        raise XmlValidateError(
-            f(
-                _(
-                    "Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}"
-                )
-            )
-        )
-    darkness_level = u8(
-        getattr(
-            MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)
-        ).value
-    )
+        raise XmlValidateError(f(_("Invalid darkness level type {ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)}")))
+    darkness_level = u8(getattr(MappaFloorDarknessLevel, ele.get(XML_FLOOR_LAYOUT__DARKNESS_LEVEL)).value)
 
     return MappaBinHandler.get_floor_layout_model()(
         structure=structure,
-        room_density=i8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY))
-        ),
+        room_density=i8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ROOM_DENSITY))),
         tileset_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__TILESET))),
         music_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__BGM))),
         weather=weather,
-        floor_connectivity=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY))
-        ),
-        initial_enemy_density=i8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY))
-        ),
-        kecleon_shop_chance=u8_checked(
-            int(chances.get(XML_FLOOR_LAYOUT__CHANCES__SHOP))
-        ),
-        monster_house_chance=u8_checked(
-            int(chances.get(XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE))
-        ),
+        floor_connectivity=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__FLOOR_CONNECTIVITY))),
+        initial_enemy_density=i8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__INITIAL_ENEMY_DENSITY))),
+        kecleon_shop_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__SHOP))),
+        monster_house_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__MONSTER_HOUSE))),
         unused_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__UNUSED))),
-        sticky_item_chance=u8_checked(
-            int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM))
-        ),
-        dead_ends=bool(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__DEAD_ENDS))
-        ),
-        secondary_terrain=u8_checked(
-            int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE))
-        ),
+        sticky_item_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__STICKY_ITEM))),
+        dead_ends=bool(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__DEAD_ENDS))),
+        secondary_terrain=u8_checked(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_TYPE))),
         terrain_settings=MappaBinHandler.get_terrain_settings_model()(
-            has_secondary_terrain=bool(
-                int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED))
-            ),
+            has_secondary_terrain=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__SECONDARY_USED))),
             unk1=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK1))),
-            generate_imperfect_rooms=bool(
-                int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__IMPERFECT_ROOMS))
-            ),
+            generate_imperfect_rooms=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__IMPERFECT_ROOMS))),
             unk3=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK3))),
             unk4=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK4))),
             unk5=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK5))),
@@ -623,43 +533,21 @@ def mappa_floor_layout_from_xml(ele: Element) -> MappaFloorLayoutProtocol:
             unk7=bool(int(terrain_settings.get(XML_FLOOR_LAYOUT__TERRAINSET__UNK7))),
         ),
         unk_e=bool(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNKE))),
-        item_density=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ITEM_DENSITY))
-        ),
-        trap_density=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__TRAP_DENSITY))
-        ),
+        item_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__ITEM_DENSITY))),
+        trap_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__TRAP_DENSITY))),
         floor_number=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__NUMBER))),
         fixed_floor_id=u8_checked(int(ele.get(XML_FLOOR_LAYOUT__FIXED_FLOOR_ID))),
-        extra_hallway_density=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY))
-        ),
-        buried_item_density=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__BURIED_ITEM_DENSITY))
-        ),
-        water_density=u8_checked(
-            int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY))
-        ),
+        extra_hallway_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__EXTRA_HALLWAY_DENSITY))),
+        buried_item_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__BURIED_ITEM_DENSITY))),
+        water_density=u8_checked(int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__WATER_DENSITY))),
         darkness_level=darkness_level,
-        max_coin_amount=int(
-            generator_settings.get(XML_FLOOR_LAYOUT__GENSET__MAX_COIN_AMOUNT)
-        ),
-        kecleon_shop_item_positions=u8_checked(
-            int(misc.get(XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS))
-        ),
-        empty_monster_house_chance=u8_checked(
-            int(chances.get(XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE))
-        ),
-        unk_hidden_stairs=u8_checked(
-            int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS))
-        ),
-        hidden_stairs_spawn_chance=u8_checked(
-            int(chances.get(XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS))
-        ),
+        max_coin_amount=int(generator_settings.get(XML_FLOOR_LAYOUT__GENSET__MAX_COIN_AMOUNT)),
+        kecleon_shop_item_positions=u8_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__KECLEON_SHOP_ITEM_POSITIONS))),
+        empty_monster_house_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__EMPTY_MONSTER_HOUSE))),
+        unk_hidden_stairs=u8_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__UNK_HIDDEN_STAIRS))),
+        hidden_stairs_spawn_chance=u8_checked(int(chances.get(XML_FLOOR_LAYOUT__CHANCES__HIDDEN_STAIRS))),
         enemy_iq=u16_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__ENEMY_IQ))),
-        iq_booster_boost=i16_checked(
-            int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST))
-        ),
+        iq_booster_boost=i16_checked(int(misc.get(XML_FLOOR_LAYOUT__MISCSET__IQ_BOOSTER_BOOST))),
     )
 
 
@@ -726,14 +614,10 @@ def mappa_trap_list_from_xml(ele: Element) -> MappaTrapListProtocol:
     try:
         return MappaBinHandler.get_trap_list_model()(weights)
     except ValueError as ex:
-        raise XmlValidateError(
-            _("Trap lists need an entry for all of the 25 traps")
-        ) from ex
+        raise XmlValidateError(_("Trap lists need an entry for all of the 25 traps")) from ex
 
 
-def mappa_item_list_to_xml(
-    item_list: MappaItemListProtocol, items_desc: dict[int, Pmd2DungeonItemCategory]
-) -> Element:
+def mappa_item_list_to_xml(item_list: MappaItemListProtocol, items_desc: dict[int, Pmd2DungeonItemCategory]) -> Element:
     xml_item_list = Element(XML_ITEM_LIST)
     for category, probability in item_list.categories.items():
         weight = "GUARANTEED" if probability == GUARANTEED else str(probability)
@@ -747,17 +631,13 @@ def mappa_item_list_to_xml(
         xml_item_list.append(xml_category)
     for item, probability in item_list.items.items():
         weight = "GUARANTEED" if probability == GUARANTEED else str(probability)
-        xml_item = Element(
-            XML_ITEM, {XML_ITEM__ID: str(item), XML_ITEM__WEIGHT: str(weight)}
-        )
+        xml_item = Element(XML_ITEM, {XML_ITEM__ID: str(item), XML_ITEM__WEIGHT: str(weight)})
         xml_item_list.append(xml_item)
 
     return xml_item_list
 
 
-def mappa_item_list_from_xml(
-    ele: Element, items_desc: dict[str, Pmd2DungeonItemCategory]
-) -> MappaItemListProtocol:
+def mappa_item_list_from_xml(ele: Element, items_desc: dict[str, Pmd2DungeonItemCategory]) -> MappaItemListProtocol:
     validate_xml_tag(ele, XML_ITEM_LIST)
     categories = {}
     items = {}
@@ -779,7 +659,5 @@ def mappa_item_list_from_xml(
             weight = int(weight_str) if weight_str != "GUARANTEED" else GUARANTEED
             items[int(child.get(XML_ITEM__ID))] = weight  # type: ignore
         else:
-            raise XmlValidateError(
-                f"Unexpected sub-node for {XML_ITEM_LIST}: {child.tag}"
-            )
+            raise XmlValidateError(f"Unexpected sub-node for {XML_ITEM_LIST}: {child.tag}")
     return MappaBinHandler.get_item_list_model()(categories, items)

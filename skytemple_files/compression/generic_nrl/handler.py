@@ -29,9 +29,7 @@ class GenericNrlHandler:
     """
 
     @classmethod
-    def decompress(
-        cls, compressed_data: bytes, stop_when_size: int
-    ) -> tuple[bytes, int]:
+    def decompress(cls, compressed_data: bytes, stop_when_size: int) -> tuple[bytes, int]:
         """todo. Stops when stop_when_size bytes have been decompressed.
         Second return is compressed original size.
         """

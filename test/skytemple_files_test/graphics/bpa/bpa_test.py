@@ -26,9 +26,7 @@ from skytemple_files_test.graphics.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
 from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
-class BpaTestCase(
-    SkyTempleFilesTestCase[BpaHandler, BpaProtocol[BpaFrameInfoProtocol]]
-):
+class BpaTestCase(SkyTempleFilesTestCase[BpaHandler, BpaProtocol[BpaFrameInfoProtocol]]):
     handler = BpaHandler
 
     def setUp(self) -> None:
@@ -44,18 +42,14 @@ class BpaTestCase(
         self.assertEqual(12, self.one.number_of_tiles)
         self.assertEqual(
             [
-                bytearray(
-                    b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'
-                ),
+                bytearray(b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'),
                 bytearray(
                     b"A\xdd\xda\x00c\xd4\xdd\x00k\xd4\xad\x00\x1b\xd2\xad\x00\xbb\xde\xad\x00\xbb\xe5\xdd\x00\xbb\xe4\xad\x00\xb3\xd8\xae\x00"
                 ),
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b"a\x86\x88hf\x88D\x16f\x86\x841fa\x16\xb1fa\x113f\x11c\xccXQS\xc5D1\xb3\xbc"
-                ),
+                bytearray(b"a\x86\x88hf\x88D\x16f\x86\x841fa\x16\xb1fa\x113f\x11c\xccXQS\xc5D1\xb3\xbc"),
                 bytearray(
                     b"\xbb\xd4\xae\x00\xb3\xa5J\x00\xbbE$\x00\xbcA\x82\x00\xcc\x81\x88\x00\xbbch\x00\\\x11f\x00\xcc\x13a\x00"
                 ),
@@ -80,18 +74,14 @@ class BpaTestCase(
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'
-                ),
+                bytearray(b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'),
                 bytearray(
                     b"\xa8\xda\xdd\x00\xa8\xda\xdd\x00\x81\xaa\xae\x00\x81\xaa\xad\x00\x81\xaa\xad\x00\xbb\xe5\xdd\x00\xb5\xe4\xad\x00\x9f\xd8\xae\x00"
                 ),
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"
-                ),
+                bytearray(b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"),
                 bytearray(
                     b"\xf9\xd9\xae\x00\x99\xafJ\x00\x99I$\x00\x9fO\x82\x00\x9f\x89\x88\x00\x99oh\x00\x99\x1ff\x00\xfb\x1ca\x00"
                 ),
@@ -116,18 +106,14 @@ class BpaTestCase(
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'
-                ),
+                bytearray(b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'),
                 bytearray(
                     b"\xa8\xda\xdd\x00\xa8\xda\xdd\x00\x81\xaa\xae\x00\x81\xaa\xad\x00\x81\xaa\xad\x00\xbb\xe5\xdd\x00\xb5\xe4\xad\x00\x9f\xd8\xae\x00"
                 ),
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"
-                ),
+                bytearray(b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"),
                 bytearray(
                     b"\xf9\xd9\xae\x00\x99\xafJ\x00\x99I$\x00\x9fO\x82\x00\x9f\x89\x88\x00\x99oh\x00\x99\x1ff\x00\xfb\x1ca\x00"
                 ),
@@ -152,9 +138,7 @@ class BpaTestCase(
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b'\x88\x88\x88\x88\x88\x88\x84\x84\x84D\x88\x84DBDVDB\x84\xb5\x88(\xb2\x9bH*XUD"8\xf5'
-                ),
+                bytearray(b'\x88\x88\x88\x88\x88\x88\x84\x84\x84D\x88\x84DBDVDB\x84\xb5\x88(\xb2\x9bH*XUD"8\xf5'),
                 bytearray(
                     b"\xa4\xdd~\x00\xa4\xed\xde\x00\xa8\xda\xdd\x00\x81\xaa\xde\x00\x81\xaa\xdd\x00e\xed\xaa\x00_\xe6\xdd\x00\xb9\xd3\xad\x00"
                 ),
@@ -188,18 +172,14 @@ class BpaTestCase(
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'
-                ),
+                bytearray(b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'),
                 bytearray(
                     b"\xa8\xda\xdd\x00\xa8\xda\xdd\x00\x81\xaa\xae\x00\x81\xaa\xad\x00\x81\xaa\xad\x00\xbb\xe5\xdd\x00\xb5\xe4\xad\x00\x9f\xd8\xae\x00"
                 ),
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"
-                ),
+                bytearray(b"a\x86\x88Uf\x88D\xbbf\x86\x84\xbbfa\x16\xfffa\x11\xfbf\x11\xf3\x9fXQ\xf3\x99D1\xf3\x99"),
                 bytearray(
                     b"\xf9\xd9\xae\x00\x99\xafJ\x00\x99I$\x00\x9fO\x82\x00\x9f\x89\x88\x00\x99oh\x00\x99\x1ff\x00\xfb\x1ca\x00"
                 ),
@@ -224,18 +204,14 @@ class BpaTestCase(
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'
-                ),
+                bytearray(b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'),
                 bytearray(
                     b"A\xdd\xda\x00c\xd4\xdd\x00k\xd4\xad\x00\x1b\xd2\xad\x00\xbb\xde\xad\x00\xbb\xe5\xdd\x00\xbb\xe4\xad\x00\xb3\xd8\xae\x00"
                 ),
                 bytearray(
                     b"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
                 ),
-                bytearray(
-                    b"a\x86\x88hf\x88D\x16f\x86\x841fa\x16\xb1fa\x113f\x11c\xccXQS\xc5D1\xb3\xbc"
-                ),
+                bytearray(b"a\x86\x88hf\x88D\x16f\x86\x841fa\x16\xb1fa\x113f\x11c\xccXQS\xc5D1\xb3\xbc"),
                 bytearray(
                     b"\xbb\xd4\xae\x00\xb3\xa5J\x00\xbbE$\x00\xbcA\x82\x00\xcc\x81\x88\x00\xbbch\x00\\\x11f\x00\xcc\x13a\x00"
                 ),
@@ -270,31 +246,21 @@ class BpaTestCase(
                 bytearray(
                     b"\xaa\xbb\xba\xaa*\xaa\xaa\xab\xba\xba\xba:\xba\xab\xab\xba\xaa\xbb\xaa;*\xba\xaa\xbb\xa2\xa3\xb3\xb3\xa3\xaa\xab:"
                 ),
-                bytearray(
-                    b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xa3\xab\xbb3;237#\xa23;#\xac"
-                ),
+                bytearray(b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xa3\xab\xbb3;237#\xa23;#\xac"),
                 bytearray(b"wwwwwwwwwwwwwwwwwwwwwwwwswwwswww"),
                 bytearray(
                     b"\xba\xaa\xa3:\xaa\xab\xba\xa3\xaa*\xaa\xba\xbb\xaa\xaa\xba\xab+\xaa\xba\xab\xba\xaa\xa2\xbb\xab\xab\xaa3\xbb\xaa\xaa"
                 ),
-                bytearray(
-                    b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"
-                ),
-                bytearray(
-                    b"wwwwwww7uw\xb77sw73{w\xb3\xbbsw\xaa\xbbu7\xbb\xbb5s\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"),
+                bytearray(b"wwwwwww7uw\xb77sw73{w\xb3\xbbsw\xaa\xbbu7\xbb\xbb5s\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'\xa2*\xc2\xcc\xa2""\xcc"\xa2\xcc\xccRR\xc5\\"\xc2\xcc\xcc*\xc2\xcc\xcc\xa7\xc2\xcc\xcc\'\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'2\xb7\xaa\xaa\xb2\xbb\xaa\xaa\xa2\xab+\xaa"\xaa\xaa\xaa"\xa2"\xaa,"\xaa\xa2\xac"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
                 bytearray(b'w\xc5\xcc%w\xcc\\"\xaaR,"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
                 bytearray(
@@ -310,86 +276,56 @@ class BpaTestCase(
                 bytearray(
                     b"\xb3\xb3\xc5\xb2;\xb7\xc5\xb2;w'\xcc37S\xc53\xb3[\xcc\xba\xbbU\xcc\xbb3\xcc\xcc\xba\xb3\xcc\xcc"
                 ),
-                bytearray(
-                    b"wwwwwww7uw\xb77sw73{w\xb3\xbb|w\xaa\xbb|7\xbb\xbb<s\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b"wwwwwww7uw\xb77sw73{w\xb3\xbb|w\xaa\xbb|7\xbb\xbb<s\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'\xa2*\xcc\xcc\xa2"\xcc\xcc"\xc2\xcc\xccR\xc2\xcc\xcc"\xc2\xcc\xcc*\xc2\xcc\xcc\xa7\xc2\xcc\xcc\'\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'<\xb7\xaa\xaa\xbc\xbb\xaa\xaa\xac\xab+\xaa,\xaa\xaa\xaa,\xa2"\xaa,"\xaa\xa2\xac"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
                 bytearray(b'w\xc5\xcc,w\xcc\xcc"\xaaR,"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
                 bytearray(
                     b"\xaa\xbb\xba\xaa*\xaa\xaa\xab\xba\xba\xba:\xba\xab\xab\xba\xaa\xbb\xaa;*\xba\xaa\xbb\xa2\xa3\xb3\xb3\xa3\xaa\xab:"
                 ),
-                bytearray(
-                    b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xb3;\xbb3;;373\xbb3;#\xac"
-                ),
+                bytearray(b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xb3;\xbb3;;373\xbb3;#\xac"),
                 bytearray(b"wwwwwwwwwwwwwwwwwwwwwwwwwwwwswww"),
                 bytearray(
                     b"\xba\xaa\xa3:\xaa\xab\xba\xa3\xaa*\xaa\xba\xbb\xaa\xaa\xba\xab+\xaa\xba\xab\xba\xaa\xa2\xbb\xab\xab\xaa3\xbb\xaa\xaa"
                 ),
-                bytearray(
-                    b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'
-                ),
-                bytearray(
-                    b"{www{ww7zw\xb77\xa5w73,w\xb3\xbb\xccw\xaa\xbb\xcc3\xbb\xbb\xccz\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb+s33#z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'),
+                bytearray(b"{www{ww7zw\xb77\xa5w73,w\xb3\xbb\xccw\xaa\xbb\xcc3\xbb\xbb\xccz\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb+s33#z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'"U\xcc\xcc\xa2\xcc\xcc\xcc"\xc5\xcc\xcc\xc2\xcc\xcc\xcc"\xcc\xcc\xcc*\xcc\xcc\xcc+\xc5\xcc\xcc+\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'\xcc\xb2\xaa\xaa\xcc\xb2\xaa\xaa\xcc\xa2+\xaa\xcc\xa5\xaa\xaa\xcc""\xaa\\"\xaa\xa2\\"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
-                bytearray(
-                    b'\xa7\xc5\xcc\xccw\xc2\xcc"\xaa"%"*""""""""""""\xa2","""\xc2'
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
+                bytearray(b'\xa7\xc5\xcc\xccw\xc2\xcc"\xaa"%"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
                 bytearray(
                     b"\xaa\xbb\xba\xaa*\xaa\xaa\xab\xba\xba\xba:\xba\xab\xab\xba\xaa\xbb\xaa;*\xba\xaa\xbb\xa2\xa3\xb3\xb3\xa3\xaa\xab:"
                 ),
-                bytearray(
-                    b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xb3;\xbb3;;373\xbb3;#\xac"
-                ),
+                bytearray(b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xb3;\xbb3;;373\xbb3;#\xac"),
                 bytearray(b"wwwwwwwwwwwwwwwwwwwwwwwwwwwwswww"),
                 bytearray(
                     b"\xba\xaa\xa3:\xaa\xab\xba\xa3\xaa*\xaa\xba\xbb\xaa\xaa\xba\xab+\xaa\xba\xab\xba\xaa\xa2\xbb\xab\xab\xaa3\xbb\xaa\xaa"
                 ),
-                bytearray(
-                    b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'
-                ),
-                bytearray(
-                    b"{www{ww7zw\xb77\xa5w73,w\xb3\xbb\xccw\xaa\xbb\xcc3\xbb\xbb\xccz\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb+s33#z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'),
+                bytearray(b"{www{ww7zw\xb77\xa5w73,w\xb3\xbb\xccw\xaa\xbb\xcc3\xbb\xbb\xccz\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb+s33#z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'"U\xcc\xcc\xa2\xcc\xcc\xcc"\xc5\xcc\xcc\xc2\xcc\xcc\xcc"\xcc\xcc\xcc*\xcc\xcc\xcc+\xc5\xcc\xcc+\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'\xcc\xb2\xaa\xaa\xcc\xb2\xaa\xaa\xcc\xa2+\xaa\xcc\xa5\xaa\xaa\xcc""\xaa\\"\xaa\xa2\\"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
-                bytearray(
-                    b'\xa7\xc5\xcc\xccw\xc2\xcc"\xaa"%"*""""""""""""\xa2","""\xc2'
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
+                bytearray(b'\xa7\xc5\xcc\xccw\xc2\xcc"\xaa"%"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
                 bytearray(
                     b"\xaa\xbb\xba\xaa*\xaa\xaa\xab\xba\xba\xba:\xba\xab\xab\xba\xaa\xbb\xaa;*\xba\xaa\xbb\xa2\xa3\xb3\xb3\xa3\xaa\xab:"
@@ -404,51 +340,35 @@ class BpaTestCase(
                 bytearray(
                     b"\xb3\xb3\xc5\xb2;\xb7\xc5\xb2;w'\xcc37S\xc53\xb3[\xcc\xba\xbbU\xcc\xbb3\xcc\xcc\xba\xb3\xcc\xcc"
                 ),
-                bytearray(
-                    b"wwwwwww7uw\xb77sw73{w\xb3\xbb|w\xaa\xbb|7\xbb\xbb<s\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b"wwwwwww7uw\xb77sw73{w\xb3\xbb|w\xaa\xbb|7\xbb\xbb<s\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'\xa2*\xcc\xcc\xa2"\xcc\xcc"\xc2\xcc\xccR\xc2\xcc\xcc"\xc2\xcc\xcc*\xc2\xcc\xcc\xa7\xc2\xcc\xcc\'\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'<\xb7\xaa\xaa\xbc\xbb\xaa\xaa\xac\xab+\xaa,\xaa\xaa\xaa,\xa2"\xaa,"\xaa\xa2\xac"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
                 bytearray(b'w\xc5\xcc,w\xcc\xcc"\xaaR,"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
                 bytearray(
                     b"\xaa\xbb\xba\xaa*\xaa\xaa\xab\xba\xba\xba:\xba\xab\xab\xba\xaa\xbb\xaa;*\xba\xaa\xbb\xa2\xa3\xb3\xb3\xa3\xaa\xab:"
                 ),
-                bytearray(
-                    b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xa3\xab\xbb3;237#\xa23;#\xac"
-                ),
+                bytearray(b"\xa3\xaa\xaa\xba;\xaa\xbb\xbb\xbb\xab\xbb3\xbb3\xba\xa3;\xbb\xa3\xab\xbb3;237#\xa23;#\xac"),
                 bytearray(b"wwwwwwwwwwwwwwwwwwwwwwwwswwwswww"),
                 bytearray(
                     b"\xba\xaa\xa3:\xaa\xab\xba\xa3\xaa*\xaa\xba\xbb\xaa\xaa\xba\xab+\xaa\xba\xab\xba\xaa\xa2\xbb\xab\xab\xaa3\xbb\xaa\xaa"
                 ),
-                bytearray(
-                    b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"
-                ),
-                bytearray(
-                    b"wwwwwww7uw\xb77sw73{w\xb3\xbbsw\xaa\xbbu7\xbb\xbb5s\xa3\xba"
-                ),
-                bytearray(
-                    b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"
-                ),
+                bytearray(b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"),
+                bytearray(b"wwwwwww7uw\xb77sw73{w\xb3\xbbsw\xaa\xbbu7\xbb\xbb5s\xa3\xba"),
+                bytearray(b"3\xbb\xab\xaaw:\xab\xaa;\xbb\xa3\xaaw\xba\xbb[s333z7;\xbawS\xaass\xa3\xaa\xbb"),
                 bytearray(
                     b'\xa2*\xc2\xcc\xa2""\xcc"\xa2\xcc\xccRR\xc5\\"\xc2\xcc\xcc*\xc2\xcc\xcc\xa7\xc2\xcc\xcc\'\xc5\xcc\xcc'
                 ),
                 bytearray(
                     b'2\xb7\xaa\xaa\xb2\xbb\xaa\xaa\xa2\xab+\xaa"\xaa\xaa\xaa"\xa2"\xaa,"\xaa\xa2\xac"\xa2""*\xaa\xa2'
                 ),
-                bytearray(
-                    b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"
-                ),
+                bytearray(b"3\xba7:;w;\xb3{w7733ws;3s\xba\xaa\xaa\xba\xa5\xa5\xaa\xa5\xaaUUZ\xaa"),
                 bytearray(b'w\xc5\xcc%w\xcc\\"\xaaR,"*""""""""""""\xa2","""\xc2'),
                 bytearray(b'**\xa2\xaa\xa2\xa2\xaa*""""*""""\xc2""\xc2\xcc""",,"""""'),
             ],
@@ -495,9 +415,7 @@ class BpaTestCase(
 
     def test_get_tile(self) -> None:
         self.assertEqual(
-            bytes(
-                b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'
-            ),
+            bytes(b'\x88\x88DH\x84DB\x14FDH\x14F\x84$\x14dHB\x12\x86H"\x12\x86DBd\x86D\x84\x18'),
             self.one.get_tile(0, 0),
         )
         self.assertEqual(
@@ -507,9 +425,7 @@ class BpaTestCase(
             self.one.get_tile(4, 0),
         )
         self.assertEqual(
-            bytes(
-                b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'
-            ),
+            bytes(b'\x88\x88\x84\x84\x84D\x82\x84FDHVF\x84\x84\xb5dH\x82\xb5\x86H"\x12\x86DBT\x86D\x84X'),
             self.one.get_tile(0, 1),
         )
         self.assertEqual(
@@ -525,9 +441,7 @@ class BpaTestCase(
             self.two.get_tile(0, 0),
         )
         self.assertEqual(
-            bytes(
-                b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"
-            ),
+            bytes(b"\xb3s#,;7'\xcc;w'\xcc37\xa3\xcc3\xb3+\xc2\xba\xbb\xab\xcc\xbb3*\xc2\xba\xb3\"\xcc"),
             self.two.get_tile(4, 0),
         )
         self.assertEqual(
@@ -537,9 +451,7 @@ class BpaTestCase(
             self.two.get_tile(0, 1),
         )
         self.assertEqual(
-            bytes(
-                b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'
-            ),
+            bytes(b'\xb3s\xa3%;7[,;w\xcc\\3\xb7U\xc53\xb3R\xcc\xba+U\xcc\xbbR\xcc\xcc\xaa"\xcc\xcc'),
             self.two.get_tile(4, 2),
         )
 
@@ -558,28 +470,16 @@ class BpaTestCase(
         )
 
     def test_tiles_to_pil_separate(self) -> None:
-        for i, image in enumerate(
-            self.one.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)
-        ):
-            self.assertImagesEqual(
-                self._fix_path_expected(("separate", "one", f"{i}.png")), image
-            )
-        for i, image in enumerate(
-            self.two.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)
-        ):
-            self.assertImagesEqual(
-                self._fix_path_expected(("separate", "two", f"{i}.png")), image
-            )
-        self.assertEqual(
-            0, len(self.empty.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1))
-        )
+        for i, image in enumerate(self.one.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)):
+            self.assertImagesEqual(self._fix_path_expected(("separate", "one", f"{i}.png")), image)
+        for i, image in enumerate(self.two.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)):
+            self.assertImagesEqual(self._fix_path_expected(("separate", "two", f"{i}.png")), image)
+        self.assertEqual(0, len(self.empty.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)))
 
     def test_pil_to_tiles(self) -> None:
         self.one.pil_to_tiles(self._load_image(self._fix_path_joined()))
         saved = self._save_and_reload_main_fixture(self.one)
-        self.assertImagesEqual(
-            self._fix_path_joined(), saved.tiles_to_pil(SIMPLE_DUMMY_PALETTE[0])
-        )
+        self.assertImagesEqual(self._fix_path_joined(), saved.tiles_to_pil(SIMPLE_DUMMY_PALETTE[0]))
 
     def test_pil_to_tiles_separate(self) -> None:
         imgs = [
@@ -593,13 +493,9 @@ class BpaTestCase(
         ]
         self.one.pil_to_tiles_separate(imgs)
         saved = self._save_and_reload_main_fixture(self.one)
-        for source, img in zip(
-            imgs, saved.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)
-        ):
+        for source, img in zip(imgs, saved.tiles_to_pil_separate(SIMPLE_DUMMY_PALETTE[0], 1)):
             self.assertImagesEqual(source, img)
-        self.assertImagesEqual(
-            self._fix_path_joined(), saved.tiles_to_pil(SIMPLE_DUMMY_PALETTE[0])
-        )
+        self.assertImagesEqual(self._fix_path_joined(), saved.tiles_to_pil(SIMPLE_DUMMY_PALETTE[0]))
 
     def test_tiles_for_frame(self) -> None:
         self.assertEqual(
@@ -680,12 +576,8 @@ class BpaTestCase(
         self.assertEqual(bpa_before.number_of_frames, bpa_after.number_of_frames)
         self.assertEqual(bpa_before.tiles, bpa_after.tiles)
         self.assertEqual(len(bpa_before.frame_info), len(bpa_after.frame_info))
-        for frame_before, frame_after in zip(
-            bpa_before.frame_info, bpa_after.frame_info
-        ):
-            self.assertEqual(
-                frame_before.duration_per_frame, frame_after.duration_per_frame
-            )
+        for frame_before, frame_after in zip(bpa_before.frame_info, bpa_after.frame_info):
+            self.assertEqual(frame_before.duration_per_frame, frame_after.duration_per_frame)
             self.assertEqual(frame_before.unk2, frame_after.unk2)
 
     @typing.no_type_check

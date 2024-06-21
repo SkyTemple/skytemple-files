@@ -60,9 +60,7 @@ class BmaCollisionRleCompressor:
     def _read(self):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.length_input:
-            raise ValueError(
-                "BMA Collision RLE Compressor: Reached EOF while reading data."
-            )
+            raise ValueError("BMA Collision RLE Compressor: Reached EOF while reading data.")
         oc = self.cursor
         self.cursor += 1
         return 1 if read_u8(self.uncompressed_data, oc) > 0 else 0
@@ -77,9 +75,7 @@ class BmaCollisionRleCompressor:
         nc = self.cursor
         repeats = 0
         while (
-            nc < self.length_input
-            and read_u8(self.uncompressed_data, nc) == data
-            and repeats < RLE_MAX_LOOKAHEAD_SIZE
+            nc < self.length_input and read_u8(self.uncompressed_data, nc) == data and repeats < RLE_MAX_LOOKAHEAD_SIZE
         ):
             repeats += 1
             nc += 1

@@ -58,17 +58,13 @@ class BpcWriter:
                 length_of_second_layer += 1
 
         # 4 byte header + layer specs + layer data
-        data = bytearray(
-            end_of_layer_specs + length_of_first_layer + length_of_second_layer
-        )
+        data = bytearray(end_of_layer_specs + length_of_first_layer + length_of_second_layer)
 
         # upper layer pointer
         self._write_16uintle(data, end_of_layer_specs)
         # lower layer pointer ( if two layers )
         if model.number_of_layers > 1:
-            self._write_16uintle(
-                data, u16_checked(end_of_layer_specs + length_of_first_layer)
-            )
+            self._write_16uintle(data, u16_checked(end_of_layer_specs + length_of_first_layer))
         else:
             self._write_16uintle(data, u16(0))
 
@@ -126,11 +122,7 @@ class BpcWriter:
         from skytemple_files.common.types.file_types import FileType
 
         layer = model.layers[layeri]
-        length = (
-            (layer.chunk_tilemap_len - 1)
-            * (model.tiling_width * model.tiling_height)
-            * BPC_TILEMAP_BYTELEN
-        )
+        length = (layer.chunk_tilemap_len - 1) * (model.tiling_width * model.tiling_height) * BPC_TILEMAP_BYTELEN
         data = bytearray(length)
         bytes_written = 0
 

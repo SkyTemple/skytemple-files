@@ -101,9 +101,7 @@ class BpcTilemapDecompressor:
         else:  # elif cmd > CMD_1_COPY_BYTES:
             # cmd - CMD_1_COPY_BYTES is the nb of words to write with the sequence of bytes as high byte
             if DEBUG:
-                print(
-                    f"READ {cmd - (CMD_1_COPY_BYTES-1)} - WRITE {cmd - (CMD_1_COPY_BYTES-1)}"
-                )
+                print(f"READ {cmd - (CMD_1_COPY_BYTES-1)} - WRITE {cmd - (CMD_1_COPY_BYTES-1)}")
             for i in range(CMD_1_COPY_BYTES - 1, cmd):
                 param = self._read() << 8
                 self._write(param)
@@ -124,24 +122,18 @@ class BpcTilemapDecompressor:
                 print(f"READ 0 - WRITE {cmd+1}")
             self.bytes_written += (cmd + 1) * 2
             if self.bytes_written > self.stop_when_size:
-                raise ValueError(
-                    "BPC Tilemap Decompressor: Reached EOF while writing decompressed data."
-                )
+                raise ValueError("BPC Tilemap Decompressor: Reached EOF while writing decompressed data.")
         elif CMD_2_SEEK_OFFSET <= cmd < CMD_2_COPY_LOW:
             # cmd - CMD_2_SEEK_OFFSET is the nb of words to write with the next byte as low byte
             cmd_value = self._read()
             if DEBUG:
                 print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
             for i in range(CMD_2_SEEK_OFFSET - 1, cmd):
-                self._write(
-                    read_u16(self.decompressed_data, self.bytes_written) | cmd_value
-                )
+                self._write(read_u16(self.decompressed_data, self.bytes_written) | cmd_value)
         else:  # elif cmd > CMD_2_COPY_LOW:
             # cmd - CMD_2_COPY_LOW is the nb of words to write with the sequence of bytes as low byte
             if DEBUG:
-                print(
-                    f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}"
-                )
+                print(f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}")
             for i in range(CMD_2_COPY_LOW - 1, cmd):
                 value_at_pos = read_u16(self.decompressed_data, self.bytes_written)
                 value_at_pos |= self._read()
@@ -150,18 +142,12 @@ class BpcTilemapDecompressor:
     def _read(self, bytes=1):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError(
-                "BPC Tilemap Decompressor: Reached EOF while reading compressed data."
-            )
+            raise ValueError("BPC Tilemap Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += bytes
-        return read_dynamic(
-            self.compressed_data, oc, length=bytes, big_endian=False, signed=False
-        )
+        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=False, signed=False)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as LE"""
-        self.decompressed_data[self.bytes_written : self.bytes_written + 2] = (
-            pattern_to_write.to_bytes(2, "little")
-        )
+        self.decompressed_data[self.bytes_written : self.bytes_written + 2] = pattern_to_write.to_bytes(2, "little")
         self.bytes_written += 2

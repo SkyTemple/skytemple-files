@@ -146,11 +146,7 @@ class MoveAnim(AutoString):
         write_u16(data, self.anim3, 4)
         write_u16(data, self.anim4, 6)
         flags = (
-            self.dir
-            | (int(self.flag1) << 3)
-            | (int(self.flag2) << 4)
-            | (int(self.flag3) << 5)
-            | (int(self.flag4) << 6)
+            self.dir | (int(self.flag1) << 3) | (int(self.flag2) << 4) | (int(self.flag3) << 5) | (int(self.flag4) << 6)
         )
         write_u32(data, u32(flags), 8)
         write_u32(data, self.speed, 12)
@@ -252,9 +248,7 @@ class Anim(AutoString):
             self.general_table.append(GeneralAnim(data[x : x + GENERAL_DATA_SIZE]))
         self.special_move_table = []
         for x in range(special_move_table_ptr, len(data), SPECIAL_MOVE_DATA_SIZE):
-            self.special_move_table.append(
-                SpecMoveAnim(data[x : x + SPECIAL_MOVE_DATA_SIZE])
-            )
+            self.special_move_table.append(SpecMoveAnim(data[x : x + SPECIAL_MOVE_DATA_SIZE]))
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Anim):

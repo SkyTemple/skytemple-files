@@ -66,9 +66,7 @@ class Custom999Decompressor:
             else:
                 if n != 0:
                     prev = code
-                code = (
-                    code + (n >> 1) * (1 - 2 * (n & 1))
-                ) & 0xF  # & 0xFF in the original algorithm
+                code = (code + (n >> 1) * (1 - 2 * (n & 1))) & 0xF  # & 0xFF in the original algorithm
                 decompressed.append(code)
 
             flags >>= 2 * nbit + 1

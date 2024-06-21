@@ -33,18 +33,12 @@ class BmaLayerNrlCompressionContainer(CommonAt):
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
-        data, len_read = FileType.BMA_LAYER_NRL.decompress(
-            self.compressed_data, self.length_decompressed
-        )
+        data, len_read = FileType.BMA_LAYER_NRL.decompress(self.compressed_data, self.length_decompressed)
         assert len_read == len(self.compressed_data)
         return data
 
     def to_bytes(self) -> bytes:
-        return (
-            b"BMANRL"
-            + self.length_decompressed.to_bytes(2, "little")
-            + self.compressed_data
-        )  # pylint: disable=no-member
+        return b"BMANRL" + self.length_decompressed.to_bytes(2, "little") + self.compressed_data  # pylint: disable=no-member
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):

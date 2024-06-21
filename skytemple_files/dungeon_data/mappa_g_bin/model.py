@@ -62,11 +62,7 @@ class MappaGFloor(AutoString):
 
     @classmethod
     def from_mappa(cls, read: MappaGBinReadContainer, floor_data: bytes) -> MappaGFloor:
-        return cls(
-            MappaGFloorLayout.from_mappa(
-                read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)
-            )
-        )
+        return cls(MappaGFloorLayout.from_mappa(read, read.floor_layout_data_start + 4 * read_u16(floor_data, 0x00)))
 
     @staticmethod
     def _read_pointer(data: bytes, start, index):
@@ -102,10 +98,7 @@ class MappaGFloorLayout(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, MappaGFloorLayout):
             return False
-        return (
-            self.tileset_id == other.tileset_id
-            and self.fixed_floor_id == other.fixed_floor_id
-        )
+        return self.tileset_id == other.tileset_id and self.fixed_floor_id == other.fixed_floor_id
 
 
 class MappaGBin(Sir0Serializable):
@@ -119,9 +112,7 @@ class MappaGBin(Sir0Serializable):
 
     @classmethod
     def sir0_unwrap(cls, content_data: bytes, data_pointer: u32) -> MappaGBin:
-        return cls(
-            cls._read_floor_list(MappaGBinReadContainer(content_data, data_pointer))
-        )
+        return cls(cls._read_floor_list(MappaGBinReadContainer(content_data, data_pointer)))
 
     @classmethod
     def _read_floor_list(cls, read: MappaGBinReadContainer):
@@ -166,9 +157,7 @@ class MappaGBin(Sir0Serializable):
             stub_floor_list = []
             for floor in floor_list:
                 # Layout
-                layout_idx = self._find_if_not_exists_insert(
-                    floor_layouts, floor.layout
-                )
+                layout_idx = self._find_if_not_exists_insert(floor_layouts, floor.layout)
 
                 stub_floor_list.append(StubMappaGFloor(layout_idx))
 

@@ -28,9 +28,7 @@ from skytemple_files.data.waza_p.protocol import (
 )
 
 
-def eq_level_up_move_list(
-    one: Sequence[LevelUpMoveProtocol], two: Sequence[LevelUpMoveProtocol]
-) -> bool:
+def eq_level_up_move_list(one: Sequence[LevelUpMoveProtocol], two: Sequence[LevelUpMoveProtocol]) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -43,9 +41,7 @@ def eq_level_up_move(one: LevelUpMoveProtocol, two: LevelUpMoveProtocol) -> bool
     return one.move_id == two.move_id and one.level_id == two.level_id
 
 
-def eq_learnset_list(
-    one: Sequence[MoveLearnsetProtocol], two: Sequence[MoveLearnsetProtocol]
-) -> bool:
+def eq_learnset_list(one: Sequence[MoveLearnsetProtocol], two: Sequence[MoveLearnsetProtocol]) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -62,9 +58,7 @@ def eq_learnset(one: MoveLearnsetProtocol, two: MoveLearnsetProtocol) -> bool:
     )
 
 
-def eq_move_list(
-    one: Sequence[WazaMoveProtocol], two: Sequence[WazaMoveProtocol]
-) -> bool:
+def eq_move_list(one: Sequence[WazaMoveProtocol], two: Sequence[WazaMoveProtocol]) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):

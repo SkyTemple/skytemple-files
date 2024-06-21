@@ -37,9 +37,7 @@ class HardcodedPersonalityTestStarters:
         return ids
 
     @staticmethod
-    def set_partner_md_ids(
-        value: list[u16], overlay13: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_partner_md_ids(value: list[u16], overlay13: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md indices of the partner starter choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_partner_md_ids).
@@ -48,9 +46,7 @@ class HardcodedPersonalityTestStarters:
         assert block.length is not None
         expected_length = int(block.length / 2)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The ID list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
         for i, v in enumerate(value):
             write_u16(overlay13, v, block.address + (i * 2))
 
@@ -64,9 +60,7 @@ class HardcodedPersonalityTestStarters:
         return ids
 
     @staticmethod
-    def set_player_md_ids(
-        value: list[u16], overlay13: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_player_md_ids(value: list[u16], overlay13: bytearray, config: Pmd2Data) -> None:
         """
         Sets the monster.md indices of the player partner choices (in place, total index, with gender form!)
         The length of the list must exactly match the original ROM's length (see get_player_md_ids).
@@ -75,9 +69,7 @@ class HardcodedPersonalityTestStarters:
         assert block.length is not None
         expected_length = int(block.length / 2)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The ID list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The ID list must have exactly the length of {expected_length} entries.")
         for i, v in enumerate(value):
             write_u16(overlay13, v, block.address + (i * 2))
 

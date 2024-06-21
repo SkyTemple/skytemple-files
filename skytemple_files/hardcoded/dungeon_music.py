@@ -66,23 +66,17 @@ class HardcodedDungeonMusic:
         return lst
 
     @staticmethod
-    def set_music_list(
-        value: list[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_music_list(value: list[DungeonMusicEntry], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay10.data.MUSIC_ID_TABLE
         assert block.length is not None
         expected_length = int(block.length / 2)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
             write_u16(ov10, entry.to_int(), block.address + i * 2)
 
     @staticmethod
-    def get_random_music_list(
-        ov10: bytes, config: Pmd2Data
-    ) -> list[tuple[u16, u16, u16, u16]]:
+    def get_random_music_list(ov10: bytes, config: Pmd2Data) -> list[tuple[u16, u16, u16, u16]]:
         block = config.bin_sections.overlay10.data.RANDOM_MUSIC_ID_TABLE
         lst = []
         for i in range(block.address, block.address + block.length, 8):
@@ -97,16 +91,12 @@ class HardcodedDungeonMusic:
         return lst
 
     @staticmethod
-    def set_random_music_list(
-        value: list[tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_random_music_list(value: list[tuple[u16, u16, u16, u16]], ov10: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay10.data.RANDOM_MUSIC_ID_TABLE
         assert block.length is not None
         expected_length = int(block.length / 8)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, (a, b, c, d) in enumerate(value):
             write_u16(ov10, a, block.address + i * 8 + 0)
             write_u16(ov10, b, block.address + i * 8 + 2)

@@ -112,9 +112,7 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             self.assertNotEqual(subject_not_same, subject1)
 
     def test_mappa_floor_terrain_settings_attrs(self):
-        e = self.handler.get_terrain_settings_model()(
-            False, False, False, False, False, False, False, False
-        )
+        e = self.handler.get_terrain_settings_model()(False, False, False, False, False, False, False, False)
 
         e.unk1 = True
         e.unk3 = True
@@ -326,9 +324,7 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             u8(0),
             False,
             u8(0),
-            self.handler.get_terrain_settings_model()(
-                False, False, False, False, False, False, False, False
-            ),
+            self.handler.get_terrain_settings_model()(False, False, False, False, False, False, False, False),
             False,
             u8(0),
             u8(0),
@@ -425,9 +421,7 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
 
     def test_mappa_item_list__init__(self):
         for expected in FIX_ITEM_LISTS:
-            subject = self.handler.get_item_list_model()(
-                expected.categories, expected.items
-            )
+            subject = self.handler.get_item_list_model()(expected.categories, expected.items)
 
             self.assertTrue(eq_mappa_item_list_protocol(expected, subject))
 
@@ -455,12 +449,8 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
         )
 
         for expected in FIX_ITEM_LISTS[1:]:
-            subject1 = self.handler.get_item_list_model()(
-                expected.categories, expected.items
-            )
-            subject2 = self.handler.get_item_list_model()(
-                expected.categories, expected.items
-            )
+            subject1 = self.handler.get_item_list_model()(expected.categories, expected.items)
+            subject2 = self.handler.get_item_list_model()(expected.categories, expected.items)
 
             self.assertEqual(subject1, subject2)
             self.assertEqual(subject2, subject1)
@@ -726,26 +716,12 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
         for exp, act in zip(FIX_FLOORS[0].monsters, e.monsters):
             self.assertTrue(eq_mappa_monster_protocol(exp, act))
         self.assertTrue(eq_mappa_trap_list_protocol(FIX_FLOORS[0].traps, e.traps))
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[0].floor_items, e.floor_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[0].shop_items, e.shop_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(
-                FIX_FLOORS[0].monster_house_items, e.monster_house_items
-            )
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[0].buried_items, e.buried_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[0].unk_items1, e.unk_items1)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[0].unk_items2, e.unk_items2)
-        )
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].floor_items, e.floor_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].shop_items, e.shop_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].monster_house_items, e.monster_house_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].buried_items, e.buried_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].unk_items1, e.unk_items1))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[0].unk_items2, e.unk_items2))
 
         (
             e.layout,
@@ -774,26 +750,12 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
         for exp, act in zip(FIX_FLOORS[1].monsters, e.monsters):
             self.assertTrue(eq_mappa_monster_protocol(exp, act))
         self.assertTrue(eq_mappa_trap_list_protocol(FIX_FLOORS[1].traps, e.traps))
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[1].floor_items, e.floor_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[1].shop_items, e.shop_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(
-                FIX_FLOORS[1].monster_house_items, e.monster_house_items
-            )
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[1].buried_items, e.buried_items)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[1].unk_items1, e.unk_items1)
-        )
-        self.assertTrue(
-            eq_mappa_item_list_protocol(FIX_FLOORS[1].unk_items2, e.unk_items2)
-        )
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].floor_items, e.floor_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].shop_items, e.shop_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].monster_house_items, e.monster_house_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].buried_items, e.buried_items))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].unk_items1, e.unk_items1))
+        self.assertTrue(eq_mappa_item_list_protocol(FIX_FLOORS[1].unk_items2, e.unk_items2))
 
     def test_mappa__init__(self):
         floor_lists = []
@@ -862,9 +824,7 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
         # Note, this test requires the Python Sir0 model to function correctly!
         with open(self._mappa_fix_path(), "rb") as f:
             sir0 = Sir0Handler.load_python_model().from_bin(f.read())
-        actual = self.handler.get_model_cls().sir0_unwrap(
-            sir0.content, sir0.data_pointer
-        )
+        actual = self.handler.get_model_cls().sir0_unwrap(sir0.content, sir0.data_pointer)
 
         self.assertEqual(len(FIX_FLOOR_LISTS), len(actual.floor_lists))
         for fl_expected, fl_actual in zip(FIX_FLOOR_LISTS, actual.floor_lists):
@@ -1121,18 +1081,12 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
     def test_cross_native_implementation(self):
         """Tests the native implementation against the Python implementation."""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
             return
         with open(self._mappa_fix_path(), "rb") as f:
             sir0 = Sir0Handler.deserialize(f.read())
-        loaded_py = self.handler.load_python_model().sir0_unwrap(
-            sir0.content, sir0.data_pointer
-        )
-        loaded_rs = self.handler.load_native_model().sir0_unwrap(
-            sir0.content, sir0.data_pointer
-        )
+        loaded_py = self.handler.load_python_model().sir0_unwrap(sir0.content, sir0.data_pointer)
+        loaded_rs = self.handler.load_native_model().sir0_unwrap(sir0.content, sir0.data_pointer)
 
         loaded_py_sir0 = Sir0Handler.wrap_obj(loaded_py)
         loaded_rs_sir0 = Sir0Handler.wrap_obj(loaded_rs)
@@ -1143,22 +1097,14 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
             loaded_rs_sir0.content, loaded_rs_sir0.data_pointer
         )
 
-        self.assertEqual(
-            len(FIX_FLOOR_LISTS), len(loaded_rs_reloaded_with_py.floor_lists)
-        )
-        for fl_expected, fl_actual in zip(
-            FIX_FLOOR_LISTS, loaded_rs_reloaded_with_py.floor_lists
-        ):
+        self.assertEqual(len(FIX_FLOOR_LISTS), len(loaded_rs_reloaded_with_py.floor_lists))
+        for fl_expected, fl_actual in zip(FIX_FLOOR_LISTS, loaded_rs_reloaded_with_py.floor_lists):
             self.assertEqual(len(fl_expected), len(fl_actual))
             for f_expected, f_actual in zip(fl_expected, fl_actual):
                 self.assertTrue(eq_mappa_floor_protocol(f_expected, f_actual))
 
-        self.assertEqual(
-            len(FIX_FLOOR_LISTS), len(loaded_py_reloaded_with_rs.floor_lists)
-        )
-        for fl_expected, fl_actual in zip(
-            FIX_FLOOR_LISTS, loaded_py_reloaded_with_rs.floor_lists
-        ):
+        self.assertEqual(len(FIX_FLOOR_LISTS), len(loaded_py_reloaded_with_rs.floor_lists))
+        for fl_expected, fl_actual in zip(FIX_FLOOR_LISTS, loaded_py_reloaded_with_rs.floor_lists):
             self.assertEqual(len(fl_expected), len(fl_actual))
             for f_expected, f_actual in zip(fl_expected, fl_actual):
                 self.assertTrue(eq_mappa_floor_protocol(f_expected, f_actual))
@@ -1314,16 +1260,10 @@ class MdTestCase(SkyTempleFilesTestCase[MappaBinHandler, MappaBinProtocol]):
                 for monster in monsters
             ],
             self.handler.get_trap_list_model()(traps.weights),
-            self.handler.get_item_list_model()(
-                floor_items.categories, floor_items.items
-            ),
+            self.handler.get_item_list_model()(floor_items.categories, floor_items.items),
             self.handler.get_item_list_model()(shop_items.categories, shop_items.items),
-            self.handler.get_item_list_model()(
-                monster_house_items.categories, monster_house_items.items
-            ),
-            self.handler.get_item_list_model()(
-                buried_items.categories, buried_items.items
-            ),
+            self.handler.get_item_list_model()(monster_house_items.categories, monster_house_items.items),
+            self.handler.get_item_list_model()(buried_items.categories, buried_items.items),
             self.handler.get_item_list_model()(unk_items1.categories, unk_items1.items),
             self.handler.get_item_list_model()(unk_items2.categories, unk_items2.items),
         )

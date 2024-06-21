@@ -35,6 +35,4 @@ class DbinSir0At4pxDmaHandler(DataHandler[DmaProtocol]):
         from skytemple_files.common.types.file_types import FileType
 
         serialized = FileType.DMA.serialize(data)
-        return FileType.DBIN_SIR0_AT4PX.serialize(
-            FileType.COMMON_AT.compress(serialized)
-        )
+        return FileType.DBIN_SIR0_AT4PX.serialize(FileType.COMMON_AT.compress(serialized))

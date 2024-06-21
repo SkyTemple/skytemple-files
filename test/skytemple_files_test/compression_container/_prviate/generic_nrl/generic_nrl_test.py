@@ -38,9 +38,7 @@ FIX = (
 )
 
 
-class GenericNrlTestCase(
-    SkyTempleFilesTestCase[GenericNrlHandler, CompressionContainerProtocol]
-):
+class GenericNrlTestCase(SkyTempleFilesTestCase[GenericNrlHandler, CompressionContainerProtocol]):
     @classmethod
     def handler(cls) -> Type[GenericNrlHandler]:
         return GenericNrlHandler
@@ -48,9 +46,7 @@ class GenericNrlTestCase(
     def test_cross_native_implementation_compress(self):
         """Tests the native implementation against the Python implementation (assuming this one works)"""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
         py_cls = self.handler().load_python_model()
         rs_cls = self.handler().load_native_model()
         result_rs = rs_cls.compress(FIX).to_bytes()
@@ -64,9 +60,7 @@ class GenericNrlTestCase(
     def test_cross_native_implementation_decompress(self):
         """Tests the native implementation against the Python implementation (assuming this one works)"""
         if not env_use_native():
-            self.skipTest(
-                "This test is only enabled when the native implementations are tested."
-            )
+            self.skipTest("This test is only enabled when the native implementations are tested.")
         py_cls = self.handler().load_python_model()
         rs_cls = self.handler().load_native_model()
         result_py = py_cls.compress(FIX).to_bytes()

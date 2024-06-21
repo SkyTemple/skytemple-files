@@ -25,9 +25,7 @@ from skytemple_files.graphics.dpl.protocol import DplProtocol
 class DplMock(DplProtocol):
     palettes: Sequence[Sequence[int]]
 
-    def __init__(
-        self, data: bytes, *, palettes: Optional[Sequence[Sequence[int]]] = None
-    ):
+    def __init__(self, data: bytes, *, palettes: Optional[Sequence[Sequence[int]]] = None):
         if palettes is None:
             raise NotImplementedError("Not implemented for mock.")
         self.palettes = palettes

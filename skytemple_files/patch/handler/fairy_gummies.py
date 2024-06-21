@@ -133,25 +133,14 @@ Also, you'll need to reapply this if you apply AddTypes again. """
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         item_effect: bytes
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
@@ -197,9 +186,7 @@ Also, you'll need to reapply this if you apply AddTypes again. """
         # Change item's text attributes
         for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(
-                bin_before, string_encoding=config.string_encoding
-            )
+            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
             block = config.string_index_data.string_blocks["Item Names"]
             strings.strings[block.begin + GUMMI_ITEM_ID] = NAME_LIST[filename]
             block = config.string_index_data.string_blocks["Item Short Descriptions"]
@@ -220,7 +207,5 @@ Also, you'll need to reapply this if you apply AddTypes again. """
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

@@ -37,8 +37,5 @@ class SsaUnk10(AutoString):
         if not isinstance(other, self.__class__):
             return False
         return (
-            self.unk0 == other.unk0
-            and self.unk2 == other.unk2
-            and self.unk4 == other.unk4
-            and self.unk6 == other.unk6
+            self.unk0 == other.unk0 and self.unk2 == other.unk2 and self.unk4 == other.unk4 and self.unk6 == other.unk6
         )

@@ -42,9 +42,7 @@ class BgpWriter(WriterProtocol[Bgp]):
         tilemapping_begin = palette_begin + palette_length
         tiles_begin = tilemapping_begin + tilemapping_length
         # 32 byte header + palette, tiles and tilemapping data
-        data = bytearray(
-            BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length
-        )
+        data = bytearray(BGP_HEADER_LENGTH + palette_length + tiles_length + tilemapping_length)
 
         # Header
         write_u32(data, u32(palette_begin), 0)

@@ -36,12 +36,8 @@ class GraphicFontWriter:
         for i, e in enumerate(self.model.entries):
             if e:
                 write_u8(buffer, u8_checked(e.width), i * GRAPHIC_FONT_ENTRY_LEN + 0x00)
-                write_u8(
-                    buffer, u8_checked(e.height), i * GRAPHIC_FONT_ENTRY_LEN + 0x01
-                )
-                write_u16(
-                    buffer, u16_checked(len(buffer)), i * GRAPHIC_FONT_ENTRY_LEN + 0x02
-                )
+                write_u8(buffer, u8_checked(e.height), i * GRAPHIC_FONT_ENTRY_LEN + 0x01)
+                write_u16(buffer, u16_checked(len(buffer)), i * GRAPHIC_FONT_ENTRY_LEN + 0x02)
                 data_raw = e.tobytes("raw", "P")
                 buffer += bytearray(data_raw)
             else:

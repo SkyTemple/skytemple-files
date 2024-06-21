@@ -194,21 +194,12 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
                 raise NotImplementedError()  # TODO STAT_DISP: Relies on ChangeMoveStatsDisplay to work.
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
     def is_applied_ms(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
@@ -234,25 +225,14 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         PATCH_DV_CHECK_INSTR_APPLIED = 0xE3A09001
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_US)
-                    == PATCH_DV_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_US) == PATCH_DV_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU)
-                    == PATCH_DV_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_EU) == PATCH_DV_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_JP)
-                    == PATCH_DV_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_DV_CHECK_ADDR_APPLIED_JP) == PATCH_DV_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         param = self.get_parameters()
         if self.is_applied_ms(rom, config):
             param["MoveShortcuts"] = 1
@@ -303,10 +283,7 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
             modelwp = WazaPHandler.deserialize(bin_before)
             total = bytearray(0)
             for m in modelwp.moves:
-                if (
-                    m.category != WazaMoveCategory.STATUS.value
-                    and m.max_upgrade_level == 99
-                ):
+                if m.category != WazaMoveCategory.STATUS.value and m.max_upgrade_level == 99:
                     total += mgrow_data_dama
                 else:
                     total += mgrow_data_stat
@@ -316,7 +293,5 @@ class MoveGrowthPatchHandler(AbstractPatchHandler, DependantPatch):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

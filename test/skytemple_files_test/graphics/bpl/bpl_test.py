@@ -26,9 +26,7 @@ from skytemple_files_test.graphics.mocks.bpl_mock import SIMPLE_DUMMY_PALETTE
 from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
-class BplTestCase(
-    SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpecProtocol]]
-):
+class BplTestCase(SkyTempleFilesTestCase[BplHandler, BplProtocol[BplAnimationSpecProtocol]]):
     handler = BplHandler
 
     def setUp(self) -> None:
@@ -1862,9 +1860,9 @@ class BplTestCase(
         self.two.has_palette_animation = True
         self.two.palettes = list(SIMPLE_DUMMY_PALETTE)
         self.two.animation_palette = [[3] * 45] + [[2] * 45] + [[1] * 45]
-        self.two.animation_specs = [
-            self.handler.get_animation_spec_model_cls()(u16(0), u16(0))
-        ] * len(SIMPLE_DUMMY_PALETTE)
+        self.two.animation_specs = [self.handler.get_animation_spec_model_cls()(u16(0), u16(0))] * len(
+            SIMPLE_DUMMY_PALETTE
+        )
         saved = self._save_and_reload_main_fixture(self.two)
         self.assertEqual(len(SIMPLE_DUMMY_PALETTE), saved.number_palettes)
         self.assertEqual(True, saved.has_palette_animation)
@@ -9228,20 +9226,12 @@ class BplTestCase(
         bpl_after = self._save_and_reload_main_fixture(bpl_before)
 
         self.assertEqual(bpl_before.number_palettes, bpl_after.number_palettes)
-        self.assertEqual(
-            bpl_before.has_palette_animation, bpl_after.has_palette_animation
-        )
+        self.assertEqual(bpl_before.has_palette_animation, bpl_after.has_palette_animation)
         self.assertEqual(bpl_before.palettes, bpl_after.palettes)
         self.assertEqual(bpl_before.animation_palette, bpl_after.animation_palette)
-        self.assertEqual(
-            len(bpl_before.animation_specs), len(bpl_after.animation_specs)
-        )
-        for spec_before, spec_after in zip(
-            bpl_before.animation_specs, bpl_after.animation_specs
-        ):
-            self.assertEqual(
-                spec_before.duration_per_frame, spec_after.duration_per_frame
-            )
+        self.assertEqual(len(bpl_before.animation_specs), len(bpl_after.animation_specs))
+        for spec_before, spec_after in zip(bpl_before.animation_specs, bpl_after.animation_specs):
+            self.assertEqual(spec_before.duration_per_frame, spec_after.duration_per_frame)
             self.assertEqual(spec_before.number_of_frames, spec_after.number_of_frames)
 
     @typing.no_type_check

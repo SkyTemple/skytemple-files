@@ -40,8 +40,6 @@ class HardcodedTactics:
         assert block.length is not None
         expected_length = int(block.length / ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
             write_i16(arm9, entry, block.address + i * ENTRY_LEN)

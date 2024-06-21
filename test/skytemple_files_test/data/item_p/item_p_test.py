@@ -30,9 +30,7 @@ from skytemple_files_test.data.item_p.fixture import (
 from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
 
 
-class ItemPTestCase(
-    SkyTempleFilesTestCase[ItemPHandler, ItemPProtocol[ItemPEntryProtocol]]
-):
+class ItemPTestCase(SkyTempleFilesTestCase[ItemPHandler, ItemPProtocol[ItemPEntryProtocol]]):
     handler = ItemPHandler
 
     def setUp(self) -> None:
@@ -41,9 +39,7 @@ class ItemPTestCase(
     def test_entries_read(self) -> None:
         self.assertEqual(len(self.fixture.item_list), len(EXPECTED_ITEM_P_ENTRIES))
 
-        for entry_fixture, entry_expected in zip(
-            self.fixture.item_list, EXPECTED_ITEM_P_ENTRIES
-        ):
+        for entry_fixture, entry_expected in zip(self.fixture.item_list, EXPECTED_ITEM_P_ENTRIES):
             self.assertItemPEntriesEqual(entry_expected, entry_fixture)
 
     def test_entries_write(self) -> None:
@@ -51,9 +47,7 @@ class ItemPTestCase(
 
         self.assertEqual(len(self.fixture.item_list), len(item_p_after.item_list))
 
-        for entry_before, entry_after in zip(
-            self.fixture.item_list, item_p_after.item_list
-        ):
+        for entry_before, entry_after in zip(self.fixture.item_list, item_p_after.item_list):
             self.assertItemPEntriesEqual(entry_before, entry_after)
 
     def test_entries_attrs(self):
@@ -97,9 +91,7 @@ class ItemPTestCase(
             self.assertEqual(f.read(), self.handler.serialize(item_p_after))
 
     def test_entries_eq(self) -> None:
-        for entry_fixture, entry_fixture_plus_1 in zip(
-            self.fixture.item_list, self.fixture.item_list[1:]
-        ):
+        for entry_fixture, entry_fixture_plus_1 in zip(self.fixture.item_list, self.fixture.item_list[1:]):
             self.assertEqual(entry_fixture, entry_fixture)
             self.assertNotEqual(entry_fixture, entry_fixture_plus_1)
 
@@ -110,9 +102,7 @@ class ItemPTestCase(
 
         self.assertEqual(len(item_p_before.item_list), len(item_p_after.item_list))
 
-        for entry_before, entry_after in zip(
-            item_p_before.item_list, item_p_after.item_list
-        ):
+        for entry_before, entry_after in zip(item_p_before.item_list, item_p_after.item_list):
             self.assertItemPEntriesEqual(entry_before, entry_after)
 
     def assertItemPEntriesEqual(

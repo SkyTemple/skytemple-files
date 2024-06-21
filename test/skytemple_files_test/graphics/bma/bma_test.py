@@ -26,9 +26,7 @@ from skytemple_files_test.graphics.mocks.bpl_mock import BplMock
 from skytemple_files_test.case import SkyTempleFilesTestCase, fixpath, romtest
 
 
-class BmaTestCase(
-    SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMock, BplMock]]
-):
+class BmaTestCase(SkyTempleFilesTestCase[BmaHandler, BmaProtocol[BpaMock, BpcMock, BplMock]]):
     handler = BmaHandler
 
     def setUp(self) -> None:
@@ -37,40 +35,26 @@ class BmaTestCase(
         self.two_layers = self._load_main_fixture(self._fix_path_two_layers())
         self.assertIsNotNone(self.two_layers)
         # TODO: Whoops. This one actually has 2 layers. The second is empty though.
-        self.single_layer_one_col = self._load_main_fixture(
-            self._fix_path_single_layer_one_col()
-        )
+        self.single_layer_one_col = self._load_main_fixture(self._fix_path_single_layer_one_col())
         self.assertIsNotNone(self.single_layer_one_col)
-        self.two_layers_one_col = self._load_main_fixture(
-            self._fix_path_two_layers_one_col()
-        )
+        self.two_layers_one_col = self._load_main_fixture(self._fix_path_two_layers_one_col())
         self.assertIsNotNone(self.two_layers_one_col)
-        self.two_layers_two_col = self._load_main_fixture(
-            self._fix_path_two_layers_two_col()
-        )
+        self.two_layers_two_col = self._load_main_fixture(self._fix_path_two_layers_two_col())
         self.assertIsNotNone(self.two_layers_two_col)
-        self.two_layers_two_col_data = self._load_main_fixture(
-            self._fix_path_two_layers_two_col_data()
-        )
+        self.two_layers_two_col_data = self._load_main_fixture(self._fix_path_two_layers_two_col_data())
         self.assertIsNotNone(self.two_layers_two_col_data)
         self.two_layers_data = self._load_main_fixture(self._fix_path_two_layers_data())
         self.assertIsNotNone(self.two_layers_data)
-        self.one_layer_two_col = self._load_main_fixture(
-            self._fix_path_one_layer_two_col()
-        )
+        self.one_layer_two_col = self._load_main_fixture(self._fix_path_one_layer_two_col())
         self.assertIsNotNone(self.one_layer_two_col)
 
         self._bpc_mock: BpcMock = BpcMock(bytes(), 8, 8, mock__number_of_layers=2)
-        self._bpc_single_layer_mock: BpcMock = BpcMock(
-            bytes(), 8, 8, mock__number_of_layers=1
-        )
+        self._bpc_single_layer_mock: BpcMock = BpcMock(bytes(), 8, 8, mock__number_of_layers=1)
         self._bpl_mock = BplMock(bytes())
         self._bpas = [None, BpaMock(bytes()), None, None, None, None, None, None]
 
     def test_to_pil_single_layer(self) -> None:
-        self._test_single_layer_image(
-            self.single_layer, self._bpc_single_layer_mock, "single_layer", 1
-        )
+        self._test_single_layer_image(self.single_layer, self._bpc_single_layer_mock, "single_layer", 1)
         self._test_single_layer_image(self.two_layers, self._bpc_mock, "two_layers", 2)
         self._test_single_layer_image(
             self.single_layer_one_col,
@@ -78,29 +62,15 @@ class BmaTestCase(
             "single_layer_one_col",
             1,
         )
-        self._test_single_layer_image(
-            self.two_layers_one_col, self._bpc_mock, "two_layers_one_col", 2
-        )
-        self._test_single_layer_image(
-            self.two_layers_two_col, self._bpc_mock, "two_layers_two_col", 2
-        )
-        self._test_single_layer_image(
-            self.two_layers_two_col_data, self._bpc_mock, "two_layers_two_col_data", 2
-        )
-        self._test_single_layer_image(
-            self.two_layers_data, self._bpc_mock, "two_layers_data", 2
-        )
-        self._test_single_layer_image(
-            self.one_layer_two_col, self._bpc_single_layer_mock, "one_layer_two_col", 1
-        )
+        self._test_single_layer_image(self.two_layers_one_col, self._bpc_mock, "two_layers_one_col", 2)
+        self._test_single_layer_image(self.two_layers_two_col, self._bpc_mock, "two_layers_two_col", 2)
+        self._test_single_layer_image(self.two_layers_two_col_data, self._bpc_mock, "two_layers_two_col_data", 2)
+        self._test_single_layer_image(self.two_layers_data, self._bpc_mock, "two_layers_data", 2)
+        self._test_single_layer_image(self.one_layer_two_col, self._bpc_single_layer_mock, "one_layer_two_col", 1)
 
-    def _test_single_layer_image(
-        self, model: BmaProtocol, bpc_mock: BpcMock, typ: str, layers: int
-    ):
+    def _test_single_layer_image(self, model: BmaProtocol, bpc_mock: BpcMock, typ: str, layers: int):
         for layer in range(0, layers):
-            img = model.to_pil_single_layer(
-                bpc_mock, self._bpl_mock.palettes, self._bpas, layer
-            )
+            img = model.to_pil_single_layer(bpc_mock, self._bpl_mock.palettes, self._bpas, layer)
             self.assertImagesEqual(
                 self._fix_path_expected("to_pil_single_layer", f"{typ}/{layer}.png"),
                 img,
@@ -121,9 +91,7 @@ class BmaTestCase(
             "single_layer",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs)
         self._test_both_layers_image(
             self.single_layer_one_col,
             self._bpc_single_layer_mock,
@@ -152,9 +120,7 @@ class BmaTestCase(
             "two_layers_two_col_data",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs)
         self._test_both_layers_image(
             self.one_layer_two_col,
             self._bpc_single_layer_mock,
@@ -166,9 +132,7 @@ class BmaTestCase(
     def test_to_pil_debug(self) -> None:
         # If this is the Rust implementation, drawing collision and unknown data is not supported.
         # XXX: Actually for now this entire test is just disabled, see below (#449).
-        self.skipTest(
-            "This test is not supported anymore due to unstable Pillow fonts."
-        )
+        self.skipTest("This test is not supported anymore due to unstable Pillow fonts.")
         kwargs = {
             "include_collision": True,
             "include_unknown_data_block": True,
@@ -183,9 +147,7 @@ class BmaTestCase(
             "single_layer",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs)
         self._test_both_layers_image(
             self.single_layer_one_col,
             self._bpc_single_layer_mock,
@@ -214,9 +176,7 @@ class BmaTestCase(
             "two_layers_two_col_data",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs)
         self._test_both_layers_image(
             self.one_layer_two_col,
             self._bpc_single_layer_mock,
@@ -240,9 +200,7 @@ class BmaTestCase(
             "single_layer",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers, self._bpc_mock, ttyp, "two_layers", **kwargs)
         self._test_both_layers_image(
             self.single_layer_one_col,
             self._bpc_single_layer_mock,
@@ -271,9 +229,7 @@ class BmaTestCase(
             "two_layers_two_col_data",
             **kwargs,
         )
-        self._test_both_layers_image(
-            self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs
-        )
+        self._test_both_layers_image(self.two_layers_data, self._bpc_mock, ttyp, "two_layers_data", **kwargs)
         self._test_both_layers_image(
             self.one_layer_two_col,
             self._bpc_single_layer_mock,
@@ -304,9 +260,7 @@ class BmaTestCase(
             single_frame,
         )
         for i, img in enumerate(imgs):
-            self.assertImagesEqual(
-                self._fix_path_expected(test_typ, f"{typ}/{i}.png"), img
-            )
+            self.assertImagesEqual(self._fix_path_expected(test_typ, f"{typ}/{i}.png"), img)
 
     def test_from_pil(self) -> None:
         self._bpc_mock.mock__enable_writing()
@@ -1496,15 +1450,11 @@ class BmaTestCase(
         # BPC tiles for this test! But that's ok. We confirmed the correct BPL and BPC changes above.
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"),
-            self.two_layers.to_pil_single_layer(
-                self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ),
+            self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0),
         )
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "1.png"),
-            self.two_layers.to_pil_single_layer(
-                self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1
-            ),
+            self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1),
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -2336,15 +2286,11 @@ class BmaTestCase(
         # BPC tiles for this test! But that's ok. We confirmed the correct BPL and BPC changes above.
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"),
-            self.single_layer.to_pil_single_layer(
-                self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 0
-            ),
+            self.single_layer.to_pil_single_layer(self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 0),
         )
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "1.png"),
-            self.single_layer.to_pil_single_layer(
-                self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 1
-            ),
+            self.single_layer.to_pil_single_layer(self._bpc_single_layer_mock, self._bpl_mock.palettes, self._bpas, 1),
         )
         reloaded = self._save_and_reload_main_fixture(self.single_layer)
         self.assertEqual(self.single_layer.layer0, reloaded.layer0)
@@ -3175,9 +3121,7 @@ class BmaTestCase(
         # BPC tiles for this test! But that's ok. We confirmed the correct BPL and BPC changes above.
         self.assertImagesEqual(
             self._fix_path_expected("from_pil", "0.png"),
-            self.two_layers.to_pil_single_layer(
-                self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ),
+            self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0),
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -4066,15 +4010,11 @@ class BmaTestCase(
 
         self.assertImagesEqual(
             self._fix_path_expected("resize", "0.png"),
-            self.two_layers.to_pil_single_layer(
-                self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-            ),
+            self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0),
         )
         self.assertImagesEqual(
             self._fix_path_expected("resize", "1.png"),
-            self.two_layers.to_pil_single_layer(
-                self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1
-            ),
+            self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1),
         )
         reloaded = self._save_and_reload_main_fixture(self.two_layers)
         self.assertEqual(self.two_layers.layer0, reloaded.layer0)
@@ -4099,13 +4039,9 @@ class BmaTestCase(
         self.assertEqual(13, saved.layer0[index])
         assert saved.layer1 is not None
         self.assertEqual(15, saved.layer1[index])
-        img = self.two_layers.to_pil_single_layer(
-            self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0
-        )
+        img = self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 0)
         self.assertImagesEqual(self._fix_path_expected("place_chunk", "0.png"), img)
-        img = self.two_layers.to_pil_single_layer(
-            self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1
-        )
+        img = self.two_layers.to_pil_single_layer(self._bpc_mock, self._bpl_mock.palettes, self._bpas, 1)
         self.assertImagesEqual(self._fix_path_expected("place_chunk", "1.png"), img)
 
     def test_place_collision(self) -> None:
@@ -9491,15 +9427,11 @@ class BmaTestCase(
             self.assertEqual(None, model.collision2)
 
         self._test_metadata_with_reload(self.two_layers, two_layers)
-        self._test_metadata_with_reload(
-            self.two_layers_two_col_data, two_layers_two_col_data
-        )
+        self._test_metadata_with_reload(self.two_layers_two_col_data, two_layers_two_col_data)
         self._test_metadata_with_reload(self.single_layer, single_layer)
         self._test_metadata_with_reload(self.two_layers_one_col, two_layers_one_col)
 
-    def _test_metadata_with_reload(
-        self, model: BmaProtocol, cb: typing.Callable[[BmaProtocol], None]
-    ):
+    def _test_metadata_with_reload(self, model: BmaProtocol, cb: typing.Callable[[BmaProtocol], None]):
         cb(model)
         cb(self._save_and_reload_main_fixture(model))
 
@@ -9516,9 +9448,7 @@ class BmaTestCase(
         self.assertEqual(bma_before.map_height_chunks, bma_after.map_height_chunks)
         self.assertEqual(bma_before.number_of_layers, bma_after.number_of_layers)
         self.assertEqual(bma_before.unk6, bma_after.unk6)
-        self.assertEqual(
-            bma_before.number_of_collision_layers, bma_after.number_of_collision_layers
-        )
+        self.assertEqual(bma_before.number_of_collision_layers, bma_after.number_of_collision_layers)
         self.assertEqual(bma_before.layer0, bma_after.layer0)
         self.assertEqual(bma_before.layer1, bma_after.layer1)
         self.assertEqual(bma_before.unknown_data_block, bma_after.unknown_data_block)

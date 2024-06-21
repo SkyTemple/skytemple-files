@@ -72,10 +72,7 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                 # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
                 # return rom.arm9[PATCH_STRING_ADDR_ARM9_US:PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)] == PATCH_STRING
                 return (
-                    rom.arm9[
-                        PATCH_STRING_ADDR_ARM9_US : PATCH_STRING_ADDR_ARM9_US
-                        + len(PATCH_STRING)
-                    ]
+                    rom.arm9[PATCH_STRING_ADDR_ARM9_US : PATCH_STRING_ADDR_ARM9_US + len(PATCH_STRING)]
                     != b"PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY"
                 )
 
@@ -83,27 +80,19 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                 # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
                 # return rom.arm9[PATCH_STRING_ADDR_ARM9_EU:PATCH_STRING_ADDR_ARM9_EU + len(PATCH_STRING)] == PATCH_STRING
                 return (
-                    rom.arm9[
-                        PATCH_STRING_ADDR_ARM9_EU : PATCH_STRING_ADDR_ARM9_EU
-                        + len(PATCH_STRING)
-                    ]
+                    rom.arm9[PATCH_STRING_ADDR_ARM9_EU : PATCH_STRING_ADDR_ARM9_EU + len(PATCH_STRING)]
                     != b"PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY"
                 )
             if config.game_region == GAME_REGION_JP:
                 # TODO: The patch overwrites this region again, atm. Instead we check against the original value there
                 # return rom.arm9[PATCH_STRING_ADDR_ARM9_JP:PATCH_STRING_ADDR_ARM9_JP + len(PATCH_STRING)] == PATCH_STRING
                 return (
-                    rom.arm9[
-                        PATCH_STRING_ADDR_ARM9_JP : PATCH_STRING_ADDR_ARM9_JP
-                        + len(PATCH_STRING)
-                    ]
+                    rom.arm9[PATCH_STRING_ADDR_ARM9_JP : PATCH_STRING_ADDR_ARM9_JP + len(PATCH_STRING)]
                     != b"PLAYER\x00\x00TALK_SUB\x00\x00\x00\x00NPC_MY"
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # First make absolute sure, that we aren't doing it again by accident, this isn't supported.
         if self.is_applied(rom, config):
             raise RuntimeError(_("This patch can not be re-applied."))
@@ -111,37 +100,19 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
         extracted_a_list = False
 
         # Extract the actor list
-        if (
-            EXTRACT_LOOSE_BIN_SRCDATA__ACTORS
-            not in config.asm_patches_constants.loose_bin_files
-        ):
-            raise ValueError(
-                _("The source data specification was not found in the configuration.")
-            )
-        loose_bin_spec = config.asm_patches_constants.loose_bin_files[
-            EXTRACT_LOOSE_BIN_SRCDATA__ACTORS
-        ]
+        if EXTRACT_LOOSE_BIN_SRCDATA__ACTORS not in config.asm_patches_constants.loose_bin_files:
+            raise ValueError(_("The source data specification was not found in the configuration."))
+        loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__ACTORS]
         if loose_bin_spec.filepath not in rom.filenames:
-            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(
-                LEN_ACTOR_ENTRY, [4]
-            )
+            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(LEN_ACTOR_ENTRY, [4])
             extracted_a_list = True
 
         # Extract the level list
-        if (
-            EXTRACT_LOOSE_BIN_SRCDATA__LEVELS
-            not in config.asm_patches_constants.loose_bin_files
-        ):
-            raise ValueError(
-                _("The source data specification was not found in the configuration.")
-            )
-        loose_bin_spec = config.asm_patches_constants.loose_bin_files[
-            EXTRACT_LOOSE_BIN_SRCDATA__LEVELS
-        ]
+        if EXTRACT_LOOSE_BIN_SRCDATA__LEVELS not in config.asm_patches_constants.loose_bin_files:
+            raise ValueError(_("The source data specification was not found in the configuration."))
+        loose_bin_spec = config.asm_patches_constants.loose_bin_files[EXTRACT_LOOSE_BIN_SRCDATA__LEVELS]
         if loose_bin_spec.filepath not in rom.filenames:
-            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(
-                12, [8], write_subheader=False
-            )
+            ListExtractor(rom, config.bin_sections.arm9, loose_bin_spec).extract(12, [8], write_subheader=False)
             extracted_a_list = True
 
         # Apply the patch
@@ -160,7 +131,5 @@ class ActorAndLevelListLoaderPatchHandler(AbstractPatchHandler):
                 ) from ex
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

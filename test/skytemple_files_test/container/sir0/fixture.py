@@ -85,26 +85,10 @@ class DummySir0Serializable(Sir0Serializable):
         # We are using the pointers to get the values of a, b, c, d to test that they are valid.
         assert data_pointer == 2
         return DummySir0Serializable(
-            a=u8_checked(
-                content_data[
-                    read_u32(content_data[data_pointer + 2 : data_pointer + 6])
-                ]
-            ),
-            b=u8_checked(
-                content_data[
-                    read_u32(content_data[data_pointer + 6 : data_pointer + 10])
-                ]
-            ),
-            c=u8_checked(
-                content_data[
-                    read_u32(content_data[data_pointer + 10 : data_pointer + 14])
-                ]
-            ),
-            d=u8_checked(
-                content_data[
-                    read_u32(content_data[data_pointer + 14 : data_pointer + 18])
-                ]
-            ),
+            a=u8_checked(content_data[read_u32(content_data[data_pointer + 2 : data_pointer + 6])]),
+            b=u8_checked(content_data[read_u32(content_data[data_pointer + 6 : data_pointer + 10])]),
+            c=u8_checked(content_data[read_u32(content_data[data_pointer + 10 : data_pointer + 14])]),
+            d=u8_checked(content_data[read_u32(content_data[data_pointer + 14 : data_pointer + 18])]),
             header_val=read_u16(content_data[data_pointer : data_pointer + 2]),
         )
 

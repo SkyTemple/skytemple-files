@@ -27,7 +27,4 @@ from Foundation import NSUserDefaults  # pylint: disable=import-error
 
 def macos_use_light_theme():
     """Function to check if the current macOS theme is the light theme or the dark theme"""
-    return (
-        NSUserDefaults.standardUserDefaults().stringForKey_("AppleInterfaceStyle")
-        != "Dark"
-    )
+    return NSUserDefaults.standardUserDefaults().stringForKey_("AppleInterfaceStyle") != "Dark"

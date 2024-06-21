@@ -82,9 +82,7 @@ class FontDatEntry(AbstractFontEntry):
                         else:
                             data.append(0x0)
                     pos += 1
-        image = Image.frombytes(
-            mode="P", size=(FONT_DAT_SIZE, FONT_DAT_SIZE), data=bytes(data)
-        )
+        image = Image.frombytes(mode="P", size=(FONT_DAT_SIZE, FONT_DAT_SIZE), data=bytes(data))
         return image
 
     def to_xml(self) -> Element:
@@ -95,9 +93,7 @@ class FontDatEntry(AbstractFontEntry):
         return xml_entry
 
     @classmethod
-    def from_pil(
-        cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8
-    ) -> FontDatEntry:
+    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: u8, bprow_field: u8) -> FontDatEntry:
         if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         bprow = FONT_DEFAULT_BPROW  # Unused, so always use default
@@ -152,9 +148,7 @@ class FontDat(AbstractFont):
         self.entries.remove(entry)  # type: ignore
 
     def create_entry_for_table(self, table: u8) -> AbstractFontEntry:
-        entry = FontDatEntry(
-            u8(0), table, u8(0), FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN - 0x4)
-        )
+        entry = FontDatEntry(u8(0), table, u8(0), FONT_DEFAULT_BPROW, bytes(FONT_DAT_ENTRY_LEN - 0x4))
         self.entries.append(entry)
         return entry
 
@@ -168,9 +162,7 @@ class FontDat(AbstractFont):
     def to_pil(self) -> dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(
-                mode="P", size=(FONT_DAT_SIZE * 16, FONT_DAT_SIZE * 16), color=0
-            )
+            tables[t] = Image.new(mode="P", size=(FONT_DAT_SIZE * 16, FONT_DAT_SIZE * 16), color=0)
             tables[t].putpalette([min(255, 256 - (i // 3) * 16) for i in range(16 * 3)])
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:
@@ -216,9 +208,7 @@ class FontDat(AbstractFont):
                     y = (charid // 16) * FONT_DAT_SIZE
                     self.entries.append(
                         FontDatEntry.from_pil(
-                            tables[t].crop(
-                                box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]
-                            ),
+                            tables[t].crop(box=[x, y, x + FONT_DAT_SIZE, y + FONT_DAT_SIZE]),
                             charid,
                             t,
                             width,

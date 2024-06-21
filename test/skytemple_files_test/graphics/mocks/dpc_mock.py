@@ -55,9 +55,7 @@ class DpcMock(DpcProtocol):
     def make_empty_importable(cls) -> DpcMock:
         return cls(bytes(), kind=_EMPTY)
 
-    def chunks_to_pil(
-        self, dpci: CI, palettes: Sequence[Sequence[int]], width_in_mtiles=16
-    ) -> Image.Image:
+    def chunks_to_pil(self, dpci: CI, palettes: Sequence[Sequence[int]], width_in_mtiles=16) -> Image.Image:
         if self.kind == _DUNGEON_BG:
             assert width_in_mtiles == 1
 
@@ -82,20 +80,14 @@ class DpcMock(DpcProtocol):
             )
             # fmt: on
 
-            return Image.open(
-                os.path.join(thisdir, "data", "dpc", "chunks_to_pil_gengar.png")
-            )
+            return Image.open(os.path.join(thisdir, "data", "dpc", "chunks_to_pil_gengar.png"))
 
         raise NotImplementedError("Not implemented for mock.")
 
-    def single_chunk_to_pil(
-        self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def single_chunk_to_pil(self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]) -> Image.Image:
         raise NotImplementedError("Not implemented for mock.")
 
-    def pil_to_chunks(
-        self, image: Image.Image, force_import=True
-    ) -> Tuple[Sequence[bytes], Sequence[Sequence[int]]]:
+    def pil_to_chunks(self, image: Image.Image, force_import=True) -> Tuple[Sequence[bytes], Sequence[Sequence[int]]]:
         raise NotImplementedError("Not implemented for mock.")
 
     def import_tile_mappings(

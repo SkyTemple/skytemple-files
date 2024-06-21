@@ -89,9 +89,7 @@ class Dma(DmaProtocol):
         """
         self.chunk_mappings[(0x300 * 3) + extra_type + (3 * index)] = value
 
-    def to_pil(
-        self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]) -> Image.Image:
         """
         For debugging only, the output image contains some labels, etc. Use get(...) instead to
         get a chunk mapping and then render that chunk by extracting it from the image returned by
@@ -144,12 +142,8 @@ class Dma(DmaProtocol):
                 for y, row in enumerate(possibility):
                     for x, solid in enumerate(row):
                         ctype = solid_type if solid else DmaType.FLOOR
-                        solid_neighbors = get_tile_neighbors(
-                            possibility, x, y, bool(solid)
-                        )
-                        for iv, variation in enumerate(
-                            self.get(ctype, solid_neighbors)
-                        ):
+                        solid_neighbors = get_tile_neighbors(possibility, x, y, bool(solid))
+                        for iv, variation in enumerate(self.get(ctype, solid_neighbors)):
                             paste(variation, x_cursor + (4 * iv) + x, y_cursor + y)
                 y_cursor += 4
             x_cursor += 13

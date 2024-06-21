@@ -30,9 +30,7 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
         self,
         expected: Union[str, Image.Image],
         input_img: Image.Image,
-        palette_filter: Optional[
-            Callable[[Sequence[int], Sequence[int]], Sequence[int]]
-        ] = None,
+        palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
         msg: Optional[str] = None,
     ) -> None:
         self._assertImageEqual(expected, input_img, palette_filter, msg, equal=True)
@@ -41,9 +39,7 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
         self,
         expected: Union[str, Image.Image],
         input_img: Image.Image,
-        palette_filter: Optional[
-            Callable[[Sequence[int], Sequence[int]], Sequence[int]]
-        ] = None,
+        palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
         msg: Optional[str] = None,
     ) -> None:
         self._assertImageEqual(expected, input_img, palette_filter, msg, equal=False)
@@ -56,9 +52,7 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
         self,
         expected: Union[str, Image.Image],
         input_img: Image.Image,
-        palette_filter: Optional[
-            Callable[[Sequence[int], Sequence[int]], Sequence[int]]
-        ] = None,
+        palette_filter: Optional[Callable[[Sequence[int], Sequence[int]], Sequence[int]]] = None,
         msg: Optional[str] = None,
         *,
         equal: bool,
@@ -71,9 +65,7 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
         if palette_filter is not None:
             assert expected.mode == "P"
             self.assertEqual("P", input_img.mode)
-            expected.putpalette(
-                palette_filter(expected.getpalette(), input_img.getpalette())
-            )  # type: ignore
+            expected.putpalette(palette_filter(expected.getpalette(), input_img.getpalette()))  # type: ignore
         try:
             if equal:
                 self.assertTrue(
@@ -101,9 +93,7 @@ class ImageTestCaseAbc(unittest.TestCase, ABC):
             comparision_image.paste(expected, (0, 15))
             comparision_image.paste(input_img, (expected.width + 5, 15))
             comparision_image.save(os.fdopen(tempfile, mode="wb"), format="PNG")
-            raise AssertionError(
-                f"Assertion failed: Comparison image output to {tempfile_path}"
-            ) from e
+            raise AssertionError(f"Assertion failed: Comparison image output to {tempfile_path}") from e
 
 
 def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
@@ -116,8 +106,6 @@ def are_images_equal(img1: Image.Image, img2: Image.Image) -> bool:
     else:
         equal_alphas = True
 
-    equal_content = not ImageChops.difference(
-        img1.convert("RGB"), img2.convert("RGB")
-    ).getbbox()
+    equal_content = not ImageChops.difference(img1.convert("RGB"), img2.convert("RGB")).getbbox()
 
     return equal_size and equal_alphas and equal_content

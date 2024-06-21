@@ -94,9 +94,7 @@ class ArmPatcher:
                                 game = game_candidate
                         if game is not None:
                             with open_utf8(os.path.join(tmp, fn), "r") as fi:
-                                new_content = replace.regexp.sub(
-                                    game.replace, fi.read()
-                                )
+                                new_content = replace.regexp.sub(game.replace, fi.read())
                             with open_utf8(os.path.join(tmp, fn), "w") as fi:
                                 fi.write(new_content)
 
@@ -108,10 +106,7 @@ class ArmPatcher:
                             try:
                                 fib.write(get_binary_from_rom(self.rom, binary))
                             except ValueError as err:
-                                if (
-                                    binary_name == "overlay36"
-                                    and patch.id == "ExtraSpace"
-                                ):
+                                if binary_name == "overlay36" and patch.id == "ExtraSpace":
                                     # SPECIAL CASE for ExtraSpace patch, the overlay hasn't been added to the overlay
                                     # table yet so get_binary_from_rom() fails.
                                     with open(OV_FILE_PATH, "rb") as ovfib:
@@ -126,28 +121,20 @@ class ArmPatcher:
 
                 # Then include other includes
                 for include in patch.includes:
-                    asm_entrypoint += (
-                        f'.include "{os.path.join(tmp, include.filename)}"\n'
-                    )
+                    asm_entrypoint += f'.include "{os.path.join(tmp, include.filename)}"\n'
 
                 # Build binary blocks
                 if isinstance(patch, Pmd2Patch):
                     for open_bin in patch.open_bins:
                         binary = binaries[binary_path_to_name(open_bin.filepath)]
-                        binary_path = os.path.join(
-                            tmp, open_bin.filepath.split("/")[-1]
-                        )
+                        binary_path = os.path.join(tmp, open_bin.filepath.split("/")[-1])
                         os.makedirs(os.path.dirname(binary_path), exist_ok=True)
                         # Write binary to tmp dir
                         with open(binary_path, "wb") as fib:
                             fib.write(get_binary_from_rom(self.rom, binary))
-                        asm_entrypoint += (
-                            f'.open "{binary_path}", 0x{binary.loadaddress:0x}\n'
-                        )
+                        asm_entrypoint += f'.open "{binary_path}", 0x{binary.loadaddress:0x}\n'
                         for include in open_bin.includes:
-                            asm_entrypoint += (
-                                f'.include "{os.path.join(tmp, include.filename)}"\n'
-                            )
+                            asm_entrypoint += f'.include "{os.path.join(tmp, include.filename)}"\n'
                         asm_entrypoint += ".close\n"
 
                 # Write final asm file
@@ -160,11 +147,7 @@ class ArmPatcher:
                     parameters += [
                         "-equ",
                         param_name,
-                        (
-                            f'"{param_value}"'
-                            if isinstance(param_value, str)
-                            else str(param_value)
-                        ),
+                        (f'"{param_value}"' if isinstance(param_value, str) else str(param_value)),
                     ]
 
                 # Run armips
@@ -190,19 +173,14 @@ class ArmPatcher:
                 except FileNotFoundError as ex:
                     raise make_user_err(
                         ArmipsNotInstalledError,
-                        _(
-                            "ARMIPS could not be found. Make sure, that "
-                            "'armips' is inside your system's PATH."
-                        ),
+                        _("ARMIPS could not be found. Make sure, that " "'armips' is inside your system's PATH."),
                     ) from ex
 
                 if os.getenv("SKYTEMPLE_DEBUG_ARMIPS_OUTPUT", False):
                     print("ARMIPS OUTPUT:")
                     if result is not None:
                         print(str(result.stdout.read(), "utf-8"))  # type: ignore
-                        print(
-                            str(result.stderr.read(), "utf-8") if result.stderr else ""
-                        )  # type: ignore
+                        print(str(result.stderr.read(), "utf-8") if result.stderr else "")  # type: ignore
 
                 if retcode != 0:
                     raise make_user_err(

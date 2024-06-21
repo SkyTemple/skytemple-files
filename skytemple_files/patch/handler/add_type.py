@@ -1402,30 +1402,22 @@ class AddTypePatchHandler(AbstractPatchHandler):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([29])[29].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 type_table = TYPE_TABLE_US
@@ -1448,9 +1440,7 @@ class AddTypePatchHandler(AbstractPatchHandler):
         # Change Fairy's type name
         for filename in get_files_from_rom_with_extension(rom, "str"):
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(
-                bin_before, string_encoding=config.string_encoding
-            )
+            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
             block = config.string_index_data.string_blocks["Type Names"]
             strings.strings[block.begin + 18] = TYPE_LIST[filename]
             bin_after = StrHandler.serialize(strings)
@@ -1459,9 +1449,7 @@ class AddTypePatchHandler(AbstractPatchHandler):
         bincfg2 = config.bin_sections.arm9
         data = bytearray(get_binary_from_rom(rom, bincfg2))
         data[gummi_iq_table : gummi_iq_table + TABLE_LEN] = bytearray(NEW_IQ_GUMMI)
-        data[gummi_belly_table : gummi_belly_table + TABLE_LEN] = bytearray(
-            NEW_BELLY_GUMMI
-        )
+        data[gummi_belly_table : gummi_belly_table + TABLE_LEN] = bytearray(NEW_BELLY_GUMMI)
         set_binary_in_rom(rom, bincfg2, bytes(data))
 
         try:
@@ -1469,7 +1457,5 @@ class AddTypePatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

@@ -30,6 +30,4 @@ def pytest_ignore_collect(path):
     if isdir(path.strpath):
         return False
     parts = path.strpath.split(path.sep)
-    return not (
-        len(parts) > 1 and parts[-2] == TEST_DIR_NAME and parts[-1].endswith("_test.py")
-    )
+    return not (len(parts) > 1 and parts[-2] == TEST_DIR_NAME and parts[-1].endswith("_test.py"))

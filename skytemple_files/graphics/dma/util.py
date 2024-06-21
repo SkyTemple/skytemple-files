@@ -43,11 +43,7 @@ def get_tile_neighbors(
     if y + 1 < len(wall_matrix) and wall_matrix[y + 1][x]:
         ns += DmaNeighbor.SOUTH
     # SOUTH_EAST
-    if (
-        y + 1 < len(wall_matrix)
-        and x + 1 < len(wall_matrix[y + 1])
-        and wall_matrix[y + 1][x + 1]
-    ):
+    if y + 1 < len(wall_matrix) and x + 1 < len(wall_matrix[y + 1]) and wall_matrix[y + 1][x + 1]:
         ns += DmaNeighbor.SOUTH_EAST
     # EAST
     if x + 1 < len(wall_matrix[y]) and wall_matrix[y][x + 1]:

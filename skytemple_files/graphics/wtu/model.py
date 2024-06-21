@@ -39,12 +39,7 @@ class WtuEntry(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, WtuEntry):
             return False
-        return (
-            self.x == other.x
-            and self.y == other.y
-            and self.width == other.width
-            and self.height == other.height
-        )
+        return self.x == other.x and self.y == other.y and self.width == other.width and self.height == other.height
 
 
 class Wtu(AutoString):
@@ -54,9 +49,7 @@ class Wtu(AutoString):
     def __init__(self, data: bytes):
         if not isinstance(data, memoryview):
             data = memoryview(data)
-        assert self.matches(
-            data, 0
-        ), "The Wtu file must begin with the WTU magic number"
+        assert self.matches(data, 0), "The Wtu file must begin with the WTU magic number"
         number_entries = read_u32(data, 0x4)
         self.image_mode = read_u32(data, 0x8)
         # The size of this header; Wtu entries start from this address

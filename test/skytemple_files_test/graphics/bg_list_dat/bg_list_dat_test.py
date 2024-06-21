@@ -2700,9 +2700,7 @@ FIXTURE_REPR = [
 ]
 
 
-class BgListDatTestCase(
-    SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[BgListEntryProtocol]]
-):
+class BgListDatTestCase(SkyTempleFilesTestCase[BgListDatHandler, BgListProtocol[BgListEntryProtocol]]):
     handler = BgListDatHandler
 
     def setUp(self) -> None:
@@ -2769,34 +2767,22 @@ class BgListDatTestCase(
             self._save_and_reload_main_fixture(self.bg_list)
 
     def test_get_bpl(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bpl(self._fix_path_common()), BplProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bpl(self._fix_path_common()), BplProtocol)
 
     def test_get_bpl_rom_file_provider(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bpl(RomFileProviderStub()), BplProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bpl(RomFileProviderStub()), BplProtocol)
 
     def test_get_bpc(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bpc(self._fix_path_common()), BpcProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bpc(self._fix_path_common()), BpcProtocol)
 
     def test_get_bpc_rom_file_provider(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bpc(RomFileProviderStub()), BpcProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bpc(RomFileProviderStub()), BpcProtocol)
 
     def test_get_bma(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bma(self._fix_path_common()), BmaProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bma(self._fix_path_common()), BmaProtocol)
 
     def test_get_bma_rom_file_provider(self) -> None:
-        self.assertIsInstance(
-            self.bg_list.level[-1].get_bma(RomFileProviderStub()), BmaProtocol
-        )
+        self.assertIsInstance(self.bg_list.level[-1].get_bma(RomFileProviderStub()), BmaProtocol)
 
     def test_get_bpas(self) -> None:
         result = self.bg_list.level[-1].get_bpas(self._fix_path_common())
@@ -2883,9 +2869,7 @@ class BgListDatTestCase(
         bg_list_dat_before = self.handler.deserialize(file)
         bg_list_dat_after = self._save_and_reload_main_fixture(bg_list_dat_before)
 
-        for idx, (entry_before, entry_after) in enumerate(
-            zip(bg_list_dat_before.level, bg_list_dat_after.level)
-        ):
+        for idx, (entry_before, entry_after) in enumerate(zip(bg_list_dat_before.level, bg_list_dat_after.level)):
             self.assertEqual(entry_before.bma_name, entry_after.bma_name)
             self.assertEqual(entry_before.bpa_names, entry_after.bpa_names)
             self.assertEqual(entry_before.bpl_name, entry_after.bpl_name)
@@ -2902,9 +2886,7 @@ class BgListDatTestCase(
         return os.path.join(os.path.dirname(__file__), "..", "fixtures")
 
     @classmethod
-    def format_list(
-        cls, ldat: BgListProtocol
-    ) -> List[Dict[str, Union[str, Sequence[Optional[str]]]]]:
+    def format_list(cls, ldat: BgListProtocol) -> List[Dict[str, Union[str, Sequence[Optional[str]]]]]:
         return [cls.format_entry(x) for x in ldat.level]
 
     @staticmethod

@@ -84,9 +84,7 @@ class HardcodedRankUpTable:
         return lst
 
     @classmethod
-    def set_rank_up_table(
-        cls, value: list[Rank], arm9bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_rank_up_table(cls, value: list[Rank], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Sets the list of ranks in the game.
         The length of the list must exactly match the original ROM's length (see get_rank_up_table).
@@ -95,10 +93,6 @@ class HardcodedRankUpTable:
         assert block.length is not None
         expected_length = int(block.length / ENTRY_LEN)
         if len(value) != expected_length:
-            raise ValueError(
-                f"The list must have exactly the length of {expected_length} entries."
-            )
+            raise ValueError(f"The list must have exactly the length of {expected_length} entries.")
         for i, entry in enumerate(value):
-            arm9bin[
-                block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)
-            ] = entry.to_bytes()
+            arm9bin[block.address + (i * ENTRY_LEN) : block.address + ((i + 1) * ENTRY_LEN)] = entry.to_bytes()

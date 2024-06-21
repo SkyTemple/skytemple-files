@@ -75,9 +75,7 @@ class Wte(Sir0Serializable, AutoString):
         if not isinstance(data, memoryview):
             data = memoryview(data)
 
-        assert self.matches(
-            data, header_pnt
-        ), "The Wte file must begin with the WTE magic number"
+        assert self.matches(data, header_pnt), "The Wte file must begin with the WTE magic number"
         pointer_image = read_u32(data, header_pnt + 0x4)
         image_length = read_u32(data, header_pnt + 0x8)
 
@@ -113,9 +111,7 @@ class Wte(Sir0Serializable, AutoString):
         return WteWriter(self).write()  # type: ignore
 
     def actual_dimensions(self) -> tuple[int, int]:
-        return 8 * (2 ** (self.actual_dim & 0x07)), 8 * (
-            2 ** ((self.actual_dim >> 3) & 0x07)
-        )
+        return 8 * (2 ** (self.actual_dim & 0x07)), 8 * (2 ** ((self.actual_dim >> 3) & 0x07))
 
     def _adjust_actual_dimensions(self, canvas_width: int, canvas_height: int):
         """Adjusts the actual dimensions specified by the image mode so the image can fit into those dimensions."""
@@ -125,9 +121,7 @@ class Wte(Sir0Serializable, AutoString):
         height = 0
         while 8 * (2**height) < canvas_height:
             height += 1
-        if (
-            width >= 8 or height >= 8
-        ):  # Max theoretical size: (2**(7+3), 2**(7+3)) = (1024, 1024)
+        if width >= 8 or height >= 8:  # Max theoretical size: (2**(7+3), 2**(7+3)) = (1024, 1024)
             raise ValueError("Canvas size too large.")
         self.actual_dim = u8_checked(width + (height << 3))
 
@@ -160,10 +154,7 @@ class Wte(Sir0Serializable, AutoString):
         colors_per_line: int = 2**self.image_type.bpp
         if not self.has_palette():
             # Generates a default grayscale palette if the file doesn't have one
-            return [
-                min((i // 3) * (256 // colors_per_line), 255)
-                for i in range(colors_per_line * 3)
-            ]
+            return [min((i // 3) * (256 // colors_per_line), 255) for i in range(colors_per_line * 3)]
         else:
             return self.palette
 
@@ -207,23 +198,15 @@ class Wte(Sir0Serializable, AutoString):
         nb_colors = 2**self.image_type.bpp
         for i, px in enumerate(self.image_data):
             for j in range(pixels_per_byte):
-                pil_img_data[i * pixels_per_byte + j] = (
-                    px >> (self.image_type.bpp * j)
-                ) % nb_colors
+                pil_img_data[i * pixels_per_byte + j] = (px >> (self.image_type.bpp * j)) % nb_colors
         im = Image.frombuffer("P", dimensions, pil_img_data, "raw", "P", 0, 1)
         im.putpalette(self.get_palette()[3 * (2**self.image_type.bpp) * variation :])
         return im
 
-    def from_pil(
-        self, img: Image.Image, img_type: WteImageType, discard_palette: bool
-    ) -> Wte:
+    def from_pil(self, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> Wte:
         """Replace the image data by the new one passed in argument."""
         if img.mode != "P":
-            raise AttributeError(
-                _(
-                    "Can not convert PIL image to WTE: Must be indexed image (=using a palette)"
-                )
-            )
+            raise AttributeError(_("Can not convert PIL image to WTE: Must be indexed image (=using a palette)"))
 
         if img_type.has_image:
             try:
@@ -263,9 +246,7 @@ class Wte(Sir0Serializable, AutoString):
     def _read_image(self, data: memoryview, pointer_image, image_length) -> memoryview:
         return data[pointer_image : pointer_image + image_length]
 
-    def _read_palette(
-        self, data: memoryview, pointer_pal, number_pal_colors
-    ) -> list[int]:
+    def _read_palette(self, data: memoryview, pointer_pal, number_pal_colors) -> list[int]:
         pal = []
         data = data[pointer_pal : pointer_pal + (number_pal_colors * 4)]
         for i, (r, g, b, x) in enumerate(iter_bytes(data, 4)):

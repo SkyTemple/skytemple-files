@@ -110,9 +110,7 @@ class RomDir:
         with open(os.path.join(self.tempdir.name, "arm9.bin"), "wb") as f:
             f.write(self.rom.arm9)
         for ov_id, ov in self.rom.loadArm9Overlays().items():
-            with open(
-                os.path.join(self.tempdir.name, f"overlay{ov_id}.bin"), "wb"
-            ) as f:
+            with open(os.path.join(self.tempdir.name, f"overlay{ov_id}.bin"), "wb") as f:
                 f.write(ov.data)
         return self
 
@@ -242,17 +240,12 @@ def process(
         print("-- No matches found.")
     elif len(translated_found_offsets) == 1:
         print(f"++ Found! 0x{translated_found_offsets[0]:0x}")
-        addresses_dict["JP"] = (
-            jp_binary_start_addr + translated_found_offsets[0] + offset_in_search
-        )
+        addresses_dict["JP"] = jp_binary_start_addr + translated_found_offsets[0] + offset_in_search
         if length_dict is not None:
             length_dict["JP"] = orig_length
         return True
     else:
-        print(
-            "?? Multiple matches found: "
-            + ", ".join(f"0x{x:0x}" for x in translated_found_offsets)
-        )
+        print("?? Multiple matches found: " + ", ".join(f"0x{x:0x}" for x in translated_found_offsets))
 
     return False
 
@@ -264,18 +257,14 @@ def main():
             print("Pre-processing...")
             # We pre-process the JP offsets since the literal file doesn't contain them
             binary_jp_addresses = {}
-            for yml_path in glob(
-                path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")
-            ):
+            for yml_path in glob(path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")):
                 with open(yml_path) as f:
                     yml = yaml.load(f, Loader=yaml.SafeLoader)
                     for binary_name, binary in yml.items():
                         if "address" in binary and "JP" in binary["address"]:
                             binary_jp_addresses[binary_name] = binary["address"]["JP"]
 
-            for yml_path in glob(
-                path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")
-            ):
+            for yml_path in glob(path_to("../skytemple_files/_resources/pmdsky-debug/symbols/*.yml")):
                 print(f"Processing {yml_path}...")
                 with open(yml_path) as f:
                     yml = yaml.load(f, Loader=yaml.SafeLoader)
@@ -284,10 +273,7 @@ def main():
                     for binary_name, binary in yml.items():
                         if "data" in binary:
                             for blk in binary["data"]:
-                                if (
-                                    blk["name"] in INTERESTING_BLOCKS
-                                    and "EU" in blk["address"]
-                                ):
+                                if blk["name"] in INTERESTING_BLOCKS and "EU" in blk["address"]:
                                     eu_address = blk["address"]["EU"]
                                     if yml_path.endswith("ram.yml"):
                                         print(f">> {blk['name']} in {binary_name}")
@@ -301,13 +287,8 @@ def main():
                                     if "length" in blk:
                                         length = blk["length"]["EU"]
                                         if "NA" in blk["length"]:
-                                            if (
-                                                blk["length"]["NA"]
-                                                != blk["length"]["EU"]
-                                            ):
-                                                print(
-                                                    f">> {blk['name']} in {binary_name}"
-                                                )
+                                            if blk["length"]["NA"] != blk["length"]["EU"]:
+                                                print(f">> {blk['name']} in {binary_name}")
                                                 print(
                                                     f'-- Warning: Skipped: NA [{blk["length"]["NA"]}] '
                                                     f'and EU [{blk["length"]["EU"]}] length not the same.'

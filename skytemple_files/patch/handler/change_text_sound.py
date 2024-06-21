@@ -73,13 +73,9 @@ class ChangeTextSoundPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(rom.arm9, OFFSET_JP) != ORIGINAL_INSTRUCTION_JP
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ):
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data):
         raise NotImplementedError()

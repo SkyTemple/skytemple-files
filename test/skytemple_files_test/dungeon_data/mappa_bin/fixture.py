@@ -34,9 +34,7 @@ from skytemple_files.dungeon_data.mappa_bin.protocol import (
 )
 
 
-def eq_mappa_trap_list_protocol(
-    one: MappaTrapListProtocol, two: MappaTrapListProtocol
-) -> bool:
+def eq_mappa_trap_list_protocol(one: MappaTrapListProtocol, two: MappaTrapListProtocol) -> bool:
     return one.weights == two.weights
 
 
@@ -46,18 +44,14 @@ class MappaTrapListStub(MappaTrapListProtocol, AutoString):
     def __init__(self, weights: Union[List[u16], Dict[u8, u16]]):
         if isinstance(weights, list):
             if len(weights) != 25:
-                raise ValueError(
-                    "MappaTrapListStub constructor needs a weight value for all of the 25 traps."
-                )
+                raise ValueError("MappaTrapListStub constructor needs a weight value for all of the 25 traps.")
             self.weights = {}
             for i, value in enumerate(weights):
                 self.weights[u8(i)] = value
         elif isinstance(weights, dict):
             self.weights = weights
             if set(self.weights.keys()) != set(range(0, 25)):
-                raise ValueError(
-                    "MappaTrapListStub constructor needs a weight value for all of the 25 traps."
-                )
+                raise ValueError("MappaTrapListStub constructor needs a weight value for all of the 25 traps.")
         else:
             raise ValueError(f"Invalid type for MappaTrapListStub {type(weights)}")
 
@@ -65,9 +59,7 @@ class MappaTrapListStub(MappaTrapListProtocol, AutoString):
         raise NotImplementedError()
 
 
-def eq_mappa_monster_list_protocol(
-    one: Sequence[MappaMonsterProtocol], two: Sequence[MappaMonsterProtocol]
-) -> bool:
+def eq_mappa_monster_list_protocol(one: Sequence[MappaMonsterProtocol], two: Sequence[MappaMonsterProtocol]) -> bool:
     if len(one) != len(two):
         return False
     for x, y in zip(one, two):
@@ -76,9 +68,7 @@ def eq_mappa_monster_list_protocol(
     return True
 
 
-def eq_mappa_monster_protocol(
-    one: MappaMonsterProtocol, two: MappaMonsterProtocol
-) -> bool:
+def eq_mappa_monster_protocol(one: MappaMonsterProtocol, two: MappaMonsterProtocol) -> bool:
     return (
         one.level == two.level
         and one.main_spawn_weight == two.main_spawn_weight
@@ -109,9 +99,7 @@ class MappaMonsterStub(MappaMonsterProtocol, AutoString):
         raise NotImplementedError()
 
 
-def eq_mappa_item_list_protocol(
-    one: MappaItemListProtocol, two: MappaItemListProtocol
-) -> bool:
+def eq_mappa_item_list_protocol(one: MappaItemListProtocol, two: MappaItemListProtocol) -> bool:
     return one.categories == two.categories and one.items == two.items
 
 
@@ -187,9 +175,7 @@ class MappaFloorTerrainSettingsStub(MappaFloorTerrainSettingsProtocol, AutoStrin
         raise NotImplementedError()
 
 
-def eq_mappa_floor_layout_protocol(
-    one: MappaFloorLayoutProtocol, two: MappaFloorLayoutProtocol
-) -> bool:
+def eq_mappa_floor_layout_protocol(one: MappaFloorLayoutProtocol, two: MappaFloorLayoutProtocol) -> bool:
     return (
         one.structure == two.structure
         and one.room_density == two.room_density
@@ -204,9 +190,7 @@ def eq_mappa_floor_layout_protocol(
         and one.sticky_item_chance == two.sticky_item_chance
         and one.dead_ends == two.dead_ends
         and one.secondary_terrain == two.secondary_terrain
-        and eq_mappa_floor_terrain_settings_protocol(
-            one.terrain_settings, two.terrain_settings
-        )
+        and eq_mappa_floor_terrain_settings_protocol(one.terrain_settings, two.terrain_settings)
         and one.unk_e == two.unk_e
         and one.item_density == two.item_density
         and one.trap_density == two.trap_density
@@ -337,9 +321,7 @@ def eq_mappa_floor_protocol(one: MappaFloorProtocol, two: MappaFloorProtocol) ->
         and eq_mappa_trap_list_protocol(one.traps, two.traps)
         and eq_mappa_item_list_protocol(one.floor_items, two.floor_items)
         and eq_mappa_item_list_protocol(one.shop_items, two.shop_items)
-        and eq_mappa_item_list_protocol(
-            one.monster_house_items, two.monster_house_items
-        )
+        and eq_mappa_item_list_protocol(one.monster_house_items, two.monster_house_items)
         and eq_mappa_item_list_protocol(one.buried_items, two.buried_items)
         and eq_mappa_item_list_protocol(one.unk_items1, two.unk_items1)
         and eq_mappa_item_list_protocol(one.unk_items2, two.unk_items2)
@@ -409,9 +391,7 @@ class MappaBinStub(MappaBinProtocol, AutoString):
     def add_floor_to_floor_list(self, floor_list_index: int, floor: MappaFloorStub):
         raise NotImplementedError()
 
-    def insert_floor_in_floor_list(
-        self, floor_list_index: int, insert_index: int, floor: F
-    ):
+    def insert_floor_in_floor_list(self, floor_list_index: int, insert_index: int, floor: F):
         pass
 
     def remove_floor_from_floor_list(self, floor_list_index: int, floor_index: int):

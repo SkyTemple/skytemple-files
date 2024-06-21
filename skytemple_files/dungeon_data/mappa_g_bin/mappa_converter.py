@@ -33,12 +33,6 @@ def convert_mappa_to_mappag(mappa: MappaBinProtocol) -> MappaGBin:
         gfloor_list: list[MappaGFloor] = []
         mappag_floor_lists.append(gfloor_list)
         for floor in floor_list:
-            gfloor_list.append(
-                MappaGFloor(
-                    MappaGFloorLayout(
-                        floor.layout.tileset_id, floor.layout.fixed_floor_id
-                    )
-                )
-            )
+            gfloor_list.append(MappaGFloor(MappaGFloorLayout(floor.layout.tileset_id, floor.layout.fixed_floor_id)))
 
     return MappaGBin(mappag_floor_lists)

@@ -51,9 +51,7 @@ class HardcodedDungeonMisc:
         return read_u16(ov10, block.address)
 
     @staticmethod
-    def set_bad_poison_damage_delay(
-        value: u16, ov10: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_bad_poison_damage_delay(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay10.data.BAD_POISON_DAMAGE_COOLDOWN
         write_u16(ov10, value, block.address)
 
@@ -63,9 +61,7 @@ class HardcodedDungeonMisc:
         return read_u16(ov10, block.address)
 
     @staticmethod
-    def set_ginseng_increase_by_3_chance(
-        value: u16, ov10: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_ginseng_increase_by_3_chance(value: u16, ov10: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay10.data.GINSENG_CHANCE_3
         write_u16(ov10, value, block.address)
 
@@ -85,9 +81,7 @@ class HardcodedDungeonMisc:
         return read_u16(ov29, block.address)
 
     @staticmethod
-    def set_belly_loss_walk_through_walls(
-        value: u16, ov29: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_belly_loss_walk_through_walls(value: u16, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_INT
         write_u16(ov29, value, block.address)
 
@@ -97,8 +91,6 @@ class HardcodedDungeonMisc:
         return read_u16(ov29, block.address)
 
     @staticmethod
-    def set_belly_loss_1000ile_walk_through_walls(
-        value: u16, ov29: bytearray, config: Pmd2Data
-    ) -> None:
+    def set_belly_loss_1000ile_walk_through_walls(value: u16, ov29: bytearray, config: Pmd2Data) -> None:
         block = config.bin_sections.overlay29.data.BELLY_DRAIN_IN_WALLS_THOUSANDTHS
         write_u16(ov29, value, block.address)

@@ -1412,9 +1412,7 @@ class DpciMock(DpciProtocol):
             is_importable=True,
         )
 
-    def tiles_to_pil(
-        self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0
-    ) -> Image.Image:
+    def tiles_to_pil(self, palettes: Sequence[Sequence[int]], width_in_tiles=20, palette_index=0) -> Image.Image:
         raise NotImplementedError("Not implemented for mock.")
 
     def pil_to_tiles(self, image: Image.Image):

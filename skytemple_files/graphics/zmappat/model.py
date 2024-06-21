@@ -70,9 +70,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         pointer_tiles = read_u32(data, header_pnt)
         pointer_pal = read_u32(data, header_pnt + 0x4)
 
-        self.tiles, self.masks = self._read_tiles(
-            data, pointer_tiles, (pointer_pal - pointer_tiles) // 4
-        )
+        self.tiles, self.masks = self._read_tiles(data, pointer_tiles, (pointer_pal - pointer_tiles) // 4)
         self.palette = self._read_palette(data, pointer_pal)
 
         assert len(self.tiles) == ZMAPPAT_NB_TILES_PER_VARIATION * ZMAPPAT_NB_VARIATIONS
@@ -91,9 +89,7 @@ class ZMappaT(Sir0Serializable, AutoString):
 
         return ZMappaTWriter(self).write()
 
-    def _read_tiles(
-        self, data: memoryview, pointer_tiles, nb_tiles
-    ) -> tuple[list[bytearray], list[bytearray]]:
+    def _read_tiles(self, data: memoryview, pointer_tiles, nb_tiles) -> tuple[list[bytearray], list[bytearray]]:
         tiles = []
         masks = []
         for i in range(nb_tiles):
@@ -102,12 +98,8 @@ class ZMappaT(Sir0Serializable, AutoString):
             current_mask = bytearray(ZMAPPAT_TILE_SIZE // 2)
             current_tile = bytearray(ZMAPPAT_TILE_SIZE // 2)
             for chunks in range(ZMAPPAT_TILE_SIZE // 8):
-                current_mask[chunks * 4 : (chunks + 1) * 4] = data_tile[
-                    chunks * 8 : chunks * 8 + 4
-                ]
-                current_tile[chunks * 4 : (chunks + 1) * 4] = data_tile[
-                    chunks * 8 + 4 : chunks * 8 + 8
-                ]
+                current_mask[chunks * 4 : (chunks + 1) * 4] = data_tile[chunks * 8 : chunks * 8 + 4]
+                current_tile[chunks * 4 : (chunks + 1) * 4] = data_tile[chunks * 8 + 4 : chunks * 8 + 8]
             masks.append(current_mask)
             tiles.append(current_tile)
         return tiles, masks
@@ -131,8 +123,7 @@ class ZMappaT(Sir0Serializable, AutoString):
 
         for i, t in enumerate(
             chunks[
-                ZMAPPAT_NB_TILES_PER_VARIATION
-                * variation.value : ZMAPPAT_NB_TILES_PER_VARIATION
+                ZMAPPAT_NB_TILES_PER_VARIATION * variation.value : ZMAPPAT_NB_TILES_PER_VARIATION
                 * (variation.value + 1)
             ]
         ):
@@ -144,9 +135,7 @@ class ZMappaT(Sir0Serializable, AutoString):
         im = Image.frombuffer("P", dimensions, pil_img_data, "raw", "P", 0, 1)
         return im
 
-    def _to_pil_chunk_minimized(
-        self, chunks, variation: ZMappaTVariation
-    ) -> Image.Image:
+    def _to_pil_chunk_minimized(self, chunks, variation: ZMappaTVariation) -> Image.Image:
         """Returns an image using the chunks given.
         This is the minimized version."""
         dimensions = (
@@ -157,8 +146,7 @@ class ZMappaT(Sir0Serializable, AutoString):
 
         for i, t in enumerate(
             chunks[
-                ZMAPPAT_NB_TILES_PER_VARIATION
-                * variation.value : ZMAPPAT_NB_TILES_PER_VARIATION
+                ZMAPPAT_NB_TILES_PER_VARIATION * variation.value : ZMAPPAT_NB_TILES_PER_VARIATION
                 * (variation.value + 1)
             ]
         ):
@@ -166,9 +154,7 @@ class ZMappaT(Sir0Serializable, AutoString):
                 x_tile = (i // 4) % (ZMAPPAT_NB_TILES_PER_LINE // 2)
                 y_tile = (i // 4) // (ZMAPPAT_NB_TILES_PER_LINE // 2)
                 for y in range(4):
-                    start = (
-                        y_tile * 16 + y * 4
-                    ) * ZMAPPAT_NB_TILES_PER_LINE // 2 + x_tile * 4
+                    start = (y_tile * 16 + y * 4) * ZMAPPAT_NB_TILES_PER_LINE // 2 + x_tile * 4
                     pil_img_data[start : start + 4] = t[y * 8 : y * 8 + 4]
         im = Image.frombuffer("P", dimensions, pil_img_data, "raw", "P", 0, 1)
         return im
@@ -208,19 +194,13 @@ class ZMappaT(Sir0Serializable, AutoString):
         for v in range(ZMAPPAT_NB_VARIATIONS):
             if imgs[v].mode != "P" or masks[v].mode != "P":
                 raise AttributeError(
-                    _(
-                        "Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)"
-                    )
+                    _("Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)")
                 )
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION):
                 x_tile = i % ZMAPPAT_NB_TILES_PER_LINE
                 y_tile = i // ZMAPPAT_NB_TILES_PER_LINE
-                tile_img = imgs[v].crop(
-                    box=(x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8)
-                )
-                mask_img = masks[v].crop(
-                    box=(x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8)
-                )
+                tile_img = imgs[v].crop(box=(x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8))
+                mask_img = masks[v].crop(box=(x_tile * 8, y_tile * 8, (x_tile + 1) * 8, (y_tile + 1) * 8))
                 new_tiles.append(bytearray(tile_img.tobytes("raw", "P")))
                 new_masks.append(bytearray(mask_img.tobytes("raw", "P")))
         self.tiles = new_tiles
@@ -237,19 +217,13 @@ class ZMappaT(Sir0Serializable, AutoString):
         for v in range(ZMAPPAT_NB_VARIATIONS):
             if imgs[v].mode != "P" or masks[v].mode != "P":
                 raise AttributeError(
-                    _(
-                        "Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)"
-                    )
+                    _("Can not convert PIL image to ZMAPPAT: Must be indexed images (=using a palette)")
                 )
             for i in range(ZMAPPAT_NB_TILES_PER_VARIATION // 4):
                 x_tile = i % (ZMAPPAT_NB_TILES_PER_LINE // 2)
                 y_tile = i // (ZMAPPAT_NB_TILES_PER_LINE // 2)
-                mini_tile_img = imgs[v].crop(
-                    box=(x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4)
-                )
-                mini_mask_img = masks[v].crop(
-                    box=(x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4)
-                )
+                mini_tile_img = imgs[v].crop(box=(x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4))
+                mini_mask_img = masks[v].crop(box=(x_tile * 4, y_tile * 4, (x_tile + 1) * 4, (y_tile + 1) * 4))
                 for y in range(2):
                     for x in range(2):
                         tile_img = Image.new(mode="P", size=(8, 8), color=0)
@@ -265,8 +239,4 @@ class ZMappaT(Sir0Serializable, AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ZMappaT):
             return False
-        return (
-            self.tiles == other.tiles
-            and self.masks == other.masks
-            and self.palette == other.palette
-        )
+        return self.tiles == other.tiles and self.masks == other.masks and self.palette == other.palette

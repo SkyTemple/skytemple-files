@@ -57,6 +57,4 @@ class SprconfHandler(DataHandler[SprconfType]):
 
     @classmethod
     def update(cls, sprconf: SprconfType, sprite_data: Pmd2Sprite):
-        sprconf[sprite_data.id] = {
-            index.id: index.names for index in sprite_data.indices.values()
-        }
+        sprconf[sprite_data.id] = {index.id: index.names for index in sprite_data.indices.values()}

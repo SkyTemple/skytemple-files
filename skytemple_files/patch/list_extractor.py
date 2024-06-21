@@ -36,30 +36,22 @@ from skytemple_files.common.util import (
 class ListExtractor:
     """Extracts binary data from the ROM's arm9 binary or overlays into a new file inside the ROM"""
 
-    def __init__(
-        self, rom: NintendoDSRom, binary: SectionProtocol, spec: Pmd2LooseBinFile
-    ):
+    def __init__(self, rom: NintendoDSRom, binary: SectionProtocol, spec: Pmd2LooseBinFile):
         self._rom = rom
         self._out_path = spec.filepath
         self._key = spec.srcdata.upper()
         self._binary = binary
         if not hasattr(self._binary.data, self._key):
-            raise ValueError(
-                "The source data block for the patch was not found in the configuration."
-            )
+            raise ValueError("The source data block for the patch was not found in the configuration.")
         self._block: Symbol = getattr(self._binary.data, self._key)
 
-    def extract(
-        self, entry_len: int, string_offs_per_entry: list[int], write_subheader=True
-    ):
+    def extract(self, entry_len: int, string_offs_per_entry: list[int], write_subheader=True):
         """Performs the extraction. Raises a RuntimeError on error."""
         try:
             binary = get_binary_from_rom(self._rom, self._binary)
             data = self._wrap_sir0(
                 binary,
-                binary[
-                    self._block.address : (self._block.address + self._block.length)
-                ],
+                binary[self._block.address : (self._block.address + self._block.length)],
                 entry_len,
                 string_offs_per_entry,
                 write_subheader,
@@ -90,9 +82,7 @@ class ListExtractor:
                 new_pointer = self._push_string(
                     full_binary,
                     out_data,
-                    u32_checked(
-                        read_u32(table_data, i + string_off) - self._binary.loadaddress
-                    ),
+                    u32_checked(read_u32(table_data, i + string_off) - self._binary.loadaddress),
                 )
                 pointer_offsets.append(u32(i + string_off))
                 write_u32(table_data, new_pointer, i + string_off)
@@ -119,13 +109,9 @@ class ListExtractor:
             data_pointer = pointer_data_block
 
         # 5. Convert into SIR0
-        return FileType.SIR0.serialize(
-            FileType.SIR0.wrap(out_data, pointer_offsets, data_pointer)
-        )
+        return FileType.SIR0.serialize(FileType.SIR0.wrap(out_data, pointer_offsets, data_pointer))
 
-    def _push_string(
-        self, full_binary: bytes, out_data: bytearray, pointer: u32
-    ) -> u32:
+    def _push_string(self, full_binary: bytes, out_data: bytearray, pointer: u32) -> u32:
         """Add the string that's being pointed to to in full_binary to out_data and return a new relative pointer"""
         str_len, string = read_var_length_string(full_binary, pointer)
         new_pointer = u32_checked(len(out_data))

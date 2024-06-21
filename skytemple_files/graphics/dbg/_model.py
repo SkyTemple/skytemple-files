@@ -59,9 +59,7 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
         dbg_index = y * DBG_WIDTH_AND_HEIGHT + x
         self.mappings[dbg_index] = u16(chunk_index)
 
-    def to_pil(
-        self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def to_pil(self, dpc: Dpc, dpci: Dpci, palettes: Sequence[Sequence[int]]) -> Image.Image:
         width_and_height_map = DBG_WIDTH_AND_HEIGHT * DBG_CHUNK_WIDTH
 
         chunks = dpc.chunks_to_pil(dpci, palettes, 1)
@@ -157,22 +155,16 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
             DBG_WIDTH_AND_HEIGHT * DBG_WIDTH_AND_HEIGHT * tiles_in_chunk,
             tiles_in_chunk,
         ):
-            chunk = all_possible_tile_mappings[
-                chk_fst_tile_idx : chk_fst_tile_idx + tiles_in_chunk
-            ]
+            chunk = all_possible_tile_mappings[chk_fst_tile_idx : chk_fst_tile_idx + tiles_in_chunk]
             start_of_existing_chunk = search_for_chunk(chunk, tile_mappings)
             if start_of_existing_chunk is not None:
-                chunk_mappings.append(
-                    u16(int(start_of_existing_chunk / tiles_in_chunk) + 1)
-                )
+                chunk_mappings.append(u16(int(start_of_existing_chunk / tiles_in_chunk) + 1))
             else:
                 tile_mappings += chunk
                 chunk_mappings.append(u16(chunk_mappings_counter))
                 chunk_mappings_counter += 1
 
-        dpc.import_tile_mappings(
-            list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM))
-        )  # type: ignore
+        dpc.import_tile_mappings(list(chunks(tile_mappings, DPC_TILING_DIM * DPC_TILING_DIM)))  # type: ignore
         self.mappings = chunk_mappings
 
         # Import palettes

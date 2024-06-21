@@ -35,15 +35,11 @@ from skytemple_files.graphics.chara_wan.split_merge import MergeWan, SplitWan
 
 ANIM_PRESENCE = []
 # monster
-ANIM_PRESENCE.append(
-    [True, False, False, False, False, True, True, True, False, False, False, True]
-)
+ANIM_PRESENCE.append([True, False, False, False, False, True, True, True, False, False, False, True])
 # ground
 ANIM_PRESENCE.append([True] * 44)
 # attack
-ANIM_PRESENCE.append(
-    [False, True, True, True, True, False, False, False, True, True, True, True, True]
-)
+ANIM_PRESENCE.append([False, True, True, True, True, False, False, False, True, True, True, True, True])
 
 
 class CharaWanHandler(DataHandler[WanFile]):
@@ -68,9 +64,7 @@ class CharaWanHandler(DataHandler[WanFile]):
         return ExportSheets(out_dir, shadow_img, wan, anim_name_map)  # type: ignore
 
     @classmethod
-    def export_sheets_as_zip(
-        cls, zip_file: str, wan: WanFile, sprite_def: Pmd2Sprite
-    ) -> None:
+    def export_sheets_as_zip(cls, zip_file: str, wan: WanFile, sprite_def: Pmd2Sprite) -> None:
         shadow_img = Image.open(os.path.join(os.path.dirname(__file__), "Shadow.png"))
         anim_name_map: list[int] = []
         for index_index, index in sprite_def.indices.items():
@@ -82,15 +76,11 @@ class CharaWanHandler(DataHandler[WanFile]):
         return ImportSheets(in_dir, strict)  # type: ignore
 
     @classmethod
-    def import_sheets_from_zip(
-        cls, zip_file: str | IO[bytes], strict: bool = False
-    ) -> WanFile:
+    def import_sheets_from_zip(cls, zip_file: str | IO[bytes], strict: bool = False) -> WanFile:
         return ImportSheetsFromZip(zip_file, strict)  # type: ignore
 
     @classmethod
-    def merge_wan(
-        cls, wan_monster: WanFile, wan_ground: WanFile, wan_attack: WanFile
-    ) -> WanFile:
+    def merge_wan(cls, wan_monster: WanFile, wan_ground: WanFile, wan_attack: WanFile) -> WanFile:
         return MergeWan([wan_monster, wan_ground, wan_attack])  # type: ignore
 
     @classmethod

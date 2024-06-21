@@ -122,11 +122,7 @@ class Bpl(BplProtocol[BplAnimationSpec]):
             elif self.number_palettes > nb_pal_old:
                 # Add missing spec entries
                 for _ in range(nb_pal_old, self.number_palettes):
-                    self.animation_specs.append(
-                        BplAnimationSpec(
-                            duration_per_frame=u16(0), number_of_frames=u16(0)
-                        )
-                    )
+                    self.animation_specs.append(BplAnimationSpec(duration_per_frame=u16(0), number_of_frames=u16(0)))
 
     def apply_palette_animations(self, frame: int) -> list[list[int]]:
         """
@@ -167,6 +163,4 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         self.palettes = palettes
         self.number_palettes = u16_checked(len(palettes))
         while len(self.palettes) < BPL_MAX_PAL:
-            self.palettes.append(
-                [(i // 3) * BPL_MAX_PAL for i in range(BPL_MAX_PAL * 3)]
-            )
+            self.palettes.append([(i // 3) * BPL_MAX_PAL for i in range(BPL_MAX_PAL * 3)])

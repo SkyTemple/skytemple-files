@@ -175,9 +175,7 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptMenu):
             return cls(PREFIX_MENU + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpecial):
-            return cls(
-                PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value
-            )
+            return cls(PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptBgm):
             return cls(PREFIX_BGM + cls._cvrt_camel(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpriteEffect):
@@ -194,44 +192,32 @@ class SsbConstant(SsbOpParamConstant):
         raise TypeError("value must be of type SsbConstantPmdScriptMappable.")
 
     @classmethod
-    def _map_back(
-        cls, constant_as_string: str, script_data: Pmd2ScriptData
-    ) -> SsbConstantPmdScriptMappable:
+    def _map_back(cls, constant_as_string: str, script_data: Pmd2ScriptData) -> SsbConstantPmdScriptMappable:
         """Inverse of create_for."""
         # Backwards compatibility
         if constant_as_string in CONSTANT_ALIASES:
             constant_as_string = CONSTANT_ALIASES[constant_as_string]
         try:
             if constant_as_string.startswith(PREFIX_ACTOR):
-                return script_data.level_entities__by_name[
-                    constant_as_string[len(PREFIX_ACTOR) :]
-                ]
+                return script_data.level_entities__by_name[constant_as_string[len(PREFIX_ACTOR) :]]
             elif constant_as_string.startswith(PREFIX_OBJECT):
                 return cls._in_dict_insensitive(
                     script_data.objects__by_unique_name,
                     constant_as_string[len(PREFIX_OBJECT) :],
                 )
             elif constant_as_string.startswith(PREFIX_CORO):
-                return script_data.common_routine_info__by_name[
-                    constant_as_string[len(PREFIX_CORO) :]
-                ]
+                return script_data.common_routine_info__by_name[constant_as_string[len(PREFIX_CORO) :]]
             elif constant_as_string.startswith(PREFIX_FACE_POS):
                 return cls._in_dict_insensitive(
                     script_data.face_position_modes__by_name,
                     constant_as_string[len(PREFIX_FACE_POS) :],
                 )
             elif constant_as_string.startswith(PREFIX_FACE):
-                return script_data.face_names__by_name[
-                    constant_as_string[len(PREFIX_FACE) :].replace("_", "-")
-                ]
+                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE) :].replace("_", "-")]
             elif constant_as_string.startswith(PREFIX_VAR):
-                return script_data.game_variables__by_name[
-                    constant_as_string[len(PREFIX_VAR) :]
-                ]
+                return script_data.game_variables__by_name[constant_as_string[len(PREFIX_VAR) :]]
             elif constant_as_string.startswith(PREFIX_LEVEL):
-                return script_data.level_list__by_name[
-                    constant_as_string[len(PREFIX_LEVEL) :]
-                ]
+                return script_data.level_list__by_name[constant_as_string[len(PREFIX_LEVEL) :]]
             elif constant_as_string.startswith(PREFIX_MENU):
                 return cls._in_dict_insensitive(
                     script_data.menus__by_name,
@@ -240,9 +226,7 @@ class SsbConstant(SsbOpParamConstant):
             elif constant_as_string.startswith(PREFIX_PROCESS_SPECIAL):
                 return cls._in_dict_insensitive(
                     script_data.process_specials__by_name,
-                    cls._cvrt_camel_inverse(
-                        constant_as_string[len(PREFIX_PROCESS_SPECIAL) :]
-                    ),
+                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_PROCESS_SPECIAL) :]),
                 )
             elif constant_as_string.startswith(PREFIX_BGM):
                 return cls._in_dict_insensitive(

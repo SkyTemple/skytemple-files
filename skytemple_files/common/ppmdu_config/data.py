@@ -114,13 +114,9 @@ class Pmd2StringBlock(AutoString):
 
 
 class Pmd2StringIndexData(AutoString):
-    def __init__(
-        self, languages: list[Pmd2Language], string_blocks: list[Pmd2StringBlock]
-    ):
+    def __init__(self, languages: list[Pmd2Language], string_blocks: list[Pmd2StringBlock]):
         self.languages = languages
-        self.string_blocks: dict[str, Pmd2StringBlock] = {
-            blk.name: blk for blk in string_blocks
-        }
+        self.string_blocks: dict[str, Pmd2StringBlock] = {blk.name: blk for blk in string_blocks}
 
 
 class Pmd2LooseBinFile(AutoString):
@@ -191,9 +187,7 @@ class Pmd2Patch(AutoString):
         self.id = id
         self.includes = includes
         self.open_bins = open_bins
-        self.parameters: dict[str, Pmd2PatchParameter] = {
-            param.name: param for param in parameters
-        }
+        self.parameters: dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
 
     def has_parameters(self) -> bool:
         return len(self.parameters) > 0
@@ -228,9 +222,7 @@ class Pmd2SimplePatch(AutoString):
         self.id = id
         self.includes = includes
         self.string_replacements = string_replacements
-        self.parameters: dict[str, Pmd2PatchParameter] = {
-            param.name: param for param in parameters
-        }
+        self.parameters: dict[str, Pmd2PatchParameter] = {param.name: param for param in parameters}
 
     def has_parameters(self) -> bool:
         return len(self.parameters) > 0
@@ -243,13 +235,9 @@ class Pmd2AsmPatchesConstants(AutoString):
         patch_dir: Pmd2PatchDir,
         patches: list[Pmd2Patch | Pmd2SimplePatch],
     ):
-        self.loose_bin_files: dict[str, Pmd2LooseBinFile] = {
-            var.srcdata: var for var in loose_bin_files
-        }
+        self.loose_bin_files: dict[str, Pmd2LooseBinFile] = {var.srcdata: var for var in loose_bin_files}
         self.patch_dir = patch_dir
-        self.patches: dict[str, Pmd2Patch | Pmd2SimplePatch] = {
-            var.id: var for var in patches
-        }
+        self.patches: dict[str, Pmd2Patch | Pmd2SimplePatch] = {var.id: var for var in patches}
 
 
 class Pmd2Index(AutoString):
@@ -280,18 +268,14 @@ class Pmd2Data(AutoString):
         self.game_edition = game_edition.id
         self.game_version = game_edition.version
         self.game_region = self.get_region_constant_for_region_name(game_edition.region)
-        self.game_editions: dict[str, Pmd2GameEdition] = {
-            edi.id: edi for edi in game_editions
-        }
+        self.game_editions: dict[str, Pmd2GameEdition] = {edi.id: edi for edi in game_editions}
         self.game_constants = game_constants
         self.string_index_data = string_index_data
         self.asm_patches_constants = asm_patches_constants
         self.script_data = script_data
         self.dungeon_data = dungeon_data
         self.string_encoding = string_encoding
-        self.animation_names: dict[int, Pmd2Sprite] = {
-            k: animation_names[k] for k in sorted(animation_names)
-        }
+        self.animation_names: dict[int, Pmd2Sprite] = {k: animation_names[k] for k in sorted(animation_names)}
         self.bin_sections: pmdsky_debug_py.AllSymbolsProtocol
         if self.game_region == GAME_REGION_US:
             self.bin_sections = pmdsky_debug_py.na

@@ -222,18 +222,10 @@ class Sir0TestCase(SkyTempleFilesTestCase[Sir0Handler, Sir0Protocol]):
         This asserts that the sir0+bytes-encoded representation of DummySir0Serializable has valid sir0
         encoded pointer offsets.
         """
-        self.assertEqual(
-            16, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 4 : HEADER_LEN + 8])
-        )
-        self.assertEqual(
-            17, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 8 : HEADER_LEN + 12])
-        )
-        self.assertEqual(
-            36, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 12 : HEADER_LEN + 16])
-        )
-        self.assertEqual(
-            37, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 16 : HEADER_LEN + 20])
-        )
+        self.assertEqual(16, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 4 : HEADER_LEN + 8]))
+        self.assertEqual(17, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 8 : HEADER_LEN + 12]))
+        self.assertEqual(36, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 12 : HEADER_LEN + 16]))
+        self.assertEqual(37, read_u32(dummy_as_sir0_bytes[HEADER_LEN + 16 : HEADER_LEN + 20]))
 
     @typing.no_type_check
     @classmethod

@@ -42,14 +42,10 @@ class DbgProtocol(Protocol[C, CI, L]):
         ...
 
     @abstractmethod
-    def to_pil(
-        self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image: ...
+    def to_pil(self, dpc: C, dpci: CI, palettes: Sequence[Sequence[int]]) -> Image.Image: ...
 
     @abstractmethod
-    def from_pil(
-        self, dpc: C, dpci: CI, dpl: L, img: Image.Image, force_import: bool = False
-    ) -> None:
+    def from_pil(self, dpc: C, dpci: CI, dpl: L, img: Image.Image, force_import: bool = False) -> None:
         """
         Import an entire background from an image.
         Changes all tiles, tile mappings and chunks in the DPC/DPCI and re-writes the mappings of the DBG.

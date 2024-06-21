@@ -45,14 +45,10 @@ class At4pnHandler(CompressionContainerHandler):
         return At4pn
 
     @classmethod
-    def deserialize(
-        cls, data: bytes, **kwargs: OptionalKwargs
-    ) -> CompressionContainerProtocol:
+    def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> CompressionContainerProtocol:
         """Load a container into a high-level representation"""
         if not cls.matches(data):
-            raise ValueError(
-                f"The provided data is not a {str(cls.magic_word(), 'ascii')} container."
-            )
+            raise ValueError(f"The provided data is not a {str(cls.magic_word(), 'ascii')} container.")
         return cls.get_model_cls()(data, False)
 
     @classmethod

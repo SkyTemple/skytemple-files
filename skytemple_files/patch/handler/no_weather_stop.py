@@ -47,9 +47,7 @@ class NoWeatherStopPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _(
-            "Changes weather damage messages so they don't make the player stop running."
-        )
+        return _("Changes weather damage messages so they don't make the player stop running.")
 
     @property
     def author(self) -> str:
@@ -77,13 +75,9 @@ class NoWeatherStopPatchHandler(AbstractPatchHandler, DependantPatch):
                 return read_u32(overlay29, OFFSET_JP) != ORIGINAL_INSTRUCTION_JP
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

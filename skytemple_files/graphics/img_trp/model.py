@@ -88,9 +88,7 @@ class ImgTrp(Sir0Serializable):
         T = TILE_DIM * TILE_DIM * CHUNK_DIM * CHUNK_DIM // 2
         for x in range(count):
             xdata = data[data_pointer + (x * T) : data_pointer + ((x + 1) * T)]
-            tiles.append(
-                list(iter_bytes(xdata, int(TILE_DIM * TILE_DIM / 2)))
-            )  # / 2 because 4bpp
+            tiles.append(list(iter_bytes(xdata, int(TILE_DIM * TILE_DIM / 2))))  # / 2 because 4bpp
         return tiles
 
     def _read_palettes(self, data, count, data_pointer: u32):

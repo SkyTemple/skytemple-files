@@ -135,25 +135,14 @@ This supposedly removes most of the particular cases the game handles for evolut
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -185,23 +174,13 @@ This supposedly removes most of the particular cases the game handles for evolut
                             if (
                                 x.pre_evo_index == i
                                 and x.evo_method != EvolutionMethod.NONE.value
-                                and (
-                                    x.evo_param2 != AdditionalRequirement.MALE.value
-                                    or i < 600
-                                )
-                                and (
-                                    x.evo_param2 != AdditionalRequirement.FEMALE.value
-                                    or i >= 600
-                                )
+                                and (x.evo_param2 != AdditionalRequirement.MALE.value or i < 600)
+                                and (x.evo_param2 != AdditionalRequirement.FEMALE.value or i >= 600)
                             ):
                                 next_stage.append(j)
-                write_u16(
-                    mevo_data, u16_checked(len(next_stage)), i * MEVO_ENTRY_LENGTH + 4
-                )
+                write_u16(mevo_data, u16_checked(len(next_stage)), i * MEVO_ENTRY_LENGTH + 4)
                 for j, x in enumerate(next_stage):
-                    write_u16(
-                        mevo_data, u16_checked(x), i * MEVO_ENTRY_LENGTH + j * 2 + 6
-                    )
+                    write_u16(mevo_data, u16_checked(x), i * MEVO_ENTRY_LENGTH + j * 2 + 6)
                 if i in SPECIAL_EGGS:
                     next_stage = SPECIAL_EGGS[i]
                 else:
@@ -215,25 +194,19 @@ This supposedly removes most of the particular cases the game handles for evolut
                             if (
                                 current.evo_param2 == AdditionalRequirement.MALE.value
                                 and md_model[pre_evo % 600].gender == Gender.MALE.value
-                                and md_model[pre_evo % 600 + 600].gender
-                                == Gender.FEMALE.value
+                                and md_model[pre_evo % 600 + 600].gender == Gender.FEMALE.value
                             ):
                                 pre_evo = pre_evo % 600
                             elif (
                                 current.evo_param2 == AdditionalRequirement.FEMALE.value
                                 and md_model[pre_evo % 600].gender == Gender.MALE.value
-                                and md_model[pre_evo % 600 + 600].gender
-                                == Gender.FEMALE.value
+                                and md_model[pre_evo % 600 + 600].gender == Gender.FEMALE.value
                             ):
                                 pre_evo = pre_evo % 600 + 600
                             tries += 1
                             if tries >= MAX_TRY:
                                 raise Exception(
-                                    f(
-                                        _(
-                                            "Infinite recursion detected in pre evolutions for md entry {i}. "
-                                        )
-                                    )
+                                    f(_("Infinite recursion detected in pre evolutions for md entry {i}. "))
                                 )
                         next_stage.append(pre_evo)
                     except IndexError as e:
@@ -279,7 +252,5 @@ This supposedly removes most of the particular cases the game handles for evolut
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

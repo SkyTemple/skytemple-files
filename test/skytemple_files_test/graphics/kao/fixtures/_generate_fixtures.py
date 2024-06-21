@@ -24,9 +24,7 @@ from PIL import Image, ImageDraw
 
 from skytemple_files.graphics.kao.handler import KaoHandler
 
-rom: NintendoDSRom = NintendoDSRom.fromFile(
-    os.path.join("..", "..", "..", "..", "..", "..", "CLEAN_ROM", "pmdsky.nds")
-)
+rom: NintendoDSRom = NintendoDSRom.fromFile(os.path.join("..", "..", "..", "..", "..", "..", "CLEAN_ROM", "pmdsky.nds"))
 
 kao = KaoHandler.deserialize(rom.getFileByName("FONT/kaomado.kao"))
 

@@ -110,9 +110,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
             )
         )
 
-    def get_bpas(
-        self, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> list[Bpa | None]:
+    def get_bpas(self, rom_or_directory_root: str | RomFileProviderProtocol) -> list[Bpa | None]:
         """
         Returns a list of BPA models that are referenced in this entry.
         Can be serialized with the BPA DataHandler. Original filenames in self.bpa_names.
@@ -126,9 +124,7 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
                 bpas.append(
                     FileType.BPA.deserialize(
                         self._get_file(  # type: ignore
-                            str(
-                                PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)
-                            ),
+                            str(PurePosixPath(DIR).joinpath(bpa_name.lower() + BPA_EXT)),
                             rom_or_directory_root,
                         )
                     )
@@ -138,18 +134,14 @@ class BgListEntry(BgListEntryProtocol[Bma, Bpa, Bpc, Bpl]):
         return bpas
 
     @staticmethod
-    def _get_file(
-        filename: str, rom_or_directory_root: str | RomFileProviderProtocol
-    ) -> bytes:
+    def _get_file(filename: str, rom_or_directory_root: str | RomFileProviderProtocol) -> bytes:
         if isinstance(rom_or_directory_root, RomFileProviderProtocol):
             return rom_or_directory_root.getFileByName(filename)
         elif isinstance(rom_or_directory_root, str):
             with open(os.path.join(rom_or_directory_root, filename), "rb") as f:
                 data = f.read()
             return data
-        raise ValueError(
-            "Provided rom_or_directory is neither a string nor a NintendoDSRom."
-        )
+        raise ValueError("Provided rom_or_directory is neither a string nor a NintendoDSRom.")
 
 
 class BgList(BgListProtocol[BgListEntry]):

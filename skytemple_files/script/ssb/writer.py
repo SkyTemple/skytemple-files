@@ -103,14 +103,10 @@ class SsbWriter:
 
         if len(self.model.strings) == 0:
             # Init empty string list
-            self.model.strings = {
-                lang_name: [] for lang_name in header_cls.supported_langs()
-            }
+            self.model.strings = {lang_name: [] for lang_name in header_cls.supported_langs()}
         number_of_strings = 0
         if len(self.model.strings.keys()) > 0:
-            number_of_strings = len(
-                self.model.strings[next(iter(self.model.strings.keys()))]
-            )
+            number_of_strings = len(self.model.strings[next(iter(self.model.strings.keys()))])
 
         # Routine Info - The offsets used for the routine starts MUST already be correctly calculated!
         for offset, routine_info in self.model.routine_info:
@@ -125,14 +121,9 @@ class SsbWriter:
             for op in ops:
                 self.write_u16(data, op.op_code.id, self.bytes_written)
                 self.bytes_written += 2
-                if (
-                    self.static_data.script_data.op_codes__by_id[op.op_code.id].params
-                    == -1
-                ):
+                if self.static_data.script_data.op_codes__by_id[op.op_code.id].params == -1:
                     # Dynamic argument handling: Write number of arguments next
-                    self.write_u16(
-                        data, u16_checked(len(op.params)), self.bytes_written
-                    )
+                    self.write_u16(data, u16_checked(len(op.params)), self.bytes_written)
                     self.bytes_written += 2
                 for argidx, param in enumerate(op.params):
                     # If negative, store as 14-bit or 16-bit signed integer.
@@ -152,12 +143,8 @@ class SsbWriter:
         const_table_bytes_written = 0
         const_string_bytes_written = 0
         for constant in self.model.constants:
-            abs_pos_of_string = (
-                start_of_const_table + len_of_const_table + const_string_bytes_written
-            )
-            written_pos_of_string = (
-                const_string_bytes_written + len_of_const_table + number_of_strings * 2
-            )
+            abs_pos_of_string = start_of_const_table + len_of_const_table + const_string_bytes_written
+            written_pos_of_string = const_string_bytes_written + len_of_const_table + number_of_strings * 2
 
             self.write_u16(
                 data,
@@ -177,28 +164,15 @@ class SsbWriter:
         len_of_string_tables = 2 * number_of_strings
         previous_languages_block_sizes = 0
         string_lengths: dict[str, int] = {}
-        if (
-            number_of_strings != 0
-            and len({len(i) for i in self.model.strings.values()}) != 1
-        ):
-            raise ValueError(
-                _(
-                    "Could not compile script: All languages must have the same amount of strings."
-                )
-            )
+        if number_of_strings != 0 and len({len(i) for i in self.model.strings.values()}) != 1:
+            raise ValueError(_("Could not compile script: All languages must have the same amount of strings."))
         for lang in header_cls.supported_langs():
             start_of_string_table = self.bytes_written
             string_table_bytes_written = 0
             string_bytes_written = 0
             for string in self.model.strings[lang]:
-                abs_pos_of_string = (
-                    start_of_string_table + len_of_string_tables + string_bytes_written
-                )
-                written_pos_of_string = (
-                    abs_pos_of_string
-                    - start_of_const_table
-                    - previous_languages_block_sizes
-                )
+                abs_pos_of_string = start_of_string_table + len_of_string_tables + string_bytes_written
+                written_pos_of_string = abs_pos_of_string - start_of_const_table - previous_languages_block_sizes
 
                 self.write_u16(
                     data,
@@ -227,15 +201,11 @@ class SsbWriter:
             # Constant Strings Start
             write_u16(
                 data,
-                u16_checked(
-                    (start_of_const_table - header_len + len_of_const_table) // 2
-                ),
+                u16_checked((start_of_const_table - header_len + len_of_const_table) // 2),
                 0x04,
             )
             # Const length
-            write_u16(
-                data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06
-            )
+            write_u16(data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06)
             # String length
             assert len(string_lengths) == 1
             for length in string_lengths.values():
@@ -250,15 +220,11 @@ class SsbWriter:
             # Constant Strings Start
             write_u16(
                 data,
-                u16_checked(
-                    (start_of_const_table - header_len + len_of_const_table) // 2
-                ),
+                u16_checked((start_of_const_table - header_len + len_of_const_table) // 2),
                 0x04,
             )
             # Const length
-            write_u16(
-                data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06
-            )
+            write_u16(data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06)
             assert len(string_lengths) == 5
             for i, length in enumerate(string_lengths.values()):
                 write_u16(data, u16_checked(length // 2), 0x08 + (2 * i))
@@ -274,18 +240,14 @@ class SsbWriter:
                 0x04,
             )
             # Const length
-            write_u16(
-                data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06
-            )
+            write_u16(data, u16_checked(math.ceil(const_string_bytes_written / 2)), 0x06)
             # Unknown. TODO: Might want to check this.
             write_u16(data, u16(0), 0x08)
             # Unknown. TODO: Might want to check this.
             write_u16(data, u16(0), 0x0A)
 
         # Important metadata
-        write_u16(
-            data, u16_checked((start_of_const_table - header_len) // 2), header_len
-        )
+        write_u16(data, u16_checked((start_of_const_table - header_len) // 2), header_len)
         write_u16(data, u16_checked(len(self.model.routine_info)), header_len + 2)
 
         assert self.bytes_written % 2 == 0

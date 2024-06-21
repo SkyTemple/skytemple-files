@@ -48,12 +48,7 @@ class At3px(CommonAt):
     # pylint: disable=no-member
     def to_bytes(self) -> bytes:
         """Converts the container back into a bit (compressed) representation"""
-        return (
-            b"AT3PX"
-            + self.length_compressed.to_bytes(2, "little")
-            + self.compression_flags
-            + self.compressed_data
-        )
+        return b"AT3PX" + self.length_compressed.to_bytes(2, "little") + self.compression_flags + self.compressed_data
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):

@@ -58,9 +58,7 @@ CHECK_JP[1] = 0x022ED9B8 - ov29JP
 BYTES_EU[1] = b"\xf1\x00\x90\xe1"
 BYTES_US[1] = BYTES_EU[1]
 BYTES_JP[1] = BYTES_EU[1]
-CHECK_EU[2] = (
-    0x022ECE38 - ov29EU
-)  # Jump to the function which executes the leader's action
+CHECK_EU[2] = 0x022ECE38 - ov29EU  # Jump to the function which executes the leader's action
 CHECK_US[2] = 0x022EC488 - ov29US
 CHECK_JP[2] = 0x022EDAF0 - ov29JP
 BYTES_EU[2] = b"\x27\x48\x00\xeb"
@@ -169,9 +167,7 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
                 return False
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 string_id0 = STRING_ID0_US
@@ -186,20 +182,12 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
         for lang in config.string_index_data.languages:
             filename = "MESSAGE/" + lang.filename
             bin_before = rom.getFileByName(filename)
-            strings = StrHandler.deserialize(
-                bin_before, string_encoding=config.string_encoding
-            )
-            strings.strings[string_id0 - 1] = get_locales().translate(
-                CTC_AUTO, lang.locale.replace("-", "_")
-            )
-            strings.strings[string_id1 - 1] = get_locales().translate(
-                CTC_MANUAL, lang.locale.replace("-", "_")
-            )
+            strings = StrHandler.deserialize(bin_before, string_encoding=config.string_encoding)
+            strings.strings[string_id0 - 1] = get_locales().translate(CTC_AUTO, lang.locale.replace("-", "_"))
+            strings.strings[string_id1 - 1] = get_locales().translate(CTC_MANUAL, lang.locale.replace("-", "_"))
             bin_after = StrHandler.serialize(strings)
             rom.setFileByName(filename, bin_after)
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

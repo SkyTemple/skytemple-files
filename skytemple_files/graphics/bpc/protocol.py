@@ -75,9 +75,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def chunks_to_pil(
-        self, layer: int, palettes: Sequence[Sequence[int]], width_in_mtiles: int = 20
-    ) -> Image.Image:
+    def chunks_to_pil(self, layer: int, palettes: Sequence[Sequence[int]], width_in_mtiles: int = 20) -> Image.Image:
         """
         Convert all chunks of the BPC to one big PIL image.
         The chunks are all placed next to each other.
@@ -97,9 +95,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def single_chunk_to_pil(
-        self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def single_chunk_to_pil(self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]]) -> Image.Image:
         """
         Convert a single chunk of the BPC to one big PIL image. For general notes, see chunks_to_pil.
 
@@ -180,9 +176,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def pil_to_chunks(
-        self, layer: int, image: Image.Image, force_import: bool = True
-    ) -> list[list[int]]:
+    def pil_to_chunks(self, layer: int, image: Image.Image, force_import: bool = True) -> list[list[int]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tiles, tile mappings and therefor also chunks.
@@ -203,17 +197,13 @@ class BpcProtocol(Protocol[T, P]):
     def get_tile(self, layer: int, index: int) -> TilemapEntryProtocol: ...
 
     @abstractmethod
-    def set_tile(
-        self, layer: int, index: int, tile_mapping: TilemapEntryProtocol
-    ) -> None: ...
+    def set_tile(self, layer: int, index: int, tile_mapping: TilemapEntryProtocol) -> None: ...
 
     @abstractmethod
     def get_chunk(self, layer: int, index: int) -> Sequence[TilemapEntryProtocol]: ...
 
     @abstractmethod
-    def import_tiles(
-        self, layer: int, tiles: list[bytes], contains_null_tile: bool = False
-    ) -> None:
+    def import_tiles(self, layer: int, tiles: list[bytes], contains_null_tile: bool = False) -> None:
         """
         Replace the tiles of the specified layer.
         If contains_null_tile is False, the null tile is added to the list, at the beginning.
@@ -238,9 +228,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def get_bpas_for_layer(
-        self, layer: int, bpas_from_bg_list: Sequence[P | None]
-    ) -> list[P]:
+    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[P | None]) -> list[P]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.
@@ -252,9 +240,7 @@ class BpcProtocol(Protocol[T, P]):
         ...
 
     @abstractmethod
-    def set_chunk(
-        self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]
-    ) -> None: ...
+    def set_chunk(self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]) -> None: ...
 
     @abstractmethod
     def remove_upper_layer(self) -> None:

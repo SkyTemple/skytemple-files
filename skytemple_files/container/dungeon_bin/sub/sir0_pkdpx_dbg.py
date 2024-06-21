@@ -38,6 +38,4 @@ class DbinSir0PkdpxDbgHandler(DataHandler[DbgProtocol]):
         from skytemple_files.common.types.file_types import FileType
 
         serialized = FileType.DBG.serialize(data)
-        return FileType.DBIN_SIR0_PKDPX.serialize(
-            FileType.DBIN_SIR0_PKDPX.compress(serialized)
-        )
+        return FileType.DBIN_SIR0_PKDPX.serialize(FileType.DBIN_SIR0_PKDPX.compress(serialized))

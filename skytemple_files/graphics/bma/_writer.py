@@ -124,9 +124,7 @@ class BmaWriter:
             # Extra null tile is already there because of the bytearray size!
             comp_row_bytes = FileType.BMA_LAYER_NRL.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[
-                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
-            ] = comp_row_bytes
+            layer_bytes[layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]
@@ -160,9 +158,7 @@ class BmaWriter:
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.BMA_COLLISION_RLE.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[
-                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
-            ] = comp_row_bytes
+            layer_bytes[layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]
@@ -190,9 +186,7 @@ class BmaWriter:
             assert len(row_bytes) == int(size / self.model.map_height_camera)
             comp_row_bytes = FileType.GENERIC_NRL.compress(row_bytes)
             len_comp_row_bytes = len(comp_row_bytes)
-            layer_bytes[
-                layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes
-            ] = comp_row_bytes
+            layer_bytes[layer_bytes_cursor : layer_bytes_cursor + len_comp_row_bytes] = comp_row_bytes
             layer_bytes_cursor += len_comp_row_bytes
 
         return layer_bytes[:layer_bytes_cursor]

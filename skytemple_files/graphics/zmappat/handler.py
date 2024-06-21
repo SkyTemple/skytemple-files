@@ -44,9 +44,7 @@ class ZMappaTHandler(DataHandler[ZMappaT]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def new(
-        cls, img: list[Image.Image], mask: list[Image.Image], minimized=False
-    ) -> ZMappaT:
+    def new(cls, img: list[Image.Image], mask: list[Image.Image], minimized=False) -> ZMappaT:
         zmappat = ZMappaT(None, 0)
         if minimized:
             zmappat.from_pil_minimized(img, mask)

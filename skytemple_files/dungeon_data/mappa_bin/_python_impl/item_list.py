@@ -86,10 +86,7 @@ class MappaItemList(MappaItemListProtocol, AutoString):
                 item_or_cat_id -= MAX_CAT_IDS + 1
             pointer += 2
 
-        assert (
-            data[orig_pointer : orig_pointer + len_read]
-            == MappaItemList(categories, items).to_mappa()
-        )
+        assert data[orig_pointer : orig_pointer + len_read] == MappaItemList(categories, items).to_mappa()
 
         return MappaItemList(categories, items)
 
@@ -127,9 +124,7 @@ class MappaItemList(MappaItemListProtocol, AutoString):
 
     def _write_skip(self, data: bytearray, current_id: int, target_id: int):
         if current_id != target_id:
-            data += (target_id - current_id + CMD_SKIP).to_bytes(
-                2, "little", signed=False
-            )
+            data += (target_id - current_id + CMD_SKIP).to_bytes(2, "little", signed=False)
         return target_id
 
     def _write_probability(self, data: bytearray, probability: Probability):

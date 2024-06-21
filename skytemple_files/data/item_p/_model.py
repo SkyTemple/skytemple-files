@@ -64,9 +64,7 @@ class ItemPEntry(ItemPEntryProtocol, AutoString):
             data, 11
         )  # For stackable, indicates the maximum amount you can get for 1 instance of that item
         self.palette = read_u8(data, 12)  # Palette ID associated to that item
-        self.action_name = read_u8(
-            data, 13
-        )  # Action name displayed in dungeon menus (Use, Eat, Ingest, Equip...)
+        self.action_name = read_u8(data, 13)  # Action name displayed in dungeon menus (Use, Eat, Ingest, Equip...)
         bitfield = read_u8(data, 14)
         self.is_valid = (bitfield & 0x1) != 0  # Is Valid
         self.is_in_td = (bitfield & 0x2) != 0  # Is in Time/Darkness

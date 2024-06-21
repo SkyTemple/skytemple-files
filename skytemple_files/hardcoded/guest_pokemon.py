@@ -250,28 +250,18 @@ class ExtraDungeonDataList:
         """Returns the list of extra dungeon data"""
         block = config.extra_bin_sections.arm9.data.EXTRA_DUNGEON_DATA
         lst = []
-        for i in range(
-            block.address, block.address + block.length, EXTRA_DUNGEON_DATA_ENTRY_SIZE
-        ):
-            lst.append(
-                ExtraDungeonDataEntry.from_bytes(
-                    read_bytes(arm9bin, i, EXTRA_DUNGEON_DATA_ENTRY_SIZE)
-                )
-            )
+        for i in range(block.address, block.address + block.length, EXTRA_DUNGEON_DATA_ENTRY_SIZE):
+            lst.append(ExtraDungeonDataEntry.from_bytes(read_bytes(arm9bin, i, EXTRA_DUNGEON_DATA_ENTRY_SIZE)))
         return lst
 
     @staticmethod
-    def write(
-        lst: list[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data
-    ) -> None:
+    def write(lst: list[ExtraDungeonDataEntry], arm9bin: bytearray, config: Pmd2Data) -> None:
         """
         Writes the list of dungeon extra data to the arm9 binary provided.
         The list must have exactly 0xB4 entries.
         """
         if len(lst) != EXTRA_DUNGEON_DATA_ENTRIES:
-            raise ValueError(
-                f"The extra dungeon data list must have exactly {EXTRA_DUNGEON_DATA_ENTRIES} entries."
-            )
+            raise ValueError(f"The extra dungeon data list must have exactly {EXTRA_DUNGEON_DATA_ENTRIES} entries.")
 
         block = config.extra_bin_sections.arm9.data.EXTRA_DUNGEON_DATA
         for i, entry in enumerate(lst):
@@ -288,10 +278,7 @@ class GuestPokemonList:
         assert block1.length is not None
         assert block2.length is not None
 
-        return (
-            block1.length // GUEST_DATA_ENTRY_SIZE
-            + block2.length // GUEST_DATA_ENTRY_SIZE
-        )
+        return block1.length // GUEST_DATA_ENTRY_SIZE + block2.length // GUEST_DATA_ENTRY_SIZE
 
     @staticmethod
     def read(arm9bin: bytes, config: Pmd2Data) -> list[GuestPokemon]:
@@ -300,12 +287,8 @@ class GuestPokemonList:
         lst = []
         done = False
         # Read the first list
-        for i in range(
-            block.address, block.address + block.length, GUEST_DATA_ENTRY_SIZE
-        ):
-            read_entry = GuestPokemon.from_bytes(
-                read_bytes(arm9bin, i, GUEST_DATA_ENTRY_SIZE)
-            )
+        for i in range(block.address, block.address + block.length, GUEST_DATA_ENTRY_SIZE):
+            read_entry = GuestPokemon.from_bytes(read_bytes(arm9bin, i, GUEST_DATA_ENTRY_SIZE))
             if read_entry.is_null():
                 done = True
                 break
@@ -320,9 +303,7 @@ class GuestPokemonList:
                 (block.address + block.length) - GUEST_DATA_ENTRY_SIZE + 1,
                 GUEST_DATA_ENTRY_SIZE,
             ):
-                read_entry = GuestPokemon.from_bytes(
-                    read_bytes(arm9bin, i, GUEST_DATA_ENTRY_SIZE)
-                )
+                read_entry = GuestPokemon.from_bytes(read_bytes(arm9bin, i, GUEST_DATA_ENTRY_SIZE))
                 if read_entry.is_null():
                     break
                 lst.append(read_entry)
@@ -338,33 +319,23 @@ class GuestPokemonList:
         """
         max_entries = GuestPokemonList.get_max_entries(config)
         if len(lst) > max_entries:
-            raise ValueError(
-                f"The guest pokémon data list can't have more than {max_entries} entries."
-            )
+            raise ValueError(f"The guest pokémon data list can't have more than {max_entries} entries.")
         block1 = config.bin_sections.arm9.data.GUEST_MONSTER_DATA
         block2 = config.extra_bin_sections.arm9.data.GUEST_MONSTER_DATA2
 
         for i, value in enumerate(lst):
             if i < 18:
                 offset = block1.address + i * GUEST_DATA_ENTRY_SIZE
-                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[
-                    0:GUEST_DATA_ENTRY_SIZE
-                ]
+                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[0:GUEST_DATA_ENTRY_SIZE]
             else:
                 offset = block2.address + (i - 18) * GUEST_DATA_ENTRY_SIZE
-                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[
-                    0:GUEST_DATA_ENTRY_SIZE
-                ]
+                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = lst[i].to_bytes()[0:GUEST_DATA_ENTRY_SIZE]
 
         # Null the rest of the table
         for i in range(len(lst), max_entries):
             if i < 18:
                 offset = block1.address + i * GUEST_DATA_ENTRY_SIZE
-                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [
-                    0
-                ] * GUEST_DATA_ENTRY_SIZE
+                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [0] * GUEST_DATA_ENTRY_SIZE
             else:
                 offset = block2.address + (i - 18) * GUEST_DATA_ENTRY_SIZE
-                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [
-                    0
-                ] * GUEST_DATA_ENTRY_SIZE
+                arm9bin[offset : offset + GUEST_DATA_ENTRY_SIZE] = [0] * GUEST_DATA_ENTRY_SIZE

@@ -47,10 +47,7 @@ class LevelListBin(Sir0Serializable):
         # pointer_start = read_uintle(data, header_start, 4)
         # number_entries = read_uintle(data, header_start + 4, 4)
         for i, start in enumerate(range(header_start, len(data), LEN_LEVEL_ENTRY)):
-            if (
-                data[start : start + 12]
-                == b"\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa"
-            ):
+            if data[start : start + 12] == b"\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa\xaa":
                 break
             self.list.append(
                 Pmd2ScriptLevel(

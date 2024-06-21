@@ -243,12 +243,8 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
     ),
     MonsterFormInfo(
         _request_adapter=AioRequestAdapterMock(),
@@ -261,12 +257,8 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
     ),
     MonsterFormInfo(
         _request_adapter=AioRequestAdapterMock(),
@@ -279,12 +271,8 @@ LIST_MONSTER_FORMS_NO_PORTRAITS_FIX: List[MonsterFormInfo] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(
-            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
     ),
 ]
 
@@ -300,12 +288,8 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
         preview_portrait="test-portrait:Special3.png",
     ),
     MonsterFormInfoWithPortrait(
@@ -319,12 +303,8 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
         preview_portrait="test-portrait:Normal.png",
     ),
     MonsterFormInfoWithPortrait(
@@ -338,12 +318,8 @@ LIST_MONSTER_FORMS_WITH_PORTRAITS_FIX: List[MonsterFormInfoWithPortrait] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(
-            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
         preview_portrait=None,
     ),
 ]
@@ -360,12 +336,8 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         canon=True,
         portraits_phase=PHASE_FULL,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(3000, 3, 1, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 1, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
         portraits={
             "Special3": "test-portrait:Special3.png",
             "Special1": "test-portrait:Special1.png",
@@ -533,12 +505,8 @@ MONSTER_FORM_DETAILS_FIX: List[MonsterFormDetails] = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_EXISTS,
-        portraits_modified_date=datetime.datetime(
-            1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(1994, 5, 5, 13, 12, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2021, 3, 2, 5, 11, 3, 4, tzinfo=datetime.timezone.utc),
         portraits={
             "Special1": "test-portrait:Happy.png",
             "Happy": "test-portrait:Happy.png",
@@ -573,12 +541,8 @@ MONSTER_FORM_DETAILS_FIX_MULTI_MON = [
         canon=False,
         portraits_phase=PHASE_EXISTS,
         sprites_phase=PHASE_UNKNOWN,
-        portraits_modified_date=datetime.datetime(
-            2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc
-        ),
-        sprites_modified_date=datetime.datetime(
-            2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc
-        ),
+        portraits_modified_date=datetime.datetime(2000, 12, 1, 13, 14, 15, 10, tzinfo=datetime.timezone.utc),
+        sprites_modified_date=datetime.datetime(2001, 3, 2, 4, 12, 3, 98, tzinfo=datetime.timezone.utc),
         portraits={
             "Normal": "dummy",
         },

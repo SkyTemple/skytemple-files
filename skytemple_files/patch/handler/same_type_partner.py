@@ -45,9 +45,7 @@ class SameTypePartnerPatch(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Allows the partner to be of the same type as the player in the personality test."
-        )
+        return _("Allows the partner to be of the same type as the player in the personality test.")
 
     @property
     def author(self) -> str:
@@ -72,13 +70,9 @@ class SameTypePartnerPatch(AbstractPatchHandler):
                 return overlay13[OFFSET_JP : OFFSET_JP + 4] != ORIGINAL_BYTESEQ
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         # Apply the patch
         apply()
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

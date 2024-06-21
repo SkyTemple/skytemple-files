@@ -200,9 +200,7 @@ class MappaFloorLayout(MappaFloorLayoutProtocol[MappaFloorTerrainSettings], Auto
     @classmethod
     def from_mappa(cls, read: MappaBinReadContainer, pointer: int):
         terrain_settings_bitflag = read_u8(read.data, pointer + 0x0D)
-        terrain_settings = MappaFloorTerrainSettings(
-            *(bool(terrain_settings_bitflag >> i & 1) for i in range(8))
-        )
+        terrain_settings = MappaFloorTerrainSettings(*(bool(terrain_settings_bitflag >> i & 1) for i in range(8)))
         return cls(
             structure=read_u8(read.data, pointer + 0x00),
             room_density=read_i8(read.data, pointer + 0x01),

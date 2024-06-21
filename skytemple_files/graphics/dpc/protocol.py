@@ -33,9 +33,7 @@ class DpcProtocol(Protocol[CI]):
     def __init__(self, data: bytes): ...
 
     @abstractmethod
-    def chunks_to_pil(
-        self, dpci: CI, palettes: Sequence[Sequence[int]], width_in_mtiles=16
-    ) -> Image.Image:
+    def chunks_to_pil(self, dpci: CI, palettes: Sequence[Sequence[int]], width_in_mtiles=16) -> Image.Image:
         """
         Convert all chunks of the DPC to one big PIL image.
         The chunks are all placed next to each other.
@@ -50,18 +48,14 @@ class DpcProtocol(Protocol[CI]):
         ...
 
     @abstractmethod
-    def single_chunk_to_pil(
-        self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def single_chunk_to_pil(self, chunk_idx, dpci: CI, palettes: Sequence[Sequence[int]]) -> Image.Image:
         """
         Convert a single chunk of the DPC into a PIL image. For general notes, see chunks_to_pil.
         """
         ...
 
     @abstractmethod
-    def pil_to_chunks(
-        self, image: Image.Image, force_import=True
-    ) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
+    def pil_to_chunks(self, image: Image.Image, force_import=True) -> tuple[Sequence[bytes], Sequence[Sequence[int]]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tile mappings and returns the new tiles for storing them in a DPCI and the palettes

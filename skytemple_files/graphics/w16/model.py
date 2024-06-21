@@ -33,9 +33,7 @@ TILE_DIM = 8
 
 
 class W16Image(ABC):
-    def __init__(
-        self, entry_data: W16TocEntry, compressed_img_data: bytes, pal: list[int]
-    ):
+    def __init__(self, entry_data: W16TocEntry, compressed_img_data: bytes, pal: list[int]):
         self.entry_data = entry_data
         self.compressed_img_data = compressed_img_data
         self.pal = pal
@@ -72,9 +70,7 @@ class W16Image(ABC):
         """Sets the w16 image using a PIL image with 16-bit color palette as input"""
         self.entry_data.width = int(pil.width / TILE_DIM)
         self.entry_data.height = int(pil.height / TILE_DIM)
-        new_pal, new_img = self._read_in(
-            pil, self.entry_data.width, self.entry_data.height
-        )
+        new_pal, new_img = self._read_in(pil, self.entry_data.width, self.entry_data.height)
         self.pal = new_pal
         self.compressed_img_data = self.compress(new_img)
         return self
@@ -88,14 +84,10 @@ class W16Image(ABC):
         return cls(entry_data, cls.compress(new_img), new_pal)
 
     @classmethod
-    def _read_in(
-        cls, pil: Image.Image, w_in_tiles, h_in_tiles
-    ) -> tuple[list[int], bytes]:
+    def _read_in(cls, pil: Image.Image, w_in_tiles, h_in_tiles) -> tuple[list[int], bytes]:
         w = TILE_DIM * w_in_tiles
         h = TILE_DIM * h_in_tiles
-        tiles, tile_mappings, pal = from_pil(
-            pil, 16, 1, TILE_DIM, w, h, 1, 1, force_import=True, optimize=False
-        )
+        tiles, tile_mappings, pal = from_pil(pil, 16, 1, TILE_DIM, w, h, 1, 1, force_import=True, optimize=False)
         # todo: in theory the tiles could be out of order and we would need to check using the mappings,
         #       in practice they aren't.
         tiles_concat = bytes(itertools.chain.from_iterable(tiles))
@@ -112,9 +104,7 @@ class W16AtImage(W16Image):
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
-        return FileType.COMMON_AT.deserialize(
-            bytes(self.compressed_img_data)
-        ).decompress()
+        return FileType.COMMON_AT.deserialize(bytes(self.compressed_img_data)).decompress()
 
 
 class W16RawImage(W16Image):

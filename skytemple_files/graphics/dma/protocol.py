@@ -73,9 +73,7 @@ class DmaProtocol(Protocol):
         ...
 
     @abstractmethod
-    def set(
-        self, get_type: _DmaType, neighbors_same: int, variation_index: int, value: int
-    ):
+    def set(self, get_type: _DmaType, neighbors_same: int, variation_index: int, value: int):
         """
         Sets the mapping for the given configuration and the given variation of it.
         """

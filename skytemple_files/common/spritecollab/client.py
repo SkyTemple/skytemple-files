@@ -143,9 +143,7 @@ class MonsterFormDetails(MonsterFormInfo):
             return await self._request_adapter.fetch_image(self.portraits[emotion_name])
         return None
 
-    async def fetch_portrait_via_face_name(
-        self, face_name: Pmd2ScriptFaceName
-    ) -> Image.Image | None:
+    async def fetch_portrait_via_face_name(self, face_name: Pmd2ScriptFaceName) -> Image.Image | None:
         emotion_name = self._map_face_name(face_name)
         if emotion_name is not None and emotion_name in self.portraits:
             return await self._request_adapter.fetch_image(self.portraits[emotion_name])
@@ -153,23 +151,17 @@ class MonsterFormDetails(MonsterFormInfo):
 
     async def fetch_sprite_anim(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
-            return await self._request_adapter.fetch_image(
-                self.sprites[action_name].anim
-            )
+            return await self._request_adapter.fetch_image(self.sprites[action_name].anim)
         return None
 
     async def fetch_sprite_shadows(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
-            return await self._request_adapter.fetch_image(
-                self.sprites[action_name].shadows
-            )
+            return await self._request_adapter.fetch_image(self.sprites[action_name].shadows)
         return None
 
     async def fetch_sprite_offsets(self, action_name: str) -> Image.Image | None:
         if action_name in self.sprites:
-            return await self._request_adapter.fetch_image(
-                self.sprites[action_name].offsets
-            )
+            return await self._request_adapter.fetch_image(self.sprites[action_name].offsets)
         return None
 
     async def fetch_portrait_sheet(self) -> Image.Image:
@@ -238,14 +230,10 @@ class SpriteCollabSession:
         )["config"]
 
     @overload
-    async def list_monster_forms(
-        self, with_preview_portrait: Literal[True]
-    ) -> list[MonsterFormInfoWithPortrait]: ...
+    async def list_monster_forms(self, with_preview_portrait: Literal[True]) -> list[MonsterFormInfoWithPortrait]: ...
 
     @overload
-    async def list_monster_forms(
-        self, with_preview_portrait: Literal[False]
-    ) -> list[MonsterFormInfo]: ...
+    async def list_monster_forms(self, with_preview_portrait: Literal[False]) -> list[MonsterFormInfo]: ...
 
     async def list_monster_forms(self, with_preview_portrait: bool):
         """
@@ -255,9 +243,7 @@ class SpriteCollabSession:
         """
         portrait_extra_args = []
         if with_preview_portrait:
-            portrait_extra_args.append(
-                self.ds.MonsterFormPortraits.previewEmotion.select(self.ds.Portrait.url)
-            )
+            portrait_extra_args.append(self.ds.MonsterFormPortraits.previewEmotion.select(self.ds.Portrait.url))
 
         result = await self.execute_query(
             DSLQuery(
@@ -290,16 +276,12 @@ class SpriteCollabSession:
             for form in monster["forms"]:
                 portraits_modified = None
                 try:
-                    portraits_modified = datetime.fromisoformat(
-                        form["portraits"]["modifiedDate"]
-                    )
+                    portraits_modified = datetime.fromisoformat(form["portraits"]["modifiedDate"])
                 except (ValueError, TypeError):
                     pass
                 sprites_modified = None
                 try:
-                    sprites_modified = datetime.fromisoformat(
-                        form["sprites"]["modifiedDate"]
-                    )
+                    sprites_modified = datetime.fromisoformat(form["sprites"]["modifiedDate"])
                 except (ValueError, TypeError):
                     pass
                 base_params = {
@@ -337,9 +319,7 @@ class SpriteCollabSession:
 
         return monsters
 
-    async def monster_form_details(
-        self, monsters_and_forms: list[tuple[int, str]]
-    ) -> list[MonsterFormDetails]:
+    async def monster_form_details(self, monsters_and_forms: list[tuple[int, str]]) -> list[MonsterFormDetails]:
         """
         Returns details about monster forms for a monster, including credits and all portraits and sprites ready to be
         fetched. `monsters_and_forms` is a list of tuples, where the first entry is the
@@ -350,21 +330,15 @@ class SpriteCollabSession:
         Raises an error if any path could not be resolved to a valid form.
         """
 
-        async def process_form(
-            _idx: int, monster: Monster_Metadata, form: MonsterForm
-        ) -> MonsterFormDetails:
+        async def process_form(_idx: int, monster: Monster_Metadata, form: MonsterForm) -> MonsterFormDetails:
             portraits_modified = None
             try:
-                portraits_modified = datetime.fromisoformat(
-                    form["portraits"]["modifiedDate"]
-                )
+                portraits_modified = datetime.fromisoformat(form["portraits"]["modifiedDate"])
             except (ValueError, TypeError):
                 pass
             sprites_modified = None
             try:
-                sprites_modified = datetime.fromisoformat(
-                    form["sprites"]["modifiedDate"]
-                )
+                sprites_modified = datetime.fromisoformat(form["sprites"]["modifiedDate"])
             except (ValueError, TypeError):
                 pass
 
@@ -430,12 +404,8 @@ class SpriteCollabSession:
                 self.ds.MonsterForm.portraits.select(
                     self.ds.MonsterFormPortraits.phase,
                     self.ds.MonsterFormPortraits.modifiedDate,
-                    self.ds.MonsterFormPortraits.emotions.select(
-                        self.ds.Portrait.emotion, self.ds.Portrait.url
-                    ),
-                    self.ds.MonsterFormPortraits.emotionsFlipped.select(
-                        self.ds.Portrait.emotion, self.ds.Portrait.url
-                    ),
+                    self.ds.MonsterFormPortraits.emotions.select(self.ds.Portrait.emotion, self.ds.Portrait.url),
+                    self.ds.MonsterFormPortraits.emotionsFlipped.select(self.ds.Portrait.emotion, self.ds.Portrait.url),
                     self.ds.MonsterFormPortraits.sheetUrl,
                     self.ds.MonsterFormPortraits.creditPrimary.select(credit),
                     self.ds.MonsterFormPortraits.creditSecondary.select(credit),
@@ -476,18 +446,14 @@ class SpriteCollabSession:
             kao = FileType.KAO.new(1)
 
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
-                portrait_sheet = await self._request_adapter.fetch_bin(
-                    form["portraits"]["sheetUrl"]
-                )
+                portrait_sheet = await self._request_adapter.fetch_bin(form["portraits"]["sheetUrl"])
                 tmp.write(portrait_sheet)
                 tmp.flush()
                 tmp.close()
 
                 this_sheet: list[KaoImageProtocol | None] = [None] * 40
                 try:
-                    for subindex, image in SpriteBotSheet.load(
-                        tmp.name, lambda *args: ""
-                    ):
+                    for subindex, image in SpriteBotSheet.load(tmp.name, lambda *args: ""):
                         kao.set_from_img(0, subindex, image)
                         this_sheet[subindex] = kao.get(0, subindex)
                 except PIL.UnidentifiedImageError as ex:
@@ -502,18 +468,14 @@ class SpriteCollabSession:
                     try:
                         os.unlink(tmp.name)
                     except Exception as ex:
-                        logger.warning(
-                            f"Failed to remove temporary file {tmp}: {type(ex)}: {ex}"
-                        )
+                        logger.warning(f"Failed to remove temporary file {tmp}: {type(ex)}: {ex}")
 
                 return this_sheet
 
         return await self._fetch_details(
             monsters_and_forms,
             lambda _credit, _history, _sprite, copy_of: (
-                self.ds.MonsterForm.portraits.select(
-                    self.ds.MonsterFormPortraits.sheetUrl
-                ),
+                self.ds.MonsterForm.portraits.select(self.ds.MonsterFormPortraits.sheetUrl),
             ),
             process_form,
             include_sprite_fragments=False,
@@ -545,9 +507,7 @@ class SpriteCollabSession:
         Raises an error if any path could not be resolved to a valid form.
         """
         if len(monsters_and_forms) != len(actions):
-            raise ValueError(
-                "The actions and monsters_and_forms parameters must have the same length."
-            )
+            raise ValueError("The actions and monsters_and_forms parameters must have the same length.")
 
         async def process_form(
             idx: int, monster: Monster_Metadata, form: MonsterForm
@@ -558,18 +518,14 @@ class SpriteCollabSession:
             if form["sprites"]["zipUrl"] is None:
                 return None
 
-            zipped_bytes = await self._request_adapter.fetch_bin(
-                form["sprites"]["zipUrl"]
-            )
+            zipped_bytes = await self._request_adapter.fetch_bin(form["sprites"]["zipUrl"])
 
             with tempfile.TemporaryDirectory() as tmp_dir:
                 with ZipFile(BytesIO(zipped_bytes), "r") as zipObj:
                     zipObj.extractall(tmp_dir)
                 xml_path = os.path.join(tmp_dir, "AnimData.xml")
                 if not os.path.exists(xml_path):
-                    raise RuntimeError(
-                        f"AnimData.xml for sprite for form of monster {monster['id']} missing."
-                    )
+                    raise RuntimeError(f"AnimData.xml for sprite for form of monster {monster['id']} missing.")
                 try:
                     root = ElementTree.parse(xml_path).getroot()
                     shadow_size = int(root.find("ShadowSize").text)  # type: ignore
@@ -578,30 +534,17 @@ class SpriteCollabSession:
                     event_sleep_found = None
                     wake_found = None
                     laying_found = None
-                    event_sleep_requested = (
-                        actions_for_this_form is None
-                        or "eventsleep" in actions_for_this_form
-                    )
-                    wake_requested = (
-                        actions_for_this_form is None or "wake" in actions_for_this_form
-                    )
-                    laying_requested = (
-                        actions_for_this_form is None
-                        or "laying" in actions_for_this_form
-                    )
+                    event_sleep_requested = actions_for_this_form is None or "eventsleep" in actions_for_this_form
+                    wake_requested = actions_for_this_form is None or "wake" in actions_for_this_form
+                    laying_requested = actions_for_this_form is None or "laying" in actions_for_this_form
                     new_actions = []
                     action_indices = {}
                     for action in anims:
                         name = action.find("Name").text.lower()  # type: ignore
                         name_normal: str = action.find("Name").text  # type: ignore
-                        if (
-                            actions_for_this_form is None
-                            or name in actions_for_this_form
-                        ):
+                        if actions_for_this_form is None or name in actions_for_this_form:
                             sleep_found = sleep_found or name == "sleep"
-                            event_sleep_found = (
-                                event_sleep_found or name == "eventsleep"
-                            )
+                            event_sleep_found = event_sleep_found or name == "eventsleep"
                             wake_requested = wake_requested or name == "wake"
                             laying_requested = laying_requested or name == "laying"
                             new_actions.append(action)
@@ -671,9 +614,7 @@ class SpriteCollabSession:
             include_credit_and_history_fragments=False,
         )
 
-    async def execute_query(
-        self, query: DSLQuery, *, fragments: Iterable[DSLFragment] | None = None
-    ) -> Query:
+    async def execute_query(self, query: DSLQuery, *, fragments: Iterable[DSLFragment] | None = None) -> Query:
         """Note that you should upcast the returned type to match your actual query subtype."""
         if fragments is not None:
             return cast(Query, await self._session.execute(dsl_gql(*fragments, query)))
@@ -682,9 +623,7 @@ class SpriteCollabSession:
     async def _fetch_details(
         self,
         monsters_and_forms: Sequence[tuple[int, str]],
-        selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
-        ],
+        selector_fn: Callable[[DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
         *,
         include_sprite_fragments: bool = True,
@@ -733,9 +672,7 @@ class SpriteCollabSession:
             self.ds.MonsterHistory.modifiedDate,
             self.ds.MonsterHistory.modifications,
             self.ds.MonsterHistory.obsolete,
-            self.ds.MonsterHistory.license.select(
-                license_frag_known, license_frag_other
-            ),
+            self.ds.MonsterHistory.license.select(license_frag_known, license_frag_other),
         )
 
         fragments = []
@@ -787,9 +724,7 @@ class SpriteCollabSession:
         copy_of: DSLFragment,
         credit: DSLFragment,
         history: DSLFragment,
-        selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
-        ],
+        selector_fn: Callable[[DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
     ) -> list[Coroutine[Any, Any, T]]:
         monster_forms = {}
@@ -813,9 +748,7 @@ class SpriteCollabSession:
         )
 
         if len(result["monster"]) > 1:
-            raise ValueError(
-                f"Invalid server response error while trying to get forms for monster {monster_id}"
-            )
+            raise ValueError(f"Invalid server response error while trying to get forms for monster {monster_id}")
         if len(result["monster"]) < 1:
             raise ValueError(f"Monster {monster_id} not found.")
 
@@ -826,9 +759,7 @@ class SpriteCollabSession:
             if not key.startswith("f_"):
                 continue
             if form is None:
-                raise ValueError(
-                    f"Form {path_mapping[key]} for monster {monster_id} not found"
-                )
+                raise ValueError(f"Form {path_mapping[key]} for monster {monster_id} not found")
 
             coros.append(form_cb(i, monster, cast(MonsterForm, form)))
             i = i + 1
@@ -843,9 +774,7 @@ class SpriteCollabSession:
         copy_of: DSLFragment,
         credit: DSLFragment,
         history: DSLFragment,
-        selector_fn: Callable[
-            [DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]
-        ],
+        selector_fn: Callable[[DSLFragment, DSLFragment, DSLFragment, DSLFragment], Iterable[DSLField]],
         form_cb: Callable[[int, Monster_Metadata, MonsterForm], Coroutine[Any, Any, T]],
     ) -> list[Coroutine[Any, Any, T]]:
         result = await self.execute_query(
@@ -853,9 +782,7 @@ class SpriteCollabSession:
                 self.ds.Query.monster(filter=monster_ids).select(
                     self.ds.Monster.id,
                     self.ds.Monster.name,
-                    self.ds.Monster.forms().select(
-                        *selector_fn(credit, history, sprite, copy_of)
-                    ),
+                    self.ds.Monster.forms().select(*selector_fn(credit, history, sprite, copy_of)),
                 )
             ),
             fragments=fragments,
@@ -916,13 +843,9 @@ class SpriteCollabClient:
             server_url = server_url.replace("https://", "http://")
         if request_adapter is None:
             if cache_size > 0:
-                self._request_adapter = CachedRequestAdapter(
-                    cache_size, use_certifi_ssl=use_certifi_ssl
-                )
+                self._request_adapter = CachedRequestAdapter(cache_size, use_certifi_ssl=use_certifi_ssl)
             else:
-                self._request_adapter = AioRequestAdapterImpl(
-                    use_certifi_ssl=use_certifi_ssl
-                )
+                self._request_adapter = AioRequestAdapterImpl(use_certifi_ssl=use_certifi_ssl)
         else:
             self._request_adapter = request_adapter
 
@@ -953,9 +876,7 @@ class SpriteCollabClient:
             self._session = SpriteCollabSession(session, ds, self._request_adapter)
             return self._session
         else:
-            raise RuntimeError(
-                "Failed to fetch GraphQL schema from SpriteCollab GraphQL server."
-            )
+            raise RuntimeError("Failed to fetch GraphQL schema from SpriteCollab GraphQL server.")
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         r = await self._client.close_async()

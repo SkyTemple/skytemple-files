@@ -38,9 +38,7 @@ from skytemple_files.script.ssb.writer import SsbWriter
 
 class SsbHandler(DataHandler[Ssb]):
     @classmethod
-    def deserialize(
-        cls, data: bytes, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs
-    ) -> Ssb:  # type: ignore
+    def deserialize(cls, data: bytes, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs) -> Ssb:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
         ssb_header: AbstractSsbHeader
@@ -62,9 +60,7 @@ class SsbHandler(DataHandler[Ssb]):
         )
 
     @classmethod
-    def serialize(
-        cls, data: Ssb, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs
-    ) -> bytes:  # type: ignore
+    def serialize(cls, data: Ssb, static_data: Pmd2Data | None = None, **kwargs: OptionalKwargs) -> bytes:  # type: ignore
         if static_data is None:
             static_data = Pmd2XmlReader.load_default()
 

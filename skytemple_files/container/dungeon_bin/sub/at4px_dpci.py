@@ -35,6 +35,4 @@ class DbinAt4pxDpciHandler(DataHandler[DpciProtocol]):
         from skytemple_files.common.types.file_types import FileType
 
         serialized = FileType.DPCI.serialize(data)
-        return FileType.COMMON_AT.serialize(
-            FileType.COMMON_AT.compress(serialized, COMMON_AT_BEST_3)
-        )
+        return FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(serialized, COMMON_AT_BEST_3))

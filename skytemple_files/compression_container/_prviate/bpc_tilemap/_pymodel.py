@@ -33,17 +33,11 @@ class BpcTilemapCompressionContainer(CommonAt):
     def decompress(self) -> bytes:
         from skytemple_files.common.types.file_types import FileType
 
-        data = FileType.BPC_TILEMAP.decompress(
-            self.compressed_data, self.length_decompressed
-        )
+        data = FileType.BPC_TILEMAP.decompress(self.compressed_data, self.length_decompressed)
         return data
 
     def to_bytes(self) -> bytes:
-        return (
-            b"BPCTLM"
-            + self.length_decompressed.to_bytes(2, "little")
-            + self.compressed_data
-        )  # pylint: disable=no-member
+        return b"BPCTLM" + self.length_decompressed.to_bytes(2, "little") + self.compressed_data  # pylint: disable=no-member
 
     @classmethod
     def cont_size(cls, data: bytes, byte_offset=0):

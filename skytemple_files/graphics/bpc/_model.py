@@ -56,9 +56,7 @@ class BpcLayer(BpcLayerProtocol):
         self.tilemap: list[TilemapEntryProtocol] = tilemap
 
     def __repr__(self) -> str:
-        return (
-            f"<#T{self.number_tiles} #TM{self.chunk_tilemap_len} - BPA: [{self.bpas}]>"
-        )
+        return f"<#T{self.number_tiles} #TM{self.chunk_tilemap_len} - BPA: [{self.bpas}]>"
 
 
 class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
@@ -108,9 +106,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             )
 
         # Read the first layer image data
-        end_of_layer_data = (
-            self._lower_layer_pointer if self._lower_layer_pointer > 0 else None
-        )
+        end_of_layer_data = self._lower_layer_pointer if self._lower_layer_pointer > 0 else None
         self.layers[0].tiles, compressed_tile_size_1 = self._read_tile_data(
             FileType.BPC_IMAGE.decompress(
                 # We don't know when the compressed data ends, but at least it can't go into the next layer
@@ -177,9 +173,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             tilemap.append(TilemapEntry.from_int(u16(int.from_bytes(entry, "little"))))
         return tilemap  # type: ignore
 
-    def chunks_to_pil(
-        self, layer: int, palettes: Sequence[Sequence[int]], width_in_mtiles: int = 20
-    ) -> Image.Image:
+    def chunks_to_pil(self, layer: int, palettes: Sequence[Sequence[int]], width_in_mtiles: int = 20) -> Image.Image:
         """
         Convert all chunks of the BPC to one big PIL image.
         The chunks are all placed next to each other.
@@ -197,11 +191,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
 
         """
         width = width_in_mtiles * self.tiling_width * BPC_TILE_DIM
-        height = (
-            math.ceil(self.layers[layer].chunk_tilemap_len / width_in_mtiles)
-            * self.tiling_height
-            * BPC_TILE_DIM
-        )
+        height = math.ceil(self.layers[layer].chunk_tilemap_len / width_in_mtiles) * self.tiling_height * BPC_TILE_DIM
         return to_pil(
             self.layers[layer].tilemap,
             self.layers[layer].tiles,
@@ -213,9 +203,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             self.tiling_height,
         )
 
-    def single_chunk_to_pil(
-        self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]]
-    ) -> Image.Image:
+    def single_chunk_to_pil(self, layer: int, chunk_idx: int, palettes: Sequence[Sequence[int]]) -> Image.Image:
         """
         Convert a single chunk of the BPC to one big PIL image. For general notes, see chunks_to_pil.
 
@@ -259,20 +247,13 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             dummy_tile_map.append(
                 TilemapEntry(
                     idx=i,
-                    pal_idx=(
-                        single_palette
-                        if single_palette is not None
-                        else self._get_palette_for_tile(layer, i)
-                    ),
+                    pal_idx=(single_palette if single_palette is not None else self._get_palette_for_tile(layer, i)),
                     flip_x=False,
                     flip_y=False,
                 )
             )
         width = width_in_tiles * BPC_TILE_DIM
-        height = (
-            math.ceil((self.layers[layer].number_tiles + 1) / width_in_tiles)
-            * BPC_TILE_DIM
-        )
+        height = math.ceil((self.layers[layer].number_tiles + 1) / width_in_tiles) * BPC_TILE_DIM
 
         return to_pil(
             dummy_tile_map,
@@ -327,9 +308,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
-                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = (
-                    bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
-                )
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
 
                 previous_end_of_tiles = new_end_of_tiles
                 bpa_animation_indices[bpaidx] += 1
@@ -381,9 +360,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             for bpaidx, bpa in enumerate(self.get_bpas_for_layer(layer, bpas)):
                 # Add the BPA tiles for this frame to the set of BPC tiles:
                 new_end_of_tiles = previous_end_of_tiles + bpa.number_of_tiles
-                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = (
-                    bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
-                )
+                ldata.tiles[previous_end_of_tiles:new_end_of_tiles] = bpa.tiles_for_frame(bpa_animation_indices[bpaidx])
 
                 previous_end_of_tiles = new_end_of_tiles
                 if bpa.number_of_frames > 0:
@@ -415,9 +392,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         )
         self.layers[layer].number_tiles = u16_checked(len(self.layers[layer].tiles) - 1)
 
-    def pil_to_chunks(
-        self, layer: int, image: Image.Image, force_import: bool = True
-    ) -> list[list[int]]:
+    def pil_to_chunks(self, layer: int, image: Image.Image, force_import: bool = True) -> list[list[int]]:
         """
         Imports chunks. Format same as for chunks_to_pil.
         Replaces tiles, tile mappings and therefor also chunks.
@@ -445,27 +420,21 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
         )
         self.layers[layer].number_tiles = u16_checked(len(self.layers[layer].tiles) - 1)
         self.layers[layer].chunk_tilemap_len = u16_checked(
-            int(
-                len(self.layers[layer].tilemap) / self.tiling_width / self.tiling_height
-            )
+            int(len(self.layers[layer].tilemap) / self.tiling_width / self.tiling_height)
         )
         return palettes  # type: ignore
 
     def get_tile(self, layer: int, index: int) -> TilemapEntryProtocol:
         return self.layers[layer].tilemap[index]
 
-    def set_tile(
-        self, layer: int, index: int, tile_mapping: TilemapEntryProtocol
-    ) -> None:
+    def set_tile(self, layer: int, index: int, tile_mapping: TilemapEntryProtocol) -> None:
         self.layers[layer].tilemap[index] = tile_mapping
 
     def get_chunk(self, layer: int, index: int) -> list[TilemapEntryProtocol]:
         mtidx = index * self.tiling_width * self.tiling_height
         return self.layers[layer].tilemap[mtidx : mtidx + 9]
 
-    def import_tiles(
-        self, layer: int, tiles: list[bytes], contains_null_tile: bool = False
-    ) -> None:
+    def import_tiles(self, layer: int, tiles: list[bytes], contains_null_tile: bool = False) -> None:
         """
         Replace the tiles of the specified layer.
         If contains_null_tile is False, the null tile is added to the list, at the beginning.
@@ -503,9 +472,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             int(len(tile_mappings) / self.tiling_width / self.tiling_height)
         )
 
-    def get_bpas_for_layer(
-        self, layer: int, bpas_from_bg_list: Sequence[BpaProtocol | None]
-    ) -> list[BpaProtocol]:
+    def get_bpas_for_layer(self, layer: int, bpas_from_bg_list: Sequence[BpaProtocol | None]) -> list[BpaProtocol]:
         """
         This method returns a list of not None BPAs assigned to the BPC layer from an ordered list of possible candidates.
         What is returned depends on the BPA mapping of the layer.
@@ -524,13 +491,10 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
                 assert self.layers[layer].bpas[i] == 0
         return not_none_bpas
 
-    def set_chunk(
-        self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]
-    ) -> None:
+    def set_chunk(self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]) -> None:
         if len(new_tilemappings) < self.tiling_width * self.tiling_height:
             raise ValueError(
-                f"The new tilemapping for this chunk must contain"
-                f"{self.tiling_width}x{self.tiling_height} tiles."
+                f"The new tilemapping for this chunk must contain" f"{self.tiling_width}x{self.tiling_height} tiles."
             )
         mtidx = index * self.tiling_width * self.tiling_height
         self.layers[layer].tilemap[mtidx : mtidx + 9] = new_tilemappings
@@ -582,9 +546,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
             tile_idx_start = tile_idx_start + n_bpas
 
         old_tile_idx_end = tile_idx_start + self.layers[layer_idx].bpas[bpa_layer_idx]
-        number_tiles_added = (
-            tiles_bpa_new - self.layers[layer_idx].bpas[bpa_layer_idx]
-        )  # may be negative, of course.
+        number_tiles_added = tiles_bpa_new - self.layers[layer_idx].bpas[bpa_layer_idx]  # may be negative, of course.
         for mapping in self.layers[layer_idx].tilemap:
             if mapping.idx > old_tile_idx_end:
                 # We need to move this back by the full amount

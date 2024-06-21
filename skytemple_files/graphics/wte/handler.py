@@ -44,9 +44,7 @@ class WteHandler(DataHandler[Wte]):
         return FileType.SIR0.serialize(FileType.SIR0.wrap_obj(data))
 
     @classmethod
-    def new(
-        cls, img: Image.Image, img_type: WteImageType, discard_palette: bool
-    ) -> Wte:
+    def new(cls, img: Image.Image, img_type: WteImageType, discard_palette: bool) -> Wte:
         wte = Wte(None, 0)
         wte.from_pil(img, img_type, discard_palette)
         return wte

@@ -25,9 +25,7 @@ from range_typed_integers import u32
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-def decode_sir0_pointer_offsets(
-    data: bytes, pointer_offset_list_pointer: u32, relative=True
-) -> Sequence[u32]:
+def decode_sir0_pointer_offsets(data: bytes, pointer_offset_list_pointer: u32, relative=True) -> Sequence[u32]:
     decoded = []
     # This is used to sum up all offsets and obtain the offset relative to the file, and not the last offset
     offsetsum = 0
@@ -63,9 +61,7 @@ def decode_sir0_pointer_offsets(
 
 # Based on C++ algorithm by psy_commando from
 # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
-def encode_sir0_pointer_offsets(
-    buffer: bytearray, pointer_offsets: Sequence[int], relative=True
-) -> u32:
+def encode_sir0_pointer_offsets(buffer: bytearray, pointer_offsets: Sequence[int], relative=True) -> u32:
     cursor = 0
     # used to add up the sum of all the offsets up to the current one
     offset_so_far = 0

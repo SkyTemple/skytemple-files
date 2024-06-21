@@ -31,9 +31,7 @@ class BinPackWriter:
 
     def write(self) -> bytes:
         files = self.model.get_files_bytes()
-        len_header = (
-            len(self.model.get_files_bytes()) + 1
-        ) * 8 + 16  # 16 is a row of padding
+        len_header = (len(self.model.get_files_bytes()) + 1) * 8 + 16  # 16 is a row of padding
         if len_header % 16 != 0:
             len_header += 16 - (len_header % 16)
         out_buffer = bytearray(

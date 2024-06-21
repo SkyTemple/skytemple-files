@@ -49,13 +49,5 @@ def dump(data: Pmd2Data):
 
 
 if __name__ == "__main__":
-    dump(
-        Pmd2XmlReader.load_default(
-            GAME_VERSION_EOS + "_" + GAME_REGION_US, translate_strings=False
-        )
-    )
-    dump(
-        Pmd2XmlReader.load_default(
-            GAME_VERSION_EOS + "_" + GAME_REGION_EU, translate_strings=False
-        )
-    )
+    dump(Pmd2XmlReader.load_default(GAME_VERSION_EOS + "_" + GAME_REGION_US, translate_strings=False))
+    dump(Pmd2XmlReader.load_default(GAME_VERSION_EOS + "_" + GAME_REGION_EU, translate_strings=False))

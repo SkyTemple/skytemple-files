@@ -225,16 +225,12 @@ if __name__ == "__main__":
 
     with open("./fixture.bin", "wb") as f:
         parts = mappa.sir0_serialize_parts()
-        assert mappa == MappaBinHandler.load_python_model().sir0_unwrap(
-            parts[0], parts[2]
-        )
+        assert mappa == MappaBinHandler.load_python_model().sir0_unwrap(parts[0], parts[2])
         f.write(Sir0Handler.serialize(Sir0Handler.wrap(*parts)))
 
     with open("./fixture.bin", "rb") as f:
         in_s = Sir0Handler.deserialize(f.read())
-        assert mappa == MappaBinHandler.load_python_model().sir0_unwrap(
-            in_s.content, in_s.data_pointer
-        )
+        assert mappa == MappaBinHandler.load_python_model().sir0_unwrap(in_s.content, in_s.data_pointer)
 
     print("# fmt: off")
     print("# pylint: disable-all")
@@ -251,9 +247,7 @@ if __name__ == "__main__":
 
     print("FIX_TERRAIN_SETTINGS_LISTS = (")
     for terrain_settings_list in terrain_settings_lists:
-        print(
-            f"    MappaFloorTerrainSettingsStub({p_floor_terrain_settings(terrain_settings_list)}),"
-        )
+        print(f"    MappaFloorTerrainSettingsStub({p_floor_terrain_settings(terrain_settings_list)}),")
     print(")")
     print("")
 

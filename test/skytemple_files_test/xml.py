@@ -47,6 +47,4 @@ class XmlTestCaseAbc(unittest.TestCase, ABC):
         if len(diff) < 1:
             return
         s = "\n".join((str(x) for x in diff))
-        raise AssertionError(
-            f"Expected XMLs to be equal. Differences from xml1 to xml2:\n{s}"
-        )
+        raise AssertionError(f"Expected XMLs to be equal. Differences from xml1 to xml2:\n{s}")

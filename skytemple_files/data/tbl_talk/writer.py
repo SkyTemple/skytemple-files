@@ -42,7 +42,5 @@ class TblTalkWriter:
                     last_ptr += 2  # type: ignore
                 write_u16(data, last_ptr, 2 + (i + g * TBL_TALK_PERSONALITY_LEN) * 2)
 
-        data += bytes(self.model.monster_personalities) + bytes(
-            self.model.special_personalities
-        )
+        data += bytes(self.model.monster_personalities) + bytes(self.model.special_personalities)
         return data

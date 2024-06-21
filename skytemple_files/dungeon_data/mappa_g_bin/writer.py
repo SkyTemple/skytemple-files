@@ -51,9 +51,7 @@ class MappaGBinWriter:
         for i, floor_list in enumerate(floor_lists):
             pointer_offsets.append(u32(start_floor_list_lut + i * 4))
             write_u32(floor_list_lut, cursor_floor_data, i * 4)
-            cursor_floor_data = u32_checked(
-                cursor_floor_data + (len(floor_list) + 1) * 4
-            )
+            cursor_floor_data = u32_checked(cursor_floor_data + (len(floor_list) + 1) * 4)
         data += floor_list_lut
         # Floor layout data
         start_floor_layout_data = u32_checked(len(data))

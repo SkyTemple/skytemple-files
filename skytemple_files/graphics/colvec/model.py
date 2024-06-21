@@ -66,9 +66,7 @@ class Colvec(Sir0Serializable, AutoString):
 
     def to_pil(self, index) -> Image.Image:
         """Returns the palette as an image where each pixel represents each color of the colormap."""
-        img = Image.frombytes(
-            mode="RGB", data=bytes(self.colormaps[index]), size=(16, 16)
-        )
+        img = Image.frombytes(mode="RGB", data=bytes(self.colormaps[index]), size=(16, 16))
         return img
 
     def from_pil(self, index, img: Image.Image):

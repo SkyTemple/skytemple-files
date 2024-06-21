@@ -34,34 +34,22 @@ class SsaXmlTestCase(SkyTempleFilesTestCase, XmlTestCaseAbc):
     handler = SsaHandler
 
     def test_export_valid_enter(self) -> None:
-        self.do_test_export_valid(
-            self._fix_path_xml("enter"), self._fix_path_model("enter")
-        )
+        self.do_test_export_valid(self._fix_path_xml("enter"), self._fix_path_model("enter"))
 
     def test_import_valid_enter(self) -> None:
-        self.do_test_import_valid(
-            self._fix_path_xml("enter"), self._fix_path_model("enter")
-        )
+        self.do_test_import_valid(self._fix_path_xml("enter"), self._fix_path_model("enter"))
 
     def test_export_valid_sub(self) -> None:
-        self.do_test_export_valid(
-            self._fix_path_xml("sub"), self._fix_path_model("sub")
-        )
+        self.do_test_export_valid(self._fix_path_xml("sub"), self._fix_path_model("sub"))
 
     def test_import_valid_sub(self) -> None:
-        self.do_test_import_valid(
-            self._fix_path_xml("sub"), self._fix_path_model("sub")
-        )
+        self.do_test_import_valid(self._fix_path_xml("sub"), self._fix_path_model("sub"))
 
     def test_export_valid_acting(self) -> None:
-        self.do_test_export_valid(
-            self._fix_path_xml("acting"), self._fix_path_model("acting")
-        )
+        self.do_test_export_valid(self._fix_path_xml("acting"), self._fix_path_model("acting"))
 
     def test_import_valid_acting(self) -> None:
-        self.do_test_import_valid(
-            self._fix_path_xml("acting"), self._fix_path_model("acting")
-        )
+        self.do_test_import_valid(self._fix_path_xml("acting"), self._fix_path_model("acting"))
 
     def do_test_export_valid(self, xml_path: str, ssx_path: str):
         self.assertXmlEqual(xml_path, ssa_to_xml(self._load_main_fixture(ssx_path)))
@@ -92,27 +80,21 @@ class SsaXmlTestCase(SkyTempleFilesTestCase, XmlTestCaseAbc):
     def test_import_invalid_integer_range(self) -> None:
         with self.assertRaises(IntegerBoundError):
             ssa_from_xml(
-                ElementTree.parse(
-                    self._fix_path_xml("invalid_integer_range")
-                ).getroot(),
+                ElementTree.parse(self._fix_path_xml("invalid_integer_range")).getroot(),
                 Pmd2XmlReader.load_default().script_data,
             )
 
     def test_import_invalid_integer_range2(self) -> None:
         with self.assertRaises(IntegerBoundError):
             ssa_from_xml(
-                ElementTree.parse(
-                    self._fix_path_xml("invalid_integer_range2")
-                ).getroot(),
+                ElementTree.parse(self._fix_path_xml("invalid_integer_range2")).getroot(),
                 Pmd2XmlReader.load_default().script_data,
             )
 
     def test_import_invalid_trigger_event(self) -> None:
         with self.assertRaises(XmlValidateError):
             ssa_from_xml(
-                ElementTree.parse(
-                    self._fix_path_xml("invalid_trigger_event")
-                ).getroot(),
+                ElementTree.parse(self._fix_path_xml("invalid_trigger_event")).getroot(),
                 Pmd2XmlReader.load_default().script_data,
             )
 

@@ -110,9 +110,7 @@ def string_dataset():
     ]
 
 
-class StringCodecTestCase(
-    SkyTempleFilesTestCase[_TstStringHandler, _TstStringProtocol]
-):
+class StringCodecTestCase(SkyTempleFilesTestCase[_TstStringHandler, _TstStringProtocol]):
     handler = _TstStringHandler
 
     @parameterized.expand(string_dataset(), name_func=dataset_name_func)

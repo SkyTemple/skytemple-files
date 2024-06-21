@@ -298,9 +298,7 @@ def ssa_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> Ssa:
     return Ssa.new(scriptdata, layer_list, events, pos_marks)
 
 
-def layer_list_from_xml(
-    ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData
-) -> list[SsaLayer]:
+def layer_list_from_xml(ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData) -> list[SsaLayer]:
     validate_xml_tag(ele, XML_LAYERS)
     return [layer_from_xml(c, length_event_list, scriptdata) for c in ele]
 
@@ -310,16 +308,12 @@ def events_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> list[SsaTrigger
     return [event_from_xml(c, scriptdata) for c in ele]
 
 
-def position_markers_from_xml(
-    ele: Element, scriptdata: Pmd2ScriptData
-) -> list[SsaPositionMarker]:
+def position_markers_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> list[SsaPositionMarker]:
     validate_xml_tag(ele, XML_POS_MARKS)
     return [position_marker_from_xml(c, scriptdata) for c in ele]
 
 
-def layer_from_xml(
-    ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData
-) -> SsaLayer:
+def layer_from_xml(ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData) -> SsaLayer:
     validate_xml_tag(ele, XML_LAYER)
     actors: list[SsaActor] = []
     objects: list[SsaObject] = []
@@ -364,9 +358,7 @@ def event_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> SsaTrigger:
     )
 
 
-def position_marker_from_xml(
-    ele: Element, scriptdata: Pmd2ScriptData
-) -> SsaPositionMarker:
+def position_marker_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> SsaPositionMarker:
     validate_xml_tag(ele, XML_POS_MARK)
     validate_xml_attribs(
         ele,
@@ -450,9 +442,7 @@ def performer_from_xml(ele: Element, scriptdata: Pmd2ScriptData) -> SsaPerformer
     )
 
 
-def trigger_from_xml(
-    ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData
-) -> SsaEvent:
+def trigger_from_xml(ele: Element, length_event_list: int, scriptdata: Pmd2ScriptData) -> SsaEvent:
     validate_xml_tag(ele, XML_TRIGGER)
     validate_xml_attribs(
         ele,
@@ -465,13 +455,7 @@ def trigger_from_xml(
     )
     event_id = u16_checked(int(ele.attrib[XML_TRIGGER__EVENT_ID]))
     if event_id >= length_event_list:
-        raise XmlValidateError(
-            _(
-                "The event ID {} is out of bounds for one of the triggers.".format(
-                    event_id
-                )
-            )
-        )
+        raise XmlValidateError(_("The event ID {} is out of bounds for one of the triggers.".format(event_id)))
     return SsaEvent(
         trigger_width=u16_checked(int(ele.attrib[XML_TRIGGER__WIDTH])),
         trigger_height=u16_checked(int(ele.attrib[XML_TRIGGER__HEIGHT])),

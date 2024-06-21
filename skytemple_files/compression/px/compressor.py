@@ -70,9 +70,7 @@ class PXCompLevel(Enum):
 class CompOp:
     """Stores an operation to insert into the output buffer."""
 
-    def __init__(
-        self, type=Operation.COPY_ASIS, highnybble=0, lownybble=0, nextbytevalue=0
-    ):
+    def __init__(self, type=Operation.COPY_ASIS, highnybble=0, lownybble=0, nextbytevalue=0):
         # The operation to do
         self.type = type
         # u8: The value of the compressed high nybble if applicable
@@ -134,9 +132,7 @@ class PxCompressor:
         # Worst case, we got 1 more bytes per 8 bytes.
         # And if we're not divisible by 8, add an extra
         # yte for the last command byte !
-        self.compressed_data = bytearray(
-            self.input_size + self.input_size + (1 if self.input_size % 8 != 0 else 0)
-        )
+        self.compressed_data = bytearray(self.input_size + self.input_size + (1 if self.input_size % 8 != 0 else 0))
 
         # Set by default those two possible matching sequence length, given we want 99% of the time to
         # have those 2 to cover the gap between the 2 bytes to 1 algorithm and the string search, and also get
@@ -200,9 +196,8 @@ class PxCompressor:
             if DEBUG:
                 print(f"> RESULT WAS Copy Sequence. Advancing {amount_to_advance}")
 
-        elif (
-            self.compression_level.value >= PXCompLevel.LEVEL_1.value
-            and self._can_compress_to_2_in_1_byte(self.cursor, myoperation)
+        elif self.compression_level.value >= PXCompLevel.LEVEL_1.value and self._can_compress_to_2_in_1_byte(
+            self.cursor, myoperation
         ):
             amount_to_advance = 2
             if DEBUG:
@@ -210,9 +205,7 @@ class PxCompressor:
 
         elif (
             self.compression_level.value >= PXCompLevel.LEVEL_2.value
-            and self._can_compress_to_2_in_1_byte_with_manipulation(
-                self.cursor, myoperation
-            )
+            and self._can_compress_to_2_in_1_byte_with_manipulation(self.cursor, myoperation)
         ):
             amount_to_advance = 2
             if DEBUG:
@@ -298,8 +291,7 @@ class PxCompressor:
                     # B) The decompressor increments all of them once, and then decrements the one at index 0 !
                     # indexsmallest : is the index of the nybble that gets decremented.
                     out_result.type = Operation(
-                        indexsmallest
-                        + int(Operation.COPY_NYBBLE_4TIMES_EX_INCRALL_DECRNYBBLE0)
+                        indexsmallest + int(Operation.COPY_NYBBLE_4TIMES_EX_INCRALL_DECRNYBBLE0)
                     )
                     if indexsmallest == 0:
                         # Copy as-is, given the decompressor increment it then decrement this value
@@ -312,10 +304,7 @@ class PxCompressor:
                     # A) The decompressor increments a nybble not at index 0 once.
                     # B) The decompressor decrements all of them once, and then increments the one at index 0 again!
                     # indexlargest : is the index of the nybble that gets incremented.
-                    out_result.type = Operation(
-                        indexlargest
-                        + int(Operation.COPY_NYBBLE_4TIMES_EX_DECRALL_INCRNYBBLE0)
-                    )
+                    out_result.type = Operation(indexlargest + int(Operation.COPY_NYBBLE_4TIMES_EX_DECRALL_INCRNYBBLE0))
                     if indexlargest == 0:
                         # Since we decrement and then increment this one during decomp, use it as-is
                         out_result.lownybble = nibbles[indexlargest]
@@ -333,19 +322,13 @@ class PxCompressor:
         """
         # Get offset of LookBack Buffer beginning
         current_offset = l_cursor
-        lb_buffer_begin = (
-            current_offset - PX_LOOKBACK_BUFFER_SIZE
-            if current_offset > PX_LOOKBACK_BUFFER_SIZE
-            else 0
-        )
+        lb_buffer_begin = current_offset - PX_LOOKBACK_BUFFER_SIZE if current_offset > PX_LOOKBACK_BUFFER_SIZE else 0
 
         # Setup our iterators for clarity's sake
         it_look_back_begin = lb_buffer_begin
         it_look_back_end = l_cursor
         it_seq_begin = l_cursor
-        it_seq_end = self._adv_as_much_as_possible(
-            l_cursor, self.input_size, PX_MAX_MATCH_SEQLEN
-        )
+        it_seq_end = self._adv_as_much_as_possible(l_cursor, self.input_size, PX_MAX_MATCH_SEQLEN)
 
         cur_seq_len = it_seq_end - it_seq_begin
 
@@ -361,17 +344,12 @@ class PxCompressor:
             # Subtract 3 given that's how they're stored!
             valid_high_nibble = result.length - PX_MIN_MATCH_SEQLEN
             # Check the length in the table!
-            if not self._check_sequence_high_nibble_valid_or_add(
-                result.length - PX_MIN_MATCH_SEQLEN
-            ):
+            if not self._check_sequence_high_nibble_valid_or_add(result.length - PX_MIN_MATCH_SEQLEN):
                 # If the size is not one of the allowed ones, and we can't add it to the list,
                 # shorten our found sequence to the longest length in the list of allowed lengths!
                 for i in range(0, len(self.high_nibble_lenghts_possible)):
                     # Since the list is sorted, just break once we can't find anything smaller than the value we found!
-                    if (
-                        self.high_nibble_lenghts_possible[i] + PX_MIN_MATCH_SEQLEN
-                        < result.length
-                    ):
+                    if self.high_nibble_lenghts_possible[i] + PX_MIN_MATCH_SEQLEN < result.length:
                         valid_high_nibble = self.high_nibble_lenghts_possible[i]
                 assert valid_high_nibble <= (PX_MAX_MATCH_SEQLEN - PX_MIN_MATCH_SEQLEN)
 
@@ -398,16 +376,12 @@ class PxCompressor:
         - sequencelenght : Length of the sequence to look for in bytes.
         """
         longestmatch = MatchingSeq(searchend, 0)
-        seq_to_find_short_end = self._adv_as_much_as_possible(
-            tofindbeg, tofindend, PX_MIN_MATCH_SEQLEN
-        )
+        seq_to_find_short_end = self._adv_as_much_as_possible(tofindbeg, tofindend, PX_MIN_MATCH_SEQLEN)
 
         cur_search_pos = searchbeg
         while cur_search_pos < searchend:
             fnd_tpl = self.uncompressed_data.tobytes().find(
-                read_bytes(
-                    self.uncompressed_data, tofindbeg, seq_to_find_short_end - tofindbeg
-                ),
+                read_bytes(self.uncompressed_data, tofindbeg, seq_to_find_short_end - tofindbeg),
                 cur_search_pos,
                 searchend,
             )
@@ -419,9 +393,7 @@ class PxCompressor:
             if cur_search_pos != searchend:
                 nbmatches = self._count_equal_consecutive_elem(
                     cur_search_pos,
-                    self._adv_as_much_as_possible(
-                        cur_search_pos, searchend, PX_MAX_MATCH_SEQLEN
-                    ),
+                    self._adv_as_much_as_possible(cur_search_pos, searchend, PX_MAX_MATCH_SEQLEN),
                     tofindbeg,
                     tofindend,
                 )
@@ -457,9 +429,7 @@ class PxCompressor:
             # We didn't find the length.. Check if we can add it.
             if len(self.high_nibble_lenghts_possible) < PX_NB_POSSIBLE_SEQUENCES_LEN:
                 self.high_nibble_lenghts_possible.append(hnybbleorlen)
-                self.high_nibble_lenghts_possible = sorted(
-                    self.high_nibble_lenghts_possible
-                )
+                self.high_nibble_lenghts_possible = sorted(self.high_nibble_lenghts_possible)
                 return True
             return False
 
@@ -473,17 +443,13 @@ class PxCompressor:
         """
         insert_pos = self.output_cursor
         if operation.type == Operation.COPY_ASIS:
-            self.compressed_data[insert_pos] = (
-                operation.highnybble << 4 & 0xF0
-            ) | operation.lownybble
+            self.compressed_data[insert_pos] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
             if DEBUG:
                 print(f"Writing as is {self.compressed_data[insert_pos]:>08b}")
         elif operation.type == Operation.COPY_SEQUENCE:
-            self.compressed_data[insert_pos] = (
-                operation.highnybble << 4 & 0xF0
-            ) | operation.lownybble
+            self.compressed_data[insert_pos] = (operation.highnybble << 4 & 0xF0) | operation.lownybble
             self.output_cursor += 1
             self.nb_compressed_byte_written += 1
             self.compressed_data[insert_pos + 1] = operation.nextbytevalue
@@ -515,8 +481,7 @@ class PxCompressor:
                     break
                 if (
                     nybbleval not in self.high_nibble_lenghts_possible
-                    and len(self.high_nibble_lenghts_possible)
-                    < PX_NB_POSSIBLE_SEQUENCES_LEN
+                    and len(self.high_nibble_lenghts_possible) < PX_NB_POSSIBLE_SEQUENCES_LEN
                 ):
                     self.high_nibble_lenghts_possible.append(nybbleval)
 
@@ -587,8 +552,7 @@ class PxCompressor:
         while (
             first_1 != last_1
             and first_2 != last_2
-            and read_u8(self.uncompressed_data, first_1)
-            == read_u8(self.uncompressed_data, first_2)
+            and read_u8(self.uncompressed_data, first_1) == read_u8(self.uncompressed_data, first_2)
         ):
             count += 1
             first_1 += 1

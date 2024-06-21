@@ -36,9 +36,7 @@ from skytemple_files.graphics.dma.protocol import DmaType
 
 
 class RandomGenProperties:
-    def __init__(
-        self, gen_type, mul, count, seed_old_t0, seed_t0, add_t1, use_seed_t1, seeds_t1
-    ):
+    def __init__(self, gen_type, mul, count, seed_old_t0, seed_t0, add_t1, use_seed_t1, seeds_t1):
         self.gen_type = gen_type
         self.mul = mul
         self.count = count
@@ -215,9 +213,7 @@ class DungeonFloorGenerator:
                 tiles_row.append(tile)
                 if DungeonData.player_spawn_x == x and DungeonData.player_spawn_y == y:
                     tile.typ = TileType.PLAYER_SPAWN
-                elif (
-                    DungeonData.stairs_spawn_x == x and DungeonData.stairs_spawn_y == y
-                ):
+                elif DungeonData.stairs_spawn_x == x and DungeonData.stairs_spawn_y == y:
                     tile.typ = TileType.STAIRS
                 elif DungeonData.list_tiles[x][y].spawn_flags & 0x8:
                     tile.typ = TileType.ENEMY

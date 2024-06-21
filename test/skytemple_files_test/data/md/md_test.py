@@ -44,9 +44,7 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
     def test_entries_read(self) -> None:
         self.assertEqual(len(self.fixture.entries), len(EXPECTED_MD_ENTRIES))
 
-        for entry_fixture, entry_expected in zip(
-            self.fixture.entries, EXPECTED_MD_ENTRIES
-        ):
+        for entry_fixture, entry_expected in zip(self.fixture.entries, EXPECTED_MD_ENTRIES):
             self.assertMdEntriesEqual(entry_expected, entry_fixture)
 
     def test_entries_write(self) -> None:
@@ -69,9 +67,7 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
         self.handler.properties().num_entities = FIX_NUM_ENTITIES
         self.handler.properties().max_possible = FIX_MAX_POSSIBLE
 
-        for i, (entry_fixture, expected_md_index_base) in enumerate(
-            zip(self.fixture.entries, EXPECTED_BASE_INDICES)
-        ):
+        for i, (entry_fixture, expected_md_index_base) in enumerate(zip(self.fixture.entries, EXPECTED_BASE_INDICES)):
             self.assertEqual(
                 entry_fixture.md_index_base,
                 expected_md_index_base,
@@ -287,9 +283,7 @@ class MdTestCase(SkyTempleFilesTestCase[MdHandler, MdProtocol[MdEntryProtocol]])
         self.assertEqual(len(a), len(b))
         for i, (aa, bb) in enumerate(zip(a, b)):
             self.assertEqual(aa[0], bb[0], f"The md_index must match in iteration {i}")
-            self.assertMdEntriesEqual(
-                aa[1], bb[1], "The md entry must match in iteration {i}"
-            )
+            self.assertMdEntriesEqual(aa[1], bb[1], "The md entry must match in iteration {i}")
 
     def assertMdEntriesEqual(
         self,

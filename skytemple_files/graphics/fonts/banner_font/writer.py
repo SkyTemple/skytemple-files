@@ -51,9 +51,7 @@ class BannerFontWriter:
         last: tuple[int | None, int | None] = (None, None)
         for i, e in enumerate(sorted_entries):
             if last == (e.char, e.table):
-                raise ValueError(
-                    "Character {e.char} in table {e.table} is be defined multiple times in a font file!"
-                )
+                raise ValueError("Character {e.char} in table {e.table} is be defined multiple times in a font file!")
             last = (e.char, e.table)
             pointer_offsets.append(u32(len(buffer) + i * BANNER_FONT_ENTRY_LEN))
             write_u32(char_pointer, char_offsets[i], i * BANNER_FONT_ENTRY_LEN)

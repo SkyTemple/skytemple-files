@@ -77,30 +77,22 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US
-                    )
+                    read_u32(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_US)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_EU:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU
-                    )
+                    read_u32(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_EU)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
             if config.game_region == GAME_REGION_JP:
                 return (
-                    read_u32(
-                        rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP
-                    )
+                    read_u32(rom.loadArm9Overlays([11])[11].data, PATCH_CHECK_ADDR_APPLIED_JP)
                     != PATCH_CHECK_INSTR_APPLIED
                 )
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         if not self.is_applied(rom, config):
             if config.game_version == GAME_VERSION_EOS:
                 if config.game_region == GAME_REGION_US:
@@ -120,9 +112,7 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
             ov = table[11]
             ov11 = bytearray(rom.files[ov.fileID])
 
-            switch = AsmFunction(
-                ov11[start_table - start_ov11 : lst_func[0] - start_ov11], start_table
-            )
+            switch = AsmFunction(ov11[start_table - start_ov11 : lst_func[0] - start_ov11], start_table)
             ext_data = switch.process()[1]
             lst_data = {}
             data_processed = set()
@@ -137,9 +127,7 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
             lst_calls = []
             for x in main_calls:
                 lst_calls.append(lst_func.index(x))
-            ov11[start_table - start_ov11 + 4 : start_table - start_ov11 + 2052] = (
-                bytes(lst_calls)
-            )
+            ov11[start_table - start_ov11 + 4 : start_table - start_ov11 + 2052] = bytes(lst_calls)
             rom.files[ov.fileID] = bytes(ov11)
 
         try:
@@ -147,7 +135,5 @@ class PkmnGroundAnimPatchHandler(AbstractPatchHandler):
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

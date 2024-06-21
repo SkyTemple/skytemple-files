@@ -64,18 +64,14 @@ ENUM_ARGUMENTS = {
 
 
 class SkyTempleSsbOperation(SsbOperation):
-    def __init__(
-        self, offset: int, op_code: Pmd2ScriptOpCode, params: list[SsbOpParam]
-    ):
+    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: list[SsbOpParam]):
         super().__init__(offset, op_code, params)
 
 
 class Ssb:
     @classmethod
     def create_empty(cls, scriptdata: Pmd2ScriptData, supported_langs=None):
-        return cls(
-            None, None, None, scriptdata, if_empty_supported_langs=supported_langs
-        )
+        return cls(None, None, None, scriptdata, if_empty_supported_langs=supported_langs)
 
     def __init__(
         self,
@@ -97,9 +93,7 @@ class Ssb:
             self.routine_info: list[tuple[int, SsbRoutineInfo]] = []
             self.routine_ops: list[list[SkyTempleSsbOperation]] = []
             self.constants: list[str] = []
-            self.strings: dict[str, list[str]] = {
-                lang_name: [] for lang_name in if_empty_supported_langs
-            }
+            self.strings: dict[str, list[str]] = {lang_name: [] for lang_name in if_empty_supported_langs}
             return
         assert begin_data_offset is not None
         assert header is not None
@@ -112,9 +106,7 @@ class Ssb:
         # WARNING: This is NOT updated by this model. Only the writer can update it.
         self.original_binary_data = bytes(data)
 
-        start_of_const_table = begin_data_offset + (
-            read_u16(data, begin_data_offset + 0x00) * 2
-        )
+        start_of_const_table = begin_data_offset + (read_u16(data, begin_data_offset + 0x00) * 2)
         number_of_routines = read_u16(data, begin_data_offset + 0x02)
 
         self._header = header
@@ -162,27 +154,21 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table
-                + read_u16(data, i)
-                - (header.number_of_strings * 2)
+                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
             )
         self.constants = []
         cursor = start_of_constants
         # Read constants
         for const_string_offset in const_offset_table:
             assert cursor == const_string_offset
-            bytes_read, string = read_var_length_string(
-                data, const_string_offset, self._string_codec
-            )
+            bytes_read, string = read_var_length_string(data, const_string_offset, self._string_codec)
             self.constants.append(string)
             cursor += bytes_read
         # Padding if not even
         if cursor % 2 != 0:
             cursor += 1
         # The end of the script block must also match the data from the header
-        assert (
-            start_of_const_table + header.number_of_constants * 2 == start_of_constants
-        )
+        assert start_of_const_table + header.number_of_constants * 2 == start_of_constants
 
         # ### STRING OFFSETS AND STRING STRINGS
         # Read strings
@@ -197,17 +183,13 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table
-                    + read_u16(data, i)
-                    + previous_languages_block_sizes
+                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings
             for string_offset in string_offset_table_lang:
                 assert cursor == string_offset
-                bytes_read, string = read_var_length_string(
-                    data, string_offset, self._string_codec
-                )
+                bytes_read, string = read_var_length_string(data, string_offset, self._string_codec)
                 strings_lang.append(string)
                 cursor += bytes_read
             string_offset_table[language] = string_offset_table_lang
@@ -262,9 +244,7 @@ class Ssb:
             [x[1] for x in self.routine_info],
             self.get_filled_routine_ops(),
             self._scriptdata.common_routine_info,
-            SsbConstant.create_for(
-                self._scriptdata.game_variables__by_name["PERFORMANCE_PROGRESS_LIST"]
-            ).name,
+            SsbConstant.create_for(self._scriptdata.game_variables__by_name["PERFORMANCE_PROGRESS_LIST"]).name,
             SsbConstant.get_dungeon_mode_constants(),
         ).convert()
 
@@ -280,13 +260,9 @@ class Ssb:
         for _, r in self.routine_info:
             try:
                 if r.type == SsbRoutineType.ACTOR:
-                    r.linked_to_name = SsbConstant.create_for(
-                        self._scriptdata.level_entities__by_id[r.linked_to]
-                    ).name
+                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.level_entities__by_id[r.linked_to]).name
                 elif r.type == SsbRoutineType.OBJECT:
-                    r.linked_to_name = SsbConstant.create_for(
-                        self._scriptdata.objects__by_id[r.linked_to]
-                    ).name
+                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[r.linked_to]).name
             except KeyError:
                 pass
 
@@ -323,34 +299,19 @@ class Ssb:
                                 param = -0x10000 + param
                             new_params.append(param)
                         elif argument_spec.type in ENUM_ARGUMENTS:
-                            const_data = getattr(
-                                self._scriptdata, ENUM_ARGUMENTS[argument_spec.type]
-                            )
+                            const_data = getattr(self._scriptdata, ENUM_ARGUMENTS[argument_spec.type])
                             if param in const_data:
-                                new_params.append(
-                                    SsbConstant.create_for(const_data[param])
-                                )
+                                new_params.append(SsbConstant.create_for(const_data[param]))
                             else:
-                                logger.warning(
-                                    f"Unknown {argument_spec.type} id: {param}"
-                                )
+                                logger.warning(f"Unknown {argument_spec.type} id: {param}")
                                 new_params.append(param)
-                        elif (
-                            argument_spec.type == "String"
-                            or argument_spec.type == "ConstString"
-                        ):
+                        elif argument_spec.type == "String" or argument_spec.type == "ConstString":
                             if param >= len(self.constants):
                                 new_params.append(
-                                    SsbOpParamLanguageString(
-                                        self.get_single_string(
-                                            param - len(self.constants)
-                                        )
-                                    )
+                                    SsbOpParamLanguageString(self.get_single_string(param - len(self.constants)))
                                 )
                             else:
-                                new_params.append(
-                                    SsbOpParamConstString(self.constants[param])
-                                )
+                                new_params.append(SsbOpParamConstString(self.constants[param]))
                         elif argument_spec.type == "PositionMark":
                             x_offset = y_offset = x_relative = y_relative = 0
                             try:
@@ -359,9 +320,7 @@ class Ssb:
                                 x_relative = op.params[i + 2]
                                 y_relative = op.params[i + 3]
                             except IndexError:
-                                logger.warning(
-                                    "SSB had wrong number of arguments for building a position marker."
-                                )
+                                logger.warning("SSB had wrong number of arguments for building a position marker.")
                             new_params.append(
                                 SsbOpParamPositionMarker(
                                     f"m{pos_marker_increment}",
@@ -374,13 +333,9 @@ class Ssb:
                             pos_marker_increment += 1
                             skip_arguments = 3
                         else:
-                            raise RuntimeError(
-                                f"Unknown argument type '{argument_spec.type}'"
-                            )
+                            raise RuntimeError(f"Unknown argument type '{argument_spec.type}'")
                     else:
-                        raise RuntimeError(
-                            f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}"
-                        )
+                        raise RuntimeError(f"Missing argument spec for argument #{i} for OpCode {op.op_code.name}")
                 new_op = SkyTempleSsbOperation(op.offset, op.op_code, new_params)
                 rtn_ops.append(new_op)
             rtns.append(rtn_ops)
@@ -399,10 +354,7 @@ class Ssb:
     def _get_argument_spec(op_code: Pmd2ScriptOpCode, i):
         """Returns the spec for an argument at a given index, if defined. Also checks repeating arguments."""
         # Maybe it's a repeating argument?
-        if (
-            op_code.repeating_argument_group is not None
-            and op_code.repeating_argument_group.id <= i
-        ):
+        if op_code.repeating_argument_group is not None and op_code.repeating_argument_group.id <= i:
             # Use repeating args
             repeat_i = i - op_code.repeating_argument_group.id
             index = repeat_i % len(op_code.repeating_argument_group.arguments)
@@ -412,9 +364,7 @@ class Ssb:
         return None
 
     @classmethod
-    def internal__get_all_raw_strings_from(
-        cls, data: bytes, region: str
-    ) -> list[bytes]:
+    def internal__get_all_raw_strings_from(cls, data: bytes, region: str) -> list[bytes]:
         """Returns all strings in this file, undecoded."""
 
         def _read_var_length_string_raw(stdata: bytes, start: int = 0):
@@ -453,9 +403,7 @@ class Ssb:
         else:
             raise ValueError(f"Unsupported game edition: {region}")
 
-        start_of_const_table = header.data_offset + (
-            read_u16(data, header.data_offset + 0x00) * 2
-        )
+        start_of_const_table = header.data_offset + (read_u16(data, header.data_offset + 0x00) * 2)
 
         # ### CONSTANT OFFSETS AND CONSTANT STRINGS
         # Read const offset table
@@ -464,9 +412,7 @@ class Ssb:
         for i in range(start_of_const_table, start_of_constants, 2):
             const_offset_table.append(
                 # Actual offset is start_of_constble + X - header.number_of_strings_ta
-                start_of_const_table
-                + read_u16(data, i)
-                - (header.number_of_strings * 2)
+                start_of_const_table + read_u16(data, i) - (header.number_of_strings * 2)
             )
         constants = []
         cursor = start_of_constants
@@ -480,9 +426,7 @@ class Ssb:
         if cursor % 2 != 0:
             cursor += 1
         # The end of the script block must also match the data from the header
-        assert (
-            start_of_const_table + header.number_of_constants * 2 == start_of_constants
-        )
+        assert start_of_const_table + header.number_of_constants * 2 == start_of_constants
 
         # ### STRING OFFSETS AND STRING STRINGS
         # Read strings
@@ -496,9 +440,7 @@ class Ssb:
             # Read string offset table
             for i in range(cursor, cursor + header.number_of_strings * 2, 2):
                 string_offset_table_lang.append(
-                    start_of_const_table
-                    + read_u16(data, i)
-                    + previous_languages_block_sizes
+                    start_of_const_table + read_u16(data, i) + previous_languages_block_sizes
                 )
             cursor += header.number_of_strings * 2
             # Read strings

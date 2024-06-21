@@ -190,9 +190,7 @@ class BmaProtocol(Protocol[P, C, L]):
         ...
 
     @abstractmethod
-    def place_collision(
-        self, collision_layer_id: int, x: int, y: int, is_solid: bool
-    ) -> None:
+    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
         """Set the collision at the X and Y position. No error checking is done."""
         ...
 

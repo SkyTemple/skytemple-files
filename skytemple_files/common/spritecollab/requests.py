@@ -48,9 +48,7 @@ class AioRequestAdapterImpl(AioRequestAdapter):
 
     async def fetch_bin(self, url: str) -> bytes:
         async with aiohttp.ClientSession() as session:
-            async with session.get(
-                url, timeout=aiohttp.ClientTimeout(total=120)
-            ) as resp:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=120)) as resp:
                 resp.raise_for_status()
                 return await resp.read()
 
@@ -59,9 +57,7 @@ class AioRequestAdapterImpl(AioRequestAdapter):
             import certifi  # type: ignore
             import ssl  # type: ignore
 
-            return AIOHTTPTransport(
-                url=url, ssl=ssl.create_default_context(cafile=certifi.where())
-            )
+            return AIOHTTPTransport(url=url, ssl=ssl.create_default_context(cafile=certifi.where()))
         return AIOHTTPTransport(url=url)
 
 
@@ -101,9 +97,7 @@ class CachedAIOHTTPTransport(AsyncTransport):
             import certifi
             import ssl  # type: ignore  #  pylint: disable=no-name-in-module,no-member,import-error
 
-            self._transport = AIOHTTPTransport(
-                url=url, ssl=ssl.create_default_context(cafile=certifi.where())
-            )
+            self._transport = AIOHTTPTransport(url=url, ssl=ssl.create_default_context(cafile=certifi.where()))
         else:
             self._transport = AIOHTTPTransport(url=url)
         self._cache = cache
@@ -116,9 +110,7 @@ class CachedAIOHTTPTransport(AsyncTransport):
     ) -> ExecutionResult:
         cache_key = (document, variable_values, operation_name)
         if cache_key not in self._cache.cache:
-            self._cache.cache[cache_key] = await self._transport.execute(
-                document, variable_values, operation_name
-            )
+            self._cache.cache[cache_key] = await self._transport.execute(document, variable_values, operation_name)
         return self._cache.cache[cache_key]
 
     def subscribe(

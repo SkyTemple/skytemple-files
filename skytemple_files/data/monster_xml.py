@@ -59,9 +59,7 @@ XML_GENENT_IDLE_ANIM = "IdleAnim"
 XML_GENENT_PERSONALITY = "Personality"
 XML_GENENT_UNK31 = "Unk31"
 XML_GENENT_NATIONAL_POKEDEX_NUMBER = "PokedexNumber"
-XML_GENENT_BASE_MOVEMENT_SPEED = (
-    "MovementSpeed"  # todo: this is still Unk1 in StatsUtil
-)
+XML_GENENT_BASE_MOVEMENT_SPEED = "MovementSpeed"  # todo: this is still Unk1 in StatsUtil
 XML_GENENT_EVOLUTION_REQ = "EvolutionReq"
 XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX = "PreEvoIndex"
 XML_GENENT_EVOLUTION_REQ__EVO_METHOD = "Method"
@@ -99,9 +97,7 @@ XML_GENENT_SIZE = "Size"
 XML_GENENT_UNK17 = "Unk17"
 XML_GENENT_UNK18 = "Unk18"
 XML_GENENT_SHADOW_SIZE = "ShadowSize"  # todo: this is still Unk19 in StatsUtil
-XML_GENENT_CHANCE_SPAWN_ASLEEP = (
-    "AsleepChance"  # todo: this is still Unk20 in StatsUtil
-)
+XML_GENENT_CHANCE_SPAWN_ASLEEP = "AsleepChance"  # todo: this is still Unk20 in StatsUtil
 XML_GENENT_HP_REGENERATION = "HpRegen"  # todo: this is still Unk21 in StatsUtil (lower)
 XML_GENENT_UNK21H = "Unk21h"  # todo: this is still Unk21 in StatsUtil (higher)
 XML_GENENT_BASE_FORM_INDEX = "BasePokemonIndex"
@@ -128,9 +124,7 @@ XML_STATS_GROWTH_LEVEL__DEFENSE = "Defense"
 XML_STATS_GROWTH_LEVEL__SP_DEFENSE = "SpDefense"
 XML_PORTRAITS = "Portraits"
 XML_PORTRAITS_PORTRAIT = "Portrait"
-XML_PORTRAITS_PORTRAIT__IMAGE = (
-    "At4pxImage"  # TODO: Change this to AtImage (could broke already exported xml data)
-)
+XML_PORTRAITS_PORTRAIT__IMAGE = "At4pxImage"  # TODO: Change this to AtImage (could broke already exported xml data)
 XML_PORTRAITS_PORTRAIT__PALETTE = "Palette"
 
 XML_GENENT__MAP__SIMPLE = {
@@ -214,19 +208,11 @@ class StringsXml(XmlConverter[dict[str, tuple[str, str]]]):
                         category = xml_sub.text
                 if name is None:
                     raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. '{XML_STRINGS__NAME}' missing for language {xml_lang.tag}."
-                            )
-                        )
+                        f(_("Invalid XML. '{XML_STRINGS__NAME}' missing for language {xml_lang.tag}."))
                     )
                 if category is None:
                     raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. '{XML_STRINGS__CATEGORY}' missing for language {xml_lang.tag}."
-                            )
-                        )
+                        f(_("Invalid XML. '{XML_STRINGS__CATEGORY}' missing for language {xml_lang.tag}."))
                     )
                 value_to_update[xml_lang.tag] = (name, category)
 
@@ -255,90 +241,42 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
             xml.append(create_elem_w_text(xml_name, attr_val))
         # Personality
         if base_value.personality is not None:
-            xml.append(
-                create_elem_w_text(XML_GENENT_PERSONALITY, base_value.personality)
-            )
+            xml.append(create_elem_w_text(XML_GENENT_PERSONALITY, base_value.personality))
         # Idle Animation
         if base_value.idle_anim is not None:
             xml.append(create_elem_w_text(XML_GENENT_IDLE_ANIM, base_value.idle_anim))
         # Evolution requirements
         evo = Element(XML_GENENT_EVOLUTION_REQ)
-        evo.append(
-            create_elem_w_text(
-                XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, value.pre_evo_index
-            )
-        )
-        evo.append(
-            create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_METHOD, value.evo_method)
-        )
-        evo.append(
-            create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM1, value.evo_param1)
-        )
-        evo.append(
-            create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2)
-        )
+        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__PRE_EVO_INDEX, value.pre_evo_index))
+        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_METHOD, value.evo_method))
+        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM1, value.evo_param1))
+        evo.append(create_elem_w_text(XML_GENENT_EVOLUTION_REQ__EVO_PRAM2, value.evo_param2))
         xml.append(evo)
         # Base stats
         stats = Element(XML_GENENT_BASE_STATS)
         stats.append(create_elem_w_text(XML_GENENT_BASE_STATS__HP, value.base_hp))
         stats.append(create_elem_w_text(XML_GENENT_BASE_STATS__ATTACK, value.base_atk))
-        stats.append(
-            create_elem_w_text(XML_GENENT_BASE_STATS__SP_ATTACK, value.base_sp_atk)
-        )
+        stats.append(create_elem_w_text(XML_GENENT_BASE_STATS__SP_ATTACK, value.base_sp_atk))
         stats.append(create_elem_w_text(XML_GENENT_BASE_STATS__DEFENSE, value.base_def))
-        stats.append(
-            create_elem_w_text(XML_GENENT_BASE_STATS__SP_DEFENSE, value.base_sp_def)
-        )
+        stats.append(create_elem_w_text(XML_GENENT_BASE_STATS__SP_DEFENSE, value.base_sp_def))
         xml.append(stats)
         # Exclusive items
         items = Element(XML_GENENT_EXCLUSIVE_ITEMS)
-        items.append(
-            create_elem_w_text(
-                XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item1
-            )
-        )
-        items.append(
-            create_elem_w_text(
-                XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item2
-            )
-        )
-        items.append(
-            create_elem_w_text(
-                XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item3
-            )
-        )
-        items.append(
-            create_elem_w_text(
-                XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item4
-            )
-        )
+        items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item1))
+        items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item2))
+        items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item3))
+        items.append(create_elem_w_text(XML_GENENT_EXCLUSIVE_ITEMS__ITEM_ID, value.exclusive_item4))
         xml.append(items)
         # Bitfield
         items = Element(XML_GENENT_BITFLAG1)
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK0, int(value.bitfield1_0))
-        )
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK1, int(value.bitfield1_1))
-        )
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK2, int(value.bitfield1_2))
-        )
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK3, int(value.bitfield1_3))
-        )
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK0, int(value.bitfield1_0)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK1, int(value.bitfield1_1)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK2, int(value.bitfield1_2)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK3, int(value.bitfield1_3)))
         items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK4, int(value.can_move)))
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK5, int(value.bitfield1_5))
-        )
-        items.append(
-            create_elem_w_text(XML_GENENT_BITFLAG1__UNK6, int(value.can_evolve))
-        )
-        items.append(
-            create_elem_w_text(
-                XML_GENENT_BITFLAG1__UNK7, int(value.item_required_for_spawning)
-            )
-        )
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK5, int(value.bitfield1_5)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK6, int(value.can_evolve)))
+        items.append(create_elem_w_text(XML_GENENT_BITFLAG1__UNK7, int(value.item_required_for_spawning)))
         xml.append(items)
         return xml
 
@@ -418,35 +356,15 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
                     elif value_xml.tag == XML_GENENT_BASE_STATS__SP_DEFENSE:
                         sp_defense = int(value_xml.text)
                 if hp is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BASE_STATS__HP, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BASE_STATS__HP, XML_GENENT_BASE_STATS))
                 if attack is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BASE_STATS__ATTACK, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BASE_STATS__ATTACK, XML_GENENT_BASE_STATS))
                 if sp_attack is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BASE_STATS__SP_ATTACK, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BASE_STATS__SP_ATTACK, XML_GENENT_BASE_STATS))
                 if defense is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BASE_STATS__DEFENSE, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BASE_STATS__DEFENSE, XML_GENENT_BASE_STATS))
                 if sp_defense is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_STATS_GROWTH_LEVEL__SP_DEFENSE, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_STATS_GROWTH_LEVEL__SP_DEFENSE, XML_GENENT_BASE_STATS))
                 value_to_update.base_hp = hp
                 value_to_update.base_atk = attack
                 value_to_update.base_sp_atk = sp_attack
@@ -454,13 +372,7 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
                 value_to_update.base_sp_def = sp_defense
             if sub_xml.tag == XML_GENENT_EXCLUSIVE_ITEMS:
                 if len(sub_xml) != 4:
-                    raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. '{XML_GENENT_EXCLUSIVE_ITEMS}' needs four item IDs."
-                            )
-                        )
-                    )
+                    raise XmlValidateError(f(_("Invalid XML. '{XML_GENENT_EXCLUSIVE_ITEMS}' needs four item IDs.")))
                 update = (
                     "exclusive_item1",
                     "exclusive_item2",
@@ -497,53 +409,21 @@ class GenderedEntityXml(XmlConverter[GenderedConvertEntry]):
                     elif value_xml.tag == XML_GENENT_BITFLAG1__UNK7:
                         unk7 = bool(int(value_xml.text))
                 if unk0 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK0, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK0, XML_GENENT_BASE_STATS))
                 if unk1 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK1, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK1, XML_GENENT_BASE_STATS))
                 if unk2 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK2, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK2, XML_GENENT_BASE_STATS))
                 if unk3 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK3, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK3, XML_GENENT_BASE_STATS))
                 if unk4 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK4, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK4, XML_GENENT_BASE_STATS))
                 if unk5 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK5, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK5, XML_GENENT_BASE_STATS))
                 if unk6 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK6, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK6, XML_GENENT_BASE_STATS))
                 if unk7 is None:
-                    raise XmlValidateError(
-                        cls._missing_err(
-                            XML_GENENT_BITFLAG1__UNK7, XML_GENENT_BASE_STATS
-                        )
-                    )
+                    raise XmlValidateError(cls._missing_err(XML_GENENT_BITFLAG1__UNK7, XML_GENENT_BASE_STATS))
                 value_to_update.bitfield1_0 = unk0
                 value_to_update.bitfield1_1 = unk1
                 value_to_update.bitfield1_2 = unk2
@@ -565,12 +445,8 @@ class MovesetXml(XmlConverter[MoveLearnsetProtocol]):
         level_up = Element(XML_MOVESET_LEVEL_UP)
         for level_up_move in value.level_up_moves:
             learn = Element(XML_MOVESET_LEVEL_UP__LEARN)
-            learn.append(
-                create_elem_w_text(XML_MOVESET_LEVEL_UP__LEVEL, level_up_move.level_id)
-            )
-            learn.append(
-                create_elem_w_text(XML_MOVESET__MOVE_ID, level_up_move.move_id)
-            )
+            learn.append(create_elem_w_text(XML_MOVESET_LEVEL_UP__LEVEL, level_up_move.level_id))
+            learn.append(create_elem_w_text(XML_MOVESET__MOVE_ID, level_up_move.move_id))
             level_up.append(learn)
 
         egg = Element(XML_MOVESET_EGG)
@@ -602,23 +478,13 @@ class MovesetXml(XmlConverter[MoveLearnsetProtocol]):
                             move_id = int(xml_level_or_move.text)
                     if level is None:
                         raise XmlValidateError(
-                            f(
-                                _(
-                                    "Invalid XML. '{XML_MOVESET_LEVEL_UP__LEVEL}' missing for a level up moveset entry."
-                                )
-                            )
+                            f(_("Invalid XML. '{XML_MOVESET_LEVEL_UP__LEVEL}' missing for a level up moveset entry."))
                         )
                     if move_id is None:
                         raise XmlValidateError(
-                            f(
-                                _(
-                                    "Invalid XML. '{XML_MOVESET__MOVE_ID}' missing for a level up moveset entry."
-                                )
-                            )
+                            f(_("Invalid XML. '{XML_MOVESET__MOVE_ID}' missing for a level up moveset entry."))
                         )
-                    new_level_up.append(
-                        FileType.WAZA_P.get_level_up_model()(move_id, level)
-                    )
+                    new_level_up.append(FileType.WAZA_P.get_level_up_model()(move_id, level))
                 value_to_update.level_up_moves = new_level_up
             elif xml_type.tag == XML_MOVESET_EGG:
                 new_eggs = []
@@ -640,32 +506,12 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
         xml = Element(XML_STATS_GROWTH)
         for level in value.levels:
             level_xml = Element(XML_STATS_GROWTH_LEVEL)
-            level_xml.append(
-                create_elem_w_text(
-                    XML_STATS_GROWTH_LEVEL__REQUIRED_EXP, level.experience_required
-                )
-            )
-            level_xml.append(
-                create_elem_w_text(XML_STATS_GROWTH_LEVEL__HP, level.hp_growth)
-            )
-            level_xml.append(
-                create_elem_w_text(XML_STATS_GROWTH_LEVEL__ATTACK, level.attack_growth)
-            )
-            level_xml.append(
-                create_elem_w_text(
-                    XML_STATS_GROWTH_LEVEL__SP_ATTACK, level.special_attack_growth
-                )
-            )
-            level_xml.append(
-                create_elem_w_text(
-                    XML_STATS_GROWTH_LEVEL__DEFENSE, level.defense_growth
-                )
-            )
-            level_xml.append(
-                create_elem_w_text(
-                    XML_STATS_GROWTH_LEVEL__SP_DEFENSE, level.special_defense_growth
-                )
-            )
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__REQUIRED_EXP, level.experience_required))
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__HP, level.hp_growth))
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__ATTACK, level.attack_growth))
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__SP_ATTACK, level.special_attack_growth))
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__DEFENSE, level.defense_growth))
+            level_xml.append(create_elem_w_text(XML_STATS_GROWTH_LEVEL__SP_DEFENSE, level.special_defense_growth))
             xml.append(level_xml)
         return xml
 
@@ -674,9 +520,7 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
     @no_type_check
     def from_xml(cls, xml: Element, value_to_update: LevelBinEntry):
         if len(xml) != 100:
-            raise XmlValidateError(
-                _("Invalid XML. StatsGrowth must have exactly 100 levels.")
-            )
+            raise XmlValidateError(_("Invalid XML. StatsGrowth must have exactly 100 levels."))
         for i, xml_level in enumerate(xml):
             validate_xml_tag(xml_level, XML_STATS_GROWTH_LEVEL)
             required_exp = None
@@ -700,37 +544,23 @@ class StatsGrowthXml(XmlConverter[LevelBinEntry]):
                     sp_defense = int(xml_stat.text)
             if required_exp is None:
                 x = XML_STATS_GROWTH_LEVEL__REQUIRED_EXP  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
             if hp is None:
                 x = XML_STATS_GROWTH_LEVEL__HP  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
             if attack is None:
                 x = XML_STATS_GROWTH_LEVEL__ATTACK  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
             if sp_attack is None:
                 x = XML_STATS_GROWTH_LEVEL__SP_ATTACK  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
             if defense is None:
                 x = XML_STATS_GROWTH_LEVEL__DEFENSE  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
             if sp_defense is None:
                 x = XML_STATS_GROWTH_LEVEL__SP_DEFENSE  # noqa:F841
-                raise XmlValidateError(
-                    f(_("Invalid XML. '{x}' missing for a stats growth level entry."))
-                )
-            value_to_update.levels[i] = LevelEntry(
-                required_exp, hp, attack, sp_attack, defense, sp_defense, 0
-            )
+                raise XmlValidateError(f(_("Invalid XML. '{x}' missing for a stats growth level entry.")))
+            value_to_update.levels[i] = LevelEntry(required_exp, hp, attack, sp_attack, defense, sp_defense, 0)
 
 
 class PortraitsXml(XmlConverter[list[Optional[KaoImageProtocol]]]):
@@ -770,19 +600,11 @@ class PortraitsXml(XmlConverter[list[Optional[KaoImageProtocol]]]):
                         palette = xml_image_or_pal.text
                 if image is None:
                     raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. '{XML_PORTRAITS_PORTRAIT__IMAGE}' missing for a portrait."
-                            )
-                        )
+                        f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__IMAGE}' missing for a portrait."))
                     )
                 if palette is None:
                     raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."
-                            )
-                        )
+                        f(_("Invalid XML. '{XML_PORTRAITS_PORTRAIT__PALETTE}' missing for a portrait."))
                     )
                 try:
                     value_to_update[  # type: ignore
@@ -793,11 +615,7 @@ class PortraitsXml(XmlConverter[list[Optional[KaoImageProtocol]]]):
                     )
                 except Exception as err:
                     raise XmlValidateError(
-                        f(
-                            _(
-                                "Invalid XML. The portrait data of one of the portraits is invalid: {err}"
-                            )
-                        )
+                        f(_("Invalid XML. The portrait data of one of the portraits is invalid: {err}"))
                     ) from err
             else:
                 value_to_update[i] = None  # type: ignore
@@ -829,17 +647,13 @@ def monster_xml_export(
     if md_gender1:
         xml.append(
             GenderedEntityXml.to_xml(
-                GenderedConvertEntry(
-                    md_gender1, personality1, idle_anim1.value if idle_anim1 else None
-                )
+                GenderedConvertEntry(md_gender1, personality1, idle_anim1.value if idle_anim1 else None)
             )
         )
     if md_gender2:
         xml.append(
             GenderedEntityXml.to_xml(
-                GenderedConvertEntry(
-                    md_gender2, personality2, idle_anim2.value if idle_anim2 else None
-                )
+                GenderedConvertEntry(md_gender2, personality2, idle_anim2.value if idle_anim2 else None)
             )
         )
     if moveset:
@@ -871,17 +685,9 @@ def monster_xml_import(
     The lists can already be filled, they will be cleared and re-filled when data is avaiable.
     Returns the game version.
     """
-    genent_counter = (
-        1
-        if md_gender1 is None and len([s for s in xml if s.tag == XML_GENENT]) == 1
-        else 0
-    )
+    genent_counter = 1 if md_gender1 is None and len([s for s in xml if s.tag == XML_GENENT]) == 1 else 0
     moveset_counter = 0
-    portraits_counter = (
-        1
-        if portraits is None and len([s for s in xml if s.tag == XML_PORTRAITS]) == 1
-        else 0
-    )
+    portraits_counter = 1 if portraits is None and len([s for s in xml if s.tag == XML_PORTRAITS]) == 1 else 0
     for sub_node in xml:
         if sub_node.tag == XML_GENENT:
             if genent_counter == 0:

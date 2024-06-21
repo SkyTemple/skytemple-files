@@ -29,9 +29,7 @@ def randomize_item_p_entry(entry: ItemPEntryProtocol):
 if __name__ == "__main__":
     rom = NintendoDSRom.fromFile("/tmp/rom.nds")
 
-    item_p = ItemPHandler.load_python_model()(
-        rom.getFileByName("BALANCE/item_p.bin"), 0
-    )
+    item_p = ItemPHandler.load_python_model()(rom.getFileByName("BALANCE/item_p.bin"), 0)
 
     entries = item_p.item_list[0:6]
 

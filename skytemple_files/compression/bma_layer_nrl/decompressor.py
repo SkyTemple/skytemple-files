@@ -84,9 +84,7 @@ class BmaLayerNrlDecompressor:
         else:  # elif cmd > CMD_1_COPY_BYTES:
             # cmd - CMD_COPY_BYTES. Copy the next three bytes and repeat.
             if DEBUG:
-                print(
-                    f"READ {3*(cmd - (CMD_COPY_BYTES-1))} - WRITE {3*(cmd - (CMD_COPY_BYTES-1))}"
-                )
+                print(f"READ {3*(cmd - (CMD_COPY_BYTES-1))} - WRITE {3*(cmd - (CMD_COPY_BYTES-1))}")
             for i in range(CMD_COPY_BYTES - 1, cmd):
                 param = self._read(3)
                 self._write(param)
@@ -99,14 +97,10 @@ class BmaLayerNrlDecompressor:
     def _read(self, bytes=1):
         """Read bytes and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError(
-                "BMA Layer NRL Decompressor: Reached EOF while reading compressed data."
-            )
+            raise ValueError("BMA Layer NRL Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += bytes
-        return read_dynamic(
-            self.compressed_data, oc, length=bytes, big_endian=True, signed=False
-        )
+        return read_dynamic(self.compressed_data, oc, length=bytes, big_endian=True, signed=False)
 
     def _write(self, pattern_to_write):
         """Writes the pattern to the output as 2 16 bit integers"""
@@ -120,14 +114,8 @@ class BmaLayerNrlDecompressor:
         # 01 20 00 -> 00 10 02 -> 001 002
         # 11 20 01 -> 01 10 12 -> 011 012
         v1 = ((0xFF0000 & pattern_to_write) >> 16) + (0x000F00 & pattern_to_write)
-        v2 = ((0x0000FF & pattern_to_write) << 4) + (
-            (0x00F000 & pattern_to_write) >> 12
-        )
-        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = (
-            v1.to_bytes(2, "little")
-        )
+        v2 = ((0x0000FF & pattern_to_write) << 4) + ((0x00F000 & pattern_to_write) >> 12)
+        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = v1.to_bytes(2, "little")
         self.bytes_written += 2
-        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = (
-            v2.to_bytes(2, "little")
-        )
+        self.decompressed_data[self.bytes_written : self.bytes_written + 1] = v2.to_bytes(2, "little")
         self.bytes_written += 2

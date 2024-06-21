@@ -61,9 +61,7 @@ class Sir0(Sir0Protocol):
 
         # The first two are for the pointers in the header, we remove them now, they are not
         # part of the content pointers
-        content_pointer_offsets: list[u32] = [
-            u32_checked(pnt - HEADER_LEN) for pnt in pointer_offsets[2:]
-        ]
+        content_pointer_offsets: list[u32] = [u32_checked(pnt - HEADER_LEN) for pnt in pointer_offsets[2:]]
 
         return cls(
             bytes(data[HEADER_LEN:pointer_offset_list_pointer]),
@@ -74,7 +72,5 @@ class Sir0(Sir0Protocol):
     # Based on C++ algorithm by psy_commando from
     # https://projectpokemon.org/docs/mystery-dungeon-nds/sir0siro-format-r46/
     @classmethod
-    def _decode_pointer_offsets(
-        cls, data: bytes, pointer_offset_list_pointer: u32
-    ) -> Sequence[u32]:
+    def _decode_pointer_offsets(cls, data: bytes, pointer_offset_list_pointer: u32) -> Sequence[u32]:
         return decode_sir0_pointer_offsets(data, pointer_offset_list_pointer)

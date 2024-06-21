@@ -150,6 +150,4 @@ class PxDecompressor:
         bytes_to_copy = high_nibble + PX_MIN_MATCH_SEQLEN
         if DEBUG:
             print(f"> Copying {bytes_to_copy} from offset: {offset}")
-        self.uncompressed_data += read_bytes(
-            self.uncompressed_data, copy_pos, bytes_to_copy
-        )
+        self.uncompressed_data += read_bytes(self.uncompressed_data, copy_pos, bytes_to_copy)

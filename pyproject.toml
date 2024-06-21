@@ -58,6 +58,7 @@ spritecollab = [
 skytemple_export_maps = "skytemple_files.export_maps:main"
 
 [tool.ruff]
+line-length = 120
 extend-exclude = [
     "fixture_autogen.py",
     "fixture_autogen.pyi",

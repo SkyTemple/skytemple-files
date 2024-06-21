@@ -67,9 +67,7 @@ class BannerFontEntry(AbstractFontEntry):
         self.data = data
 
     def to_pil(self) -> Image.Image:
-        image = Image.frombytes(
-            mode="P", size=(BANNER_FONT_SIZE, BANNER_FONT_SIZE), data=self.data
-        )
+        image = Image.frombytes(mode="P", size=(BANNER_FONT_SIZE, BANNER_FONT_SIZE), data=self.data)
         return image
 
     def to_xml(self) -> Element:
@@ -93,9 +91,7 @@ class BannerFontEntry(AbstractFontEntry):
             self.width = i16(properties["width"])
 
     @classmethod
-    def from_pil(
-        cls, img: Image.Image, char: u8, table: u8, width: i16
-    ) -> BannerFontEntry:
+    def from_pil(cls, img: Image.Image, char: u8, table: u8, width: i16) -> BannerFontEntry:
         if img.mode != "P":
             raise AttributeError(_("This must be a color indexed image!"))
         return BannerFontEntry(char, table, width, img.tobytes("raw", "P"))
@@ -137,9 +133,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
                     read_u8(data, i + 0x04),
                     read_u8(data, i + 0x05),
                     read_i16(data, i + 0x06),
-                    FileType.RLE_NIBBLE.decompress(
-                        data[pt_data:], BANNER_FONT_DATA_LEN
-                    ),
+                    FileType.RLE_NIBBLE.decompress(data[pt_data:], BANNER_FONT_DATA_LEN),
                 )
             )
 
@@ -193,9 +187,7 @@ class BannerFont(Sir0Serializable, AbstractFont):
     def to_pil(self) -> dict[int, Image.Image]:
         tables = dict()
         for t in FONT_VALID_TABLES:
-            tables[t] = Image.new(
-                mode="P", size=(BANNER_FONT_SIZE * 16, BANNER_FONT_SIZE * 16), color=0
-            )
+            tables[t] = Image.new(mode="P", size=(BANNER_FONT_SIZE * 16, BANNER_FONT_SIZE * 16), color=0)
             tables[t].putpalette(self.get_palette_raw())
         for item in self.entries:
             if item.table in FONT_VALID_TABLES:

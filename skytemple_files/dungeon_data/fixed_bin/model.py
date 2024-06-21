@@ -111,9 +111,7 @@ class TileRuleType(Enum):
         RoomType.HALLWAY,
         False,
         False,
-        _(
-            'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
-        ),
+        _('Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'),
     )
     SECONDARY_HALLWAY_VOID_ALL = (
         0x07,
@@ -152,9 +150,7 @@ class TileRuleType(Enum):
         RoomType.HALLWAY,
         True,
         False,
-        _(
-            'Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'
-        ),
+        _('Tile type is forced to be "Void / Chasm" (Still rendered as tileset\'s secondary terrain!).'),
     )
     FLOOR_HALLWAY_FLAG_0A = (
         0x0B,
@@ -314,15 +310,11 @@ class FixedFloorActionRule(ABC, AutoString):
         pass
 
     def __int__(self):
-        return (self._get_action_id() & 0xFFF) + (
-            (self.direction.ssa_id if self.direction is not None else 0) << 0xC
-        )
+        return (self._get_action_id() & 0xFFF) + ((self.direction.ssa_id if self.direction is not None else 0) << 0xC)
 
 
 class TileRule(FixedFloorActionRule):
-    def __init__(
-        self, tr_type: TileRuleType, direction: Pmd2ScriptDirection | None = None
-    ):
+    def __init__(self, tr_type: TileRuleType, direction: Pmd2ScriptDirection | None = None):
         super().__init__(direction)
         self.tr_type = tr_type
 
@@ -331,9 +323,7 @@ class TileRule(FixedFloorActionRule):
 
 
 class EntityRule(FixedFloorActionRule):
-    def __init__(
-        self, entity_rule_id: int, direction: Pmd2ScriptDirection | None = None
-    ):
+    def __init__(self, entity_rule_id: int, direction: Pmd2ScriptDirection | None = None):
         super().__init__(direction)
         self.entity_rule_id = entity_rule_id
 
@@ -369,9 +359,7 @@ class FixedFloor:
             self.width = read_u16(data, floor_pointer)
             self.height = read_u16(data, floor_pointer + 2)
             self.unk4 = read_u16(data, floor_pointer + 4)
-            self.actions = self.read_actions(
-                data, floor_pointer + 6, self.width * self.height
-            )
+            self.actions = self.read_actions(data, floor_pointer + 6, self.width * self.height)
 
     @classmethod
     def new(cls, width: u16, height: u16, actions: list[FixedFloorActionRule]):
@@ -381,9 +369,7 @@ class FixedFloor:
         n.actions = actions
         return n
 
-    def read_actions(
-        self, data: bytes, action_list_start: int, max_actions: int
-    ) -> list[FixedFloorActionRule]:
+    def read_actions(self, data: bytes, action_list_start: int, max_actions: int) -> list[FixedFloorActionRule]:
         cursor = action_list_start
         actions: list[FixedFloorActionRule] = []
         while len(actions) < max_actions:
@@ -395,9 +381,7 @@ class FixedFloor:
         ), "The number of actions encoded does not match the width & height of the map."
         return actions
 
-    def _read_action(
-        self, data: bytes, action_pointer: int
-    ) -> tuple[FixedFloorActionRule, int]:
+    def _read_action(self, data: bytes, action_pointer: int) -> tuple[FixedFloorActionRule, int]:
         action_value = read_u16(data, action_pointer)
         action_id = action_value & 0xFFF
         parameter = action_value >> 0xC

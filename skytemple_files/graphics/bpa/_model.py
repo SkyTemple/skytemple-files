@@ -77,8 +77,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
                 data,
                 slice_size,
                 end_header,
-                end_header
-                + (slice_size * self.number_of_frames * self.number_of_tiles),
+                end_header + (slice_size * self.number_of_frames * self.number_of_tiles),
             )
         ):
             self.tiles.append(bytearray(tile))
@@ -122,13 +121,9 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
             return None
         height = math.ceil(etr / width_in_tiles) * BPA_TILE_DIM
 
-        return to_pil(
-            dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height
-        )
+        return to_pil(dummy_tile_map, self.tiles, [palette], BPA_TILE_DIM, width, height)
 
-    def tiles_to_pil_separate(
-        self, palette: Sequence[int], width_in_tiles: int = 20
-    ) -> list[Image.Image]:
+    def tiles_to_pil_separate(self, palette: Sequence[int], width_in_tiles: int = 20) -> list[Image.Image]:
         """
         Exports the BPA as an image, where each row of 8x8 tiles is the
         animation set for a single tile. The 16 color palette passed is used to color the image.
@@ -152,9 +147,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         height = math.ceil(self.number_of_tiles / width_in_tiles) * BPA_TILE_DIM
 
         images = []
-        for frame_start in range(
-            0, self.number_of_tiles * self.number_of_frames, self.number_of_tiles
-        ):
+        for frame_start in range(0, self.number_of_tiles * self.number_of_frames, self.number_of_tiles):
             images.append(
                 to_pil(
                     dummy_tile_map[frame_start : frame_start + self.number_of_tiles],
@@ -214,9 +207,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
                 raise ValueError(_("The dimensions of all images must be the same."))
         self.tiles = []
         self.number_of_frames = u16_checked(len(frames))
-        self.number_of_tiles = u16_checked(
-            int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM))
-        )
+        self.number_of_tiles = u16_checked(int((images[0].height * images[0].width) / (BPA_TILE_DIM * BPA_TILE_DIM)))
 
         for tile in frames:
             self.tiles += tile
@@ -239,6 +230,4 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
 
     def tiles_for_frame(self, frame: int) -> Sequence[bytes]:
         """Returns the tiles for the specified frame. Strips the empty dummy tile image at the beginning."""
-        return self.tiles[
-            frame * self.number_of_tiles : (frame + 1) * self.number_of_tiles
-        ]
+        return self.tiles[frame * self.number_of_tiles : (frame + 1) * self.number_of_tiles]

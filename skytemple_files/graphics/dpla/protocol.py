@@ -69,9 +69,7 @@ class DplaProtocol(Sir0Serializable, Protocol):
         ...
 
     @abstractmethod
-    def apply_palette_animations(
-        self, palettes: Sequence[Sequence[int]], frame_idx: int
-    ) -> list[list[int]]:
+    def apply_palette_animations(self, palettes: Sequence[Sequence[int]], frame_idx: int) -> list[list[int]]:
         """
         Returns a modified copy of `palettes`.
 

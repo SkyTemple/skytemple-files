@@ -74,11 +74,7 @@ class ProjectFileManager:
         filename = self._explorerscript_resolve_filename(filename, EXPLORERSCRIPT_EXT)
         with open_utf8(filename, "r") as f:
             source_code = f.read()
-        sourcemap = (
-            self.explorerscript_load_sourcemap(filename)
-            if sourcemap
-            else SourceMap.create_empty()
-        )
+        sourcemap = self.explorerscript_load_sourcemap(filename) if sourcemap else SourceMap.create_empty()
         return source_code, sourcemap
 
     def explorerscript_load_sourcemap(self, filename) -> SourceMap:
@@ -107,9 +103,7 @@ class ProjectFileManager:
         with open_utf8(filename, "w") as f:
             f.write(new_hash)
 
-    def explorerscript_include_usage_remove(
-        self, filename, ssb_filename_that_is_included
-    ):
+    def explorerscript_include_usage_remove(self, filename, ssb_filename_that_is_included):
         """Removes an entry from the inclusion map for filename (can be SSB filename or inclusion map filename)."""
         filename = self._explorerscript_resolve_filename(
             filename, EXPLORERSCRIPT_EXT + EXPLORERSCRIPT_INCLUSION_MAP_SUFFIX
@@ -133,33 +127,22 @@ class ProjectFileManager:
         """
         Returns a relative path (relative to project dir) to an exps file for a given ssb file.
         """
-        return self._explorerscript_resolve_filename__relative(
-            ssb_filename, EXPLORERSCRIPT_EXT
-        )
+        return self._explorerscript_resolve_filename__relative(ssb_filename, EXPLORERSCRIPT_EXT)
 
-    def _explorerscript_resolve_filename__relative(
-        self, filename: str, desired_extension: str
-    ) -> str:
+    def _explorerscript_resolve_filename__relative(self, filename: str, desired_extension: str) -> str:
         """
         Removes the file extension and adds the desired extension.
         Returns the path relative to the project dir.
         """
-        return (
-            ".".join(filename.split(".")[:-1]).replace("/", os.path.sep)
-            + desired_extension
-        )
+        return ".".join(filename.split(".")[:-1]).replace("/", os.path.sep) + desired_extension
 
-    def _explorerscript_resolve_filename(
-        self, filename: str, desired_extension: str
-    ) -> str:
+    def _explorerscript_resolve_filename(self, filename: str, desired_extension: str) -> str:
         """
         Like the __relative version, but returns the full path and makes sure, that the directory exists.
         """
         filename = os.path.join(
             self.directory_name,
-            self._explorerscript_resolve_filename__relative(
-                filename, desired_extension
-            ),
+            self._explorerscript_resolve_filename__relative(filename, desired_extension),
         )
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         return filename

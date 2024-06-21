@@ -424,9 +424,7 @@ class DpciTestCase(SkyTempleFilesTestCase[DpciHandler, DpciProtocol]):
         two.import_tiles(list(dummy_tiles), False)
 
         self.assertEqual(dummy_tiles, self.one.tiles)
-        self.assertEqual(
-            [bytearray(int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))] + dummy_tiles, two.tiles
-        )
+        self.assertEqual([bytearray(int(DPCI_TILE_DIM * DPCI_TILE_DIM / 2))] + dummy_tiles, two.tiles)
 
         saved1 = self._save_and_reload_main_fixture(self.one)
         saved2 = self._save_and_reload_main_fixture(two)

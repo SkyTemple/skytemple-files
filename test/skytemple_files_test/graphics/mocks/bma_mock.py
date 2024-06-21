@@ -92,9 +92,7 @@ class BmaStub(BmaProtocol[P, C, L]):
     def place_chunk(self, layer_id: int, x: int, y: int, chunk_index: int) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
-    def place_collision(
-        self, collision_layer_id: int, x: int, y: int, is_solid: bool
-    ) -> None:
+    def place_collision(self, collision_layer_id: int, x: int, y: int, is_solid: bool) -> None:
         raise NotImplementedError("Not implemented on mock.")
 
     def place_data(self, x: int, y: int, data: int) -> None:

@@ -80,9 +80,7 @@ class Icon:
         )
 
     def from_pil(self, img: Image.Image) -> None:
-        tiles, _, pals = from_pil(
-            img, 16, 1, ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False
-        )
+        tiles, _, pals = from_pil(img, 16, 1, ICON_DIM_TILE, ICON_DIM_IMG_PX, ICON_DIM_IMG_PX, optimize=False)
         self.bitmap = bytes(itertools.chain.from_iterable(tiles))
         self._palette = pals[0]
 
@@ -101,24 +99,12 @@ class IconBanner:
 
         self.icon = Icon(read_bytes(data, 0x20, 0x200), read_bytes(data, 0x220, 0x20))
 
-        self.title_japanese = (
-            read_bytes(data, 0x240, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
-        self.title_english = (
-            read_bytes(data, 0x340, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
-        self.title_french = (
-            read_bytes(data, 0x440, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
-        self.title_german = (
-            read_bytes(data, 0x540, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
-        self.title_italian = (
-            read_bytes(data, 0x640, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
-        self.title_spanish = (
-            read_bytes(data, 0x740, 0x100).decode("UTF-16LE").rstrip("\x00")
-        )
+        self.title_japanese = read_bytes(data, 0x240, 0x100).decode("UTF-16LE").rstrip("\x00")
+        self.title_english = read_bytes(data, 0x340, 0x100).decode("UTF-16LE").rstrip("\x00")
+        self.title_french = read_bytes(data, 0x440, 0x100).decode("UTF-16LE").rstrip("\x00")
+        self.title_german = read_bytes(data, 0x540, 0x100).decode("UTF-16LE").rstrip("\x00")
+        self.title_italian = read_bytes(data, 0x640, 0x100).decode("UTF-16LE").rstrip("\x00")
+        self.title_spanish = read_bytes(data, 0x740, 0x100).decode("UTF-16LE").rstrip("\x00")
 
     def save_to_rom(self) -> None:
         data = bytearray(ICON_BANNER_SIZE)

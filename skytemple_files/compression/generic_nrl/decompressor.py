@@ -83,9 +83,7 @@ class GenericNrlDecompressor:
         else:  # elif cmd > CMD_COPY_BYTES:
             # cmd - CMD_COPY_BYTES. Copy the next byte and repeat.
             if DEBUG:
-                print(
-                    f"READ {(cmd - (CMD_COPY_BYTES-1))} - WRITE {(cmd - (CMD_COPY_BYTES-1))}"
-                )
+                print(f"READ {(cmd - (CMD_COPY_BYTES-1))} - WRITE {(cmd - (CMD_COPY_BYTES-1))}")
             for i in range(CMD_COPY_BYTES - 1, cmd):
                 param = self._read()
                 self._write(param)
@@ -98,9 +96,7 @@ class GenericNrlDecompressor:
     def _read(self):
         """Read a single byte and increase cursor"""
         if self.cursor >= self.max_size:
-            raise ValueError(
-                "Generic NRL Decompressor: Reached EOF while reading compressed data."
-            )
+            raise ValueError("Generic NRL Decompressor: Reached EOF while reading compressed data.")
         oc = self.cursor
         self.cursor += 1
         return read_u8(self.compressed_data, oc)

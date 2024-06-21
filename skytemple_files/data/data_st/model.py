@@ -55,7 +55,4 @@ class DataST(AutoString):
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DataST):
             return False
-        return (
-            self.struct_ids == other.struct_ids
-            and self.struct_data == other.struct_data
-        )
+        return self.struct_ids == other.struct_ids and self.struct_data == other.struct_data

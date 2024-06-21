@@ -1,0 +1,814 @@
+macro WaitUnlockLives($lock, $actor)
+{
+    WaitLockLives($lock, $actor);
+    Unlock($lock);
+}
+
+macro WaitUnlockObject($lock, $object)
+{
+    WaitLockObject($lock, $object);
+    Unlock($lock);
+}
+
+macro WaitUnlockPerformer($lock, $performer)
+{
+    WaitLockObject($lock, $performer);
+    Unlock($lock);
+}
+
+macro WaitUnlockMain()
+{
+    WaitLockSupervision(20);
+    Unlock(20);
+}
+
+macro shake($duration)
+{
+    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    {
+        Slide2PositionOffset(1, -1, 0);
+        Wait(2);
+        Slide2PositionOffset(1, 1, 0);
+        Wait(2);
+    }
+}
+
+macro spotlight($x, $y, $size, $speed)
+{
+    supervision_SpecialActing(27, 0, 0);
+    supervision_SpecialActing(28, $x, $y);
+    supervision_SpecialActing(29, $size, 0);
+    supervision_SpecialActing(30, $speed, 0);
+}
+
+macro camera_shake($time, $arg0, $arg1, $arg3)
+{
+    camera_SetEffect($arg0, $arg1, $arg3);
+    Wait($time);
+    camera_SetEffect(0, 0, 0);
+}
+
+macro amber_hop_once()
+{
+    SetAnimation(5);
+    Wait(23);
+    SetAnimation(2);
+}
+
+macro amber_hop_se($duration)
+{
+    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    {
+        se_PlayVolume(257, 128);
+        Wait(23);
+    }
+}
+
+macro nod()
+{
+    SetAnimation(31);
+    WaitAnimation();
+    SetAnimation(2);
+}
+
+macro dungeon_talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2, $s3, $s4)
+{
+    switch($DUNGEON_ENTER)
+    {
+        case 2:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2);
+            break;
+        case 3:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s3);
+            break;
+        case 4:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s4);
+    }
+}
+
+macro dungeon_talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2, $s3, $s4)
+{
+    switch($DUNGEON_ENTER)
+    {
+        case 2:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2);
+            break;
+        case 3:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s3);
+            break;
+        case 4:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s4);
+    }
+}
+
+macro echo_se($se_id)
+{
+    Wait(60);
+    se_PlayVolume($se_id, 192);
+    WaitSe($se_id);
+    Wait(60);
+    se_PlayVolume($se_id, 128);
+    WaitSe($se_id);
+    Wait(90);
+}
+
+
+// More general-purpose ones
+
+
+macro talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    message_KeyWait();
+}
+
+macro monologue($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    message_KeyWait();
+}
+
+macro talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+}
+
+macro monologue_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+}
+
+macro talk_interrupted($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    message_CloseEnforce();
+}
+
+macro monologue_interrupted($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    message_CloseEnforce();
+}
+
+
+macro with_sweat_medium_wait($actor)
+{
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_medium($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+}
+
+macro tr_sweat_medium_wait()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_medium()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+}
+
+macro with_sweat_small_wait($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_small($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    }
+}
+
+macro tr_sweat_small_wait()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_small()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+}
+
+macro with_sweat_single_wait($actor)
+{
+    se_Play(8961);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_single($actor)
+{
+    se_Play(8961);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+}
+
+macro tr_sweat_single_wait()
+{
+    se_Play(8961);
+    SetEffect(EFFECT_SWEAT_DROP, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_single()
+{
+    se_Play(8961);
+    SetEffect(EFFECT_SWEAT_DROP, 3);
+}
+
+macro with_shock_wait($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_shock($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+}
+
+macro tr_shock_wait()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED, 3);
+    WaitEffect();
+}
+
+macro tr_shock()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED, 3);
+}
+
+macro with_shock_m_wait($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_shock_m($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+}
+
+macro tr_shock_m_wait()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    WaitEffect();
+}
+
+macro tr_shock_m()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+}
+
+macro with_vshock_wait($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_vshock($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+}
+
+macro tr_vshock_wait()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED, 3);
+    WaitEffect();
+}
+
+macro tr_vshock()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED, 3);
+}
+
+macro with_vshock_m_wait($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_vshock_m($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+}
+
+macro tr_vshock_m_wait()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    WaitEffect();
+}
+
+macro tr_vshock_m()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+}
+
+macro with_question($actor)
+{
+    se_Play(8962);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+}
+
+macro with_question_wait($actor)
+{
+    se_Play(8962);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    with(actor $actor)
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro tr_question()
+{
+    se_Play(8962);
+    SetEffect(EFFECT_QUESTION_MARK, 3);
+}
+
+macro tr_question_wait()
+{
+    se_Play(8962);
+    SetEffect(EFFECT_QUESTION_MARK, 3);
+    WaitEffect();
+}
+    
+
+
+
+def 0
+{
+    debug_Print("In which Smeargle doesn't know what to do.");
+    /*
+    if(debug)
+    {
+        back2_SetMode(4);
+        back2_SetGround(75);
+        supervision_Acting(1);
+        
+            camera2_SetPositionMark(Position<'eye0', 1, 16.5>);
+        
+        
+        screen2_FadeIn(1, 0);
+        message_Notice('bingus');
+        message_Close();
+        camera2_SetPositionMark(Position<'eye1', 1, 43.5>);
+        Wait(5);
+        camera2_SetPositionMark(Position<'eye2', 1, 70.5>);
+        Wait(5);
+        camera2_SetPositionMark(Position<'eye3', 1, 97.5>);
+        Wait(5);
+        camera2_SetPositionMark(Position<'eye4', 1, 124.5>);
+        Wait(5);
+        camera2_SetPositionMark(Position<'eye5', 1, 166.5>);
+        Wait(60);
+        camera2_Move2PositionMark(32896, Position<'eyefinal', 1, 154>);
+        WaitMoveCamera2();
+        CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+        message_Notice('owo what\'s this');
+        message_Close();
+        end;
+    }
+    */
+    CallCommon(CORO_FADE_OUT_ALL_BEFORE);
+    CallCommon(CORO_SUBSCREEN_INIT);
+    CallCommon(CORO_TITLE_TEST);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_BIPPA);
+    back_SetGround(49);
+    supervision_Acting(0);
+    WaitLockLives(1, 2);
+    WaitLockLives(0, 0);
+    WaitLockPerformer(0, 0);
+    screen_FadeInAll(1, 0);
+    Wait(180);
+    Unlock(0);
+    Lock(20);
+    CallCommon(CORO_DEBUG_SCRIPT);
+    WaitLockLives(2, 0);
+    ~talk_close(0, FACE_NORMAL, FACE_POS_STANDARD, 4, 2,
+        "Hey.");
+    Wait(50);
+    ~talk(0, FACE_HAPPY, FACE_POS_STANDARD, 4, 2,
+        "Glad to see you're finally up,[W:20] but...");
+    ~talk(0, FACE_HAPPY, FACE_POS_STANDARD, 4, 2,
+        "[VS:1:2]...[VR]");
+    ~talk_close(0, FACE_NORMAL, FACE_POS_STANDARD, 4, 2,
+        "[VS:1:3]...[VR]");
+    Wait(45);
+    ~talk(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "But?[K] Would you rather me asleep?");
+    Unlock(1);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "[VS:1:2]Because...[W:30][VS:1:3]I...[VR]");
+    Wait(80);
+    ~WaitUnlockLives(3, 2);
+    WaitLockLives(5, 2);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "I think it'd be better that way too.[K]\nI just can't seem to do it.[C][VS:1:2]Along with,[W:20] well...[K][U:5]things in general,[W:20] y'know?[VR]");
+    Wait(45);
+    ~WaitUnlockLives(2, 0);
+    WaitLockLives(4, 0);
+    ~talk_close(0, FACE_SAD, FACE_POS_STANDARD, 4, 2,
+        "I don't know,[W:10] no.[K]\n[VS:1:2]You've never mentioned this before...[VR]");
+    ~talk_close(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "I wonder why that is.");
+    Unlock(4);
+    ~talk(0, FACE_WORRIED, FACE_POS_STANDARD, 4, 2,
+        "Y'know,[W:10] I DO[W:10] actually wonder.[K]\nHaven't I made it clear before...?");
+    ~talk_close(0, FACE_SAD, FACE_POS_STANDARD, 4, 2,
+        "[VS:1:2]That you could talk to me about anything...?[VR]");
+    Wait(60);
+    WaitLockLives(6, 2);
+    ~WaitUnlockLives(6, 0);
+    WaitLockLives(8, 0);
+    Wait(70);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "I'm sorry.");
+    ~talk_close(0, FACE_SAD, FACE_POS_STANDARD, 4, 2,
+        "\"Sorry\" isn't what I need.");
+    ~talk(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "But that's the thing.[K]\nYou shouldn't \"need\" anything.");
+    message_Talk("All I had to do was make everyone happy.[K]\nAnd for the most part,[W:20] I think I've done okay...");
+    message_Talk("But for some reason...[K][VS:1:2]I'm still the same.[VR]");
+    message_KeyWait();
+    WaitLockLives(7, 2);
+    message_Talk("So being around me...[K][U:7]won't make you happy.[K][FACE:2]\nI don't think I'll ever be as happy as you\nor anyone else in the world...");
+    message_KeyWait();
+    WaitLockLives(9, 2);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "I don't know why.[K] I really wish I did,[W:20] but...[K][U:9][FACE:2][VS:1:2]\nI can't turn [BS]myself[BR] into a [CS:K]Doll[CR]...[VR]");
+    Wait(80);
+    WaitLockLives(8, 0);
+    ~talk_close(0, FACE_WORRIED, FACE_POS_STANDARD, 4, 2,
+        "Do you...[K][U:8][VS:1:4]need[VR][W:10] to be one to be happy?");
+    ~WaitUnlockLives(11, 2);
+    WaitLockLives(13, 0);
+    WaitLockLives(13, 2);
+    ~talk(2, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "[VS:1:2]What...?[VR][K][FACE:5] W-[W:5]what do you mean...?[VR]");
+    ~WaitUnlockLives(13, 2);
+    ~talk(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW, -4, 0,
+        "[VS:1:2]This,[W:20] coming from a literal [CS:K]Doll[CR]...?[VR]");
+    message_Talk("[VS:1:2]And if that were true...[K][FACE:2]\nThen why have I done any of this...?[VR]");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(80);
+    ~WaitUnlockLives(10, 0);
+    WaitLockLives(12, 0);
+    ~talk(0, FACE_PAIN, FACE_POS_STANDARD, 4, 2,
+        "[VS:1:3]...[VR]");
+    ~talk(0, FACE_WORRIED, FACE_POS_STANDARD, 4, 2,
+        "We did this because it's a guarantee.[K][U:12]\nAnd those are always hard to come by.");
+    message_Talk("It's not always a guarantee that you'll be\nhappy by being yourself,[W:20] but...[K]\nThere's always a chance...");
+    message_KeyWait();
+    ~WaitUnlockLives(14, 0);
+    ~talk_close(0, FACE_NORMAL, FACE_POS_STANDARD, 4, 2,
+        "Right?");
+    Wait(50);
+    ~WaitUnlockLives(15, 2);
+    Lock(20);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW, -4, 0,
+        "[VS:1:2]Chances aren't enough.[VR]");
+    ~talk_close(0, FACE_WORRIED, FACE_POS_STANDARD, 4, 2,
+        "It's all we have.");
+    ~WaitUnlockLives(17, 2);
+    ~talk_close(2, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW, -4, 0,
+        "It's all[W:5] [BS]I[BR][W:20] have.[K]\nDid you just forget what you said?");
+    WaitLockPerformer(16, 0);
+    ~WaitUnlockLives(16, 0);
+    WaitLockLives(18, 0);
+    ~talk(0, FACE_HAPPY, FACE_POS_STANDARD, 4, 2,
+        "[VS:1:3]WE.[VR]");
+    ~talk_close(0, FACE_NORMAL, FACE_POS_STANDARD, 4, 2,
+        "I'm including myself because I care about you.[K]\nIf you're not happy,[W:20][U:18] then neither am I.");
+    Wait(60);
+    ~WaitUnlockLives(1, 2);
+    se_PlayVolume(10764, 128);
+    Wait(23);
+    bgm_PlayFadeIn(BGM_HIGH_PITCHED_WHISTLE, 420, 128);
+    WaitLockLives(3, 2);
+    Wait(90);
+    ~talk_close(2, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "[VS:1:2]Then...[VR]");
+    Wait(90);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW, -4, 0,
+        "[VS:2:3]T-[W:5]then I've messed up the one thing I\nwas ever meant to do with myself.[VR]");
+    Wait(97);
+    ~WaitUnlockLives(0, 0);
+    WaitLockLives(5, 2);
+    ~talk_close(0, FACE_HAPPY, FACE_POS_STANDARD, 2, 2,
+        "Then I'm glad you've messed up.");
+    Wait(90);
+    ~WaitUnlockLives(5, 2);
+    WaitLockLives(7, 2);
+    ~talk_close(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW, -4, 0,
+        "[VS:1:2]But...[VR][K]what are we supposed to do now?");
+    ~WaitUnlockLives(2, 0);
+    ~talk_close(0, FACE_WORRIED, FACE_POS_STANDARD, 2, 2,
+        "With the way we've gotten things done...[K][VS:1:2]\nI think there's only one place we can try.[VR]");
+    CallCommon(CORO_DEBUG_SCENE);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    end;
+}
+
+def 1 for_actor(2)
+{
+    SetAnimation(1057);
+    WaitAnimation();
+    Lock(1);
+    SetAnimation(514);
+    Wait(42);
+    ~nod();
+    Lock(3);
+    ~shake(6);
+    Wait(60);
+    Lock(5);
+    ~nod();
+    Lock(6);
+    Wait(42);
+    ~shake(3);
+    Lock(7);
+    call @slow_head_shake;
+    Lock(9);
+    ~shake(7);
+    Lock(11);
+    ~tr_question_wait();
+    SetDirection(DIR_UPRIGHT);
+    Lock(13);
+    Turn2Direction(12, 10, DIR_DOWN);
+    Lock(15);
+    SetDirection(DIR_DOWNLEFT);
+    Wait(90);
+    SetDirection(DIR_DOWN);
+    ~WaitUnlockMain();
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    Lock(17);
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    Wait(2);
+    ~WaitUnlockPerformer(19, 0);
+    CallCommon(CORO_JUMP_HAPPY_FUNC);
+    Lock(1);
+    ~shake(4);
+    Wait(90);
+    Turn2Direction(8, 2, DIR_UP);
+    ~shake(2);
+    Wait(60);
+    ~WaitUnlockPerformer(19, 0);
+    SetAnimation(32);
+    Wait(13);
+    ~shake(2);
+    WaitAnimation();
+    Lock(3);
+    Wait(2);
+    Slide2PositionOffset(3, 3, 0);
+    bgm_ChangeVolume(120, 192);
+    Wait(2);
+    Slide2PositionOffset(3, -3, 0);
+    Wait(90);
+    ~shake(4);
+    SetAnimation(514);
+    ~shake(2);
+    Wait(80);
+    Turn2Direction(8, 10, DIR_LEFT);
+    Lock(5);
+    Turn2Direction(10, 10, DIR_UP);
+    Wait(60);
+    bgm_ChangeVolume(120, 256);
+    ~shake(2);
+    Wait(60);
+    Turn2Direction(8, 10, DIR_LEFT);
+    Wait(90);
+    bgm_Stop();
+    SetAnimation(31);
+    ~shake(6);
+    WaitAnimation();
+    SetAnimation(770);
+    Lock(7);
+    hold;
+}
+
+def 2 for_actor(0)
+{
+    SetAnimation(514);
+    Lock(0);
+    Move2PositionOffset(32844, 0, -72);
+    Wait(120);
+    SetDirection(DIR_UPRIGHT);
+    Wait(60);
+    ~WaitUnlockMain();
+    Wait(15);
+    SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    SetDirection(DIR_UP);
+    WaitEffect();
+    Wait(30);
+    Move2PositionOffset(32843, 0, -28);
+    Wait(60);
+    SetAnimation(33);
+    WaitAnimation();
+    Wait(90);
+    SetAnimation(2);
+    Lock(2);
+    call @slow_head_shake;
+    Lock(4);
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    Wait(13);
+    CallCommon(CORO_JUMP_HAPPY_FUNC);
+    Lock(6);
+    Move2PositionOffset(32790, 0, -4);
+    Lock(8);
+    SetDirection(DIR_UPRIGHT);
+    SetAnimation(770);
+    Wait(30);
+    ~amber_hop_once();
+    Lock(13);
+    Wait(20);
+    SetDirection(DIR_UP);
+    Lock(10);
+    ~tr_sweat_medium_wait();
+    Lock(12);
+    call @slow_head_shake;
+    Lock(14);
+    ~amber_hop_once();
+    Lock(16);
+    se_Play(8975);
+    CallCommon(CORO_JUMP_ANGRY_FUNC);
+    Lock(18);
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    Lock(0);
+    SetDirection(DIR_UPLEFT);
+    Wait(65);
+    Move2PositionOffset(32843, -28, -28);
+    Wait(40);
+    Turn2Direction(7, 10, DIR_RIGHT);
+    Wait(60);
+    Move2PositionOffset(32793, 12, 0);
+    Wait(120);
+    SetAnimation(31);
+    se_Play(6414);
+    ~WaitUnlockLives(3, 2);
+    Slide2PositionOffset(2, 5, 0);
+    Wait(4);
+    Slide2PositionOffset(2, -5, 0);
+    WaitAnimation();
+    SetAnimation(2);
+    Wait(20);
+    SetAnimation(5);
+    Slide2PositionOffset(2, -8, 0);
+    Wait(5);
+    SetAnimation(2);
+    WaitLockLives(5, 2);
+    ~amber_hop_once();
+    Lock(2);
+    ~nod();
+    Wait(30);
+    Turn2Direction(4, 10, DIR_UP);
+    Lock(4);
+    hold;
+    
+    §slow_head_shake;
+    Turn2DirectionTurn(6, 1, 1);
+    Wait(6);
+    Turn2DirectionTurn(6, 2, 4);
+    Wait(6);
+    Turn2DirectionTurn(6, 1, 3);
+    Wait(6);
+    Turn2DirectionTurn(6, 2, 2);
+    return;
+}
+
+def 3 for_performer(0)
+{
+    camera_SetMyself();
+    Lock(0);
+    Move2PositionOffset(32794, 0, 24);
+    Lock(19);
+    ~camera_shake(10, 2, 2, 32899);
+    Lock(16);
+    ~camera_shake(10, 2, 2, 1);
+    Lock(19);
+    se_PlayVolume(10764, 128);
+    se_ChangeVolume(10764, 60, 256);
+    screen_FadeChangeAll(1, 20, 256, 128);
+    Wait(5);
+    screen_FadeChangeAll(1, 20, 128, 256);
+    Lock(19);
+    hold;
+}

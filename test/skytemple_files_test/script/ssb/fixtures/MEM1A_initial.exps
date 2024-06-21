@@ -1,0 +1,354 @@
+macro shake($duration)
+{
+    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    {
+        Slide2PositionOffset(1, -1, 0);
+        Wait(2);
+        Slide2PositionOffset(1, 1, 0);
+        Wait(2);
+    }
+}
+
+def 0
+{
+    debug_Print("In which the world takes form.");
+    CallCommon(CORO_SUBSCREEN_INIT);
+    screen2_FadeIn(1, 0);
+    $EVENT_LOCAL = 0;
+    screen_FadeOutAll(1, 0);
+    back_SetGround(78);
+    supervision_Acting(0);
+    WaitLockLives(0, 2);
+    $SCENARIO_TALK_BIT_FLAG[1] = 1;
+    Wait(120);
+    screen_FadeInAll(1, 0);
+    Wait(190);
+    Unlock(0);
+    Wait(60);
+    message_EmptyActor();
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(0x2, 0x10, 0x1C, 0x4, 0x0, 0xFA);
+    message_Monologue("[CN][VS:1:12]Am...[W:20]am I...?[VR]");
+    message_KeyWait();
+    WaitLockLives(1, 2);
+    message_Monologue("[CN][VS:1:12]I...[K][U:1]d-[W:5]don't want to...[K]to...[VR]");
+    message_Close();
+    Wait(120);
+    se_Play(10764);
+    WaitSe(10764);
+    Wait(90);
+    WaitLockLives(2, 2);
+    Unlock(2);
+    WaitLockLives(3, 2);
+    Unlock(3);
+    CallCommon(CORO_COMMON_ENTER);
+    ProcessSpecial(PROCESS_SPECIAL_KEY_WAIT_PRESS, 0, 0);
+    call @sketch_fadeout;
+    with(actor 2)
+    {
+        SetPositionInitial();
+    }
+    with(actor 2)
+    {
+        SetPositionOffset(1, 0);
+    }
+    back_SetGround(77);
+    $EVENT_LOCAL = 1;
+    supervision_Acting(0);
+    CallCommon(CORO_COMMON_ENTER);
+    ProcessSpecial(PROCESS_SPECIAL_KEY_WAIT_PRESS, 0, 0);
+    call @sketch_fadeout;
+    with(actor 2)
+    {
+        SetPositionInitial();
+    }
+    with(actor 2)
+    {
+        SetPositionOffset(1, 0);
+    }
+    back_SetGround(79);
+    supervision_Acting(0);
+    CallCommon(CORO_COMMON_ENTER);
+    $EVENT_LOCAL = 2;
+    ProcessSpecial(PROCESS_SPECIAL_KEY_WAIT_PRESS, 0, 0);
+    CallCommon(CORO_DEBUG_ENTER);
+    $SCENARIO_TALK_BIT_FLAG[1] = 0;
+    §skip;
+    $EVENT_LOCAL = 3;
+    back_SetGround(81);
+    supervision_Acting(1);
+    Wait(60);
+    CallCommon(CORO_COMMON_ENTER);
+    screen2_FlushIn(1, 0, 255, 0, 0, 0);
+    screen2_FlushIn(1, 0, 1, 0, 0, 0);
+    WaitLockLives(0, 2);
+    WaitLockPerformer(0, 0);
+    Wait(90);
+    Unlock(0);
+    screen_FadeChange(0, 30, 256, 164);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+    message_Mail("Each and every ragged breath [hero]\ntook did little to allieviate the fact that\nshe was completely, utterly lost.[W:60]\nIt didn't help that the ground felt as\nthough it would crumble at any second.");
+    message_Mail("Her mind surged forth, scattering.[K] All at once,\neach thought crashed on top of each other\nwithout so much as a sound, other than her\ndrawing breaths...[K][U:1]in,[W:40] out...[W:40][VR][K]\n\n[U:2]In,[W:40][VS:1:2] out...[VR][W:10]");
+    message_KeyWait();
+    WaitLockLives(3, 2);
+    message_Mail("[VS:1:3]In...[VR][K]the end--finally--it dawned upon her...[K][U:3]\nShe felt no need to breathe any longer...");
+    message_Close();
+    WaitLockLives(4, 2);
+    Unlock(4);
+    screen_FadeChange(1, 60, 164, 256);
+    Lock(20);
+    CallCommon(CORO_DEBUG_SCRIPT);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_BIPPA);
+    WaitLockLives(5, 2);
+    WaitLockPerformer(7, 0);
+    message_SetFaceEmpty(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEOUTW);
+    message_FacePositionOffset(0, -2);
+    message_Monologue("(Are those...[K][U:5][VS:1:2]stars?)[VR]");
+    message_Monologue("(Where in the world am I...[K]that the stars\nare this close to me...?)");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(80);
+    WaitLockLives(6, 2);
+    Unlock(6);
+    WaitLockPerformer(9, 0);
+    message_SetFaceEmpty(2, FACE_SAD, FACE_POS_STANDARD);
+    message_FacePositionOffset(0, -2);
+    message_Monologue("(Pretty...[K]unbelievable...)");
+    message_KeyWait();
+    WaitLockLives(10, 2);
+    message_Monologue("(Along with, well...[W:20][VS:1:2]everything else...[K][U:10]\nBut I--[W:10]out of all things--[W:10]feel...[VR][K][FACE:0]good...?)");
+    message_Monologue("(I...[K]can't put it into words...[K]\nIt almost feels...[W:20][FACE:5][VS:1:4]wrong[VR][W:10] to feel like this...)[VR]");
+    message_KeyWait();
+    message_SetFaceEmpty(2, FACE_PAIN, FACE_POS_STANDARD);
+    message_FacePositionOffset(0, -2);
+    WaitLockLives(12, 2);
+    Unlock(12);
+    message_Talk("[VS:1:3]Haah...[VR][K]I don't get it...[K]\nAny of it...");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(110);
+    WaitLockLives(14, 2);
+    Unlock(14);
+    WaitLockPerformer(11, 0);
+    Unlock(11);
+    message_SetFaceEmpty(2, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_FacePositionOffset(1, 2);
+    message_Monologue("(Cut it out.[K] Stop being so pessimistic.)");
+    message_SetFaceEmpty(2, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_FacePositionOffset(1, 2);
+    message_Monologue("(I need to try and find someone.[K] Anyone.)");
+    message_Monologue("(I won't be able to figure out where I am\nall by myself...[K][FACE:2]or WHO[W:30] I even am...)");
+    message_Monologue("[VS:1:2](And...[K]if I'm...[K][FACE:5][VS:1:4]I'm...)[VR]");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(110);
+    WaitLockLives(16, 2);
+    Unlock(16);
+    Lock(20);
+    screen_FadeOutAll(0, 60);
+    CallCommon(CORO_DEBUG_SCENE);
+    WaitScreenFadeAll();
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    Wait(90);
+    end;
+    
+    
+    
+    
+    §sketch_fadeout;
+    ProcessSpecial(64, 1, 0);
+    ProcessSpecial(65, 1, 2);
+    $CRYSTAL_COLOR_01 = 0;
+    se_Play(5377);
+    §loop_draw3;
+    ProcessSpecial(65, 0, $CRYSTAL_COLOR_01);
+    $CRYSTAL_COLOR_01 += 1;
+    Wait(1);
+    if ($CRYSTAL_COLOR_01<30) {
+        jump @loop_draw3;
+    }
+    screen_FadeOut(1, 0);
+    ProcessSpecial(65, 2, 0);
+    ProcessSpecial(64, 0, 0);
+    return;
+}
+
+def 1 for_actor(2)
+{
+    if($EVENT_LOCAL == 0)
+    {
+        camera_SetMyPosition();
+        SetPositionOffset(1, 0);
+        SetAnimation(1046);
+        WaitAnimation();
+        SetOutputAttribute(16);
+        Lock(0);
+        ~shake(20);
+        SetAnimation(810);
+        ~shake(4);
+        Lock(1);
+        ~shake(8);
+        Wait(60);
+        se_PlayVolume(10764, 128);
+        SetAnimation(1066);
+        Lock(2);
+        SetAnimation(810);
+        Wait(60);
+        SetAnimation(534);
+        WaitAnimation();
+        SetAnimation(534);
+        Wait(1);
+        StopAnimation();
+        Wait(60);
+        SetAnimation(535);
+        WaitAnimation();
+        SetAnimation(770);
+        Wait(90);
+        Turn2DirectionTurn(8, 1, 3);
+        Wait(30);
+        Turn2DirectionTurn(8, 2, 4);
+        Wait(30);
+        Turn2DirectionTurn(8, 1, 5);
+        Wait(120);
+        SetAnimation(545);
+        WaitAnimation();
+        Wait(20);
+        Lock(3);
+    }
+    while($EVENT_LOCAL < 3)
+    {
+        if($EVENT_LOCAL == 2)
+        {
+            ResetOutputAttribute(16);
+        }
+        camera_SetMyself();
+        SetPositionOffset(264, 0);
+        Wait(5);
+        SetPositionOffset(264, 0);
+        Wait(5);
+        SetPositionOffset(264, 0);
+        Wait(5);
+        SetPositionOffset(-792, 0);
+        Wait(5);
+    }
+    SetAnimation(72);
+    Wait(20);
+    Lock(0);
+    while($EVENT_LOCAL == 3)
+    {
+        Slide2PositionOffset(1, -1, 0);
+        Wait(2);
+        Slide2PositionOffset(1, 1, 0);
+        Wait(2);
+    }
+    for($LOCAL0 = 0; $LOCAL0 < 4; $LOCAL0+=1;)
+    {
+        Slide2PositionOffset(2, -1, 0);
+        Wait(4);
+        Slide2PositionOffset(2, 1, 0);
+        Wait(4);
+    }
+    Lock(3);
+    SetAnimation(2);
+    Lock(4);
+    Turn2DirectionTurn(6, 2, 4);
+    Wait(20);
+    Turn2DirectionTurn(6, 1, 5);
+    Wait(20);
+    Turn2DirectionTurn(6, 2, 4);
+    Wait(20);
+    Turn2DirectionTurn(6, 1, 3);
+    Wait(15);
+    Turn2DirectionTurn(6, 2, 4);
+    Wait(40);
+    WaitLockSupervision(20);
+    Unlock(20);
+    Turn2DirectionTurn(10, 1, 5);
+    Wait(90);
+    Turn2Direction(10, 2, DIR_UPRIGHT);
+    Wait(60);
+    Lock(5);
+    se_Play(8962);
+    SetEffect(EFFECT_QUESTION_MARK, 3);
+    WaitEffect();
+    Lock(6);
+    SetDirection(DIR_RIGHT);
+    Wait(60);
+    SetDirection(DIR_UPRIGHT);
+    Wait(60);
+    WaitLockPerformer(7, 0);
+    Unlock(7);
+    Move2PositionOffset(32896, 42, -42);
+    SetDirection(DIR_RIGHT);
+    Wait(30);
+    SetAnimation(514);
+    WaitLockPerformer(8, 0);
+    Unlock(8);
+    Wait(130);
+    Move2PositionOffset(32888, 8, 0);
+    Wait(60);
+    SetDirection(DIR_UPRIGHT);
+    Wait(60);
+    SetDirection(DIR_RIGHT);
+    Lock(10);
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    Wait(40);
+    Turn2Direction(8, 10, DIR_UP);
+    Lock(12);
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    CallCommon(CORO_HEAD_SHAKE_FUNC);
+    WaitEffect();
+    Lock(14);
+    Turn2Direction(10, 10, DIR_RIGHT);
+    Wait(90);
+    WaitLockPerformer(9, 0);
+    Unlock(9);
+    Turn2Direction(10, 10, DIR_UPLEFT);
+    Lock(16);
+    SetDirection(DIR_LEFT);
+    Wait(90);
+    SetAnimation(31);
+    WaitAnimation();
+    SetAnimation(770);
+    Wait(74);
+    SetAnimation(5);
+    Slide2PositionOffset(32896, -16, 0);
+    SetDirection(DIR_UPLEFT);
+    Slide2PositionOffset(32896, -34, -42);
+    SetDirection(DIR_UP);
+    Slide2PositionOffset(32896, 0, -32);
+    WaitLockSupervision(20);
+    Unlock(20);
+    Slide2PositionOffset(32896, 0, -200);
+    hold;
+}
+
+def 2 for_performer(0)
+{
+    camera_SetMyself();
+    Lock(0);
+    Move2PositionOffset(32888, 0, -116);
+    Lock(1);
+    se_PlayVolume(8721, 128);
+    se_FadeOut(8721, 40);
+    Wait(40);
+    se_PlayVolume(8722, 128);
+    se_FadeOut(8722, 40);
+    Lock(2);
+    se_Play(8721);
+    se_FadeOut(8721, 40);
+    Wait(40);
+    se_Play(8722);
+    se_FadeOut(8722, 40);
+    Wait(20);
+    $EVENT_LOCAL = 4;
+    Lock(7);
+    Move2PositionOffset(32896, 42, -42);
+    Lock(8);
+    Move2PositionOffset(32912, 62, 0);
+    Wait(120);
+    Lock(9);
+    Move2PositionOffset(1, -110, -48);
+    Lock(11);
+    camera_SetEffect(2, 2, 2);
+    Wait(10);
+    camera_SetEffect(0, 0, 0);
+    hold;
+}

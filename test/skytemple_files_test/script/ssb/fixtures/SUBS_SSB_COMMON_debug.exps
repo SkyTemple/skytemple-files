@@ -1,0 +1,278 @@
+macro enter_dungeon($id) {
+    ProcessSpecial(101, 0, 0);
+    ProcessSpecial(75, 1, 0);
+    main_EnterDungeon($id, 0);
+    main_EnterDungeon(-1, 0);
+}
+
+def 0 {
+    $EVENT_LOCAL = 1;
+    $BIT_FUWARANTE_LOCAL[0] = 1;
+    $BIT_FUWARANTE_LOCAL[1] = 1;
+    $BIT_FUWARANTE_LOCAL[2] = 1;
+    screen2_FadeOut(0, 0);
+    screen_FadeOut(1, 0);
+    switch ( ProcessSpecial(PROCESS_SPECIAL_INIT_MAIN_TEAM_AFTER_QUIZ, 0, 0) ) { }
+    §debug_menu;
+    message_Notice('[CN][BS]Debug Menu[BR]\n[CN]\"Little memories, marching on...\n[CN]Your little feet, working the machine...\" ♪');
+    switch ( message_SwitchMenu(1, 1) ) {
+        case menu('[CS:H]Denial[CR]'):
+            message_Close();
+            supervision_ExecuteActing(115, 'denial', 0);
+            end;
+        case menu('Continue'):
+            §label_0;
+            message_Close();
+            supervision_ExecuteCommon(CORO_EVENT_DIVIDE);
+            end;
+        case menu('[CS:O]Paradise[CR]'):
+            message_Close();
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            $PERFORMANCE_PROGRESS_LIST[2] = 1;
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $GROUND_ENTER = 15;
+            main_EnterGround(10, 30);
+            end;
+        case menu('[CS:C]Beginning[CR]'):
+            message_Close();
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            supervision_ExecuteCommon(CORO_EVENT_M00A_01);
+            end;
+        case menu('[CS:S]Remember Place[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 0];
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+            ProcessSpecial(100, 0, 0);
+            ~enter_dungeon(1);
+            end;
+        case menu('[CS:C]Remember Place Loss[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 0];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $DUNGEON_ENTER = 1;
+            $GROUND_START_MODE = 9;
+            supervision_ExecuteCommon(CORO_GETOUT_SCENARIO_DUNGEON);
+            end;
+        case menu('[CS:C]Remember Place DI[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 0];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $GROUND_START_MODE = 8;
+            $DUNGEON_ENTER = 1;
+            supervision_ExecuteCommon(CORO_GETOUT_SCENARIO_DUNGEON);
+            end;
+        case menu('[CS:C]Remember Place Win[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 1];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            supervision_ExecuteCommon(CORO_EVENT_TG01);
+            end;
+        case menu('[CS:H]Time Skip 1[CR]'):
+            message_Close();
+            supervision_ExecuteActing(9, 'timeskip', 0);
+            end;
+        case menu('[CS:H]Time Skip 2[CR]'):
+            message_Close();
+            supervision_ExecuteActing(44, 'timeskip', 0);
+            end;
+        case menu('[CS:H]Meeting 0[CR]'):
+            message_Close();
+            supervision_ExecuteActing(49, 'meet0', 0);
+            end;
+        case menu('[CS:H]Wake Up[CR]'):
+            message_Close();
+            supervision_ExecuteActing(9, 'wakeup', 0);
+            end;
+        case menu('[CS:C]First Hollow[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 0;
+            supervision_ExecuteCommon(CORO_EVENT_TG02);
+            end;
+        case menu('[CS:C]Second Hollow[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            supervision_ExecuteCommon(CORO_EVENT_TG02);
+            end;
+        case menu('[CS:C]Successful Name Check[CR]'):
+            clear $SCENARIO_TALK_BIT_FLAG;
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            §day_menu;
+            message_Notice("[CN]How Many Dungeons Cleared?");
+            switch(message_SwitchMenu(1, 1))
+            {
+                case menu("0"):
+                    $SCENARIO_MAIN = scn[152, 2];
+                    break;
+                case menu("1"):
+                    $SCENARIO_MAIN = scn[152, 3];
+                    break;
+                case menu("2"):
+                    $SCENARIO_MAIN = scn[152, 4];
+                    break;
+                case menu("3"):
+                    $SCENARIO_MAIN = scn[152, 5];
+                    message_Close();
+                    supervision_ExecuteCommon(CORO_EVENT_TG04);
+                    end;
+                default:
+                case menu("Exit"):
+                    jump @debug_menu;
+                    
+            }
+            message_Notice("[CN]Which Dungeon?");
+            switch(message_SwitchMenu(1, 1))
+            {
+                case menu("[CS:P]Daunting Doldrums[CR]"):
+                    $DUNGEON_SELECT = 2;
+                    break;
+                case menu("[CS:P]Polyphonic Playground[CR]"):
+                    $DUNGEON_SELECT = 3;
+                    break;
+                case menu("[CS:P]Sinking Shadows[CR]"):
+                    $DUNGEON_SELECT = 4;
+                    break;
+                default:
+                case menu("Exit"):
+                    jump @day_menu;
+            }
+            message_Close();
+            supervision_ExecuteCommon(CORO_EVENT_TG03);
+            end;
+        case menu('[CS:C]Daunting Doldrums Win[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            $DUNGEON_ENTER = 2;
+            supervision_ExecuteCommon(CORO_EVENT_TG05);
+            end;
+        case menu('[CS:C]Polyphonic Playground Win[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            $DUNGEON_ENTER = 3;
+            supervision_ExecuteCommon(CORO_EVENT_TG06);
+            end;
+        case menu('[CS:C]Sinking Shadows Win[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 2];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            $DUNGEON_ENTER = 4;
+            supervision_ExecuteCommon(CORO_EVENT_TG07);
+            end;
+        case menu('[CS:C]Dungeon Win[CR]'):
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            $SCENARIO_TALK_BIT_FLAG[2] = 1;
+            §clear_menu;
+            message_Notice("[CN]How Many Dungeons Cleared Prior?");
+            switch(message_SwitchMenu(1, 1))
+            {
+                case menu("0"):
+                    $SCENARIO_MAIN = scn[152, 2];
+                    break;
+                case menu("1"):
+                    $SCENARIO_MAIN = scn[152, 3];
+                    break;
+                case menu("2"):
+                    $SCENARIO_MAIN = scn[152, 4];
+                    break;
+                default:
+                case menu("Exit"):
+                    jump @debug_menu;
+                    
+            }
+            message_Notice("[CN]Which Dungeon Cleared?");
+            switch(message_SwitchMenu(1, 1))
+            {
+                case menu("[CS:P]Daunting Doldrums[CR]"):
+                    $DUNGEON_ENTER = 2;
+                    break;
+                case menu("[CS:P]Polyphonic Playground[CR]"):
+                    $DUNGEON_ENTER = 3;
+                    break;
+                case menu("[CS:P]Sinking Shadows[CR]"):
+                    $DUNGEON_ENTER = 4;
+                    break;
+                default:
+                case menu("Exit"):
+                    jump @clear_menu;
+            }
+            message_Close();
+            supervision_ExecuteCommon(CORO_EVENT_DIVIDE_AFTER);
+            end;
+        case menu('[CS:H]Final Aftermath[CR]'):
+            message_Close();
+            supervision_ExecuteActing(49, 'after3', 0);
+            end;
+        case menu('[CS:C]Little Dream Win[CR]'):
+            message_Close();
+            $SCENARIO_MAIN = scn[152, 5];
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            supervision_ExecuteCommon(CORO_EVENT_TG08);
+            end;
+        case menu('[CS:H]Credits[CR]'):
+            message_Close();
+            supervision_ExecuteActing(71, 'credits', 0);
+            end;
+        case menu('[CS:S]Daunting Doldrums[CR]'):
+            message_Close();
+            $PERFORMANCE_PROGRESS_LIST[2] = 1;
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            ProcessSpecial(100, 0, 0);
+            ProcessSpecial(102, 0, 0); // Time skip
+            ~enter_dungeon(2);
+            end;
+        case menu('[CS:S]Polyphonic Playground[CR]'):
+            message_Close();
+            $PERFORMANCE_PROGRESS_LIST[2] = 1;
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            ProcessSpecial(100, 0, 0);
+            ProcessSpecial(102, 0, 0); // Time skip
+            ~enter_dungeon(3);
+            end;
+        case menu('[CS:S]Sinking Shadows[CR]'):
+            message_Close();
+            $PERFORMANCE_PROGRESS_LIST[2] = 1;
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            ProcessSpecial(100, 0, 0);
+            ProcessSpecial(102, 0, 0); // Time skip
+            ~enter_dungeon(4);
+            end;
+        case menu('[CS:S]Little Dream[CR]'):
+            message_Close();
+            $PERFORMANCE_PROGRESS_LIST[2] = 1;
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            ProcessSpecial(100, 0, 0);
+            
+            ProcessSpecial(102, 0, 0); // Time skip
+            
+            ProcessSpecial(101, 0, 0);
+            ProcessSpecial(75, 1, 0);
+            // Must be set after SP 75 since it resets those flags!
+            $SCENARIO_TALK_BIT_FLAG[252] = 1;
+            $SCENARIO_TALK_BIT_FLAG[253] = 1;
+            main_EnterDungeon(5, 0);
+            main_EnterDungeon(-1, 0);
+            end;
+        default:
+            case menu("[M:R7] Debug Menu Info"):
+                message_Close();
+                CallCommon(CORO_DEBUG_FLAG_SETTING_CHARMS);
+                message_Notice("Welcome! If you're reading this, then you've\naccessed the Debug Menu for\n[BS]Strung Up By Sketches[BR]!");
+                message_Notice("You will be able to choose where you start\nfrom. This can be as far back as the\nstart, middle, or end of the game!");
+                message_Notice("Menu options are color-coded for your\ndebugging pleasure:\n\n[CS:S]Purple[CR] - Dungeon\n[HR][CS:O]Green[CR] - Overworld\n[HR][CS:H]Pink[CR] - Acting Scene\n[HR][CS:C]Yellow[CR] - Unionall Coroutine");
+                message_Notice("That's all from us! Thank you for checking\nthis little menu out!\n                                      - [CS:X]Team Tangent[CR]");
+                message_Close();
+                CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+                jump @debug_menu;
+    }
+    end;
+}

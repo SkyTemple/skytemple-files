@@ -1,0 +1,51 @@
+
+def 0 {
+    $EVENT_LOCAL = 0;
+    $DUNGEON_PRESENT_LIST[255] = 0;
+    WaitLockLives(0, 2);
+    WaitLockLives(0, 0);
+    Unlock(0);
+    if($GROUND_ENTER == 103)
+    {
+        $SCENARIO_TALK_BIT_FLAG[28] = 1;
+    }
+    switch ( message_Menu(MENU_SAVE_MENU) ) { }
+    end;
+}
+
+def 1 for_actor(2) {
+    SavePosition(0);
+    Lock(0);
+    SetDirection(DIR_DOWN);
+    §label_1;
+    forever {
+        if ( $EVENT_LOCAL < 5 ) {
+            Turn2Direction(4, 1, DIR_UP);
+            Turn2Direction(4, 1, DIR_DOWN);
+            $EVENT_LOCAL += 1;
+            continue;  // may be redundant
+        } else {
+            break_loop;
+        }
+    }
+    SetAnimation(66);
+    hold;
+}
+
+def 2 for_actor(0) {
+    SavePosition(1);
+    Lock(0);
+    SetDirection(DIR_DOWN);
+    §label_3;
+    forever {
+        if ( $EVENT_LOCAL != 5 ) {
+            Turn2Direction(4, 2, DIR_UP);
+            Turn2Direction(4, 2, DIR_DOWN);
+            continue;  // may be redundant
+        } else {
+            break_loop;
+        }
+    }
+    SetAnimation(66);
+    hold;
+}

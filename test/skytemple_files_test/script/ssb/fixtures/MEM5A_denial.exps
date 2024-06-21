@@ -1,0 +1,17 @@
+def 0 {
+    back_SetGround(115);
+    supervision_Acting(0);
+    screen_FadeIn(1, 0);
+    Wait(403); // was originally the custom opcode CreateLetterboxes();
+    Wait(20);
+    message_Notice('test 1');
+    message_Close();
+    screen_FadeOut(1, 30);
+    message_Notice('test 2');
+    message_Close();
+    screen_FadeIn(1, 30);
+    message_Notice('test 3');
+    message_Close();
+    screen_FadeOut(1, 30);
+    end;
+}

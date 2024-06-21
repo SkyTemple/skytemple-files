@@ -1,0 +1,14 @@
+
+def 0 {
+    debug_Print('In which the Happiness Machine seeks a way out.');
+    CallCommon(CORO_SUBSCREEN_INIT);
+    screen2_FadeIn(1, 0);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+    message_Mail('Surely, I am not incapable of learning?[K]\nPerhaps there may be hope for this world yet.[K]\n\nI have witnessed every entity\'s life\nrise and fall as though each was an empire.[K]\nKnowledge of all that has transpired MUST[W:10]\nprevent this world from collapsing as theirs.[K]\n\nIs it enough?[K]\nEnough to save myself?[K]\nEnough to save [hero]?');
+    message_Mail('[VS:1:2]If only I was created to save myself.[K]\nIf only [hero] was created to save herself.[VR][K]\n\nIs anything salvageable at this point...?');
+    message_Close();
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    end;
+}
+  
+ 

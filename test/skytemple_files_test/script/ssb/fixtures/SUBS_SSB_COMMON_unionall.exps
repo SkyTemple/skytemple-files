@@ -1,0 +1,3998 @@
+macro c($level, $scene)
+{
+    CancelRecoverCommon(CORO_MAP_TEST);
+    supervision_ExecuteActingSub($level, $scene, 0);
+    CancelCut();
+}
+
+
+coro END_TALK {
+    message_Close();
+    supervision_Suspend(-2);
+    end;
+}
+
+coro WAIT_START_FUNC {
+    WaitScreenFade();
+    return; 
+}
+
+coro NORMAL_WAIT_END_TALK {
+    hold;
+}
+
+coro LIVES_REPLY_NORMAL {
+    SetAnimation(2);
+    MoveSpecial(5, 0, 0);
+    TurnDirection(32767);
+    hold;
+}
+
+coro LIVES_REPLY {
+    TurnDirection(32767);
+    hold;
+} 
+
+coro OBJECT_REPLY_NORMAL {
+    hold;
+}
+
+coro LIVES_ACTING_NORMAL {
+    SetAnimation(2);
+    TurnDirection(32767);
+    hold;
+}
+
+coro ENTER_WAIT_FUNC {
+    return;
+}
+
+coro TALK_UNIT {
+    with (actor 109) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 1) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_SetFace(1, FACE_NORMAL, FACE_POS_STANDARD);
+    message_SpecialTalk(0);
+    JumpCommon(CORO_END_TALK);
+}
+
+coro TALK_ADVENTURE {
+    with (actor 109) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 1) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_SetFace(1, FACE_NORMAL, FACE_POS_STANDARD);
+    message_SpecialTalk(1);
+    JumpCommon(CORO_END_TALK);
+}
+
+coro TALK_ATTENDANT {
+    with (actor 2) {
+        SetAnimation(2);
+    }
+    with (actor 0) {
+        SetAnimation(2);
+    }
+    message_Notice("[CN]What would you like to do?");
+    switch(message_SwitchMenu(1, 1))
+    {
+        case menu("Save"):
+            message_Close();
+            $SCENARIO_MAIN_BIT_FLAG[7] = 1;
+            CallCommon(CORO_HANYOU_SAVE_FUNC);
+            $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+            break;
+        case menu("Talk to [partner]"):
+            message_Close();
+            JumpCommon(CORO_TALK_PARTNER_MESSAGE);
+        default:
+        case menu("Exit"):
+            message_Close();
+    }
+    supervision_Suspend(-2);
+    end;
+}
+
+coro TALK_PARTNER_MESSAGE {
+    with (actor 109) {
+        SetAnimation(2);
+    }
+    with (actor 1) {
+        SetAnimation(2);
+    }
+    with (actor 109) {
+        Turn2DirectionLives(4, 10, 1);
+    }
+    with (actor 1) {
+        Turn2DirectionLives(4, 10, 109);
+    }
+    WaitExecuteLives(109);
+    WaitExecuteLives(1);
+    with (actor 109) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 1) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    supervision_ExecuteExportSub('partner');
+    JumpCommon(CORO_END_TALK);
+}
+
+coro LIVES_MOVE_NORMAL {
+    SetAnimation(768);
+    SetAnimation(1);
+    §label_0;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro LIVES_MOVE_CHANGE {
+    SetAnimation(768);
+    SetAnimation(10);
+    §label_1;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro LIVES_MOVE_PARTY {
+    SetAnimation(768);
+    SetAnimation(1);
+    end;
+}
+
+coro OBJECT_MOVE_NORMAL {
+    SetAnimation(1);
+    §label_2;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro OBJECT_MOVE_CHANGE {
+    SetAnimation(2);
+    §label_3;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro PERFORMER_MOVE_NORMAL {
+    SetAnimation(1);
+    §label_4;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro PERFORMER_MOVE_CHANGE {
+    SetAnimation(2);
+    §label_5;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_INIT {
+    Wait(12);
+    end;
+}
+
+coro MOVE_PAUSE {
+    SetAnimation(768);
+    SetAnimation(3);
+    TurnDirection(DIR_DOWN);
+    §label_6;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_STAY {
+    SetAnimation(768);
+    SetAnimation(4);
+    TurnDirection(DIR_DOWN);
+    §label_7;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_SLEEP {
+    SetAnimation(768);
+    SetAnimation(6);
+    §label_8;
+    forever {
+        Wait(240);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_RANDOM {
+    SetAnimation(1);
+    §label_9;
+    forever {
+        MoveTurn(24, 1, 8);
+        Wait(48);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_TYPE1 {
+    SetAnimation(1);
+    §label_10;
+    forever {
+        MoveTurn(24, 1, 8);
+        WaitRandom(24, 48);
+        continue;  // may be redundant
+    }
+}
+
+coro MOVE_TYPE2 {
+    SetAnimation(1);
+    §label_11;
+    forever {
+        MoveTurn(16, 1, 8);
+        WaitRandom(16, 24);
+        continue;  // may be redundant
+    }
+}
+
+coro WAKEUP_FUNC {
+    SetAnimation(62);
+    Wait(60);
+    SetAnimation(63);
+    WaitAnimation();
+    Wait(10);
+    SetAnimation(2);
+    Turn2Direction(4, 10, DIR_DOWN);
+    Wait(40);
+    return;
+}
+
+coro WAKEUP_FUNC_SERIES {
+    SetAnimation(62);
+    Wait(60);
+    SetAnimation(63);
+    WaitAnimation();
+    Wait(10);
+    SetAnimation(2);
+    Turn2Direction(4, 10, DIR_DOWN);
+    Wait(40);
+    hold;
+}
+
+coro LOOK_AROUND_FUNC {
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    return;
+}
+
+coro LOOK_AROUND_FUNC_SERIES {
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    hold;
+}
+
+coro LOOK_AROUND_DOWN_FUNC {
+    Turn2DirectionTurn(4, 1, 3);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    return;
+}
+
+coro LOOK_AROUND_DOWN_FUNC_SERIES {
+    Turn2DirectionTurn(4, 1, 3);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    hold;
+}
+
+coro LOOK_AROUND_RIGHT_FUNC {
+    Turn2DirectionTurn(4, 1, 3);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    return;
+}
+
+coro LOOK_AROUND_RIGHT_FUNC_SERIES {
+    Turn2DirectionTurn(4, 1, 3);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    hold;
+}
+
+coro LOOK_AROUND_LEFT_FUNC {
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 5);
+    Wait(15);
+    return;
+}
+
+coro LOOK_AROUND_LEFT_FUNC_SERIES {
+    Turn2DirectionTurn(4, 2, 4);
+    Wait(15);
+    Turn2DirectionTurn(4, 1, 5);
+    Wait(15);
+    Turn2DirectionTurn(4, 2, 5);
+    Wait(15);
+    hold;
+}
+
+coro JUMP_HAPPY_FUNC {
+    SetAnimation(3);
+    MoveHeight(2, 10);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    return;
+}
+
+coro JUMP_HAPPY_FUNC_SERIES {
+    SetAnimation(3);
+    MoveHeight(2, 10);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    hold;
+}
+
+coro JUMP_SURPRISE_FUNC {
+    SetAnimation(11);
+    MoveHeight(2, 10);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    return;
+}
+
+coro JUMP_SURPRISE_FUNC_SERIES {
+    SetAnimation(11);
+    MoveHeight(2, 10);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    hold;
+}
+
+coro JUMP_ANGRY_FUNC {
+    SetAnimation(3);
+    MoveHeight(2, 6);
+    Wait(1);
+    MoveHeight(2, 0);
+    Wait(1);
+    MoveHeight(2, 6);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    return;
+}
+
+coro JUMP_ANGRY_FUNC_SERIES {
+    SetAnimation(3);
+    MoveHeight(2, 6);
+    Wait(1);
+    MoveHeight(2, 0);
+    Wait(1);
+    MoveHeight(2, 6);
+    Wait(1);
+    MoveHeight(2, 0);
+    SetAnimation(2);
+    hold;
+}
+
+coro LOOK_AROUND_FAST_FUNC {
+    Turn2DirectionTurn(1, 1, 3);
+    Wait(5);
+    Turn2DirectionTurn(1, 2, 5);
+    Wait(15);
+    Turn2DirectionTurn(1, 1, 5);
+    Wait(5);
+    Turn2DirectionTurn(1, 2, 4);
+    return;
+}
+
+coro LOOK_AROUND_FAST_FUNC_SERIES {
+    Turn2DirectionTurn(1, 1, 3);
+    Wait(5);
+    Turn2DirectionTurn(1, 2, 5);
+    Wait(15);
+    Turn2DirectionTurn(1, 1, 5);
+    Wait(5);
+    Turn2DirectionTurn(1, 2, 4);
+    hold;
+}
+
+coro HEAD_SHAKE_FUNC {
+    Turn2DirectionTurn(2, 1, 1);
+    Wait(2);
+    Turn2DirectionTurn(2, 2, 4);
+    Wait(2);
+    Turn2DirectionTurn(2, 1, 3);
+    Wait(2);
+    Turn2DirectionTurn(2, 2, 2);
+    return;
+}
+
+coro HEAD_SHAKE_FUNC_SERIES {
+    Turn2DirectionTurn(2, 1, 1);
+    Wait(2);
+    Turn2DirectionTurn(2, 2, 4);
+    Wait(2);
+    Turn2DirectionTurn(2, 1, 3);
+    Wait(2);
+    Turn2DirectionTurn(2, 2, 2);
+    hold;
+}
+
+coro EXPLANATION_FUNC {
+    SetAnimation(5);
+    Wait(45);
+    SetAnimation(2);
+    Wait(30);
+    return;
+}
+
+coro EXPLANATION_FUNC_SERIES {
+    SetAnimation(5);
+    Wait(45);
+    SetAnimation(2);
+    Wait(30);
+    hold;
+}
+
+coro INIT_SLEEP_FUNC {
+    SetAnimation(62);
+    SetDirection(DIR_RIGHT);
+    Wait(60);
+    return;
+}
+
+coro INIT_SLEEP_FUNC_SERIES {
+    SetAnimation(62);
+    SetDirection(DIR_RIGHT);
+    Wait(60);
+    hold;
+}
+
+coro INIT_BASE_FUNC {
+    reset dungeon_result;
+    $PLAYER_KIND = 0;
+    $ATTENDANT1_KIND = 2;
+    $ATTENDANT2_KIND = 0;
+    return;
+}
+
+coro INIT_BASE_FUNC_SERIES {
+    reset dungeon_result;
+    $PLAYER_KIND = 0;
+    $ATTENDANT1_KIND = 2;
+    $ATTENDANT2_KIND = 0;
+    hold;
+}
+
+coro HANYOU_SAVE_FUNC {
+    if ( $SCENARIO_MAIN_BIT_FLAG[7] ) {
+        §label_31;
+        message_Mail({
+            english="[CN]Would you like to save your adventure?",
+        });
+        switch ( message_SwitchMenu(0, 3) ) {
+            case menu({
+                english="Save and Continue",
+            }):
+            default:
+                §label_32;
+                message_Close();
+                if ( $SCENARIO_MAIN_BIT_FLAG[7] ) {
+                    §label_35;
+                    $SCENARIO_MAIN_BIT_FLAG[6] = 1;
+                    supervision_ExecuteExportSub('save');
+                    //switch ( message_Menu(MENU_SAVE_MENU) ) { }
+                    $SCENARIO_MAIN_BIT_FLAG[6] = 0;
+                    $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                    return;
+                } else {
+                    debug_Print('COMPULSORY_SAVE');
+                    $GROUND_PLACE = 307;
+                    //jump @label_35;
+                    $SCENARIO_MAIN_BIT_FLAG[6] = 1;
+                    switch ( message_Menu(MENU_SAVE_MENU) ) { }
+                    $SCENARIO_MAIN_BIT_FLAG[6] = 0;
+                    $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                    return;
+                }
+                break;
+            case menu({
+                english="Save and Return to Top Menu",
+            }):
+                message_Close();
+                $SCENARIO_MAIN_BIT_FLAG[6] = 1;
+                supervision_ExecuteExportSub('save');
+                //switch ( message_Menu(MENU_SAVE_MENU) ) { }
+                bgm_FadeOut(60);
+                screen2_FadeOut(0, 30);
+                screen_FadeOut(1, 30);
+                switch ( ProcessSpecial(PROCESS_SPECIAL_JUMP_TO_TITLE_SCREEN, 0, 0) ) { }
+                return;
+            case menu({
+                english="Don\'t Save",
+            }):
+                §label_33;
+                message_Close();
+                $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                return;
+        }
+    } else {
+        message_Mail({
+            english="[CN]Would you like to save your adventure?",
+        });
+        switch ( message_SwitchMenu(0, 2) ) {
+            case menu({
+                english="Yes",
+            }):
+                jump @label_32;
+            case menu({
+                english="No",
+            }):
+                jump @label_33;
+            default:
+                jump @label_31;
+        }
+    }
+}
+
+
+coro NORMAL_MESSAGE {
+    camera_SetMyPosition();
+    Wait(1);
+    Destroy();
+}
+
+coro NORMAL_EVENT {
+    alias previous;
+}
+
+coro NORMAL_CAMERA {
+    alias previous;
+}
+
+coro EVENT_FORMATION {
+    screen_FadeOut(1, 30);
+    $GROUND_GETOUT = value($GROUND_ENTER);
+    $GROUND_ENTER_LINK = 0;
+    $GROUND_START_MODE = 3;
+    supervision_ExecuteCommon(CORO_EVENT_DIVIDE);
+    hold;
+}
+
+coro EVENT_EVOLUTION {
+    end;
+}
+
+coro EFFECT_MOVE_DIVE {
+    SetEffect(EFFECT_WATER_SPLASH, 0);
+    WaitEffect();
+    Destroy();
+}
+
+coro EFFECT_MOVE_WAVE {
+    SetEffect(EFFECT_TWO_SPINNING_CIRCLES, 0);
+    WaitEffect();
+    Destroy();
+}
+
+coro EVENT_DIVIDE {
+    debug_Print('EVENT_DIVIDE');
+    /*
+    if not($DUNGEON_PRESENT_LIST[255]) // TODO: Remove
+            {
+                $DUNGEON_PRESENT_LIST[255] = 1;
+                ProcessSpecial(66, 4, 1);
+                ProcessSpecial(66, 2, 3);
+                ProcessSpecial(66, 1, 0);
+                supervision_ExecuteExportSub('debug');
+                end;
+            }
+    */
+    if(debug)
+    {
+        jump @debug_menu;
+    }
+    // ACTUAL SAVE CHECK
+    switch(ProcessSpecial(78, 0x5E, 0x0))
+    {
+        case 0x64:
+            §debug_menu;
+            if not($DUNGEON_PRESENT_LIST[255])
+            {
+                $DUNGEON_PRESENT_LIST[255] = 1;
+                ProcessSpecial(66, 4, 1);
+                ProcessSpecial(66, 2, 3);
+                ProcessSpecial(66, 1, 0);
+                supervision_ExecuteExportSub('debug');
+                end;
+            }
+            break;
+    }
+    
+    if($SCENARIO_MAIN_BIT_FLAG[6])
+    {
+        debug_Print('LABEL_DIVIDE_RESUME');
+        $SCENARIO_MAIN_BIT_FLAG[6] = 0;
+        JumpCommon(CORO_EVENT_DIVIDE_RESUME);
+    } 
+    elseif($SCENARIO_MAIN_BIT_FLAG[7])
+    {
+        debug_Print('LABEL_HANYOU_RESUME');
+        supervision_ExecuteEnter(32767);
+        hold;
+    }
+    else
+    {
+        switch(scn($SCENARIO_MAIN)[0])
+        {
+            case 0:
+                debug_Print('EVENT_DIVIDE_OPENING');
+                switch(ProcessSpecial(78, 0x5E, 0x0))
+                {
+                    case 0x44:
+                        JumpCommon(CORO_EVENT_TG13);
+                    default:
+                        JumpCommon(CORO_EVENT_M00A_01);
+                }
+            default:
+                supervision_ExecuteEnter(32767);
+                hold;
+                
+        }
+    }
+    end;
+}
+
+coro EVENT_DIVIDE_NEXT {
+    CallCommon(CORO_EVENT_DIVIDE_NEXT_DAY_FUNC);
+    end;
+}
+
+coro EVENT_DIVIDE_INIT_FUNC {
+    return;
+}
+
+coro EVENT_DIVIDE_NEXT_DAY_FUNC {
+    return;
+}
+
+coro EVENT_DIVIDE_NEXT_DAY2_FUNC {
+    return;
+}
+
+coro EVENT_DIVIDE_FIRST {
+    switch ( scn($SCENARIO_MAIN)[0] ) { }
+    switch ( ProcessSpecial(PROCESS_SPECIAL_JUMP_TO_TITLE_SCREEN, 0, 0) ) { }
+    return;
+} 
+
+coro EVENT_DIVIDE_SECOND {
+    switch ( scn($SCENARIO_MAIN)[0] ) { }
+    switch ( ProcessSpecial(PROCESS_SPECIAL_JUMP_TO_TITLE_SCREEN, 0, 0) ) { }
+    return;
+}
+
+coro EVENT_DIVIDE_AFTER {
+    debug_PrintScenario($SCENARIO_MAIN, "EVENT_DIVIDE_AFTER");
+    // Some NPC Flags to reset
+    $SCENARIO_TALK_BIT_FLAG[24] = 0; // Alliterative Doll
+    $SCENARIO_TALK_BIT_FLAG[26] = 0; // Southern Doll
+    $SCENARIO_TALK_BIT_FLAG[31] = 0; // Liar Doll
+    $SCENARIO_TALK_BIT_FLAG[32] = 0; // Existential Doll
+    $SCENARIO_TALK_BIT_FLAG[33] = 0; // Researcher Doll
+    $SCENARIO_TALK_BIT_FLAG[34] = 0; // Korok Doll
+    
+    $COMPULSORY_SAVE_POINT = 1;
+    $SCENARIO_MAIN_BIT_FLAG[8] = 1;
+    $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+    CallCommon(CORO_HANYOU_SAVE_FUNC);
+    §save_1;
+    $SCENARIO_MAIN_BIT_FLAG[8] = 0;
+    $SCENARIO_MAIN_BIT_FLAG[6] = 0;
+    $SCENARIO_TALK_BIT_FLAG[1] = 0;
+    switch(scn($SCENARIO_MAIN)[1])
+    { 
+        case 2:
+            $SCENARIO_MAIN = scn[152, 3];
+            JumpCommon(CORO_EVENT_TG09);
+        case 3:
+            $SCENARIO_MAIN = scn[152, 4];
+            JumpCommon(CORO_EVENT_TG10);
+        default:
+        case 4:
+            $SCENARIO_MAIN = scn[152, 5];
+            JumpCommon(CORO_EVENT_TG11);
+    }
+    end;
+}
+
+coro EVENT_DIVIDE_RESUME {
+    if($SCENARIO_MAIN_BIT_FLAG[8])
+    {
+        debug_Print("Cutscene Save!");
+        switch($COMPULSORY_SAVE_POINT)
+        {
+            case 0:
+                jump @save_0;
+            case 1:
+                jump @save_1;
+            case 2:
+                JumpCommon(CORO_EVENT_TG12);
+            case 255:
+            default:
+                JumpCommon(CORO_EVENT_M00A_01);
+            /*
+            default:
+                message_Notice("[CN]COMPULSORY SAVE NOT FOUND");
+                end;
+            */
+        }
+    }
+    else
+    {
+        debug_Print("Overworld Save!");
+        supervision_ExecuteEnter(32767);
+    }
+    hold;
+}
+
+coro EVENT_DIVIDE_SPECIAL_EPISODE {
+    supervision_ExecuteEnter(32767);
+    hold;
+}
+
+coro DEBUG_SCRIPT {
+
+    debug_Print("Creating the letterboxes...");
+    Wait(403); // was originally the custom opcode CreateLetterboxes();
+    Wait(20);
+    return;
+}
+
+coro DEBUG_SCENE {
+    debug_Print("Freeing the letterboxes...");
+    Wait(403); // was originally the custom opcode HideLetterboxes();
+    Wait(20);
+    Wait(403); // was originally the custom opcode FreeLetterboxes();
+    Wait(2);
+    Wait(403); // was originally the custom opcode DeleteLetterboxes();
+    Wait(2);
+    return;
+}
+
+coro DEMO_CANCEL {
+    debug_Print("Cutscene Skip Activated!");
+    message_CloseEnforce();
+    switch ( ProcessSpecial(65, 2, 0) ) { }
+    switch ( ProcessSpecial(64, 0, 0) ) { }
+    CallCommon(CORO_DEBUG_SCENE);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    hold;
+}
+
+coro DEBUG_FLAG_SETTING_BIPPA {
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(1, 18, 0x1E, 5, 0x0, 0xFA);
+    return;
+}
+
+coro DEBUG_FLAG_SETTING_PUPURIN {
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(2, 0x11, 0x1C, 5, 0x0, 0xFD);
+    return;
+}
+
+coro DEBUG_FLAG_SETTING_FUTURE {
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(1, 0x2, 0x1E, 0x14, 0x1, 0xFA);
+    return;
+}
+
+coro DEBUG_FLAG_SETTING_CHARMS {
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(1, 0x2, 0x1E, 0x14, 0x0, 0xFA);
+    return;
+}
+
+coro DEBUG_FLAG_SETTING_KIMAWARI {
+    screen_FlushIn(1, 0, 255, 0, 0, 0);
+    screen2_FlushIn(1, 0, 255, 0, 0, 0);
+    screen_FlushIn(1, 0, 0, 0, 0, 0);
+    screen2_FlushIn(1, 0, 0, 0, 0, 0);
+    return;
+}
+
+coro DEMO_01 {
+    se_Play(16137);
+    switch ( ProcessSpecial(24, 0, 0) ) { }
+    hold;
+}
+
+coro DEMO_02 {
+    ProcessSpecial(67, 0, 0);
+    switch(scn($SCENARIO_MAIN)[0])
+    {
+        case 0:
+            switch(ProcessSpecial(78, 0x5E, 0x0))
+            {
+                case 0x44:
+                case 0x64:
+                    jump @title;
+                default:
+                    // TODO: Remove choice
+                    if(debug)
+                    {
+                        message_Notice("[CN][BS]Debug[BR]: Skip New Game Scene?");
+                        switch(message_SwitchMenu(1, 1))
+                        {
+                            case menu("Yes"):
+                                message_Close();
+                                break;
+                            default:
+                            case menu("No"):
+                                message_Close();
+                                supervision_ExecuteActingSub(11, "NEWGAME", 0);
+                        }
+                    }
+                    else
+                    {
+                        supervision_ExecuteActingSub(11, "NEWGAME", 0);
+                    }
+            }
+            switch ( ProcessSpecial(24, 0, 0) ) { }
+            end;
+        case 152:
+            switch(scn($SCENARIO_MAIN)[1])
+            {
+                case 0:
+                case 1:
+                    switch ( ProcessSpecial(24, 0, 0) ) { }
+                    end;
+            }
+            break;
+        case 150:
+        case 151:
+            message_Notice("[CN]This save file, belonging to\n[CN][BS]Psychic Puppets[BR], is not currently\n[CN]compatible with this hack.");
+            end;
+        default:
+            message_Notice("[CN]This save file does not belong to\n[CN][BS]Strung Up By Sketches[BR].");
+            message_Notice("[CN]If you believe this is a mistake, please\n[CN]contact the creators of this hack.");
+            end;
+    }
+    §title;
+    ProcessSpecial(65, 3, 0);
+    switch ( ProcessSpecial(23, 0, 0) ) { }
+    switch ( ProcessSpecial(22, 1, 0) ) { }
+    debug_Print('main');
+    supervision_ExecuteActingSub(11, "TITLE", 0);
+    switch ( ProcessSpecial(22, 1, 0) ) { }
+    switch ( ProcessSpecial(24, 0, 0) ) { }
+    hold;
+}
+
+coro DEMO_03 {
+    return;
+}
+
+coro DEMO_04 {
+    message_Close();
+    ProcessSpecial(64, 0, 0);
+    ProcessSpecial(65, 2, 0);
+    debug_Print('event');
+    switch ( ProcessSpecial(24, 0, 0) ) { }
+    hold;
+}
+
+coro DEMO_05 {
+    message_Close();
+    switch ( ProcessSpecial(24, 0, 0) ) { }
+    hold;
+}
+
+coro DEMO_06 {
+    message_Close();
+    switch ( ProcessSpecial(26, 0, 0) ) { }
+    hold;
+}
+
+coro EVENT_M00A_01 {
+    $SCENARIO_MAIN = scn[152, 0];
+    $CRYSTAL_COLOR_02 = 0;
+    $BIT_FUWARANTE_LOCAL[0] = 1;
+    $BIT_FUWARANTE_LOCAL[1] = 1;
+    $BIT_FUWARANTE_LOCAL[2] = 1;
+    ProcessSpecial(66, 4, 1);
+    ProcessSpecial(66, 2, 3);
+    ProcessSpecial(66, 1, 0);
+    ProcessSpecial(PROCESS_SPECIAL_INIT_MAIN_TEAM_AFTER_QUIZ, 0, 0);
+    switch ( ProcessSpecial(100, 0, 0) ) { }
+    ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+    ProcessSpecial(75, 1, 0);
+    ~c(81, 'initial');
+    main_EnterDungeon(1, 0);
+    main_EnterDungeon(-1, 0);
+    end;
+}
+
+coro EVENT_HA_YU_KI {
+    return;
+}
+
+coro EVENT_HA_YU_KI_DO {
+    return;
+}
+
+coro EVENT_HA_YU_SHU {
+    return;
+}
+
+coro EVENT_HA_YU_SHU_DO {
+    return;
+}
+
+coro EVENT_HA_CHO {
+    return;
+}
+
+coro EVENT_HA_CHO_DO {
+    return;
+}
+
+coro EVENT_HA_KI {
+    return;
+}
+
+coro EVENT_HA_YU_KIX {
+    return;
+}
+
+coro EVENT_HA_YU_KI_DOX {
+    return;
+}
+
+coro EVENT_HA_YU_SHUX {
+    return;
+}
+
+coro EVENT_HA_YU_SHU_DOX {
+    return;
+}
+
+coro EVENT_HA_SAME {
+    return;
+}
+
+coro HA_MIHARIBAN {
+    return;
+}
+
+coro EVENT_HA_SAMEX {
+    return;
+}
+
+coro EVENT_M00_01 {
+    return;
+}
+
+coro EVENT_M00_02 {
+    return;
+}
+
+coro EVENT_M00_03 {
+    return;
+}
+
+coro EVENT_M00_04 {
+    return;
+}
+
+coro EVENT_M00_05 {
+    return;
+}
+
+coro EVENT_M00_06 {
+    return;
+}
+
+coro EVENT_M00_07 {
+    return;
+}
+
+coro EVENT_M00_08 {
+    return;
+}
+
+coro EVENT_M00_09 {
+    return;
+}
+
+coro EVENT_M00_12 {
+    return;
+}
+
+coro EVENT_M00_13 {
+    return;
+}
+
+coro EVENT_M00_14 {
+    return;
+}
+
+coro EVENT_M01_01_02 {
+    return;
+}
+
+coro EVENT_M01_03 {
+    return;
+}
+
+coro EVENT_M01_04 {
+    return;
+}
+
+coro EVENT_M01_05 {
+    return;
+}
+
+coro EVENT_M01_06 {
+    return;
+}
+
+coro EVENT_M01_07_08 {
+    return;
+}
+
+coro EVENT_M02_01_02 {
+    return;
+}
+
+coro EVENT_M02_03_04 {
+    return;
+}
+
+coro EVENT_M02_05_07A {
+    return;
+}
+
+coro EVENT_M02_07B {
+    return;
+}
+
+coro EVENT_M02_09_10 {
+    return;
+}
+
+coro EVENT_M03_01B {
+    return;
+}
+
+coro EVENT_M03_02 {
+    return;
+}
+
+coro EVENT_M03_03 {
+    return;
+}
+
+coro EVENT_M03_04 {
+    return;
+}
+
+coro EVENT_M03_05_06 {
+    return;
+}
+
+coro EVENT_M03_07A {
+    return;
+}
+
+coro EVENT_M03_07B {
+    return;
+}
+
+coro EVENT_M03_08 {
+    return;
+}
+
+coro EVENT_M03_10_13 {
+    return;
+}
+
+coro EVENT_M04_01 {
+    return;
+}
+
+coro EVENT_M04_02_03 {
+    return;
+}
+
+coro EVENT_M05_01_02 {
+    return;
+}
+
+coro EVENT_M05_03 {
+    return;
+}
+
+coro EVENT_M05_04 {
+    return;
+}
+
+coro EVENT_M05_05 {
+    return;
+}
+
+coro EVENT_M05_06_09 {
+    return;
+}
+
+coro EVENT_M06_01 {
+    return;
+}
+
+coro EVENT_M06_02 {
+    return;
+}
+
+coro EVENT_M06_03 {
+    return;
+}
+
+coro EVENT_M06_04 {
+    return;
+}
+
+coro EVENT_M06_05 {
+    return;
+}
+
+coro EVENT_M07_01_02 {
+    return;
+}
+
+coro EVENT_M07_03 {
+    return;
+}
+
+coro EVENT_M07_04 {
+    return;
+}
+
+coro EVENT_M07_05 {
+    return;
+}
+
+coro EVENT_M07_06 {
+    return;
+}
+
+coro EVENT_M07_07_12 {
+    return;
+}
+
+coro EVENT_M07_13 {
+    return;
+}
+
+coro EVENT_M07_14 {
+    return;
+}
+
+coro EVENT_M08_01_02 {
+    return;
+}
+
+coro EVENT_M08_03 {
+    return;
+}
+
+coro EVENT_M08_04 {
+    return;
+}
+
+coro EVENT_M08_05_06 {
+    return;
+}
+
+coro EVENT_M08_07 {
+    return;
+}
+
+coro EVENT_M08_08 {
+    return;
+}
+
+coro EVENT_M08_09 {
+    return;
+}
+
+coro EVENT_M08_10 {
+    return;
+}
+
+coro EVENT_M08_11 {
+    return;
+}
+
+coro EVENT_M08_12 {
+    return;
+}
+
+coro EVENT_M08_13 {
+    return;
+}
+
+coro EVENT_M09_01 {
+    return;
+}
+
+coro EVENT_M09_02 {
+    return;
+}
+
+coro EVENT_M09_03 {
+    return;
+}
+
+coro EVENT_M09_04 {
+    return;
+}
+
+coro EVENT_M09_05 {
+    return;
+}
+
+coro EVENT_M09_06_07 {
+    return;
+}
+
+coro EVENT_M10_01 {
+    return;
+}
+
+coro EVENT_M10_02 {
+    return;
+}
+
+coro EVENT_M10_03 {
+    return;
+}
+
+coro EVENT_M10_04 {
+    return;
+}
+
+coro EVENT_M10_05 {
+    return;
+}
+
+coro EVENT_M10_06 {
+    return;
+}
+
+coro EVENT_M10_07 {
+    return;
+}
+
+coro EVENT_M10_08 {
+    return;
+}
+
+coro EVENT_M10_09 {
+    return;
+}
+
+coro EVENT_M10_10 {
+    return;
+}
+
+coro EVENT_M10_11_12 {
+    return;
+}
+
+coro EVENT_M11_01 {
+    return;
+}
+
+coro EVENT_M11_02 {
+    return;
+}
+
+coro EVENT_M11_03 {
+    return;
+}
+
+coro EVENT_M11_04 {
+    return;
+}
+
+coro EVENT_M11_05 {
+    return;
+}
+
+coro EVENT_M11_06_07 {
+    return;
+}
+
+coro EVENT_M12_01 {
+    return;
+}
+
+coro EVENT_M12_02 {
+    return;
+}
+
+coro EVENT_M12_03A {
+    return;
+}
+
+coro EVENT_M12_03B {
+    return;
+}
+
+coro EVENT_M12_04 {
+    return;
+}
+
+coro EVENT_M12_05 {
+    return;
+}
+
+coro EVENT_M12_06 {
+    return;
+}
+
+coro EVENT_M12_07 {
+    return;
+}
+
+coro EVENT_M12_08 {
+    return;
+}
+
+coro EVENT_M12_09 {
+    return;
+}
+
+coro EVENT_M12_10_12 {
+    return;
+}
+
+coro EVENT_M13_01 {
+    return;
+}
+
+coro EVENT_M13_02 {
+    return;
+}
+
+coro EVENT_M13_03 {
+    return;
+}
+
+coro EVENT_M13_04 {
+    return;
+}
+
+coro EVENT_M13_05A {
+    return;
+}
+
+coro EVENT_M13_05B {
+    return;
+}
+
+coro EVENT_M13_06 {
+    return;
+}
+
+coro EVENT_M13_07 {
+    return;
+}
+
+coro EVENT_M13_08 {
+    return;
+}
+
+coro EVENT_M13_09 {
+    return;
+}
+
+coro EVENT_M14_01 {
+    return;
+}
+
+coro EVENT_M14_02A {
+    return;
+}
+
+coro EVENT_M14_02B {
+    return;
+}
+
+coro EVENT_M14_03 {
+    return;
+}
+
+coro EVENT_M14_04 {
+    return;
+}
+
+coro EVENT_M14_05 {
+    return;
+}
+
+coro EVENT_M14_06 {
+    return;
+}
+
+coro EVENT_M14_07 {
+    return;
+}
+
+coro EVENT_M14_08_09 {
+    return;
+}
+
+coro EVENT_M15_01 {
+    return;
+}
+
+coro EVENT_M15_02 {
+    return;
+}
+
+coro EVENT_M15_03 {
+    return;
+}
+
+coro EVENT_M15_04 {
+    return;
+}
+
+coro EVENT_M15_05 {
+    return;
+}
+
+coro EVENT_M15_06 {
+    return;
+}
+
+coro EVENT_M15_07 {
+    return;
+}
+
+coro EVENT_M15_08 {
+    return;
+}
+
+coro EVENT_M15_09 {
+    return;
+}
+
+coro EVENT_M15_10_12 {
+    return;
+}
+
+coro EVENT_M16_01 {
+    return;
+}
+
+coro EVENT_M16_02 {
+    return;
+}
+
+coro EVENT_M16_03 {
+    return;
+}
+
+coro EVENT_M16_04 {
+    return;
+}
+
+coro EVENT_M16_05 {
+    return;
+}
+
+coro EVENT_M16_06_07 {
+    return;
+}
+
+coro EVENT_M17_01 {
+    return;
+}
+
+coro EVENT_M17_02 {
+    return;
+}
+
+coro EVENT_M17_03_05 {
+    return;
+}
+
+coro EVENT_M17_06 {
+    return;
+}
+
+coro EVENT_M17_07 {
+    return;
+}
+
+coro EVENT_M18_01 {
+    return;
+}
+
+coro EVENT_M18_02 {
+    return;
+}
+
+coro EVENT_M18_03 {
+    return;
+}
+
+coro EVENT_M18_04_05 {
+    return;
+}
+
+coro EVENT_M18_06 {
+    return;
+}
+
+coro EVENT_M18_07 {
+    return;
+}
+
+coro EVENT_M18_08 {
+    return;
+}
+
+coro EVENT_M18_09 {
+    return;
+}
+
+coro EVENT_M18_10 {
+    return;
+}
+
+coro EVENT_M18_11 {
+    return;
+}
+
+coro EVENT_M18_12 {
+    return;
+}
+
+coro EVENT_M18_13_14 {
+    return;
+}
+
+coro EVENT_M19_01_02 {
+    return;
+}
+
+coro EVENT_M19_03 {
+    return;
+}
+
+coro EVENT_M19_04 {
+    return;
+}
+
+coro EVENT_M19_05 {
+    return;
+}
+
+coro EVENT_M19_06_07 {
+    return;
+}
+
+coro EVENT_M19_08 {
+    return;
+}
+
+coro EVENT_M19_09 {
+    return;
+}
+
+coro EVENT_M19_10 {
+    return;
+}
+
+coro EVENT_M20_01_04 {
+    return;
+}
+
+coro EVENT_M20_05 {
+    return;
+}
+
+coro EVENT_M20_06 {
+    return;
+}
+
+coro EVENT_M20_07_09 {
+    return;
+}
+
+coro EVENT_M21_01_03 {
+    return;
+}
+
+coro EVENT_M21_04 {
+    return;
+}
+
+coro EVENT_M21_05 {
+    return;
+}
+
+coro EVENT_M21_06 {
+    return;
+}
+
+coro EVENT_M22_01_02 {
+    return;
+}
+
+coro EVENT_M22_03 {
+    return;
+}
+
+coro EVENT_M22_04 {
+    return;
+}
+
+coro EVENT_M22_05 {
+    return;
+}
+
+coro EVENT_M22_06 {
+    return;
+}
+
+coro EVENT_M22_07 {
+    return;
+}
+
+coro EVENT_M22_08 {
+    return;
+}
+
+coro EVENT_M22_09_10 {
+    return;
+}
+
+coro EVENT_M22_11 {
+    return;
+}
+
+coro EVENT_M23_01_02 {
+    return;
+}
+
+coro EVENT_M23_03 {
+    return;
+}
+
+coro EVENT_M23_04A {
+    return;
+}
+
+coro EVENT_M23_04B {
+    return;
+}
+
+coro EVENT_M23_05 {
+    return;
+}
+
+coro EVENT_M23_06 {
+    return;
+}
+
+coro EVENT_M23_07 {
+    return;
+}
+
+coro EVENT_M23_08 {
+    return;
+}
+
+coro EVENT_M23_09_10 {
+    return;
+}
+
+coro EVENT_M24_01_03 {
+    return;
+}
+
+coro EVENT_M24_04 {
+    return;
+}
+
+coro EVENT_M24_05 {
+    return;
+}
+
+coro EVENT_M24_06 {
+    return;
+}
+
+coro EVENT_M24_07 {
+    return;
+}
+
+coro EVENT_M24_08 {
+    return;
+}
+
+coro EVENT_M24_09 {
+    return;
+}
+
+coro EVENT_M24_10 {
+    return;
+}
+
+coro EVENT_M24_11 {
+    return;
+}
+
+coro EVENT_M25_01_05 {
+    return;
+}
+
+coro EVENT_M25_06 {
+    return;
+}
+
+coro EVENT_M25_07 {
+    return;
+}
+
+coro EVENT_M25_08 {
+    return;
+}
+
+coro EVENT_M25_09 {
+    return;
+}
+
+coro EVENT_M25_10 {
+    return;
+}
+
+coro EVENT_M25_11 {
+    return;
+}
+
+coro EVENT_M25_12 {
+    return;
+}
+
+coro EVENT_M26_01_08 {
+    return;
+}
+
+coro EVENT_S01_01 {
+    return;
+}
+
+coro EVENT_S01_02 {
+    return;
+}
+
+coro EVENT_S01_03 {
+    return;
+}
+
+coro EVENT_S01_04 {
+    return;
+}
+
+coro EVENT_S01_05 {
+    return;
+}
+
+coro EVENT_S01_06 {
+    return;
+}
+
+coro EVENT_S01_07 {
+    return;
+}
+
+coro EVENT_S01_08 {
+    return;
+}
+
+coro EVENT_S01_09_10 {
+    return;
+}
+
+coro EVENT_S01_12 {
+    return;
+}
+
+coro EVENT_S02_01 {
+    return;
+}
+
+coro EVENT_S02_02 {
+    return;
+}
+
+coro EVENT_S02_03 {
+    return;
+}
+
+coro EVENT_S02_04 {
+    return;
+}
+
+coro EVENT_S02_05 {
+    return;
+}
+
+coro EVENT_S02_06 {
+    return;
+}
+
+coro EVENT_S02_07 {
+    return;
+}
+
+coro EVENT_S02_08 {
+    return;
+}
+
+coro EVENT_S02_09 {
+    return;
+}
+
+coro EVENT_S02_10 {
+    return;
+}
+
+coro EVENT_S03_01 {
+    return;
+}
+
+coro EVENT_S03_02 {
+    return;
+}
+
+coro EVENT_S03_03 {
+    return;
+}
+
+coro EVENT_S03_04 {
+    return;
+}
+
+coro EVENT_S03_05 {
+    return;
+}
+
+coro EVENT_S03_06 {
+    return;
+}
+
+coro EVENT_S03_07 {
+    return;
+}
+
+coro EVENT_S03_08 {
+    return;
+}
+
+coro EVENT_S03_09 {
+    return;
+}
+
+coro EVENT_S03_10 {
+    return;
+}
+
+coro EVENT_S03_11 {
+    return;
+}
+
+coro EVENT_S03_12 {
+    return;
+}
+
+coro EVENT_S03_13 {
+    return;
+}
+
+coro EVENT_S03_14 {
+    return;
+}
+
+coro EVENT_S03_15 {
+    return;
+}
+
+coro EVENT_S03_16 {
+    return;
+}
+
+coro EVENT_S03_17_20 {
+    return;
+}
+
+coro EVENT_S03_18 {
+    return;
+}
+
+coro EVENT_S03_19 {
+    return;
+}
+
+coro EVENT_S04_01 {
+    return;
+}
+
+coro EVENT_S04_02 {
+    return;
+}
+
+coro EVENT_S04_03 {
+    return;
+}
+
+coro EVENT_S04_04 {
+    return;
+}
+
+coro EVENT_S04_05 {
+    return;
+}
+
+coro EVENT_S04_06_07 {
+    return;
+}
+
+coro EVENT_S04_08 {
+    return;
+}
+
+coro EVENT_S04_09 {
+    return;
+}
+
+coro EVENT_S04_10 {
+    return;
+}
+
+coro EVENT_S04_11 {
+    return;
+}
+
+coro EVENT_S04_12 {
+    return;
+}
+
+coro EVENT_S04_13 {
+    return;
+}
+
+coro EVENT_S04_14 {
+    return;
+}
+
+coro EVENT_S04_15 {
+    return;
+}
+
+coro EVENT_S04_16 {
+    return;
+}
+
+coro EVENT_S04_17 {
+    return;
+}
+
+coro EVENT_S04_18 {
+    return;
+}
+
+coro EVENT_S04_19 {
+    return;
+}
+
+coro EVENT_S04_20 {
+    return;
+}
+
+coro EVENT_S04_21 {
+    return;
+}
+
+coro EVENT_S04_22 {
+    return;
+}
+
+coro EVENT_S04_23 {
+    return;
+}
+
+coro EVENT_S04_24 {
+    return;
+}
+
+coro EVENT_S11_01 {
+    return;
+}
+
+coro EVENT_S12_01 {
+    return;
+}
+
+coro EVENT_S12_02 {
+    return;
+}
+
+coro EVENT_S12_03 {
+    return;
+}
+
+coro EVENT_S12_04 {
+    return;
+}
+
+coro EVENT_S12_05 {
+    return;
+}
+
+coro EVENT_S12_06 {
+    return;
+}
+
+coro EVENT_S12_07 {
+    return;
+}
+
+coro EVENT_S12_08 {
+    return;
+}
+
+coro EVENT_S12_09 {
+    return;
+}
+
+coro EVENT_S12_10 {
+    return;
+}
+
+coro EVENT_S12_11 {
+    return;
+}
+
+coro EVENT_S12_12 {
+    return;
+}
+
+coro EVENT_S12_13 {
+    return;
+}
+
+coro EVENT_S12_14 {
+    return;
+}
+
+coro EVENT_S12_15 {
+    return;
+}
+
+coro EVENT_S12_16 {
+    return;
+}
+
+coro EVENT_S12_17 {
+    return;
+}
+
+coro EVENT_S12_18 {
+    return;
+}
+
+coro EVENT_S12_19 {
+    return;
+}
+
+coro EVENT_S12_20 {
+    return;
+}
+
+coro EVENT_S12_21 {
+    return;
+}
+
+coro EVENT_S20_01 {
+    return;
+}
+
+coro EVENT_S20_02 {
+    return;
+}
+
+coro EVENT_S20_03 {
+    return;
+}
+
+coro EVENT_S20_04_05 {
+    return;
+}
+
+coro EVENT_S20_06 {
+    return;
+}
+
+coro EVENT_S20_07_08 {
+    return;
+}
+
+coro EVENT_S20_09 {
+    return;
+}
+
+coro EVENT_S20_10 {
+    return;
+}
+
+coro EVENT_S20_11 {
+    return;
+}
+
+coro EVENT_S21_01 {
+    return;
+}
+
+coro EVENT_S21_02 {
+    return;
+}
+
+coro EVENT_S21_03 {
+    return;
+}
+
+coro EVENT_S21_04_06 {
+    return;
+}
+
+coro EVENT_S21_07 {
+    return;
+}
+
+coro EVENT_S21_08 {
+    return;
+}
+
+coro EVENT_S21_09 {
+    return;
+}
+
+coro EVENT_S21_10 {
+    return;
+}
+
+coro EVENT_S21_11 {
+    return;
+}
+
+coro EVENT_S21_12 {
+    return;
+}
+
+coro EVENT_S21_13 {
+    return;
+}
+
+coro EVENT_S22_01_04 {
+    return;
+}
+
+coro EVENT_S22_05 {
+    return;
+}
+
+coro EVENT_S22_06 {
+    return;
+}
+
+coro EVENT_S22_07 {
+    return;
+}
+
+coro EVENT_S22_08 {
+    return;
+}
+
+coro EVENT_S22_09 {
+    return;
+}
+
+coro EVENT_S22_10 {
+    return;
+}
+
+coro EVENT_S22_11 {
+    return;
+}
+
+coro EVENT_S22_12 {
+    return;
+}
+
+coro EVENT_S22_13 {
+    return;
+}
+
+coro EVENT_S22_14_15 {
+    return;
+}
+
+coro EVENT_S23_01 {
+    return;
+}
+
+coro EVENT_S30_01 {
+    return;
+}
+
+coro EVENT_S30_02 {
+    return;
+}
+
+coro EVENT_S30_03 {
+    return;
+}
+
+coro EVENT_S30_04 {
+    return;
+}
+
+coro EVENT_S30_05 {
+    return;
+}
+
+coro EVENT_S30_06 {
+    return;
+}
+
+coro EVENT_S30_07 {
+    return;
+}
+
+coro EVENT_S31_01 {
+    return;
+}
+
+coro EVENT_S31_02 {
+    return;
+}
+
+coro EVENT_S31_03 {
+    return;
+}
+
+coro EVENT_S31_04 {
+    return;
+}
+
+coro EVENT_S31_05 {
+    return;
+}
+
+coro EVENT_S31_06 {
+    return;
+}
+
+coro EVENT_S31_07 {
+    return;
+}
+
+coro EVENT_S31_08 {
+    return;
+}
+
+coro EVENT_S31_09 {
+    return;
+}
+
+coro EVENT_S31_10 {
+    return;
+}
+
+coro EVENT_S31_11 {
+    return;
+}
+
+coro EVENT_S31_12 {
+    return;
+}
+
+coro EVENT_S31_13 {
+    return;
+}
+
+coro EVENT_S31_14 {
+    return;
+}
+
+coro EVENT_S31_15 {
+    return;
+}
+
+coro EVENT_S31_16 {
+    return;
+}
+
+coro EVENT_S31_17 {
+    return;
+}
+
+coro EVENT_S31_18 {
+    return;
+}
+
+coro EVENT_S31_19 {
+    return;
+}
+
+coro EVENT_S31_20 {
+    return;
+}
+
+coro EVENT_S31_21 {
+    return;
+}
+
+coro EVENT_S31_22 {
+    return;
+}
+
+coro EVENT_S31_23 {
+    return;
+}
+
+coro EVENT_S31_24 {
+    return;
+}
+
+coro EVENT_S31_25 {
+    return;
+}
+
+coro EVENT_S31_26 {
+    return;
+}
+
+coro EVENT_S31_27 {
+    return;
+}
+
+coro EVENT_S31_28 {
+    return;
+}
+
+coro EVENT_S31_29 {
+    return;
+}
+
+coro EVENT_S31_30 {
+    return;
+}
+
+coro EVENT_S31_31 {
+    return;
+}
+
+coro EVENT_S31_32 {
+    return;
+}
+
+coro EVENT_S31_33 {
+    return;
+}
+
+coro EVENT_S31_34 {
+    return;
+}
+
+coro EVENT_S31_35 {
+    return;
+}
+
+coro EVENT_S31_36 {
+    return;
+}
+
+coro EVENT_S31_37 {
+    return;
+}
+
+coro EVENT_S31_38 {
+    return;
+}
+
+coro EVENT_S31_39 {
+    return;
+}
+
+coro EVENT_S31_40 {
+    return;
+}
+
+coro EVENT_S32_01 {
+    return;
+}
+
+coro EVENT_S32_02 {
+    return;
+}
+
+coro EVENT_S32_03 {
+    return;
+}
+
+coro EVENT_S32_04 {
+    return;
+}
+
+coro EVENT_N00_01 {
+    return;
+}
+
+coro EVENT_N01_01 {
+    return;
+}
+
+coro EVENT_N01_02 {
+    return;
+}
+
+coro EVENT_N01_03 {
+    return;
+}
+
+coro EVENT_N01_04 {
+    return;
+}
+
+coro EVENT_N01_05_07 {
+    return;
+}
+
+coro EVENT_N01_08 {
+    return;
+}
+
+coro EVENT_N01_09 {
+    return;
+}
+
+coro EVENT_N01_10YARARETA {
+    return;
+}
+
+coro EVENT_N01_10CHOUREI {
+    return;
+}
+
+coro EVENT_N01_14 {
+    return;
+}
+
+coro EVENT_N01_15 {
+    return;
+}
+
+coro EVENT_N01_16 {
+    return;
+}
+
+coro EVENT_N01_17 {
+    return;
+}
+
+coro EVENT_N01_18 {
+    return;
+}
+
+coro EVENT_N01_19 {
+    return;
+}
+
+coro EVENT_N01_19_2 {
+    return;
+}
+
+coro EVENT_N01_20 {
+    return;
+}
+
+coro EVENT_N01_21 {
+    return;
+}
+
+coro EVENT_N01_22 {
+    return;
+}
+
+coro EVENT_N01_23 {
+    return;
+}
+
+coro EVENT_N01_24 {
+    return;
+}
+
+coro EVENT_N01_25 {
+    return;
+}
+
+coro EVENT_N01_27 {
+    return;
+}
+
+coro EVENT_N01_28 {
+    return;
+}
+
+coro EVENT_N01_30 {
+    return;
+}
+
+coro EVENT_N01_31 {
+    return;
+}
+
+coro EVENT_N02_01 {
+    return;
+}
+
+coro EVENT_N02_02 {
+    return;
+}
+
+coro EVENT_N02_03 {
+    return;
+}
+
+coro EVENT_N02_04 {
+    return;
+}
+
+coro EVENT_N02_05 {
+    return;
+}
+
+coro EVENT_N02_06_07 {
+    return;
+}
+
+coro EVENT_N02_08 {
+    return;
+}
+
+coro EVENT_N02_09_10 {
+    return;
+}
+
+coro EVENT_N03_01 {
+    return;
+}
+
+coro EVENT_N03_02 {
+    return;
+}
+
+coro EVENT_N03_03 {
+    return;
+}
+
+coro EVENT_N03_04 {
+    return;
+}
+
+coro EVENT_N03_05 {
+    return;
+}
+
+coro EVENT_N03_06_07 {
+    return;
+}
+
+coro EVENT_N03_08 {
+    return;
+}
+
+coro EVENT_N03_09 {
+    return;
+}
+
+coro EVENT_N03_10 {
+    return;
+}
+
+coro EVENT_N03_11 {
+    return;
+}
+
+coro EVENT_N03_12 {
+    return;
+}
+
+coro EVENT_N03_13 {
+    return;
+}
+
+coro EVENT_N03_14 {
+    return;
+}
+
+coro EVENT_N03_15_16 {
+    return;
+}
+
+coro EVENT_N03_17 {
+    return;
+}
+
+coro EVENT_N03_18 {
+    return;
+}
+
+coro EVENT_N03_19 {
+    return;
+}
+
+coro EVENT_N04_01 {
+    return;
+}
+
+coro EVENT_N04_02 {
+    return;
+}
+
+coro EVENT_N04_03 {
+    return;
+}
+
+coro EVENT_N04_04 {
+    return;
+}
+
+coro EVENT_N04_05 {
+    return;
+}
+
+coro EVENT_N04_06 {
+    return;
+}
+
+coro EVENT_N04_07 {
+    return;
+}
+
+coro EVENT_N04_08 {
+    return;
+}
+
+coro EVENT_N04_09 {
+    return;
+}
+
+coro EVENT_N04_10 {
+    return;
+}
+
+coro EVENT_N04_11 {
+    return;
+}
+
+coro EVENT_N04_12 {
+    return;
+}
+
+coro EVENT_N04_13 {
+    return;
+}
+
+coro EVENT_N04_14 {
+    return;
+}
+
+coro EVENT_N04_15 {
+    return;
+}
+
+coro EVENT_N04_16 {
+    return;
+}
+
+coro EVENT_N04_17 {
+    return;
+}
+
+coro EVENT_N04_18 {
+    return;
+}
+
+coro EVENT_N04_19 {
+    return;
+}
+
+coro EVENT_N04_20 {
+    return;
+}
+
+coro EVENT_N04_21 {
+    return;
+}
+
+coro EVENT_N04_22 {
+    return;
+}
+
+coro EVENT_N04_23 {
+    return;
+}
+
+coro EVENT_N04_24 {
+    return;
+}
+
+coro EVENT_N04_25 {
+    return;
+}
+
+coro EVENT_N04_26 {
+    return;
+}
+
+coro EVENT_N06_01_02 {
+    return;
+}
+
+coro EVENT_N06_03 {
+    return;
+}
+
+coro EVENT_N06_04 {
+    return;
+}
+
+coro EVENT_N06_05_07 {
+    return;
+}
+
+coro EVENT_N06_08 {
+    return;
+}
+
+coro EVENT_N06_09 {
+    return;
+}
+
+coro EVENT_N06_10 {
+    return;
+}
+
+coro EVENT_N06_11 {
+    return;
+}
+
+coro EVENT_N06_12 {
+    return;
+}
+
+coro EVENT_N06_13 {
+    return;
+}
+
+coro EVENT_N06_14 {
+    return;
+}
+
+coro EVENT_N06_15 {
+    return;
+}
+
+coro EVENT_N06_16 {
+    return;
+}
+
+coro EVENT_N06_17 {
+    return;
+}
+
+coro EVENT_N06_18_19 {
+    return;
+}
+
+coro EVENT_N06_20 {
+    return;
+}
+
+coro EVENT_N06_21 {
+    return;
+}
+
+coro EVENT_N06_22 {
+    return;
+}
+
+coro EVENT_N06_23 {
+    return;
+}
+
+coro EVENT_N06_24 {
+    return;
+}
+
+coro EVENT_N06_25 {
+    return;
+}
+
+coro EVENT_N06_26 {
+    return;
+}
+
+coro EVENT_N06_27 {
+    return;
+}
+
+coro EVENT_N06_28 {
+    return;
+}
+
+coro EVENT_N06_29 {
+    return;
+}
+
+coro EVENT_N06_30 {
+    return;
+}
+
+coro EVENT_N06_31 {
+    return;
+}
+
+coro EVENT_N06_32 {
+    return;
+}
+
+coro EVENT_N06_33 {
+    return;
+}
+
+coro EVENT_N06_34 {
+    return;
+}
+
+coro EVENT_N06_35 {
+    return;
+}
+
+coro EVENT_N06_36 {
+    return;
+}
+
+coro EVENT_N06_37 {
+    return;
+}
+
+coro EVENT_N06_38 {
+    return;
+}
+
+coro EVENT_N06_39 {
+    return;
+}
+
+coro EVENT_N08_01_02 {
+    return;
+}
+
+coro EVENT_N08_03 {
+    return;
+}
+
+coro EVENT_N08_04 {
+    return;
+}
+
+coro EVENT_N08_05 {
+    return;
+}
+
+coro EVENT_N08_06 {
+    return;
+}
+
+coro EVENT_N08_07 {
+    return;
+}
+
+coro EVENT_N08_08 {
+    return;
+}
+
+coro EVENT_N08_09 {
+    return;
+}
+
+coro EVENT_N08_10 {
+    return;
+}
+
+coro EVENT_N08_11 {
+    return;
+}
+
+coro EVENT_N08_12 {
+    return;
+}
+
+coro EVENT_N08_13 {
+    return;
+}
+
+coro EVENT_N08_14 {
+    return;
+}
+
+coro EVENT_N08_15 {
+    return;
+}
+
+coro EVENT_N08_16 {
+    return;
+}
+
+coro EVENT_N08_17 {
+    return;
+}
+
+coro EVENT_N08_18 {
+    return;
+}
+
+coro EVENT_N08_19 {
+    return;
+}
+
+coro EVENT_N08_20 {
+    return;
+}
+
+coro EVENT_N08_21 {
+    return;
+}
+
+coro EVENT_N08_22 {
+    return;
+}
+
+coro EVENT_N08_23 {
+    return;
+}
+
+coro EVENT_N08_24 {
+    return;
+}
+
+coro EVENT_N08_25 {
+    return;
+}
+
+coro EVENT_N08_26 {
+    return;
+}
+
+coro EVENT_N08_27 {
+    return;
+}
+
+coro EVENT_N08_28 {
+    return;
+}
+
+coro EVENT_N08_29 {
+    return;
+}
+
+coro EVENT_N08_30 {
+    return;
+}
+
+coro EVENT_N09_01 {
+    return;
+}
+
+coro EVENT_N09_02 {
+    return;
+}
+
+coro EVENT_N09_03 {
+    return;
+}
+
+coro EVENT_N09_04 {
+    return;
+}
+
+coro EVENT_N09_05 {
+    return;
+}
+
+coro EVENT_N09_06 {
+    return;
+}
+
+coro EVENT_N09_07 {
+    return;
+}
+
+coro EVENT_N09_08 {
+    return;
+}
+
+coro EVENT_N09_09 {
+    return;
+}
+
+coro EVENT_N09_10 {
+    return;
+}
+
+coro EVENT_N09_11 {
+    return;
+}
+
+coro EVENT_N09_12 {
+    return;
+}
+
+coro EVENT_N09_13 {
+    return;
+}
+
+coro EVENT_N09_14 {
+    return;
+}
+
+coro EVENT_N09_15 {
+    return;
+}
+
+coro EVENT_N09_16 {
+    return;
+}
+
+coro EVENT_N09_17 {
+    return;
+}
+
+coro EVENT_N09_18 {
+    return;
+}
+
+coro EVENT_N09_19 {
+    return;
+}
+
+coro EVENT_N09_20 {
+    return;
+}
+
+coro EVENT_N09_21 {
+    return;
+}
+
+coro EVENT_N09_22 {
+    return;
+}
+
+coro EVENT_TG01 {
+    debug_Print("Remember Place Win");
+    $SCENARIO_MAIN = scn[152, 2];
+    $CRYSTAL_COLOR_02 = 0;
+    ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+    $PERFORMANCE_PROGRESS_LIST[2] = 1;
+    ~c(44, 'win');
+    supervision_ExecuteActingSub(11, 'title', 1);
+    CallCommon(CORO_FADE_OUT_ALL_AFTER);
+    $SCENARIO_MAIN_BIT_FLAG[8] = 1;
+    $COMPULSORY_SAVE_POINT = 0;
+    CallCommon(CORO_HANYOU_SAVE_FUNC);
+    §save_0;
+    $SCENARIO_MAIN_BIT_FLAG[8] = 0;
+    ProcessSpecial(102, 0, 0); // Adjust level after time skip
+    ~c(9, 'timeskip');
+    ~c(44, 'timeskip');
+    ~c(49, 'meet0');
+    $CRYSTAL_COLOR_02 = 1;
+    ~c(9, 'wakeup');
+    CallCommon(CORO_EVENT_END_MAPIN);
+    main_SetGround(9);
+    supervision_ExecuteStationCommon(9, 1);
+    end;
+}
+
+coro EVENT_TG02 {
+    debug_Print("Entering Hollow");
+    if not($SCENARIO_TALK_BIT_FLAG[2])
+    {
+        $CRYSTAL_COLOR_02 = 2;
+        $SCENARIO_TALK_BIT_FLAG[2] = 1;
+        CancelRecoverCommon(CORO_MAP_TEST);
+        supervision_ExecuteActingSub(15, 'initial', 0);
+        CancelCut();
+        supervision_ExecuteActingSub(15, 'askname', 1);
+    }
+    else
+    {
+        §askname;
+        supervision_ExecuteActingSub(15, 'askname', 0);
+    }
+    $GROUND_ENTER = 15;
+    main_EnterGround(10, 0);
+    end;
+}
+
+coro EVENT_TG03 {
+    debug_Print("Entering a Remember Place");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(81, 'prepare');
+    switch(scn($SCENARIO_MAIN)[1])
+    {
+        case 2:
+            $SCENARIO_TALK_BIT_FLAG[3] = 1;
+            break;
+        case 3:
+            $SCENARIO_TALK_BIT_FLAG[4] = 1;
+            break;
+        case 4:
+            $SCENARIO_TALK_BIT_FLAG[5] = 1;
+            break;
+    }
+    ProcessSpecial(75, 1, 0);
+    ProcessSpecial(101, 0, 0);
+    switch($DUNGEON_SELECT)
+    {
+        case 2:
+            main_EnterDungeon(2, 0);
+            break;
+        case 3:
+            main_EnterDungeon(3, 0);
+            break;
+        default:
+        case 4:
+            // $SCENARIO_TALK_BIT_FLAG[6] = 1;
+            ProcessSpecial(71,0x227,0);
+            main_EnterDungeon(4, 0);
+    }
+    main_EnterDungeon(-1, 0);
+    end;
+}
+
+coro EVENT_TG04 {
+    debug_Print("Entering Little Dream");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(115, 'prepare');
+    ProcessSpecial(75, 1, 0);
+    ProcessSpecial(101, 0, 0);
+    ProcessSpecial(71, 542, 0); // IdentifySpecies (dungeon Doll)
+    $SCENARIO_TALK_BIT_FLAG[252] = 1;
+    $SCENARIO_TALK_BIT_FLAG[253] = 1;
+    main_EnterDungeon(5, 0);
+    main_EnterDungeon(-1, 0);
+    end;
+}
+
+coro EVENT_TG05 {
+    debug_Print("Daunting Doldrums Win");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(67, 'win0');
+    JumpCommon(CORO_EVENT_DIVIDE_AFTER);
+    end;
+}
+
+coro EVENT_TG06 {
+    debug_Print("Polyphonic Playground Win");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(114, 'win0');
+    JumpCommon(CORO_EVENT_DIVIDE_AFTER);
+    end;
+}
+
+coro EVENT_TG07 {
+    debug_Print("Sinking Shadows WIn");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(100, 'win0');
+    JumpCommon(CORO_EVENT_DIVIDE_AFTER);
+    end;
+}
+
+coro EVENT_TG08 {
+    debug_Print("Little Dream Win");
+    supervision_ExecuteActingSub(80, 'final0', 0);
+    $SCENARIO_MAIN_BIT_FLAG[6] = 1;
+    $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+    $SCENARIO_MAIN_BIT_FLAG[8] = 1;
+    $COMPULSORY_SAVE_POINT = 2;
+    ProcessSpecial(79, 0x5E, 0x44);
+    ProcessSpecial(77, 3, 0);
+    CallCommon(CORO_FADE_OUT_ALL_AFTER);
+    message_Notice("[CN]Save completed.");
+    message_Close();
+    supervision_ExecuteActingSub(76, 'final1', 0);
+    end;
+}
+
+coro EVENT_TG09 {
+    debug_Print("First Dungeon Aftermath");
+    $CRYSTAL_COLOR_02 = 3;
+    ~c(34, 'after0');
+    CallCommon(CORO_EVENT_END_MAPIN);
+    main_SetGround(34);
+    supervision_ExecuteStationCommon(34, 1);
+    end;
+}
+
+coro EVENT_TG10 {
+    debug_Print("Second Dungeon Aftermath");
+    $CRYSTAL_COLOR_02 = 4;
+    ~c(10, 'after1');
+    CallCommon(CORO_EVENT_END_MAPIN);
+    main_SetGround(10);
+    supervision_ExecuteStationCommon(10, 1);
+    end;
+}
+
+coro EVENT_TG11 {
+    debug_Print("Third Dungeon Aftermath");
+    $CRYSTAL_COLOR_02 = 0;
+    ~c(34, 'after2');
+    $CRYSTAL_COLOR_02 = 5;
+    ~c(49, 'after3');
+    CallCommon(CORO_EVENT_END_MAPIN);
+    main_SetGround(49);
+    supervision_ExecuteStationCommon(49, 1);
+    end;
+}
+
+coro EVENT_TG12 {
+    debug_Print("Final Save Point");
+    supervision_ExecuteActingSub(76, 'final2', 0);
+    end;
+}
+
+coro EVENT_TG13 {
+    debug_Print("Deleted Save Data");
+    ProcessSpecial(PROCESS_SPECIAL_INIT_MAIN_TEAM_AFTER_QUIZ, 0, 0);
+    supervision_ExecuteActingSub(76, 'final2', 1);
+    supervision_ExecuteActingSub(71, 'credits', 0);
+    end;
+}
+
+coro EVENT_TG14 {
+    return;
+}
+
+coro EVENT_TG15 {
+    return;
+}
+
+coro EVENT_TG16 {
+    return;
+}
+
+coro EVENT_TG17 {
+    return;
+}
+
+coro EVENT_TG18 {
+    return;
+}
+
+coro EVENT_TG19 {
+    return;
+}
+
+coro EVENT_TG20 {
+    return;
+}
+
+coro EVENT_TG21 {
+    return;
+}
+
+coro EVENT_TG22 {
+    return;
+}
+
+coro EVENT_TG23 {
+    return;
+}
+
+coro EVENT_TG24 {
+    return;
+}
+
+coro EVENT_MEND_01 {
+    $SCENARIO_MAIN = scn[29, 0];
+    hold;
+}
+
+coro EVENT_MEND_02 {
+    $SCENARIO_MAIN = scn[29, 0];
+    hold;
+}
+
+coro COMMON_ENTER {
+    se_Play(5378);
+    ProcessSpecial(64, 1, 0);
+    ProcessSpecial(65, 1, 1);
+    $CRYSTAL_COLOR_01 = 0;
+    ProcessSpecial(65, 0, $CRYSTAL_COLOR_01);
+    screen_FadeInAll(0, 0);
+    screen_FadeIn(1, 0);
+    §loop_draw_enter;
+    ProcessSpecial(65, 0, $CRYSTAL_COLOR_01);
+    $CRYSTAL_COLOR_01 += 1;
+    Wait(1);
+    if ($CRYSTAL_COLOR_01<30) {
+        jump @loop_draw_enter;
+    }
+    ProcessSpecial(65, 2, 0);
+    ProcessSpecial(64, 0, 0);
+    screen2_FlushOut(1, 0, 255, 0, 0, 0);
+    return;
+}
+
+coro DEBUG_ENTER {
+    ProcessSpecial(64, 1, 0);
+    ProcessSpecial(65, 1, 2);
+    $CRYSTAL_COLOR_01 = 0;
+    se_Play(5377);
+    §loop_draw3;
+    ProcessSpecial(65, 0, $CRYSTAL_COLOR_01);
+    $CRYSTAL_COLOR_01 += 1;
+    Wait(1);
+    if ($CRYSTAL_COLOR_01<30) {
+        jump @loop_draw3;
+    }
+    screen_FadeOutAll(0, 0);
+    screen_FadeOut(1, 0);
+    ProcessSpecial(65, 2, 0);
+    ProcessSpecial(64, 0, 0);
+    return;
+}
+
+coro GETOUT_NORMAL {
+    debug_Print('GOTO_SCENARIO_DUNGEON');
+    bgm_FadeOut(60);
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro GOTO_SCENARIO_DUNGEON {
+    alias previous;
+}
+
+coro GOTO_REQUEST_DUNGEON {
+    debug_Print('GOTO_REQUEST_DUNGEON');
+    bgm_FadeOut(60);
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro GOTO_TRAINING_DUNGEON {
+    debug_Print('GOTO_TRAINING_DUNGEON');
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro GOTO_RESCUE_DUNGEON {
+    debug_Print('GOTO_RESCUE_DUNGEON');
+    bgm_FadeOut(60);
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro GOTO_FREE_DUNGEON {
+    debug_Print('GOTO_FREE_DUNGEON');
+    bgm_FadeOut(60);
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro GOTO_DEBUG_DUNGEON {
+    debug_Print('GOTO_DEBUG_DUNGEON');
+    bgm_FadeOut(60);
+    switch ( main_EnterAdventure(250, 30) ) { }
+    hold;
+}
+
+coro ENTER_SCENARIO_DUNGEON {
+    debug_Print('ENTER_SCENARIO_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    debug_Print('BGM_FADEOUT');
+    bgm_FadeOut(60);
+    main_EnterDungeon(-1, 30);
+    hold;
+}
+
+coro ENTER_REQUEST_DUNGEON {
+    debug_Print('ENTER_REQUEST_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    debug_Print('BGM_FADEOUT');
+    bgm_FadeOut(60);
+    main_EnterDungeon(-1, 30);
+    hold;
+}
+
+coro ENTER_TRAINING_DUNGEON {
+    debug_Print('ENTER_TRAINING_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    debug_Print('BGM_FADEOUT');
+    bgm_FadeOut(60);
+    main_EnterDungeon(-1, 30);
+    hold;
+}
+
+coro ENTER_RESCUE_DUNGEON {
+    debug_Print('ENTER_RESCUE_DUNGEON');
+    JumpCommon(CORO_EVENT_DIVIDE);
+}
+
+coro ENTER_FREE_DUNGEON {
+    debug_Print('ENTER_FREE_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    debug_Print('BGM_FADEOUT');
+    bgm_FadeOut(60);
+    main_EnterDungeon(-1, 30);
+    hold;
+}
+
+coro ENTER_DEBUG_DUNGEON {
+    debug_Print('ENTER_DEBUG_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    debug_Print('BGM_FADEOUT');
+    bgm_FadeOut(60);
+    main_EnterDungeon(-1, 30);
+    hold;
+}
+
+macro reset_moveset() {
+    switch(ProcessSpecial(PROCESS_SPECIAL_IS_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0))
+    {
+        case 0:
+            ProcessSpecial(72, 0, 0);
+            ProcessSpecial(73, 0, 0);
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+            break;
+        case 1:
+            ProcessSpecial(72, 0, 0);
+            ProcessSpecial(73, 0, 0);
+            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY, 0, 0);
+            switch ( ProcessSpecial(100, 0, 0) ) { }
+    }
+}
+
+coro GETOUT_SCENARIO_DUNGEON {
+    debug_Print('GETOUT_SCENARIO_DUNGEON');
+    
+    $SCENARIO_TALK_BIT_FLAG[252] = 0;
+    $SCENARIO_TALK_BIT_FLAG[253] = 0;
+    
+    switch ( $GROUND_START_MODE ) {
+        case 8:
+            debug_Print('DUNGEON_GETOUT_CONQUEST');
+            switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+            switch ( $DUNGEON_ENTER )
+            {
+                case 1:
+                    if(scn($SCENARIO_MAIN) == [152, 0])
+                    {
+                        $SCENARIO_MAIN = scn[152, 1];
+                        ~c(55, 'identify');
+                        ProcessSpecial(71, 1, 0); // IdentifySpecies (Bulbasaur)
+                        ProcessSpecial(71, 4, 0); // IdentifySpecies (Charmander)
+                        ProcessSpecial(71, 7, 0); // IdentifySpecies (Squirtle)
+                        main_EnterDungeon(1, 0);
+                        ProcessSpecial(70, 3, 1);
+                        ProcessSpecial(75, 1, 0);
+                        main_EnterDungeon(-1, 0);
+                        end;
+                    }
+                    else
+                    {
+                        ProcessSpecial(68, 0, 0); // Remove bag
+                        ~reset_moveset();
+                        JumpCommon(CORO_EVENT_TG01);
+                    }
+                case 2:
+                    ProcessSpecial(68, 0, 0); // Remove bag
+                    ~reset_moveset();
+                    JumpCommon(CORO_EVENT_TG05);
+                case 3:
+                    ProcessSpecial(68, 0, 0); // Remove bag
+                    ~reset_moveset();
+                    JumpCommon(CORO_EVENT_TG06);
+                case 4:
+                    ProcessSpecial(68, 0, 0); // Remove bag
+                    ~reset_moveset();
+                    JumpCommon(CORO_EVENT_TG07);
+                case 5:
+                    if(not $PERFORMANCE_PROGRESS_LIST[50]) {
+                        ~c(115, 'anger');
+                        $PERFORMANCE_PROGRESS_LIST[50] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[252] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[253] = 1;
+                        main_EnterDungeon(5, 0);
+                        ProcessSpecial(70 /* ResumeDungeon */, 2, 1);
+                        main_EnterDungeon(-1, 0);
+                        end;
+                    } elseif (not $PERFORMANCE_PROGRESS_LIST[51]) {
+                        ~c(115, 'bargain');
+                        $PERFORMANCE_PROGRESS_LIST[51] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[252] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[253] = 1;
+                        main_EnterDungeon(5, 0);
+                        ProcessSpecial(70 /* ResumeDungeon */, 3, 1);
+                        main_EnterDungeon(-1, 0);
+                        end;
+                    } elseif (not $PERFORMANCE_PROGRESS_LIST[52]) {
+                        ~c(115, 'depress');
+                        $PERFORMANCE_PROGRESS_LIST[52] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[252] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[253] = 1;
+                        main_EnterDungeon(5, 0);
+                        ProcessSpecial(70 /* ResumeDungeon */, 4, 1);
+                        main_EnterDungeon(-1, 0);
+                        end;
+                    } elseif (not $PERFORMANCE_PROGRESS_LIST[53]) {
+                        ~c(115, 'accept');
+                        $PERFORMANCE_PROGRESS_LIST[53] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[252] = 1;
+                        $SCENARIO_TALK_BIT_FLAG[253] = 1;
+                        main_EnterDungeon(5, 0);
+                        ProcessSpecial(70 /* ResumeDungeon */, 5, 1);
+                        main_EnterDungeon(-1, 0);
+                        end;
+                    } else {
+                        $SCENARIO_TALK_BIT_FLAG[252] = 0;
+                        $SCENARIO_TALK_BIT_FLAG[253] = 1;
+                        ProcessSpecial(68, 0, 0); // Remove bag
+                        ~reset_moveset();
+                        JumpCommon(CORO_EVENT_TG08);
+                    }
+                default:
+                    JumpCommon(CORO_EVENT_DIVIDE);
+            }
+        case 9:
+        case 10:
+        case 11:
+            §dungeon_scenario_loss;
+            ~reset_moveset();
+            ProcessSpecial(68, 0, 0); // Remove bag
+            
+            switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+            switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+            switch ( $DUNGEON_ENTER )
+            {
+                case 1:
+                    ~c(81, 'loss');
+                    ProcessSpecial(75, 1, 0);
+                    main_EnterDungeon(1, 0);
+                    main_EnterDungeon(-1, 0);
+                    end;
+                case 2:
+                    supervision_ExecuteActingSub(113, 'gameover', 2);
+                    end;
+                case 3:
+                    supervision_ExecuteActingSub(113, 'gameover', 3);
+                    end;
+                case 4:
+                    supervision_ExecuteActingSub(113, 'gameover', 4);
+                    end;
+                case 5:
+                    supervision_ExecuteActingSub(113, 'gameover', 5);
+                    end;
+                default:
+                    JumpCommon(CORO_EVENT_DIVIDE);
+            }
+            JumpCommon(CORO_EVENT_DIVIDE);
+        default:
+            jump @dungeon_scenario_loss;
+    }
+}
+
+coro GETOUT_REQUEST_DUNGEON {
+    debug_Print('GETOUT_REQUEST_DUNGEON');
+    switch ( ProcessSpecial(PROCESS_SPECIAL_DUNGEON_HAD_REQUEST_DONE, 0, 0) ) {
+        case 0:
+            debug_Print('GETOUT_NO_REQUEST_DUNGEON');
+            switch ( $GROUND_START_MODE ) {
+                case 8:
+                default:
+                    JumpCommon(CORO_GETOUT_REQUEST_CONQUEST);
+                case 9:
+                case 10:
+                case 11:
+                    JumpCommon(CORO_GETOUT_REQUEST_RETURN);
+            }
+            break;
+        default:
+            switch ( $GROUND_START_MODE ) {
+                case 8:
+                case 9:
+                default:
+                    debug_Print('GETOUT_REQUEST_RETURN');
+                    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+                    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+                    JumpCommon(CORO_EVENT_DIVIDE);
+                case 10:
+                case 11:
+                    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+                    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+                    debug_Print('GETOUT_REQUEST_DEATH');
+                    JumpCommon(CORO_EVENT_DIVIDE);
+            }
+            break;
+    }
+}
+
+coro GETOUT_REQUEST_RETURN {
+    debug_Print('GETOUT_NO_REQUEST_RETURN');
+    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+    JumpCommon(CORO_EVENT_DIVIDE);
+}
+
+coro GETOUT_REQUEST_CONQUEST {
+    debug_Print('GETOUT_REQUEST_CONQUEST');
+    debug_Print('LABEL_BACKTOHOME');
+    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+    $SCENARIO_MAIN_BIT_FLAG[4] = 0;
+    JumpCommon(CORO_EVENT_DIVIDE);
+}
+
+coro GETOUT_TRAINING_DUNGEON {
+    debug_Print('GETOUT_TRAINING_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+    JumpCommon(CORO_EVENT_DIVIDE);
+}
+
+coro GETOUT_DEBUG_DUNGEON {
+    debug_PrintFlag($GROUND_START_MODE, 'GETOUT_DEBUG_DUNGEON');
+    switch ( message_Menu(MENU_DUNGEON_EXPLORATION_RESULTS) ) { }
+    switch ( message_Menu(MENU_DUNGEON_TEAM_RETURNS_FROM_MAP) ) { }
+    JumpCommon(CORO_EVENT_DIVIDE);
+}
+
+coro MOVE_WORLD_MAP {
+    debug_Print('MOVE_WORLD_MAP');
+    screen_FadeOutAll(1, 0);
+    WaitSubScreen();
+    worldmap_SetMode(1);
+    back2_SetMode(3);
+    WaitSubScreen();
+    bgm_PlayFadeIn(BGM_WIGGLYTUFFS_GUILD_REMIX, 0, 256);
+    worldmap_SetCamera(1000);
+    WaitSubScreen();
+    Wait(30);
+    worldmap_MoveCamera(1001);
+    WaitSubScreen();
+    worldmap_SetMessagePlace(1001);
+    Wait(60);
+    back2_SetMode(1);
+    WaitSubScreen();
+    bgm_FadeOut(60);
+    switch ( ProcessSpecial(24, 0, 0) ) { }
+    hold;
+}
+
+coro EVENT_CONTROL {
+    switch ( ProcessSpecial(17, 0, 0) ) {
+        case 0:
+            §label_41;
+            end;
+        default:
+            Lock(4);
+            jump @label_41;
+    }
+}
+
+coro EVENT_WAKEUP {
+    alias previous;
+}
+
+coro EVENT_STATION {
+    alias previous;
+}
+
+coro STATION_CONTROL {
+    alias previous;
+}
+
+coro ENTER_CONTROL {
+    alias previous;
+}
+
+coro SETUP_DEBUG_CAMERA {
+    alias previous;
+}
+
+coro MOVE_DEBUG_CAMERA {
+    camera_SetMyself();
+    switch ( ProcessSpecial(18, 0, 0) ) { }
+    Unlock(4);
+    camera_SetDefault();
+    Destroy();
+}
+
+coro MESSAGE_CLOSE_WAIT_FUNC {
+    message_Close();
+    Wait(10);
+    return;
+}
+
+coro EVENT_END_MAPIN {
+    debug_Print('EVENT_END_MAPIN');
+    camera_MoveDefault(33152);
+    WaitMoveCamera();
+    supervision_StationCommon(1);
+    with (actor 2) {
+        SetFunctionAttribute(2);
+    }
+    with (actor 0) {
+        SetFunctionAttribute(2);
+    }
+    WaitExecuteLives(2);
+    WaitExecuteLives(0);
+    supervision_Suspend(-2);
+    supervision_RemoveActing(32766);
+    back2_SetMode(32767);
+    WaitSubScreen();
+    return;
+}
+
+coro EVENT_END_FREE {
+    camera_MoveDefault(33152);
+    WaitMoveCamera();
+    with (actor 2) {
+        SetFunctionAttribute(2);
+    }
+    with (actor 0) {
+        SetFunctionAttribute(2);
+    }
+    WaitExecuteLives(2);
+    WaitExecuteLives(0);
+    back2_SetMode(32767);
+    WaitSubScreen();
+    supervision_Suspend(-2);
+    supervision_RemoveActing(32766);
+    return;
+}
+
+coro EVENT_END_MAPIN_AE {
+    debug_Print('EVENT_END_MAPIN_AE');
+    camera_MoveDefault(33152);
+    WaitMoveCamera();
+    supervision_StationCommon(1);
+    with (actor 108) {
+        SetFunctionAttribute(2);
+    }
+    WaitExecuteLives(108);
+    supervision_Suspend(-2);
+    supervision_RemoveActing(32766);
+    back2_SetMode(32767);
+    WaitSubScreen();
+    return;
+}
+
+coro EVENT_END_FREE_AE {
+    camera_MoveDefault(33152);
+    WaitMoveCamera();
+    with (actor 108) {
+        SetFunctionAttribute(2);
+    }
+    WaitExecuteLives(108);
+    back2_SetMode(32767);
+    WaitSubScreen();
+    supervision_Suspend(-2);
+    supervision_RemoveActing(32766);
+    return;
+}
+
+coro BOSS_WIPE_FUNC {
+    se_Play(5136);
+    supervision_SpecialActing(13, 0, 0);
+    Wait(60);
+    screen_WhiteOutAll(1, 30);
+    supervision_SpecialActing(3, 0, 0);
+    return;
+}
+
+coro FADE_OUT_ALL_BEFORE {
+    screen_FadeOutAll(1, 0);
+    Wait(1);
+    screen_FadeIn(1, 0);
+    return;
+}
+
+coro FADE_OUT_ALL_AFTER {
+    screen_FadeOut(1, 0);
+    screen_FadeInAll(1, 0);
+    return;
+}
+
+coro SUBSCREEN_INIT {
+    WaitSubScreen();
+    screen2_FadeOut(1, 15);
+    WaitScreenFade();
+    WaitScreenFadeAll();
+    back2_SetMode(0);
+    WaitSubScreen();
+    return;
+}
+
+coro RESCUE_SET {
+    return;
+}
+
+coro RESCUE_DEBUG {
+    return;
+}
+
+coro SORANOITADAKI_FLAGSET {
+    $EVENT_LOCAL = 0;
+    $BIT_FUWARANTE_LOCAL[3] = 0;
+    switch(message_SwitchMenu2(0, 1, $BIT_FUWARANTE_LOCAL))
+                {
+                    case menu('The sad one'):
+                        $BIT_FUWARANTE_LOCAL[0] = 0;
+                        $EVENT_LOCAL = 0;
+                        message_SetFaceEmpty(1, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk("Very well, that poor subject...");
+                        message_Talk("Interestingly, this subject vehemently\nhates moisture.[K] Perhaps when it burrows\nunderground, it is not simply from fear...?");
+                        message_SetFaceEmpty(1, FACE_HAPPY, FACE_POS_STANDARD);
+                        message_Talk("Still, it flees at the slightest provocation.[K]\nDoes that help at all?");
+                        if($DUNGEON_CONQUEST_LIST[2])
+                        {
+                            $BIT_FUWARANTE_LOCAL[3] = 1;
+                            
+                        }
+                        break;
+                    case menu('The happy one'):
+                        $BIT_FUWARANTE_LOCAL[1] = 0;
+                        $EVENT_LOCAL = 1;
+                        message_SetFaceEmpty(1, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk("Quite a curious one, that subject...");
+                        message_Talk("I have found traces of what I am\ndubbing \"joy dust\" wherever it roams.[K]\nFurther research is needed on this, but...");
+                        message_SetFaceEmpty(1, FACE_HAPPY, FACE_POS_STANDARD);
+                        message_Talk("It oddly seems to incite happiness,\nwhich I did not know was common\nfor Pokémon...[K] Does that help at all?");
+                        if($DUNGEON_CONQUEST_LIST[3])
+                        {
+                            $BIT_FUWARANTE_LOCAL[3] = 1;
+                        }
+                        break;
+                    case menu('The angry one'):
+                        $BIT_FUWARANTE_LOCAL[2] = 0;
+                        $EVENT_LOCAL = 2;
+                        message_SetFaceEmpty(1, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk("I know I specified \"one\", but this\nPokémon is quite peculiar...");
+                        message_Talk("It seems to be made up of several\nspirits...[K][FACE:4]I can't quite count how many...");
+                        message_SetFaceEmpty(1, FACE_WORRIED, FACE_POS_STANDARD);
+                        message_Talk("Two?[K] Two dozen?[K] Two hundred?");
+                        message_SetFaceEmpty(1, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk("Alas, my research is eternal.[K]\nDoes that help at all?");
+                        if($DUNGEON_CONQUEST_LIST[4])
+                        {
+                            $BIT_FUWARANTE_LOCAL[3] = 1;
+                        }
+
+                }
+    message_Close();
+    Wait(10);
+    return;
+}
+
+coro TITLE_TEST {
+    screen_FlushOut(1, 0, 255, 0, 0, 0);
+    screen2_FlushOut(1, 0, 255, 0, 0, 0);
+    return;
+}
+
+coro BUBBLE_TEST {
+    screen_FlushIn(1, 0, 255, 0, 0, 0);
+    screen2_FlushIn(1, 0, 255, 0, 0, 0);
+    screen_FlushIn(1, 0, 0, 0, 0, 0);
+    screen2_FlushIn(1, 0, 0, 0, 0, 0);
+    return;
+}
+
+coro MAP_TEST {
+    $SCENARIO_TALK_BIT_FLAG[1] = 0;
+    CallCommon(CORO_BUBBLE_TEST);
+    CallCommon(CORO_DEBUG_SCENE);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    screen_FadeOutAll(1, 0);
+    message_Notice("[TR]");
+    message_CloseEnforce();
+    screen_FadeInAll(1, 0);
+    switch($CRYSTAL_COLOR_02)
+    {
+        // Note: 0 is typically used for "no special treatment" in skipping the cutscene, i.e., the game will resume on the line after the cutscene plays.
+        case 1:
+            $GROUND_ENTER = 9;
+            main_EnterGround(9, 0);
+            end;
+        case 2:
+            jump @askname;
+        case 3:
+            $GROUND_ENTER = 34;
+            main_EnterGround(34, 0);
+            end;
+        case 4:
+            $GROUND_ENTER = 10;
+            main_EnterGround(10, 0);
+            end;
+        case 5:
+            $GROUND_ENTER = 49;
+            main_EnterGround(49, 0);
+            end;
+        default:
+            Wait(403); // was originally the custom opcode RestoreAddress();
+    }
+}

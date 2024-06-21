@@ -1,0 +1,116 @@
+
+def 0 {
+    back_SetGround(433);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_IN_THE_DEPTHS_OF_THE_PIT, 0, 256);
+    screen_FadeIn(1, 30);
+    with (actor ACTOR_PLAYER) {
+        Move2PositionMark(1, Position<'m0', 30.5, 46.5>);
+    }
+    WaitExecuteLives(ACTOR_PLAYER);
+    se_Play(8967);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_STANDARD);
+    message_Talk(' Stop right there!');
+    message_Close();
+    with (actor 396) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    se_Play(8962);
+    with (actor 396) {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    message_SetFace(396, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' An explorer,[W:10] eh?');
+    message_Close();
+    with (actor 396) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    message_SetFace(396, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk('Hahahahaha!');
+    message_Close();
+    with (actor 396) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    se_Play(8972);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_ANGRY, FACE_POS_STANDARD);
+    message_Talk(' You sure do laugh a lot for a D-ranked outlaw!');
+    message_Close();
+    bgm_FadeOut(256);
+    message_SetFace(396, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Oh, don\'t be decieved by my ranking[W:10]\nyoung lady.[K] I may be D-ranked...[W:10] Heh.');
+    message_Close();
+    bgm_PlayFadeIn(BGM_OH_NO, 0, 256);
+    se_Play(8967);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNRIGHT);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    with (actor 398) {
+        Move2PositionMark(1, Position<'m1', 22.5, 42.5>);
+    }
+    with (actor 400) {
+        Move2PositionMark(1, Position<'m2', 37.5, 38>);
+    }
+    with (actor 399) {
+        Move2PositionMark(1, Position<'m3', 38, 51.5>);
+    }
+    WaitExecuteLives(398);
+    with (actor 398) {
+        Turn2Direction(4, 10, DIR_DOWNRIGHT);
+    }
+    with (actor 400) {
+        Turn2Direction(4, 10, DIR_DOWNLEFT);
+    }
+    with (actor 399) {
+        Turn2Direction(4, 10, DIR_UPLEFT);
+    }
+    message_SetFace(396, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' When I\'m alone.');
+    message_Close();
+    se_Play(8971);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_ANGRY, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_STANDARD);
+    message_Talk(' Bring it ON!');
+    message_Close();
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    bgm_Stop();
+    se_Play(5143);
+    screen_WhiteOut(1, 2);
+    Wait(2);
+    screen_FadeIn(1, 2);
+    Wait(10);
+    se_Play(5143);
+    screen_WhiteOut(1, 2);
+    Wait(2);
+    screen_FadeIn(1, 2);
+    WaitSe(5143);
+    CallCommon(CORO_BOSS_WIPE_FUNC);
+    switch ( ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0) ) { }
+    main_EnterDungeon(2, 0);
+    main_EnterDungeon(-1, 30);
+    end;
+}

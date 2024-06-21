@@ -1,0 +1,18 @@
+def 0
+{
+    CallCommon(CORO_DEBUG_ENTER);
+    main_EnterGround(34, 0);
+    end;
+}
+
+def 1 for_actor(2)
+{
+    SetAnimation(2);
+    hold;
+}
+
+def 2 for_actor(0)
+{
+    SetAnimation(2);
+    hold;
+}

@@ -18,6 +18,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Tuple
 
+# fmt: off
 from range_typed_integers import i32, i32_checked, i16, i16_checked, i8, i8_checked, u32, u32_checked, u16, u16_checked, \
     u8, u8_checked, i64_checked
 
@@ -26,7 +27,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import write_i32, read_i32, read_i16, write_i16, read_i8, write_i8, \
     read_u32, write_u32, read_u16, write_u16, read_u8, write_u8, read_bytes, write_bytes
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
-
+# fmt: on
 
 CHAR_ARRAY_REGEX = re.compile(r"char\[(\d+)]$")
 DATA_PROCESSING_INSTRUCTION_TYPE = "struct data_processing_instruction"
@@ -84,7 +85,7 @@ class RWValue(ABC):
                 size = int(match.group(1))
                 return RWCharArrayValue(offset, size)
             else:
-                raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
+                raise UnsupportedTypeError('Unsupported C type "' + type_str + '".')
 
     @abstractmethod
     def read_str(self, binary: bytes, index: int = 0) -> str:
@@ -120,7 +121,6 @@ class RWValue(ABC):
 
 
 class RWInt32Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -146,7 +146,6 @@ class RWInt32Value(RWValue):
 
 
 class RWInt16Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -172,7 +171,6 @@ class RWInt16Value(RWValue):
 
 
 class RWInt8Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -198,7 +196,6 @@ class RWInt8Value(RWValue):
 
 
 class RWUInt32Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -224,7 +221,6 @@ class RWUInt32Value(RWValue):
 
 
 class RWUInt16Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -250,7 +246,6 @@ class RWUInt16Value(RWValue):
 
 
 class RWUInt8Value(RWValue):
-
     def __init__(self, offset: int):
         self.offset = offset
 
@@ -376,7 +371,7 @@ class RWShiftedImmediateValue(RWValue):
     def __init__(self, offset: int):
         self.offset = offset
 
-    def read(self,  binary: bytes) -> int:
+    def read(self, binary: bytes) -> int:
         base = read_u8(binary, self.offset)
         rot_amount = (read_u8(binary, self.offset + 1) & 0xF) * 2
         return (base >> rot_amount) | (base << (32 - rot_amount) & 0xFFFFFFFF)
@@ -432,7 +427,7 @@ class RWCharArrayValue(RWValue):
         self.offset = offset
         self.size = size
 
-    def read(self,  binary: bytes) -> str:
+    def read(self, binary: bytes) -> str:
         _bytes = read_bytes(binary, self.offset, self.size)
         end = _bytes.find(b"\0")
         if end == -1:

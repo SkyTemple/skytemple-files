@@ -25,6 +25,7 @@ class EnumValue:
     """
     Represents one of the possible value of an enum
     """
+
     # Integer representation of the value
     int_value: int
     # Name of the value
@@ -252,7 +253,7 @@ def get_enum_values(type_str: str) -> List[EnumValue]:
         try:
             return KNOWN_ENUM_DATA[type_str_short]
         except KeyError:
-            raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
+            raise UnsupportedTypeError('Unsupported C type "' + type_str + '".')
     else:
         raise ValueError("The specified type is not an enum type.")
 

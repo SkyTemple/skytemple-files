@@ -25,6 +25,7 @@ class StructField:
     """
     Represents a struct field
     """
+
     # Name of the field.
     name: str
     # Offset of this field within its containing struct
@@ -41,6 +42,7 @@ class StructField:
 # List containing information about all structs that have been manually implemented.
 # Each entry maps the name of the struct (without the "struct" prefix) to a tuple of two elements. The first one
 # contains the full size of the struct, while the second is a list containing all its fields.
+# fmt: off
 KNOWN_STRUCT_DATA = {
     "rgba": (4, [
         StructField("r", 0, "uint8"),
@@ -123,6 +125,7 @@ KNOWN_STRUCT_DATA = {
         StructField("status", 2, "struct status_two_turn_id_16"),
     ])
 }
+# fmt: on
 
 
 def get_struct_size(type_str: str) -> int:
@@ -139,7 +142,7 @@ def get_struct_size(type_str: str) -> int:
         try:
             return KNOWN_STRUCT_DATA[type_str_short][0]
         except KeyError:
-            raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
+            raise UnsupportedTypeError('Unsupported C type "' + type_str + '".')
     else:
         raise ValueError("The specified type is not a struct type.")
 
@@ -158,6 +161,6 @@ def get_struct_fields(type_str: str) -> List[StructField]:
         try:
             return KNOWN_STRUCT_DATA[type_str_short][1]
         except KeyError:
-            raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
+            raise UnsupportedTypeError('Unsupported C type "' + type_str + '".')
     else:
         raise ValueError("The specified type is not a struct type.")

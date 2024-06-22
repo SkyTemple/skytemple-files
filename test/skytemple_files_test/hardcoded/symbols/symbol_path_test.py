@@ -20,7 +20,6 @@ from skytemple_files.hardcoded.symbols.symbol_path import SymbolPath
 
 
 class SymbolPathTestCase(unittest.TestCase):
-
     def test_get_next_array_1(self):
         path = SymbolPath("[12].thing[7]")
         array_path, rest_of_path = path.get_next_array()

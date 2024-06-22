@@ -28,12 +28,11 @@ from skytemple_files.hardcoded.symbols.unsupported_type_error import Unsupported
 SAMPLE_STRUCT_FIELDS = [
     StructField("field_0x0", 0, "int"),
     StructField("field_0x4", 4, "bool"),
-    StructField("field_0x8", 8, "struct fx64_16")
+    StructField("field_0x8", 8, "struct fx64_16"),
 ]
 
 
 class RWSymbolTestCase(unittest.TestCase):
-
     sample_symbol: Symbol[Optional[list[int]], None]
 
     def setUp(self) -> None:

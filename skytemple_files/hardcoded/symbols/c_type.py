@@ -138,7 +138,7 @@ class CType:
         elif simplified_base_type.startswith("struct "):
             return get_struct_size(simplified_base_type)
         else:
-            raise UnsupportedTypeError("Unsupported C type \"" + simplified_base_type + "\".")
+            raise UnsupportedTypeError('Unsupported C type "' + simplified_base_type + '".')
 
     def get_size(self) -> int:
         """

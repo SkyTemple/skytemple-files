@@ -55,15 +55,17 @@ class RWSymbol(ABC):
                 # Array type
                 if 0 in c_type.dim_sizes:
                     # Unknown or variable size, unsupported
-                    raise UnsupportedTypeError("Unsupported symbol type \"" + type_str + "\" due to unknown or "
-                         "variable array size.")
+                    raise UnsupportedTypeError(
+                        'Unsupported symbol type "' + type_str + '" due to unknown or variable ' "array size."
+                    )
                 else:
                     return RWArraySymbol(name, offset, type_str)
             else:
                 if c_type.is_array_type() and c_type.base_type == "char" and 0 in c_type.dim_sizes:
                     # Unknown or variable-length string, unsupported
-                    raise UnsupportedTypeError("Unsupported symbol type \"" + type_str + "\" due to unknown or "
-                         "variable string length.")
+                    raise UnsupportedTypeError(
+                        'Unsupported symbol type "' + type_str + '" due to unknown or variable ' "array string length."
+                    )
 
                 # Simplify the type if possible
                 type_str = get_size_equivalent_type(type_str)
@@ -84,7 +86,7 @@ class RWSymbol(ABC):
                 else:
                     # This type is not an array type, is not supported by RWSimpleSymbol and it's not a supported
                     # struct type either, raise an error.
-                    raise UnsupportedTypeError("Unsupported C type \"" + type_str + "\".")
+                    raise UnsupportedTypeError('Unsupported C type "' + type_str + '".')
 
     @classmethod
     def from_symbol(cls, symbol: Symbol) -> "RWSymbol":
@@ -99,8 +101,9 @@ class RWSymbol(ABC):
             raise ValueError("Cannot instantiate RWSymbol with a Symbol that has no addresses.")
         if len(symbol.addresses) != 1:
             # TODO: Maybe support symbols with multiple addresses? Although it's uncommon for data symbols.
-            raise ValueError("Cannot instantiate RWSymbol with a Symbol that has " + str(len(symbol.addresses)) +
-                " addresses.")
+            raise ValueError(
+                "Cannot instantiate RWSymbol with a Symbol that has " + str(len(symbol.addresses)) + " addresses."
+            )
         if symbol.c_type is None:
             raise ValueError("Cannot instantiate RWSymbol with a Symbol that does not have a type.")
 
@@ -151,12 +154,12 @@ class RWSimpleSymbol(RWSymbol):
 
     def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         if path != "":
-            raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
+            raise ValueError('Cannot follow non empty path "' + path + '" on simple symbol "' + self.name + '".')
         return self._rw_value.read_str(binary)
 
     def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         if path != "":
-            raise ValueError("Cannot follow non empty path \"" + path + "\" on simple symbol \"" + self.name + "\".")
+            raise ValueError('Cannot follow non empty path "' + path + '" on simple symbol "' + self.name + '".')
         self._rw_value.write_str(binary, value)
 
 
@@ -176,8 +179,9 @@ class RWArraySymbol(RWSymbol):
 
         # Create sub-symbols
         for i in range(c_type.get_total_num_elements()):
-            self.elements.append(RWSymbol.from_basic_data(self.name + "[" + str(i) + "]",
-                offset + i * base_type_size, c_type.base_type))
+            self.elements.append(
+                RWSymbol.from_basic_data(self.name + "[" + str(i) + "]", offset + i * base_type_size, c_type.base_type)
+            )
 
     def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         index, rest_of_path = path.get_next_array_flat()
@@ -204,19 +208,20 @@ class RWStructSymbol(RWSymbol):
         self.fields = {}
 
         for field in fields:
-            self.fields[field.name] = RWSymbol.from_basic_data(name + "." + field.name, offset + field.offset,
-                field.type)
+            self.fields[field.name] = RWSymbol.from_basic_data(
+                name + "." + field.name, offset + field.offset, field.type
+            )
 
     def read_str_with_path(self, binary: bytes, path: SymbolPath) -> str:
         field_name, rest_of_path = path.get_next_field()
         try:
             return self.fields[field_name].read_str_with_path(binary, rest_of_path)
         except KeyError:
-            raise ValueError("Struct symbol " + self.name + " has no field named \"" + field_name + "\".")
+            raise ValueError("Struct symbol " + self.name + ' has no field named "' + field_name + '".')
 
     def write_str_with_path(self, binary: bytearray, path: SymbolPath, value: str):
         field_name, rest_of_path = path.get_next_field()
         try:
             return self.fields[field_name].write_str_with_path(binary, rest_of_path, value)
         except KeyError:
-            raise ValueError("Struct symbol " + self.name + " has no field named \"" + field_name + "\".")
+            raise ValueError("Struct symbol " + self.name + ' has no field named "' + field_name + '".')

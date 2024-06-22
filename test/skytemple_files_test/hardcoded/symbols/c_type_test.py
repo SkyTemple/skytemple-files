@@ -20,7 +20,6 @@ from skytemple_files.hardcoded.symbols.c_type import CType
 
 
 class CTypeTestCase(unittest.TestCase):
-
     def test_from_str_1(self):
         c_type = CType.from_str("int")
         self.assertEqual("int", c_type.base_type)

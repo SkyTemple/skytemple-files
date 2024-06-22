@@ -15,8 +15,10 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+
 class UnsupportedTypeError(ValueError):
     """
     Raised when trying to perform an operation that is not supported for a given type.
     """
+
     pass

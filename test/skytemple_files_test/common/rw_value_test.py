@@ -19,7 +19,7 @@ import unittest
 from range_typed_integers import i32, i16, i8, u32, u16, u8
 
 from skytemple_files.common.rw_value import RWValue, RWInt32Value, RWCharArrayValue, RWUInt32Value, RWInt16Value, \
-    RWInt8Value, RWUInt8Value, RWUInt16Value, RWFx6416Value, RWFx3216Value, RWFx328Value, RWShiftedImmediateValue
+    RWInt8Value, RWUInt8Value, RWUInt16Value, RWFx6416Value, RWFx3216Value, RWFx328Value, RWShiftedImmediateValue  # fmt: skip
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 
 
@@ -151,7 +151,9 @@ class RWValueTestCase(unittest.TestCase):
     def test_read_fx_64_16_3(self):
         rw = RWFx6416Value(0x30)
         self.assertAlmostEqual(1.1, rw.read(self.binary_to_read), 4)
-        self.assertTrue(rw.read_str(self.binary_to_read).startswith("1.1") or rw.read_str(self.binary_to_read).startswith("1.09"))
+        self.assertTrue(
+            rw.read_str(self.binary_to_read).startswith("1.1") or rw.read_str(self.binary_to_read).startswith("1.09")
+        )
 
     def test_read_fx_32_16_1(self):
         rw = RWFx3216Value(0x28)
@@ -166,7 +168,9 @@ class RWValueTestCase(unittest.TestCase):
     def test_read_fx_32_16_3(self):
         rw = RWFx3216Value(0x34)
         self.assertAlmostEqual(1.1, rw.read(self.binary_to_read), 4)
-        self.assertTrue(rw.read_str(self.binary_to_read).startswith("1.1") or rw.read_str(self.binary_to_read).startswith("1.09"))
+        self.assertTrue(
+            rw.read_str(self.binary_to_read).startswith("1.1") or rw.read_str(self.binary_to_read).startswith("1.09")
+        )
 
     def test_read_fx_32_8_1(self):
         rw = RWFx328Value(0x28)
@@ -190,7 +194,9 @@ class RWValueTestCase(unittest.TestCase):
     def test_read_fx_32_8_5(self):
         rw = RWFx328Value(0x3C)
         self.assertAlmostEqual(1.4, rw.read(self.binary_to_read), 2)
-        self.assertTrue(rw.read_str(self.binary_to_read).startswith("1.4") or rw.read_str(self.binary_to_read).startswith("1.39"))
+        self.assertTrue(
+            rw.read_str(self.binary_to_read).startswith("1.4") or rw.read_str(self.binary_to_read).startswith("1.39")
+        )
 
     def test_read_sh_imm_1(self):
         rw = RWShiftedImmediateValue(0x40)

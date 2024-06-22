@@ -57,7 +57,7 @@ class SymbolPath(str):
                 indexes.append(int(index))
             return indexes, SymbolPath(rest_of_path)
         else:
-            raise ValueError("Next section of path \"" + self.path_str + "\" is not an array section.")
+            raise ValueError('Next section of path "' + self.path_str + '" is not an array section.')
 
     def get_next_array_flat(self) -> Tuple[int, "SymbolPath"]:
         """
@@ -85,4 +85,4 @@ class SymbolPath(str):
             rest_of_path = next_symbol_match.group(3)
             return next_symbol_name, SymbolPath(rest_of_path)
         else:
-            raise ValueError("Next section of path \"" + self.path_str + "\" is not a struct field.")
+            raise ValueError('Next section of path "' + self.path_str + '" is not a struct field.')

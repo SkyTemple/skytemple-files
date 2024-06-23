@@ -18,16 +18,41 @@ import re
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-# fmt: off
-from range_typed_integers import i32, i32_checked, i16, i16_checked, i8, i8_checked, u32, u32_checked, u16, u16_checked, \
-    u8, u8_checked, i64_checked
+from range_typed_integers import (
+    i32,
+    i32_checked,
+    i16,
+    i16_checked,
+    i8,
+    i8_checked,
+    u32,
+    u32_checked,
+    u16,
+    u16_checked,
+    u8,
+    u8_checked,
+    i64_checked,
+)
 
 from skytemple_files.common.i18n_util import _
 
-from skytemple_files.common.util import write_i32, read_i32, read_i16, write_i16, read_i8, write_i8, \
-    read_u32, write_u32, read_u16, write_u16, read_u8, write_u8, read_bytes, write_bytes
+from skytemple_files.common.util import (
+    write_i32,
+    read_i32,
+    read_i16,
+    write_i16,
+    read_i8,
+    write_i8,
+    read_u32,
+    write_u32,
+    read_u16,
+    write_u16,
+    read_u8,
+    write_u8,
+    read_bytes,
+    write_bytes,
+)
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
-# fmt: on
 
 CHAR_ARRAY_REGEX = re.compile(r"char\[(\d+)]$")
 DATA_PROCESSING_INSTRUCTION_TYPE = "struct data_processing_instruction"

@@ -302,7 +302,7 @@ class Pmd2ScriptDirection(AutoString):
         For backwards compatibility.
         """
         warnings.warn(
-            DeprecatedToBeRemovedWarning("Please use self.ssa_id instead.", (1, 5, 0)),
+            DeprecatedToBeRemovedWarning("Please use self.ssa_id instead.", (2, 0, 0)),
             stacklevel=2,
         )
         return self.ssa_id

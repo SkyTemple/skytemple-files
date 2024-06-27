@@ -59,7 +59,6 @@ from range_typed_integers import (
 from skytemple_files.common import string_codec
 from skytemple_files.common.i18n_util import _, f
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
-from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 from skytemple_files.user_error import UserValueError
 
 import importlib.resources as importlib_resources
@@ -727,36 +726,6 @@ class AutoString:
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}<{str({k: v for k, v in self.__dict__.items() if v is not None and not k[0] == '_'})}>"
-
-
-class EnumCompatibleInt(int):
-    """For backwards compatibility"""
-
-    _DEPR_WARN = "This (formerly '{}') is now an int and should no longer be used like an enum instance."
-    _DEPR_VER = (1, 5, 0)
-
-    # noinspection PyAttributeOutsideInit
-    def former(self, f: str) -> None:
-        # I don't quite know how to pass arguments to __new__ or __init__ of builtin type subclasses.
-        self._former = f
-
-    @property
-    def value(self) -> int:
-        warnings.warn(
-            DeprecatedToBeRemovedWarning(self._DEPR_WARN.format(self._former), self._DEPR_VER),
-            stacklevel=2,
-        )
-        logger.warning(self._DEPR_WARN.format(self._former))
-        return self
-
-    @property
-    def name(self) -> str:
-        warnings.warn(
-            DeprecatedToBeRemovedWarning(self._DEPR_WARN.format(self._former), self._DEPR_VER),
-            stacklevel=2,
-        )
-        logger.warning(self._DEPR_WARN.format(self._former))
-        return str(self)
 
 
 def set_rw_permission_folder(folder_path: str) -> None:

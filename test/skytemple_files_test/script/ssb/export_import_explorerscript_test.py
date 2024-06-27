@@ -104,7 +104,7 @@ class ExportImportExplorerScriptTest(unittest.TestCase):
 
         _exps, ssb, pmd2_data = _collect_for_path(path)
 
-        self._run_test(path, None, ssb, pmd2_data)
+        self._run_test(path, None, ssb, pmd2_data, expect_ssb_script="UTOPIA13_final2" in path)
 
     def _run_test(
         self,
@@ -113,6 +113,7 @@ class ExportImportExplorerScriptTest(unittest.TestCase):
         ssb_file: bytes,
         pmd2_data: Pmd2Data,
         *,
+        expect_ssb_script=False,
         _skip_flow_check=False,
     ):
         ssb_before = SsbHandler.deserialize(ssb_file, pmd2_data)
@@ -120,6 +121,12 @@ class ExportImportExplorerScriptTest(unittest.TestCase):
             # Test the compiling and writing, by compiling the model, writing it to binary,
             # and then loading it again, and checking the generated ssb script.
             exps_before, _source_map_before = ssb_before.to_explorerscript()
+            if not expect_ssb_script:
+                self.assertNotIn(
+                    "is-ssb-script", exps_before, "Was not expecting the decompiler to fall back to SsbScript"
+                )
+            else:
+                self.assertIn("is-ssb-script", exps_before, "Was expecting the decompiler to fall back to SsbScript")
 
         compiler = ScriptCompiler(pmd2_data)
 

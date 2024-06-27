@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Optional
+from typing import Callable, Optional, MutableSequence, Sequence, TYPE_CHECKING
 
 from explorerscript.error import ParseError, SsbCompilerError
 from explorerscript.source_map import SourceMap
@@ -83,6 +83,13 @@ class ScriptCompiler:
         if callback_after_parsing:
             callback_after_parsing()
 
+        assert (
+            base_compiler.routine_infos is not None
+            and base_compiler.routine_ops is not None
+            and base_compiler.named_coroutines is not None
+            and base_compiler.source_map is not None
+        )
+
         return self.compile_structured(
             base_compiler.routine_infos,
             base_compiler.routine_ops,
@@ -126,6 +133,13 @@ class ScriptCompiler:
         # Profiling callback
         if callback_after_parsing:
             callback_after_parsing()
+
+        assert (
+            base_compiler.routine_infos is not None
+            and base_compiler.routine_ops is not None
+            and base_compiler.named_coroutines is not None
+            and base_compiler.source_map is not None
+        )
 
         return self.compile_structured(
             base_compiler.routine_infos,
@@ -194,7 +208,7 @@ class ScriptCompiler:
 
             # Build Routine Infos
             built_routine_info_with_offset: list[tuple[int, SsbRoutineInfo]] = []
-            built_routine_ops: list[list[SsbOperation]] = []
+            built_routine_ops: list[MutableSequence[SsbOperation]] = []
             # A list of lists for ALL opcodes that maps all opcode indices to their memory address.
             opcode_index_mem_offset_mapping: dict[int, int] = {}
             bytes_written_last_rtn = 0
@@ -207,7 +221,7 @@ class ScriptCompiler:
 
                 routine_start_cursor = opcode_cursor
                 # Build OPs
-                built_ops: list[SkyTempleSsbOperation] = []
+                built_ops: MutableSequence[SsbOperation] = []
                 if len(input_ops) == 0:
                     # ALIAS ROUTINE. This alias the PREVIOUS routine
                     routine_start_cursor = opcode_cursor - bytes_written_last_rtn
@@ -238,7 +252,7 @@ class ScriptCompiler:
                                 )
                         else:
                             op_code = op_codes[0]
-                        new_params: list[int] = []
+                        new_params: MutableSequence[SsbOpParam] = []
                         op_len = 2
                         if op_code.params == -1:
                             # Handle variable length opcode by inserting the number of opcodes as the first argument.
@@ -277,6 +291,7 @@ class ScriptCompiler:
 
                 # Find out the target for this routine if it's specified by name
                 if input_info.linked_to == -1:
+                    assert input_info.linked_to_name is not None
                     input_info.linked_to = SsbConstant(input_info.linked_to_name, self.rom_data.script_data).value.id
 
                 built_routine_info_with_offset.append((routine_start_cursor, input_info))
@@ -288,6 +303,8 @@ class ScriptCompiler:
                     if op.op_code.name in OPS_WITH_JUMP_TO_MEM_OFFSET:
                         param_id = OPS_WITH_JUMP_TO_MEM_OFFSET[op.op_code.name]
                         index_to_jump_to = op.params[param_id]
+                        if TYPE_CHECKING:
+                            assert isinstance(index_to_jump_to, int)
                         op.params[param_id] = opcode_index_mem_offset_mapping[index_to_jump_to]
                     for i, param in enumerate(op.params):
                         if isinstance(param, StringIndexPlaceholder):
@@ -350,7 +367,7 @@ class ScriptCompiler:
         raise SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}")))
 
     @staticmethod
-    def _correct_param_list_len(params: list[SsbOpParam]) -> int:
+    def _correct_param_list_len(params: Sequence[SsbOpParam]) -> int:
         """Returns the correct length of a parameter list (positon markers count as 4"""
         len = 0
         for p in params:

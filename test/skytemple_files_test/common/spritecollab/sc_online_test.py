@@ -41,12 +41,12 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
     def check_type(self, v: Any, ftype: type):
         args = get_args(ftype)
         origin = get_origin(ftype)
-        if args is not None and origin == list:
+        if args is not None and origin is list:
             self.assertIsInstance(v, list)
             t = args[0]
             for vv in v:
                 self.check_type(vv, t)
-        elif args is not None and origin == dict:
+        elif args is not None and origin is dict:
             self.assertIsInstance(v, dict)
             t = args[1]
             for vv in v.values():

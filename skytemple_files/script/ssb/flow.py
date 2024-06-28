@@ -40,6 +40,8 @@ from explorerscript.ssb_converting.ssb_special_ops import (
     OPS_FLAG__SET,
     OPS_THAT_END_CONTROL_FLOW,
     SsbForeignLabel,
+    OP_HOLD,
+    OP_END,
 )
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -91,9 +93,9 @@ class SsbFlow:
             if output_print:
                 print(f"Checking routine {i}...")
             if len(g_self.vs) == 0 or len(g_other.vs) == 0:
-                assert len(g_self.vs) == len(g_other.vs), (
-                    f"If one graph is empty, " f"the other must be too ({self._r_info(i)})"
-                )
+                assert len(g_self.vs) == len(
+                    g_other.vs
+                ), f"If one graph is empty, the other must be too ({self._r_info(i)})"
                 continue
             self_iter = iter(self.bfs_generator(g_self.vs[0]))
             other_iter = iter(self.bfs_generator(g_other.vs[0]))
@@ -102,9 +104,9 @@ class SsbFlow:
                 while True:
                     self_v, self_distance, self_parent = next(self_iter)
                     other_v, other_distance, other_parent = next(other_iter)
-                    assert self_distance == other_distance, (
-                        f"While running BFS, the distances changed unexpectedly " f"({self._r_info(i)})."
-                    )
+                    assert (
+                        self_distance == other_distance
+                    ), f"While running BFS, the distances changed unexpectedly ({self._r_info(i)})."
                     self._assert_same_vertex(i, self_v, other_v)
                     self._assert_same_vertex(i, self_parent, other_parent)
             except StopIteration:
@@ -199,14 +201,29 @@ class SsbFlow:
         """
         Basically the same as graph.bfsiter with advanced (but as a generator).
         However the order of vertices honors the flow_level of it's in edge. It also takes special Ssb flow
-        rules into account.
+        rules into account. Also does not yield Ends after Holds if they are the last opcode on a branch.
         """
         already_visited = set()
+        previous_vertex: Vertex | None = None
         next_vertices = [(start, 0, None)]
         while len(next_vertices) > 0:
             nxt, distance, parent = next_vertices.pop()
 
+            # Deal with the fact the ExplorerScript compiler always inserts safety-Ends:
+            # If the previous vertex was a hold and this is now an end and this is the last vertex on this branch,
+            # then we can assume the hold ended control flow. Do not yield the end.
+            if (
+                nxt["op"].op_code.name == OP_END
+                and len(nxt.out_edges()) == 0
+                and previous_vertex is not None
+                and previous_vertex["op"].op_code.name == OP_HOLD
+            ):
+                previous_vertex = nxt
+                already_visited.add(nxt.index)
+                continue
+
             yield nxt, distance, parent
+            previous_vertex = nxt
 
             # Don't loop.
             if nxt.index in already_visited:

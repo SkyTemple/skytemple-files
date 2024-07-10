@@ -17,9 +17,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import TYPE_CHECKING, Sequence
+
+from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.types.file_storage import AssetSpec
 from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
     HybridSir0DataHandler,
@@ -131,3 +135,13 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
     @classmethod
     def serialize_raw(cls, data: WazaPProtocol, **kwargs: OptionalKwargs) -> bytes:
         return data.sir0_serialize_parts()[0]
+
+    @classmethod
+    def find_handled_files_in_rom(cls, rom: NintendoDSRom) -> Sequence[Path]:
+        return [Path("BALANCE", "waza_p.bin")]
+
+    @classmethod
+    def find_handled_files_in_project(cls, project_dir: Path) -> Sequence[Path]:
+        if Path(project_dir, "BALANCE", "waza_p.json").exists():
+            return [Path("BALANCE", "waza_p.bin")]
+        return []

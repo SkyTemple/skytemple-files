@@ -1,9 +1,9 @@
 """
-API to read/write files from ROMS and file storage.
+API to read/write files from ROMs and file storage.
 
 Using this API files and hardcoded in a game ROM can be manipulated
 while also storing machine and human-readable versions of those files
-out-of-ROM (so-called "assets"; eg. as YAML or PNG).
+out-of-ROM (so-called "assets"; e.g. as YAML or PNG).
 Requesting to read a file from the ROM will first try to load it from assets,
 and fall back to the ROM if no assets have been saved yet for that file.
 Writing a model back to ROM will also write the model to the asset files.
@@ -38,6 +38,9 @@ from pathlib import Path
 from typing import Sequence, TypeVar, cast
 
 from ndspy.rom import NintendoDSRom
+
+from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.patch.patches import Patcher
 
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
@@ -90,11 +93,17 @@ def extract_assets(assets: Sequence[Asset | AssetSpec]) -> Sequence[Asset]:
     return cast(Sequence[Asset], assets)
 
 
+def _load_data_handlers() -> list[type[DataHandler[T]]]:
+    return [
+        handler for handler in vars(FileType).values() if isinstance(handler, type) and issubclass(handler, DataHandler)
+    ]
+
+
 class RomProject:
     """
     A SkyTemple Files ROM project.
 
-    A new eos-asset-sepc standard compliant project can be created with `RomProject.new`. Otherwise,
+    A new eos-asset-spec standard compliant project can be created with `RomProject.new`. Otherwise,
     a custom project can be created using `RomProject.__init__`. Custom projects can also work without
     actual ROM files, in which case all operations which would usually get/set data from/to the ROM may fail.
     """
@@ -104,6 +113,7 @@ class RomProject:
     _static_data: Pmd2Data
     _allow_extra_skypatches: bool | None
     _patcher: Patcher | None
+    _data_handlers: list[type[DataHandler[T]]]
 
     @property
     def rom(self) -> NintendoDSRom | None:
@@ -156,6 +166,7 @@ class RomProject:
 
         self._patcher = None
         self._allow_extra_skypatches = self._load_allow_extra_skypatches()
+        self._data_handlers = _load_data_handlers()
 
     @classmethod
     def new(cls, rom_path: Path, project_dir: Path):
@@ -205,13 +216,24 @@ class RomProject:
 
     def list_files(
         self, *, search_project_dir: bool = True, search_rom: bool = True
-    ) -> list[dict[Path, type[DataHandler[T]]]]:
+    ) -> dict[Path, type[DataHandler[T]]]:
         """
-        Returns a list of all files in the project and their corresponding handlers.
+        Returns a dictionary of all files in the project and their corresponding handlers.
 
-        The list is built from information in the project directory and ROM by default.
+        The dictionary is built from information in the project directory and ROM by default.
         """
-        raise NotImplementedError()
+        files: dict[Path, type[DataHandler[T]]] = {}
+        for data_handler in self._data_handlers:
+            if search_rom and self._rom:
+                for file in data_handler.find_handled_files_in_rom(self._rom):
+                    files[file] = data_handler
+
+            if search_project_dir:
+                project_dir = self._file_storage.get_project_dir()
+                for file in data_handler.find_handled_files_in_project(project_dir):
+                    files[file] = data_handler
+
+        return files
 
     def open_file(
         self,
@@ -325,14 +347,14 @@ class RomProject:
         return assets
 
     def _enrich_static_data(self):
-        # RomDataLoader(rom).load_into(config)
-        raise NotImplementedError()
+        RomDataLoader(self.rom).load_into(self.static_data)
 
     def _load_extra_skypatches(self):
         raise NotImplementedError()
 
     def _load_allow_extra_skypatches(self) -> bool | None:
-        raise NotImplementedError()
+        # TODO Figure out where to store this setting.
+        return None
 
 
 class SkyTempleProjectFileStorage(FileStorage):
@@ -344,6 +366,9 @@ class SkyTempleProjectFileStorage(FileStorage):
         self.rom_path = rom_path
         self.project_dir = project_dir
         self.rom = NintendoDSRom.fromFile(str(rom_path))
+
+    def get_project_dir(self) -> Path:
+        return self.project_dir
 
     def get_from_rom(self, path: Path) -> bytes:
         raise NotImplementedError()

@@ -32,9 +32,9 @@ class AssetSpec:
     rom_path: Path
 
     # handler internal category name, to know which kind of asset to generate
-    category: str
+    category: str = ""
     # handler internal identifier, to know which kind of asset to generate
-    id: str
+    id: str = ""
 
 
 @dataclass
@@ -69,6 +69,13 @@ class Asset:
 
 
 class FileStorage(Protocol):
+    @abc.abstractmethod
+    def get_project_dir(self) -> Path:
+        """
+        Gets the root directory of the project assets.
+        """
+        ...
+
     @abc.abstractmethod
     def get_from_rom(self, path: Path) -> bytes:
         """

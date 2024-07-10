@@ -21,6 +21,8 @@ import abc
 from pathlib import Path
 from typing import Generic, TypeVar, Sequence
 
+from ndspy.rom import NintendoDSRom
+
 from skytemple_files.common.types.file_storage import (
     Asset,
     AssetSpec,
@@ -61,7 +63,7 @@ class DataHandler(Generic[T], abc.ABC):
     @abc.abstractmethod
     def asset_specs(cls, path_to_rom_obj: Path) -> Sequence[AssetSpec]:
         """The specifications for the assets that make up this model given a file at `rom_path`."""
-        pass
+        return []
 
     @classmethod
     @abc.abstractmethod
@@ -78,3 +80,18 @@ class DataHandler(Generic[T], abc.ABC):
     ):
         """Create a model from all loaded assets. `assets` must contain all assets defined via `cls.assets`."""
         pass
+
+    @classmethod
+    @abc.abstractmethod
+    def find_handled_files_in_rom(cls, rom: NintendoDSRom) -> Sequence[Path]:
+        """Given a loaded ROM, find all files in the ROM that are handled by this data handler."""
+        return []
+
+    @classmethod
+    @abc.abstractmethod
+    def find_handled_files_in_project(cls, project_dir: Path) -> Sequence[Path]:
+        """
+        Given a path to an asset project, find all files that are handled by this data handler
+        and map them to NitroFS file paths.
+        """
+        return []

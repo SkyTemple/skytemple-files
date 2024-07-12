@@ -23,6 +23,7 @@ from __future__ import annotations
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import warnings
 from enum import Enum, IntEnum
+from typing import Sequence, Mapping
 
 from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16
@@ -360,7 +361,7 @@ class Pmd2ScriptData(AutoString):
         self._bgms = bgms
         self._level_list = level_list
         self._level_entities = level_entity_table
-        self._op_codes = op_codes
+        self.op_codes = op_codes
         self._ground_state_structs = ground_state_structs
 
     @property
@@ -560,25 +561,25 @@ class Pmd2ScriptData(AutoString):
         return {o.name: o for o in self.level_entities}
 
     @property
-    def op_codes(self) -> list[Pmd2ScriptOpCode]:
-        return self._op_codes
+    def op_codes(self) -> Sequence[Pmd2ScriptOpCode]:
+        return list(self._op_codes_by_id.values())
 
     @op_codes.setter
-    def op_codes(self, value: list[Pmd2ScriptOpCode]) -> None:
-        self._op_codes = value
+    def op_codes(self, value: Sequence[Pmd2ScriptOpCode]) -> None:
+        self._op_codes_by_id: dict[int, Pmd2ScriptOpCode] = {o.id: o for o in value}
+        self._op_codes_by_name: dict[str, list[Pmd2ScriptOpCode]] = {}
+        for o in value:
+            if o.name not in self._op_codes_by_name:
+                self._op_codes_by_name[o.name] = []
+            self._op_codes_by_name[o.name].append(o)
 
     @property
-    def op_codes__by_id(self) -> dict[int, Pmd2ScriptOpCode]:
-        return {o.id: o for o in self.op_codes}
+    def op_codes__by_id(self) -> Mapping[int, Pmd2ScriptOpCode]:
+        return self._op_codes_by_id
 
     @property
-    def op_codes__by_name(self) -> dict[str, list[Pmd2ScriptOpCode]]:
-        opcs: dict[str, list[Pmd2ScriptOpCode]] = {}
-        for o in self._op_codes:
-            if o.name not in opcs:
-                opcs[o.name] = []
-            opcs[o.name].append(o)
-        return opcs
+    def op_codes__by_name(self) -> Mapping[str, list[Pmd2ScriptOpCode]]:
+        return self._op_codes_by_name
 
     @property
     def ground_state_structs(self) -> dict[str, Pmd2ScriptGroundStateStruct]:

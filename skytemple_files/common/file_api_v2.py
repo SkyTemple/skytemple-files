@@ -36,6 +36,8 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Sequence, TypeVar, cast
+from collections import defaultdict
+import json
 
 from ndspy.rom import NintendoDSRom
 
@@ -59,6 +61,9 @@ from skytemple_files.common.types.file_storage import (
 
 T = TypeVar("T")
 
+ASSET_CONFIG_FILE = "asset_config.json"
+SKYPATCHES_DIR = "skypatches"
+ALLOW_EXTRA_SKYPATCHES = "allow_extra_skypatches"
 
 def _first_missing_asset(assets: Sequence[Asset | AssetSpec]) -> AssetSpec | None:
     for x in assets:
@@ -114,6 +119,7 @@ class RomProject:
     _allow_extra_skypatches: bool | None
     _patcher: Patcher | None
     _data_handlers: list[type[DataHandler[T]]]
+    _asset_config: dict
 
     @property
     def rom(self) -> NintendoDSRom | None:
@@ -165,6 +171,7 @@ class RomProject:
             self._static_data = static_data
 
         self._patcher = None
+        self._asset_config = self._load_asset_config()
         self._allow_extra_skypatches = self._load_allow_extra_skypatches()
         self._data_handlers = _load_data_handlers()
 
@@ -202,7 +209,10 @@ class RomProject:
         If `remember` is False, the next time the project is opened the value will be None again (default).
         """
         self._patcher = None
-        raise NotImplementedError()
+        self._allow_extra_skypatches = value
+        if remember:
+            self._asset_config[ALLOW_EXTRA_SKYPATCHES] = value
+            self._save_asset_config()
 
     def load_assets(self, handler: type[DataHandler[T]], path_to_rom_obj: Path) -> Sequence[Asset | AssetSpec]:
         """Returns loaded bytes of assets or just the spec if it's missing."""
@@ -318,7 +328,7 @@ class RomProject:
     def patch_info_asset(self):
         """
         Returns the asset providing information about the requested state of patches applied to the ROM, or None
-        if it doesn't exist. This can be applied to the ROM with `self.apply_symbol_info_asset`.
+        if it doesn't exist. This can be applied to the ROM with `self.apply_patch_info_asset`.
         """
         raise NotImplementedError()
 
@@ -352,9 +362,20 @@ class RomProject:
     def _load_extra_skypatches(self):
         raise NotImplementedError()
 
-    def _load_allow_extra_skypatches(self) -> bool | None:
-        # TODO Figure out where to store this setting.
-        return None
+    def _load_asset_config(self) -> dict:
+        asset_config_path = Path(self._file_storage.get_project_dir(), ASSET_CONFIG_FILE)
+        if asset_config_path.exists():
+            with open(asset_config_path, "r") as asset_file:
+                return defaultdict(lambda: None, json.load(asset_file))
+        return defaultdict(lambda: None)
+
+    def _save_asset_config(self):
+        asset_config_path = Path(self._file_storage.get_project_dir(), ASSET_CONFIG_FILE)
+        with open(asset_config_path, "w") as asset_file:
+            asset_file.write(json.dumps(self._asset_config, sort_keys=True, indent=4))
+
+    def _load_allow_extra_skypatches(self) -> bool:
+        return self._asset_config[ALLOW_EXTRA_SKYPATCHES] or False
 
 
 class SkyTempleProjectFileStorage(FileStorage):

@@ -1,0 +1,2208 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(261);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    with (actor 5){
+        SetAnimation(2);
+    }
+    with (actor 8){
+        SetAnimation(2);
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 8){
+        MovePositionMark(1, Position<'m0', 20, 37>);
+    }
+    WaitExecuteLives(8);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    message_SetFace (8, FACE_INSPIRED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Woah![K] The view\'s great from here!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 5){
+        MovePositionMark(1, Position<'m1', 20, 43.5>);
+    }
+    WaitExecuteLives(5);
+    message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' That it is.');
+    message_Talk (' And,[W:10] we\'ve come here when its\nat its most beautiful,[W:10] lucky us.');
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' To be honest,[W:10] I must thank you.[K]\nI don\'t think I would\'ve seen this if not for\nyou bringing me here.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    WaitExecuteLives(8);
+    se_Play(8972);
+    with (actor 8){
+        SetEffect(171, 3);
+    }
+    with (actor 8){
+        WaitEffect();
+    }
+    message_SetFace (8, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Well,[W:10] I should probably apologise\non my end,[W:20] dragging you around like this...');
+    message_Talk (' But I...');
+    Wait(10);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(10);
+    WaitExecuteLives(8);
+    message_SetFace (8, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+    message_Talk (' -Urk!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8968);
+    with (actor 5){
+        SetEffect(91, 3);
+    }
+    with (actor 5){
+        WaitEffect();
+    }
+    with (actor 5){
+        MovePositionOffset(2, 0, -15);
+    }
+    message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' [CS:C]Minior[CR]!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+    message_Talk (' I-[W:10]Its okay...[K] I just didn\'t expect\nthis to happen as soon as it has...');
+    message_SetFace (8, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Please hold on a moment.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 5){
+        SlidePositionOffset(2, 0, 15);
+    }
+    WaitExecuteLives(5);
+    with (actor 8){
+        SetEffect(645, 3);
+    }
+    Wait(20);
+    se_Play(7433);
+    screen_WhiteOut(1, 130);
+    switch ($CRYSTAL_COLOR_01){
+        case 0:
+            supervision_Acting(1);
+            break;
+        case 1:
+            supervision_Acting(2);
+            break;
+        case 2:
+            supervision_Acting(3);
+            break;
+        case 3:
+            supervision_Acting(4);
+            break;
+        case 4:
+            supervision_Acting(5);
+            break;
+        case 5:
+            supervision_Acting(6);
+            break;
+        case 6:
+            supervision_Acting(7);
+            break; 
+        case 7:
+            supervision_Acting(8);
+            break;
+        default:
+            supervision_Acting(1);
+            break;
+    }
+    with (actor 8){
+        Destroy();
+    }
+    Wait(4);
+    screen_FadeIn(1, 30);
+    Wait(30);
+    se_Play(8964);
+    with (actor 5){
+        SetEffect(88, 3);
+    }
+    with (actor 5){
+        WaitEffect();
+    }
+    switch ($CRYSTAL_COLOR_01){
+        case 0:
+            §label_default;
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (343, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (343, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_red;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 343){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 343) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 343) {
+                                WaitEffect();
+                            }
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 343) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 343) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_red;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_red;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 1:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (338, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (338, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_orange;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 338){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 338) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 338) {
+                                WaitEffect();
+                            }
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 338) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 338) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_orange;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_orange;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 2:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (341, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (341, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_yellow;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 341){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 341) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 341) {
+                                WaitEffect();
+                            }
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 341) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 341) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_yellow;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_yellow;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 3:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (337, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (337, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_green;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 337){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 337) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 337) {
+                                WaitEffect();
+                            }
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 337) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 337) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_green;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_green;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 4:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (340, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (340, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_blue;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 340){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 340) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 340) {
+                                WaitEffect();
+                            }
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 340) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 340) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_blue;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_blue;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 5:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (344, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (344, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_indigo;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 344){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 344) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 344) {
+                                WaitEffect();
+                            }
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 344) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 344) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_indigo;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_indigo;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        case 6:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (339, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (339, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_violet;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 339){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 339) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 339) {
+                                WaitEffect();
+                            }
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 339) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 339) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_violet;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_violet;
+                        break;
+                    }
+                    break;
+            }
+            break; 
+        case 7:
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]M-Minior[CR]![K] Your shell!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Don\'t worry about it.[K] It wasn\'t\nprotecting me sufficiently anymore.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' B-But...![K] Your shell was keeping you\nsafe from this atmosphere!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' As I said...[K] It wasn\'t protecting\nme sufficiently.[K] It has grown weak.');
+            message_Talk (' It would only have weakened me\nfurther had I kept it on.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_SAD, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' But that would mean...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Yes...[K] Unfortunately...');
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Us [CS:K]Minior[CR] aren\'t suited to live in\nthis lower atmosphere.[K] The very air is toxic\nto our bodies.');
+            message_Talk (' We normally have our shells to at\nleast stave off the elements for a short bit,[W:10]\nbut...');
+            message_Talk (' My shell was broken on impact.[K]\nThat made it much weaker...');
+            message_Talk (' Regardless though,[W:10] even if it\nwasn\'t broken, it\'ll have still weakened\neventually.');
+            message_Talk (' I guess,[W:10] my time just came in a\nlittle quicker compared to what it normally\nwould\'ve been...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' N-no![K] This isn\'t right!');
+            message_Talk (' Y-you can\'t!');
+            message_Talk (' I-[W:10]I-[W:10]I-[W:10]I\'ve finally felt that I could\ndo something right![K] Just having someone who\nunderstood me to some extent!');
+            message_Talk (' And you\'re telling me that you\'re\njust gonna go,[W:10] when you could\'ve made me\ndo so much more?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+            message_SetFace (342, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] I...');
+            message_SetFace (342, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ........');
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...This is a fate that all [CS:K]Minior[CR]\nshare.[K] We don\'t live very long.');
+            message_Talk (' But...[K] I suppose its what we\ndo with that time which really makes it\nworthwhile...');
+            message_Talk (' And you...[K] Despite the short time\nI\'ve had...[K] I think I wouldn\'t have had it\nany other way.');
+            message_Talk (' You were able to protect me at\nevery turn,[W:10] take me to various sights...');
+            message_Talk (' And let me see things I could only\nimagine while up in the skies...');
+            message_Talk (' It was a great two days,[W:10] we had.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' A-And in these two days,[K] you had\nme doing things that I wouldn\'t...');
+            message_Talk (' A-Admittedly at first it was only\nbecause I felt bad for you since I wasn\'t\ndoing my job...[K] but...!');
+            message_SetFace (5, FACE_CRYING, FACE_POS_BOTTOM_R_CENTER);
+            se_Play(8972);
+            with (actor 5){
+                SetEffect(171, 3);
+            }
+            message_Talk (' I-I need you![K] I can\'t do any of this\nalone![K] I need you to guide me to make me\nnot hold myself back!');
+            message_Talk (' I can\'t do this alone!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(60);
+            with (actor 5){
+                ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+            }
+            WaitExecuteLives(5);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' No!');
+            message_Talk (' Th-There has to be something that\nI can do...![K] I can mould some of these rocks\nto form a shield...!');
+            supervision_Acting(0);
+            Unlock(1);
+            Wait(50);
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] Please...[K] Stop it...');
+            message_Talk (' Even if you were to find\nsomething...[K] It still would be toxic to me...');
+            message_Talk (' Only the meteors from the skies\nabove will serve as a suitable shield...');
+            message_Talk (' And even then...');
+            Unlock(2);
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_L_CENTER);
+            message_Talk (' I-Is there nothing I can do?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Please...[K] Just let go...[K] There\'s\nnothing that you should do.');
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I\'m already satisfied with what\nI\'ve done in these few days...[K] I\'ve accepted\nmy fate...');
+            message_Talk (' I only ask that you do the same...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_L_CENTER);
+            message_Monologue ('(Is this really it?[K] Is there nothing I can\ndo?[K] Should I just let them go...?)');
+            message_Monologue ('(Unless... I...)');
+            §label_shiny;
+            message_Monologue ('(I will...)');
+            switch(message_SwitchMenu(0, 1)){
+                case menu ("Let go"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            message_Close();
+                            with (actor 5){
+                                MovePositionMark(1, Position<'m1', 20, 43.5>);
+                            }
+                            WaitExecuteLives(5);
+                            with (actor 5){
+                                Turn2Direction(4, 10, DIR_UP);
+                            }
+                            WaitExecuteLives(5);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' [CS:G]Minior[CR] I-');
+                            message_Talk (' .........');
+                            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' P-Please don\'t make me regret\nthis...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' .........');
+                            message_Talk (' ...Thank you,[W:10] [CS:Q]Rayquaza[CR].');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 342){
+                                SetOutputAttribute(2);
+                            }
+                            supervision_Acting(9);
+                            with (object 347) {
+                                SetAnimation(1);
+                            }
+                            Wait(15);
+                            se_Play(8978);
+                            with (actor 342) {
+                                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                            }
+                            with (actor 342) {
+                                WaitEffect();
+                            }
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Ah.[K] I suppose its time...');
+                            message_Talk (' [CS:Q]Rayquaza[CR].[K] I have one more\nrequest for you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' I-[K] What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Its very selfish but...');
+                            message_Talk (' There\'s no doubt that the meteor\nwould\'ve made more of my brethren fall...');
+                            message_Talk (' Can you please find them,[W:10] and give\nthem a life worth remembering...');
+                            message_Talk (' ...as you have...[K] for me...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ............');
+                            message_Talk (' ...Okay...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8454);
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            Wait(95);
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Thank you...');
+                            message_Talk (' And...[K] one more thing...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' Please... Give me a smile...');
+                            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' For...[K] my...[K] last...[K] memory...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......');
+                            message_SetFace (5, FACE_HAPPY, FACE_POS_BOTTOM_R_CENTER);
+                            message_Talk (' ......?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(8459);
+                            supervision_Acting(10);
+                            with (object 348) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            supervision_Acting(11);
+                            with (object 345) {
+                                SetAnimation(3);
+                            }
+                            Wait(2);
+                            supervision_Acting(12);
+                            with (object 346) {
+                                SetAnimation(2);
+                            }
+                            Wait(3);
+                            with (object 347) {
+                                SetAnimation(4);
+                            }
+                            with (actor 342) {
+                                SetOutputAttribute(64);
+                            }
+                            back_SetEffect(12, 90);
+                            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+                            with (actor 342) {
+                                Destroy();
+                            }
+                            with (object 347) {
+                                SetAnimation(3);
+                            }
+                            supervision_RemoveActing(10);
+                            supervision_RemoveActing(11);
+                            Wait(25);
+                            with (object 347) {
+                                SetAnimation(2);
+                            }
+                            supervision_RemoveActing(12);
+                            supervision_RemoveActing(9);
+                            message_CloseEnforce();
+                            Wait(30);
+                            screen_FadeChange(0, 120, 256, 100);
+                            message_Narration(0, {
+                                english="[CN]Thank you... for eveything...",
+                            });
+                        break;
+                        case menu ("No"):
+                            jump @label_shiny;
+                        break;
+                    }
+                    break;
+                case menu ("Resist"):
+                    message_Monologue ('(A-am I truly certain...?)');
+                    switch(message_SwitchMenu(0, 1)){
+                        case menu ("Yes"):
+                            bgm_FadeOut(60);
+                            message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_L_CENTER);
+                            message_Monologue ('(No.[K] There is something that I can do.)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' [CS:C]Minior[CR]. [K]Now its my turn to make\na request of you.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' What is it?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_L_CENTER);
+                            message_Talk (' Please.[K] Stay on for just a little\nbit longer...[K] I have one last thing for you...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+                            message_Talk (' I will...[K] do my best...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Unlock(3);
+                            ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+                            screen_FadeOut(1, 30);
+                            main_EnterDungeon(10, 0);
+                            switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                            main_EnterDungeon(-1, 0);
+                        break;
+                        case menu ("No"):
+                            jump @label_shiny;
+                        break;
+                    }
+                    break;
+            }
+            break;
+        default:
+            jump @label_default;
+            break;
+    }
+    bgm_FadeOut(120);
+    screen_FadeOut(1, 120);
+    ProcessSpecial(PROCESS_SPECIAL_RETURN_TO_TITLE_SCREEN, 0, 0);
+    end;
+}
+
+def 1 for_actor (5){
+    Lock(1);
+    SetAnimation(2);
+    MovePositionMark(2, Position<'m2', 12, 40>);
+    CallCommon(CORO_LOOK_AROUND_FUNC);
+    MovePositionMark(3, Position<'m3', 29, 41.5>);
+    CallCommon(CORO_LOOK_AROUND_FUNC);
+    Lock(2);
+    Turn2Direction(4, 10, DIR_UPLEFT);
+    Lock(3);
+    MoveHeight(1, 1);
+    MoveHeight(1, 2);
+    MoveHeight(1, 3);
+    MoveHeight(1, 4);
+    MoveHeight(1, 5);
+    MoveHeight(1, 6);
+    MoveHeight(1, 7);
+    MoveHeight(1, 8);
+    MoveHeight(1, 9);
+    MoveHeight(1, 10);
+    MoveHeight(1, 11);
+    MoveHeight(1, 12);
+    MoveHeight(1, 13);
+    MoveHeight(1, 14);
+    MoveHeight(1, 15);
+    MoveHeight(1, 16);
+    MoveHeight(1, 17);
+    MoveHeight(1, 18);
+    MoveHeight(1, 19);
+    MoveHeight(1, 20);
+    MoveHeight(1, 21);
+    MoveHeight(1, 22);
+    MoveHeight(1, 23);
+    MoveHeight(1, 24);
+    MoveHeight(1, 25);
+    MoveHeight(1, 26);
+    MoveHeight(1, 27);
+    MoveHeight(1, 28);
+    MoveHeight(1, 29);
+    MoveHeight(1, 30);
+    hold;
+}

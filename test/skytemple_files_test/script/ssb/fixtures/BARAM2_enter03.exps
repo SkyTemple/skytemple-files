@@ -1,0 +1,31 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 11){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(12);
+    message_SetFace(12, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Ah![W:20] Good day,[W:10] [CS:Q]Rayquaza[CR].");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 5){
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    se_Play(8964);
+    message_SetFace(5, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Oh![W:20] You know who I am?");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(12, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" I know a lot of Pokémon.[W:20] Don't\nbe too surprised!");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(5, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Man.");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+    end;
+}

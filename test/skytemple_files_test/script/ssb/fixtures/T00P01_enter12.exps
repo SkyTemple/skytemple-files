@@ -1,0 +1,14 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_Notice('There\'s a note here.');
+    message_Notice('\"Gone to [CS:P]Baram Town[CR] to work on\nredevelopment project!\"');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

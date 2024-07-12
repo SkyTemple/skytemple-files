@@ -1,0 +1,45 @@
+
+
+def 0 {
+    sound_Stop();
+    message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' N-No![K] I musn\'t...[K] I must...[K]\nI must...');
+    message_Close();
+    §label_1;
+    message_Mail ('What is your choice?');
+    switch(message_SwitchMenu(0, 1)){
+        case menu ("Let go"):
+        message_Mail ('And you are certain?');
+        switch(message_SwitchMenu(0, 1)){
+            case menu ("Yes"):
+                message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk (' I...[K]I...[K]I...');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                screen_FadeOut(1, 30);
+                supervision_ExecuteCommon(CORO_EVENT_M03_07B);
+                break;
+            case menu ("No"):
+                jump @label_1;
+                break;
+        }
+        break;
+        case menu ("Resist"):
+        message_Mail ('And you are certain?');
+        switch(message_SwitchMenu(0, 1)){
+            case menu ("Yes"):
+                message_SetFace (5, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk (' No![K] I can do this!');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                screen_FadeOut(1, 30);
+                main_EnterDungeon(13, 0);
+                switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                main_EnterDungeon(-1, 0);
+                break;
+            case menu ("No"):
+                jump @label_1;
+                break;
+        }
+        break;
+    }
+    end;
+}

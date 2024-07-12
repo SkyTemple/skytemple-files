@@ -1,0 +1,22 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 17) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(17);
+    message_SetFace(17, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Woah![K] It\'s you![K]\nIt\'s the first time I\'m seeing a Legendary\nup close!!');
+    message_Talk(' Can you uh...[K] sign my leaf?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk(' What would I even sign it with...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

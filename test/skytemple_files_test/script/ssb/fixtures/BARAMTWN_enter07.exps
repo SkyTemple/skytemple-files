@@ -1,0 +1,33 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    if (scn($SCENARIO_MAIN) <= [102, 1]){
+        with (actor 14){
+            Turn2Direction(4, 10, DIR_UP);
+        }
+        message_Notice("(Looks like she\'s a little to busy to notice\nyou...)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    }
+    elseif (scn($SCENARIO_MAIN) <= [102, 4]){ 
+        message_SetFace(14, FACE_PAIN, FACE_POS_STANDARD);
+        message_Talk(" Oh...[K] Those damn bandits...");
+        message_Talk(" If only I could get rid of them...");
+        message_SetFace(14, FACE_DETERMINED, FACE_POS_STANDARD);
+        message_Talk(" Stalling my progress on this...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    }
+    else {
+        message_SetFace(14, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(" Ah![K] Its you two!");
+        message_Talk(" Thank you again for helping out\nwith this.[K] I don\'t think we\'d be able to\ncontinue without you two.");
+        message_Talk(" Once again, my heartiest thanks!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    }
+    JumpCommon(CORO_END_TALK);
+    end;
+}

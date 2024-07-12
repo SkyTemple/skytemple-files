@@ -1,0 +1,138 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 9) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(9);
+    if ( $SCENARIO_TALK_BIT_FLAG[26] ) {
+        §label_0;
+        if ( $SCENARIO_TALK_BIT_FLAG[27] ) {
+            message_SetFace(9, FACE_SPECIAL0, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Heh![K] That was a wonderful battle!');
+            message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Guess [CS:G]Charizard[CR] and I still have\nquite the ways to go...');
+            message_Talk(' Well![K] No use moping around\nabout it![K] We gotta train more!');
+            message_Talk(' We\'ll come back and get you next\ntime!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(2, FACE_HAPPY, FACE_POS_STANDARD);
+            message_Talk(' Looking forward to it.');
+            message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+            message_Talk(' Say...[K] Where were you guys\nthinking of going to train,[W:10] anyway?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(9, FACE_SPECIAL0, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Isn\'t it obvious?[K] We\'re going to\n[CS:P]Western Cave[CR]![K] Clearly its a good training\nground!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+            message_Monologue('(...................)');
+            message_Monologue('(These guys are SO gonna get hurt.)');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+        } else {
+            message_Mail('[CN]Brawl with [CS:G]Blastoise[CR] and [CS:G]Charizard[CR]?');
+            switch ( message_SwitchMenu(0, 1) ) {
+                case menu('Yes'):
+                    §label_4;
+                    message_SetFace(2, FACE_DETERMINED, FACE_POS_STANDARD);
+                    message_Talk(' You know what,[W:10] you\'re on![K] Let\'s\ndo this!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' That\'s what I\'d like to see!');
+                    message_Talk(' I\'ll go get [CS:G]Charizard[CR].[K] We shall\nmeet at the Square!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    bgm_Stop();
+                    se_Play(5143);
+                    screen_WhiteOut(1, 2);
+                    Wait(2);
+                    screen_FadeIn(1, 2);
+                    Wait(10);
+                    se_Play(5143);
+                    screen_WhiteOut(1, 2);
+                    Wait(2);
+                    screen_FadeIn(1, 2);
+                    WaitSe(5143);
+                    CallCommon(CORO_BOSS_WIPE_FUNC);
+                    main_EnterDungeon(24, 30);
+                    main_EnterDungeon(-1, 30);
+                    hold;
+                case menu('No'):
+                    §label_2;
+                    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' Well,[W:10] I guess not.');
+                    message_Talk(' Not really in the mood right now.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Darn...[W:10] Guess not today...');
+                    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Well,[W:10] if you want a challenge,[W:10]\nI\'ll be waiting here.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    JumpCommon(CORO_END_TALK);
+                default:
+                    JumpCommon(CORO_END_TALK);
+            }
+        }
+    } else {
+        $SCENARIO_TALK_BIT_FLAG[26] = 1;
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' [CS:G]Charizard[CR] and I are about to head\nout to [CS:P]Western Cave[CR]!');
+        message_Talk(' If we can stand up to whatever\'s\nthere,[W:10] then perhaps we\'d be able to take you\non too!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' [CS:P]Western Cave[CR], eh?[K]\nYeah,[W:10] good luck with that.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Hm...[W:10] Why don\'t we test that\ntheory?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' What are you implying...?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Simple.[K] I\'ll get [CS:G]Charizard[CR],[W:10] and we\ncan have a test of strength in the Square.');
+        message_Talk(' Bring your friend too - I don\'t like\nhaving an advantage.');
+        message_SetFace(9, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' That is,[W:10] if you\'re game enough!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' .........');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 7);
+        }
+        with (actor 7) {
+            Turn2DirectionLives(4, 10, 2);
+        }
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Any thoughts,[W:10] [CS:C]Minior[CR]?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' I guess I don\'t mind.[K] Its a new\nthing to experience!');
+        message_SetFace(7, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(' I\'ll tag along if you want to!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' ............');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 9);
+        }
+        with (actor 7) {
+            Turn2DirectionLives(4, 10, 9);
+        }
+        WaitExecuteLives(7);
+        message_Mail('[CN]Brawl with [CS:G]Blastoise[CR] and [CS:G]Charizard[CR]?');
+        switch ( message_SwitchMenu(0, 1) ) {
+            case menu('Yes'):
+                jump @label_4;
+            case menu('No'):
+                jump @label_2;
+            default:
+                JumpCommon(CORO_END_TALK);
+        }
+    }
+}

@@ -1,0 +1,65 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(3);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_TREASURE_TOWN, 60, 256);
+    screen_FadeIn(1, 30);
+    with (actor 2) {
+        MovePositionMark(1, Position<'m0', 31, 40>);
+    }
+    with (actor 7) {
+        MovePositionMark(1, Position<'m1', 23.5, 40>);
+    }
+    WaitExecuteLives(7);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(2);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Well,[W:10] we\'re here.');
+    message_Talk(' Welcome to [CS:P]Pokémon Square[CR].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 7) {
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    with (actor 7) {
+        SetEffect(EFFECT_JOYOUS, 3);
+    }
+    message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Woah![K] It\'s even more developed\nthan [CS:P]Baram Town[CR]!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Well, yeah.[K] It\'s been around for\nway longer than [CS:P]Baram Town[CR],[W:10] so its a little\nmore modern.');
+    message_Talk(' Oh yeah,[W:10] where was it that you\nwanted to visit again?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 7) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    se_Play(8964);
+    with (actor 7) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 7) {
+        WaitEffect();
+    }
+    message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Right![K] I wanted to see [CS:P]Whiscash[CR]\n[CS:P]Pond[CR].[K] You know where it is?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Its just up north.[K] I\'ve been there\na couple of times.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(7, FACE_HAPPY, FACE_POS_STANDARD);
+    message_Talk(' Okay![K] Lead the way!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    $SCENARIO_MAIN = scn[105, 0];
+    $SPECIAL_EPISODE_OPEN_OLD[4] = 1;
+    $SPECIAL_EPISODE_OPEN_OLD[5] = 1;
+    end;
+}

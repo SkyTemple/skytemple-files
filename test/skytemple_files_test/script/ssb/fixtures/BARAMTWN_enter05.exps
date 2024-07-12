@@ -1,0 +1,270 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    WaitExecuteLives(16);
+    if (scn($SCENARIO_MAIN) <= [102, 4]){
+        with (actor 16){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I\'m one of the workers in this\nproject.");
+        message_Talk(" Its been tough,[W:10] but I\'m sure this\nplace will be amazing in time to come!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+        JumpCommon(CORO_END_TALK);
+    end;
+    }
+    if not($SCENARIO_TALK_BIT_FLAG[17]){
+        $SCENARIO_TALK_BIT_FLAG[17] = 1;
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Heya.");
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk("[STS] Heya.[STE] You uh... need some help?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 16){
+            SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+        }
+        se_Play(8964);
+        with (actor 16){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Oh![K] Aren't you...");
+        message_SetFace(16, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Yeah![K] You're the guy who messed\nwith [CS:G]Cradily[CR] and her gang, right?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            SetEffect(171, 3);
+        }
+        se_Play(8972);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" I... guess I am?[K] What of it?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(16, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Well,[W:10] I should thank you for helping\nus deal with her.[K] She was a real pain,[W:10] see?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Oh...[W:10] uh...[W:10] you're welcome.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" So, uh...[W:10] On that note...[W:10] you asked\nif I happened to need some help.");
+        message_SetFace(16, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Hope you don\'t mind hearing me\nout?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Go ahead,[W:10] I'm listening.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(16, FACE_SIGH, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah,[W:10] thank you.");
+        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" So.[K] I\'ll cut to the chase.");
+        message_SetFace(16, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I\'m in a little bit of a financial\ncrisis...");
+        message_Talk(" Took a loan from [CS:G]Kecleon[CR],[W:10] need to\npay him back and all...");
+        message_Talk(" I'd ask [CS:G]Kangaskhan[CR] but...");
+        message_Talk(" Well,[W:10] she\'s my boss![K] It\'d be nothing\nshort of awkward...");
+        message_SetFace(16, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" So uh...[K] Mind helping me out a\nlittle?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" How much do you need?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(16, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Well,[W:10] uh...");
+        with (actor 16){
+            ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(16);
+        message_SetFace(16, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk("[STS] Well, uh...[STE] Pro[W:2]o[W:2]o[W:2]o[W:2]o[W:2]o[W:2]bably around\n1000[M:S0].");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8968);
+        with (actor 5){
+            SetEffect(91, 3);
+        }
+        with (actor 5){
+            WaitEffect();
+        }
+        message_SetFace(5, FACE_SURPRISED, FACE_POS_STANDARD);
+        message_Talk(" A thou-");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            ExecuteCommon(CORO_HEAD_SHAKE_FUNC, 3);
+        }
+        WaitExecuteLives(5);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" Well,[W:10] I can see why you\'re feeling\nstuck.");
+        message_Talk(" I can only wish you the be-");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8974);
+        with (actor 8){
+            ExecuteCommon(CORO_JUMP_ANGRY_FUNC_SERIES, 0);
+        }
+        message_SetFace(8, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" We'll see what we might be able\nto do.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        with (actor 5){
+            Turn2DirectionLives(4, 10, 8);
+        }
+        WaitExecuteLives(5);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" (Come on [CS:C]Minior[CR],[W:10] this one\'s clearly\non her!)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(8, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" (And leave her in the lurch?)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(16, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(" Ah![K] You\'d be willing to help out?[K]\nThanks so much!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            Turn2DirectionLives(4, 10, 16);
+        }
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" .........");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        switch($CARRY_GOLD){
+            case >=1000:
+                message_Mail ('[CN]Pass her 1000[M:S0]?');
+                switch(message_SwitchMenu(0, 1)){
+                    case menu('Yes'):
+                        jump @label_0;
+                        break;
+                    case menu('No'):
+                        jump @label_2;
+                        break;
+                    }
+                break;
+            default:
+                §label_2;
+                message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                message_Talk(" Right.[K] We\'ll...[W:10] see what we can do...");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                JumpCommon(CORO_END_TALK);
+                end; 
+                break;    
+        }          
+    }
+    if not($SCENARIO_TALK_BIT_FLAG[18]){
+        switch($CARRY_GOLD){
+            case >=1000:
+                message_Mail ('[CN]Pass her 1000[M:S0]?');
+                switch(message_SwitchMenu(0, 1)){
+                    case menu('Yes'):
+                        §label_0;
+                        $CARRY_GOLD -= 1000;
+                        $SCENARIO_TALK_BIT_FLAG[18] = 1;
+                        $RECYCLE_COUNT += 1;
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" Hey.[K] Got what you needed.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                        with (actor 16){
+                            Turn2DirectionLives(4, 10, 5);
+                        }
+                        WaitExecuteLives(16);
+                        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Oh?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        se_Play(4872);
+                        Wait(40);
+                        with (actor 16){
+                            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+                        }
+                        WaitExecuteLives(16);
+                        with (actor 16){
+                            SetEffect(EFFECT_JOYOUS, 3);
+                        }
+                        message_SetFace(16, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" This is exactly what I need![K] Thanks\nso much!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        with (actor 16){
+                            SetEffect(EFFECT_NONE, 3);
+                        }
+                        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Hey,[W:10] tell you what.[K] I\'ve got\nsomething I think you\'d like.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);   
+                        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+                        message_Talk(" Wait.[K] If you had that all this time,[W:10]\ncouldn\'t you just have sold that to [CS:G]Kecleon[CR]?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" I... don\'t think its worth enough\nto pay off my debt...");
+                        message_SetFace(16, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Plus,[W:10] I didn\'t want to show my face\naround him before I could pay it all off...");
+                        message_SetFace(16, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" And, hey![K] I need to show my\nappreciation,[W:10] not just for this,[W:10] but also for\n[CS:G]Cradily[CR]!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" .........[K] I see.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                        me_Play(4);
+                        message_Mail('[CN][CS:G]Heracross[CR] greatfully gave you a [CS:A]Stamina Band[CR]!');
+                        message_Close();
+                        switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+                            case 0:
+                                item_Set(0, 38, 0);
+                                switch ( message_Menu(MENU_GIVE_ITEM)){}
+                                break;
+                            case 1:
+                                item_Set(0, 38, 0);
+                                switch ( message_Menu(MENU_GIVE_ITEM2)){}
+                                break;
+                        }
+                        WaitMe(4);
+                        message_SetFace(16, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Appreciate the help![K] You've\ndefinitely made things much smoother for me!");
+                        message_Talk(" Not too sure where\'d I\'d be\nwithout you!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" Yeah,[W:10] no problem.");
+                        message_Talk(" .........");
+                        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                        message_Monologue("(Being greatful for my help,[W:10] huh...?)");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        JumpCommon(CORO_END_TALK);
+                        end; 
+                        break;
+                    case menu('No'):
+                        jump @label_1;
+                        break;
+                    }
+                break;
+            default:
+                §label_1;
+                message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                message_Talk(" Still no luck?");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                with (actor 16){
+                    Turn2DirectionLives(4, 10, 5);
+                }
+                message_SetFace(16, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(" Sadly,[W:10] no...");
+                message_Talk(" Sorry for asking this of you...[K] I\'m\nkind of out of options...");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                message_Talk(" Yeah,[W:10] uh...[K] No problem...");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                JumpCommon(CORO_END_TALK);
+                end; 
+                break;    
+        }
+    }
+    if ($SCENARIO_TALK_BIT_FLAG[18]){
+        with (actor 16){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        WaitExecuteLives(16);
+        message_SetFace(16, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Hey there![K] Got my debt paid off,[W:10]\nnow I can work with full focus!");
+        message_Talk(" I can\'t thank you enough for that.[K]\nI\'ll work hard for you!");
+        message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Alright![K] Time to get to work!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;   
+   } 
+   end;
+}

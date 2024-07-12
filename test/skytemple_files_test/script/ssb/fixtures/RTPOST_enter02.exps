@@ -1,0 +1,13 @@
+
+
+def 0 {
+    message_ResetActor();
+    message_EmptyActor();
+    message_Monologue('[CS:G]Kecleon[CR], a [CS:K]Chimchar[CR], a [CS:K]Lucario[CR], a [CS:K]Glaceon[CR], and\nwhat can only be described as a [CS:K]Morpeko[CR] are\nin the post office.');
+    message_Monologue('Seems like they\'re arguing over something...\nits pretty heated...');
+    message_Monologue('Something about \"Anime\", milk, anmesia, and\na bucket!?');
+    message_Monologue('...Probably shouldn\'t interfere...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    CallCommon(CORO_EVENT_END_FREE);
+    end;
+}

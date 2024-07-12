@@ -1,0 +1,19 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 18) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(18);
+    message_SetFace(18, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' With this new evolved form, I\'m sure\nI can take down anything![K]\nEven dragons!');
+    message_Talk(' Okay...[K] Maybe not that...[K]\nNot yet, at the least...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

@@ -1,0 +1,291 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(315);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    with (actor 8){
+       MoveHeight(1, -6);
+    }
+    with (actor 8){
+        SetAnimation(262);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 90);
+    Wait(90);
+    message_SetFaceOnly (8, FACE_DIZZY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Ughhhhhhh.....');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(4);
+    message_SetFaceOnly (8, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' That was...[K] Quite the fall...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(20);
+    with (actor 8){
+        MoveHeight(40, 6);
+    }
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 8){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(20);
+    with (actor 8){
+        SetAnimation(772);
+    }
+    se_Play(8963);
+    with (actor 8){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 0);
+    }
+    WaitExecuteLives(8);
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    message_SetFaceOnly (8, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Where even am I...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0){
+        SlidePositionOffset(1, -40, 0);
+    }
+    with (actor 5){
+        MovePositionMark(1, Position<'m0', 10.5, 19.5>);
+    }
+    Wait(120);
+    with (actor 5){
+        MovePositionMark(1, Position<'m1', 18, 19.5>);
+    }
+    Wait(40);
+    message_SetFace (5, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Talk (' What in the...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8967);
+    with (actor 8){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    with (actor 8){
+        WaitEffect();
+    }
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(8);
+    bgm_PlayFadeIn(BGM_IN_THE_DEPTHS_OF_THE_PIT, 60, 256);
+    message_SetFaceOnly (8, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Ah! Uhm...[K] Hi there!');
+    message_SetFaceOnly (8, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk ('[STS] Ah! Uhm...[K] Hi there![STE] Uh...[K] Where\nam I?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' You\'re in the [CS:P]Wind Continent[CR].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFaceOnly (8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Ah![K] So this is what it looks like\nup close!');
+    message_Talk (' This looks incredible!');
+    supervision_Acting(1);
+    Unlock(1);
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(40);
+    with (actor 5){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 0);
+    }
+    WaitExecuteLives(5);
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_DOWNRIGHT);
+    }
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Monologue ('(Hmmm...[K] This place really got\ntrashed up...)');
+    message_SetFace (5, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Monologue ('(Wait, didn\'t [CS:G]Kecleon[CR] mention something\nabout a development project?)');
+    message_Monologue ('(And this road leads into [CS:P]Baram Town[CR]...[K]\nWhich means...)');
+    message_SetFace (5, FACE_PAIN, FACE_POS_STANDARD);
+    message_Monologue ('(Oh Arceus, did I make this tougher\nfor them...?)');
+    message_Monologue ('(This probably wouldn\'t have\nhappened if I\'d pay more attention to the\nskies and all...)');
+    message_Monologue ('(Shoot, so this is my fault then?[K]\nThen I...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        Turn2Direction(8, 1, DIR_LEFT);
+    }
+    WaitExecuteLives(8);
+    with (actor 8){
+        SetAnimation(772);
+    }
+    with (actor 8){
+        SetEffect(EFFECT_NONE, 3);
+    }
+    message_SetFaceOnly (8, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Hey uhm...[K] Sorry to bother you\nagain, but...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8967);
+    with (actor 5){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    with (actor 5){
+        WaitEffect();
+    }
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Oh?[K] What is it?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFaceOnly (8, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Well, as you can probably see...');
+    with (actor 8){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(8);
+    with (actor 8){
+        SetAnimation(772);
+    }
+    message_SetFaceOnly (8, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk ('[STS] Well, as you can probably see...[STE]\nI\'ve made quite the mess over here...');
+    message_Talk (' I was wondering if you knew who\nwas responsible for this place?[K] I probably\nneed to apologise for this...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Monologue ('(Well, I guess it is my fault that\nthis guy dropped from the sky here of all\nplaces...)');
+    message_Monologue ('(Guess I at least owe it to them to\nget them to [CS:G]Kangaskhan[CR]...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well...[K] I think I might have an\nidea of who\'s in charge...');
+    message_Talk (' I can probably take you to her,\nif you want.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 0);
+    }
+    WaitExecuteLives(8);
+    message_SetFaceOnly (8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Oh![K] Thank you so much!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(40);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, before we go, though, I\nprobably wanna get your name.[K] What is it?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8974);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    message_SetFaceOnly (8, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Ah![K] Where are my manners?');
+    with (actor 8){
+        SetAnimation(772);
+    }
+    message_SetFace(8, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' My name\'s[CS:C] Minior[CR]![K] Nice to meet\nyou!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Monologue ('([CS:C]Minior[CR], huh...?)');
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, my name\'s [CS:Y]Rayquaza[CR]. Pleased\nto meet you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8968);
+    with (actor 8){
+        SetEffect(91, 3);
+    }
+    message_SetFace(8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Oh wow![K] THE [CS:Y]Rayquaza[CR]?[K] Oh, how\nfortunate I am to have met you on landing!');
+    with (actor 8){
+        SetEffect(EFFECT_JOYOUS, 3);
+    }
+    message_Talk (' Thank you for keeping the skies\nsafe for us!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8961);
+    with (actor 5){
+        SetEffect(EFFECT_SWEAT_DROP_SLOW, 3);
+    }
+    message_SetFace (5, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Talk (' Uhhh.... Yeah....[K] N-no problem...');
+    message_SetFace (5, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk (' ..........................');
+    message_Talk (' A-anyway... we should get going...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(8, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    with (actor 8){
+        SetEffect(EFFECT_NONE, 3);
+    }
+    message_Talk (' Ah! Of course![K] Lead the way!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 5){
+        Turn2Direction(8, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(5);
+    with (actor 5){
+        MovePositionOffset(1, -100, 0);
+    }
+    Wait(20);
+    with (actor 8){
+        MovePositionOffset(1, -100, 0);
+    }
+    screen_FadeOut(1, 30);
+    bgm_FadeOut(30);
+    end;
+}
+
+def 1 for_actor (8){
+    Lock(1);
+    SetEffect(EFFECT_JOYOUS, 3);
+    §label_0;
+    Turn2Direction(8, 1, DIR_UPLEFT);
+    Turn2Direction(8, 1, DIR_LEFT);
+    jump@label_0;
+    hold;
+}
+    

@@ -1,0 +1,300 @@
+
+
+def 0 {
+    debug_Print(' Of which I\'ve probably done\n%d or so...');
+    debug_Print('                                  ');
+    debug_Print(' Well,[W:10] I\'ve only defeated %d\nPokémon so far...');
+    debug_Print('                                  ');
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 19) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(19);
+    if ( $SCENARIO_TALK_BIT_FLAG[30] ) {
+        §label_0;
+        if ( $SCENARIO_TALK_BIT_FLAG[31] ) {
+            message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Heya![K] I\'ve been following your\nadvice,[W:10] tryna put practice into it.');
+            message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' I mean,[W:10] yeah,[W:10] its been tough\ngoing...');
+            message_SetFace(19, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' But that only means I\'ve got to\nget even tougher!');
+            message_Talk(' Gotta put my best into this!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+        } else {
+            message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Hello![K] Fancy seeing you again!');
+            message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' So...[W:10] are you able to give any\nadvice now?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            switch ( $CRYSTAL_COLOR_03 ) {
+                case >= 100:
+                    message_SetFace(2, FACE_HAPPY, FACE_POS_STANDARD);
+                    message_Talk(' Well,[W:10] yes![K] I think I\'ve warmed\nup enough now to be able to do so.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    §label_3;
+                    $RECYCLE_COUNT += 1;
+                    $SCENARIO_TALK_BIT_FLAG[31] = 1;
+                    message_SetFace(19, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Oh![K] Excellent![K] Please do tell!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' Right,[W:10] so to start...');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' ...............');
+                    message_Talk(' ...Always go for initiative...');
+                    message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' ...Not always the case?[K] Hm...');
+                    message_Talk(' ...............');
+                    message_Talk(' ...running away is a valid tactic...?');
+                    message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' .........');
+                    message_Talk(' ...Oh,[W:10] I see what you mean.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' And that\'s about all the advice I\ncan give you.');
+                    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                    message_Talk(' Apologies if it isn\'t really\ncomprehensive...');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' No,[W:10] no![K] This is amazing![K] These are\nsure to help me in battle!');
+                    message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' I mean,[W:10] no doubt I\'ll have to put\ntheory to practice to truly learn and adapt...');
+                    message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' But this is an excellent first\nstep!');
+                    message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Still,[W:10] I\'m wondering if those kids\nwould outpace me with this...');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' Um...[K] If you don\'t mind me saying...');
+                    message_Talk(' Does it really matter?');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Matter...?');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' If nothing at all,[W:10] those kids you\nmentioned can serve as something to aim for,[W:10]\nno?');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' I...');
+                    message_Talk(' ......');
+                    message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Yeah![K] That\'s what I can do!');
+                    message_Talk(' Maybe I\'ll talk to them about it\nlater![K] Get some tips from them and all!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                    message_Talk(' Well,[W:10] glad that you seem to know\nwhat to do,[W:10] then.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Hey,[W:10] tell you what.[K] I think I\'ve got\nsomething that you may like.');
+                    message_Talk(' To be frank,[W:10] its kind of useless to\nme,[W:10] seeing as that I\'m a Grass-type...');
+                    message_Talk(' But I\'m sure you\'d be able to find\na good use for it![K] Plus,[W:10] I need to thank you\nsomehow!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    me_Play(4);
+                    message_Mail('[CN][CS:G]Shiftry[CR] generously rewarded you with a\n[CN][CS:S]Sky Silk[CR]!');
+                    message_Close();
+                    switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                        case 0:
+                            item_Set(0, 542, 0);
+                            switch ( message_Menu(MENU_GIVE_ITEM) ) { }
+                            §label_9;
+                            WaitMe(4);
+                            message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' I\'ve got to thank you again for\nhelping me out here.');
+                            message_Talk(' I mean,[W:10] sure,[W:10] those kids are\nprobably gonna outpace me a little here and\nthere.');
+                            message_Talk(' Still![K] With this advice,[W:10] I don\'t\nthink I\'m gonna ever stop trying!');
+                            message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' I guess you\'ve earned yourself\na fan![K] I\'ll look forward to hearing more of\nyour exploits!');
+                            message_Talk(' Thanks again for your help!');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                            message_Monologue('(A fan...[K] Someone who looks up to me...)');
+                            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                            message_Monologue('(Do I even deserve this...?)');
+                            message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+                            message_Monologue('(......)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            JumpCommon(CORO_END_TALK);
+                        case 1:
+                            item_Set(0, 542, 0);
+                            switch ( message_Menu(MENU_GIVE_ITEM2) ) { }
+                            jump @label_9;
+                        default:
+                            jump @label_9;
+                    }
+                    break;
+                default:
+                    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                    switch ( ProcessSpecial(69, 23, 0) ) { }
+                    switch ( ProcessSpecial(70, 2, 3) ) { }
+                    message_Talk('                                  ');
+                    message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+                    message_Talk(' Sorry,[W:10] that\'s not the 100 that\nI feel comfortable with before giving advice.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' That\'s understandable.[K] I\'ll hope that\nyou\'d think of something soon.');
+                    message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Thanks for assisting with this,[W:10]\nthough.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    JumpCommon(CORO_END_TALK);
+            }
+        }
+    } else {
+        $SCENARIO_TALK_BIT_FLAG[30] = 1;
+        message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Oh![K] You\'re [CS:Q]Rayquaza[CR]![K]\nDo you think you can teach me how to whip\nup some strong winds?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' I don\'t even produce winds the\nsame way you do,[W:10] how do you expect me\nto teach you?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' .........');
+        message_Talk(' ......Fair point...');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' But...[K] Surely there\'s something you\ncan teach me?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well...[W:10] sorry...[K] I\'m not exactly\nproficent in more generic skills...');
+        message_Talk(' I kind of just...[W:10] do.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I see...');
+        message_Talk(' .........');
+        message_Talk(' Sorry,[W:10] its just that...');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' .........');
+        message_Talk(' Well,[W:10] if you don\'t mind hearing me\nout?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(7, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(' Talk away sir![K] Its always nice\nto talk!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8972);
+        with (actor 2) {
+            SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+        }
+        with (actor 2) {
+            WaitEffect();
+        }
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 7);
+        }
+        message_SetFace(2, FACE_SURPRISED, FACE_POS_STANDARD);
+        message_Talk(' [CS:C]Minior[CR]!');
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' .......');
+        message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+        message_Talk(' Guess its too awkward to decline\nnow...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 19);
+        }
+        message_SetFace(19, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Thank you,[W:10] you two.');
+        message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I was thinking that,[W:10] I don\'t know,[W:10]\nseeing as that you\'re a Legendary Pokémon,[W:10]\nyou\'d have a wealth of wisdom at hand.');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Well,[W:10] I hope you do...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 19) {
+            ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(19);
+        message_SetFace(19, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Ah![K] Where was I...');
+        message_SetFace(19, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' So,[W:10] I know you saved the world,[W:10]\nand you\'re strong and all...');
+        message_Talk(' Look,[W:10] I used to pride myself as\none of the strongest in this region.');
+        message_Talk(' My gang and I,[W:10] sweeping requests\nleft and right.[K] Doing good for everyone.');
+        message_SetFace(19, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' In comes a request to find\n[CS:G]Jumpluff[CR],[W:10] which then lead to a scuffle with\n[CS:G]Zapdos[CR].');
+        message_Talk(' And I got served![K] It wasn\'t even\na fight,[W:10] I was knocked out in seconds!');
+        message_Talk(' And then in comes two kids,[W:10] who\ndefeated [CS:G]Zapdos[CR] like it was nothing!');
+        message_SetFace(19, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' What that did to my perceived\nstrength![K] To be useless at something that\nkids can clear!');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Fine,[W:10] I tell myself.[K] Its only a\nfluke,[W:10] I\'m still decently good at my job...');
+        message_Talk(' And then [CS:G]Groudon[CR] shows up.[K] Well,[W:10]\nobviously I can\'t handle that,[W:10] but you know\nwhat happens?');
+        message_SetFace(19, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Those two kids come in and beat\nhim up like it was nothing!');
+        message_Talk(' I just-');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' That\'s not the worst of it,[W:10] after\nall that,[W:10] they take down you,[W:10] the Legend of the\nSkies...');
+        message_SetFace(19, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' No offense...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+        message_Talk(' None taken...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' That\'s three times mere kids have\ndone stuff I can\'t do...');
+        message_SetFace(19, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' What am I to think?');
+        message_Talk(' I only know that I need to get\nstronger...[K] But how...?');
+        message_Talk(' .........');
+        message_SetFace(19, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Sorry,[W:10] I ranted and unloaded all\nover two complete strangers...');
+        message_Talk(' My apologies.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Its fine...[K] Apologies that I can\'t\nreally give you direct advice regarding\ngetting stronger...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I understand.[K] Thank you for\nlistening to what I had to say,[W:10] though.');
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I am wondering,[W:10] though.[K] Do you\nhappen to have any wisdom to share with me?');
+        message_Talk(' Just,[W:10] in general.[K] Given your\nlong life and all,[W:10] I\'m sure you know some\nthings?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(' Hm...[K] I\'m uh...[W:10] not very good at\ngiving advice...');
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' I guess the best I\'ve got is\nbattle experience?[K] I can tell you about how\nto approach a battle and everything?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Oh![K] That would be excellent![K] If\nyou have any advice to give,[W:10] that will help!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well,[W:10] admittedly I\'m a little rusty,[W:10]\nit may take some time for me to get into the\ngroove...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I...[W:10] see...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' I suppose I\'d need around...[W:10]\n100 or so battles to warm back up...');
+        switch ( $CRYSTAL_COLOR_03 ) {
+            case >= 100:
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                with (actor 2) {
+                    SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+                }
+                se_Play(894);
+                with (actor 2) {
+                    WaitEffect();
+                }
+                message_SetFace(2, FACE_SURPRISED, FACE_POS_STANDARD);
+                message_Talk(' Hang on![K] I\'m definitely warmed\nup enough!');
+                message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                message_Talk(' I think I might be able to provide\nsome battling tips now.');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                jump @label_3;
+            default:
+                message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                switch ( ProcessSpecial(69, 23, 0) ) { }
+                switch ( ProcessSpecial(70, 0, 1) ) { }
+                message_Talk('                                  ');
+                message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+                message_Talk(' Sorry,[W:10] I can\'t give you a\ndefinitive answer now...');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                message_SetFace(19, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' I understand.[K] I appreciate you\nbeing willing to help,[W:10] though.');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                JumpCommon(CORO_END_TALK);
+        }
+    }
+}

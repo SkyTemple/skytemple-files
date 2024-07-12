@@ -1,0 +1,17 @@
+
+
+def 0 {
+    if ( scn($SCENARIO_MAIN) == [105, 0] ) {
+        §label_0;
+        screen_FadeOut(1, 30);
+        supervision_ExecuteCommon(CORO_EVENT_M03_03);
+        hold;
+    } else {
+        main_EnterGround(1, 30);
+        hold;
+    }
+}
+
+def 1 for_actor(2) {
+    hold;
+}

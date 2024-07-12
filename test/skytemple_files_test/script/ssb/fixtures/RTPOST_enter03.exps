@@ -1,0 +1,17 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_Notice('[CN]Some job requests are listed on the board.');
+    message_Notice('[CN]One of them seems to have been stuck there\n[CN]for a long, long time.');
+    message_Notice('[CN]\"Please escort me to [CS:P]Purity Forest[CR] 98F!\n[CN]I must reunite with my friend [CS:G]Shedinja[CR]!\"\n[STS][CS:T]000000000000000000000000000[CR][STE]-[CS:G]Tyranitar[CR]');
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Monologue('(Can\'t imagine that this one\'s gonna get\ncleared anytime soon...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

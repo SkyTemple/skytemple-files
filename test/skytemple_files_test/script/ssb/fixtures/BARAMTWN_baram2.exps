@@ -1,0 +1,109 @@
+
+def 0 {
+    sound_Stop();
+    back_SetGround(6);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(2);
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 60, 256);
+    with (actor 14){
+        SetAnimation(2);
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 5){
+        MovePositionMark(1, Position<'m0', 40, 34.5>);
+    }
+    with (actor 8){
+        MovePositionMark(1, Position<'m1', 46.5, 34.5>);
+    }
+    WaitExecuteLives(5);
+    se_Play(8967);
+    with (actor 5){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Ah.[K] There she is.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    camera_Move2PositionMark(1, Position<'m2', 16, 31>);
+    WaitMoveCamera();
+    message_SetFace (14, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Right, so what\'s the report?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (13, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' Right away.[K] So, we discovered that\nthere has been a crater that formed around\nthe entrance to the town.');
+    message_Talk (' No corresponding rock has been\nfound anywhere nearby, so we suspect that\nthis is the work of-');
+    message_Close();
+    with (actor 14){
+        SetEffect(94, 3);
+    }
+    se_Play(8971);
+    message_SetFace (14, FACE_DETERMINED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' [CS:G]Cradily[CR]. That little-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (13, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' Indeed, ma\'am.[K] We don\'t really see\nmuch explanation other than that.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 14){
+        SetEffect(EFFECT_NONE, 3);
+    }
+    message_SetFace (14, FACE_SAD, FACE_POS_TOP_R_CENTER);
+    message_Talk (' (Sigh...) I\'m never gonna be rid of\nthose scoundrels, am I?');
+    message_Talk (' Thank you for the report.[K] You may\ngo now.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (13, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' Very well.[K] All the best.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 13){
+        MovePositionMark(1, Position<'m3', 3, 36.5>);
+    }
+    camera_Move2Default(1);
+    WaitMoveCamera();
+    with (actor 13){
+        Destroy();
+    }
+    with (actor 5){
+        Turn2DirectionLives(8, 10, 8);
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, there you have it.[K] Seems like\nthey aren\'t holding you responsible for this,\nlucky you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(8, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' ................[K]Even still, I still feel\npartially responsible for this...');
+    message_Talk (' I think I want to help out.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, what are you going to do,\ntake out the bandits?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(8, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' ............[K]Well, I mean, yeah.[K] I did\nsee a place that seems like where they\'d\nhide out at.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' An observant one, eh?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_ANGRY_FUNC_SERIES, 3);
+    }
+    message_SetFace(8, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Will you come help?[K] I\'m sure that\nwith your strength, this will be a cakewalk!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+    message_SetFace (5, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Talk (' Well, I do want to get home-');
+    message_Close();
+    message_SetFace(8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' I\'m sure that you\'d be willing to\nhelp out in the lives of all these Pokémon too,\nright?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' ........................');
+    message_Monologue('(I suppose if I do end up going, I should\nprobably check out [CS:G]Kecleon[CR] and [CS:G]Aggron\'s[CR]\nshops.)');
+    message_Monologue('(Might be useful, who knows.)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    $SCENARIO_MAIN = scn[102, 2];
+    $SPECIAL_EPISODE_OPEN_OLD[0] = 1;
+    $SPECIAL_EPISODE_OPEN_OLD[1] = 1;
+    end;
+}

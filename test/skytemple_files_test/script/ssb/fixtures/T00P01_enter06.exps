@@ -1,0 +1,41 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 7) {
+        SetAnimation(2);
+    }
+    se_Play(16130);
+    message_Mail({
+        english="[CN]What would you like to do?",
+    });
+    switch ( message_SwitchMenu(0, 1) ) {
+        case menu({
+            english="Check Storage",
+        }):
+            §label_0;
+            message_Close();
+            switch ( message_Menu(MENU_STORAGE) ) { }
+            §label_2;
+            JumpCommon(CORO_END_TALK);
+        case menu({
+            english="Save",
+        }):
+            §label_1;
+            message_Close();
+            $SCENARIO_MAIN_BIT_FLAG[7] = 1;
+            CallCommon(CORO_HANYOU_SAVE_FUNC);
+            jump @label_2;
+        case menu({
+            english="Cancel",
+        }):
+            jump @label_2;
+        default:
+            jump @label_1;
+    }
+}

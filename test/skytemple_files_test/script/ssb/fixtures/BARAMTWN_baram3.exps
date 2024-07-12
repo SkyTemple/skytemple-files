@@ -1,0 +1,207 @@
+
+def 0 {
+    sound_Stop();
+    back_SetGround(6);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(2);
+    supervision_StationCommon(0);
+    with (actor 14){
+        SetAnimation(2);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 30, 256);
+    screen_FadeIn(1, 30);
+    Wait(30);
+    message_SetFace (14, FACE_STUNNED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Wait.[K] So let me repeat what\nyou\'ve done.');
+    message_Talk (' You went into the bandit\'s hideout,\nand beat them senseless.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Correct.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (14, FACE_STUNNED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Then, once they fled, you\ncompletely cleaned the place out of treasures.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Yep.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (14, FACE_STUNNED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' And now, you\'re donating a small\nsum of a million [M:S0].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' That about sums it up yeah.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (14, FACE_STUNNED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' That\'s... That\'s...');
+    message_SetFace (14, FACE_INSPIRED, FACE_POS_TOP_R_CENTER);
+    message_Talk ('[STS] That\'s... That\'s...[STE] Wonderful!\nThat takes care of the bulk of my issues for\nthis project!');
+    message_SetFace (14, FACE_JOYOUS, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Thank you two so much![K] Oh,[W:10] I\nmust simply give you something in return for\nall your efforts!');
+    message_SetFace (14, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Please wait here.[K] Let me see what\nI have.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 14){
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    WaitExecuteLives(14);
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(8);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Hm, guess that takes care of that\nthen.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Yeah.[K] Thank you so much for this,\n[CS:Q]Rayquaza[CR]!');
+    message_SetFace (8, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Though...[K] I don\'t really have\nanything to compensate you with...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, uh...[K] Don\'t mind that, I guess.[K]\nI don\'t need any compensation.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    message_SetFace (8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Woah![K] You really are a cool guy,\nyou know that?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_HAPPY, FACE_POS_STANDARD);
+    message_Talk (' Heh... I am?[K] Thanks.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(30);
+    message_SetFace (14, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Ooooo-kay![K] I think I\'ve got just the\nthing!');
+    se_Play(8964);
+    with (actor 5){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    with (actor 8){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_RIGHT, 3);
+    }
+     with (actor 14){
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    WaitExecuteLives(14);
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    message_SetFace (14, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' For you two, I have a [CS:A]Joy seed[CR]\nand a [CS:A]Sky Gummi[CR].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Thank you![K] These are incredible!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (14, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Heh,[K] this is nothing compared to\nthe help you\'ve given this town.[K] I can now go\nfull steam ahead!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    me_Play(4);
+    message_Mail('[CN]You were given a [CS:A]Joy seed[CR]\n[CN]and a [CS:A]Sky Gummi[CR]!');
+    message_Close();
+    switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+        case 0:
+            item_Set(0, 89, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM)){}
+            break;
+        case 1:
+            item_Set(0, 89, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM2)){}
+            break;
+    }
+    switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+        case 0:
+            item_Set(0, 128, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM)){}
+            break;
+        case 1:
+            item_Set(0, 128, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM2)){}
+            break;
+    }
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    with (actor 8){
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(8);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, now that that\'s done, I\'ll be\nheading off.');
+    message_Talk (' See ya.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0){
+        SlidePositionOffset(32896, 50, 0);
+    }
+    with (actor 5){
+        Move2PositionMark(1, Position<'m0', 19, 37.5>);
+    }
+    with (actor 8){
+        Turn2Direction(12, 10, DIR_RIGHT);
+    }
+    WaitExecuteLives(5);
+    with (actor 5){
+        Move2PositionMark(1, Position<'m1', 25.5, 34.5>);
+    }
+    WaitExecuteLives(5);
+    se_Play(8974);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_ANGRY_FUNC_SERIES, 3);
+    }
+    message_SetFace (8, FACE_SHOUTING, FACE_POS_STANDARD);
+    message_Talk (' Actually![K] I\'m sorry, but can I ask\nanother favour of you?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 5){
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(5);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' What is it?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' I...I would like you to take me\nsomewhere, if you don\'t mind.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' And where would that be...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (8, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' The [CS:P]Hill of the Ancients[CR].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Well, no problem, we can just take\nan airstream there...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+    }
+    message_SetFace (8, FACE_SAD, FACE_POS_STANDARD);
+    message_Talk (' Well, I...don\'t think that\'s a good\nidea.[K] I don\'t think I can keep up with you...');
+    message_Talk (' And, uhm...[K] As sturdy as this shell\nis, I don\'t think it\'ll be safe... I won\'t be able\nto retrieve the parts at such speeds...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Hmm... so we\'ll have to travel by\nfoot then...');
+    message_Talk (' We\'ll probably be moving through\nthe [CS:P]Wooded Grove[CR] and the [CS:P]Ruined Frontier[CR]...');
+    message_Talk (' That means we\'ll have to pass\nthrough Pokémon Square...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 8){
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    message_SetFace (8, FACE_INSPIRED, FACE_POS_STANDARD);
+    message_Talk (' Oh![K] That\'ll be good![K] I do want to\nvisit there too!');
+    message_Talk (' If you can take me there too, that\nwill be excellent!');
+    message_Talk (' It\'ll mean a bunch if you can\nhelp out!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' ..................');
+    message_Monologue ('(Should I even help them...?)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    $SCENARIO_MAIN = scn[103, 0];
+    $SPECIAL_EPISODE_OPEN_OLD[2] = 1;
+    end;
+}

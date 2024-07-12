@@ -1,0 +1,111 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(176);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    $PERFORMANCE_PROGRESS_LIST[2] = 1;
+    $PERFORMANCE_PROGRESS_LIST[50] = 1;
+    $SCENARIO_BALANCE_FLAG = 1;
+    $ATTENDANT1_KIND = 0;
+    $SCENARIO_MAIN = scn[101, 0];
+    $RECYCLE_COUNT = 0;
+    message_Narration(30, {
+        english="[CN]In the skies above [CS:P]Sky Tower[CR]...",
+    });
+    camera_SetEffect(2, 1, 33024);
+    bgm2_PlayFadeIn(BGM_HEAVY_FEELING, 30, 200);
+    bgm_PlayFadeIn(BGM_EARTHQUAKE2, 30, 200);
+    screen_FadeIn(1, 30);
+    Wait(90);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' ............[K]Before I try...[K]\nI need to know your resolve.');
+    message_Talk (' The star has come too close.');
+    message_Talk (' If I were to loose my \n[CS:G]Hyper Beam[CR] here...');
+    message_Talk (' You would not escape unscathed!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (353, FACE_SURPRISED, FACE_POS_STANDARD);
+    message_Talk (' So?![K]\nWe accepted that from the start!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Well said!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 350){
+        SetAnimation(22);
+    }
+    Wait(60);
+    se_Play(7681);
+    supervision_Acting(1);
+    supervision_Acting(2);
+    Wait(1);
+    Unlock(1);
+    Wait(60);
+    message_SetFace (5, FACE_ANGRY, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Take charge of your destiny!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait (40);
+    supervision_RemoveActing(1);
+    supervision_RemoveActing(2);
+    se_Stop(7681);
+    Wait (10);
+    with (actor 350){
+        SetAnimation (23);
+    }
+    Wait(32);
+    se_Play(7439);
+    supervision_Acting(3);
+    Unlock (3);
+    supervision_Acting(4);
+    Unlock (4);
+    Wait(10);
+    se_Play(6403);
+    bgm_FadeOut(120);
+    bgm2_FadeOut(120);
+    screen_WhiteOutAll(1, 90);
+    Wait(180);
+    screen_WhiteOut(1, 0);
+    screen_FadeInAll(1, 0);
+    WaitSe(6403);
+    end;
+}
+
+def 1 for_performer (5){
+    Lock(1);
+    SetEffect(EFFECT_LIGHT_ENGULFING, 3);
+    Wait(110);
+    §label_0;
+    SetOutputAttribute(128);
+    SetEffect(EFFECT_LIGHT_ENGULFING, 3);
+    Wait(110);
+    ResetOutputAttribute(128);
+    Wait(110);
+    jump @label_0;
+    hold;
+}
+
+def 2 for_performer (2){
+    Lock(1);
+    §label_1;
+    SetOutputAttribute(128);
+    SetEffect(EFFECT_LIGHT_ENGULFING, 3);
+    Wait(110);
+    ResetOutputAttribute(128);
+    Wait(110);
+    jump @label_1;
+    hold;
+}
+
+def 3 for_performer (3){
+    Lock(3);
+    SetEffect(338, 0);
+    hold;
+}
+
+def 4 for_performer (4){
+    Lock(4);
+    SetEffect(338, 0);
+    hold;
+}

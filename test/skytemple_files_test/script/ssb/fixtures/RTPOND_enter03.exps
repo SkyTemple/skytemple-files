@@ -1,0 +1,14 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_SetFace(6, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Hoho![K] All the best for your trip![K]\nHope you have a wonderful time!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

@@ -1,0 +1,61 @@
+
+
+def 0 {
+    switch ( sector() ) {
+        case 1:
+            §label_0;
+            switch ( $GROUND_GETOUT ) {
+                case 437:
+                    supervision_StationCommon(5);
+                    §label_4;
+                    supervision_StationCommon(0);
+                    if ( $SCENARIO_MAIN_BIT_FLAG[7] ) {
+                        $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                        supervision_StationCommon(1);
+                        §label_8;
+                        debug_Print('SET_BGM');
+                        bgm_PlayFadeIn(BGM_TREASURE_TOWN, 0, 256);
+                        JumpCommon(CORO_COMMON_ENTER);
+                    } else {
+                        switch ( sector() ) {
+                            case 1:
+                                end;
+                            default:
+                                switch ( $GROUND_GETOUT ) { }
+                                supervision_StationCommon(1);
+                                jump @label_8;
+                        }
+                    }
+                    break;
+                case 436:
+                    supervision_StationCommon(4);
+                    jump @label_4;
+                default:
+                    jump @label_4;
+            }
+            break;
+        default:
+            screen_FadeOutAll(1, 0);
+            back_SetGround(3);
+            jump @label_0;
+    }
+}
+
+def 1 for_actor(2) {
+    SetAnimation(2);
+    SetFunctionAttribute(2);
+    WaitFadeIn();
+    end;
+}
+
+def 2 for_actor(7) {
+    SetAnimation(2);
+    SetFunctionAttribute(2);
+    WaitFadeIn();
+    end;
+}
+
+def 3 for_actor(10) {
+    SetMoveRange(Position<'m0', 64.5, 40.5>, 5, 6);
+    JumpCommon(CORO_MOVE_TYPE1);
+}

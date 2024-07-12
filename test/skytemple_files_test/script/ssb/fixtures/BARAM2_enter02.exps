@@ -1,0 +1,238 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 9){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(9);
+    if (scn($SCENARIO_MAIN) <= [102, 4]){
+        message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Oh, hello there!");
+        message_SetFace(9, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I... uh...");
+        se_Play(8972);
+        with (actor 9){
+            SetEffect(171, 3);
+        }
+        message_Talk("[STS] I... uh...[STE] Have you happened to\nhave seen my son?[K] He\'s supposed to have\nfollowed me around here...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" No,[W:10] I haven\'t.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Oh...[W:10] That\'s not good...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[19]){
+        $SCENARIO_TALK_BIT_FLAG[19] = 1;
+        message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Hey,[W:10] sorry.[K] Do you mind sparing a\nminute?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+        }
+        se_Play(8964);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Hm?[K] What is it?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah...[K] Well,[W:10] I need to ask a favour\nof you,[W:10] if you don\'t mind.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Monologue("(..........)");
+        message_Monologue("(Someone needing help again,[W:10] hm?)");
+        message_Monologue("(Well, I guess it can't hurt to clarify...)");
+        message_Talk(" What do you need help with?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Well...[K] Its my son.[K] I\'ve been trying\nto look for him,[W:10] but I can\'t find him...");
+        message_Talk(" Having looked around here,[W:10] I can\'t\nfind him around here...");
+        message_SetFace(9, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I...[W:10] I know he knows his way here,[W:10]\nbut I don\'t know where we got separated...");
+        se_Play(8972);
+        with (actor 9){
+            SetEffect(171, 3);
+        }
+        message_SetFace(9, FACE_CRYING, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I know I\'m a terrible mother![K] But\nI want to see my son!");
+        message_Talk(" I know I...[W:10] I...[W:10] I...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" ..................");
+        message_Talk(" Hey,[W:10] sorry,[W:10] but...[K] Is there a way\nI can help?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 9){
+            SetEffect(91, 3);
+        }
+        se_Play(8968);
+        with (actor 9){
+            WaitEffect();
+        }
+        message_SetFace(9, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" O-oh...[W:10] Sorry about that...");
+        message_Talk(" I\'m a little stressed...");
+        with (actor 9){
+            ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(9);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" If you\'re able,[W:10] I just need you to\nfind my son,[W:10] [CS:G]Caterpie[CR].");
+        message_Talk(" Tell him I\'m waiting for him at\n[CS:P]Baram Town[CR].");
+        message_Talk(" He should know how to get here.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" I see.[K] I\'ll let him know if I see\nhim.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I\'ll be waiting around here,[W:10] so he\nknows where to find me.");
+        message_Talk(" .........");
+        message_Talk(" Thank you for your help.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" No problem.[K] Hoping for the best.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Monologue("(..........)");
+        message_Monologue("(How unfortunate...)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[20]){
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Hey.[K] Any luck with your son?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" ........");
+        message_Talk(" Sadly,[W:10] no...");
+        message_Talk(" Thank you for offering your help\nin this search,[W:10] though.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(8, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(" Stay positive![K] I know we\'ll find\nhim soon!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" ........");
+        message_Talk(" I know you\'re trying to be\noptimistic and all,[W:10] but...");
+        message_Talk(" .........");
+        message_Talk(" Nevermind.[K] Thanks for the\nencouragement.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(8, FACE_SAD, FACE_POS_STANDARD);
+        message_Talk(" Ah...[K] My apologies...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;  
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[21]){
+        $SCENARIO_TALK_BIT_FLAG[21] = 1;
+        $SCENARIO_BALANCE_FLAG = 2;
+        $RECYCLE_COUNT += 1;
+        with (actor 9){
+            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(9);
+        message_SetFace(9, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Oh hey![K] It\'s you![K] [CS:G]Caterpie[CR] came\nback!");
+        message_Talk(" And![K] He told me that it was you\nwho managed to find him!");
+        with (actor 9){
+            SetEffect(EFFECT_JOYOUS, 3);
+        }
+        message_SetFace(9, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Thank you so much for finding him!");
+        message_Talk(" I don\'t know what I\'d do without\nyou!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" You\'re welcome.[K] Hope you\'re feeling\nhappy,[W:10] reuinted.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Yes![K] I\'m beyond happy!");
+        with (actor 9){
+            SetEffect(EFFECT_NONE, 3);
+        }
+        message_Talk(" Oh,[W:10] I need to thank you somehow...");
+        message_Talk(" Hmm...[K] How about if I were to\nexpand your Toolbox size?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Ah no need...[W:20] I just was-");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" No,[W:10] please![K] I insist![K] I need to\nthank you somehow for your assistance!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" .......");
+        message_Talk(" Very well then...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Right then![K] Please give me a\nmoment!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 9){
+            Turn2DirectionTurn(4, 10, 4);
+        }
+        WaitExecuteLives(9);
+        message_SetFace(9, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" .........");
+        message_Talk(" Let\'s see...[W:20] This goes there,[W:10] and\nthat goes here,[W:10] then...");
+        message_Talk(" .........");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        Wait(20);
+        with (actor 9){
+            SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+        }
+        se_Play(8964);
+        message_SetFace(9, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah![K] There we go!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 9){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        WaitExecuteLives(9);
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" There we have it![K] An expanded\nToolbox!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(" Ah,[W:10] thank you,[W:10] [CS:G]Butterfree[CR].");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        me_Play(4);
+        message_Mail('[CN][CS:G]Butterfree[CR] expanded your Toolbox!');
+        WaitMe(4);
+        message_Close();
+        with (actor 9){
+            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(9);
+        message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Now that I\'ve gotten my boy\nback,[W:10] I know I\'ll be keeping a watchful\neye on him!");
+        message_Talk(" As his mother,[W:10] I\'ll keep him\nsafe!");
+        with(actor 9){
+            Turn2Direction(4, 10, DIR_LEFT);
+        }
+        message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I\'ll take care of him.[K] I won\'t make\nthe same mistake again.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Monologue("(..........)");
+        message_Monologue("(Having someone to watch over you...)");
+        message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+        message_Monologue("(If only...)");
+        message_Monologue("(..........)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    message_SetFace(9, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Oh![K] It\'s you!");
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" [CS:G]Caterpie[CR] seems to be a little\nshaken up by the situation...");
+    message_Talk(" But he should be fine!");
+    message_SetFace(9, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk("[STS] But he should be fine![STE]\n...[K] I think...");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+    end;
+}

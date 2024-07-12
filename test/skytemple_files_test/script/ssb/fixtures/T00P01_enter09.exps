@@ -1,0 +1,26 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    if ( scn($SCENARIO_MAIN) <= [102, 1] ) {
+        §label_0;
+        message_SetFace(14, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Hey, hey! You need to remember\nany moves?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Monologue('(No, I don\'t think I do.)');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 14) {
+            Turn2Direction(4, 10, DIR_DOWN);
+        }
+        JumpCommon(CORO_END_TALK);
+    } else {
+        switch ( message_Menu(MENU_LINK_SHOP) ) { }
+        JumpCommon(CORO_END_TALK);
+    }
+}

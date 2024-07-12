@@ -1,0 +1,23 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    message_Notice({
+        english="Would you like to save your adventure?",
+    });
+    switch ( message_SwitchMenu(1, 2) ) {
+        case menu({
+            english="Yes",
+        }):
+            §label_0;
+            switch ( message_Menu(MENU_SAVE_MENU) ) { }
+            JumpCommon(CORO_END_TALK);
+        case menu({
+            english="No",
+        }):
+        default:
+            JumpCommon(CORO_END_TALK);
+    }
+}

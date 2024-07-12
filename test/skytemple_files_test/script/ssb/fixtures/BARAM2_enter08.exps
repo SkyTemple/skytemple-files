@@ -1,0 +1,37 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 3){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(3);
+    if not($SCENARIO_TALK_BIT_FLAG[24]){
+        message_SetFace(3, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ho ho![K] It\'s you!");
+        message_Talk(" Thanks for telling me that [CS:G]Big[CR]\n[CS:G]Man Grass Snake[CR] wanted me back.");
+        message_SetFace(3, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Well,[W:10] I suppose you\'re looking for\n[CS:G]Ms Blank Cat[CR] now?");
+        message_SetFace(3, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk(" If you can find me,[W:10] you\'d be able\nto find her.[K] Good luck with that!");
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    message_SetFace(3, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" What\'s this?[K] Come to visit us?");
+    message_SetFace(3, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Thanks for the thought![K] You have\nbrought us back together,[W:10] so come visit\nanytime!");
+    message_SetFace(3, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" That said though,[W:10] [CS:G]Big Man Grass[CR]\n[CS:G]Snake[CR] told us to just \"Go out and do research\"\nbut never told us how much...");
+    message_SetFace(3, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" That guy\'s really got to work on\nhis instructions... I wouldn\'t have been done\nfor at least a month!");
+    message_SetFace(3, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Ah,[W:10] whatever.[K] Lessons for the\nfuture, I guess.");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+    end;  
+}

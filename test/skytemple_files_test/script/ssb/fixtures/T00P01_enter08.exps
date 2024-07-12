@@ -1,0 +1,399 @@
+
+
+def 0 {
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:110][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What else will you be purchasing?\n\n[CLUM_SET:110][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What else will you be purchasing?\n\n[CLUM_SET:115][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What else will you be purchasing?\n\n[CLUM_SET:120][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What else will you be purchasing?\n\n[CLUM_SET:125][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What else will you be purchasing?\n\n[CLUM_SET:130][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:115][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:120][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:125][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:130][STS]Current [M:S0]Poké: %d');
+    debug_Print('                                                                                                    ');
+    debug_Print('Keckleon/NPC_KAKUREON1');
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 13) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(13);
+    if ( $SCENARIO_TALK_BIT_FLAG[20] ) {
+        §label_0;
+        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Welcome! How can I help you?');
+        switch ( message_SwitchMenu(1, 1) ) {
+            case menu('Buy'):
+                §label_1;
+                $EVENT_LOCAL = 1;
+                message_KeyWait();
+                message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                if ( $CARRY_GOLD > 9999 ) {
+                    switch ( ProcessSpecial(69, 60, 0) ) { }
+                    switch ( ProcessSpecial(70, 0, 1) ) { }
+                    message_Talk('                                                                                                    ');
+                    §label_9;
+                    switch ( message_SwitchMenu(1, 1) ) {
+                        case menu('[M:S0][CS:T]00[CR]50 - Apple'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 49 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                §label_12;
+                                if ( $EVENT_LOCAL != 1 ) {
+                                    jump @label_1;
+                                } else {
+                                    message_KeyWait();
+                                    message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                    if ( $CARRY_GOLD > 9999 ) {
+                                        switch ( ProcessSpecial(69, 60, 0) ) { }
+                                        switch ( ProcessSpecial(70, 2, 3) ) { }
+                                        message_Talk('                                                                                                    ');
+                                        jump @label_9;
+                                    } elseif ( $CARRY_GOLD > 999 ) {
+                                        switch ( ProcessSpecial(69, 60, 0) ) { }
+                                        switch ( ProcessSpecial(70, 4, 5) ) { }
+                                        message_Talk('                                                                                                    ');
+                                        jump @label_9;
+                                    } elseif ( $CARRY_GOLD > 99 ) {
+                                        switch ( ProcessSpecial(69, 60, 0) ) { }
+                                        switch ( ProcessSpecial(70, 6, 7) ) { }
+                                        message_Talk('                                                                                                    ');
+                                        jump @label_9;
+                                    } elseif ( $CARRY_GOLD > 9 ) {
+                                        switch ( ProcessSpecial(69, 60, 0) ) { }
+                                        switch ( ProcessSpecial(70, 8, 9) ) { }
+                                        message_Talk('                                                                                                    ');
+                                        jump @label_9;
+                                    } else {
+                                        switch ( ProcessSpecial(69, 60, 0) ) { }
+                                        switch ( ProcessSpecial(70, 10, 11) ) { }
+                                        message_Talk('                                                                                                    ');
+                                        jump @label_9;
+                                    }
+                                }
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' An [CS:A]Apple[CR]? That\'ll be [M:S0]50\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 50;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 109, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]00[CR]50 - I.Oran Packet'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 49 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' An [CS:A]I.Oran Packet[CR]? That\'ll be [M:S0]50\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 50;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 114, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]00[CR]50 - Oran Berry'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 49 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' An [CS:A]Oran Berry[CR]? That\'ll be [M:S0]50\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 50;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 70, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]0[CR]100 - Max Elixir'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 99 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' A [CS:A]Max Elixir[CR]? That\'ll be [M:S0]100\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 100;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 99, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]0[CR]400 - Reviver Seed'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 399 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' A [CS:A]Reviver Seed[CR]? That\'ll be [M:S0]400\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 400;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 73, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]0[CR]600 - Joy Seed'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 599 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' A [CS:A]Joy Seed[CR]? That\'ll be [M:S0]600\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 600;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 89, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('[M:S0][CS:T]0[CR]600 - Sky Gummi'):
+                            message_KeyWait();
+                            if ( $CARRY_GOLD <= 599 ) {
+                                message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(' Sorry, you can\'t afford that.');
+                                message_KeyWait();
+                                jump @label_12;
+                            } else {
+                                switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                    case 1:
+                                        message_SetFace(13, FACE_SAD, FACE_POS_STANDARD);
+                                        message_Talk(' Sorry, you have no room in your bag\nfor that!');
+                                        jump @label_12;
+                                    default:
+                                        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                                        message_Talk(' A [CS:A]Sky Gummi[CR]? That\'ll be [M:S0]600\nPoké.');
+                                        switch ( message_SwitchMenu(1, 1) ) {
+                                            case menu('Buy'):
+                                                message_KeyWait();
+                                                $CARRY_GOLD -= 600;
+                                                se_Play(4872);
+                                                switch ( ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 128, 1) ) { }
+                                                message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                                message_Talk(' Thank you for your purchase!');
+                                                jump @label_12;
+                                            case menu('Cancel'):
+                                                jump @label_12;
+                                            default:
+                                                jump @label_12;
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        case menu('Back'):
+                            §label_10;
+                            message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+                            message_Talk(' Is there anything else I can help you\nwith?');
+                            switch ( message_SwitchMenu(1, 1) ) {
+                                case menu('Buy'):
+                                    jump @label_12;
+                                case menu('Sell'):
+                                    §label_2;
+                                    message_KeyWait();
+                                    switch ( message_Menu(MENU_KECLEON_WARES) ) { }
+                                    jump @label_10;
+                                case menu('Close'):
+                                    §label_14;
+                                    message_KeyWait();
+                                    §label_11;
+                                    message_SetFace(13, FACE_HAPPY, FACE_POS_STANDARD);
+                                    message_Talk(' I hope to see you again!');
+                                    with (actor 13) {
+                                        Turn2Direction(4, 10, DIR_DOWN);
+                                    }
+                                    JumpCommon(CORO_END_TALK);
+                                default:
+                                    jump @label_14;
+                            }
+                            break;
+                        default:
+                            jump @label_10;
+                    }
+                } elseif ( $CARRY_GOLD > 999 ) {
+                    switch ( ProcessSpecial(69, 60, 0) ) { }
+                    switch ( ProcessSpecial(70, 12, 13) ) { }
+                    message_Talk('                                                                                                    ');
+                    jump @label_9;
+                } elseif ( $CARRY_GOLD > 99 ) {
+                    switch ( ProcessSpecial(69, 60, 0) ) { }
+                    switch ( ProcessSpecial(70, 14, 15) ) { }
+                    message_Talk('                                                                                                    ');
+                    jump @label_9;
+                } elseif ( $CARRY_GOLD > 9 ) {
+                    switch ( ProcessSpecial(69, 60, 0) ) { }
+                    switch ( ProcessSpecial(70, 16, 17) ) { }
+                    message_Talk('                                                                                                    ');
+                    jump @label_9;
+                } else {
+                    switch ( ProcessSpecial(69, 60, 0) ) { }
+                    switch ( ProcessSpecial(70, 18, 19) ) { }
+                    message_Talk('                                                                                                    ');
+                    jump @label_9;
+                }
+                break;
+            case menu('Sell'):
+                jump @label_2;
+            case menu('Close'):
+                §label_3;
+                message_KeyWait();
+                jump @label_11;
+            default:
+                jump @label_3;
+        }
+    } else {
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Hey... uh...[K] Where\'s your brother?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Oh,[W:10] don\'t worry about him.[K] He went\noff to do something,[W:10] I\'ll help out in his place.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Huh.[K] Any idea what he\'s doing?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(13, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well, I\'m not too sure myself.[K]\nSomething to do with the Post Office?');
+        message_SetFace(13, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Anyway, I\'m sure he\'s fine.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        $SCENARIO_TALK_BIT_FLAG[20] = 1;
+        jump @label_0;
+    }
+}

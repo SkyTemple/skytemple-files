@@ -15,6 +15,8 @@ def copy(fname: str):
     region = "us"
     if game_name == "SUBS_EXPS":
         game_name = "SUBS_SSB"
+    if game_name == "SeekingSkywardEXPS":
+        game_name = "SeekingSkywardSSB"
     if ext == "ssb":
         print(game_name, level_name, script_name, ext)
         if game_name == "Pichus_fate_script" and not os.path.exists(fname.removesuffix(".ssb") + ".exps"):

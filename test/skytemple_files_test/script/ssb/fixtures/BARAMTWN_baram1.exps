@@ -1,0 +1,34 @@
+
+def 0 {
+    sound_Stop();
+    back_SetGround(6);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(2);
+    supervision_StationCommon(0);
+    with (actor 5) {
+        SetPositionMark(Position<'m1', 90, 33.5>);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 30, 256);
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 5){
+        MovePositionOffset(1, -100, 0);
+    }
+    WaitExecuteLives(5);
+    with (actor 5){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(5);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Hm.[K] Seems like they\'ve been\ndeveloping this place a little.');
+    message_Talk (' A far cry from what it was when\nI came here last, that\'s for sure.');
+    message_Talk (' Anyway.[K] Just need to get some food\nfrom [CS:G]Kecleon[CR], and I\'d be off.');
+    message_Close();
+    $ATTENDANT1_KIND = 0;
+    $SCENARIO_MAIN = scn[102, 0];
+    end;
+}

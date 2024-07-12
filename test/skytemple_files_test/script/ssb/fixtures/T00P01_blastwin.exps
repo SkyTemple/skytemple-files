@@ -1,0 +1,129 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(3);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_TREASURE_TOWN, 60, 256);
+    screen_FadeIn(1, 30);
+    WaitScreenFade();
+    $SCENARIO_TALK_BIT_FLAG[27] = 1;
+    $RECYCLE_COUNT += 1;
+    se_Play(8972);
+    with (actor 9) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor 9) {
+        WaitEffect();
+    }
+    message_SetFace(9, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Huh...[W:10] That...[W:10] was tough...');
+    message_Talk(' We got absolutely trashed...');
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I suppose they don\'t call you the\nSultan of the Skies for nothing,[W:10] huh?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Hey,[W:10] I didn\'t give myself that title.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Bah,[W:10] does it matter?[K] You still\nmopped the floor with us.');
+    message_Talk(' Your strength is undeniable.[K] That\'s\na fact.');
+    message_Talk(' And well...');
+    message_SetFace(9, FACE_SPECIAL0, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' [STS] And well...[STE] I must thank you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8962);
+    with (actor 2) {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    with (actor 2) {
+        WaitEffect();
+    }
+    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk(' Uhhh...[K] You\'re welcome???');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' No,[W:10] honestly.[K] You\'ve made us\nrealise that we have much further to go with\nour training.');
+    message_Talk(' If we want to be the best out\nthere,[W:10] we gotta take on all challenges that\ncome our way.');
+    message_SetFace(9, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    with (actor 9) {
+        SetEffect(EFFECT_JOYOUS, 3);
+    }
+    message_Talk(' And I\'d say you\'re quite the\nchallenge to overcome!');
+    message_Talk(' Thank you for giving us a Legendary\ntime!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 9) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Ah...[W:10] I see.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8964);
+    with (actor 9) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 9) {
+        WaitEffect();
+    }
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Oh,[W:10] yes![K] [CS:G]Charizard[CR] wanted to\ngive you something.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_STUNNED, FACE_POS_STANDARD);
+    message_Talk(' Oh,[W:10] no.[K] I couldn\'t possibly...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Hey,[W:10] no.[K] Keep it.[K] Think of it as a\nmemento of our battle here.');
+    message_Talk(' Plus,[W:10] [CS:G]Charizard[CR] said that he\nalready had \"multiple of these things\" and\nfigured that it\'d be useful to you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk(' I...[W:20] suppose...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    me_Play(4);
+    message_Mail('[CN][CS:G]Blastoise[CR] eagerly gave you a [CS:A]Detect Band[CR]!');
+    message_Close();
+    switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+        case 0:
+            §label_0;
+            item_Set(0, 42, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM) ) { }
+            §label_2;
+            WaitMe(4);
+            message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Anyway,[W:10] so what do you think\nyou\'re gonna do after this?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+            message_Talk(' I\'ve never given it much\nthought...');
+            message_Talk('[STS] I\'ve never given it much\nthought...[STE] I suppose I could just go home and\nsle-');
+            message_SetWaitMode(0, 0);
+            message_Talk('[STS] I\'ve never given it much\nthought... I suppose I could just[STE] wander\naround and help [CS:C]Minior[CR].');
+            message_SetWaitMode(-1, -1);
+            message_Talk('[STS] I\'ve never given it much\nthought... I suppose I could just wander\naround and help [CS:C]Minior[CR].[STE]');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' I see,[W:10] I see.[K] Say,[W:10] have you\nconsidered joining a Rescue Team?');
+            message_Talk(' With your power,[W:10] and access to\nthe Guild\'s resources,[W:10] I\'d imagine you\'d be\na great asset to this world.');
+            message_Talk(' I\'d offer you a spot in Team [CS:X]Hydro[CR],[W:10]\nbut,[W:10] well...');
+            message_SetFace(9, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' I don\'t think you\'d jive well with\nthe theme and all,[W:10] you know?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+            message_Monologue('(.........)');
+            message_Monologue('(I have the power,[W:10] huh?)');
+            message_Monologue('(But I told myself that I wouldn\'t...)');
+            message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+            message_Monologue('(.........)');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            end;
+        case 1:
+            item_Set(0, 42, 0);
+            switch ( message_Menu(MENU_GIVE_ITEM2) ) { }
+            jump @label_2;
+        default:
+            jump @label_2;
+    }
+}

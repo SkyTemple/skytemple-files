@@ -3,7 +3,10 @@ from pathlib import Path
 from unittest import TestCase, SkipTest
 
 from common.file_api_v2 import RomProject, ALLOW_EXTRA_SKYPATCHES
+from common.types.file_types import FileType
 from skytemple_files.data.waza_p.handler import WazaPHandler
+
+SKYTEMPLE_TEST_ROM_ENV = "SKYTEMPLE_TEST_ROM"
 
 
 class FileApiV2TestCase(TestCase):
@@ -17,7 +20,7 @@ class FileApiV2TestCase(TestCase):
 
         expected_path = Path("BALANCE", "waza_p.bin")
         self.assertTrue(expected_path in file_list)
-        self.assertEqual(WazaPHandler, file_list[expected_path])
+        self.assertEqual(FileType.WAZA_P, file_list[expected_path])
 
     def test_list_files_project(self):
         project = RomProject.new(self.load_rom_path(), self.asset_project_path)
@@ -26,7 +29,7 @@ class FileApiV2TestCase(TestCase):
 
         expected_path = Path("BALANCE", "waza_p.bin")
         self.assertTrue(expected_path in file_list)
-        self.assertEqual(WazaPHandler, file_list[expected_path])
+        self.assertEqual(FileType.WAZA_P, file_list[expected_path])
 
     def test_load_allow_extra_skypatches(self):
         project = RomProject.new(self.load_rom_path(), self.asset_project_path)
@@ -56,7 +59,7 @@ class FileApiV2TestCase(TestCase):
             project.set_allow_extra_skypatches(True, True)
 
     def load_rom_path(self):
-        if "SKYTEMPLE_TEST_ROM" in os.environ and os.environ["SKYTEMPLE_TEST_ROM"] != "":
-            return Path(os.environ["SKYTEMPLE_TEST_ROM"])
+        if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
+            return Path(os.environ[SKYTEMPLE_TEST_ROM_ENV])
         else:
             raise SkipTest("No ROM file provided or ROM not found.")

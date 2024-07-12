@@ -39,6 +39,7 @@ from typing import Sequence, TypeVar, cast
 from collections import defaultdict
 import json
 
+from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
@@ -233,15 +234,27 @@ class RomProject:
         The dictionary is built from information in the project directory and ROM by default.
         """
         files: dict[Path, type[DataHandler[T]]] = {}
-        for data_handler in self._data_handlers:
-            if search_rom and self._rom:
-                for file in data_handler.find_handled_files_in_rom(self._rom):
-                    files[file] = data_handler
 
-            if search_project_dir:
-                project_dir = self._file_storage.get_project_dir()
-                for file in data_handler.find_handled_files_in_project(project_dir):
-                    files[file] = data_handler
+        def get_files_in_folder(folder_path, folder: Folder) -> list[Path]:
+            folder_files = [Path(folder_path, folder_file) for folder_file in folder.files.copy()]
+            for subfolder in folder.folders:
+                folder_files.extend(get_files_in_folder(Path(folder_path, subfolder[0]), subfolder[1]))
+            return folder_files
+        rom_files = get_files_in_folder(Path(), self.rom.filenames)
+
+        for data_handler in self._data_handlers:
+            for rom_file in rom_files:
+                asset_specs = data_handler.asset_specs(rom_file)
+
+                if len(asset_specs) > 0:
+                    if search_rom:
+                        files[rom_file] = data_handler
+
+                    if search_project_dir:
+                        for asset_spec in asset_specs:
+                            if Path(self._file_storage.get_project_dir(), asset_spec.path).exists():
+                                files[rom_file] = data_handler
+                                break
 
         return files
 

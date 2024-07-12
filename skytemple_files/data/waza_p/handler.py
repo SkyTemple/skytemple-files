@@ -137,11 +137,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         return data.sir0_serialize_parts()[0]
 
     @classmethod
-    def find_handled_files_in_rom(cls, rom: NintendoDSRom) -> Sequence[Path]:
-        return [Path("BALANCE", "waza_p.bin")]
-
-    @classmethod
-    def find_handled_files_in_project(cls, project_dir: Path) -> Sequence[Path]:
-        if Path(project_dir, "BALANCE", "waza_p.json").exists():
-            return [Path("BALANCE", "waza_p.bin")]
+    def asset_specs(cls, path_to_rom_obj: Path) -> Sequence[AssetSpec]:
+        if path_to_rom_obj == Path("BALANCE", "waza_p.bin"):
+            return [AssetSpec(Path("BALANCE", "waza_p.json"), path_to_rom_obj)]
         return []

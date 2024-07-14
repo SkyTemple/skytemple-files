@@ -1,19 +1,19 @@
-macro WaitUnlockLives($lock, $actor)
+macro WaitUnlockLives(%lock, %actor)
 {
-    WaitLockLives($lock, $actor);
-    Unlock($lock);
+    WaitLockLives(%lock, %actor);
+    Unlock(%lock);
 }
 
-macro WaitUnlockObject($lock, $object)
+macro WaitUnlockObject(%lock, %object)
 {
-    WaitLockObject($lock, $object);
-    Unlock($lock);
+    WaitLockObject(%lock, %object);
+    Unlock(%lock);
 }
 
-macro WaitUnlockPerformer($lock, $performer)
+macro WaitUnlockPerformer(%lock, %performer)
 {
-    WaitLockObject($lock, $performer);
-    Unlock($lock);
+    WaitLockObject(%lock, %performer);
+    Unlock(%lock);
 }
 
 macro WaitUnlockMain()
@@ -22,9 +22,9 @@ macro WaitUnlockMain()
     Unlock(20);
 }
 
-macro shake($duration)
+macro shake(%duration)
 {
-    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    for($LOCAL0 = 0; $LOCAL0 < %duration; $LOCAL0+=1;)
     {
         Slide2PositionOffset(1, -1, 0);
         Wait(2);
@@ -33,12 +33,12 @@ macro shake($duration)
     }
 }
 
-macro spotlight($x, $y, $size, $speed)
+macro spotlight(%x, %y, %size, %speed)
 {
     supervision_SpecialActing(27, 0, 0);
-    supervision_SpecialActing(28, $x, $y);
-    supervision_SpecialActing(29, $size, 0);
-    supervision_SpecialActing(30, $speed, 0);
+    supervision_SpecialActing(28, %x, $y);
+    supervision_SpecialActing(29, %size, 0);
+    supervision_SpecialActing(30, %speed, 0);
 }
 
 macro camera_shake($time, $arg0, $arg1, $arg3)
@@ -737,19 +737,19 @@ def 0
     end;
 }
 
-def 1 for_actor(2)
+def 1 for actor 2
 {
     SetAnimation(2);
     hold;
 }
 
-def 2 for_actor(0)
+def 2 for actor 0
 {
     SetAnimation(2);
     hold;
 }
 
-def 3 for_actor(1)
+def 3 for actor(1)
 {
     SetAnimation(2);
     Turn2DirectionLives(0, 10, 2);

@@ -64,6 +64,7 @@ ASSET_CONFIG_FILE = "asset_config.json"
 SKYPATCHES_DIR = "skypatches"
 ALLOW_EXTRA_SKYPATCHES = "allow_extra_skypatches"
 
+
 def _first_missing_asset(assets: Sequence[Asset | AssetSpec]) -> AssetSpec | None:
     for x in assets:
         if isinstance(x, AssetSpec):
@@ -97,7 +98,7 @@ def extract_assets(assets: Sequence[Asset | AssetSpec]) -> Sequence[Asset]:
     return cast(Sequence[Asset], assets)
 
 
-def _load_data_handlers() -> list[type[DataHandler[T]]]:
+def load_data_handlers() -> list[type[DataHandler[T]]]:
     return [
         handler for handler in vars(FileType).values() if isinstance(handler, type) and issubclass(handler, DataHandler)
     ]
@@ -117,7 +118,6 @@ class RomProject:
     _static_data: Pmd2Data
     _allow_extra_skypatches: bool | None
     _patcher: Patcher | None
-    _data_handlers: list[type[DataHandler[T]]]
     _asset_config: dict
 
     @property
@@ -172,7 +172,6 @@ class RomProject:
         self._patcher = None
         self._asset_config = self._load_asset_config()
         self._allow_extra_skypatches = self._load_allow_extra_skypatches()
-        self._data_handlers = _load_data_handlers()
 
     @classmethod
     def new(cls, rom_path: Path, project_dir: Path):
@@ -233,14 +232,16 @@ class RomProject:
         """
         files: dict[Path, type[DataHandler[T]]] = {}
 
+        # Recursively crawl the file tree to get all files in the ROM.
         def get_files_in_folder(folder_path, folder: Folder) -> list[Path]:
             folder_files = [Path(folder_path, folder_file) for folder_file in folder.files.copy()]
             for subfolder in folder.folders:
                 folder_files.extend(get_files_in_folder(Path(folder_path, subfolder[0]), subfolder[1]))
             return folder_files
+
         rom_files = get_files_in_folder(Path(), self.rom.filenames)
 
-        for data_handler in self._data_handlers:
+        for data_handler in load_data_handlers():
             for rom_file in rom_files:
                 asset_specs = data_handler.asset_specs(rom_file)
 
@@ -403,7 +404,10 @@ class SkyTempleProjectFileStorage(FileStorage):
         return self.project_dir
 
     def get_from_rom(self, path: Path) -> bytes:
-        return bytes(self.rom.getFileByName(str(path)))
+        try:
+            return bytes(self.rom.getFileByName(str(path)))
+        except ValueError:
+            raise FileNotFoundError(f"Cannot find ROM file at {path}")
 
     def store_in_rom(self, path: Path, data: bytes) -> bytes:
         # todo: also record hash in hash file.
@@ -416,14 +420,36 @@ class SkyTempleProjectFileStorage(FileStorage):
 
     def get_asset(self, path: Path, for_rom_path: Path) -> Asset:
         # todo: also throw hash mismatch errors
-        raise NotImplementedError()
+        full_path = Path(self.project_dir, path)
+        if not full_path.exists():
+            raise FileNotFoundError(f"Cannot find project file at {full_path}")
+
+        with open(Path(self.project_dir, path), "rb") as project_file:
+            project_file_bytes = project_file.read()
+
+        return Asset(
+            AssetSpec(path, for_rom_path),
+            None,
+            bytes(self.hash_of_rom_object(for_rom_path), "utf-8"),
+            None,
+            bytes(sha1(project_file_bytes).hexdigest(), "utf-8"),
+            project_file_bytes,
+        )
 
     def store_asset(self, path: Path, for_rom_path: Path, data: bytes) -> bytes:
         # todo: also record hash in hash file.
-        raise NotImplementedError()
+        full_path = Path(self.project_dir, path)
+        if not full_path.exists():
+            raise FileNotFoundError(f"Cannot find project file at {full_path}")
+
+        with open(Path(self.project_dir, path), "wb") as project_file:
+            project_file.write(data)
+
+        return data
 
     def hash_of_rom_object(self, path: Path) -> AssetHash | None:
         return AssetHash(str(sha1(self.get_from_rom(path)).hexdigest()))
 
     def hash_of_asset(self, path: Path) -> AssetHash | None:
-        raise NotImplementedError()
+        with open(Path(self.project_dir, path), "rb") as project_file:
+            return AssetHash(sha1(project_file.read()).hexdigest())

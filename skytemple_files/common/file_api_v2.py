@@ -37,6 +37,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Sequence, TypeVar, cast
 from collections import defaultdict
+from hashlib import sha1
 import json
 
 from ndspy.fnt import Folder
@@ -45,12 +46,9 @@ from ndspy.rom import NintendoDSRom
 from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.patch.patches import Patcher
-
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-
 from skytemple_files.common.types.data_handler import DataHandler
-
-from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom
+from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom, create_file_in_rom
 
 from skytemple_files.common.types.file_storage import (
     FileStorage,
@@ -405,12 +403,16 @@ class SkyTempleProjectFileStorage(FileStorage):
         return self.project_dir
 
     def get_from_rom(self, path: Path) -> bytes:
-        raise NotImplementedError()
+        return bytes(self.rom.getFileByName(str(path)))
 
     def store_in_rom(self, path: Path, data: bytes) -> bytes:
-        # todo: also support creating new files!
         # todo: also record hash in hash file.
-        raise NotImplementedError()
+        try:
+            self.rom.setFileByName(str(path), data)
+        except ValueError:
+            create_file_in_rom(self.rom, str(path), data)
+        self.rom.saveToFile(str(self.rom_path))
+        return data
 
     def get_asset(self, path: Path, for_rom_path: Path) -> Asset:
         # todo: also throw hash mismatch errors
@@ -421,7 +423,7 @@ class SkyTempleProjectFileStorage(FileStorage):
         raise NotImplementedError()
 
     def hash_of_rom_object(self, path: Path) -> AssetHash | None:
-        raise NotImplementedError()
+        return AssetHash(str(sha1(self.get_from_rom(path)).hexdigest()))
 
     def hash_of_asset(self, path: Path) -> AssetHash | None:
         raise NotImplementedError()

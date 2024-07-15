@@ -1,20 +1,41 @@
 import os
+import shutil
 from pathlib import Path
 from unittest import TestCase, SkipTest
 
-from common.file_api_v2 import RomProject, ALLOW_EXTRA_SKYPATCHES
+from common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
 from common.types.file_types import FileType
-from skytemple_files.data.waza_p.handler import WazaPHandler
 
 SKYTEMPLE_TEST_ROM_ENV = "SKYTEMPLE_TEST_ROM"
+ASSET_PROJECT_PATH = Path("skytemple_files_test", "common", "fixtures", "asset_project")
+ROM_COPY_PATH = Path("skytemple_files_test", "common", "fixtures", "rom_copy.nds")
 
 
-class FileApiV2TestCase(TestCase):
+def load_rom_path() -> Path:
+    if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
+        return Path(os.environ[SKYTEMPLE_TEST_ROM_ENV])
+    else:
+        raise SkipTest("No ROM file provided or ROM not found.")
 
-    asset_project_path = Path("skytemple_files_test", "common", "fixtures", "asset_project")
+
+def copy_rom_to_temp_file() -> Path:
+    """
+    Copies the provided ROM to a temporary file for testing.
+    This allows testing writes to the ROM without changing the ROM supplied by the user.
+    """
+    rom_path = load_rom_path()
+    shutil.copy(rom_path, ROM_COPY_PATH)
+    return ROM_COPY_PATH
+
+
+def delete_temp_rom():
+    os.remove(ROM_COPY_PATH)
+
+
+class RomProjectTestCase(TestCase):
 
     def test_list_files_rom(self):
-        project = RomProject.new(self.load_rom_path(), self.asset_project_path)
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
         file_list = project.list_files(search_project_dir=False)
 
@@ -23,7 +44,7 @@ class FileApiV2TestCase(TestCase):
         self.assertEqual(FileType.WAZA_P, file_list[expected_path])
 
     def test_list_files_project(self):
-        project = RomProject.new(self.load_rom_path(), self.asset_project_path)
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
         file_list = project.list_files(search_rom=False)
 
@@ -32,12 +53,12 @@ class FileApiV2TestCase(TestCase):
         self.assertEqual(FileType.WAZA_P, file_list[expected_path])
 
     def test_load_allow_extra_skypatches(self):
-        project = RomProject.new(self.load_rom_path(), self.asset_project_path)
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
         self.assertTrue(project.does_allow_extra_skypatches())
 
     def test_set_allow_extra_skypatches_no_remember(self):
-        project = RomProject.new(self.load_rom_path(), self.asset_project_path)
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
         project.set_allow_extra_skypatches(False)
 
@@ -47,7 +68,7 @@ class FileApiV2TestCase(TestCase):
         self.assertTrue(asset_config[ALLOW_EXTRA_SKYPATCHES])
 
     def test_set_allow_extra_skypatches_remember(self):
-        project = RomProject.new(self.load_rom_path(), self.asset_project_path)
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
         try:
             project.set_allow_extra_skypatches(False, True)
@@ -58,8 +79,54 @@ class FileApiV2TestCase(TestCase):
         finally:
             project.set_allow_extra_skypatches(True, True)
 
-    def load_rom_path(self):
-        if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
-            return Path(os.environ[SKYTEMPLE_TEST_ROM_ENV])
-        else:
-            raise SkipTest("No ROM file provided or ROM not found.")
+
+class SkyTempleProjectFileStorageTestCase(TestCase):
+
+    def test_get_from_rom(self):
+        storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
+
+        file_bytes = storage.get_from_rom(Path("BALANCE", "waza_p.bin"))
+
+        self.assertEqual(80432, len(file_bytes))
+
+    def test_get_from_rom_invalid_file(self):
+        storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
+
+        self.assertRaises(ValueError, storage.get_from_rom, Path("BALANCE", "missing.bin"))
+
+    def test_store_in_rom_existing_file(self):
+        try:
+            rom_path = copy_rom_to_temp_file()
+            storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
+
+            test_data: bytes = bytes(300)
+            storage.store_in_rom(Path("BALANCE", "waza_p.bin"), test_data)
+
+            storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
+            file_bytes = storage.get_from_rom(Path("BALANCE", "waza_p.bin"))
+            self.assertEqual(test_data, file_bytes)
+        finally:
+            delete_temp_rom()
+
+    def test_store_in_rom_new_file(self):
+        try:
+            rom_path = copy_rom_to_temp_file()
+            storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
+
+            test_data: bytes = bytes(300)
+            storage.store_in_rom(Path("BALANCE", "new.bin"), test_data)
+
+            storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
+            file_bytes = storage.get_from_rom(Path("BALANCE", "new.bin"))
+            self.assertEqual(test_data, file_bytes)
+        finally:
+            delete_temp_rom()
+
+    def test_hash_of_rom_object(self):
+        storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
+
+        sha1_hash = storage.hash_of_rom_object(Path("BALANCE", "waza_p.bin"))
+
+        self.assertEqual("f85089b1c47c9392c93f76f5d1baf9b28677454c", sha1_hash)
+
+

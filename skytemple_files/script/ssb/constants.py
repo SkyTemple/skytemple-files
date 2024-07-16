@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import re
 from enum import Enum
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Mapping
 from collections.abc import Iterable
 
 from explorerscript.ssb_converting.ssb_data_types import (
@@ -259,7 +259,7 @@ class SsbConstant(SsbOpParamConstant):
         return "".join(word.title() for word in string.split("_"))
 
     @staticmethod
-    def _in_dict_insensitive(d: dict[str, T], k: str) -> T:
+    def _in_dict_insensitive(d: Mapping[str, T], k: str) -> T:
         """Case-insensitive access to a string indexed dict"""
         for dk, dv in d.items():
             if dk.lower() == k.lower():

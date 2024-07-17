@@ -349,20 +349,20 @@ class Pmd2ScriptData(AutoString):
         op_codes: list[Pmd2ScriptOpCode],
         ground_state_structs: dict[str, Pmd2ScriptGroundStateStruct],
     ):
-        self._game_variables = game_variables_table
-        self._objects = objects_list
-        self._face_names = face_names
-        self._face_position_modes = face_position_modes
-        self._directions = directions
-        self._common_routine_info = common_routine_info
-        self._menus = menu_ids
-        self._process_specials = process_special_ids
-        self._sprite_effects = sprite_effect_ids
-        self._bgms = bgms
-        self._level_list = level_list
-        self._level_entities = level_entity_table
+        self.game_variables = game_variables_table
+        self.objects = objects_list
+        self.face_names = face_names
+        self.face_position_modes = face_position_modes
+        self.directions = directions
+        self.common_routine_info = common_routine_info
+        self.menus = menu_ids
+        self.process_specials = process_special_ids
+        self.sprite_effects = sprite_effect_ids
+        self.bgms = bgms
+        self.level_list = level_list
+        self.level_entities = level_entity_table
         self.op_codes = op_codes
-        self._ground_state_structs = ground_state_structs
+        self.ground_state_structs = ground_state_structs
 
     @property
     def game_variables(self) -> list[Pmd2ScriptGameVar]:
@@ -371,14 +371,16 @@ class Pmd2ScriptData(AutoString):
     @game_variables.setter
     def game_variables(self, value: list[Pmd2ScriptGameVar]) -> None:
         self._game_variables = value
+        self._game_variables__by_id = {var.id: var for var in self._game_variables}
+        self._game_variables__by_name = {var.name: var for var in self._game_variables}
 
     @property
-    def game_variables__by_id(self) -> dict[int, Pmd2ScriptGameVar]:
-        return {var.id: var for var in self.game_variables}
+    def game_variables__by_id(self) -> Mapping[int, Pmd2ScriptGameVar]:
+        return self._game_variables__by_id
 
     @property
-    def game_variables__by_name(self) -> dict[str, Pmd2ScriptGameVar]:
-        return {var.name: var for var in self.game_variables}
+    def game_variables__by_name(self) -> Mapping[str, Pmd2ScriptGameVar]:
+        return self._game_variables__by_name
 
     @property
     def objects(self) -> list[Pmd2ScriptObject]:
@@ -387,14 +389,16 @@ class Pmd2ScriptData(AutoString):
     @objects.setter
     def objects(self, value: list[Pmd2ScriptObject]) -> None:
         self._objects = value
+        self._objects__by_id = {o.id: o for o in self._objects}
+        self._objects__by_unique_name = {o.unique_name: o for o in self._objects}
 
     @property
-    def objects__by_id(self) -> dict[int, Pmd2ScriptObject]:
-        return {o.id: o for o in self.objects}
+    def objects__by_id(self) -> Mapping[u16, Pmd2ScriptObject]:
+        return self._objects__by_id
 
     @property
-    def objects__by_unique_name(self) -> dict[str, Pmd2ScriptObject]:
-        return {o.unique_name: o for o in self.objects}
+    def objects__by_unique_name(self) -> Mapping[str, Pmd2ScriptObject]:
+        return self._objects__by_unique_name
 
     @property
     def face_names(self) -> list[Pmd2ScriptFaceName]:
@@ -403,14 +407,16 @@ class Pmd2ScriptData(AutoString):
     @face_names.setter
     def face_names(self, value: list[Pmd2ScriptFaceName]) -> None:
         self._face_names = value
+        self._face_names__by_id = {n.id: n for n in self._face_names}
+        self._face_names__by_name = {n.name: n for n in self._face_names}
 
     @property
-    def face_names__by_id(self) -> dict[int, Pmd2ScriptFaceName]:
-        return {n.id: n for n in self.face_names}
+    def face_names__by_id(self) -> Mapping[int, Pmd2ScriptFaceName]:
+        return self._face_names__by_id
 
     @property
-    def face_names__by_name(self) -> dict[str, Pmd2ScriptFaceName]:
-        return {n.name: n for n in self.face_names}
+    def face_names__by_name(self) -> Mapping[str, Pmd2ScriptFaceName]:
+        return self._face_names__by_name
 
     @property
     def face_position_modes(self) -> list[Pmd2ScriptFacePositionMode]:
@@ -419,14 +425,16 @@ class Pmd2ScriptData(AutoString):
     @face_position_modes.setter
     def face_position_modes(self, value: list[Pmd2ScriptFacePositionMode]) -> None:
         self._face_position_modes = value
+        self._face_position_modes__by_id = {n.id: n for n in self._face_position_modes}
+        self._face_position_modes__by_name = {n.name: n for n in self._face_position_modes}
 
     @property
-    def face_position_modes__by_id(self) -> dict[int, Pmd2ScriptFacePositionMode]:
-        return {n.id: n for n in self.face_position_modes}
+    def face_position_modes__by_id(self) -> Mapping[int, Pmd2ScriptFacePositionMode]:
+        return self._face_position_modes__by_id
 
     @property
-    def face_position_modes__by_name(self) -> dict[str, Pmd2ScriptFacePositionMode]:
-        return {n.name: n for n in self.face_position_modes}
+    def face_position_modes__by_name(self) -> Mapping[str, Pmd2ScriptFacePositionMode]:
+        return self._face_position_modes__by_name
 
     @property
     def directions(self) -> dict[int, Pmd2ScriptDirection]:
@@ -435,18 +443,20 @@ class Pmd2ScriptData(AutoString):
     @directions.setter
     def directions(self, value: dict[int, Pmd2ScriptDirection]) -> None:
         self._directions = value
+        self._directions__by_ssb_id = {d.ssb_id: d for d in self._directions.values()}
+        self._directions__by_name = {b.name: b for b in self.directions.values()}
 
     @property
-    def directions__by_ssa_id(self) -> dict[int, Pmd2ScriptDirection]:
+    def directions__by_ssa_id(self) -> Mapping[int, Pmd2ScriptDirection]:
         return self.directions
 
     @property
-    def directions__by_ssb_id(self) -> dict[int, Pmd2ScriptDirection]:
-        return {d.ssb_id: d for d in self._directions.values()}
+    def directions__by_ssb_id(self) -> Mapping[int, Pmd2ScriptDirection]:
+        return self._directions__by_ssb_id
 
     @property
-    def directions__by_name(self) -> dict[str, Pmd2ScriptDirection]:
-        return {b.name: b for b in self.directions.values()}
+    def directions__by_name(self) -> Mapping[str, Pmd2ScriptDirection]:
+        return self._directions__by_name
 
     @property
     def common_routine_info(self) -> list[Pmd2ScriptRoutine]:
@@ -455,14 +465,16 @@ class Pmd2ScriptData(AutoString):
     @common_routine_info.setter
     def common_routine_info(self, value: list[Pmd2ScriptRoutine]) -> None:
         self._common_routine_info = value
+        self._common_routine_info__by_id = {o.id: o for o in self.common_routine_info}
+        self._common_routine_info__by_name = {o.name: o for o in self.common_routine_info}
 
     @property
     def common_routine_info__by_id(self) -> dict[int, Pmd2ScriptRoutine]:
-        return {o.id: o for o in self.common_routine_info}
+        return self._common_routine_info__by_id
 
     @property
     def common_routine_info__by_name(self) -> dict[str, Pmd2ScriptRoutine]:
-        return {o.name: o for o in self.common_routine_info}
+        return self._common_routine_info__by_name
 
     @property
     def menus(self) -> list[Pmd2ScriptMenu]:
@@ -471,14 +483,16 @@ class Pmd2ScriptData(AutoString):
     @menus.setter
     def menus(self, value: list[Pmd2ScriptMenu]) -> None:
         self._menus = value
+        self._menus__by_id = {o.id: o for o in self.menus}
+        self._menus__by_name = {o.name: o for o in self.menus}
 
     @property
-    def menus__by_id(self) -> dict[int, Pmd2ScriptMenu]:
-        return {o.id: o for o in self.menus}
+    def menus__by_id(self) -> Mapping[int, Pmd2ScriptMenu]:
+        return self._menus__by_id
 
     @property
-    def menus__by_name(self) -> dict[str, Pmd2ScriptMenu]:
-        return {o.name: o for o in self.menus}
+    def menus__by_name(self) -> Mapping[str, Pmd2ScriptMenu]:
+        return self._menus__by_name
 
     @property
     def process_specials(self) -> list[Pmd2ScriptSpecial]:
@@ -487,14 +501,16 @@ class Pmd2ScriptData(AutoString):
     @process_specials.setter
     def process_specials(self, value: list[Pmd2ScriptSpecial]) -> None:
         self._process_specials = value
+        self._process_specials__by_id = {o.id: o for o in self.process_specials}
+        self._process_specials__by_name = {o.name: o for o in self.process_specials}
 
     @property
-    def process_specials__by_id(self) -> dict[int, Pmd2ScriptSpecial]:
-        return {o.id: o for o in self.process_specials}
+    def process_specials__by_id(self) -> Mapping[int, Pmd2ScriptSpecial]:
+        return self._process_specials__by_id
 
     @property
-    def process_specials__by_name(self) -> dict[str, Pmd2ScriptSpecial]:
-        return {o.name: o for o in self.process_specials}
+    def process_specials__by_name(self) -> Mapping[str, Pmd2ScriptSpecial]:
+        return self._process_specials__by_name
 
     @property
     def sprite_effects(self) -> list[Pmd2ScriptSpriteEffect]:
@@ -503,14 +519,16 @@ class Pmd2ScriptData(AutoString):
     @sprite_effects.setter
     def sprite_effects(self, value: list[Pmd2ScriptSpriteEffect]) -> None:
         self._sprite_effects = value
+        self._sprite_effects__by_id = {o.id: o for o in self.sprite_effects}
+        self._sprite_effects__by_name = {o.name: o for o in self.sprite_effects}
 
     @property
-    def sprite_effects__by_id(self) -> dict[int, Pmd2ScriptSpriteEffect]:
-        return {o.id: o for o in self.sprite_effects}
+    def sprite_effects__by_id(self) -> Mapping[int, Pmd2ScriptSpriteEffect]:
+        return self._sprite_effects__by_id
 
     @property
-    def sprite_effects__by_name(self) -> dict[str, Pmd2ScriptSpriteEffect]:
-        return {o.name: o for o in self.sprite_effects}
+    def sprite_effects__by_name(self) -> Mapping[str, Pmd2ScriptSpriteEffect]:
+        return self._sprite_effects__by_name
 
     @property
     def bgms(self) -> list[Pmd2ScriptBgm]:
@@ -519,14 +537,16 @@ class Pmd2ScriptData(AutoString):
     @bgms.setter
     def bgms(self, value: list[Pmd2ScriptBgm]) -> None:
         self._bgms = value
+        self._bgms__by_id = {o.id: o for o in self.bgms}
+        self._bgms__by_name = {o.name: o for o in self.bgms}
 
     @property
-    def bgms__by_id(self) -> dict[int, Pmd2ScriptBgm]:
-        return {o.id: o for o in self.bgms}
+    def bgms__by_id(self) -> Mapping[int, Pmd2ScriptBgm]:
+        return self._bgms__by_id
 
     @property
-    def bgms__by_name(self) -> dict[str, Pmd2ScriptBgm]:
-        return {o.name: o for o in self.bgms}
+    def bgms__by_name(self) -> Mapping[str, Pmd2ScriptBgm]:
+        return self._bgms__by_name
 
     @property
     def level_list(self) -> list[Pmd2ScriptLevel]:
@@ -535,14 +555,16 @@ class Pmd2ScriptData(AutoString):
     @level_list.setter
     def level_list(self, value: list[Pmd2ScriptLevel]) -> None:
         self._level_list = value
+        self._level_list__by_id = {o.id: o for o in self.level_list}
+        self._level_list__by_name = {o.name: o for o in self.level_list}
 
     @property
-    def level_list__by_id(self) -> dict[int, Pmd2ScriptLevel]:
-        return {o.id: o for o in self.level_list}
+    def level_list__by_id(self) -> Mapping[int, Pmd2ScriptLevel]:
+        return self._level_list__by_id
 
     @property
-    def level_list__by_name(self) -> dict[str, Pmd2ScriptLevel]:
-        return {o.name: o for o in self.level_list}
+    def level_list__by_name(self) -> Mapping[str, Pmd2ScriptLevel]:
+        return self._level_list__by_name
 
     @property
     def level_entities(self) -> list[Pmd2ScriptEntity]:
@@ -551,14 +573,16 @@ class Pmd2ScriptData(AutoString):
     @level_entities.setter
     def level_entities(self, value: list[Pmd2ScriptEntity]) -> None:
         self._level_entities = value
+        self._level_entities__by_id = {o.id: o for o in self.level_entities}
+        self._level_entities__by_name = {o.name: o for o in self.level_entities}
 
     @property
-    def level_entities__by_id(self) -> dict[int, Pmd2ScriptEntity]:
-        return {o.id: o for o in self.level_entities}
+    def level_entities__by_id(self) -> Mapping[u16, Pmd2ScriptEntity]:
+        return self._level_entities__by_id
 
     @property
-    def level_entities__by_name(self) -> dict[str, Pmd2ScriptEntity]:
-        return {o.name: o for o in self.level_entities}
+    def level_entities__by_name(self) -> Mapping[str, Pmd2ScriptEntity]:
+        return self._level_entities__by_name
 
     @property
     def op_codes(self) -> Sequence[Pmd2ScriptOpCode]:
@@ -584,3 +608,7 @@ class Pmd2ScriptData(AutoString):
     @property
     def ground_state_structs(self) -> dict[str, Pmd2ScriptGroundStateStruct]:
         return self._ground_state_structs
+
+    @ground_state_structs.setter
+    def ground_state_structs(self, value: dict[str, Pmd2ScriptGroundStateStruct]) -> None:
+        self._ground_state_structs = value

@@ -32,6 +32,7 @@ from explorerscript.ssb_converting.ssb_decompiler import ExplorerScriptSsbDecomp
 from explorerscript.ssb_script.ssb_converting.ssb_decompiler import (
     SsbScriptSsbDecompiler,
 )
+from range_typed_integers import u16
 
 from skytemple_files.common import string_codec
 from skytemple_files.common.ppmdu_config.script_data import (
@@ -260,9 +261,11 @@ class Ssb:
         for _, r in self.routine_info:
             try:
                 if r.type == SsbRoutineType.ACTOR:
-                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.level_entities__by_id[r.linked_to]).name
+                    r.linked_to_name = SsbConstant.create_for(
+                        self._scriptdata.level_entities__by_id[u16(r.linked_to)]
+                    ).name
                 elif r.type == SsbRoutineType.OBJECT:
-                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[r.linked_to]).name
+                    r.linked_to_name = SsbConstant.create_for(self._scriptdata.objects__by_id[u16(r.linked_to)]).name
             except KeyError:
                 pass
 

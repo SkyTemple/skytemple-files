@@ -19,7 +19,10 @@ class UserValueError(ValueError):
         setattr(self, USER_ERROR_MARK, True)
 
 
-def mark_as_user_err(exc: BaseException):
+E = TypeVar("E", bound=BaseException)
+
+
+def mark_as_user_err(exc: E) -> E:
     """
     This marks an error as a user error, provided the exception supports it. Silently fails if it doesn't.
     Consider using make_user_err instead.
@@ -28,6 +31,7 @@ def mark_as_user_err(exc: BaseException):
         setattr(exc, USER_ERROR_MARK, True)
     except Exception:
         pass
+    return exc
 
 
 def make_user_err(base_type: type[T], *args, **kwargs) -> T:

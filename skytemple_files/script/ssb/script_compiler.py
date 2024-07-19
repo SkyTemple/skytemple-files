@@ -52,7 +52,7 @@ from skytemple_files.script.ssb.model import (
     Ssb,
 )
 from skytemple_files.script.ssb.ssb_number import fixed_point_to_ssb_encoding
-from skytemple_files.user_error import USER_ERROR_MARK
+from skytemple_files.user_error import USER_ERROR_MARK, mark_as_user_err
 
 logger = logging.getLogger(__name__)
 Callback = Optional[Callable[[], None]]
@@ -189,22 +189,26 @@ class ScriptCompiler:
             if has_coroutines:
                 # Assert, that the data contains all coroutines from the ROM schema and sort all three lists by this
                 if len(input_routine_structure) != len(self.rom_data.script_data.common_routine_info):
-                    raise SsbCompilerError(
-                        f(
-                            _(
-                                "The script must contain exactly {len(self.rom_data.script_data.common_routine_info)} coroutines."
+                    raise mark_as_user_err(
+                        SsbCompilerError(
+                            f(
+                                _(
+                                    "The script must contain exactly {len(self.rom_data.script_data.common_routine_info)} coroutines."
+                                )
                             )
                         )
                     )
                 if len(routine_infos) != len(set(named_coroutines)):
-                    raise SsbCompilerError(f(_("The script must not contain any duplicate coroutines.")))
+                    raise mark_as_user_err(
+                        SsbCompilerError(f(_("The script must not contain any duplicate coroutines.")))
+                    )
                 try:
                     input_routine_structure = sorted(
                         input_routine_structure,
                         key=lambda k: self.rom_data.script_data.common_routine_info__by_name[k[1]].id,
                     )
                 except KeyError as err:
-                    raise SsbCompilerError(f(_("Unknown coroutine {err}"))) from err
+                    raise mark_as_user_err(SsbCompilerError(f(_("Unknown coroutine {err}")))) from err
 
             # Build Routine Infos
             built_routine_info_with_offset: list[tuple[int, SsbRoutineInfo]] = []
@@ -217,7 +221,9 @@ class ScriptCompiler:
                 if (has_coroutines and input_info.type != SsbRoutineType.COROUTINE) or (
                     not has_coroutines and input_info.type == SsbRoutineType.COROUTINE
                 ):
-                    raise SsbCompilerError(f(_("Coroutines and regular routines can not be mixed in a script file.")))
+                    raise mark_as_user_err(
+                        SsbCompilerError(f(_("Coroutines and regular routines can not be mixed in a script file.")))
+                    )
 
                 routine_start_cursor = opcode_cursor
                 # Build OPs
@@ -229,7 +235,7 @@ class ScriptCompiler:
                     bytes_written_last_rtn = 0
                     for in_op in input_ops:
                         if in_op.op_code.name not in self.rom_data.script_data.op_codes__by_name:
-                            raise SsbCompilerError(f(_("Unknown operation {in_op.op_code.name}.")))
+                            raise mark_as_user_err(SsbCompilerError(f(_("Unknown operation {in_op.op_code.name}."))))
                         op_codes: list[Pmd2ScriptOpCode] = self.rom_data.script_data.op_codes__by_name[
                             in_op.op_code.name
                         ]
@@ -242,11 +248,13 @@ class ScriptCompiler:
                             elif self._correct_param_list_len(in_op.params) > normal_op_code.params:
                                 op_code = var_len_op_code
                             else:
-                                raise SsbCompilerError(
-                                    f(
-                                        _(
-                                            "The number of parameters for {normal_op_code.name} "
-                                            "must be at least {normal_op_code.params}, is {self._correct_param_list_len(in_op.params)}."
+                                raise mark_as_user_err(
+                                    SsbCompilerError(
+                                        f(
+                                            _(
+                                                "The number of parameters for {normal_op_code.name} "
+                                                "must be at least {normal_op_code.params}, is {self._correct_param_list_len(in_op.params)}."
+                                            )
                                         )
                                     )
                                 )
@@ -261,11 +269,13 @@ class ScriptCompiler:
                             op_len += 2
                         elif self._correct_param_list_len(in_op.params) != op_code.params:
                             # TODO: This might be a confusing count for end users in the case of position markers.
-                            raise SsbCompilerError(
-                                f(
-                                    _(
-                                        "The number of parameters for {op_code.name} "
-                                        "must be {op_code.params}, is {self._correct_param_list_len(in_op.params)}."
+                            raise mark_as_user_err(
+                                SsbCompilerError(
+                                    f(
+                                        _(
+                                            "The number of parameters for {op_code.name} "
+                                            "must be {op_code.params}, is {self._correct_param_list_len(in_op.params)}."
+                                        )
                                     )
                                 )
                             )
@@ -339,7 +349,7 @@ class ScriptCompiler:
             try:
                 return SsbConstant(param.name, self.rom_data.script_data).value.id
             except ValueError as err:
-                raise SsbCompilerError(str(err)) from err
+                raise mark_as_user_err(SsbCompilerError(str(err))) from err
 
         if isinstance(param, SsbOpParamConstString):
             try:
@@ -360,11 +370,11 @@ class ScriptCompiler:
                 # Multi language regular case. All languages must be known.
                 for lang, string in param.strings.items():
                     if lang not in built_strings:
-                        raise SsbCompilerError(f(_("Unknown language for string: {lang}")))
+                        raise mark_as_user_err(SsbCompilerError(f(_("Unknown language for string: {lang}"))))
                     built_strings[lang].append(string)
             return StringIndexPlaceholder(i)
 
-        raise SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}")))
+        raise mark_as_user_err(SsbCompilerError(f(_("Invalid parameter supplied for an operation: {param}"))))
 
     @staticmethod
     def _correct_param_list_len(params: Sequence[SsbOpParam]) -> int:

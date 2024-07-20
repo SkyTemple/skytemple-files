@@ -5,8 +5,7 @@ range-typed-integers==1.0.1
 Pillow==10.2.0
 appdirs==1.4.4
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
-# TODO TMP:
-git+https://github.com/skytemple/explorerscript@master#egg=explorerscript
+explorerscript==0.2.0
 dungeon-eos==0.0.5
 gql[aiohttp]==3.5.0
 graphql-core>=3.2.0

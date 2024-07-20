@@ -48,12 +48,12 @@ def parse_ssb_encoding(v: int) -> int | SsbOpParamFixedPoint:
         v = -0x4000 + (raw_v & 0x3FFF)
     # fixed point flag
     if raw_v & 0x8000:
-        whole = (abs(v) & 0x7FFF) >> 8
+        whole: int | type[SsbOpParamFixedPoint.NegativeZero] = (abs(v) & 0x7FFF) >> 8
         if v < 0:  # correct sign
             if whole == 0:
                 whole = SsbOpParamFixedPoint.NegativeZero
             else:
-                whole *= -1
+                whole *= -1  # type: ignore
         fract_256 = abs(v) & 0xFF
         if fract_256 == 0:
             fract_str = "0"

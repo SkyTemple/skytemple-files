@@ -42,6 +42,7 @@ from skytemple_files.common.ppmdu_config.script_data import (
 from skytemple_files.common.util import read_var_length_string, read_u16
 from skytemple_files.script.ssb.constants import SsbConstant
 from skytemple_files.script.ssb.header import AbstractSsbHeader
+from skytemple_files.script.ssb.ssb_number import parse_ssb_encoding
 
 logger = logging.getLogger(__name__)
 
@@ -286,21 +287,9 @@ class Ssb:
                     argument_spec = self._get_argument_spec(op.op_code, i)
                     if argument_spec is not None:
                         if argument_spec.type == "uint":
-                            # TODO: Do unsigned parameters actually exist? If so are they also 14bit?
                             new_params.append(param)
-                        elif argument_spec.type == "sint":
-                            # 14 bit signed int.
-                            if param >= 0x8000:
-                                # ??? This is bigger than 14bit.
-                                pass
-                            elif param & 0x4000:
-                                param = -0x8000 + param
-                            new_params.append(param)
-                        elif argument_spec.type == "sint16":
-                            # 16bit signed
-                            if param & 0x8000:
-                                param = -0x10000 + param
-                            new_params.append(param)
+                        elif argument_spec.type == "Number":
+                            new_params.append(parse_ssb_encoding(param))
                         elif argument_spec.type in ENUM_ARGUMENTS:
                             const_data = getattr(self._scriptdata, ENUM_ARGUMENTS[argument_spec.type])
                             if param in const_data:

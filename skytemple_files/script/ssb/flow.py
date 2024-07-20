@@ -30,6 +30,7 @@ from explorerscript.ssb_converting.ssb_data_types import (
     SsbCalcOperator,
     SsbOpCode,
     SsbOperation,
+    SsbOpParamFixedPoint,
 )
 from explorerscript.ssb_converting.ssb_special_ops import (
     OP_BRANCH_BIT,
@@ -170,10 +171,25 @@ class SsbFlow:
                 self_op_params[0] = 1
             if other_op_params[0] > 1:
                 other_op_params[0] = 1
+        # Fixed point numbers with 0 as fraction are equivalent to their non-fixed point version. Convert them
+        # to integers for the check.
+        for paramset in (self_op_params, other_op_params):
+            for param_i, param in enumerate(paramset):
+                if isinstance(param, SsbOpParamFixedPoint):
+                    parts = str(param).split(".")
+                    if len(parts) == 1:
+                        fract = parts[0]
+                        whole = "0"
+                    else:
+                        whole = parts[0]
+                        fract = parts[1]
+                    fract = fract.rstrip("0")
+                    if fract == "":
+                        paramset[param_i] = int(whole)
 
         assert self_op_params == other_op_params, (
             f"Parameters of opcode ({self_op.op_code.name}) [{self_v.index},"
-            f"{other_v.index}] are not the same ({self._r_info(i)})."
+            f"{other_v.index}] are not the same ({self._r_info(i)}).\n{self_op_params} v. {other_op_params}"
         )
 
     def __eq__(self, other: object) -> bool:

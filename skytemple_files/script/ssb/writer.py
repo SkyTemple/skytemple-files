@@ -111,21 +111,22 @@ class SsbWriter:
         # Routine Info - The offsets used for the routine starts MUST already be correctly calculated!
         for offset, routine_info in self.model.routine_info:
             write_u16(data, u16(offset // 2), self.bytes_written)
-            write_u16(data, routine_info.type.value, self.bytes_written + 2)
-            write_u16(data, routine_info.linked_to, self.bytes_written + 4)
+            write_u16(data, u16_checked(routine_info.type.value), self.bytes_written + 2)
+            write_u16(data, u16_checked(routine_info.linked_to), self.bytes_written + 4)
             self.bytes_written += 6
 
         # Routines - The offsets used for the routine starts MUST already be correctly calculated!
         op_codes = self.static_data.script_data.op_codes__by_id
         for i, ops in enumerate(self.model.routine_ops):
             for op in ops:
-                self.write_u16(data, op.op_code.id, self.bytes_written)
+                self.write_u16(data, u16_checked(op.op_code.id), self.bytes_written)
                 self.bytes_written += 2
                 if self.static_data.script_data.op_codes__by_id[op.op_code.id].params == -1:
                     # Dynamic argument handling: Write number of arguments next
                     self.write_u16(data, u16_checked(len(op.params)), self.bytes_written)
                     self.bytes_written += 2
                 for argidx, param in enumerate(op.params):
+                    assert isinstance(param, int)
                     # If negative, store as 14-bit or 16-bit signed integer.
                     if param < 0:
                         # TODO: Support for repeating args

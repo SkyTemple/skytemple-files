@@ -1,0 +1,33 @@
+
+
+def 0 {
+    screen_FadeOutAll(0, 0);
+    sound_Stop();
+    back_SetGround(352);
+    ProcessSpecial(71, 1, 0);
+    ProcessSpecial(64, 0, 0);
+    ProcessSpecial(67, 0, 0);
+    ProcessSpecial(66, 537, 9197); //Red in slot 5
+    ProcessSpecial(66, 538, 9197); //Orange in slot 6
+    ProcessSpecial(66, 539, 9197); //Yellow in slot 7
+    ProcessSpecial(66, 540, 9197); //Green in slot 8
+    ProcessSpecial(66, 541, 9197); //Blue in slot 9
+    ProcessSpecial(66, 542, 9197); //Indigo in slot 10
+    ProcessSpecial(66, 543, 9197); //Violet in slot 11
+    ProcessSpecial(66, 544, 9197); //Shiny in slot 12
+    ProcessSpecial(65, 0, 13);
+    ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_ONLY, 0, 0);
+    screen_FadeInAll(1, 1);
+    message_EmptyActor();
+    me_Play(7);
+    message_Talk ('[CN]Please take note: This hack will spoil the\n[CN]endings of the Rescue Team series of games.');
+    message_KeyWait();
+    me_Play(2);
+    message_Talk ('[CN]Enjoy the game!');
+    message_Close();
+    debug_Print('Thanks tainted for the idea haha');
+    WaitMe(2);
+    screen_FadeOut(1, 1);
+    Wait(30);
+    end;
+}

@@ -1,0 +1,18 @@
+
+
+def 0 {
+    with (actor 2) {
+        Turn2DirectionLives(4, 10, 7);
+    }
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Hey,[W:10] [CS:C]Minior[CR],[W:10] do you think you can\nevolve?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' I don\'t think so...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Pity.[K] Guess we don\'t really need to\nhead down here then...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    CallCommon(CORO_EVENT_END_FREE);
+    end;
+}

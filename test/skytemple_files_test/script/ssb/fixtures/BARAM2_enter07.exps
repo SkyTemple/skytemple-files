@@ -1,0 +1,30 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 2){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(2);
+    if not($SCENARIO_TALK_BIT_FLAG[23]){
+        message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah.[K] It\'s you.");
+        message_Talk(" Thank you for telling me that\n[CS:G]Serperior[CR] was looking for me.");
+        message_Talk(" Getting someone to look around\nfor me...");
+        message_Talk(" Hopefully he\'d finally get his wits\nabout him and install [CS:A]Discharge[CR].");
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Oh.[K] It's you again.");
+    message_Talk(" I see that you have managed to\nfind all my comrades.");
+    message_Talk(" I will thank you for the effort.");
+    message_Talk(" We should be able to effectively\nassist this town now.");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+    end;  
+}

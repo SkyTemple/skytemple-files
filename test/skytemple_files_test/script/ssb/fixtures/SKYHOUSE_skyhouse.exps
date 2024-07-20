@@ -1,0 +1,117 @@
+
+def 0 {
+    sound_Stop();
+    back_SetGround(267);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    with (actor 350){
+        SetAnimation(25);
+    }
+    with (actor 350){
+        ResetOutputAttribute(256);
+    }
+    screen_FlushOut(1, 0, 8, 0, 0, 0);
+    screen_FadeIn(1, 30);
+    Wait(150);
+    se_Play(7942);
+    Wait(20);
+    se_Play(7942);
+    Wait(20);
+    with (actor 350){
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, -1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, -1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, -1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SlidePositionOffset(1, -1, 0);
+    }
+    Wait(2);
+    with (actor 350){
+        SetAnimation(46);
+    }
+    Wait (22);
+    message_SetFace (5, FACE_PAIN, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Ugh, who is it this time...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait (30);
+    with (actor 350){
+        SetAnimation(47);
+    }
+    Wait (80);
+    with (actor 350){
+        SetAnimation(28);
+    }
+    screen2_FadeOut(1, 15);
+    back2_SetMode(4);
+    back2_SetGround (351);
+    camera2_SetPositionMark(Position<'m1', 15.5, 11>);
+    screen2_FadeIn(1, 15);
+    Wait(30);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Hmmmm......');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_EmptyActor();
+    message_Talk ('[CS:X]Fortnight[CR]\n[CS:G]@Ray[CR]\n[CS:G]@Ray[CR]\nHelp some kids are kicking our butts');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_STUNNED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' The heck...?[K] Getting destroyed by\nsome kids...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    camera2_SetPositionMark(Position<'m2', 49.5, 11>);
+    screen2_FadeIn(1, 15);
+    se_Play(7942);
+    message_EmptyActor();
+    message_Talk ('[CS:J]Sailor_Mn[CR]\n[CS:G]@Ray[CR] Helb he aint kidding');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Huh...?[K] Surely this must be some\nsort of prank?');
+    message_SetFace (5, FACE_DETERMINED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' I swear if these idiots are\ndisturbing my sleep...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    camera2_SetPositionMark(Position<'m3', 15.5, 38.5>);
+    screen2_FadeIn(1, 15);
+    message_EmptyActor();
+    message_Talk ('Ayyyreodactyl\nThey just passed by me. Arceus they\'re good.\nMigt wanna come');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Hm?[K] Three at once?[K] Then...');
+    camera2_SetPositionMark(Position<'m4', 49.5, 38.5>);
+    screen2_FadeIn(1, 15);
+    se_Play(7942);
+    message_EmptyActor();
+    message_Talk ('[CS:B]Mega Borked[CR]\n[CS:G]@Ray[CR] wake up ffs\nThey\'re reaching top');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace (5, FACE_DETERMINED, FACE_POS_TOP_R_CENTER);
+    message_Talk (' FINE, I\'ll go and take a look at that.');
+    message_SetFace (5, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk (' Jeez, if its just a bunch of kids\nno way they can be that strong...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    screen2_FadeOut(0, 30);
+    screen_FadeOut(1, 30);
+    screen_FlushIn(1, 0, 1, 0, 0, 0);
+    end;
+}

@@ -1,0 +1,297 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 1){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(1);
+    if (scn($SCENARIO_MAIN) <= [102, 4]){
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Heya![K] I\'m [CS:N]Serperior[CR], of Team\n[CS:X]Burger[CR]!");
+        message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Pleasure to meet you!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Funny name.[W:20] Where\'d you get\nit from?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Oh![K] That, hmm...");
+        message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" ......");
+        message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" You know...[W:10] I really have no\nidea, myself...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Also,[W:10] you say you're a team, yet\nI only see you here.[K] Where are your\nteammates?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" ......");
+        message_Talk(" I uh...[K] Can't really say...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[22]){
+        $SCENARIO_TALK_BIT_FLAG[22] = 1;
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Good day to you.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Good day to you too.");
+        message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" .........");
+        message_Talk(" Hmm...[K] You aren\'t from around\nhere,[W:10] are you?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" I wouldn\'t say so.[K] Why do you\nask?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah,[W:10] perfect then.");
+        message_Talk(" Look,[W:10] do you mind keeping a\nsecret,[W:10] and uh...");
+        with (actor 1){
+            SetEffect(171, 3);
+        }
+        se_Play(8972);
+        message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk("[STS] Look, do you mind keeping a\nsecret, and uh...[STE] helping me out a little?");
+        message_Talk(" I need someone who isn\'t from\naround here.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" I suppose I could try to help.");
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" Why do you need someone who\nisn\'t from the area though...?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 1){
+            ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(1);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Right,[W:10] but before I say anything,[W:10]\npromise me.");
+        message_SetFace(1, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk("[STS] Right, but before I say anything,\npromise me.[STE] PROMISE ME.");
+        with (actor 1){
+            ExecuteCommon(CORO_JUMP_ANGRY_FUNC_SERIES, 3);
+        }
+        se_Play(8971);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk("[STS] Right, but before I say anything,\npromise me. PROMISE ME.[STE] That you won\'t\ntell about this to anyone.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        Wait(20);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Okay![W:20] Okay![K] My lips are sealed!");
+        message_Talk(" As are [CS:C]Minior[CR]\'s.");
+        with (actor 5){
+            Turn2DirectionLives(4, 10, 8);
+        }
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(8, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Yep.[K] Not a soul.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            Turn2DirectionLives(4, 10, 1);
+        }
+        message_SetFace(1, FACE_SIGH, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Good.[K] I can properly\nexplain myself,[W:10] then.");
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" As you know,[W:10] this town is being\nestablished.[K] With time,[W:10] this place is sure to\nbe populated with more Pokémon.");
+        message_Talk(" And,[W:10] every town needs a rescue\nteam to deal with any problems that they\nmay have.");
+        message_Talk(" My team,[W:10] Team [CS:X]Burger[CR],[W:10] aims to\nbe that team.");
+        message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Please don\'t ask about the name...");
+        message_SetWaitMode(0, 0);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Now,[W:10] here\'s the thing.");
+        message_SetWaitMode(-1, -1);
+        message_Talk("[STS] Now, here\'s the thing.[STE] I've asked\nmy teammates to scout around the area,[W:10]\nand they haven\'t returned for a while.");
+        message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" It has been quite a few days...");
+        message_Talk(" I need us to reconvene and\nget started establishing a name for\nourselves but...");
+        message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I can\'t really do that without\nthe full team...");
+        message_Talk(" And,[W:10] I don\'t want to ask for the\nlocals\' help lest they view us as incompetent.");
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" So![K] That\'s where you come in.");
+        message_Talk(" I need you to find my teammates\nand get them back here so we can start\nworking out plans.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" I mean,[W:10] I can do that,[W:10] sure,[W:10] but...");
+        message_Talk(" Surely you can just contact them\neasily?[K] Surely you have [CS:A]Discharge[CR] for mobile?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_SPECIAL1, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" the what now");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+        message_Talk(" Oh Arceus,[W:10] you haven\'t even\ninstalled it...");
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" I\'ll have to tell you more in\nthe future.[K] For now,[W:10] let\'s just find your\nteammates.");
+        message_Talk(" Who are they?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah,[W:10] them.");
+        message_Talk(" The other members of Team [CS:X]Burger[CR]\nare [CS:G]Meowstic[CR] and [CS:G]Gliscor[CR].[K] I instructed them\nnot to stray too far from here.");
+        message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Hopefully you can find them soon.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Right.[K] If I find them,[W:10] I\'ll ask them\nto head here.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" That will do![K] Thank you so much!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[23]){
+        if not ($SCENARIO_TALK_BIT_FLAG[24]){
+            §label_0;
+            message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+            message_Talk(" None of them showed up yet?");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Unfortunately not...");
+            message_Talk(" I really need to improve my\ncommand and control over my team...");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+            message_Talk(" Well,[W:10] I can tell you that I haven\'t\nseen any of them around.");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Pity...[K] I guess I can only hope for\nthe best for now.");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+            end;
+        }
+        else{
+            message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Oh![K] It\'s you![K] [CS:G]Meowstic[CR] returned\njust a short while ago.");
+            message_Talk(" Guess that must have been thanks\nto you?[K] She\'s been telling of how you told\nher to get back.");
+            message_Talk(" My utmost thanks!");
+            message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" [CS:G]Meowstic[CR] has also been telling me\nabout [CS:A]Discharge[CR].[K] Seems really useful for\nkeeping in touch.");
+            message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Though,[W:10] seeing as that [CS:G]Gliscor[CR]\ndoesn\'t have it installed,[W:10] it\'ll do little to\nhelp me find him...");
+            message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Sorry,[W:10] gonna have to ask you to\nfind him too...");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+            message_Talk(" Already on it.");
+            message_Talk(" Hopefully things go well.");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+            end;     
+        }
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[24]){
+            message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Well![K] [CS:G]Gliscor[CR] came back!");
+            message_Talk(" Then I suppose it must be thanks\nto you that he got the word.");
+            message_Talk(" My utmost thanks!");
+            message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Still,[W:10] looks like [CS:G]Meowstic[CR] still\nhasn\'t come back...");
+            message_Talk(" Perhaps she\'s still out there\nsomewhere?");
+            message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(" Sorry,[W:10] I\'m going to have to trouble\nyou with finding her,[W:10] too.");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+            message_Talk(" Yep.[K] I have been looking.");
+            message_Talk(" Hopefully things go well.");
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+            end;   
+    }
+    if not ($SCENARIO_TALK_BIT_FLAG[25]){
+        $SCENARIO_TALK_BIT_FLAG[25] = 1;
+        $RECYCLE_COUNT += 1;
+        message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Yo![K] Welcome back!");
+        message_SetFace(1, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" As you can see,[W:10] the gang\'s back\ntogether!");
+        message_Talk(" In no small part,[W:10] thanks to you!");
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I don\'t think I\'d have been able to\ndo all this without your help, so...");
+        message_Talk(" Again,[W:10] thank you very much.");
+        message_Talk(" Look, I know it isn\'t that much,[W:10] but\nI've prepared something for you to thank you\nfor helping me out.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Oh![K] Uh...[W:20] I don\'t think I should take\na reward...[W:20] I just talked to the right Pokémon\nat the right time...");
+        message_Talk(" You should keep it.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Come on,[W:10] just take it.");
+        message_Talk(" You saved my reputation for this\ntown,[W:10] and,[W:10] well...");
+        message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" You got my team...[W:20] No,[W:10] my friends\nback together again.[K] I must repay that\nsomehow.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" .........");
+        message_Talk(" Okay then.[K] I\'ll take it.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        me_Play(4);
+        message_Mail('[CN][CS:G]Serperior[CR] greatfully gave you a [CS:A]Sky Veil[CR]!'); // TODO: clear and replace with asm shenianigans items
+        message_Close();
+        switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+            case 0:
+                item_Set(0, 545, 0);
+                switch ( message_Menu(MENU_GIVE_ITEM)){}
+                break;
+            case 1:
+                item_Set(0, 545, 0);
+                switch ( message_Menu(MENU_GIVE_ITEM2)){}
+                break;
+        }
+        WaitMe(4);
+        Wait(20);
+        with (actor 1){
+            Turn2Direction(4, 10, DIR_UP);
+        }
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Now,[W:10] we need to discuss about\ngetting [CS:A]Discharge[CR] for you,[W:10] [CS:G]Gliscor[CR].");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(3, FACE_SAD, FACE_POS_TOP_L_FACEINW);
+        message_Talk(" Eh,[W:10] I\'ll do it later.[K] Feeling kinda\nlazy now.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 1){
+            ExecuteCommon(CORO_JUMP_ANGRY_FUNC_SERIES, 3);
+        }
+        se_Play(8970);
+        message_SetFace(1, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" What![K] You know how we got\nseparated this time,[W:10] this will help stop\nfuture incidents!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+        message_Talk(" You know [CS:G]Serperior[CR],[W:10] what [CS:G]Gliscor[CR]\nsaid was exactly what you told me when\nI told you last...");
+        message_Talk(" And what you said was the same\nthing I told you.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(1, FACE_SPECIAL0, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Wait,[W:10] huh?!");
+        message_SetFace(1, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Well,[W:10] regardless,[W:10] I think..");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Monologue("(Friends, huh...?)");
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Monologue("(If only I had some around...)");
+        message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+        message_Monologue("(Though, given how I am, perhaps the best\nis for...)");
+        message_Monologue("(......)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+        JumpCommon(CORO_END_TALK);
+        end;  
+    }
+    message_SetFace(1, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" I should seriously rethink our\nteam name...");
+    message_Talk(" I mean,[W:10] seriously,[W:10] what on\nearth is a \'Burger\'?");
+    message_Talk(" Then again,[W:10] if I do want to change\nit,[W:10] then I\'d have to submit a request for\na name change,[W:10] and then I\'d have to...");
+    message_SetFace(1, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" .........");
+    message_Talk(" You know what,[W:10] the bureaucracy\nisn\'t worth the hassle.");
+    message_SetFace(1, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Besides,[W:10] the weirdness of the\nname catches your attention,[W:10] no?");
+    message_Talk(" And,[W:10] I guess it describes us\nweird pack of friends...");
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+    end;  
+}

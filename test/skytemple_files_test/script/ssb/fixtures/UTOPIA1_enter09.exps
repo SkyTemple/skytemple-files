@@ -1,0 +1,5 @@
+def 0
+{
+    supervision_Suspend(-2);
+    end;
+}

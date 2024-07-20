@@ -1,0 +1,11 @@
+
+
+def 0 {
+    main_EnterGround(3, 30);
+    bgm_FadeOut(20);
+    hold;
+}
+
+def 1 for_actor(2) {
+    hold;
+}

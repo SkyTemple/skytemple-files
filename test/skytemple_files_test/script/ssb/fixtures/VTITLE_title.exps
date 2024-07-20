@@ -1,0 +1,62 @@
+
+def 0 {
+    screen2_FadeOut(0, 0);
+    screen_FadeOut(0, 0);
+    screen_FadeOutAll(1, 0);
+    back_SetGround(11);
+    switch ( ProcessSpecial(64, 1, 0) ) { }
+    switch(sector())
+    {
+        case 1:
+            screen2_FadeIn(1, 0);
+            CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+            message_EmptyActor();
+            message_SetWaitMode(0, 0);
+            message_Talk("[TS:16137] [TS:0][HR][STS][CN][CS:X]Team Tangent[CR] Presents[HR][BAR][STE][W:120]\n\n[TS:16136] [TS:0][HR][STS][CN]A Project Originally Made For\n[CN]The 5th SkyTemple ROM Hack Game Jam[STE][W:120][TR]");
+            message_KeyWait();
+    }
+    screen2_FadeIn(0, 30);
+    screen_FadeIn(0, 0);
+    screen_FadeInAll(1, 30);
+    Wait(1);
+    switch ( ProcessSpecial(65, 1, 0) ) { }
+    $CRYSTAL_COLOR_01 = 0;
+    §label_4;
+    forever {
+        if ( $CRYSTAL_COLOR_01 == 0 || $CRYSTAL_COLOR_01 == 80 || $CRYSTAL_COLOR_01 == 160 ) {
+            §label_0;
+            se_Play(5378);
+            §label_1;
+            switch ( ProcessSpecial(65, 0, 21) ) { }
+            $CRYSTAL_COLOR_01 += 1;
+            if ( $CRYSTAL_COLOR_01 == 40 || $CRYSTAL_COLOR_01 == 120 || $CRYSTAL_COLOR_01 == 200 ) {
+                Wait(60);
+                se_Play(5377);
+                §label_3;
+                Wait(1);
+                if ( $CRYSTAL_COLOR_01 < 240 ) {
+                    continue;  // may be redundant
+                } else {
+                    break_loop;
+                }
+            } else {
+                jump @label_3;
+            }
+        } else {
+            jump @label_1;
+        }
+    }
+    switch ( ProcessSpecial(65, 2, 0) ) { }
+    screen2_FadeOut(0, 30);
+    screen_FadeOutAll(1, 30);
+    switch ( ProcessSpecial(64, 0, 0) ) { }
+    switch(sector())
+    {
+        case 1:
+            message_CloseEnforce();
+            message_SetWaitMode(-1, -1);
+            CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+            Wait(90);
+    }
+    end;
+}

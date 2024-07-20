@@ -1,0 +1,70 @@
+
+def 0 {
+    if (scn($SCENARIO_MAIN) == [102, 0] || scn($SCENARIO_MAIN) == [102, 1]){
+        with (actor 14){
+            Turn2Direction(1, 10, DIR_UP);
+        }
+    }
+    switch ( sector() ) {
+        case 1:
+            §label_0;
+            switch ($GROUND_GETOUT){
+                case 440:
+                    supervision_StationCommon(4);
+                    break;
+                default:
+                    supervision_StationCommon(1);
+                    break;
+            } 
+            supervision_StationCommon(0);
+            supervision_StationCommon(2);
+            if (scn($SCENARIO_MAIN) >= [102, 2]){
+                supervision_StationCommon(3);
+            }
+            if (scn($SCENARIO_MAIN) == [102, 0] || scn($SCENARIO_MAIN) == [102, 1]){
+                with (actor 14){
+                    Turn2Direction(1, 10, DIR_UP);
+                }
+            }
+            if ( $SCENARIO_MAIN_BIT_FLAG[7] ) {
+                $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                §label_3;
+                debug_Print('SET_BGM');
+                bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 0, 256);
+                JumpCommon(CORO_COMMON_ENTER);
+            } else {
+                switch ( sector() ) {
+                    case 1:
+                        end;
+                    default:
+                        switch ( $GROUND_GETOUT ) { }
+                        supervision_StationCommon(1);
+                        jump @label_3;
+                }
+            }
+            break;
+        default:
+            screen_FadeOutAll(1, 0);
+            back_SetGround(6);
+            jump @label_0;
+    }
+}
+
+def 1 for_actor (15){
+   §label_spin;
+   Turn2Direction(6, 1, DIR_LEFT);
+   Turn2Direction(6, 1, DIR_DOWNLEFT);
+   jump @label_spin;
+   hold;
+}
+
+def 2 for_actor(11){
+    SetMoveRange(Position<'MoveFen', 55, 39>, 3, 3);
+    JumpCommon(CORO_MOVE_TYPE1);
+    hold;
+}
+
+def 3 for_actor (16){
+   SetAnimation(4);
+   hold;
+}

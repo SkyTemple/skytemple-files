@@ -1,0 +1,181 @@
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+     if (scn($SCENARIO_MAIN) == [102, 0]){
+        message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' Hmm... I still haven\'t gotten my\nfood from [CS:G]Kecleon[CR] yet...');
+        message_Close();
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        jump @label_0;
+     }
+     if (scn($SCENARIO_MAIN) == [102, 1]){
+        message_Notice ('Ready to head home?');
+        switch (message_SwitchMenu(1, 1)){
+            case menu('Yes'):
+            message_CloseEnforce();
+            screen_FadeOut(1, 30);
+            supervision_ExecuteCommon(CORO_EVENT_M01_04);
+            break;
+            case menu('No'):
+            message_CloseEnforce();
+            break;
+            default:
+            message_Close();
+            break;
+        }
+        jump @label_0;
+     } 
+    else {
+        message_Notice ('Where would you like to go?');
+        switch (message_SwitchMenu2 (1, 1, $SPECIAL_EPISODE_OPEN_OLD)){
+            case menu('Baram Town'):
+            message_Notice ('You\'re already here.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            break;
+            case menu('Bandit\'s Hideout'):
+                message_Notice ('The [CS:P]Bandit\'s Hideout[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    if (scn($SCENARIO_MAIN) == [102, 2]){
+                        supervision_ExecuteCommon(CORO_EVENT_M01_05);
+                    }
+                    else {
+                        main_EnterDungeon(1, 0);
+                        switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                        main_EnterDungeon(-1, 0);
+                    }
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                    break;
+                default:
+                message_Close();
+                break;
+            }
+            break;
+            case menu('Wooded Grove'):
+                message_Notice ('The [CS:P]Wooded Grove[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    main_EnterDungeon(7, 0);
+                    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                    main_EnterDungeon(-1, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+                default:
+            message_Close();
+            break;
+            }
+            break;
+            case menu('Frontier Camp'):
+                message_Notice ('The [CS:P]Frontier Camp[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    CallCommon(CORO_EVENT_END_MAPIN);
+                    main_SetGround(19);
+                    supervision_ExecuteStationCommon(19, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+            }
+            break;
+            case menu('Ruined Frontier'):
+                message_Notice ('The [CS:P]Ruined Frontier[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    main_EnterDungeon(8, 0);
+                    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                    main_EnterDungeon(-1, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+                default:
+                message_Close();
+                break;
+            }
+            break;
+            case menu('Pokémon Square'):
+                message_Notice ('[CS:P]Pokémon Square[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    CallCommon(CORO_EVENT_END_MAPIN);
+                    main_SetGround(17);
+                    supervision_ExecuteStationCommon(17, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+                default:
+                message_Close();
+                break;
+            }
+            break;
+            case menu('Great Canyon'):
+                message_Notice ('The [CS:P]Great Canyon[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    main_EnterDungeon(9, 0);
+                    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+                    main_EnterDungeon(-1, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+                default:
+                message_Close();
+                break;
+            }
+            break;
+            case menu('Canyon Apex'):
+                message_Notice ('[CS:P]Canyon Apex[CR] is the selected location.\nIs that where you want to go?');
+                switch (message_SwitchMenu(1, 1)){
+                case menu('Yes'):
+                    message_CloseEnforce();
+                    bgm_FadeOut(30);
+                    screen_FadeOut(1, 30);
+                    CallCommon(CORO_EVENT_END_MAPIN);
+                    main_SetGround(18);
+                    supervision_ExecuteStationCommon(18, 0);
+                break;
+                case menu('No'):
+                    message_CloseEnforce();
+                break;
+                default:
+                message_Close();
+                break;
+            }
+        default:
+            message_Close();
+            break;
+        }
+    }
+    §label_0;
+    CallCommon(CORO_EVENT_END_FREE);
+    end;
+}

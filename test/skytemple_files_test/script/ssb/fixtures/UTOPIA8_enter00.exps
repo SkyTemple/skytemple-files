@@ -1,0 +1,66 @@
+
+def 0 {
+    switch ( sector() ) {
+        case 1:
+            §label_0;
+            supervision_StationCommon(0);
+            if(scn($SCENARIO_MAIN) == [152, 5])
+            {
+                supervision_StationCommon(4);
+            }
+            switch ( sector() ) {
+                case 1:
+                    end;
+                default:
+                    switch ( $GROUND_GETOUT )
+                    {
+                        case 6:
+                            supervision_StationCommon(2);
+                            break;
+                        case 3:
+                            supervision_StationCommon(3);
+                            break;
+                        case 45:
+                            supervision_StationCommon(1);
+                            break;
+                    }
+                    debug_Print('SET_BGM');
+                    bgm_Play(BGM_AT_THE_END_OF_THE_DAY);
+                    JumpCommon(CORO_COMMON_ENTER);
+            }
+            break;
+        default:
+            screen_FadeOutAll(1, 0);
+            back_SetGround(45);
+            screen_FlushOut(1, 0, 255, 0, 0, 0);
+            jump @label_0;
+    }
+}
+
+def 1 for_actor(2) {
+    if($SCENARIO_MAIN_BIT_FLAG[7])
+    {
+        LoadPosition(0);
+        WaitLockLives(0, 0);
+        $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+        Unlock(0);
+    }
+    SetAnimation(2);
+    WaitScreenFade();
+    WaitScreenFadeAll();
+    end;
+}
+
+def 2 for_actor(0) {
+    if($SCENARIO_MAIN_BIT_FLAG[7])
+    {
+        LoadPosition(1);
+        Lock(0);
+    }
+    SetAnimation(2);
+    WaitScreenFade();
+    WaitScreenFadeAll();
+    end;
+}
+
+

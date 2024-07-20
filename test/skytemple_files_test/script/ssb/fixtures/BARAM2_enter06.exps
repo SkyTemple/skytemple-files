@@ -1,0 +1,23 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 0){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(0);
+    message_SetFace(0, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" Hello![K] Thank you for taking\nme back to [CS:G]Mom[CR].");
+    message_SetFace(0, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" But the whole experience had\nme wondering who I was to everyone...");
+    message_Talk(" Who I was to [CS:G]Mom[CR],[W:10] who I was to\n[CS:G]Whiscash[CR],[W:10] who I was to anyone...");
+    message_Talk(" Does my life mean anything if I\ncan\'t find anyone for which it means?");
+    message_Talk(" And then,[W:10] following that,[W:10] what\nthen is my reason for being here...?");
+    message_Monologue("(Existential Crisis)");
+    JumpCommon(CORO_END_TALK);
+    end;  
+}

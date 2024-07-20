@@ -1,0 +1,13 @@
+
+def 0 {
+    debug_Print('In which the Happiness Machine dreads the end.');
+    CallCommon(CORO_SUBSCREEN_INIT);
+    screen2_FadeIn(1, 0);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+    message_Mail('[VS:1:2]It was about time they made up their minds.[VR][K]\n\nNo matter how hard [hero] attempted\nto stifle her feelings regarding her duty,[W:20]\nthey were all bound to come crashing down.[K]\n\nAnd as for my duty, while I have prepared\nfor all possible outcomes,[W:20] that does not\nprevent me from dreading the moment\nwhen I am subject to the worst type\nof frustration:[K] justifiable.');
+    message_Mail('It does not help anyone that reassurance is\noutside the scope of my abilities.');
+    message_Close();
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    end;
+}
+ 

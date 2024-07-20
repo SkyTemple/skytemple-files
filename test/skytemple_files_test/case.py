@@ -161,3 +161,33 @@ def romtest(*, file_names=None, file_ext=None, path):
             return pytest.mark.romtest(no_tests)
 
     return _outer_wrapper
+
+
+def with_fixtures(*, file_ext=None, path):
+    """
+    Run a test for all files in a directory (optionally filterable by file_ext).
+    """
+
+    def _outer_wrapper(wrapped_function):
+        import inspect
+
+        from parameterized import parameterized
+
+        def dataset_name_func(testcase_func, _, param):
+            return f"{testcase_func.__name__}/{os.path.basename(param.args[0])}"
+
+        files = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+        if file_ext is not None:
+            files = [f for f in files if os.path.basename(f).split(".")[-1] == file_ext]
+
+        assert len(files) > 0, f"No fixtures found at {path}"
+
+        parameterized.expand(files, name_func=dataset_name_func)(wrapped_function)
+        # since expands now adds the tests to our locals, we need to pass them back...
+        # this isn't hacky at all wdym??????ßßß
+        frame_locals = inspect.currentframe().f_back.f_locals  # type: ignore
+        for local_name, local in inspect.currentframe().f_locals.items():  # type: ignore
+            if local_name.startswith("test_"):
+                frame_locals[local_name] = local
+
+    return _outer_wrapper

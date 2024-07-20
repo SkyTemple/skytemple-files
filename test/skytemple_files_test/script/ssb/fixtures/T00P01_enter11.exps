@@ -1,0 +1,23 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 16) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(16);
+    message_SetFace(16, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Ah![K] You\'re [CS:Q]Rayquaza[CR]!');
+    message_SetFace(16, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Allow me to offer my thanks to\nyou for saving the world!');
+    message_Talk(' As thanks,[W:10] I can open an account\nfor you for just 90 percent of the original\nprice!');
+    message_SetFace(16, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' ...No?[K] What a shame...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

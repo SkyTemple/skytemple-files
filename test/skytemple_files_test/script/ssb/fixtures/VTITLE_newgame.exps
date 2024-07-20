@@ -1,0 +1,66 @@
+def 0
+{
+    screen2_FadeOut(0, 0);
+    screen_FadeInAll(1, 0);
+    screen_FadeOut(1, 0);
+    back_SetGround(12);
+    back2_SetMode(0);
+    supervision_Acting(0);
+    back_SetEffect(18, 403);
+    supervision_SpecialActing(27, 0, 0); // Allocating memory for the spotlight
+    supervision_SpecialActing(28, 128, 92); // Sets the center of the spotlight at X and Y coordinates (in pixels)
+    supervision_SpecialActing(29, 0, 0); // SIZE parameter is the size of the spotlight. Third parameter seems unused.
+    supervision_SpecialActing(30, 0, 0); // SPEED parameter is how fast the spotlight will close. Third parameter seems unused.
+    WaitSpecialActing();
+    WaitLockPerformer(0, 0);
+    screen2_FadeIn(0, 0);
+    screen_FadeIn(1, 0);
+    bgm_PlayFadeIn(BGM_HEAVY_WIND6, 120, 256);
+    Wait(120);
+    Wait(403); // was originally the custom opcode SetTextboxAttribute(0x2, 0x2, 0x1C, 0x14, 0x0, 0xFA);
+    message_EmptyActor(); 
+    message_Talk("[TS:16139][STS][CN][BS]Debug Log[BR][W:90][HR][BAR][STE][W:90] \n[HR][STS]Record 0[STE] [W:90][HR] [HR][STS]Year 0[STE][W:90][K]\n\n[VS:1:4]Topics:[W:20]\n[CLUM_SET:42][TS:16129]* Joy[W:20]\n[CLUM_SET:42]* Purpose[W:20]\n[CLUM_SET:42]* My Little Dream[VR]");
+    message_Talk("[VS:1:3]I suppose I ought to get into the habit of\ndoing this,[W:20] no matter how useless it seems.[K]\n\nIt is not as though anyone is going\nto actually read these, barring myself...[K][VS:2:3]\n\nBut nevertheless...[VR]");
+    message_Talk("[VS:2:3]After a long and grueling testing process,[W:20]\ntoday marks my first day of activation.[K]\nI was created to serve one purpose,[W:20] yet\nat the same time,[W:20] to serve many entities.[K]\n\nTo be more precise:[W:40] ALL[W:10] entities.[VR]");
+    message_Talk("[VS:2:3]Imbued with all of their experiences,\nI have formed hypotheses on what\n\"joy\" means to each one of them.[K]\n\nI need not mention how arduous\nof a task this turned out to be.[VR]");
+    message_Talk("[VS:2:3]Despite it all,[W:20] however,[W:20][VS:1:3] all that remains\nis to use what I have learned.[VR]");
+    message_Close();
+    Unlock(0);
+    WaitLockPerformer(1, 0);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+    message_Talk("[VS:2:3]For future logs,[W:20] I will report here instead.[K]\nThis way,[W:20] I can maintain some illusion of\nparallel computation and communication.[K]\nGiven my predictions,[W:20] I know I will need to\npreserve as much power as possible.[VR]");
+    message_KeyWait();
+    WaitLockPerformer(1, 0);
+    message_Talk("[VS:2:3]In fact,[W:20][U:1][VR] even as this entry is being logged,\nI must perform various...[W:30]\"optimizations\"[W:30][VS:3:2] to\nimprove performance.[VR]");
+    screen2_FlushOut(0, 0, 255, 0, 0, 0);
+    message_Talk("[VS:3:2]But in any case,[W:20] my work is piling up.[K]\nI will end this entry with the first of\nmany strange observations about entities.[VR]");
+    message_Talk("[VS:3:2]They will go to great lengths in suffering\njust to reach their dreams.[K] I assume this\nsame behavior is what spurred my creator\nto act,[W:20] and why I must help others...");
+    message_Talk("[VS:3:2]So do I inherit the dream of my creator?[K]\nTo help everyone whenever possible?[VR]");
+    message_KeyWait();
+    WaitLockPerformer(2, 0);
+    message_Talk("[VS:3:2]I suppose I am glad that it was\na kindhearted person who made me, but...[K][U:2]\nI do hope they knew what they were doing.[VR]");
+    message_Talk("And with that hope,[W:20] I will now begin.[TR]");
+    message_Close();
+    Wait(90);
+    bgm_FadeOut(90);
+    WaitBgm(BGM_HEAVY_WIND6);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_KIMAWARI);
+    end;
+}
+
+def 1 for_performer(0)
+{
+    camera_SetMyself();
+    Lock(0);
+    bgm2_PlayFadeIn(BGM_HIGH_PITCHED_WHISTLE, 120, 96);
+    supervision_SpecialActing(31, 200, 0); // SPEED parameter is how fast the spotlight will open. Third parameter seems unused.
+    WaitSpecialActing();
+    supervision_SpecialActing(32, 0, 0);
+    Lock(1);
+    screen_FlushOut(1, 90, 255, 0, 0, 0);
+    Lock(2);
+    bgm2_FadeOut(90);
+    screen_FadeOutAll(1, 60);
+    hold;
+}

@@ -1,0 +1,51 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(176);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(90);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Man.');
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk (' Did I really have to ham it up for\nthose kids?');
+    message_Talk (' I mean, I know I have an image to\nhold up and all...');
+    message_Talk (' But still...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(1);
+    se_Play(8961);
+    with (actor 350){
+        SetEffect(92 , 3);
+    }
+    with (actor 350){
+        WaitEffect();
+    }
+    with (actor 350){
+        Turn2Direction(5, 10, DIR_DOWN);
+    }
+    message_SetFace (5, FACE_SIGH, FACE_POS_STANDARD);
+    message_Talk (' Well, in any case...');
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Those two kids...[K] to be fighting\nside-by-side together...');
+    message_SetFace (5, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk (' Can\'t say I\'m not jealous.');
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk (' Then again, who\'d live long enough\nand be willing to stay around me for a long\nperiod of time?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(120);
+    with (actor 350){
+        ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' A-anyway, what was I doing before\nall this, anyway?');
+    message_Talk (' Right, I was...');
+    message_Close();
+    screen_FadeOut(1, 30);
+    end;
+}

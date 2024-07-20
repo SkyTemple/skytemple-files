@@ -1,0 +1,1100 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(261);
+    supervision_Acting(0);
+    switch ($CRYSTAL_COLOR_01){
+        case 0:
+            supervision_Acting(1);
+            break;
+        case 1:
+            supervision_Acting(2);
+            break;
+        case 2:
+            supervision_Acting(3);
+            break;
+        case 3:
+            supervision_Acting(4);
+            break;
+        case 4:
+            supervision_Acting(5);
+            break;
+        case 5:
+            supervision_Acting(6);
+            break;
+        case 6:
+            supervision_Acting(7);
+            break; 
+        case 7:
+            supervision_Acting(8);
+            break;
+        default:
+            supervision_Acting(1);
+            break;
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 5){
+        MovePositionMark(1, Position<'m1', 20, 43.5>);
+    }
+    WaitExecuteLives(5);
+    Wait(20);
+    with (actor 5){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 5){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 5){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 5){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(2);
+    with (actor 5){
+        SlidePositionOffset(2, 1, 0);
+    }
+    Wait(2);
+    with (actor 5){
+        SlidePositionOffset(2, -1, 0);
+    }
+    Wait(10);
+    message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk (' [CS:C]Minior[CR]... I...[K] I...[K] I failed you...');
+    message_Talk (' I tried to help...[K] but I wasn\'t\nstrong enough...');
+    se_Play(8972);
+    with (actor 5){
+        SetEffect(171, 3);
+    }
+    with (actor 5){
+        WaitEffect();
+    }
+    message_Talk (' All I wanted to do was to...[K]\nwas to...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    switch ($CRYSTAL_COLOR_01){
+        case 0:
+            §label_default;
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 343){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 343) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 343) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (343, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (343, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 343) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (343, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 343) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 1:
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 338){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 338) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 338) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (338, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (338, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 338) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (338, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 338) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 2:
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 341){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 341) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 341) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (341, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (341, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 341) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (341, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 341) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 3:
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 337){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 337) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 337) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (337, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (337, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 337) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (337, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 337) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 4:
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 340){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 340) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 340) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (340, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (340, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 340) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (340, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 340) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 5:
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 344){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 344) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 344) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (344, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (344, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 344) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (344, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 344) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        case 6:
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 339){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 339) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 339) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (339, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (339, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 339) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (339, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 339) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break; 
+        case 7:
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' I...[K]understand but...');
+            message_Talk (' Please...[K] Let me go...');
+            message_Talk (' I appreciate the effort you\'re\ngoing through, but...');
+            message_Talk (' I\'m satisfied with the time I\'ve\nhad.[K] I don\'t need any more.');
+            message_Talk (' Can you understand that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' [CS:C]Minior[CR]...[K] I...');
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Please...[K] there must be\nsomething...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_TEARY_EYED, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...[K] please...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...Okay...');
+            message_Talk (' ...Don\'t make me regret this,[W:10]\n[CS:G]Minior[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 342){
+                SetOutputAttribute(2);
+            }
+            supervision_Acting(9);
+            with (object 347) {
+                SetAnimation(1);
+            }
+            Wait(15);
+            se_Play(8978);
+            with (actor 342) {
+                SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+            }
+            with (actor 342) {
+                WaitEffect();
+            }
+            bgm_Play(BGM_IN_THE_MORNING_SUN);
+            message_SetFace (342, FACE_SAD, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Ah...[K] I suppose I can wait no\nlonger...');
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' [CS:Q]Rayquaza[CR]...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' ...What is it...?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Know that the time I\'ve spent\nwith you was the best I think I will have\never had...');
+            message_Talk (' The good times...[K] I only ask that\nyou spread it...');
+            message_Talk (' Regardless of how you feel about\nyour role in this world...');
+            message_Talk (' Know that you can make it better\nfor others as you have me...');
+            message_Talk (' Can I ask that you try to play\na role in brightening the world of others?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (5, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_CENTER);
+            message_Talk (' .........');
+            message_Talk (' ...I\'ll try...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8454);
+            with (object 347) {
+                SetAnimation(3);
+            }
+            Wait(95);
+            message_SetFace (342, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Thank...[K] you...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            Wait(40);
+            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Well...[K] That\'s that then...');
+            message_Talk (' Please know...[K] That I am without\nregrets...');
+            message_Talk (' And...[K] I am...[K] happy...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(8459);
+            supervision_Acting(10);
+            with (object 348) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            supervision_Acting(11);
+            with (object 345) {
+                SetAnimation(3);
+            }
+            Wait(2);
+            supervision_Acting(12);
+            with (object 346) {
+                SetAnimation(2);
+            }
+            Wait(3);
+            with (object 347) {
+                SetAnimation(4);
+            }
+            with (actor 342) {
+                SetOutputAttribute(64);
+            }
+            back_SetEffect(12, 90);
+            message_SetFace (342, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+            message_Talk (' T[W:15]h[W:15]a[W:15]n[W:15]k[W:15] y[W:15]o[W:15]u[W:15].[W:15].[W:15].');
+            with (actor 342) {
+                Destroy();
+            }
+            with (object 347) {
+                SetAnimation(3);
+            }
+            supervision_RemoveActing(10);
+            supervision_RemoveActing(11);
+            Wait(25);
+            with (object 347) {
+                SetAnimation(2);
+            }
+            supervision_RemoveActing(12);
+            supervision_RemoveActing(9);
+            message_CloseEnforce();
+            Wait(30);
+            screen_FadeChange(1, 120, 255, 100);
+            message_Narration(0, {
+                english="[CN]Thank you... for eveything...",
+            });
+            break;
+        default:
+            jump @label_default;
+            break;
+    }
+    bgm_FadeOut(120);
+    screen_FadeOut(1, 120);
+    ProcessSpecial(PROCESS_SPECIAL_RETURN_TO_TITLE_SCREEN, 0, 0);
+    end;
+}

@@ -1,0 +1,27 @@
+
+def 0 {
+    sound_Stop();
+    message_SetFace (5, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk (' Ouch![K] That didn\'t go too well...');
+    message_Talk (' [CS:G]Minior[CR], we should retreat...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    back_SetGround(6);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(2);
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 60, 256);
+    screen_FadeIn(1, 30);
+    Wait(30);
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk (' You feeling okay?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFaceOnly (8, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Yeah... Guess we can just try\nagain...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(30); 
+    end;
+}

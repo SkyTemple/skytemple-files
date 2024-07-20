@@ -1,0 +1,21 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 20) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(20);
+    message_SetFace(20, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' .........');
+    message_Talk(' ......No words...');
+    message_Talk(' I can understand what you\'re\nthinking of...');
+    message_Talk(' I can only wish you the best...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    JumpCommon(CORO_END_TALK);
+}

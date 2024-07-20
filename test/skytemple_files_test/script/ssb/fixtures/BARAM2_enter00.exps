@@ -1,0 +1,74 @@
+
+def 0 {
+    switch ( sector() ) {
+        case 1:
+            §label_0;
+            supervision_StationCommon(0);
+            supervision_StationCommon(1);
+            if ($SCENARIO_TALK_BIT_FLAG[20]){
+                supervision_StationCommon(2);
+            }
+            if ($SCENARIO_TALK_BIT_FLAG[23]){
+                supervision_StationCommon(4);
+            }
+            if ($SCENARIO_TALK_BIT_FLAG[24]){
+                supervision_StationCommon(3);
+            }
+            if ( $SCENARIO_MAIN_BIT_FLAG[7] ) {
+                $SCENARIO_MAIN_BIT_FLAG[7] = 0;
+                §label_3;
+                debug_Print('SET_BGM');
+                bgm_PlayFadeIn(BGM_SHAYMIN_VILLAGE, 0, 256);
+                JumpCommon(CORO_COMMON_ENTER);
+            } else {
+                switch ( sector() ) {
+                    case 1:
+                        end;
+                    default:
+                        switch ( $GROUND_GETOUT ) { }
+                        supervision_StationCommon(1);
+                        jump @label_3;
+                }
+            }
+            break;
+        default:
+            screen_FadeOutAll(1, 0);
+            back_SetGround(4);
+            jump @label_0;
+    }
+}
+
+def 1 for_actor(1){
+    if ($SCENARIO_TALK_BIT_FLAG[23] || $SCENARIO_TALK_BIT_FLAG[24]){
+        hold;
+    }
+    else{
+        SetMoveRange(Position<'MoveFen', 26.5, 21.5>, 3, 3);
+        JumpCommon(CORO_MOVE_TYPE1);
+        hold;
+    }
+}
+
+def 2 for_actor(0){
+    if not($SCENARIO_TALK_BIT_FLAG[20]){
+        Destroy();
+        hold;
+    }
+    hold;
+}
+
+def 3 for_actor(3){
+    if not($SCENARIO_TALK_BIT_FLAG[23]){
+        Destroy();
+        hold;
+    }
+    hold;
+}
+
+def 4 for_actor(2){
+    if not($SCENARIO_TALK_BIT_FLAG[24]){
+        Destroy();
+        hold;
+    }
+    hold;
+}

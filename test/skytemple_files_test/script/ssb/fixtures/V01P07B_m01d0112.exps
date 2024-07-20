@@ -1,0 +1,719 @@
+
+def 0 {
+    screen_FadeOut(1, 0);
+    sound_Stop();
+    back_SetGround(431);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(10);
+    with (actor ACTOR_PLAYER) {
+        MovePositionMark(1, Position<'m0', 24, 19>);
+    }
+    with (actor ACTOR_PLAYER) {
+        WaitEffect();
+    }
+    Wait(10);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk(' [CS:G]Meowstic[CR]?[K] I\'m really sorry.[K] I didn\'t\nmean to get back later. It just...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(60);
+    with (actor 395) {
+        Turn2Direction(1, 10, DIR_DOWN);
+    }
+    with (actor 395) {
+        SetEffect(EFFECT_JOYOUS, 3);
+    }
+    WaitExecuteLives(395);
+    se_Play(8974);
+    with (actor ACTOR_PLAYER) {
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 0);
+    }
+    bgm_PlayFadeIn(BGM_GUILDMASTER_WIGGLYTUFF, 0, 256);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Hiya, Sis!');
+    with (actor 395) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SURPRISED, FACE_POS_STANDARD);
+    message_Talk(' [CS:G]Meowstic[CR]?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Hey,[W:10] there you are![K] I noticed you\nwere running a little late, there!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk(' Yeah.[K] About that.[K] The outlaw...[W:10] he was\nworking with more outlaws.[K] It could have gone\npretty bad for me if it weren\'t for-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Aww,[W:10] sis,[W:10] what is with you?[K] Why\nso nervous?[K] Come on,[W:10] I got you some pecha\nberries!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        MovePositionOffset(32896, 0, 12);
+    }
+    WaitExecuteLives(395);
+    Wait(15);
+    se_Play(6410);
+    supervision_Acting(1);
+    Wait(15);
+    with (actor 395) {
+        SetAnimation(5);
+    }
+    with (actor 395) {
+        SlidePositionOffset(32896, 0, -12);
+    }
+    WaitExecuteLives(395);
+    with (actor 395) {
+        SetAnimation(2);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_INSPIRED, FACE_POS_STANDARD);
+    message_Talk(' Wait,[W:10] really?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Yeah,[W:10] I know they\'re your favorite!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_HAPPY, FACE_POS_STANDARD);
+    message_Talk(' Gee...[W:10] thanks.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        MovePositionOffset(32896, 0, -12);
+    }
+    WaitExecuteLives(ACTOR_PLAYER);
+    Wait(15);
+    supervision_RemoveActing(1);
+    Wait(15);
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(5);
+    }
+    with (actor ACTOR_PLAYER) {
+        SlidePositionOffset(32896, 0, 12);
+    }
+    WaitExecuteLives(ACTOR_PLAYER);
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(2);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Enjoy them now,[W:10] \'cause you\'re having\nyour first session of guildmaster training\ntonight!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8962);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk(' Let me guess,[W:10] paperwork?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        SetEffect(EFFECT_JOYOUS, 3);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Attagirl![K] Now why don\'t you go\nreturn that item![K] Your client is getting\nimpatient!');
+    message_Close();
+    bgm_FadeOut(60);
+    screen_FadeOut(1, 30);
+    back_SetGround(LEVEL_G01P03A);
+    supervision_RemoveActing(0);
+    supervision_Acting(2);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    bgm_PlayFadeIn(BGM_JOB_CLEAR, 0, 256);
+    Wait(30);
+    message_SetFace(401, FACE_HAPPY, FACE_POS_TOP_C_FACEL);
+    message_Talk({
+        english=" Th-thank you!",
+    });
+    message_SetFace(401, FACE_NORMAL, FACE_POS_TOP_C_FACEL);
+    message_Talk({
+        english=" That item has been stolen from the\noutlaws,[W:10] you see.[W:10] I missed it so much!",
+    });
+    message_SetFace(401, FACE_HAPPY, FACE_POS_TOP_C_FACEL);
+    message_Talk({
+        english=" You have my sincere thanks!",
+    });
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 401) {
+        MovePositionOffset(32972, 0, 16);
+    }
+    with (actor 401) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    WaitExecuteLives(401);
+    me_Play(4);
+    bgm_Stop();
+    message_Mail({
+        english="[CN][hero]\'s was rewarded with\n[CN]a [CS:I]Protein[CR]!",
+    });
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    me_Play(4);
+    message_Mail({
+        english="[CN][hero]\'s was rewarded with\n[CN]a [CS:I]Gingseng[CR]!",
+    });
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    me_Play(4);
+    message_Mail({
+        english="[CN][hero]\'s was rewarded with\n[CN]a [M:S0]3000!",
+    });
+    message_Close();
+    screen_FadeOut(1, 30);
+    back_SetGround(LEVEL_G01P07C);
+    supervision_RemoveActing(2);
+    supervision_Acting(3);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    bgm_PlayFadeIn(BGM_GOODNIGHT, 0, 256);
+    message_SetFace(ACTOR_PLAYER, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' [CS:G]Meowstic[CR] is in a good mood...[W:10] I hope it\nlasts a while...[W:10] I mean,[W:10] it\'ll be fine.[K] He\'s not\nthat bad.');
+    message_Talk(' I\'ll...[W:10] just practice dancing a bit in\nprivate.[K] Visit [CS:G]Gardevoir[CR] & [CS:G]Steenee[CR].');
+    message_Talk(' I should be grateful that [CS:G]Meowstic[CR]\'s in\na good mood.');
+    message_SetFace(ACTOR_PLAYER, FACE_SIGH, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I really,[W:10] really,[W:10] hope it lasts.');
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I just hate that feeling where things\nseem OK between us,[W:10] and then suddenly-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_FadeOut(30);
+    with (actor 403) {
+        MovePositionMark(1, Position<'m1', 16, 22.5>);
+    }
+    with (actor 403) {
+        WaitEffect();
+    }
+    message_SetFace(403, FACE_HAPPY, FACE_POS_BOTTOM_L_FACEINW);
+    message_Talk(' Hi,[W:10] [hero]!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    se_Play(8974);
+    with (actor ACTOR_PLAYER) {
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 0);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Ahhhh!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(403, FACE_NORMAL, FACE_POS_BOTTOM_L_FACEINW);
+    message_Talk(' Wow,[W:10] you\'re jumpy today![K] I just wanted\nto let you know I finished making dinner!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Ah,[W:10] thanks,[W:10] [CS:G]Shinx[CR]... sorry about that.');
+    message_Close();
+    screen_FadeOut(1, 30);
+    back_SetGround(LEVEL_G01P06B);
+    supervision_RemoveActing(3);
+    supervision_Acting(4);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    message_SetFace(404, FACE_JOYOUS, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' Oh boy,[W:10] dinner!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_JOYOUS, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Aiyee!');
+    message_Close();
+    bgm_PlayFadeIn(BGM_EATING, 0, 256);
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(64);
+    }
+    with (actor 394) {
+        SetAnimation(64);
+    }
+    with (actor 403) {
+        SetAnimation(64);
+    }
+    with (actor 404) {
+        SetAnimation(64);
+    }
+    with (actor 405) {
+        SetAnimation(64);
+    }
+    with (actor 395) {
+        SetAnimation(64);
+    }
+    with (actor 407) {
+        SetAnimation(64);
+    }
+    with (actor 406) {
+        SetAnimation(64);
+    }
+    with (actor 402) {
+        SetAnimation(64);
+    }
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_EATING, 3);
+    }
+    with (actor 394) {
+        SetEffect(EFFECT_EATING, 3);
+    }
+    with (actor 403) {
+        SetEffect(EFFECT_EATING, 3);
+    }
+    with (actor 404) {
+        SetEffect(EFFECT_EATING, 3);
+    }
+    with (actor 405) {
+        SetEffect(EFFECT_EATING, 3);
+    }
+    with (actor 395) {
+        SetEffect(EFFECT_EATING_SLOW, 3);
+    }
+    with (actor 407) {
+        SetEffect(EFFECT_EATING_SLOW, 3);
+    }
+    with (actor 406) {
+        SetEffect(EFFECT_EATING_SLOW, 3);
+    }
+    with (actor 402) {
+        SetEffect(EFFECT_EATING_SLOW, 3);
+    }
+    message_ResetActor();
+    message_ImitationSound({
+        english="Crunch munch! Chomp chomp! Gobble gulp!\nCrunch munch! Chomp chomp! Gobble gulp!",
+    });
+    message_ImitationSound({
+        english="Crunch munch! Chomp chomp! Gobble gulp!\nCrunch munch! Chomp chomp! Gobble gulp!",
+    });
+    message_ImitationSound({
+        english="Crunch munch! Chomp chomp! Gobble gulp!\nCrunch munch! Chomp chomp! Gobble gulp!",
+    });
+    message_CloseEnforce();
+    Wait(60);
+    message_SetFace(ACTOR_PLAYER, FACE_SIGH, FACE_POS_TOP_L_FACEINW);
+    message_Monologue('(No,[W:10] no,[W:10] it\'s fine...[W:10] don\'t let him see you\noverreacting...[W:10] that will just make it a self\nfulfilling prophecy...)');
+    message_Close();
+    bgm_FadeOut(120);
+    screen_FadeOut(1, 60);
+    Wait(60);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_R_FACEINW);
+    message_Talk(' So the most important thing about\nrunning a guild is easily the finances.[K] Let me\nwalk you through taxes.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DIZZY, FACE_POS_STANDARD);
+    message_Talk(' Yes,[W:10] Meowstic...');
+    message_Close();
+    back_SetGround(LEVEL_G01P07C);
+    supervision_RemoveActing(4);
+    supervision_Acting(5);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(76);
+    }
+    Wait(30);
+    screen_FadeIn(1, 30);
+    bgm_PlayFadeIn(BGM_GOODNIGHT, 0, 256);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk(' That was agonizing...[W:10] if I have to see\none more number I think my head is gonna\nsplit open...');
+    message_SetFace(ACTOR_PLAYER, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' But it wasn’t too bad,[W:10] I guess.');
+    message_Talk(' I guess that’s pretty much how\nexploring is for me in general.[K] It’s “not bad”.');
+    message_SetFace(ACTOR_PLAYER, FACE_SIGH, FACE_POS_STANDARD);
+    message_Talk(' ...And nothing more.');
+    message_Close();
+    bgm_FadeOut(60);
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(62);
+    }
+    Wait(60);
+    screen_FadeOut(1, 60);
+    message_Narration(30, '[CN]The next day...');
+    message_Close();
+    Wait(30);
+    supervision_Acting(6);
+    screen_FadeIn(1, 30);
+    with (actor 395) {
+        MovePositionMark(1, Position<'m2', 16, 22.5>);
+    }
+    with (actor 395) {
+        MovePositionMark(1, Position<'m3', 22, 19.5>);
+    }
+    with (actor 395) {
+        WaitEffect();
+    }
+    with (actor 395) {
+        Turn2Direction(1, 10, DIR_DOWNRIGHT);
+    }
+    with (actor 395) {
+        SetAnimation(3);
+    }
+    with (actor 395) {
+        MoveHeight(2, 6);
+    }
+    with (actor 395) {
+        Wait(1);
+    }
+    with (actor 395) {
+        MoveHeight(2, 0);
+    }
+    with (actor 395) {
+        Wait(1);
+    }
+    with (actor 395) {
+        SetAnimation(3);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' [hero]![W:5] [hero]![W:5] [hero]![W:5] Wake up,[W:5]\nWake up,[W:5] Wake up!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(20);
+    with (actor ACTOR_PLAYER) {
+        SetAnimation(2);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(1, 10, DIR_UPLEFT);
+    }
+    with (actor ACTOR_PLAYER) {
+        WaitEffect();
+    }
+    se_Play(8974);
+    with (actor ACTOR_PLAYER) {
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 0);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' What is it?![W:10] What is it?!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_PlayFadeIn(BGM_GUILDMASTER_WIGGLYTUFF, 0, 256);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Time to start your early morning\ntraining!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' It’s still dark out...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' It sure is![K] This is when I usually\nget up![K] I’m sure you’ll get used to it soon!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SIGH, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' A little warning would’ve been nice...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Yeah,[W:10] but if I’d warned you,[W:10] you\nwould’ve just complained about it.[K] Nobody likes\na whiner, [hero].');
+    message_Talk(' Now,[W:10] today you’re going to learn\nabout the other paperwork besides taxes.[K]\nWe have files on our guild members.');
+    message_Talk(' sorting the mail,[W:10] the chore chart,[W:10]\nand...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_FadeOut(60);
+    Wait(30);
+    se_Play(8967);
+    with (actor 395) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Espurr![K] What on earth!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SPECIAL0, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Z[W:10]z[W:10]z[W:10].[W:10].[W:10].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8971);
+    camera_SetEffect(2, 2, 33536);
+    with (actor 395) {
+        SetAnimation(19);
+    }
+    with (actor 395) {
+        WaitAnimation();
+    }
+    with (actor 395) {
+        SetAnimation(2);
+    }
+    camera_SetEffect(0, 0, 0);
+    with (actor 395) {
+        SetEffect(EFFECT_ANGRY, 3);
+    }
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' WAKE![W:10] UP!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    se_Play(8971);
+    message_EmptyActor();
+    message_Talk({
+        english="[CS:N]Apprentice[CR]: Hey,[W:10] what gives?!",
+    });
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_Talk({
+        english="[CS:N]Apprentice[CR]: [CS:G]Pokemon[CR] are trying to sleep!",
+    });
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Now look what you’ve done.[K]\nEveryone’s all woken up because of you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Mmf.[W:10] Sorry Meowstic.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' What are you sorry for?!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' What was that?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' How dare you apologize without\nknowing what’s going on?[K] Argh,[W:10] if you weren’t\nmy sister... Well...');
+    message_Talk(' You have five minutes to be in my\noffice or else.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(Gah...[W:10] [CS:G]Meowstic[CR] is mad at me...[W:10] and it’s\nstill dark out...)');
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(It’s gonna be a bad day...[W:10] I can already tell...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' OK.[K] We had a bit of a rough start,[W:10]\nbut now is not the time to be messing around!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I wasn’t messing around![K] I wasn’t all\nthe way awake!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' You were wasting my time,[W:10] and\nthat’s close enough to messing around for me!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I didn’t mean to!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Do I really know that?[K] Do I?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Nevermind,[W:10] let’s just get to work.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Yes.[W:10] Let’s.[W:10] Now read the chore\nchart for me.[K] I expect you to have it\nmemorized.');
+    message_Close();
+    screen_FadeOut(1, 30);
+    message_Narration(30, '[CN]Fifteen excruciating minutes later...');
+    message_Close();
+    Wait(30);
+    screen_FadeIn(1, 30);
+    Wait(30);
+    bgm_PlayFadeIn(BGM_WIGGLYTUFFS_GUILD, 0, 256);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Now,[W:10] from the top.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' ...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' [hero],[W:10] just do your best!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' [CS:G]Shinx[CR] cooks dinner most nights,[W:10]\n[CS:G]Swampert[CR] replaces him if he has something he\nneeds to do.[K] [CS:G]Eevee[CR] and [CS:G]Lucario[CR] are on a team-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' No!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' What did I get wrong now?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' [CS:G]Eevee[CR] is not on a team with [CS:G]Lucario[CR].[K]\nWho is [CS:G]Eevee[CR] on a team with?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I don’t know...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' We just went over this! Think![W:10]\nThink!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I can’t remember.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Think![W:10] Think![W:10] Think!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I’m thinking,[W:10] but I can’t remember![K]\nWho is [CS:G]Eevee[CR] on a team with again?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Try a little harder,[W:10] we just went\nover this-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_FadeOut(30);
+    message_SetFace(ACTOR_PLAYER, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I’m trying as hard as I can![K] I just\nCAN’T remember this![K] And shouting “think!”\nat me does NOT help!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(30);
+    message_SetFace(ACTOR_PLAYER, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(Oops.)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' [CS:G]Meowstic[CR], I’m sorry-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_PlayFadeIn(BGM_RISING_FEAR, 0, 256);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' I don’t believe you’re sorry at all.[K]\nYou just really love to string me along with all\nyour failures!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I’m not failing on purpose!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Well,[W:10] obviously!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' [CS:G]Meowstic[CR],[W:10] I’m sorry,[W:10] I just can’t\nstand doing this!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Just go do your job.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I’m sorry.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Go!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' No,[W:10] look,[W:10] I’m...[W:10] I’m sorry for...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I just want to say that...[W:10] can I try the\nchore chart again?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_FadeOut(30);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' I don’t want you to try again![K] I\nwant you to know it already![K] It’s not that hard\nto do, [hero]![K] All I ask for is effort!');
+    message_Talk(' I’ve taken care of you your whole\nlife and this is what I get in return?[W:20] No\neffort?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I want to just...[W:10] [CS:G]Meowstic[CR],[W:10] I just...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Spit it out.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I don’t think I want to live in the\nguild with you anymore.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' You couldn’t!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I could too![W:10] I could just... go.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' You wouldn’t.[W:10] You couldn’t.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I might.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Look,[W:10] let’s just calm down,[W:10] alright?[K]\nI’m trying to help you become guildmaster,[W:10]\nwhich you wanted, by the way-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8968);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' What?![W:10] N-No,[W:10] I never said that!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Don’t play head games with me,[W:10] you\nabsolutely did.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Well, I agreed because it was what\nyou wanted, but...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' But?![K] Are you seriously telling me\nthat after a whole life of wanting to be an\nexplorer like me,[W:10] you want to quit?!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SHOUTING, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I wanted to be a [CS:C]DANCER[CR]! I’ve said\nthat a million times!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' You have not!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I have!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' ...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' I have?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(395, FACE_NORMAL, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' If you did,[W:10] you should have said it\nmore.[K] I feel really deceived.[K] Go do your job,[W:10]\nand when you get back...');
+    message_Talk(' We’re going to have a very serious\ntalk about your future as an explorer.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 395) {
+        MovePositionMark(1, Position<'m4', 17.5, 19.5>);
+    }
+    with (actor 395) {
+        MovePositionMark(1, Position<'m5', 14.5, 22.5>);
+    }
+    with (actor 395) {
+        MovePositionMark(1, Position<'m6', 1.5, 22.5>);
+    }
+    with (actor 395) {
+        WaitEffect();
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(1, 10, DIR_LEFT);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(I thought I was so obvious about my dreams\nof dancing.[K] I can’t be remembering wrong.)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_PlayFadeIn(1000, 0, 256);
+    message_SetFace(ACTOR_PLAYER, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(No,[W:10] I know I’m not.[K] I’ll never forget\nthe first time I saw that flyer for [CS:G]Ludicolo[CR]’s\ndancing troupe...[W:10] it was so long ago,)');
+    message_Monologue('(I’d only just learned to talk.[K] Mom and Dad\nwere still...[W:10] around.[K] I know that I’ve talked\nabout it a lot since then.)');
+    message_Monologue('(Does he really not remember?)');
+    message_Monologue('(He doesn’t even know how much I gave\nup to save him and his precious guild.)');
+    message_SetFace(ACTOR_PLAYER, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(But he’s my family,[W:10] and...[W:10] and this is\nwhat I have to do.)');
+    message_Monologue('(I have to give up my life...[W:10] my\nfriendships...[W:10] my dreams...)');
+    message_Monologue('(It’s too much...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_BOTTOM_R_FACEINW);
+    message_Monologue('(I wanna go home...[W:10] I’m sorry,[W:10] [CS:G]Meowstic[CR]...)');
+    message_Monologue('(I’m sorry I...[W:10] I have so many things I want...[W:10]\nbut I don’t want to have something bad\nhappen to you...)');
+    message_Monologue('(Was [CS:G]Gardevoir[CR] right?[K] Was it really not\nbecause of me?)');
+    message_Monologue('(I just can’t risk it.)');
+    bgm_FadeOut(60);
+    message_Close();
+    screen_FadeOut(1, 60);
+    me_Play(7);
+    Wait(30);
+    message_Explanation('[CN]Thank you for playing Espurr\'s Desire Demo!');
+    message_Explanation('[CN]We hope you look forward for the full version.');
+    message_Explanation('[CN]Our team of six people');
+    message_Explanation('[CN]Murpi, Mew, Dovey, Firel, Quinn the Fox\n[CN]and PhillipsYoung have worked hard to get\n[CN]this up and running for Hack Jam 5!');
+    message_Explanation('[CN]See you in the future once it is done.');
+    message_Close();
+    Wait(30);
+    bgm_PlayFadeIn(1000, 0, 256);
+    message_Narration(30, '[CN]Credits');
+    message_Narration(30, '[CN]Producer:\n[CN]Dovey');
+    message_Narration(30, '[CN]Writer:\n[CN]PhillipsYoung and Dovey');
+    message_Narration(30, '[CN]Hacking:\n[CN]Mew and Murpi');
+    message_Narration(30, '[CN]Custom Art:\n[CN]Quinn the Fox');
+    message_Narration(30, '[CN]Custom Music:\n[CN]Firel');
+    message_Narration(30, '[CN]snd_stream:\n[CN]Irdkwia');
+    message_Narration(30, '[CN]Custom Pokemon Portrait');
+    message_Narration(30, '[CN]Espurr:\n[CN]NeroIntruder');
+    message_Narration(30, '[CN]Steenee:\n[CN]JaiFain and Murpi');
+    message_Narration(30, '[CN]Gardevoir:\n[CN]JaiFain and Ichor');
+    message_Narration(30, '[CN]Alolan Vulpix:\n[CN]NeroIntruder and Baroness Faron');
+    message_Narration(30, '[CN]Meowstic:\n[CN]NeroIntruder');
+    message_Narration(30, '[CN]Sudowoodo:\n[CN]Danksaders');
+    message_Narration(30, '[CN]Mienfoo:\n[CN]Mucrush and JaiFain');
+    message_Narration(30, '[CN]Shiny Togepi:\n[CN]RaoKurai and ShyStarryRain');
+    message_Narration(30, '[CN]Hisuian Zoroark:\n[CN]Baroness Faron');
+    message_Narration(30, '[CN]Custom Pokemon Sprite');
+    message_Narration(30, '[CN]Espurr:\n[CN]NeroIntruder');
+    message_Narration(30, '[CN]Steenee:\n[CN]JaiFain');
+    message_Narration(30, '[CN]Banette:\n[CN]Emmuffin');
+    message_Narration(30, '[CN]Dialga:\n[CN]ShyStarryRain');
+    message_Narration(30, '[CN]Lucario:\n[CN]Emmuffin');
+    message_Narration(30, '[CN]Minccino:\n[CN]Baroness Faron and powercristal');
+    message_Narration(30, '[CN]Smeargle:\n[CN]Murpi and Emmuffin');
+    message_Narration(30, '[CN]Alolan Vulpix:\n[CN]NeroIntruder and Baroness Faron');
+    message_Narration(30, '[CN]Meowstic:\n[CN]NeroIntruder');
+    message_Narration(30, '[CN]Mienfoo:\n[CN]JaiFain');
+    message_Narration(30, '[CN]Shiny Togepi:\n[CN]RaoKurai');
+    message_Narration(30, '[CN]Hisuian Zoroark:\n[CN]Baroness Faron');
+    message_Narration(30, '[CN]Swampert:\n[CN]Emmuffin');
+    message_Narration(30, '[CN]Special thanks to:\n[CN]Adex, FunnyKecleonMeme, Stolen Burrito,\n[CN] sec, Yakkomon, and ChrisSema');
+    message_Narration(30, '[CN]And all of you\n[CN]who play this ROM Hack!');
+    message_Close();
+    bgm_FadeOut(60);
+    end;
+}

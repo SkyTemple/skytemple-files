@@ -1,0 +1,47 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(176);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    with (actor 350){
+        SetAnimation(2);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    message_SetFace (5, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Yeowch![K] That didn\'t go well...');
+    message_Close();
+    screen_FadeIn(1, 30);
+    Wait(60);
+    message_SetFace (5, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Strange, I shouldn\'t be having\ntrouble with this route...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 350){
+        ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Bah, whatever.[K] Guess I can just\ntry again.');
+    message_Talk (' Off we go...');
+    supervision_Acting(1);
+    Unlock(1);
+    Wait(10);
+    screen2_FadeOut(0, 30);
+    screen_FadeOut(1, 30);
+    back2_SetMode(0);
+    main_EnterDungeon(3, 0);
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    main_EnterDungeon(-1, 0);
+    end;
+}
+
+def 1 for_actor (350){
+    Lock(1);
+    MovePositionOffset(1, -300, 0);
+    Wait(4);
+    ResetOutputAttribute(256);
+    hold;
+}

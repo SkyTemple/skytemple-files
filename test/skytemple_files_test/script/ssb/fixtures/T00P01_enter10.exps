@@ -1,0 +1,247 @@
+
+
+def 0 {
+    debug_Print(' You currently have defeated %d\nof them.');
+    debug_Print('                                  ');
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 15) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(15);
+    if ( $SCENARIO_TALK_BIT_FLAG[28] ) {
+        §label_0;
+        if ( $SCENARIO_TALK_BIT_FLAG[29] ) {
+            message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Heya![K] Thanks again for all your\nhelp!');
+            message_Talk(' Think we\'d be stuck for much\nlonger if not for you.');
+            message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Though,[W:10] now that I\'ve some\ntime,[W:10] considering that I\'m waiting on HQ to\nget back for further instructions...');
+            message_Talk(' Perhaps I can pick up a hobby?[K]\nThough I\'m not sure what to do...');
+            message_Talk(' Maybe relic collecting...[K] There\'s\nsome interesting history around these parts...');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+        } else {
+            message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Let\'s see how many [CS:K]Nidoking[CR] and\n[CS:K]Nidoqueen[CR] you\'ve defeated,[W:10] hm?');
+            message_Talk(' .........');
+            switch ( $CRYSTAL_COLOR_02 ) {
+                case >= 5:
+                    message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Oh![K] That\'s all five![K] How excellent!');
+                    §label_3;
+                    $SCENARIO_TALK_BIT_FLAG[29] = 1;
+                    $RECYCLE_COUNT += 1;
+                    message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Do tell about your experience with\nthem!');
+                    message_Talk(' .........');
+                    message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' I see...[W:10] I see...');
+                    message_Talk(' .........');
+                    message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Agressive on sight,[W:10] hm...');
+                    message_Talk(' .........');
+                    message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Ah![K] That should be enough\ninformation![K] Thank you so much for your\nhelp.');
+                    message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' This will help quite a bit with\nour research into the Mystery Dungeon\nphenomena.');
+                    message_Talk(' Our organisation provides a small\ntoken of appreciation for tips regarding the\ninvestigation,[W:10] so here\'s something for you.');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    me_Play(4);
+                    message_Mail('[CN][CS:G]Feraligatr[CR] greatfully gave you a pair of\n[CN][CS:A]X-Ray Specs[CR]!');
+                    message_Close();
+                    switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                        case 0:
+                            item_Set(0, 24, 0);
+                            switch ( message_Menu(MENU_GIVE_ITEM) ) { }
+                            §label_9;
+                            WaitMe(4);
+                            message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Well![K] I don\'t think we\'d need too\nmuch more research for now - your tip has\nprovided a wealth of information.');
+                            message_Talk(' I\'ll be awaiting orders from HQ\nuntil then.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                            message_Talk(' Glad I could help,[W:10] I guess.');
+                            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                            message_Talk(' Though,[W:10] I\'ve never heard of this\norganisation until now.[K] You sure that this\nlittle bit will add to anything?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Oh![K] I\'m not surprised that you\nhaven\'t heard of us until recently.[K] We are\nquite a new organisation,[W:10] after all.');
+                            message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' We\'re trying to get ourselves set\nup all around the globe.');
+                            message_Talk(' Though,[W:10] be rest assured - your\ncontribution means much to us.');
+                            message_Talk(' You may see it as just a group of\nfive [CS:K]Nidoking[CR] and [CS:K]Nidoqueen[CR],[W:10] but it contributes\nto our understanding of Mystery Dungeons.');
+                            message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Every little bit helps,[W:10] you know?');
+                            message_Talk(' Contributing to a huge effort to\nunderstanding the world we live in...[K] It\'s kind\nof cool,[W:10] no?');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                            message_Monologue('(Even a small effort going to help something\ngreater,[W:10] huh?)');
+                            message_Monologue('(I wonder if...)');
+                            message_Monologue('(..............)');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            JumpCommon(CORO_END_TALK);
+                        case 1:
+                            item_Set(0, 24, 0);
+                            switch ( message_Menu(MENU_GIVE_ITEM2) ) { }
+                            jump @label_9;
+                        default:
+                            jump @label_9;
+                    }
+                    break;
+                default:
+                    message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    switch ( ProcessSpecial(69, 22, 0) ) { }
+                    switch ( ProcessSpecial(70, 0, 1) ) { }
+                    message_Talk('                                  ');
+                    message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' I see...[K] That\'s still not enough...');
+                    message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' No worries.[K] They\'re always at\nthe [CS:P]Ruined Frontier[CR].[K] You\'ll be able to catch\nthem any time.');
+                    message_Talk(' All the best!');
+                    message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                    message_Talk(' Oh,[W:10] and thank you so much for\nassisting the organisation!');
+                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                    JumpCommon(CORO_END_TALK);
+            }
+        }
+    } else {
+        $SCENARIO_TALK_BIT_FLAG[28] = 1;
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Hello there![K] I\'m-');
+        message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' .........');
+        message_Talk(' You look a little disappointed...');
+        message_Talk(' Were you...[K] Expecting someone\nelse?');
+        message_SetFace(15, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Sorry,[W:10] I guess I\'m not the Pokémon\nyou\'re looking for.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' .........');
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Well,[W:10] that\'s not really an issue.');
+        message_Talk(' Say,[W:10] didn\'t [CS:G]Wigglytuff[CR] use to\nrun this shop?[K] What happened to him?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Not too sure.[K] The store just\nhappened to be open for rent,[W:10] so I decided\nto set up business here.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' A business,[W:10] hm?[K] What do you \nsell?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I suppose calling it a \"business\" is\na little misleading...[K] I don\'t really sell things,[W:10]\nper se.');
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I should properly explain myself.[K]\nI\'m part of an organisation which deals with\nresearch of Mystery Dungeons.');
+        message_Talk(' It\'s name is \"Pokémon Investigating\nRandom Anomalies in Treachrous\nEnvironemnts.\"');
+        message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Should really consider\nabbreviating that name...');
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Anyway.[K] We\'re generally\ninterested in solving occurences of Mystery\ndungeons,[W:10] solving why they even show up.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Sounds like a noble goal.[K] They\nhave been showing up quite a bit as of\nrecent.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Thanks![K] I appreciate the\ncompliment.');
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' This place was rented for the\nlocals to provide as much information on the\narea as possible,[W:10] and relaying it to us.');
+        message_Talk(' As of now,[W:10] we\'re trying to\ninvestigate [CS:K]Nidoking[CR] and [CS:K]Nidoqueen[CR],[W:10] to find out\nas much about them as possible.');
+        message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Though,[W:10] to be honest,[W:10] we\'re having\na tough time trying to battle them.[K] They\'re\nquite strong...');
+        message_SetFace(15, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Progress has been halted a little\nas a result...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 7) {
+            Turn2DirectionLives(4, 10, 2);
+        }
+        WaitExecuteLives(7);
+        message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Say,[W:10] [CS:Q]Rayquaza[CR]...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8964);
+        with (actor 2) {
+            SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_RIGHT, 3);
+        }
+        with (actor 2) {
+            WaitEffect();
+        }
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 7);
+        }
+        WaitExecuteLives(2);
+        message_SetFace(7, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Didn\'t we see some [CS:K]Nidoking[CR] and\n[CS:K]Nidoqueen[CR] on our way here?');
+        message_Talk(' I think they were at the\n[CS:P]Ruined Frontier[CR]?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Yes,[W:10] I suppose we did.[K] They\nweren\'t too tough,[W:10] I think?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8968);
+        with (actor 15) {
+            SetEffect(EFFECT_SHOCKED, 3);
+        }
+        with (actor 15) {
+            WaitEffect();
+        }
+        message_SetFace(15, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Wait![K] Are you saying that you\'ve\nmet some of them,[W:10] and made it here safely?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 2) {
+            Turn2DirectionLives(4, 10, 15);
+        }
+        with (actor 7) {
+            Turn2DirectionLives(4, 10, 15);
+        }
+        WaitExecuteLives(7);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Well,[W:10] I suppose we have.[K] What of\nit?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Ah![K] This is excellent![K] Do you mind\nif I ask a favour from you two?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8972);
+        with (actor 2) {
+            SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+        }
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well...[W:10] I suppose?[K] I don\'t know if\nwe can complete whatever task you need,[W:10]\nso we can\'t promise anything.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Oh,[W:10] its none too difficult for you.[K]\nAll I need you to do is to find and defeat some\n[CS:K]Nidoking[CR] and [CS:K]Nidoqueen[CR].');
+        message_Talk(' Report back on how they fought,[W:10]\nand how you fought them.');
+        message_Talk(' Five should be sufficent.');
+        message_Talk(' Well.[K] I guess we should see how\nmany you have now...');
+        switch ( $CRYSTAL_COLOR_02 ) {
+            case >= 5:
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                se_Play(8965);
+                with (actor 15) {
+                    ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 3);
+                }
+                WaitExecuteLives(15);
+                message_SetFace(15, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' Y-[W:10]you found and defeated five\nalready!?');
+                message_SetFace(15, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' That\'s...[W:10] surprising...');
+                jump @label_3;
+            default:
+                message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                switch ( ProcessSpecial(69, 22, 0) ) { }
+                switch ( ProcessSpecial(70, 0, 1) ) { }
+                message_Talk('                                  ');
+                message_SetFace(15, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' Hm...[K] I guess that\'s not enough\nfor the research needed...');
+                message_Talk(' Well,[W:10] I guess it shouldn\'t be\nexpected for you to already have had defeated\n5 of them...');
+                message_SetFace(15, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' Well.[K] That\'s not too big of an issue.[K]\nJust need to head back to the [CS:P]Ruined Frontier[CR]\nand pick off some more.');
+                message_SetFace(15, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(' All the best!');
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                JumpCommon(CORO_END_TALK);
+        }
+    }
+}

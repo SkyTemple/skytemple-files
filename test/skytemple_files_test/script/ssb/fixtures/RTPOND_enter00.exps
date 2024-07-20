@@ -1,0 +1,37 @@
+
+
+def 0 {
+    switch ( sector() ) {
+        case 1:
+            §label_0;
+            supervision_StationCommon(0);
+            supervision_StationCommon(1);
+            if ( $SCENARIO_TALK_BIT_FLAG[20] ) {
+                §label_2;
+                switch ( sector() ) {
+                    case 1:
+                        end;
+                    default:
+                        switch ( $GROUND_GETOUT ) { }
+                        screen_FadeIn(1, 30);
+                        debug_Print('SET_BGM');
+                        JumpCommon(CORO_COMMON_ENTER);
+                }
+            } else {
+                supervision_StationCommon(2);
+                jump @label_2;
+            }
+            break;
+        default:
+            back_SetGround(1);
+            jump @label_0;
+    }
+}
+
+def 1 for_actor(0) {
+    if ( $SCENARIO_TALK_BIT_FLAG[20] ) {
+        Destroy();
+    } else {
+        hold;
+    }
+}

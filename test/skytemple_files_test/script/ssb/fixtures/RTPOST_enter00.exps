@@ -1,0 +1,10 @@
+
+
+def 0 {
+    back_SetGround(8);
+    supervision_StationCommon(0);
+    supervision_StationCommon(1);
+    bgm_PlayFadeIn(BGM_OCEAN1, 30, 256);
+    screen_FadeIn(1, 30);
+    JumpCommon(CORO_COMMON_ENTER);
+}

@@ -1,0 +1,21 @@
+def 0
+{
+    bgm_FadeOut(90);
+    screen2_FadeOut(0, 60);
+    screen_FadeOut(1, 60);
+    WaitBgm(BGM_HEAVY_WIND3);
+    supervision_ExecuteCommon(CORO_EVENT_TG02);
+    end;
+}
+
+def 1 for_actor(2)
+{
+    SetAnimation(2);
+    hold;
+}
+
+def 2 for_actor(0)
+{
+    SetAnimation(2);
+    hold;
+}

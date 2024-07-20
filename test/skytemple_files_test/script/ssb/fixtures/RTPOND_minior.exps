@@ -1,0 +1,265 @@
+
+
+def 0 {
+    back_SetGround(1);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(2);
+    with (actor 2) {
+        SetAnimation(2);
+    }
+    with (actor 7) {
+        SetAnimation(2);
+    }
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 2) {
+        MovePositionMark(1, Position<'m0', 28.5, 47>);
+    }
+    with (actor 7) {
+        MovePositionMark(1, Position<'m1', 28.5, 52.5>);
+    }
+    WaitExecuteLives(7);
+    Wait(20);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    WaitExecuteLives(2);
+    Wait(20);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Well,[W:20] this is [CS:P]Whiscash Pond[CR].');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 7) {
+        ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+    }
+    message_SetFace(7, FACE_INSPIRED, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' It looks beautiful!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Hmm...[K] Surely you didn\'t come here\njust to see the sights?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8964);
+    with (actor 7) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 7) {
+        WaitEffect();
+    }
+    message_SetFace(7, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Right![K] That wasn\'t the main reason\nI wanted to come here!');
+    message_SetFace(7, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' I wanted to see [CS:G]Whiscash[CR]![K] While I\nwas in the skies,[W:10] I heard so many things\nabout him,[W:10] his knowledge about the world...');
+    message_Talk(' I wanna know as much as I can!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 7) {
+        Turn2Direction(4, 10, DIR_UPRIGHT);
+    }
+    WaitExecuteLives(7);
+    se_Play(8964);
+    with (actor 7) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 7) {
+        WaitEffect();
+    }
+    message_SetFace(7, FACE_SURPRISED, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Ah![K] That\'s him over there!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0) {
+        Move2PositionMark(2, Position<'m2', 28.5, 41.5>);
+    }
+    with (actor 7) {
+        MovePositionMark(3, Position<'m3', 40, 35>);
+    }
+    with (actor 2) {
+        MovePositionMark(1, Position<'m4', 30.5, 41.5>);
+    }
+    WaitExecuteLives(7);
+    supervision_Acting(0);
+    Unlock(1);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_UPRIGHT);
+    }
+    Wait(20);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' ...............');
+    message_Talk(' That [CS:C]Minior[CR]...[K] Seeming to want\nto just constantly learn and see new things...');
+    message_Talk(' Even despite everything they\'ve\nwent through...[K] They still continue on...');
+    message_Talk(' Even then, there\'s eventually gonna\nbe the matter of...');
+    message_Talk(' .................');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(100);
+    with (actor 7) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    se_Play(8964);
+    with (actor 7) {
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    with (actor 7) {
+        WaitEffect();
+    }
+    with (actor 7) {
+        Turn2Direction(4, 10, DIR_DOWNLEFT);
+    }
+    WaitExecuteLives(7);
+    Wait(20);
+    with (actor 7) {
+        MovePositionMark(1, Position<'m5', 40, 41.5>);
+    }
+    WaitExecuteLives(7);
+    with (actor 7) {
+        MovePositionMark(1, Position<'m6', 34.5, 41.5>);
+    }
+    WaitExecuteLives(7);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    message_SetFace(7, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Heya [CS:Q]Rayquaza[CR],[W:10] [CS:G]Whiscash[CR] wanted\nto speak with you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8964);
+    with (actor 2) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 2) {
+        WaitEffect();
+    }
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' Me?[K] What could he want with\nme?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(7, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Well, he didn\'t say,[W:10] so I guess you\nshould go check?');
+    message_Talk(' I\'ll go talk to that [CS:G]Caterpie[CR] over\nthere.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0) {
+        Move2PositionMark(1, Position<'m7', 40, 36.5>);
+    }
+    with (actor 7) {
+        Move2PositionMark(2, Position<'m8', 25, 44>);
+    }
+    with (actor 2) {
+        MovePositionMark(1, Position<'m9', 40, 37>);
+    }
+    WaitExecuteLives(2);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    WaitExecuteLives(2);
+    message_SetFace(6, FACE_JOYOUS, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Hohoho![K] Welcome [CS:Q]Rayquaza[CR]!');
+    message_Talk(' First and foremost,[W:10] I must offer\nmy utmost thanks for your assistance with\nthe meteor event!');
+    message_Talk(' I probably won\'t be here now if\nnot for that.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Uh...[K] Yeah.[K] It was my...[W:10]uh...[W:10]\npleasure to help out.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(6, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Quite interesting that you\'ve\nbefriended yourself a [CS:K]Minior[CR], hm?[K] They are\nquite rare!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Well,[W:10] the opportunity did strike me\nquite recently, I guess.');
+    message_Talk(' Look,[W:10] surely you didn\'t call me over\njust to make small talk.[K] What is it that you\nwant?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(6, FACE_SIGH, FACE_POS_TOP_R_CENTER);
+    bgm_ChangeVolume(90, 0);
+    message_Talk(' Cutting to the chase now,[W:10] are we?[K]\nVery well then.');
+    message_SetFace(6, FACE_SAD, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Look,[W:10] [CS:C]Minior[CR] seems to know what\'s\ngoing to happen soon.');
+    message_Talk(' Especially with that scar on their\nbody, I\'m sure you\'re aware too.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' ............');
+    message_Talk(' ...[W:10] I am.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(6, FACE_SAD, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Very well then.[K] Seeing as that\nyou\'ll be with them,[W:10] take care of them,[W:10]\nwhen the time comes.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_PAIN, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' ............');
+    message_Talk(' ...[W:10] I will.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_ChangeVolume(90, 256);
+    with (actor 7) {
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    message_SetFace(7, FACE_SHOUTING, FACE_POS_TOP_L_FACEINW);
+    message_Talk(' Heya [CS:Q]Rayquaza[CR]![K] You done over there\nyet?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8964);
+    with (actor 2) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 2) {
+        WaitEffect();
+    }
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    WaitExecuteLives(2);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Y-yeah![K] You can come over if you\nwant!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0) {
+        Move2PositionMark(1, Position<'m10', 40, 38.5>);
+    }
+    with (actor 7) {
+        MovePositionMark(2, Position<'m11', 40, 40.5>);
+    }
+    WaitExecuteLives(7);
+    with (actor 7) {
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    WaitExecuteLives(2);
+    message_SetFace(7, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' We ready to head off to the\n[CS:P]Hill of the Ancients[CR]?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8964);
+    with (actor 6) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    message_SetFace(6, FACE_JOYOUS, FACE_POS_TOP_R_CENTER);
+    message_Talk(' Hoho![K] [CS:P]Hill of the Ancients[CR],[W:10] you\nsay?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 2) {
+        Turn2Direction(4, 10, DIR_UP);
+    }
+    WaitExecuteLives(2);
+    message_SetFace(6, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+    message_Talk(' If you get through [CS:P]Great Canyon[CR],[W:10]\nI hear that a rest stop was just installed near\nthe apex.');
+    message_Talk(' So,[W:10] when you do get there,[W:10] you\ncan take a break there if necessary!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(7, FACE_NORMAL, FACE_POS_BOTTOM_R_CENTER);
+    message_Talk(' Woah![K] That\'s great!');
+    message_Talk(' C\'mon [CS:Q]Rayquaza[CR], let\'s go!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' .....................');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    $SPECIAL_EPISODE_OPEN_OLD[6] = 1;
+    $SCENARIO_MAIN = scn[105, 1];
+    end;
+}
+
+def 1 for_actor(7) {
+    Lock(1);
+    Turn2Direction(4, 10, DIR_UP);
+    SetEffect(EFFECT_JOYOUS, 3);
+    §label_2;
+    Wait(300);
+    switch ( random(2) ) {
+        case 0:
+            §label_0;
+            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+            jump @label_2;
+        default:
+            jump @label_2;
+    }
+}

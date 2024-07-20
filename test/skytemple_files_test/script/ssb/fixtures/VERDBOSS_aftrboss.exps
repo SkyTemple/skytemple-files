@@ -1,0 +1,312 @@
+
+def 0 {
+    back_SetGround(433);
+    supervision_Acting(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    bgm_PlayFadeIn(BGM_OH_NO, 0, 256);
+    se_Play(5127);
+    with (actor 396) {
+        ExecuteCommon(CORO_JUMP_ANGRY_FUNC, 0);
+    }
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC, 0);
+    }
+    Wait(5);
+    with (actor 396) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    with (actor 398) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    with (actor 399) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    with (actor 400) {
+        SetEffect(EFFECT_LAUGHING, 3);
+    }
+    message_SetFace(396, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Hahahaha![K] You called me a D-rank\noutlaw,[W:10] but maybe you should be a F-rank\nexplorer!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8971);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_ANGRY, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Monologue('(No![K] Meowstic is going to be furious\nwith me...[W:20] This jerk!)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    with (actor 396) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    with (actor 398) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    with (actor 399) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    with (actor 400) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    Wait(1);
+    se_Play(8974);
+    with (actor 396) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    bgm_FadeOut(256);
+    message_ResetActor();
+    message_Talk(' Stop right there!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    with (actor 386) {
+        Move2PositionMark(33408, Position<'m0', 34, 44.5>);
+    }
+    with (actor 387) {
+        Move2PositionMark(33408, Position<'m1', 28.5, 44.5>);
+    }
+    with (actor 387) {
+        WaitEffect();
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 1, DIR_UP);
+    }
+    se_Play(8968);
+    with (actor 396) {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    bgm_PlayFadeIn(1003, 0, 256);
+    message_SetFace(396, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Guh?![W:10] More explorers?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(386, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Oh,[W:10] we\'re not-');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(387, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' We\'re this explorer\'s back up![K] And\nwe will not show you any mercy if you\ncontinue like this!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8974);
+    with (actor 396) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    message_SetFace(396, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' No...![W:10] You had back up TOO?!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8971);
+    with (actor 396) {
+        SetEffect(EFFECT_ANGRY, 3);
+    }
+    message_SetFace(396, FACE_CRYING, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk('Wahhh![W:10] This trick is ONLY funny\nwhen I DO IT!');
+    message_Close();
+    se_Play(7430);
+    with (actor 396) {
+        Move2PositionMark(3, Position<'m2', 35.5, 18.5>);
+    }
+    with (actor 396) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    WaitExecuteLives(396);
+    with (actor 398) {
+        Turn2Direction(4, 10, DIR_RIGHT);
+    }
+    with (actor 399) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    with (actor 400) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    Wait(15);
+    se_Play(8972);
+    with (actor 398) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor 399) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor 400) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    Wait(30);
+    se_Play(7430);
+    with (actor 398) {
+        Move2PositionMark(3, Position<'m3', 35.5, 18.5>);
+    }
+    with (actor 399) {
+        Move2PositionMark(3, Position<'m4', 35.5, 18.5>);
+    }
+    with (actor 400) {
+        Move2PositionMark(3, Position<'m5', 35.5, 18.5>);
+    }
+    with (actor 400) {
+        WaitEffect();
+    }
+    Wait(10);
+    message_SetFace(ACTOR_PLAYER, FACE_HAPPY, FACE_POS_STANDARD);
+    se_Play(8972);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    with (actor 387) {
+        Turn2Direction(4, 10, DIR_UPRIGHT);
+    }
+    with (actor 386) {
+        Turn2Direction(4, 10, DIR_LEFT);
+    }
+    message_Talk(' Phew...[W:10] Thanks guys.[K] Jerk went all the\nway down here,[W:10] and then sicced his cronies on\nme.');
+    message_Talk(' I don\'t know what i would have done\nwithout you.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNLEFT);
+    }
+    message_SetFace(387, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' We may not be explorers,[W:10] but we\ncouldn\'t have turned a blind eye to a pokemon\nin need.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNRIGHT);
+    }
+    message_SetFace(386, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Yeah,[W:10] you were lucky we were having\nour picnic here.[K] Wanna stay for a bite?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8961);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Monologue('(That sounds nice...[W:20] But...[W:20] Meowstic...)');
+    message_Talk(' I can\'t...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_TEARY_EYED, FACE_POS_STANDARD);
+    message_Monologue('(I couldn\'t get the dancing hall started.[K]\nI couldn\'t do this job without some seriously\nlucky intervention...)');
+    message_Talk(' I can\'t...[W:20] do anything...[W:20] because of...[W:20]\nbecause of him...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8974);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(3);
+    with (actor ACTOR_PLAYER) {
+        SlidePositionOffset(1, -1, 0);
+    }
+    Wait(3);
+    with (actor ACTOR_PLAYER) {
+        SlidePositionOffset(1, 1, 0);
+    }
+    Wait(3);
+    with (actor ACTOR_PLAYER) {
+        SlidePositionOffset(1, -1, 0);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_CRYING, FACE_POS_STANDARD);
+    message_Talk(' No matter what I choose,[W:10] I just can\'t\nmake anyone happy!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8968);
+    with (actor 386) {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    message_SetFace(386, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Whoa,[W:10] whoa,[W:10] It\'s going to be all OK!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8962);
+    with (actor 387) {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNLEFT);
+    }
+    message_SetFace(387, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Did those outlaws hurt you?![W:10] Let me\nhave a look.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8961);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_STANDARD);
+    message_Talk(' No,[W:10] I\'m sorry,[W:10] I\'m fine...[W:20] It\'s just my\nhorrible brother...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8971);
+    with (actor 386) {
+        SetEffect(EFFECT_ANGRY, 3);
+    }
+    with (actor 386) {
+        ExecuteCommon(CORO_JUMP_ANGRY_FUNC, 0);
+    }
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNRIGHT);
+    }
+    message_SetFace(386, FACE_ANGRY, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Did HE hurt you?!');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 386) {
+        SetEffect(EFFECT_NONE, 3);
+    }
+    se_Play(8968);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor ACTOR_PLAYER) {
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC, 0);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_STANDARD);
+    message_Talk(' What?[W:10] No,[W:10] no...[W:10] he...[W:20] just I don\'t have a\nlife because of him...[W:10] in fact,[W:10] he\'ll be furious\nwith me if I\'m even a little bit late...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWNLEFT);
+    }
+    message_SetFace(387, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Tell him that the outlaw tricked\nyou.[K] He\'ll at least be glad you\'re ok,[W:10] right?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8961);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_PAIN, FACE_POS_STANDARD);
+    message_Monologue('(He...[W:10] probably will just be really mad\nat me...)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(ACTOR_PLAYER, FACE_SAD, FACE_POS_STANDARD);
+    message_Talk(' I\'ll try that.[K] I can\'t stay here for your\npicnic,[W:10] even though...[W:20] you guys seem great.[K]\nAnd sorry about the waterworks.');
+    message_Talk(' I\'m not normally like this,[W:10] honest.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor ACTOR_PLAYER) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Monologue('(Would that count as \"hurting\" to Steene?)');
+    message_Monologue('(I bet that wasn\'t what she meant though.)');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    se_Play(8961);
+    with (actor ACTOR_PLAYER) {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    message_SetFace(ACTOR_PLAYER, FACE_SIGH, FACE_POS_STANDARD);
+    message_Monologue('(Maybe I\'m just being selfish.[K] I mean,[W:10]\nthink of what would happen to Meowstic if I\ndidn\'t do this...[W:20] He\'s family...)[W:20]\n(I just need to be strong...![K] Am I really going\nto choose dancing over family?)');
+    message_Close();
+    with (actor ACTOR_PLAYER) {
+        Move2PositionMark(1, Position<'m6', 30.5, 62.5>);
+    }
+    with (actor 386) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    with (actor 387) {
+        Turn2Direction(4, 10, DIR_DOWN);
+    }
+    bgm_FadeOut(256);
+    screen_FadeOut(1, 30);
+    end;
+}

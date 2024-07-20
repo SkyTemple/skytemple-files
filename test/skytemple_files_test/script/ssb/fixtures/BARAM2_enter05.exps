@@ -1,0 +1,39 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 13){
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(13);
+    if (scn($SCENARIO_MAIN) <= [102, 4]){
+        message_SetFace(13, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Yo![K] Haven\'t seen your face around\ntown before!");
+        message_Talk(" Well,[W:10] how'd you like the place?");
+        message_Talk(" Us workers have been putting in\nthe work to make this place built up.");
+        message_Talk(" Can\'t say its been without\nhiccups,[W:10] but we'll put in the effort!");
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not($SCENARIO_TALK_BIT_FLAG[18]){
+        message_SetFace(13, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Heya![K] Heard you dealt with\n[CS:G]Cradily[CR] and her gang.");
+        message_Talk(" Nice going![K] She was really getting\non my nerves,[W:10] as it has for [CS:G]Kangaskhan[CR].");
+        message_Talk(" Seriously,[W:10] can you imagine\nbuilding something,[W:10] only for someone to come\nand break it down?");
+        message_Talk(" Regardless,[W:10] hopefully she\'d leave\nus alone from here on out.");
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    message_SetFace(13, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(" What\'s up?[K] Heard you helped\n[CS:G]Heracross[CR] out.");
+    message_Talk(" She was pretty happy about it.[K]\nKept telling me that you were pretty cool.");
+    message_Talk(" First you deal with [CS:G]Cradily[CR],[W:10] then\nyou helped [CS:G]Heracross[CR].");
+    message_Talk(" I\'m inclined to agree with her-\nyou are pretty cool.");
+    message_Talk(" Thank you for all you\'ve done.");
+    JumpCommon(CORO_END_TALK);
+    end;  
+}

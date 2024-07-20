@@ -1,0 +1,104 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(176);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    with (actor 350){
+        SetAnimation(2);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    se_Play(8961);
+    with (actor 350){
+        SetEffect(92 , 3);
+    }
+    with (actor 350){
+        WaitEffect();
+    }
+    message_SetFace (5, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk (' Oh yeah... that....[K]\nSo much for a buncha kids...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 350){
+        ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Well, its over now.[K] I\'ll think about\nbeefing up [CS:P]Sky Tower\'s[CR] defenses later.');
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk (' What to do now that I\'m awake\nthough...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(60);
+    message_Talk (' I guess I could go get some food?[K]\nI think I was running out, last I checked...');
+    message_Talk (' Where to, though...');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (performer 0){
+        Slide2PositionMark(1, Position<'m4', 33.5, 26.5>);
+    }
+    WaitExecutePerformer(0);
+    with (actor 350){
+        camera_SetMyself();
+    }
+    Wait(10);
+    with (actor 350) {
+        Move2PositionMark(1, Position<'m0', 32.5, 21>);
+    }
+    WaitExecuteLives(350);
+    with (actor 350){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    Wait(10);
+    with (actor 350) {
+        Move2PositionMark(1, Position<'m1', 44.5, 44.5>);
+    }
+    WaitExecuteLives(350);
+    with (actor 350){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    Wait(10);
+    with (actor 350) {
+        Move2PositionMark(1, Position<'m2', 17.5, 37.5>);
+    }
+    WaitExecuteLives(350);
+    with (actor 350){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    WaitExecuteLives(350);
+    Wait(10);
+    with (actor 350){
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    se_Play(8964);
+    Wait(10);
+    with (actor 350){
+        SetAnimation(2);
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk (' Hmm...[K] [CS:P]Baram Town[CR] seems like a\ngood place,[K] haven\'t been there in a while...');
+    message_Talk (' Welp, time to head out then...');
+    supervision_Acting(1);
+    Unlock(1);
+    Wait(10);
+    screen2_FadeOut(0, 30);
+    screen_FadeOut(1, 30);
+    back2_SetMode(0);
+    message_CloseEnforce();
+    main_EnterDungeon(3, 0);
+    switch ( message_Menu(MENU_DUNGEON_INITIALIZE_TEAM) ) { }
+    main_EnterDungeon(-1, 0);
+    end;
+}
+
+def 1 for_actor (350){
+    Lock(1);
+    MovePositionOffset(1, -300, 0);
+    Wait(4);
+    ResetOutputAttribute(256);
+    hold;
+}

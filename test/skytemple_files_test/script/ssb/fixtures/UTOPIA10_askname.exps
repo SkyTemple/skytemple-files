@@ -1,0 +1,757 @@
+macro WaitUnlockLives($lock, $actor)
+{
+    WaitLockLives($lock, $actor);
+    Unlock($lock);
+}
+
+macro WaitUnlockObject($lock, $object)
+{
+    WaitLockObject($lock, $object);
+    Unlock($lock);
+}
+
+macro WaitUnlockPerformer($lock, $performer)
+{
+    WaitLockObject($lock, $performer);
+    Unlock($lock);
+}
+
+macro WaitUnlockMain()
+{
+    WaitLockSupervision(20);
+    Unlock(20);
+}
+
+macro shake($duration)
+{
+    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    {
+        Slide2PositionOffset(1, -1, 0);
+        Wait(2);
+        Slide2PositionOffset(1, 1, 0);
+        Wait(2);
+    }
+}
+
+macro spotlight($x, $y, $size, $speed)
+{
+    supervision_SpecialActing(27, 0, 0);
+    supervision_SpecialActing(28, $x, $y);
+    supervision_SpecialActing(29, $size, 0);
+    supervision_SpecialActing(30, $speed, 0);
+}
+
+macro camera_shake($time, $arg0, $arg1, $arg3)
+{
+    camera_SetEffect($arg0, $arg1, $arg3);
+    Wait($time);
+    camera_SetEffect(0, 0, 0);
+}
+
+macro amber_hop_once()
+{
+    SetAnimation(5);
+    Wait(23);
+    SetAnimation(2);
+}
+
+macro amber_hop_se($duration)
+{
+    for($LOCAL0 = 0; $LOCAL0 < $duration; $LOCAL0+=1;)
+    {
+        se_PlayVolume(257, 128);
+        Wait(23);
+    }
+}
+
+macro nod()
+{
+    SetAnimation(31);
+    WaitAnimation();
+    SetAnimation(2);
+}
+
+macro dungeon_talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2, $s3, $s4)
+{
+    switch($DUNGEON_ENTER)
+    {
+        case 2:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2);
+            break;
+        case 3:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s3);
+            break;
+        case 4:
+            ~talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $s4);
+    }
+}
+
+macro dungeon_talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2, $s3, $s4)
+{
+    switch($DUNGEON_ENTER)
+    {
+        case 2:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s2);
+            break;
+        case 3:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s3);
+            break;
+        case 4:
+            ~talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $s4);
+    }
+}
+
+macro echo_se($se_id)
+{
+    Wait(60);
+    se_PlayVolume($se_id, 192);
+    WaitSe($se_id);
+    Wait(60);
+    se_PlayVolume($se_id, 128);
+    WaitSe($se_id);
+    Wait(90);
+}
+
+
+// More general-purpose ones
+
+
+macro talk($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    message_KeyWait();
+}
+
+macro monologue($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    message_KeyWait();
+}
+
+macro talk_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+}
+
+macro monologue_close($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+}
+
+macro talk_interrupted($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Talk($string);
+    message_CloseEnforce();
+}
+
+macro monologue_interrupted($actor, $face_type, $face_pos, $offset_x, $offset_y, $string)
+{
+    message_SetFaceEmpty($actor, $face_type, $face_pos);
+    message_FacePositionOffset($offset_x, $offset_y);
+    message_Monologue($string);
+    message_CloseEnforce();
+}
+
+
+macro with_sweat_medium_wait($actor)
+{
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_medium($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    }
+}
+
+macro tr_sweat_medium_wait()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_medium()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+}
+
+macro with_sweat_small_wait($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_small($actor)
+{
+    se_Play(8972);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    }
+}
+
+macro tr_sweat_small_wait()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_small()
+{
+    se_Play(8972);
+    SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_SMALL, 3);
+}
+
+macro with_sweat_single_wait($actor)
+{
+    se_Play(8961);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_sweat_single($actor)
+{
+    se_Play(8961);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SWEAT_DROP, 3);
+    }
+}
+
+macro tr_sweat_single_wait()
+{
+    se_Play(8961);
+    SetEffect(EFFECT_SWEAT_DROP, 3);
+    WaitEffect();
+}
+
+macro tr_sweat_single()
+{
+    se_Play(8961);
+    SetEffect(EFFECT_SWEAT_DROP, 3);
+}
+
+macro with_shock_wait($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_shock($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+}
+
+macro tr_shock_wait()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED, 3);
+    WaitEffect();
+}
+
+macro tr_shock()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED, 3);
+}
+
+macro with_shock_m_wait($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_shock_m($actor)
+{
+    se_Play(8968);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+}
+
+macro tr_shock_m_wait()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    WaitEffect();
+}
+
+macro tr_shock_m()
+{
+    se_Play(8968);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+}
+
+macro with_vshock_wait($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_vshock($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED, 3);
+    }
+}
+
+macro tr_vshock_wait()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED, 3);
+    WaitEffect();
+}
+
+macro tr_vshock()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED, 3);
+}
+
+macro with_vshock_m_wait($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+    with (actor $actor) 
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro with_vshock_m($actor)
+{
+    se_Play(8969);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    }
+}
+
+macro tr_vshock_m_wait()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+    WaitEffect();
+}
+
+macro tr_vshock_m()
+{
+    se_Play(8969);
+    SetEffect(EFFECT_SHOCKED_MIRRORED, 3);
+}
+
+macro with_question($actor)
+{
+    se_Play(8962);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+}
+
+macro with_question_wait($actor)
+{
+    se_Play(8962);
+    with(actor $actor)
+    {
+        SetEffect(EFFECT_QUESTION_MARK, 3);
+    }
+    with(actor $actor)
+    {
+        WaitEffect();
+    }
+    WaitExecuteLives($actor);
+}
+
+macro tr_question()
+{
+    se_Play(8962);
+    SetEffect(EFFECT_QUESTION_MARK, 3);
+}
+
+macro tr_question_wait()
+{
+    se_Play(8962);
+    SetEffect(EFFECT_QUESTION_MARK, 3);
+    WaitEffect();
+}
+    
+
+
+
+macro remember_place($level)
+{
+    $SCENARIO_TALK_BIT_FLAG[1] = 0;
+    back_SetGround($level);
+    ~spotlight(128, 92, 0, 0);
+    WaitSpecialActing();
+    CallCommon(CORO_DEBUG_FLAG_SETTING_BIPPA);
+    screen_FadeIn(1, 0);
+    screen_FadeInAll(1, 8);
+    Wait(20);
+    supervision_ExecuteCommon(CORO_EVENT_TG03);
+}
+    
+
+def 0
+{
+
+    if(scn($SCENARIO_MAIN) < [152, 5])
+    {
+         bgm_PlayFadeIn(BGM_THAT_SHAPE, 90, 256);
+    }
+    switch(sector())
+    {
+        case 0: 
+            CallCommon(CORO_FADE_OUT_ALL_BEFORE);
+            CallCommon(CORO_TITLE_TEST);
+            CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN);
+            CallCommon(CORO_SUBSCREEN_INIT);
+            screen2_FadeIn(1, 0);
+            back_SetGround(15);
+            supervision_Acting(0);
+            with(performer 0)
+            {
+                camera_SetMyself();
+            }
+            with(actor 2)
+            {
+                SetAnimation(1056);
+            }
+            with(actor 2)
+            {
+                WaitAnimation();
+            }
+            WaitExecuteLives(2);
+            screen_FadeChange(1, 0, 256, 92);
+            screen_FadeInAll(1, 60);
+    }
+    if(scn($SCENARIO_MAIN) < [152, 5])
+    {
+         message_Explanation("[CN]The Pokémon you seek...[K]\n[CN]Its name is...?");
+    }
+    else
+    {
+        message_Explanation("[CN][VS:1:3]Why...?[K] Why are you here...?[VR]");
+    }
+    /*if(debug)
+    {
+        jump @test;
+    }*/
+    §name_check;
+    $PERFORMANCE_PROGRESS_LIST[1] = 1;
+    message_Menu(MENU_TEAM_NAME);
+    $PERFORMANCE_PROGRESS_LIST[1] = 0;
+    switch(ProcessSpecial(69, 0, 0))
+    {
+        case 0:
+            debug_Print('0');
+            §no_match;
+            if(scn($SCENARIO_MAIN) < [152, 5])
+            {
+                message_Explanation("[CN]...");
+                message_Explanation("[CN]No match was found.[K]\n[CN]Will you retry?");
+            }
+            else
+            {
+                message_Explanation("[CN]...");
+                message_Explanation("[CN]No one is left, obviously.[K]\n[CN]Will you waste your time?");
+            }
+            switch(message_SwitchMenu(1, 1))
+            {
+                case menu("Yes"):
+                    jump @name_check;
+                default:
+                case menu("No"):
+                    break;
+                    
+            }
+            if(scn($SCENARIO_MAIN) < [152, 5])
+            {
+                message_Explanation("[CN]Take all the time you need.[K]\n[CN]I will always believe in you...");
+            }
+            else
+            {
+                message_Explanation("[CN]You have better things to do.");
+            }
+            bgm_FadeOut(90);
+            screen2_FadeOut(0, 60);
+            screen_FadeOut(1, 60);
+            WaitBgm(BGM_THAT_SHAPE);
+            break;
+        case 1:
+            §test;
+            if($DUNGEON_CONQUEST_LIST[2])
+            {
+                jump @no_match;
+            }
+            call @match_found;
+            $DUNGEON_SELECT = 2;
+            screen_FadeOutAll(1, 8);
+            ~remember_place(83);
+            break;
+        case 2:
+            if($DUNGEON_CONQUEST_LIST[3])
+            {
+                jump @no_match;
+            }
+            call @match_found;
+            $DUNGEON_SELECT = 3;
+            screen_FadeOutAll(1, 8);
+            ~remember_place(85);
+            break;
+        case 3:
+            if($DUNGEON_CONQUEST_LIST[4])
+            {
+                jump @no_match;
+            }
+            call @match_found;
+            $DUNGEON_SELECT = 4;
+            screen_FadeOutAll(1, 8);
+            ~remember_place(84);
+            break;
+        case 4:
+            if(scn($SCENARIO_MAIN) == [152, 5])
+            {
+                bgm_ChangeVolume(120, 128);
+                Wait(30);
+                Wait(60);
+                screen_FadeChange(0, 200, 92, 64);
+                se_PlayVolume(16130, 192);
+                Wait(30);
+                Wait(60);
+                se_PlayVolume(16130, 128);
+                Wait(30);
+                Wait(150);
+                if not($SCENARIO_TALK_BIT_FLAG[6])
+                {
+                    $SCENARIO_TALK_BIT_FLAG[6] = 1;
+                    se_Play(10764);
+                    message_Explanation("[CN][VS:1:2]What are you hoping to get out of this?[VR]");
+                    se_Play(10764);
+                    message_Explanation("[CN][VS:1:2]I promise you...[K]\n[CN]Nothing good will come from it.[VR]");
+                    Wait(60);
+                    with(actor 0)
+                    {
+                        SetDirection(DIR_UP);
+                    }
+                    Wait(30);
+                    with(actor 0)
+                    {
+                        Move2PositionOffset(32942, 0, -40);
+                    }
+                    Wait(20);
+                    with(actor 2)
+                    {
+                        SetAnimation(2);
+                    }
+                    Wait(90);
+                    ~talk_close(2, FACE_DETERMINED, FACE_POS_BOTTOM_R_FACEINW, 0, 0,
+                        "And how do you know that?");
+                    Wait(40);
+                    bgm_PlayFadeIn(BGM_HIGH_PITCHED_WHISTLE, 60, 64);
+                    screen_FadeChange(1, 60, 64, 54);
+                    message_Explanation("[CN][VS:1:4]It is the weight I am honored to carry.[VR]");
+                    §final;
+                    se_Play(9988);
+                    screen_FadeChange(1, 9, 256, 128);
+                    screen_FadeChange(1, 9, 128, 256);
+                    screen_FadeChange(1, 4, 256, 64);
+                    screen_FadeChange(1, 3, 64, 128);
+                    screen_FadeOut(1, 0);
+                    Wait(3);
+                    screen_FadeIn(1, 0);
+                    Wait(3);
+                    screen_FadeOut(1, 0);
+                    camera_SetEffect(1, 1, 1);
+                    Wait(2);
+                    screen_FadeIn(1, 0);
+                    Wait(2);
+                    sound_Stop();
+                    screen_FadeOut(1, 0);
+                    /*
+                    supervision_SpecialActing(29, 0, 0);
+                    supervision_SpecialActing(30, 15, 0);
+                    WaitSpecialActing();
+                    */
+                    CallCommon(CORO_FADE_OUT_ALL_BEFORE);
+                    /*
+                    supervision_SpecialActing(32, 0, 0);
+                    WaitSpecialActing();
+                    */
+                    Wait(20);
+                    camera_SetEffect(0, 0, 0);
+                    supervision_ExecuteCommon(CORO_EVENT_TG04);
+                    end;
+                }
+                else
+                {
+                    se_Play(10764);
+                    message_Explanation("[CN][VS:1:3]If you insist.[VR]");
+                    jump @final;
+                }
+            }
+            else
+            {
+                jump @no_match;
+            }
+            break;
+    }
+    end;
+    
+    §match_found;
+    bgm_ChangeVolume(60, 128);
+    screen_FadeChange(1, 60, 92, 64);
+    message_Explanation("[CN][VS:1:2]A single match was found.[K]\n[CN]Will you enter its [CS:P]Remember Place[CR] now?");
+    switch(message_SwitchMenu(1, 1))
+    {
+        case menu("Yes"):
+            bgm_Stop();
+            Wait(30);
+            screen_FadeChange(1, 60, 64, 92);
+            se_PlayVolume(16130, 192);
+            Wait(30);
+            screen_FadeChange(1, 60, 92, 128);
+            se_PlayVolume(16130, 128);
+            Wait(30);
+            screen_FadeIn(1, 90);
+            with(actor 0)
+            {
+                SetOutputAttribute(16);
+            }
+            Wait(1);
+            ~spotlight(129, 119, 20, 42);
+            WaitSpecialActing();
+            message_Explanation("[CN][VS:1:3][BS]All the best.[BR][VR]");
+            with(actor 2)
+            {
+                SetOutputAttribute(16);
+            }
+            se_Play(9988);
+            screen_FadeChange(1, 10, 256, 128);
+            screen_FadeChange(1, 10, 128, 256);
+            screen_FadeChange(1, 5, 256, 64);
+            screen_FadeChange(1, 5, 64, 128);
+            screen_FadeOut(1, 0);
+            Wait(4);
+            screen_FadeIn(1, 0);
+            Wait(4);
+            screen_FadeOut(1, 0);
+            Wait(2);
+            screen_FadeIn(1, 0);
+            Wait(2);
+            screen_FadeOut(1, 0);
+            camera_SetEffect(1, 2, 2);
+            supervision_SpecialActing(29, 0, 0);
+            supervision_SpecialActing(30, 15, 0);
+            Wait(3);
+            with(actor 2)
+            {
+                ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 0);
+            }
+            WaitSpecialActing();
+            camera_SetEffect(2, 2, 2);
+            bgm_Play(BGM_VIBRATING_NOISE);
+            bgm2_PlayFadeIn(BGM_OCEAN1, 0, 64);
+            Wait(120);
+            with(performer 0)
+            {
+                Move2PositionOffset(32896, -32, 32);
+            }
+            Wait(10);
+            with(actor 2)
+            {
+                Turn2Direction(12, 10, DIR_DOWNLEFT);
+            }
+            WaitExecutePerformer(0);
+            supervision_SpecialActing(32, 0, 0);
+            WaitSpecialActing();
+            break;
+        default:
+        case menu("No"):
+            bgm_ChangeVolume(60, 256);
+            screen_FadeChange(1, 60, 64, 92);
+            jump @name_check;
+                    
+    }
+    return;
+
+}
+
+

@@ -1,0 +1,560 @@
+def 0{
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:110][STS]Current [M:S0]Poké: %d');
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(" What else will you be purchasing?\n\n[CLUM_SET:110][STS]Current [M:S0]Poké: %d");
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(" What else will you be purchasing?\n\n[CLUM_SET:115][STS]Current [M:S0]Poké: %d");
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(" What else will you be purchasing?\n\n[CLUM_SET:120][STS]Current [M:S0]Poké: %d");
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(" What else will you be purchasing?\n\n[CLUM_SET:125][STS]Current [M:S0]Poké: %d");
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(" What else will you be purchasing?\n\n[CLUM_SET:130][STS]Current [M:S0]Poké: %d");
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:115][STS]Current [M:S0]Poké: %d');
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:120][STS]Current [M:S0]Poké: %d');
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:125][STS]Current [M:S0]Poké: %d');
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print(' What will you be purchasing?\n\n[CLUM_SET:130][STS]Current [M:S0]Poké: %d');
+    debug_Print("                                                                                                    "); // Some arbitrarily long string
+    debug_Print("Keckleon/NPC_KAKUREON1");
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+        
+    with (actor 20) {
+        Turn2DirectionLives(4, 10, 5);
+    }
+    WaitExecuteLives(20);
+    if (scn($SCENARIO_MAIN) == [102, 0]){
+        with (actor 20){
+            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 3);
+        }
+        message_SetFace(20, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Well hello there [CS:G]Rayquaza[CR], fancy\nseeing you here!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_HAPPY, FACE_POS_STANDARD);
+        message_Talk (' Yeah, yeah. I\'ve just come to visit\nand get supplies,[K] you know the usual.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Ah, I see, I see.');
+        message_SetFace(20, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Oh,[K] and thanks for dealing with\nthat huge meteor, by the way!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8968);
+        with (actor 5){
+            SetEffect(91, 3);
+        }
+        with (actor 5){
+            WaitEffect();
+        }
+        message_SetFace(5, FACE_SURPRISED, FACE_POS_STANDARD);
+        message_Talk (' What?![K] News spread around that\nfast already?');
+        se_Play(8972);
+        with (actor 5){
+            SetEffect(171, 3);
+        }
+        message_SetFace(5, FACE_SAD, FACE_POS_STANDARD);
+        message_Talk (' Man, that sucks.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Ah, no.[K] Not that many Pokémon\noutside of [CS:P]Pokémon Square[CR] know about it.[K]\nJust us merchants.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        se_Play(8961);
+        with (actor 5){
+            SetEffect(92, 3);
+        }
+        with (actor 5){
+            WaitEffect();
+        }
+        message_SetFace(5, FACE_SIGH, FACE_POS_STANDARD);
+        message_Talk (' I-I see.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        Wait(90);
+        with (actor 5){
+            ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+        }
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' A-anyway, what\'s up with this\nplace?[K] Last I came it was basically a dirt\npath with hardly anyone around.');
+        message_Talk (' Don\'t tell me you did all this?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_HAPPY, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Ah, no.[K] That wouldn\'t be me.[K] Too\nbusy buying and selling, you know?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 20){
+            Turn2Direction(10, 10, DIR_LEFT);
+        }
+        with (actor 5){
+            Turn2Direction(10, 10, DIR_LEFT);
+        }
+        with (actor 14){
+            Turn2Direction(1, 10, DIR_DOWN);
+        }
+        camera_Move2PositionMark(2, Position<'m1', 16, 31>);
+        WaitMoveCamera();        
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' That would be [CS:G]Kangaskhan[CR].[K] She\nmentioned how setting up a settlement here\nwould be good for travellers,[W:10] or something.');
+        message_Talk (' So she volunteered to start the\ntask to build up this place.');
+        message_SetFace(20, FACE_WORRIED, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Though, I hear its quite a stressful\nordeal.[K] Something about bandits and them\nmessing with the development process.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' Yeah,[W:10] I\'d imagine,\nespecially if she\'s leading the project.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        camera_Move2Default(2);
+        WaitMoveCamera();
+        with (actor 20){
+            Turn2DirectionLives(10, 10, 5);
+        }
+        with (actor 5){
+            Turn2DirectionLives(10, 10, 20);
+        }
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Well, don\'t get me wrong, I\'m\ngreatful for her efforts, but I wouldn\'t wanna\nbe in her position.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' Ditto.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' Ah, enough about that.[K] What did you\ncome here for?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' Oh, yeah. [K]I wanted to get an\n[CS:A]Instant Oran Packet[CR].');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' You sure?[K] I can get you a much more\nnutritious [CS:A]Apple[CR] for the same price.');
+        message_Talk (' I mean, you know, especially given\nwhat goes into those [CS:A]Instant Oran-[CR]');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk (' Nah,[K] I can\'t keep that for nearly as\nlong.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+        message_Talk (' .........[K]Well okay then.[K] That\'ll be\n50[M:S0].');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        if ($CARRY_GOLD < 50){
+            message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' .............................');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+            message_Talk (' ..............................');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...You don\'t have enough [M:S0], do you?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+            message_Talk (' ............I don\'t.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' ...............');
+            message_Talk (' Look, I can spare you an [CS:A]Instant\nOran[CR], on account of your constant patronage.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_SAD, FACE_POS_STANDARD);
+            message_Talk (' .........[K]Thanks.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            se_Play(4868);
+            Wait(30);
+            message_SetFace(20, FACE_NORMAL, FACE_POS_TOP_R_CENTER);
+            message_Talk (' Until next time.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            $SCENARIO_MAIN = scn[102, 1];
+            switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+                case 0:
+                    item_Set(0, 113, 0);
+                    switch ( message_Menu(MENU_GIVE_ITEM)){}
+                    break;
+                case 1:
+                    item_Set(0, 113, 0);
+                    switch ( message_Menu(MENU_GIVE_ITEM2)){}
+                    break;
+            }
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 20) {
+                Turn2Direction(4, 10, DIR_DOWN);
+            }
+            JumpCommon(CORO_END_TALK);
+            }
+        else {
+            Wait(30);
+            se_Play(4872);
+            Wait (30);
+            se_Play(4868);
+            Wait(30);
+            message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+            message_Talk(' Right then, pleasure doing business\nwith you!');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+            message_Talk (' Same here.');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            $SCENARIO_MAIN = scn[102, 1];
+            switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+                case 0:
+                    item_Set(0, 114, 0);
+                    switch ( message_Menu(MENU_GIVE_ITEM)){}
+                    break;
+                case 1:
+                    item_Set(0, 114, 0);
+                    switch ( message_Menu(MENU_GIVE_ITEM2)){}
+                    break;
+            }
+            $CARRY_GOLD -= 50;
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            with (actor 20) {
+                Turn2Direction(4, 10, DIR_DOWN);
+            }
+            JumpCommon(CORO_END_TALK);
+        }
+    }
+    elseif (scn($SCENARIO_MAIN) == [102, 1]){
+        message_SetFace(20, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" Still think you should lay off the\n[CS:A]Instant Orans[CR]. Its not healthy, you know?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 20) {
+            Turn2Direction(4, 10, DIR_DOWN);
+        }
+        JumpCommon(CORO_END_TALK);
+    }
+    else {
+        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Welcome! How can I help you?");
+        switch ( message_SwitchMenu(1, 1)){
+            case menu("Buy"):
+                §label_1;
+                $EVENT_LOCAL = 1;
+                message_KeyWait();
+                message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                if ($CARRY_GOLD > 9999){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 0, 1);
+                    message_Talk(1);
+                } elseif ($CARRY_GOLD > 999){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 12, 13);
+                    message_Talk(13);
+                } elseif ($CARRY_GOLD > 99){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 14, 15);
+                    message_Talk(15);
+                } elseif ($CARRY_GOLD > 9){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 16, 17);
+                    message_Talk(17);
+                } else {
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 18, 19);
+                    message_Talk(19);
+                }
+                jump @shop;
+            case menu("Sell"):
+                §label_2;
+                message_KeyWait();
+                switch ( message_Menu(MENU_KECLEON_SHOP) ) { }
+                jump @label_0;
+            case menu("Close"):
+            default:
+                message_KeyWait();
+                jump @label_5;
+                break;
+        }
+        §label_0;
+        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Is there anything else I can help you\nwith?");
+        switch ( message_SwitchMenu(1, 1)){
+            case menu("Buy"):
+                §label_4;
+                if ($EVENT_LOCAL != 1){
+                    jump @label_1;
+                }
+                message_KeyWait();
+                message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                if ($CARRY_GOLD > 9999){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 2, 3);
+                    message_Talk(3);
+                } elseif ($CARRY_GOLD > 999){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 4, 5);
+                    message_Talk(5);
+                } elseif ($CARRY_GOLD > 99){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 6, 7);
+                    message_Talk(7);
+                } elseif ($CARRY_GOLD > 9){
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 8, 9);
+                    message_Talk(9);
+                } else {
+                    ProcessSpecial(69, $CARRY_GOLD, 0);
+                    ProcessSpecial(70, 10, 11);
+                    message_Talk(11);
+                }
+                §shop;
+                switch ( message_SwitchMenu(1, 1)){
+                    case menu("[M:S0][CS:T]00[CR]50 - Apple"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 49){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" An [CS:A]Apple[CR]? That\'ll be [M:S0]50\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 50;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 109, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                    case menu("[M:S0][CS:T]00[CR]50 - I.Oran Packet"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 49){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" An [CS:A]I.Oran Packet[CR]? That\'ll be [M:S0]50\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 50;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 114, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                    case menu("[M:S0][CS:T]00[CR]50 - Oran Berry"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 49){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" An [CS:A]Oran Berry[CR]? That\'ll be [M:S0]50\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 50;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 70, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                    case menu("[M:S0][CS:T]0[CR]100 - Max Elixir"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 99){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" A [CS:A]Max Elixir[CR]? That\'ll be [M:S0]100\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 100;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 99, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                    case menu("[M:S0][CS:T]0[CR]400 - Reviver Seed"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 399){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" A [CS:A]Reviver Seed[CR]? That\'ll be [M:S0]400\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 400;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 73, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                    case menu("[M:S0][CS:T]0[CR]600 - Joy Seed"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 599){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" A [CS:A]Joy Seed[CR]? That\'ll be [M:S0]600\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 600;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 89, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                        
+                    case menu("[M:S0][CS:T]0[CR]600 - Sky Gummi"):
+                        message_KeyWait();
+                        if ($CARRY_GOLD <= 599){
+                            message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                            message_Talk(" Sorry, you can\'t afford that.");
+                            message_KeyWait();
+                            jump @label_4;
+                        }
+                        switch (ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0)){
+                            case 1:
+                                message_SetFace(20, FACE_SAD, FACE_POS_STANDARD);
+                                message_Talk(" Sorry, you have no room in your bag\nfor that!");
+                                jump @label_4;
+                                break;
+                            default:
+                                break;
+                        }
+                        message_SetFace(20, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" A [CS:A]Sky Gummi[CR]? That\'ll be [M:S0]600\nPoké.");
+                        switch ( message_SwitchMenu(1, 1)){
+                            case menu("Buy"):
+                                message_KeyWait();
+                                $CARRY_GOLD -= 600;
+                                se_Play(4872);
+                                ProcessSpecial(PROCESS_SPECIAL_ADD_ITEM_TO_BAG, 128, 1);
+                                message_SetFace(20, FACE_HAPPY, FACE_POS_STANDARD);
+                                message_Talk(" Thank you for your purchase!");
+                                jump @label_4;
+                                break;
+                            case menu("Cancel"):
+                            default:
+                                jump @label_4;
+                                break;
+                        }
+                        case menu("Back"):
+                        default:
+                            jump @label_0;
+                            break;
+                    }
+                break;
+            case menu("Sell"):
+                jump @label_2;
+                break;
+            case menu("Close"):
+            default:
+                message_KeyWait();
+                §label_5;
+                message_SetFace(21, FACE_HAPPY, FACE_POS_STANDARD);
+                message_Talk(" I hope to see you again!");
+                break;
+        }
+        
+        with (actor 20) {
+                Turn2Direction(4, 10, DIR_DOWN);
+            }
+        JumpCommon(CORO_END_TALK);
+    }
+    end;
+}

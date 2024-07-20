@@ -1,0 +1,167 @@
+
+
+def 0 {
+    bgm_ChangeVolume(30, 150);
+    back_SetGround(168);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    with (actor 350){
+        SetAnimation(2);
+    }
+    with (actor 350){
+        SetPositionMark(Position<'m1', -5, 18.5>);
+    }
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    screen_FadeIn(1, 30);
+    Wait(30);
+    with (actor 350){
+        MovePositionMark(1, Position<'m2', 28, 18.5>);
+    }
+    Wait(20);
+    with (performer 0){
+        MovePositionMark(1, Position<'m3', 28, 18.5>);
+    }
+    WaitExecuteLives(350);
+    se_Play(8967);
+    with (actor 350){
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    with (actor 350){
+        WaitEffect();
+    }
+    with (actor 350){
+        Turn2Direction(8, 10, DIR_UP);
+    }
+    WaitExecuteLives(350);
+    WaitExecutePerformer(0);
+    Wait(40);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Hm.[K] The view here\'s pretty nice.[K]\nShame I don\'t have much reason to come\ndown.');
+    message_Talk (' Well, I probably should get\ngoing so-');
+    message_KeyWait();
+    bgm_FadeOut(30);
+    Wait(30);
+    camera_SetEffect(2, 1, 33024);
+    bgm_PlayFadeIn(BGM_EARTHQUAKE2, 10, 50);
+    Wait(10);
+    se_Play(8964);
+    with (actor 350){
+        SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+    }
+    with (actor 350){
+        WaitEffect();
+    }
+    Wait(40);
+    se_Play(8963);
+    with (actor 350){
+        ExecuteCommon(CORO_LOOK_AROUND_FUNC_SERIES, 3);
+    }
+    message_Talk (' Hmm?[K] What\'s all this?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    WaitExecuteLives(350);
+    with (actor 350){
+        Turn2Direction(8, 10, DIR_DOWN);
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Unless...?');
+    WaitExecuteLives(350);
+    Wait(40);
+    with (actor 350){
+        SetAnimation(24);
+    }
+    with (actor 350){
+        WaitAnimation();
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Huh.[K] That seems to be...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_PlayFadeIn(BGM_EARTHQUAKE2, 10, 100);\
+    se_Play(8964);
+    with (actor 350){
+        SetEffect(88, 3);
+    }
+    with (actor 350){
+        WaitEffect();
+    }
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Is it...[K] getting closer to me or...?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    bgm_PlayFadeIn(BGM_EARTHQUAKE3, 0, 100);
+    camera_SetEffect(1, 1, 33024);
+    Wait(20);
+    camera_SetEffect(2, 2, 33280);
+    message_SetFace (5, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk (' Yeah, definitely.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    Wait(40);
+    message_SetFace (5, FACE_WORRIED, FACE_POS_STANDARD);
+    message_Talk (' Wait...[K] then what am I standing\naround here for?');
+    message_KeyWait();
+    message_Close();
+    with (actor 350){
+        SetAnimation(2);
+    }
+    se_Play(8972);
+    with (actor 350){
+        ExecuteCommon(CORO_JUMP_SURPRISE_FUNC_SERIES, 0);
+    }
+    WaitExecuteLives(350);
+    supervision_Acting(1);
+    Unlock(1);
+    message_SetFace (5, FACE_SURPRISED, FACE_POS_STANDARD);
+    message_Talk (' OH SH-');
+    Wait(20);
+    screen_FadeOut(1, 1);
+    message_CloseEnforce();
+    bgm_Stop();
+    Wait(10);
+    se_Play(2829);
+    WaitSe(2829);
+    Wait(30);
+    $ATTENDANT1_KIND = 2;
+    ProcessSpecial (67, 0, 0);
+    switch ( random(4096)){
+        case <= 584: //red
+        ProcessSpecial(65, 5, 1);
+        $CRYSTAL_COLOR_01 = 0;
+        break;
+        case <= 1169: //orange
+        ProcessSpecial(65, 6, 1);
+        $CRYSTAL_COLOR_01 = 1;
+        break;
+        case <= 1754: //yellow
+        ProcessSpecial(65, 7, 1);
+        $CRYSTAL_COLOR_01 = 2;
+        break;
+        case <= 2339: //green
+        ProcessSpecial(65, 8, 1);
+        $CRYSTAL_COLOR_01 = 3;
+        break;
+        case <= 2924: //blue
+        ProcessSpecial(65, 9, 1);
+        $CRYSTAL_COLOR_01 = 4;
+        break;
+        case <= 3509: //indigo
+        ProcessSpecial(65, 10, 1);
+        $CRYSTAL_COLOR_01 = 5;
+        break;
+        case <= 4094: //violet
+        ProcessSpecial(65, 11, 1);
+        $CRYSTAL_COLOR_01 = 6;
+        break;
+        case 4095: //shiny
+        ProcessSpecial(65, 12, 1);
+        $CRYSTAL_COLOR_01 = 7;
+        break;
+    }
+    ProcessSpecial(PROCESS_SPECIAL_SET_TEAM_SETUP_HERO_AND_PARTNER_ONLY,0 ,0);
+    end;
+}
+
+def 1 for_actor (350){
+    Lock(1);
+    MovePositionOffset(5, -400, 0);
+    hold;
+}

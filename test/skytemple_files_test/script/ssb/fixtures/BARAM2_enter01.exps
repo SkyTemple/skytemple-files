@@ -1,0 +1,10 @@
+
+
+def 0 {
+    main_EnterGround(6, 30);
+    hold;
+}
+
+def 1 for_actor(5) {
+    hold;
+}

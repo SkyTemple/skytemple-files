@@ -1,0 +1,13 @@
+
+def 0 {
+    debug_Print('In which the Happiness Machine gives up.');
+    CallCommon(CORO_SUBSCREEN_INIT);
+    screen2_FadeIn(1, 0);
+    CallCommon(CORO_DEBUG_FLAG_SETTING_FUTURE);
+    message_Mail('Perhaps the key to survival is to give up.[K]\nIt would be the simplest solution.[K]\n\nIt may even be considered mercy,[W:20] not just\nfor myself,[W:20] but for all those I hold\nresponsibility over...[K]\n\nAnd truly,[W:20] what are [hero] and [partner]\ndoing here,[W:20] if not giving up themselves...?');
+    message_Mail('They have both realized that eternal\nhappiness could never be achieved\nso long as they live.[K]\n\n[VS:1:2]This is solely a result of my shortcomings.[VR]');
+    message_Close();
+    CallCommon(CORO_DEBUG_FLAG_SETTING_PUPURIN); 
+    end;
+}
+ 

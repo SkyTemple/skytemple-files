@@ -1,0 +1,263 @@
+
+
+def 0 {
+    with (actor 5) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 4) {
+        ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+    }
+    with (actor 10) {
+        Turn2DirectionLives(4, 10, 2);
+    }
+    WaitExecuteLives(10);
+    if ( $SCENARIO_TALK_BIT_FLAG[32] ) {
+        §label_0;
+        if ( $SCENARIO_TALK_BIT_FLAG[33] ) {
+            §label_7;
+            message_SetFace(10, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Yo![K] How are things?');
+            message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Well,[W:10] I haven\'t really thought of\nwhat to test these seeds against yet...');
+            message_Talk(' I mean,[W:10] these things are really\ndestructive...');
+            message_Talk(' I suppose I could use it as a\ndefense mechanism,[W:10] if someone decides to\nmess with the town...');
+            message_Talk(' Or,[W:10] I guess the house of our\nlocal Rescue Team...');
+            message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Seeing as that they\'re out all the\ntime,[W:10] I wouldn\'t be surprised if some no-\ngood Pokémon would want to mess with it.');
+            message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Yeah![K] I\'ll hurl this at the vandals!');
+            message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Well,[W:10] provided I shut up and focus\non throwing,[W:10] rather than going on a speech\nabout the significance of that base...');
+            message_SetFace(10, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Bah![K] But I can\'t imagine that\nhappening![K] What are the odds of that?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            JumpCommon(CORO_END_TALK);
+        } else {
+            message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+            message_Talk(' Heya again![K] Surprised that you\'ve\ncome back.');
+            message_Talk(' So...[K] Did you change your mind?[K]\nWanna trade?');
+            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+            switch ( ProcessSpecial(PROCESS_SPECIAL_COUNT_ITEM_TYPE_IN_BAG, 87, 0) ) {
+                case > 2:
+                    message_Mail('[CN]Hand Over 3 [CS:A]Blast Seed[CR]s?');
+                    switch ( message_SwitchMenu(0, 1) ) {
+                        case menu('Yes'):
+                            §label_6;
+                            $SCENARIO_TALK_BIT_FLAG[33] = 1;
+                            $RECYCLE_COUNT += 1;
+                            switch ( ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 87, 0) ) { }
+                            switch ( ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 87, 0) ) { }
+                            switch ( ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 87, 0) ) { }
+                            message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                            message_Talk(' Yeah,[W:10] I\'ve got them here.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            se_Play(4868);
+                            Wait(20);
+                            se_Play(4868);
+                            Wait(20);
+                            se_Play(4868);
+                            Wait(20);
+                            message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' ...........');
+                            message_Talk(' Yep.[K] These are the real deal,[W:10] alright.[K]\nThe larger,[W:10] darker shell gives it away.');
+                            message_SetFace(10, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                            with (actor 10) {
+                                SetEffect(EFFECT_JOYOUS, 3);
+                            }
+                            message_Talk(' Awesome![K] I can now test these\nout![K] Wonder if throwing them is as\neffective...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(2, FACE_STUNNED, FACE_POS_STANDARD);
+                            message_Talk(' Hey,[W:10] uh...[K] maybe DON\'T wave that\nthing around so much...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            with (actor 10) {
+                                SetEffect(EFFECT_NONE, 3);
+                            }
+                            se_Play(8968);
+                            with (actor 10) {
+                                SetEffect(EFFECT_SHOCKED, 3);
+                            }
+                            with (actor 10) {
+                                WaitEffect();
+                            }
+                            Wait(20);
+                            se_Play(8972);
+                            with (actor 10) {
+                                SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+                            }
+                            message_SetFace(10, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Oh![K] Yeah,[W:10] you\'re probably right...');
+                            message_SetFace(10, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Sorry about that...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            Wait(60);
+                            message_SetFace(10, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' I...[W:10] I suppose I should give you\nwhat you\'re owed...[K] Here you go.');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            me_Play(4);
+                            message_Mail('[CN][CS:G]Lombre[CR] awkwardly handed over a pouch of\n[CN][CS:S]Sky Dust[CR]!');
+                            message_Close();
+                            switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL, 0, 0) ) {
+                                case 0:
+                                    item_Set(0, 543, 0);
+                                    switch ( message_Menu(MENU_GIVE_ITEM) ) { }
+                                    §label_14;
+                                    WaitMe(4);
+                                    message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                                    message_Talk(' To be honest,[W:10] I wasn\'t fully\nexpecting you to help me out here...');
+                                    message_Talk(' Figured you\'d have tons of other\nimportant business to handle and all...');
+                                    message_Talk(' I\'d think that this\'d be something\nfor which I\'d eventually have to post a\nrequest for...');
+                                    message_Talk(' But here you come,[W:10] helping out\nwith this mundane issue...');
+                                    message_SetFace(10, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                                    message_Talk(' Sorry,[W:10] that came off as a little\nrude...');
+                                    message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                                    message_Talk(' Guess what I\'m properly trying\nto say is:');
+                                    message_SetFace(10, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                                    message_Talk(' Thank you for all your help!');
+                                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                                    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+                                    message_Monologue('(Even mundane things...?)');
+                                    message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                                    message_Monologue('(I\'ve been telling myself not to meddle with\nthese kind of things,[W:10] yet here I am...)');
+                                    message_Monologue('(Why...?)');
+                                    message_Monologue('(..........)');
+                                    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                                    JumpCommon(CORO_END_TALK);
+                                case 1:
+                                    item_Set(0, 543, 0);
+                                    switch ( message_Menu(MENU_GIVE_ITEM2) ) { }
+                                    jump @label_14;
+                                default:
+                                    jump @label_14;
+                            }
+                            break;
+                        case menu('No'):
+                            §label_9;
+                            message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                            message_Talk(' Unfortunately,[W:10] no...');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            message_SetFace(10, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Ah...[K] A pity,[W:10] then.');
+                            message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                            message_Talk(' Well,[W:10] if you do ever change your\nmind,[W:10] there\'s always going to be more at\n[CS:P]Wooded Grove[CR]!');
+                            CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                            JumpCommon(CORO_END_TALK);
+                        default:
+                            jump @label_7;
+                    }
+                    break;
+                default:
+                    jump @label_9;
+            }
+        }
+    } else {
+        $SCENARIO_TALK_BIT_FLAG[32] = 1;
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Hey![K] You\'re [CS:Q]Rayquaza[CR]![K] Thanks for\neverything you\'ve done!');
+        message_Talk(' Gotta thank the heroes of this town\ntoo,[W:10] I guess.');
+        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Though,[W:10] honest question...[K]\nWhy didn\'t you just look up?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+        message_Talk(' ...............');
+        message_Talk(' That\'s...[W:10] Legendary business...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Well...[W:10] I see...');
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Regardless,[W:10] I hear that a Legendary\nvisiting towns and all is generally a sign of\nsomething big happening...');
+        message_Talk(' So![K] What is it this time?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' I...[W:10] uh...');
+        message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+        message_Monologue('(Can\'t tell him I just came down for [CS:A]Instant[CR]\n[CS:A]Orans[CR]...)');
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well...[K] Legendary business...?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(10, FACE_STUNNED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Darn,[W:10] you Legendaries really have\nlots to keep confidential,[W:10] huh?');
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Guess I shouldn\'t pry.[K] Fate of the\nworld and all that...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        Wait(90);
+        se_Play(8964);
+        with (actor 10) {
+            SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+        }
+        with (actor 10) {
+            WaitEffect();
+        }
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Hey![K] Actually,[W:10] I\'ve remembered\nsomething interesting that might help you with\nwhatever you\'re doing!');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' What are you thinking?');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' So,[W:10] the nearby [CS:P]Wooded Grove[CR] has\nsome [CS:A]Blast Seed[CR]s,[W:10] I\'m not sure if you\'ve seen\nthem,[W:10] or passed by them...');
+        message_Talk(' But![K] The main thing about them,[W:10] is\nthat due to some quirk in the soil there or\nsomething,[W:10] they\'re WAY more potent.');
+        message_Talk(' Much more so compared to your\naverage [CS:A]Blast Seed[CR]![K] I hear they can fully\nknock out the average Pokémon if ingested.');
+        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I wonder what the heck goes\ninto those seeds...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(' Good to know,[W:10] I guess.');
+        message_Talk(' Thanks for the info.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Actually,[W:10] seeing as that you did\ncome in from that direction...');
+        message_Talk(' Do you happen to have some on\nhand right now?');
+        message_Talk(' I\'d go there myself and pick some\nup,[W:10] but...');
+        message_SetFace(10, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I\'m not...[W:10] that good at dungeon\nspelunking...');
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' I\'ve always wanted to mess with\nsome of them,[W:10] but I\'ve never got the chance.');
+        message_Talk(' If you don\'t mind,[W:10] and you have\nsome,[W:10] I\'d like to take some off your hands.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        Wait(60);
+        with (actor 10) {
+            ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 3);
+        }
+        WaitExecuteLives(10);
+        se_Play(8972);
+        with (actor 10) {
+            SetEffect(EFFECT_SWEAT_DROPS_FROM_BOTH_SIDES_MEDIUM, 3);
+        }
+        message_SetFace(10, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Ah![K] Don\'t get me wrong![K] I\'m not\nasking you to do it for free or anything!');
+        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Fair\'s fair.[K] I\'ll give you something\nof equal value,[W:10] if you don\'t mind handing some\nover.');
+        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(' Say...[W:10] three?[K] I think that\'s about\nfair for what I\'ve got.');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(' Well...');
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        switch ( ProcessSpecial(PROCESS_SPECIAL_COUNT_ITEM_TYPE_IN_BAG, 87, 0) ) {
+            case > 2:
+                message_Mail('[CN]Hand Over 3 [CS:A]Blast Seed[CR]s?');
+                switch ( message_SwitchMenu(0, 1) ) {
+                    case menu('Yes'):
+                        jump @label_6;
+                    case menu('No'):
+                        §label_2;
+                        message_SetFace(2, FACE_WORRIED, FACE_POS_STANDARD);
+                        message_Talk(' Not right now...');
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(10, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(' Well...[W:10] I see.[K] Another one of your\n\'Legendary Business\'?');
+                        message_SetFace(10, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(' Ah,[W:10] I shouldn\'t pry.');
+                        message_Talk(' Regardless,[W:10] if you ever change your\nmind,[W:10] I\'d always be willing to barter.');
+                        message_Talk(' See you around!');
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        JumpCommon(CORO_END_TALK);
+                    default:
+                        jump @label_0;
+                }
+                break;
+            default:
+                jump @label_2;
+        }
+    }
+}

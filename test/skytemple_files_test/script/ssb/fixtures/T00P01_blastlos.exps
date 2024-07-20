@@ -1,0 +1,39 @@
+
+
+def 0 {
+    sound_Stop();
+    back_SetGround(3);
+    supervision_Acting(0);
+    supervision_Acting(1);
+    supervision_StationCommon(0);
+    with (performer 0) {
+        camera_SetMyself();
+    }
+    bgm_PlayFadeIn(BGM_TREASURE_TOWN, 60, 256);
+    screen_FadeIn(1, 30);
+    message_SetFace(9, FACE_JOYOUS, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Haha![K] [CS:G]Charizard[CR] and I got you two\ngood,[W:10] didn\'t we?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_PAIN, FACE_POS_STANDARD);
+    message_Talk(' .........');
+    message_Talk(' We lost...?');
+    message_Talk(' But...[W:10] How!?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' Hey.[K] Don\'t despair.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    with (actor 2) {
+        SetEffect(EFFECT_TWO_ARROWS_AT_SIDE_LEFT, 3);
+    }
+    se_Play(8964);
+    WaitSe(8964);
+    message_SetFace(9, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+    message_Talk(' You didn\'t beat us.[K] So what?[K]\nThere\'s always next time.');
+    message_Talk(' [CS:G]Charizard[CR] and I will be here,[W:10] if\nyou feel like you want to go another round.');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    message_SetFace(2, FACE_NORMAL, FACE_POS_STANDARD);
+    message_Talk(' .........');
+    message_Talk(' Another round,[W:10] hm?');
+    CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+    end;
+}

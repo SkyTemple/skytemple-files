@@ -1,0 +1,266 @@
+
+def 0{
+    with (actor 10) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    with (actor 7) {
+            ExecuteCommon(CORO_LIVES_REPLY_NORMAL, 0);
+        }
+    WaitExecuteLives(11);
+    if (scn($SCENARIO_MAIN) <= [102, 4]){
+        with (actor 11){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        message_SetFace(11, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Heya![K] So you\'ve heard of this place\ntoo?");
+        message_Talk(" I heard about it through the mail,[W:10]\nand immediately came to check this place out!");
+        message_SetFace(11, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I mean...[K] It isn\'t built up fully yet..");
+        message_SetFace(11, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Still,[W:10] can you imagine what it\'ll\nbe like once done?");
+        message_Talk(" Oh![K] I can\'t wait!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    if not($SCENARIO_TALK_BIT_FLAG[15]){
+        $SCENARIO_TALK_BIT_FLAG[15] = 1;
+        message_SetFace(11, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" ........");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Monologue("(Okay... Let\'s try asking if she needs help..)");
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Greetings![K] Do you happen to be\nin need of assistance?");
+        message_SetFace(5, FACE_PAIN, FACE_POS_STANDARD);
+        message_Monologue("(Ah, great job [CS:Q]Rayquaza[CR], that\nwasn\'t awkward at all...)");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 11){
+            SetEffect(EFFECT_EXCLAMATION_MARK, 3);
+        }
+        se_Play(8964);
+        with (actor 11){
+            Turn2DirectionLives(4, 10, 5);
+        }
+        message_SetFace(11, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Ah,[W:10] it\'s you.");
+        message_Talk(" Well,[W:10] I guess I\'m in a little bit of\na pickle...");
+        message_Talk(" See,[W:10] I came here on a whim...");
+        message_Talk(" And,[W:10] don\'t get me wrong,[W:10] its a\nbrilliant place.[K] It\'s just that, well...");
+        message_Talk(" I wanted to head back,[W:10] but it turns\nout that the way back is swarmed with\nMonster Houses...");
+        message_SetFace(11, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I\'m not strong enough to take\nthem on...");
+        message_Talk(" And my supply of orbs ran dry\non my way here...");
+        message_Talk(" And [CS:G]Kecleon[CR] doesn\'t sell orbs here...");
+        message_Talk(" So I\'m kinda stuck..."); 
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" That\'s quite a shame.[K] Are there\nreally that many Monster Houses around?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(11, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Well,[W:10] most I\'ve encountered was 3.");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+        message_Talk(" Woah.[K] That really is a lot...");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        with (actor 5){
+            Turn2DirectionLives(4, 10, 8);
+        }
+        WaitExecuteLives(5);
+        se_Play(8972);
+        with (actor 5){
+            SetEffect(171, 3);
+        }
+        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+        message_Talk(" Hey [CS:C]Minior[CR],[W:10] think we can do\nanything?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        message_SetFace(8, FACE_NORMAL, FACE_POS_STANDARD);
+        message_Talk(" Hmm...[K] If it\'s Monster Houses that\nare the issue,[W:10] maybe try some [CS:A]Petrify Orb[CR]s?");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        switch(ProcessSpecial(PROCESS_SPECIAL_COUNT_ITEM_TYPE_IN_BAG, 319, 0)){
+            case >2:
+                message_Mail ('[CN]Hand Over 3 [CS:A]Petrify Orb[CR]s?');
+                switch(message_SwitchMenu(0, 1)){
+                    case menu('Yes'):
+                        jump @label_0;
+                        break;
+                    case menu('No'):
+                        jump @label_2;
+                        break;
+                    }
+                break;
+            default:
+                §label_2;
+                message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                message_Talk(" Let\'s hope we come across some,[W:10]\nI guess.");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                JumpCommon(CORO_END_TALK);
+                end; 
+                break;    
+        }      
+    }  
+    if not($SCENARIO_TALK_BIT_FLAG[16]){
+        switch(ProcessSpecial(PROCESS_SPECIAL_COUNT_ITEM_TYPE_IN_BAG, 319, 0)){
+            case >2:
+                message_Mail ('[CN]Hand Over 3 [CS:A]Petrify Orb[CR]s?');
+                switch(message_SwitchMenu(0, 1)){
+                    case menu('Yes'):
+                        §label_0;
+                        $RECYCLE_COUNT += 1;
+                        with (actor 5){
+                            Turn2DirectionLives(4, 10, 11);
+                        }
+                        $SCENARIO_TALK_BIT_FLAG[16] = 1;
+                        ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 319, 0);
+                        ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 319, 0);
+                        ProcessSpecial(PROCESS_SPECIAL_REMOVE_ITEMS_TYPE_IN_BAG, 319, 0);
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" Hey.[W:20] Got something for you.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        se_Play(8963);
+                        with (actor 11){
+                            SetEffect(89, 3);
+                        }
+                        with (actor 11){
+                            WaitEffect();
+                        }
+                        with (actor 11){
+                            Turn2DirectionLives(4, 10, 5);
+                        }
+                        message_SetFace(11, FACE_WORRIED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Huh?[K] What is it?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" Here.[K] Take these.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        se_Play(4868);
+                        Wait(20);
+                        se_Play(4868);
+                        Wait(20);
+                        se_Play(4868);
+                        Wait(20);
+                        message_SetFace(11, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" These are...!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(8, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" [CS:A]Petrify Orb[CR]s.[K] You needed these,[W:10]\nright?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(11, FACE_SURPRISED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" I did![K] And...");
+                        message_SetFace(11, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk("[STS] I did! And...[STE] You\'re saying that\nit\'s all mine?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Talk(" Yeah,[W:10] sure.[K] Use them as you see\nfit.");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(11, FACE_TEARY_EYED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" ......");
+                        message_Talk(" T-[W:5]Thank you![K] I don\'t know what I\'d\nhave done without you!");
+                        message_Talk(" I didn\'t even do anything for you![W:20]\nWhy did help me with this?");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+                        message_Talk(" .........");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(8, FACE_HAPPY, FACE_POS_STANDARD);
+                        message_Talk(" Consider us just being willing\nto help!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+                        message_Talk(" .........");
+                        message_Talk(" Yeah,[W:10] that...");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(11, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" I am in your debt![K] You saved me!");
+                        message_SetFace(11, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Oh,[W:10] I must give you something![K]\nI think I\'ve got just the thing!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        with (actor 5){
+                            ExecuteCommon(CORO_HEAD_SHAKE_FUNC_SERIES, 0);
+                        }
+                        WaitExecuteLives(5);
+                        message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                        message_Talk(" Ah,[W:10] I couldn\'t...[K] I probably shouldn\'t-");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(11, FACE_INSPIRED, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" Please, do accept this![K] I need to\nrepay those who helped me in my time of need!");
+                        message_Talk(" Besides,[W:10] I think I\'d be completely\nstranded here if not for you.[K] You helped me\nout of this rut, so I\'ve got to compensate!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        message_SetFace(5, FACE_STUNNED, FACE_POS_STANDARD);
+                        message_Talk(" .........");
+                        message_Talk(" Well, alright then...");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        me_Play(4);
+                        message_Mail('[CN][CS:G]Fennekin[CR] greatfully gave you a [CS:A]Gold Ribbon[CR]!');
+                        message_Close();
+                        switch ( ProcessSpecial(PROCESS_SPECIAL_IS_BAG_FULL,0 ,0) ){
+                            case 0:
+                                item_Set(0, 32, 0);
+                                switch ( message_Menu(MENU_GIVE_ITEM)){}
+                                break;
+                            case 1:
+                                item_Set(0, 32, 0);
+                                switch ( message_Menu(MENU_GIVE_ITEM2)){}
+                                break;
+                        }
+                        WaitMe(4);
+                        message_SetFace(11, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+                        message_Talk(" I think I\'ll stay around here just\na little bit longer.[K] Rest assured that I\'d be able\nto get home safely.[K] Thank you so much!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        with (actor 8){
+                            Turn2DirectionLives(4, 10, 5);
+                        }
+                        WaitExecuteLives(8);
+                        with (actor 8){
+                            ExecuteCommon(CORO_JUMP_HAPPY_FUNC_SERIES, 0);
+                        }
+                        message_SetFace(8, FACE_HAPPY, FACE_POS_STANDARD);
+                        message_Talk(" Heya,[W:10] [CS:Q]Rayquaza[CR],[W:10] nice going![K]\nThat\'s another Pokémon\'s life made better!");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                        with (actor 5){
+                            Turn2DirectionLives(4, 10, 8);
+                        }
+                        message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                        message_Monologue("(Making better lives, huh...?)");
+                        message_Monologue("(......)");
+                        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                        JumpCommon(CORO_END_TALK);
+                        end;  
+                        break;
+                    case menu('No'):
+                        jump@label_1;
+                        break;
+                }
+                break;
+            default:
+                §label_1;
+                with (actor 11){
+                    Turn2DirectionLives(4, 10, 5);
+                }
+                message_SetFace(5, FACE_NORMAL, FACE_POS_STANDARD);
+                message_Talk(" Hey.[W:20] Still stuck?");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                message_SetFace(11, FACE_PAIN, FACE_POS_BOTTOM_R_FACEINW);
+                message_Talk(" Unfortunately so...");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+                message_SetFace(5, FACE_WORRIED, FACE_POS_STANDARD);
+                message_Talk(" Guess we should really try to\nfind those [CS:A]Petrify Orbs[CR]...");
+                CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC); 
+                JumpCommon(CORO_END_TALK);
+                end;  
+                break;
+            }
+        }
+    if ($SCENARIO_TALK_BIT_FLAG[16]){
+        with (actor 11){
+                Turn2DirectionLives(4, 10, 5);
+            }
+        message_SetFace(11, FACE_HAPPY, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" Heya![K] Thanks for getting me out\nof that situation!");
+        message_SetFace(11, FACE_NORMAL, FACE_POS_BOTTOM_R_FACEINW);
+        message_Talk(" I'd say my thanks again,[W:10] but I think\nthat\'d be kind of repetitive.");
+        message_Talk(" Still,[W:10] know that I really appreciate\nyour effort!");
+        CallCommon(CORO_MESSAGE_CLOSE_WAIT_FUNC);
+        JumpCommon(CORO_END_TALK);
+        end;
+    }
+    end;
+}

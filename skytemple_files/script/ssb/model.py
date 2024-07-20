@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 import logging
+from typing import MutableSequence, TYPE_CHECKING
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (
@@ -66,7 +67,9 @@ ENUM_ARGUMENTS = {
 
 
 class SkyTempleSsbOperation(SsbOperation):
-    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: list[SsbOpParam]):
+    op_code: Pmd2ScriptOpCode
+
+    def __init__(self, offset: int, op_code: Pmd2ScriptOpCode, params: MutableSequence[SsbOpParam]):
         super().__init__(offset, op_code, params)
 
 
@@ -228,7 +231,7 @@ class Ssb:
         opcode_offset = int((cursor - len_header) / 2)
         op_code = self._scriptdata.op_codes__by_id[read_u16(data, cursor)]
         cursor += 2
-        arguments = []
+        arguments: MutableSequence[SsbOpParam] = []
         cnt_params = op_code.params
         if cnt_params == -1:
             # Variable length opcode
@@ -278,9 +281,11 @@ class Ssb:
         for rtn in self.routine_ops:
             rtn_ops = []
             for op in rtn:
-                new_params = []
+                new_params: MutableSequence[SsbOpParam] = []
                 skip_arguments = 0
                 for i, param in enumerate(op.params):
+                    if TYPE_CHECKING:
+                        assert isinstance(param, int)
                     if skip_arguments > 0:
                         skip_arguments -= 1
                         continue
@@ -308,9 +313,9 @@ class Ssb:
                             x_offset = y_offset = x_relative = y_relative = 0
                             try:
                                 x_offset = param
-                                y_offset = op.params[i + 1]
-                                x_relative = op.params[i + 2]
-                                y_relative = op.params[i + 3]
+                                y_offset = op.params[i + 1]  # type: ignore
+                                x_relative = op.params[i + 2]  # type: ignore
+                                y_relative = op.params[i + 3]  # type: ignore
                             except IndexError:
                                 logger.warning("SSB had wrong number of arguments for building a position marker.")
                             new_params.append(

@@ -38,7 +38,7 @@ If I missed you, please open an Issue!)
 
 .. Links:
 
-.. _End:                            https://projectpokemon.org/home/profile/68315-end45/
+.. _Frostbyte:                      https://github.com/Frostbyte0x70/
 .. _Aissurteivos:                   https://github.com/Aissurteivos/
 .. _psy_commando:                   https://github.com/PsyCommando/
 .. _OgreGunner:                     https://gamefaqs.gamespot.com/boards/938930-pokemon-mystery-dungeon-explorers-of-darkness/50597686

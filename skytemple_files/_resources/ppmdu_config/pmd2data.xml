@@ -1094,8 +1094,8 @@
         </Patch>
 
         <SimplePatch id="MoveShortcuts" >
-          <Include filename="end_asm_mods/src/moveShortcuts.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/MoveShortcuts.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1103,8 +1103,8 @@
         </SimplePatch>
 
         <SimplePatch id="DisableTips" >
-          <Include filename="end_asm_mods/src/disableTips.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/DisableTips.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1112,8 +1112,8 @@
         </SimplePatch>
 
         <SimplePatch id="SameTypePartner" >
-          <Include filename="end_asm_mods/src/sameTypePartner.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/SameTypePartner.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"' />
             <Game id="EoS_EU" replace='_REGION equ "EU"' />
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1121,8 +1121,8 @@
         </SimplePatch>
 
         <SimplePatch id="ExtraSpace">
-          <Include filename="end_asm_mods/src/ExtraSpace.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/ExtraSpace.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1166,8 +1166,8 @@
         </SimplePatch>
 
         <SimplePatch id="AllowUnrecruitableMons">
-          <Include filename="end_asm_mods/src/AllowUnrecruitableMons.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/AllowUnrecruitableMons.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1175,8 +1175,8 @@
         </SimplePatch>
 
         <SimplePatch id="EditExtraPokemon">
-          <Include filename="end_asm_mods/src/EditExtraPokemon.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/EditExtraPokemon.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1184,8 +1184,8 @@
         </SimplePatch>
 
         <SimplePatch id="FixMemorySoftlock">
-          <Include filename="end_asm_mods/src/FixMemorySoftlock.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/FixMemorySoftlock.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1193,8 +1193,8 @@
         </SimplePatch>
 
         <SimplePatch id="CompressIQData">
-          <Include filename="end_asm_mods/src/CompressIQData.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/CompressIQData.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1202,8 +1202,8 @@
         </SimplePatch>
 
         <SimplePatch id="DynamicBossesEverywhere">
-          <Include filename="end_asm_mods/src/DynamicBossesEverywhere.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/DynamicBossesEverywhere.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1220,8 +1220,8 @@
         </Patch>
 
         <SimplePatch id="FixNo$GbaSaves">
-          <Include filename="end_asm_mods/src/FixNo$GbaSaves.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/FixNo$GbaSaves.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1247,8 +1247,8 @@
         </Patch>
 
         <SimplePatch id="AntiSoftlock">
-          <Include filename="end_asm_mods/src/AntiSoftlock.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/AntiSoftlock.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1256,8 +1256,8 @@
         </SimplePatch>
         
         <SimplePatch id="BetterEnemyEvolution">
-          <Include filename="end_asm_mods/src/BetterEnemyEvolution.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/BetterEnemyEvolution.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1284,8 +1284,8 @@
         </SimplePatch>
 
         <SimplePatch id="NoWeatherStop">
-          <Include filename="end_asm_mods/src/NoWeatherStop.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/NoWeatherStop.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1293,8 +1293,8 @@
         </SimplePatch>
 
         <SimplePatch id="UnusedDungeonChance">
-          <Include filename="end_asm_mods/src/UnusedDungeonChance.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/UnusedDungeonChance.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1332,8 +1332,8 @@
         </Patch>
 
         <SimplePatch id="NegativeEnemyDensity">
-          <Include filename="end_asm_mods/src/NegativeEnemyDensity.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/NegativeEnemyDensity.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>
@@ -1341,8 +1341,8 @@
         </SimplePatch>
 
         <SimplePatch id="RemoveBodySizeCheck">
-          <Include filename="end_asm_mods/src/RemoveBodySizeCheck.asm"/>
-          <Replace filename="end_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
+          <Include filename="frost_asm_mods/src/RemoveBodySizeCheck.asm"/>
+          <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>
             <Game id="EoS_JP" replace='_REGION equ "JP"'/>

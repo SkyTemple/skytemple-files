@@ -1,9 +1,9 @@
 [submodule "skytemple_files/_resources/patches/asm_patches/pmd2_asm_mods"]
 	path = skytemple_files/_resources/patches/asm_patches/pmd2_asm_mods
 	url = https://github.com/PsyCommando/pmd2_asm_mods.git
-[submodule "skytemple_files/_resources/patches/asm_patches/end_asm_mods"]
-	path = skytemple_files/_resources/patches/asm_patches/end_asm_mods
-	url = https://github.com/End45/EoS-asm-hacks.git
+[submodule "skytemple_files/_resources/patches/asm_patches/frost_asm_mods"]
+	path = skytemple_files/_resources/patches/asm_patches/frost_asm_mods
+	url = https://github.com/Frostbyte0x70/EoS-asm-patches.git
 [submodule "skytemple_files/_resources/patches/asm_patches/eos_move_effects"]
 	path = skytemple_files/_resources/patches/asm_patches/eos_move_effects
 	url = https://github.com/SkyTemple/eos-move-effects.git

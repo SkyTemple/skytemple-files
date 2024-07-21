@@ -116,7 +116,7 @@ class CompleteTeamControl(AbstractPatchHandler, DependantPatch):
     @property
     def description(self) -> str:
         return _(
-            "Pressing start in a dungeon toggles between automatic and manual mode. In manual mode, you can control your partners on their turns. You must apply the extra code overlay made by End45 before applying this patch."
+            "Pressing start in a dungeon toggles between automatic and manual mode. In manual mode, you can control your partners on their turns. You must apply the extra code overlay made by Frostbyte before applying this patch."
         )
 
     @property

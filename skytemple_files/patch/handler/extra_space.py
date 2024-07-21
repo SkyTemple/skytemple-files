@@ -33,7 +33,7 @@ OV_FILE_PATH = os.path.join(
     get_resources_dir(),
     "patches",
     "asm_patches",
-    "end_asm_mods",
+    "frost_asm_mods",
     "src",
     "overlay_0036.bin",
 )

@@ -7,3 +7,6 @@
 [submodule "skytemple_files/_resources/patches/asm_patches/eos_move_effects"]
 	path = skytemple_files/_resources/patches/asm_patches/eos_move_effects
 	url = https://github.com/SkyTemple/eos-move-effects.git
+[submodule "frost_asm_mods"]
+	path = skytemple_files/_resources/patches/asm_patches/frost_asm_mods
+	url = https://github.com/End45/EoS-asm-hacks/

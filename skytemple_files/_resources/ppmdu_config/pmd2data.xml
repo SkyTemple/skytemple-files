@@ -260,6 +260,8 @@
         <StringBlock name="Recycle Shop Strings"                       beg="17900" end="17960"/>
         <StringBlock name="Staff Roll 2"                               beg="17960" end="18236"/>
         <StringBlock name="Staff Roll 3"                               beg="18236" end="18451"/>
+        <StringBlock name="New Pokemon Names"                          beg="18451"  end="20499"/>
+        <StringBlock name="New Pokemon Categories"                     beg="20499"  end="22547"/>
       </StringBlocks>
     </Game>
 
@@ -687,6 +689,8 @@
         <StringBlock name="Recycle Shop Strings"                       beg="17931" end="17991"/>
         <StringBlock name="Staff Roll 2"                               beg="17991" end="18267"/>
         <StringBlock name="Staff Roll 3"                               beg="18267" end="18482"/>
+        <StringBlock name="New Pokemon Names"                          beg="18482"  end="20530"/>
+        <StringBlock name="New Pokemon Categories"                     beg="20530"  end="22578"/>
       </StringBlocks>
     </Game>
 

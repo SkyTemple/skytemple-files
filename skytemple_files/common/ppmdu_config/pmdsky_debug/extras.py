@@ -32,7 +32,7 @@ EXTRA_DUNGEON_DATA_DESC = "Requires EditExtraPokemon patch."
 MONSTER_GROUND_IDLE_ANIM_DESC = (
     "This table is added by the 'ChangePokemonGroundAnim' patch. " "See the patch description for details."
 )
-OV36_DESC = "This is End45's 'extra space' overlay. It requires the 'ExtraSpace' patch."
+OV36_DESC = "This is Frostbyte's 'extra space' overlay. It requires the 'ExtraSpace' patch."
 
 
 class ExtraArm9FunctionsProtocol(Protocol):

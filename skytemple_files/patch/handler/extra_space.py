@@ -52,7 +52,7 @@ class ExtraSpacePatch(AbstractPatchHandler):
 
     @property
     def author(self) -> str:
-        return "End45"
+        return "Frostbyte"
 
     @property
     def version(self) -> str:

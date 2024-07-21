@@ -51,7 +51,7 @@ class MoveShortcutsPatch(AbstractPatchHandler, DependantPatch):
 
     @property
     def author(self) -> str:
-        return "End45, Anonymous"
+        return "Frostbyte, Anonymous"
 
     @property
     def version(self) -> str:

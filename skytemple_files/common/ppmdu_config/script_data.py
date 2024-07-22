@@ -21,16 +21,15 @@ from __future__ import annotations
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
-import warnings
+import re
 from enum import Enum, IntEnum
-from typing import Sequence, Mapping
+from typing import Sequence, Mapping, Union
 
 from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import AutoString
-from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
 
 
 class GameVariableType(IntEnum):
@@ -299,14 +298,7 @@ class Pmd2ScriptDirection(AutoString):
 
     @property
     def id(self) -> int:
-        """
-        For backwards compatibility.
-        """
-        warnings.warn(
-            DeprecatedToBeRemovedWarning("Please use self.ssa_id instead.", (2, 0, 0)),
-            stacklevel=2,
-        )
-        return self.ssa_id
+        return self.ssb_id
 
     @property
     def print_name(self) -> str:
@@ -329,9 +321,43 @@ class Pmd2ScriptDirection(AutoString):
         return self.name
 
 
-class Pmd2ScriptData(AutoString):
-    """TODO: Cache the __by_xyz properties."""
+ScriptDataConstant = Union[
+    Pmd2ScriptEntity,
+    Pmd2ScriptObject,
+    Pmd2ScriptRoutine,
+    Pmd2ScriptFaceName,
+    Pmd2ScriptFacePositionMode,
+    Pmd2ScriptGameVar,
+    Pmd2ScriptLevel,
+    Pmd2ScriptMenu,
+    Pmd2ScriptSpecial,
+    Pmd2ScriptDirection,
+    Pmd2ScriptBgm,
+    Pmd2ScriptSpriteEffect,
+]
 
+PREFIX_DIRECTION = "DIR_"
+PREFIX_PROCESS_SPECIAL = "PROCESS_SPECIAL_"
+PREFIX_MENU = "MENU_"
+PREFIX_LEVEL = "LEVEL_"
+PREFIX_FACE_POS = "FACE_POS_"
+PREFIX_FACE = "FACE_"
+PREFIX_OBJECT = "OBJECT_"
+PREFIX_ACTOR = "ACTOR_"
+PREFIX_EFFECT = "EFFECT_"
+PREFIX_CORO = "CORO_"
+PREFIX_BGM = "BGM_"
+PREFIX_VAR = "$"
+PREFIX_DMODE = "DMODE_"
+
+CAMEL_REGEX = re.compile(r"(?<!^)(?=[A-Z])")
+
+
+def camel_to_screaming_snake_case(string) -> str:
+    return CAMEL_REGEX.sub("_", string).upper()
+
+
+class Pmd2ScriptData(AutoString):
     def __init__(
         self,
         game_variables_table: list[Pmd2ScriptGameVar],
@@ -349,6 +375,7 @@ class Pmd2ScriptData(AutoString):
         op_codes: list[Pmd2ScriptOpCode],
         ground_state_structs: dict[str, Pmd2ScriptGroundStateStruct],
     ):
+        self._all_script_constants__by_name: dict[str, ScriptDataConstant] = {}
         self.game_variables = game_variables_table
         self.objects = objects_list
         self.face_names = face_names
@@ -364,6 +391,14 @@ class Pmd2ScriptData(AutoString):
         self.op_codes = op_codes
         self.ground_state_structs = ground_state_structs
 
+    def _insert_constants_with_prefix(self, vars: Sequence[ScriptDataConstant], prefix: str) -> None:
+        for var in vars:
+            self._all_script_constants__by_name[prefix + var.name.upper()] = var
+
+    def _insert_constants_with_prefix_convert_camel(self, vars: Sequence[ScriptDataConstant], prefix: str) -> None:
+        for var in vars:
+            self._all_script_constants__by_name[prefix + camel_to_screaming_snake_case(var.name)] = var
+
     @property
     def game_variables(self) -> list[Pmd2ScriptGameVar]:
         return self._game_variables
@@ -373,6 +408,7 @@ class Pmd2ScriptData(AutoString):
         self._game_variables = value
         self._game_variables__by_id = {var.id: var for var in self._game_variables}
         self._game_variables__by_name = {var.name: var for var in self._game_variables}
+        self._insert_constants_with_prefix(self._game_variables, PREFIX_VAR)
 
     @property
     def game_variables__by_id(self) -> Mapping[int, Pmd2ScriptGameVar]:
@@ -391,6 +427,8 @@ class Pmd2ScriptData(AutoString):
         self._objects = value
         self._objects__by_id = {o.id: o for o in self._objects}
         self._objects__by_unique_name = {o.unique_name: o for o in self._objects}
+        for var in self._objects:
+            self._all_script_constants__by_name[PREFIX_OBJECT + var.unique_name.upper()] = var
 
     @property
     def objects__by_id(self) -> Mapping[u16, Pmd2ScriptObject]:
@@ -409,6 +447,8 @@ class Pmd2ScriptData(AutoString):
         self._face_names = value
         self._face_names__by_id = {n.id: n for n in self._face_names}
         self._face_names__by_name = {n.name: n for n in self._face_names}
+        for var in self._face_names:
+            self._all_script_constants__by_name[PREFIX_FACE + var.name.replace("-", "_")] = var
 
     @property
     def face_names__by_id(self) -> Mapping[int, Pmd2ScriptFaceName]:
@@ -427,6 +467,7 @@ class Pmd2ScriptData(AutoString):
         self._face_position_modes = value
         self._face_position_modes__by_id = {n.id: n for n in self._face_position_modes}
         self._face_position_modes__by_name = {n.name: n for n in self._face_position_modes}
+        self._insert_constants_with_prefix(self._face_position_modes, PREFIX_FACE_POS)
 
     @property
     def face_position_modes__by_id(self) -> Mapping[int, Pmd2ScriptFacePositionMode]:
@@ -445,6 +486,7 @@ class Pmd2ScriptData(AutoString):
         self._directions = value
         self._directions__by_ssb_id = {d.ssb_id: d for d in self._directions.values()}
         self._directions__by_name = {b.name: b for b in self.directions.values()}
+        self._insert_constants_with_prefix(list(self._directions.values()), PREFIX_DIRECTION)
 
     @property
     def directions__by_ssa_id(self) -> Mapping[int, Pmd2ScriptDirection]:
@@ -467,6 +509,7 @@ class Pmd2ScriptData(AutoString):
         self._common_routine_info = value
         self._common_routine_info__by_id = {o.id: o for o in self.common_routine_info}
         self._common_routine_info__by_name = {o.name: o for o in self.common_routine_info}
+        self._insert_constants_with_prefix(self._common_routine_info, PREFIX_CORO)
 
     @property
     def common_routine_info__by_id(self) -> dict[int, Pmd2ScriptRoutine]:
@@ -485,6 +528,7 @@ class Pmd2ScriptData(AutoString):
         self._menus = value
         self._menus__by_id = {o.id: o for o in self.menus}
         self._menus__by_name = {o.name: o for o in self.menus}
+        self._insert_constants_with_prefix_convert_camel(self._menus, PREFIX_MENU)
 
     @property
     def menus__by_id(self) -> Mapping[int, Pmd2ScriptMenu]:
@@ -503,6 +547,7 @@ class Pmd2ScriptData(AutoString):
         self._process_specials = value
         self._process_specials__by_id = {o.id: o for o in self.process_specials}
         self._process_specials__by_name = {o.name: o for o in self.process_specials}
+        self._insert_constants_with_prefix_convert_camel(self._process_specials, PREFIX_PROCESS_SPECIAL)
 
     @property
     def process_specials__by_id(self) -> Mapping[int, Pmd2ScriptSpecial]:
@@ -521,6 +566,7 @@ class Pmd2ScriptData(AutoString):
         self._sprite_effects = value
         self._sprite_effects__by_id = {o.id: o for o in self.sprite_effects}
         self._sprite_effects__by_name = {o.name: o for o in self.sprite_effects}
+        self._insert_constants_with_prefix_convert_camel(self._sprite_effects, PREFIX_EFFECT)
 
     @property
     def sprite_effects__by_id(self) -> Mapping[int, Pmd2ScriptSpriteEffect]:
@@ -539,6 +585,7 @@ class Pmd2ScriptData(AutoString):
         self._bgms = value
         self._bgms__by_id = {o.id: o for o in self.bgms}
         self._bgms__by_name = {o.name: o for o in self.bgms}
+        self._insert_constants_with_prefix_convert_camel(self._bgms, PREFIX_BGM)
 
     @property
     def bgms__by_id(self) -> Mapping[int, Pmd2ScriptBgm]:
@@ -557,6 +604,7 @@ class Pmd2ScriptData(AutoString):
         self._level_list = value
         self._level_list__by_id = {o.id: o for o in self.level_list}
         self._level_list__by_name = {o.name: o for o in self.level_list}
+        self._insert_constants_with_prefix(self._level_list, PREFIX_LEVEL)
 
     @property
     def level_list__by_id(self) -> Mapping[int, Pmd2ScriptLevel]:
@@ -575,6 +623,7 @@ class Pmd2ScriptData(AutoString):
         self._level_entities = value
         self._level_entities__by_id = {o.id: o for o in self.level_entities}
         self._level_entities__by_name = {o.name: o for o in self.level_entities}
+        self._insert_constants_with_prefix(self._level_entities, PREFIX_ACTOR)
 
     @property
     def level_entities__by_id(self) -> Mapping[u16, Pmd2ScriptEntity]:
@@ -612,3 +661,7 @@ class Pmd2ScriptData(AutoString):
     @ground_state_structs.setter
     def ground_state_structs(self, value: dict[str, Pmd2ScriptGroundStateStruct]) -> None:
         self._ground_state_structs = value
+
+    @property
+    def all_script_constants__by_name(self) -> Mapping[str, ScriptDataConstant]:
+        return self._all_script_constants__by_name

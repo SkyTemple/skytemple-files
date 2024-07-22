@@ -133,7 +133,7 @@ ATUPXAlgorithm1:
 	cmp r2,#0x1
 	mov  r4,r11
 	mov  r5,r11
-	add  r9,r0,#0x2
+	add  r9,r0,#0x1
 	mov  r7,#0x1
 	addle  r13,r13,#0x8
 	mov  r10,r6
@@ -219,7 +219,7 @@ ATUPXAlgorithm2:
 	str r2,[r13, #+0x0]
 	mov  r4,r11
 	mov  r5,r11
-	add  r9,r0,#0x2
+	add  r9,r0,#0x1
 	mov  r7,#0x0
 	mov  r10,r6
 	bl StoreMidPart2
@@ -298,7 +298,7 @@ ATUPXAlgorithm3:
 	cmp r2,#0x1
 	mov  r4,r11
 	mov  r5,r11
-	add  r9,r0,#0x2
+	add  r9,r0,#0x1
 	mov  r7,#0x1
 	addle  r13,r13,#0xC
 	mov  r10,r6

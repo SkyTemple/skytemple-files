@@ -91,8 +91,8 @@ def fixed_point_to_ssb_encoding(v: SsbOpParamFixedPoint) -> int:
     if (not is_negative and value > 0x3FFF) or value > 0x7FFF or value < 0:
         raise SsbCompilerError(
             _(
-                "enc: 0x{:0x}, The value '{}' can not be saved. Please use a value between -64.0 and 63.996 for fixed point numbers."
-            ).format(value, str(v))
+                "The value '{}' can not be saved. Please use a value between -64.0 and 63.996 for fixed point numbers."
+            ).format(as_str)
         )
 
     return 0x8000 + value

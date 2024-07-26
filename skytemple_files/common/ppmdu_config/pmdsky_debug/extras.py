@@ -27,8 +27,8 @@ from pmdsky_debug_py.protocol import Symbol, SectionProtocol
 
 DEBUG_PRINT2_DESC = "Would log a printf format string in the debug binary. A no-op in the final binary."
 COMPRESSED_IQ_GROUP_SKILLS_DESC = "Replaces IQ_GROUPS_SKILLS when the patch 'CompressIQData' is applied."
-GUEST_MONSTER_DATA2_DESC = "Requires EditExtraPokemon patch."
-EXTRA_DUNGEON_DATA_DESC = "Requires EditExtraPokemon patch."
+GUEST_MONSTER_DATA2_DESC = "Requires EditGuestPokemon patch."
+EXTRA_DUNGEON_DATA_DESC = "Requires EditGuestPokemon patch."
 MONSTER_GROUND_IDLE_ANIM_DESC = (
     "This table is added by the 'ChangePokemonGroundAnim' patch. " "See the patch description for details."
 )

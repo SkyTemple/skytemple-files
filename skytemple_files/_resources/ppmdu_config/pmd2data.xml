@@ -1174,8 +1174,8 @@
           </Replace>
         </SimplePatch>
 
-        <SimplePatch id="EditExtraPokemon">
-          <Include filename="frost_asm_mods/src/EditExtraPokemon.asm"/>
+        <SimplePatch id="EditGuestPokemon">
+          <Include filename="frost_asm_mods/src/EditGuestPokemon.asm"/>
           <Replace filename="frost_asm_mods/src/common/regionSelect.asm" regexp='_REGION equ "(\w+)"'>
             <Game id="EoS_NA" replace='_REGION equ "US"'/>
             <Game id="EoS_EU" replace='_REGION equ "EU"'/>

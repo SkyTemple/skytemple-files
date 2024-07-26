@@ -123,6 +123,10 @@ KNOWN_STRUCT_DATA = {
     "two_turn_move_and_status": (4, [
         StructField("move", 0, "struct move_id_16"),
         StructField("status", 2, "struct status_two_turn_id_16"),
+    ]),
+    "monster_sprite_data_entry": (2, [
+        StructField("sprite_size", 0, "uint8_t"),
+        StructField("sprite_file_size", 1, "uint8_t"),
     ])
 }
 # fmt: on

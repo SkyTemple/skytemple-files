@@ -48,6 +48,7 @@ class RomDataLoader:
         self.load_object_list_into(config_load_into, ignore_not_supported=True)
         self.load_item_categories_into(config_load_into)
         self.load_sprconf_into(config_load_into)
+        config_load_into.script_data.rebuild_constant_lookup()
 
     def load_script_var_list_into(self, config_load_into: Pmd2Data):
         from skytemple_files.common.ppmdu_config.script_data import Pmd2ScriptGameVar

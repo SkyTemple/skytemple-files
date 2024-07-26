@@ -416,12 +416,12 @@ class Pmd2ScriptData(AutoString):
         """
         Must be called after modifying any constants.
         """
-        self._all_script_constants__by_name: Mapping[str, ScriptDataConstant] = {}
+        self._all_script_constants__by_name: dict[str, ScriptDataConstant] = {}
         self._insert_constants_with_prefix(self._game_variables, PREFIX_VAR)
-        for var in self._objects:
-            self._all_script_constants__by_name[PREFIX_OBJECT + var.unique_name.upper()] = var
-        for var in self._face_names:
-            self._all_script_constants__by_name[PREFIX_FACE + var.name.replace("-", "_")] = var
+        for obj_var in self._objects:
+            self._all_script_constants__by_name[PREFIX_OBJECT + obj_var.unique_name.upper()] = obj_var
+        for face_var in self._face_names:
+            self._all_script_constants__by_name[PREFIX_FACE + face_var.name.replace("-", "_")] = face_var
         self._insert_constants_with_prefix(self._face_position_modes, PREFIX_FACE_POS)
         self._insert_constants_with_prefix(list(self._directions_ssb.values()), PREFIX_DIRECTION)
         self._insert_constants_with_prefix(self._common_routine_info, PREFIX_CORO)

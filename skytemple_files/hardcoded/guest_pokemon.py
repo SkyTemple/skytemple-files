@@ -294,7 +294,7 @@ class GuestPokemonList:
                 break
             lst.append(read_entry)
         if not done:
-            # Read the list added by the EditExtraPokemon patch
+            # Read the list added by the EditGuestPokemon patch
             block = config.extra_bin_sections.arm9.data.GUEST_MONSTER_DATA2
             # Make sure we don't keep reading if there's no space for one more entry, since if we did that
             # we would read out of bounds

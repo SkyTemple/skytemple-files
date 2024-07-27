@@ -89,8 +89,8 @@ from skytemple_files.patch.handler.dungeon_interrupt import DungeonInterruptPatc
 from skytemple_files.patch.handler.dynamic_bosses_everywhere import (
     DynamicBossesEverywherePatchHandler,
 )
-from skytemple_files.patch.handler.edit_extra_pokemon import (
-    EditExtraPokemonPatchHandler,
+from skytemple_files.patch.handler.edit_guest_pokemon import (
+    EditGuestPokemonPatchHandler,
 )
 from skytemple_files.patch.handler.exp_share import ExpSharePatchHandler
 from skytemple_files.patch.handler.expand_poke_list import ExpandPokeListPatchHandler
@@ -188,7 +188,7 @@ class PatchType(Enum):
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler
     EXPAND_POKE_LIST = ExpandPokeListPatchHandler
     ALLOW_UNRECRUITABLE_MONS = AllowUnrecruitableMonsPatchHandler
-    EDIT_EXTRA_POKEMON = EditExtraPokemonPatchHandler
+    EDIT_GUEST_POKEMON = EditGuestPokemonPatchHandler
     FIX_MEMORY_SOFTLOCK = FixMemorySoftlockPatchHandler
     COMPRESS_IQ_DATA = CompressIQDataPatchHandler
     DISARM_ONE_ROOM_MH = DisarmOneRoomMHPatchHandler

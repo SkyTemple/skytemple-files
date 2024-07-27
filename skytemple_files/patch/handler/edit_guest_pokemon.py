@@ -38,15 +38,15 @@ OFFSET_US = 0x4EBC8
 OFFSET_JP = 0x4EF20
 
 
-class EditExtraPokemonPatchHandler(AbstractPatchHandler):
+class EditGuestPokemonPatchHandler(AbstractPatchHandler):
     @property
     def name(self) -> str:
-        return "EditExtraPokemon"
+        return "EditGuestPokemon"
 
     @property
     def description(self) -> str:
         return _(
-            "Changes the way the game determines when to add additional pokémon to the team so it can be edited more easily"
+            "Changes the way the game determines when to add guest pokémon to the team so it can be edited more easily"
         )
 
     @property

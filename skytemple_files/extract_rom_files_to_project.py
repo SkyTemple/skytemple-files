@@ -22,8 +22,8 @@ def extract_rom_files_to_project(rom_path: Path, asset_dir: Path):
 def main():
     # noinspection PyTypeChecker
     parser = argparse.ArgumentParser(description="Creates an asset project from the files in a ROM.")
-    parser.add_argument("rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
-    parser.add_argument("asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
+    parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
+    parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
 
     args = parser.parse_args()
 

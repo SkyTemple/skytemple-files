@@ -28,7 +28,7 @@ from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
     HybridSir0DataHandler,
 )
-from skytemple_files.common.util import OptionalKwargs
+from skytemple_files.common.util import OptionalKwargs, serialize_enum_or_default, deserialize_enum_or_default
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     LevelUpMoveProtocol,
@@ -158,8 +158,8 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
             for move in data.moves:
                 moves_list.append({
                     "base_power": move.base_power,
-                    "type": PokeType(move.type).name,
-                    "category": WazaMoveCategory(move.category).name,
+                    "type": serialize_enum_or_default(PokeType, move.type),
+                    "category": serialize_enum_or_default(WazaMoveCategory, move.category),
                     "settings_range": cls._serialize_move_range_settings(move.settings_range),
                     "settings_range_ai": cls._serialize_move_range_settings(move.settings_range_ai),
                     "base_pp": move.base_pp,
@@ -182,7 +182,19 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
 
             return Asset(spec, None, None, None, None, bytes(json.dumps(moves_list, indent=4), "utf-8"))
         elif spec.category == LEARNSETS:
-            return Asset(spec, None, None, None, None, bytes())
+            learnsets = []
+            learnset: MoveLearnsetProtocol
+            for learnset in data.learnsets:
+                learnsets.append({
+                    "level_up_moves": [{
+                        "move_id": level_up_move.move_id,
+                        "level_id": level_up_move.level_id,
+                    } for level_up_move in learnset.level_up_moves],
+                    "tm_hm_moves": learnset.tm_hm_moves,
+                    "egg_moves": learnset.egg_moves
+                })
+
+            return Asset(spec, None, None, None, None, bytes(json.dumps(learnsets, indent=4), "utf-8"))
         else:
             raise ValueError(f"Attempted to serialize unknown category {spec.category} from waza_p.")
 
@@ -192,7 +204,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         assets: Sequence[Asset],
         **kwargs: OptionalKwargs,
     ) -> WazaPProtocol:
-        protocol = cls.get_model_cls()(bytes(), 0)
+        protocol: WazaPProtocol = cls.get_model_cls()(bytes(), 0)
 
         assets_by_category = {asset.spec.category : asset for asset in assets}
         if MOVES in assets_by_category:
@@ -204,8 +216,8 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
                 protocol.moves.append(move)
 
                 move.base_power = move_json["base_power"]
-                move.type = PokeType[move_json["type"]]
-                move.category = WazaMoveCategory[move_json["category"]]
+                move.type = deserialize_enum_or_default(PokeType, move_json["type"])
+                move.category = deserialize_enum_or_default(WazaMoveCategory, move_json["category"])
                 move.settings_range = cls.get_range_settings_model()(bytes())
                 move.settings_range = cls._deserialize_move_range_settings(move_json["settings_range"])
                 move.settings_range_ai = cls._deserialize_move_range_settings(move_json["settings_range_ai"])
@@ -228,6 +240,16 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
 
         if LEARNSETS in assets_by_category:
             learnset_asset = assets_by_category[LEARNSETS]
+            learnsets = json.loads(learnset_asset.data)
+            protocol.learnsets = []
+            for learnset_json in learnsets:
+                learnset = cls.get_learnset_model()(
+                    [cls.get_level_up_model()(level_up["move_id"], level_up["level_id"])
+                        for level_up in learnset_json["level_up_moves"]],
+                    learnset_json["tm_hm_moves"],
+                    learnset_json["egg_moves"]
+                )
+                protocol.learnsets.append(learnset)
 
         return protocol
 

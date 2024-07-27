@@ -471,6 +471,43 @@ class WazaPTestCase(
         self.assertEqual(8899, move.move_id)
         self.assertEqual(179, move.message_id)
 
+    def test_serialize_assets_learnsets(self):
+        waza = self._load_main_fixture(self._fix_path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), LEARNSETS), Path(), waza)
+
+        asset_data = json.loads(asset.data)
+        self.assertEqual(800, len(asset_data))
+
+        learnset_data = asset_data[0]
+        self.assertEqual(219, len(learnset_data["level_up_moves"]))
+        self.assertEqual(53725, learnset_data["level_up_moves"][0]["move_id"])
+        self.assertEqual(55591, learnset_data["level_up_moves"][0]["level_id"])
+        self.assertEqual(454, len(learnset_data["tm_hm_moves"]))
+        self.assertEqual(52667, learnset_data["tm_hm_moves"][0])
+        self.assertEqual(478, len(learnset_data["egg_moves"]))
+        self.assertEqual(63784, learnset_data["egg_moves"][0])
+
+    def test_deserialize_assets_learnsets(self):
+        learnset_json = {
+            "level_up_moves": [{
+                "move_id": 5,
+                "level_id": 6
+            }],
+            "tm_hm_moves": [1, 2],
+            "egg_moves": [3, 4]
+        }
+
+        asset = Asset(
+            AssetSpec(Path(), Path(), LEARNSETS), None, None, None, None, bytes(json.dumps([learnset_json]), "utf-8"))
+        waza = self.handler.deserialize_from_assets([asset])
+        self.assertEqual(1, len(waza.learnsets))
+
+        learnset: MoveLearnsetProtocol = waza.learnsets[0]
+        self.assertEqual(1, len(learnset.level_up_moves))
+        self.assertEqual(5, learnset.level_up_moves[0].move_id)
+        self.assertEqual(6, learnset.level_up_moves[0].level_id)
+        self.assertEqual([1, 2], learnset.tm_hm_moves)
+        self.assertEqual([3, 4], learnset.egg_moves)
 
     @romtest(file_names=["waza_p.bin", "waza_p2.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):

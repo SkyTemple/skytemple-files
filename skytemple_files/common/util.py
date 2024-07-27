@@ -750,3 +750,24 @@ def set_rw_permission_folder(folder_path: str) -> None:
                 os.chmod(dir_path, stat.S_IREAD + stat.S_IWRITE + stat.S_IEXEC)
     except NotImplementedError:  # This isn't needed on Windows
         pass
+
+
+def serialize_enum_or_default(enum_class: type[Enum], value: int) -> str | int:
+    """
+    Returns the corresponding enum name if the value is in range.
+    Returns the raw integer if the value is out of range.
+    """
+    try:
+        return enum_class(value).name
+    except ValueError:
+        return value
+
+def deserialize_enum_or_default(enum_class: type[Enum], value: str | int) -> Enum | int:
+    """
+    If the value is a string, returns the corresponding enum.
+    If the value is an integer, returns the integer back.
+    """
+    if isinstance(value, str):
+        return enum_class[value]
+    else:
+        return value

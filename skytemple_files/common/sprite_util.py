@@ -26,6 +26,7 @@ from skytemple_files.data.md.protocol import MdEntryProtocol
 from skytemple_files.hardcoded.monster_sprite_data_table import (
     MonsterSpriteDataTableEntry,
 )
+from skytemple_files.common.i18n_util import _
 
 
 def check_and_correct_monster_sprite_size(
@@ -57,7 +58,7 @@ def check_and_correct_monster_sprite_size(
     - md_target
     - sprite_size_table
     """
-    changed = False
+    changed = []
     effective_base_attr = "md_index_base"
 
     # If ExpandPokeList is applied, unk17 and unk18 are the values used instead
@@ -81,15 +82,14 @@ def check_and_correct_monster_sprite_size(
         else:
             sprite_size_table[getattr(md_gender1, effective_base_attr)].sprite_tile_slots = max_tile_slots_needed
 
-        changed = True
+        changed.append((_("Sprite Size"), check_value, max_tile_slots_needed))
 
     if check_value_file != max_file_size_needed:
         if is_expand_poke_list_patch_applied:
             md_target.unk18 = max_file_size_needed
         else:
             sprite_size_table[getattr(md_gender1, effective_base_attr)].unk1 = max_file_size_needed
-
-        changed = True
+        changed.append((_("Sprite File Size"), check_value, max_file_size_needed))
     return changed
 
 

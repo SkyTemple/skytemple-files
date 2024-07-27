@@ -131,8 +131,6 @@
 .definelabel HookMdAccess4, 0x02052688
 .definelabel HookMdAccess5, 0x020526CC
 .definelabel HookMdAccess6, 0x02052770
-.definelabel HookMdAccess7, 0x020527E4
-.definelabel HookMdAccess8, 0x0205281C
 .definelabel HookMdAccess9, 0x020537B0
 .definelabel HookMdAccess10, 0x020537D0
 

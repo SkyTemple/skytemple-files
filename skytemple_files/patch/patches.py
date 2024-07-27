@@ -143,6 +143,7 @@ from skytemple_files.patch.handler.remove_body_size_check import (
 from skytemple_files.patch.handler.same_type_partner import SameTypePartnerPatch
 from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
+from skytemple_files.patch.handler.sprite_size import SpriteSizePatchHandler
 from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 
@@ -187,6 +188,7 @@ class PatchType(Enum):
     IMPLEMENT_FAIRY_GUMMIES = ImplementFairyGummiesPatchHandler
     EXTRACT_BAR_LIST = ExtractBarItemListPatchHandler
     EXPAND_POKE_LIST = ExpandPokeListPatchHandler
+    SPRITE_SIZE = SpriteSizePatchHandler
     ALLOW_UNRECRUITABLE_MONS = AllowUnrecruitableMonsPatchHandler
     EDIT_GUEST_POKEMON = EditGuestPokemonPatchHandler
     FIX_MEMORY_SOFTLOCK = FixMemorySoftlockPatchHandler

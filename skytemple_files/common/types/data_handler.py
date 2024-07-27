@@ -77,6 +77,6 @@ class DataHandler(Generic[T], abc.ABC):
         cls,
         assets: Sequence[Asset],
         **kwargs: OptionalKwargs,
-    ):
+    ) -> T:
         """Create a model from all loaded assets. `assets` must contain all assets defined via `cls.assets`."""
         pass

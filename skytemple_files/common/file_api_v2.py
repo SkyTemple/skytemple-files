@@ -98,12 +98,6 @@ def extract_assets(assets: Sequence[Asset | AssetSpec]) -> Sequence[Asset]:
     return cast(Sequence[Asset], assets)
 
 
-def load_data_handlers() -> list[type[DataHandler[T]]]:
-    return [
-        handler for handler in vars(FileType).values() if isinstance(handler, type) and issubclass(handler, DataHandler)
-    ]
-
-
 class RomProject:
     """
     A SkyTemple Files ROM project.
@@ -241,7 +235,7 @@ class RomProject:
 
         rom_files = get_files_in_folder(Path(), self.rom.filenames)
 
-        for data_handler in load_data_handlers():
+        for data_handler in self._load_data_handlers():
             for rom_file in rom_files:
                 asset_specs = data_handler.asset_specs(rom_file)
 
@@ -263,6 +257,7 @@ class RomProject:
         path_to_rom_obj: Path,
         *,
         force: bool = False,
+        load_from_rom=False,
         assets: Sequence[Asset] | None = None,
         **kwargs: OptionalKwargs,
     ) -> T:
@@ -277,14 +272,14 @@ class RomProject:
 
         If `assets` is provided, the given assets are used (they must match the asset specification
         of this handler) otherwise, the assets are loaded using `cls.load_assets`. If `assets` is
-        an empty list, the model is always loaded from ROM.
+        an empty list or `load_from_rom` is `True`, the model is always loaded from ROM.
 
         Calling this repeatedly will always deserialize again, there is no caching.
         """
-        if assets is None:
+        if assets is None and not load_from_rom:
             assets = extract_assets(self.load_assets(handler, path_to_rom_obj))
 
-        if len(assets) < 1:
+        if load_from_rom or len(assets) < 1:
             # Force ROM deserialization if no assets exist.
             return handler.deserialize(self._file_storage.get_from_rom(path_to_rom_obj), **kwargs)
 
@@ -312,12 +307,12 @@ class RomProject:
         """
         Stores the asset-representation of this model into asset storage and ROM.
         """
-        slf_bytes = handler.serialize(data, **kwargs)
         if not skip_save_to_project_dir:
             assets = self._serialize_to_assets(handler, rom_path, data, **kwargs)
             for asset in assets:
                 self._file_storage.store_asset(asset.spec.path, asset.spec.rom_path, asset.data)
         if not skip_save_to_rom:
+            slf_bytes = handler.serialize(data, **kwargs)
             self._file_storage.store_in_rom(rom_path, slf_bytes)
 
     # TODO: signature
@@ -367,6 +362,14 @@ class RomProject:
         for spec in handler.asset_specs(rom_path):
             assets.append(handler.serialize_asset(spec, rom_path, data, **kwargs))
         return assets
+
+    @staticmethod
+    def _load_data_handlers() -> list[type[DataHandler[T]]]:
+        return [
+            handler
+            for handler in vars(FileType).values()
+            if isinstance(handler, type) and issubclass(handler, DataHandler)
+        ]
 
     def _enrich_static_data(self):
         RomDataLoader(self.rom).load_into(self.static_data)
@@ -439,10 +442,10 @@ class SkyTempleProjectFileStorage(FileStorage):
     def store_asset(self, path: Path, for_rom_path: Path, data: bytes) -> bytes:
         # todo: also record hash in hash file.
         full_path = Path(self.project_dir, path)
-        if not full_path.exists():
-            raise FileNotFoundError(f"Cannot find project file at {full_path}")
+        if not full_path.parent.exists():
+            full_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(Path(self.project_dir, path), "wb") as project_file:
+        with open(full_path, "wb+") as project_file:
             project_file.write(data)
 
         return data

@@ -16,19 +16,24 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import json
 import typing
+from pathlib import Path
 
 from range_typed_integers import u8, u16, u32
 
+from common.types.file_storage import AssetSpec, Asset
+from data.md.protocol import PokeType
+from data.waza_p._model import WazaP
 from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.container.sir0.handler import Sir0Handler
-from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.data.waza_p.handler import WazaPHandler, MOVES, LEARNSETS
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     MoveLearnsetProtocol,
     LevelUpMoveProtocol,
     WazaMoveProtocol,
-    WazaMoveRangeSettingsProtocol,
+    WazaMoveRangeSettingsProtocol, WazaMoveCategory,
 )
 from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
 from skytemple_files_test.data.waza_p.fixture import (
@@ -350,6 +355,122 @@ class WazaPTestCase(
 
         self.assertTrue(eq_move_list(FIX_MOVES, loaded_rs_reloaded_with_py.moves))
         self.assertTrue(eq_learnset_list(FIX_LEARNSETS, loaded_rs_reloaded_with_py.learnsets))
+
+    def test_asset_specs_relevant_file(self):
+        file_path = Path("BALANCE", "waza_p.bin")
+        specs = self.handler.asset_specs(file_path)
+        self.assertEqual(2, len(specs))
+        self.assertEqual(Path("pokemon", "moves.json"), specs[0].path)
+        self.assertEqual(file_path, specs[0].rom_path)
+        self.assertEqual(MOVES, specs[0].category)
+        self.assertEqual(Path("pokemon", "learnsets.json"), specs[1].path)
+        self.assertEqual(file_path, specs[1].rom_path)
+        self.assertEqual(LEARNSETS, specs[1].category)
+
+    def test_serialize_assets_moves(self):
+        waza = self._load_main_fixture(self._fix_path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), MOVES), Path(), waza)
+
+        asset_data = json.loads(asset.data)
+        self.assertEqual(559, len(asset_data))
+
+        move_data = asset_data[0]
+        self.assertEqual(25484, move_data["base_power"])
+        self.assertEqual("STEEL", move_data["type"])
+        self.assertEqual("PHYSICAL", move_data["category"])
+        self.assertEqual(14, move_data["settings_range"]["target"])
+        self.assertEqual(6, move_data["settings_range"]["range"])
+        self.assertEqual(5, move_data["settings_range"]["condition"])
+        self.assertEqual(0, move_data["settings_range"]["unused"])
+        self.assertEqual(8, move_data["settings_range_ai"]["target"])
+        self.assertEqual(14, move_data["settings_range_ai"]["range"])
+        self.assertEqual(3, move_data["settings_range_ai"]["condition"])
+        self.assertEqual(13, move_data["settings_range_ai"]["unused"])
+        self.assertEqual(233, move_data["base_pp"])
+        self.assertEqual(129, move_data["ai_weight"])
+        self.assertEqual(44, move_data["miss_accuracy"])
+        self.assertEqual(253, move_data["accuracy"])
+        self.assertEqual(109, move_data["ai_condition1_chance"])
+        self.assertEqual(141, move_data["number_chained_hits"])
+        self.assertEqual(140, move_data["max_upgrade_level"])
+        self.assertEqual(85, move_data["crit_chance"])
+        self.assertFalse(move_data["affected_by_magic_coat"])
+        self.assertFalse(move_data["is_snatchable"])
+        self.assertTrue(move_data["uses_mouth"])
+        self.assertTrue(move_data["ai_frozen_check"])
+        self.assertTrue(move_data["ignores_taunted"])
+        self.assertEqual(129, move_data["range_check_text"])
+        self.assertEqual(8899, move_data["move_id"])
+        self.assertEqual(179, move_data["message_id"])
+
+    def test_deserialize_assets_moves(self):
+        move_json = {
+            "base_power": 25484,
+            "type": "STEEL",
+            "category": "PHYSICAL",
+            "settings_range": {
+                "target": 14,
+                "range": 6,
+                "condition": 5,
+                "unused": 0
+            },
+            "settings_range_ai": {
+                "target": 8,
+                "range": 14,
+                "condition": 3,
+                "unused": 13
+            },
+            "base_pp": 233,
+            "ai_weight": 129,
+            "miss_accuracy": 44,
+            "accuracy": 253,
+            "ai_condition1_chance": 109,
+            "number_chained_hits": 141,
+            "max_upgrade_level": 140,
+            "crit_chance": 85,
+            "affected_by_magic_coat": False,
+            "is_snatchable": False,
+            "uses_mouth": True,
+            "ai_frozen_check": True,
+            "ignores_taunted": True,
+            "range_check_text": 129,
+            "move_id": 8899,
+            "message_id": 179
+        }
+
+        asset = Asset(AssetSpec(Path(), Path(), MOVES), None, None, None, None, bytes(json.dumps([move_json]), "utf-8"))
+        waza = self.handler.deserialize_from_assets([asset])
+        self.assertEqual(1, len(waza.moves))
+
+        move = waza.moves[0]
+        self.assertEqual(25484, move.base_power)
+        self.assertEqual(PokeType.STEEL, move.type)
+        self.assertEqual(WazaMoveCategory.PHYSICAL, move.category)
+        self.assertEqual(14, move.settings_range.target)
+        self.assertEqual(6, move.settings_range.range)
+        self.assertEqual(5, move.settings_range.condition)
+        self.assertEqual(0, move.settings_range.unused)
+        self.assertEqual(8, move.settings_range_ai.target)
+        self.assertEqual(14, move.settings_range_ai.range)
+        self.assertEqual(3, move.settings_range_ai.condition)
+        self.assertEqual(13, move.settings_range_ai.unused)
+        self.assertEqual(233, move.base_pp)
+        self.assertEqual(129, move.ai_weight)
+        self.assertEqual(44, move.miss_accuracy)
+        self.assertEqual(253, move.accuracy)
+        self.assertEqual(109, move.ai_condition1_chance)
+        self.assertEqual(141, move.number_chained_hits)
+        self.assertEqual(140, move.max_upgrade_level)
+        self.assertEqual(85, move.crit_chance)
+        self.assertFalse(move.affected_by_magic_coat)
+        self.assertFalse(move.is_snatchable)
+        self.assertTrue(move.uses_mouth)
+        self.assertTrue(move.ai_frozen_check)
+        self.assertTrue(move.ignores_taunted)
+        self.assertEqual(129, move.range_check_text)
+        self.assertEqual(8899, move.move_id)
+        self.assertEqual(179, move.message_id)
+
 
     @romtest(file_names=["waza_p.bin", "waza_p2.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):

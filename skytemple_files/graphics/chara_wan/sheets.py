@@ -997,7 +997,7 @@ def decompSize(size, unused_parts):
                             for x in range(s[0]):
                                 if matrix[cur_pos[1]+y][cur_pos[0]+x]:
                                     empty += 1
-                        if empty <= 0 and cur_size[0]*cur_size[1]-empty >= cur_heur:  # Overwrite Tolerance
+                        if empty <= s[0]*s[1]//4 and (s[0]*s[1]-empty > cur_heur or s[0]*s[1]-empty == cur_heur and s[0]*s[1] < cur_size[0]*cur_size[1]):  # Overwrite Tolerance
                             cur_size = s
                             cur_heur = cur_size[0]*cur_size[1]-empty
                 if cur_heur>max_heur:
@@ -1022,10 +1022,10 @@ def chopImgToPieceLocs(img, transparent):
                 break
         if not mirror:
             break
-    if mirror:
-        img = img.crop([0, 0, math.ceil(img.width/2), img.height])
     #mirror = False
     #mirrorBase = img.width
+    if mirror:
+        img = img.crop([0, 0, math.ceil(img.width/2), img.height])
     best_match = None
     for e in DIM_TABLE:
         if e[0]*TEX_SIZE >= img.width and e[1]*TEX_SIZE >= img.height:
@@ -1055,7 +1055,9 @@ def chopImgToPieceLocs(img, transparent):
         parts = decompSize(roundUp, unusedParts)
         for x, y, w, h in parts:
             fullImg = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
+            elCrop = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
             fullImg.paste(img, (-x*TEX_SIZE, -y*TEX_SIZE), img)
+            img.paste(elCrop, (x*TEX_SIZE, y*TEX_SIZE))
             chopped_imgs.append((fullImg, (x * TEX_SIZE, y * TEX_SIZE), (False, False)))
             if mirror:
                 chopped_imgs.append((None, (mirrorBase - (x+w) * TEX_SIZE, y * TEX_SIZE), (True, False)))

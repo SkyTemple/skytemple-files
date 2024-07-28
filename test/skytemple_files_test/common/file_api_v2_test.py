@@ -125,9 +125,9 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
     def test_get_asset(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
-        asset = storage.get_asset(Path("BALANCE", "waza_p.json"), Path("BALANCE", "waza_p.bin"))
+        asset = storage.get_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"))
 
-        self.assertEqual(Path("BALANCE", "waza_p.json"), asset.spec.path)
+        self.assertEqual(Path("pokemon", "moves.json"), asset.spec.path)
         self.assertEqual(Path("BALANCE", "waza_p.bin"), asset.spec.rom_path)
         self.assertIsNone(asset.expected_rom_obj_hash)
         self.assertEqual(b"f85089b1c47c9392c93f76f5d1baf9b28677454c", asset.actual_rom_obj_hash)
@@ -145,24 +145,24 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
         self.assertRaises(FileNotFoundError,
-                          storage.get_asset, Path("BALANCE", "waza_p.json"), Path("BALANCE", "missing.bin"))
+                          storage.get_asset, Path("pokemon", "moves.json"), Path("BALANCE", "missing.bin"))
 
     def test_store_asset(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
         test_data = b'{"test": "test"}'
 
-        asset = storage.get_asset(Path("BALANCE", "waza_p.json"), Path("BALANCE", "waza_p.bin"))
+        asset = storage.get_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"))
         before_data = asset.data
 
         try:
             data = storage.store_asset(
-                Path("BALANCE", "waza_p.json"), Path("BALANCE", "waza_p.bin"), test_data)
+                Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"), test_data)
 
             self.assertEqual(test_data, data)
-            asset = storage.get_asset(Path("BALANCE", "waza_p.json"), Path("BALANCE", "waza_p.bin"))
+            asset = storage.get_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"))
             self.assertEqual(test_data, asset.data)
         finally:
-            storage.store_asset(Path("BALANCE", "waza_p.json"), Path("BALANCE", "waza_p.bin"), before_data)
+            storage.store_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"), before_data)
 
     def test_store_asset_invalid_project_file(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
@@ -180,7 +180,7 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
     def test_hash_of_asset(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
-        sha1_hash = storage.hash_of_asset(Path("BALANCE", "waza_p.json"))
+        sha1_hash = storage.hash_of_asset(Path("pokemon", "moves.json"))
 
         self.assertEqual("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", sha1_hash)
 

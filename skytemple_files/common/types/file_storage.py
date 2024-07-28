@@ -97,6 +97,16 @@ class FileStorage(Protocol):
         """
         ...
 
+    def get_asset_from_spec(self, spec: AssetSpec) -> Asset:
+        """
+        Returns the bytes of an asset file and its corresponding hash (if any).
+        Raises `FileNotFound` if the asset under the spec's path was not found
+        """
+        asset = self.get_asset(spec.path, spec.rom_path)
+        asset.spec.category = spec.category
+        asset.spec.id = spec.id
+        return asset
+
     @abc.abstractmethod
     def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes) -> bytes:
         """Store an asset file."""

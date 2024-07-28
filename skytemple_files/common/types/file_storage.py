@@ -108,7 +108,7 @@ class FileStorage(Protocol):
         return asset
 
     @abc.abstractmethod
-    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes) -> bytes:
+    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes, custom_project_dir: Path = None) -> bytes:
         """Store an asset file."""
         ...
 

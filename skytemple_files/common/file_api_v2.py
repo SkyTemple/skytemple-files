@@ -302,18 +302,29 @@ class RomProject:
         *,
         skip_save_to_rom: bool = False,
         skip_save_to_project_dir: bool = False,
+        extracted_rom_dir: Path = None,
         **kwargs: OptionalKwargs,
     ):
         """
         Stores the asset-representation of this model into asset storage and ROM.
+        If extracted_rom_dir is defined, also saves the raw ROM files to the specified path.
         """
         if not skip_save_to_project_dir:
             assets = self._serialize_to_assets(handler, rom_path, data, **kwargs)
             for asset in assets:
                 self._file_storage.store_asset(asset.spec.path, asset.spec.rom_path, asset.data)
+
+        slf_bytes = None
         if not skip_save_to_rom:
             slf_bytes = handler.serialize(data, **kwargs)
             self._file_storage.store_in_rom(rom_path, slf_bytes)
+
+        if extracted_rom_dir is not None:
+            if slf_bytes is None:
+                # Skip serializing again if data was already saved to the ROM.
+                slf_bytes = handler.serialize(data, **kwargs)
+
+            self._file_storage.store_asset(rom_path, rom_path, slf_bytes, custom_project_dir=extracted_rom_dir)
 
     # TODO: signature
     def symbol_info_asset(self):
@@ -439,9 +450,12 @@ class SkyTempleProjectFileStorage(FileStorage):
             project_file_bytes,
         )
 
-    def store_asset(self, path: Path, for_rom_path: Path, data: bytes) -> bytes:
+    def store_asset(self, path: Path, for_rom_path: Path, data: bytes, custom_project_dir: Path = None) -> bytes:
         # todo: also record hash in hash file.
-        full_path = Path(self.project_dir, path)
+        if custom_project_dir is None:
+            full_path = Path(self.project_dir, path)
+        else:
+            full_path = Path(custom_project_dir, path)
         if not full_path.parent.exists():
             full_path.parent.mkdir(parents=True, exist_ok=True)
 

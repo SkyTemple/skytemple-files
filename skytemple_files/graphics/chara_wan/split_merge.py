@@ -177,7 +177,8 @@ def transferStrippedImgData(inputImgData, imgData, frameData):
     for metaFrame in frameData:
         for piece in metaFrame:
             piece_idx = piece.imgIndex
-            if piece_idx not in img_map:
-                img_map[piece_idx] = len(imgData)
-                imgData.append(exWanUtils.duplicateImgData(inputImgData[piece_idx]))
-            piece.imgIndex = img_map[piece_idx]
+            if piece_idx != MINUS_FRAME:
+                if piece_idx not in img_map:
+                    img_map[piece_idx] = len(imgData)
+                    imgData.append(exWanUtils.duplicateImgData(inputImgData[piece_idx]))
+                piece.imgIndex = img_map[piece_idx]

@@ -37,6 +37,7 @@ def check_and_correct_monster_sprite_size(
     md_gender1: MdEntryProtocol,
     md_gender2: MdEntryProtocol | None,
     monster_bin: BinPack,
+    m_attack_bin: BinPack,
     sprite_size_table: list[MonsterSpriteDataTableEntry],
     is_expand_poke_list_patch_applied: bool = False,
 ) -> list[tuple[str, u8, u8]]:
@@ -72,13 +73,13 @@ def check_and_correct_monster_sprite_size(
         effective_base_attr = "entid"
         check_value = md_target.unk17
         check_value_file = md_target.unk18
-        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, md_target)
+        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, m_attack_bin, md_target)
     else:
         check_value = sprite_size_table[md_gender1.md_index_base].sprite_tile_slots
         check_value_file = sprite_size_table[md_gender1.md_index_base].unk1
-        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, md_gender1)
+        max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, m_attack_bin, md_gender1)
         if md_gender2 is not None:
-            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(monster_bin, md_gender2)
+            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(monster_bin, m_attack_bin, md_gender2)
             max_tile_slots_needed = max(max_tile_slots_needed, max_tile_slots_needed2)
             max_file_size_needed = max(max_file_size_needed, max_file_size_needed2)
 
@@ -95,16 +96,24 @@ def check_and_correct_monster_sprite_size(
             md_target.unk18 = max_file_size_needed
         else:
             sprite_size_table[getattr(md_gender1, effective_base_attr)].unk1 = max_file_size_needed
-        changed.append((_("Sprite File Size"), check_value, max_file_size_needed))
+        changed.append((_("Sprite File Size"), check_value_file, max_file_size_needed))
     return changed
 
 
-def _get_sprite_properties(monster_bin: BinPack, entry: MdEntryProtocol):
+def _get_sprite_properties(monster_bin: BinPack, m_attack_bin: BinPack, entry: MdEntryProtocol):
     if entry.sprite_index < 0:
         return 0, 0
     sprite_bin = monster_bin[entry.sprite_index]
+    sprite_atk_bin = m_attack_bin[entry.sprite_index]
     sprite_bytes = FileType.COMMON_AT.deserialize(sprite_bin).decompress()
+    sprite_atk_bytes = FileType.COMMON_AT.deserialize(sprite_atk_bin).decompress()
     sprite = FileType.WAN.deserialize(sprite_bytes)
-    max_tile_slots_needed = max((6, sprite.model.frame_store.max_fragment_alloc_count))
+    sprite_atk = FileType.WAN.deserialize(sprite_atk_bytes)
+    max_tile_slots_needed = max(
+        (6,
+         sprite.model.frame_store.max_fragment_alloc_count,
+         sprite_atk.model.frame_store.max_fragment_alloc_count
+         )
+    )
     max_file_size_needed = math.ceil(len(sprite_bytes) / 512)
     return max_tile_slots_needed, max_file_size_needed

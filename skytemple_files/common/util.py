@@ -73,6 +73,7 @@ ByteReadable = Union[bytes, Sequence[int]]
 # Useful files:
 MONSTER_MD = "BALANCE/monster.md"
 MONSTER_BIN = "MONSTER/monster.bin"
+M_ATTACK_BIN = "MONSTER/m_attack.bin"
 DUNGEON_BIN = "DUNGEON/dungeon.bin"
 
 OVERLAY_RE = re.compile(r"overlay(\d+)", re.IGNORECASE)

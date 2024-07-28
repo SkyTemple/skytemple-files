@@ -185,7 +185,6 @@ def ImportSheets(inDir, strict=False):
         else:
             index = anim_names[anim_name.lower()]
             del anim_names[anim_name.lower()]
-
             anim_img = Image.open(os.path.join(inDir, anim_name + "-Anim.png")).convert("RGBA")
             offset_img = Image.open(os.path.join(inDir, anim_name + "-Offsets.png")).convert("RGBA")
             shadow_img = Image.open(os.path.join(inDir, anim_name + "-Shadow.png")).convert("RGBA")
@@ -596,7 +595,6 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
                 parent_idx = metaFrame[prev_idx].imgIndex
             else:
                 parent_idx = metaFramePiece.imgIndex
-
             if parent_idx in piece_imgs:
                 img = piece_imgs[parent_idx]
             else:
@@ -831,8 +829,8 @@ def mapDuplicateImportImgs(imgs, final_imgs, img_map):
                     flip = final_idx
             else:
                 imgs_flip = exUtils.imgsEqual(final_img[0], img[0], True)
-                if imgs_flip:
-                    imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
+                # if imgs_flip:
+                #     imgs_flip = exUtils.offsetsEqual(final_img[1], img[1], img[0].size[0], True)
                 if imgs_flip:
                     flip_mode = FlipMode.FLIP
                     flip = final_idx
@@ -880,14 +878,28 @@ def addImgData(imgData, frameData, palette_map, transparent, frame):
     metaFrame = []
     # create new metaframe piece data from the pieces
     cur_tile = 0
-    for idx, piece_loc in enumerate(piece_locs):
-        piece = piece_loc[0]
-        loc = piece_loc[1]
-        metaFramePiece = MetaFramePiece(len(imgData) + idx, 0, 0, 0)
+    prev_piece = None
+    prev_tile = 0
+    idx = 0
+    for piece, loc, master_flip in piece_locs:
+        if piece is not None:
+            prev_piece = piece
+            reuse = False
+            use_tile = cur_tile
+            prev_tile = cur_tile
+            use_idx = len(imgData) + idx
+        else:
+            piece = prev_piece
+            reuse = True
+            use_tile = prev_tile
+            use_idx = MINUS_FRAME
+        metaFramePiece = MetaFramePiece(use_idx, 0, 0, 0)
         # set coordinates
         result_loc = exUtils.addLoc(loc, pt_zero, True)
         metaFramePiece.setXOffset(result_loc[0])
         metaFramePiece.setYOffset(result_loc[1])
+        metaFramePiece.setHFlip(master_flip[0])
+        metaFramePiece.setVFlip(master_flip[1])
         # set dimensions
         block_size = (piece.size[0] // TEX_SIZE, piece.size[1] // TEX_SIZE)
         res_type = DIM_TABLE.index(block_size)
@@ -895,23 +907,25 @@ def addImgData(imgData, frameData, palette_map, transparent, frame):
         # set RnS parameter - always true when not disabled; when reading in we are never disabled
         metaFramePiece.setRotAndScalingOn(True)
         # set tile index
-        metaFramePiece.setTileNum(cur_tile)
+        metaFramePiece.setTileNum(use_tile)
         # priority is ALWAYS 3
         metaFramePiece.setPriority(3)
-        # set last if this is the last
-        if idx == len(piece_locs) - 1:
-            metaFramePiece.setIsLast(True)
 
         metaFrame.append(metaFramePiece)
         # increase tile index
-        blocks_occupied = max(1, block_size[0] * block_size[1] // 4)
-        cur_tile += blocks_occupied
+        if not reuse:
+            blocks_occupied = max(1, block_size[0] * block_size[1] // 4)
+            cur_tile += blocks_occupied
+            idx += 1
+    # set last flag
+    metaFrame[-1].setIsLast(True)
     frameData.append(metaFrame)
 
     # add each piece
-    for piece, _ in piece_locs:
-        imgStrip = convertPieceToImgStrip(piece, palette_map)
-        imgData.append(imgStrip)
+    for piece, _, _ in piece_locs:
+        if piece is not None:
+            imgStrip = convertPieceToImgStrip(piece, palette_map)
+            imgData.append(imgStrip)
 
 
 def convertPieceToImgStrip(piece, palette_map):
@@ -955,45 +969,100 @@ def convertPieceToImgStrip(piece, palette_map):
     imgStrip.imgPx = strips
     return imgStrip
 
+def decompSize(size, unused_parts):
+    size = (size[0]//TEX_SIZE, size[1]//TEX_SIZE)
+    matrix = [[0 for i in range(size[0])] for j in range(size[1])]
+    for pos in unused_parts:
+        matrix[pos[1]][pos[0]] = 1
+    parts = []
+    filled=False
+    while not filled:
+        filled=True
+        for c in range(size[0]*size[1]):
+            if matrix[c//size[0]][c%size[0]]==0:
+                filled = False
+                break
+        if not filled:
+            max_pos = (0, 0)
+            max_size = (0, 0)
+            max_heur = 0
+            for c in range(size[0]*size[1]):
+                cur_pos = (c%size[0], c//size[0])
+                cur_size = (0, 0)
+                cur_heur = 0
+                for s in DIM_TABLE:
+                    if cur_pos[0]+s[0]<=len(matrix[0]) and cur_pos[1]+s[1]<=len(matrix):
+                        empty = 0
+                        for y in range(s[1]):
+                            for x in range(s[0]):
+                                if matrix[cur_pos[1]+y][cur_pos[0]+x]:
+                                    empty += 1
+                        if empty <= 0 and cur_size[0]*cur_size[1]-empty >= cur_heur:  # Overwrite Tolerance
+                            cur_size = s
+                            cur_heur = cur_size[0]*cur_size[1]-empty
+                if cur_heur>max_heur:
+                    max_pos = cur_pos
+                    max_size = cur_size
+                    max_heur = cur_heur
+            parts.append((max_pos[0], max_pos[1], max_size[0], max_size[1]))
+            for y in range(max_size[1]):
+                for x in range(max_size[0]):
+                    matrix[max_pos[1]+y][max_pos[0]+x] = 1
+    return parts
+
 
 def chopImgToPieceLocs(img, transparent):
+    # TODO: Use Mirror
+    mirror = True
+    mirrorBase = img.width
+    for y in range(img.height):
+        for x in range(math.ceil(img.width/2)):
+            if img.getpixel((x, y)) != img.getpixel((mirrorBase-x-1, y)):
+                mirror = False
+                break
+        if not mirror:
+            break
+    if mirror:
+        img = img.crop([0, 0, math.ceil(img.width/2), img.height])
+    #mirror = False
+    #mirrorBase = img.width
+    best_match = None
+    for e in DIM_TABLE:
+        if e[0]*TEX_SIZE >= img.width and e[1]*TEX_SIZE >= img.height:
+            if best_match is None or best_match[0]*best_match[1] >= e[0]*e[1]:
+                best_match = e
     chopped_imgs = []
-    smallest_dim = 3
-    for idx, dim in enumerate(DIM_TABLE):
-        if img.size[0] <= dim[0] * TEX_SIZE and img.size[1] <= dim[1] * TEX_SIZE:
-            if dim[0] * dim[1] < DIM_TABLE[smallest_dim][0] * DIM_TABLE[smallest_dim][1]:
-                smallest_dim = idx
-    if img.size[0] > 8 * TEX_SIZE or img.size[1] > 8 * TEX_SIZE:
+    if not best_match or best_match[0]*best_match[1] > 24:
         roundUp = (
             exUtils.roundUpToMult(img.size[0], TEX_SIZE),
             exUtils.roundUpToMult(img.size[1], TEX_SIZE),
         )
-        fullImg = Image.new("RGBA", roundUp, transparent)
-        fullImg.paste(img, (0, 0), img)
-
-        yy = 0
-        total_size = 0
-        while yy < roundUp[1]:
-            addy = TEX_SIZE * 4
-            while yy + addy > roundUp[1]:
-                addy //= 2
-            xx = 0
-            while xx < roundUp[0]:
-                addx = TEX_SIZE * 4
-                while xx + addx > roundUp[0]:
-                    addx //= 2
-                bounds = (xx, yy, xx + addx, yy + addy)
-                cutImg = fullImg.crop(bounds)
-                chopped_imgs.append((cutImg, (xx, yy)))
-                total_size += max(1, addx * addy // TEX_SIZE // TEX_SIZE // 4)
-                xx += addx
-            yy += addy
-
-        # print("Size: {0}".format(total_size))
+        unusedParts = []
+        for ytile in range(roundUp[1]//TEX_SIZE):
+            for xtile in range(roundUp[0]//TEX_SIZE):
+                current = img.crop(
+                    box=[xtile * TEX_SIZE, ytile * TEX_SIZE, min((xtile + 1) * TEX_SIZE, img.width), min((ytile + 1) * TEX_SIZE, img.height)])
+                empty = True
+                for ypixel in range(current.height):
+                    for xpixel in range(current.width):
+                        if current.getpixel((xpixel, ypixel)) != transparent:
+                            empty = False
+                            break
+                    if not empty:
+                        break
+                if empty:
+                    unusedParts.append((xtile, ytile))
+        parts = decompSize(roundUp, unusedParts)
+        for x, y, w, h in parts:
+            fullImg = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
+            fullImg.paste(img, (-x*TEX_SIZE, -y*TEX_SIZE), img)
+            chopped_imgs.append((fullImg, (x * TEX_SIZE, y * TEX_SIZE), (False, False)))
+            if mirror:
+                chopped_imgs.append((None, (mirrorBase - (x+w) * TEX_SIZE, y * TEX_SIZE), (True, False)))
     else:
-        newWidth = DIM_TABLE[smallest_dim][0] * TEX_SIZE
-        newHeight = DIM_TABLE[smallest_dim][1] * TEX_SIZE
-        newImg = Image.new("RGBA", (newWidth, newHeight), transparent)
-        newImg.paste(img, (0, 0), img)
-        chopped_imgs.append((newImg, (0, 0)))
+        fullImg = Image.new("RGBA", (best_match[0]*TEX_SIZE, best_match[1]*TEX_SIZE), transparent)
+        fullImg.paste(img, (0, 0), img)
+        chopped_imgs.append((fullImg, (0, 0), (False, False)))
+        if mirror:
+            chopped_imgs.append((None, (mirrorBase - best_match[0]*TEX_SIZE, 0), (True, False)))
     return chopped_imgs

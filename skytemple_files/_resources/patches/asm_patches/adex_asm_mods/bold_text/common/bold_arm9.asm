@@ -7,3 +7,8 @@
 .area 0x4
 	bl RepeatRender
 .endarea
+
+.org ReturnCharWidth
+.area 0x4
+	bne TryIncreaseBoldCharWidth
+.endarea

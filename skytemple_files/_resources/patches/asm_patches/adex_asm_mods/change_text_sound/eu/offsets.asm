@@ -3,7 +3,8 @@
 .arm
 
 .definelabel CaseT, 0x0202111C
-.definelabel TextboxSE, 0x02017DB8
+.definelabel PlaySeByIdVolumeCallsite, 0x02017DAC
+.definelabel PlaySeByIdVolume, 0x02018354
 .definelabel TagCheck, 0x02020A20
 .definelabel GetTagParameter, 0x02020A64
 .definelabel TagCodeError, 0x02021BD4

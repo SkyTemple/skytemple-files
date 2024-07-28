@@ -19,15 +19,32 @@ def extract_rom_files_to_project(rom_path: Path, asset_dir: Path):
         project.save_file(data_handler, file_path, file_data, skip_save_to_rom=True)
 
 
+def save_project_to_rom(rom_path: Path, asset_dir: Path):
+    project = RomProject.new(rom_path, asset_dir)
+    rom_files = project.list_files(search_rom=False)
+
+    for file_path, data_handler in rom_files.items():
+        assets = project.load_assets(data_handler, file_path)
+        file_data = project.open_file(data_handler, file_path, assets=assets, force=True)
+
+        project.save_file(data_handler, file_path, file_data, skip_save_to_project_dir=True)
+
+
 def main():
     # noinspection PyTypeChecker
-    parser = argparse.ArgumentParser(description="Creates an asset project from the files in a ROM.")
+    parser = argparse.ArgumentParser(description="Transfer data between a ROM and an asset project.")
+    parser.add_argument('operation', help="'rom_to_project' or 'project_to_rom")
     parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
     parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
 
     args = parser.parse_args()
 
-    extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir))
+    if args.operation == 'rom_to_project':
+        extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir))
+    elif args.operation == 'project_to_rom':
+        save_project_to_rom(Path(args.rom_path), Path(args.asset_dir))
+    else:
+        raise ValueError(f"Invalid operation: {args.operation}")
 
 
 if __name__ == "__main__":

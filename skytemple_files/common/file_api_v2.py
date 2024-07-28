@@ -211,7 +211,7 @@ class RomProject:
         assets: list[Asset | AssetSpec] = []
         for spec in handler.asset_specs(path_to_rom_obj):
             try:
-                assets.append(self._file_storage.get_asset(spec.path, spec.rom_path))
+                assets.append(self._file_storage.get_asset_from_spec(spec))
             except FileNotFoundError:
                 assets.append(spec)
         return assets

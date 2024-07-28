@@ -20,6 +20,8 @@ from __future__ import annotations
 
 import math
 
+from range_typed_integers import u8
+
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.container.bin_pack.model import BinPack
 from skytemple_files.data.md.protocol import MdEntryProtocol
@@ -37,7 +39,7 @@ def check_and_correct_monster_sprite_size(
     monster_bin: BinPack,
     sprite_size_table: list[MonsterSpriteDataTableEntry],
     is_expand_poke_list_patch_applied: bool = False,
-) -> bool:
+) -> list[tuple[str, u8, u8]]:
     """
     Check that the data in the Pokémon sprite-size metadata
     table matches the currently selected sprite of the Pokémon.
@@ -51,7 +53,11 @@ def check_and_correct_monster_sprite_size(
         - sprite_size_table: Sprite size metadata table
         - is_expand_poke_list_patch_applied: Whether ExpandPokeList is applied.
 
-    Returns True if a change was performed.
+    Returns a list of changes if a change was performed. Each element contains a tuple:
+    - Change description (localized)
+    - Old value
+    - New value
+
     If changes were performed the data in the following input parameters may be modified and should
     be written back to ROM:
 

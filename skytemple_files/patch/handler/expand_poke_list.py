@@ -168,9 +168,6 @@ and to save a backup of your ROM before applying this."""
                 table_mf = JP_TABLE_MF
                 table_sp = JP_TABLE_SP
         if not self.is_applied(rom, config):
-            bincfg = config.bin_sections.arm9
-            binary = bytearray(get_binary_from_rom(rom, bincfg))
-
             # Apply the patch
             for filename in get_files_from_rom_with_extension(rom, "str"):
                 bin_before = rom.getFileByName(filename)

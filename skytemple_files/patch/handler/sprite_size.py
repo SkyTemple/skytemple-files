@@ -28,11 +28,10 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import get_binary_from_rom, read_u32
 from skytemple_files.data.md.handler import MdHandler
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x527E4
 PATCH_CHECK_ADDR_APPLIED_EU = 0x52B1C
@@ -47,9 +46,7 @@ class SpriteSizePatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            """Changes Sprite Size and Sprite File Size values to be in each Pokémon's data."""
-        )
+        return _("""Changes Sprite Size and Sprite File Size values to be in each Pokémon's data.""")
 
     @property
     def author(self) -> str:
@@ -62,7 +59,7 @@ class SpriteSizePatchHandler(AbstractPatchHandler):
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.IMPROVEMENT_TWEAK
-    
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
@@ -77,7 +74,7 @@ class SpriteSizePatchHandler(AbstractPatchHandler):
         if not self.is_applied(rom, config):
             bincfg = config.bin_sections.arm9
             binary = bytearray(get_binary_from_rom(rom, bincfg))
-            
+
             md_bin = rom.getFileByName("BALANCE/monster.md")
             md_model = MdHandler.deserialize(md_bin)
             block2 = bincfg.data.MONSTER_SPRITE_DATA
@@ -86,8 +83,8 @@ class SpriteSizePatchHandler(AbstractPatchHandler):
                 + binary[block2.address : block2.address + block2.length]
             )
             for i, e in enumerate(md_model.entries):
-                e.unk17 = data[i*2]
-                e.unk18 = data[i*2 + 1]
+                e.unk17 = data[i * 2]
+                e.unk18 = data[i * 2 + 1]
             rom.setFileByName("BALANCE/monster.md", MdHandler.serialize(md_model))
         try:
             apply()

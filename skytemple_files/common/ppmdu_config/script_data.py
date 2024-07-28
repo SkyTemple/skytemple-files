@@ -378,7 +378,78 @@ def camel_to_screaming_snake_case(string) -> str:
     return CAMEL_REGEX.sub("_", string).upper()
 
 
-class _ScriptDataStorage(AutoString):
+class _ScriptDataStorage:
+    all_script_constants__by_name: dict[str, ScriptDataConstant]
+
+    _game_variables_cache_outdated: bool
+    game_variables: list[Pmd2ScriptGameVar]
+    game_variables__by_id: Mapping[int, Pmd2ScriptGameVar]
+    game_variables__by_name: Mapping[str, Pmd2ScriptGameVar]
+
+    _objects_cache_outdated: bool
+    objects: list[Pmd2ScriptObject]
+    objects__by_id: Mapping[u16, Pmd2ScriptObject]
+    objects__by_unique_name: Mapping[str, Pmd2ScriptObject]
+
+    _face_names_cache_outdated: bool
+    face_names: list[Pmd2ScriptFaceName]
+    face_names__by_id: Mapping[int, Pmd2ScriptFaceName]
+    face_names__by_name: Mapping[str, Pmd2ScriptFaceName]
+
+    _face_position_modes_cache_outdated: bool
+    face_position_modes: list[Pmd2ScriptFacePositionMode]
+    face_position_modes__by_id: Mapping[int, Pmd2ScriptFacePositionMode]
+    face_position_modes__by_name: Mapping[str, Pmd2ScriptFacePositionMode]
+
+    _directions_cache_outdated: bool
+    directions: dict[int, Pmd2ScriptDirection]
+    directions__by_ssa_id: Mapping[int, Pmd2ScriptDirection]
+    directions__by_ssb_id: Mapping[int, Pmd2ScriptDirection]
+    directions__by_name: Mapping[str, Pmd2ScriptDirection]
+    directions_ssb: Mapping[int, Pmd2ScriptDirectionSsb]
+
+    _common_routine_info_cache_outdated: bool
+    common_routine_info: list[Pmd2ScriptRoutine]
+    common_routine_info__by_id: dict[int, Pmd2ScriptRoutine]
+    common_routine_info__by_name: dict[str, Pmd2ScriptRoutine]
+
+    _menus_cache_outdated: bool
+    menus: list[Pmd2ScriptMenu]
+    menus__by_id: Mapping[int, Pmd2ScriptMenu]
+    menus__by_name: Mapping[str, Pmd2ScriptMenu]
+
+    _process_specials_cache_outdated: bool
+    process_specials: list[Pmd2ScriptSpecial]
+    process_specials__by_id: Mapping[int, Pmd2ScriptSpecial]
+    process_specials__by_name: Mapping[str, Pmd2ScriptSpecial]
+
+    _sprite_effects_cache_outdated: bool
+    sprite_effects: list[Pmd2ScriptSpriteEffect]
+    sprite_effects__by_id: Mapping[int, Pmd2ScriptSpriteEffect]
+    sprite_effects__by_name: Mapping[str, Pmd2ScriptSpriteEffect]
+
+    _bgms_cache_outdated: bool
+    bgms: list[Pmd2ScriptBgm]
+    bgms__by_id: Mapping[int, Pmd2ScriptBgm]
+    bgms__by_name: Mapping[str, Pmd2ScriptBgm]
+
+    _level_list_cache_outdated: bool
+    level_list: list[Pmd2ScriptLevel]
+    level_list__by_id: Mapping[int, Pmd2ScriptLevel]
+    level_list__by_name: Mapping[str, Pmd2ScriptLevel]
+
+    _level_entities_cache_outdated: bool
+    level_entities: list[Pmd2ScriptEntity]
+    level_entities__by_id: Mapping[u16, Pmd2ScriptEntity]
+    level_entities__by_name: Mapping[str, Pmd2ScriptEntity]
+
+    _op_codes_cache_outdated: bool
+    op_codes: list[Pmd2ScriptOpCode]
+    op_codes__by_id: Mapping[int, Pmd2ScriptOpCode]
+    op_codes__by_name: dict[str, list[Pmd2ScriptOpCode]]
+
+    ground_state_structs: dict[str, Pmd2ScriptGroundStateStruct]
+
     def __init__(
         self,
         game_variables_table: list[Pmd2ScriptGameVar],
@@ -396,307 +467,174 @@ class _ScriptDataStorage(AutoString):
         op_codes: list[Pmd2ScriptOpCode],
         ground_state_structs: dict[str, Pmd2ScriptGroundStateStruct],
     ):
+        self._game_variables_cache_outdated = True
         self.game_variables = game_variables_table
+        self._objects_cache_outdated = True
         self.objects = objects_list
+        self._face_names_cache_outdated = True
         self.face_names = face_names
+        self._face_position_modes_cache_outdated = True
         self.face_position_modes = face_position_modes
+        self._directions_cache_outdated = True
         self.directions = directions
+        self._common_routine_info_cache_outdated = True
         self.common_routine_info = common_routine_info
+        self._menus_cache_outdated = True
         self.menus = menu_ids
+        self._process_specials_cache_outdated = True
         self.process_specials = process_special_ids
+        self._sprite_effects_cache_outdated = True
         self.sprite_effects = sprite_effect_ids
+        self._bgms_cache_outdated = True
         self.bgms = bgms
+        self._level_list_cache_outdated = True
         self.level_list = level_list
+        self._level_entities_cache_outdated = True
         self.level_entities = level_entity_table
+        self._op_codes_cache_outdated = True
         self.op_codes = op_codes
         self.ground_state_structs = ground_state_structs
 
-        self.rebuild_constant_lookup()
+        self.rebuild_cache()
 
-    def rebuild_constant_lookup(self) -> None:
+    def rebuild_cache(self):
+        """
+        Must be called after modifying any data.
+        """
+        if self._game_variables_cache_outdated:
+            self._rebuild_cache_game_variables()
+        if self._objects_cache_outdated:
+            self._rebuild_cache_objects()
+        if self._face_names_cache_outdated:
+            self._rebuild_cache_face_names()
+        if self._face_position_modes_cache_outdated:
+            self._rebuild_cache_face_position_modes()
+        if self._directions_cache_outdated:
+            self._rebuild_cache_directions()
+        if self._common_routine_info_cache_outdated:
+            self._rebuild_cache_common_routine_info()
+        if self._menus_cache_outdated:
+            self._rebuild_cache_menus()
+        if self._process_specials_cache_outdated:
+            self._rebuild_cache_process_specials()
+        if self._sprite_effects_cache_outdated:
+            self._rebuild_cache_sprite_effects()
+        if self._bgms_cache_outdated:
+            self._rebuild_cache_bgms()
+        if self._level_list_cache_outdated:
+            self._rebuild_cache_level_list()
+        if self._level_entities_cache_outdated:
+            self._rebuild_cache_level_entities()
+        if self._op_codes_cache_outdated:
+            self._rebuild_cache_op_codes()
+        self._rebuild_constant_lookup()
+
+    def _rebuild_constant_lookup(self) -> None:
         """
         Must be called after modifying any constants.
         """
-        self._all_script_constants__by_name: dict[str, ScriptDataConstant] = {}
-        self._insert_constants_with_prefix(self._game_variables, PREFIX_VAR)
-        for obj_var in self._objects:
-            self._all_script_constants__by_name[PREFIX_OBJECT + obj_var.unique_name.upper()] = obj_var
-        for face_var in self._face_names:
-            self._all_script_constants__by_name[PREFIX_FACE + face_var.name.replace("-", "_")] = face_var
-        self._insert_constants_with_prefix(self._face_position_modes, PREFIX_FACE_POS)
-        self._insert_constants_with_prefix(list(self._directions_ssb.values()), PREFIX_DIRECTION)
-        self._insert_constants_with_prefix(self._common_routine_info, PREFIX_CORO)
-        self._insert_constants_with_prefix_convert_camel(self._menus, PREFIX_MENU)
-        self._insert_constants_with_prefix_convert_camel(self._process_specials, PREFIX_PROCESS_SPECIAL)
-        self._insert_constants_with_prefix_convert_camel(self._sprite_effects, PREFIX_EFFECT)
-        self._insert_constants_with_prefix_convert_camel(self._bgms, PREFIX_BGM)
-        self._insert_constants_with_prefix(self._level_list, PREFIX_LEVEL)
-        self._insert_constants_with_prefix(self._level_entities, PREFIX_ACTOR)
+        self.all_script_constants__by_name = {}
+        self._insert_constants_with_prefix(self.game_variables, PREFIX_VAR)
+        for obj_var in self.objects:
+            self.all_script_constants__by_name[PREFIX_OBJECT + obj_var.unique_name.upper()] = obj_var
+        for face_var in self.face_names:
+            self.all_script_constants__by_name[PREFIX_FACE + face_var.name.replace("-", "_")] = face_var
+        self._insert_constants_with_prefix(self.face_position_modes, PREFIX_FACE_POS)
+        self._insert_constants_with_prefix(list(self.directions_ssb.values()), PREFIX_DIRECTION)
+        self._insert_constants_with_prefix(self.common_routine_info, PREFIX_CORO)
+        self._insert_constants_with_prefix_convert_camel(self.menus, PREFIX_MENU)
+        self._insert_constants_with_prefix_convert_camel(self.process_specials, PREFIX_PROCESS_SPECIAL)
+        self._insert_constants_with_prefix_convert_camel(self.sprite_effects, PREFIX_EFFECT)
+        self._insert_constants_with_prefix_convert_camel(self.bgms, PREFIX_BGM)
+        self._insert_constants_with_prefix(self.level_list, PREFIX_LEVEL)
+        self._insert_constants_with_prefix(self.level_entities, PREFIX_ACTOR)
 
     def _insert_constants_with_prefix(self, vars: Sequence[ScriptDataConstant], prefix: str) -> None:
         for var in vars:
-            self._all_script_constants__by_name[prefix + var.name.upper()] = var
+            self.all_script_constants__by_name[prefix + var.name.upper()] = var
 
     def _insert_constants_with_prefix_convert_camel(self, vars: Sequence[ScriptDataConstant], prefix: str) -> None:
         for var in vars:
-            self._all_script_constants__by_name[prefix + camel_to_screaming_snake_case(var.name)] = var
+            self.all_script_constants__by_name[prefix + camel_to_screaming_snake_case(var.name)] = var
 
-    @property
-    def game_variables(self) -> list[Pmd2ScriptGameVar]:
-        return self._game_variables
+    def _rebuild_cache_game_variables(self) -> None:
+        self.game_variables__by_id = {var.id: var for var in self.game_variables}
+        self.game_variables__by_name = {var.name: var for var in self.game_variables}
+        self._game_variables_cache_outdated = False
 
-    @game_variables.setter
-    def game_variables(self, value: list[Pmd2ScriptGameVar]) -> None:
-        self._game_variables = value
-        self._game_variables__by_id = {var.id: var for var in self._game_variables}
-        self._game_variables__by_name = {var.name: var for var in self._game_variables}
+    def _rebuild_cache_objects(self) -> None:
+        self.objects__by_id = {o.id: o for o in self.objects}
+        self.objects__by_unique_name = {o.unique_name: o for o in self.objects}
+        self._objects_cache_outdated = False
 
-    @property
-    def game_variables__by_id(self) -> Mapping[int, Pmd2ScriptGameVar]:
-        return self._game_variables__by_id
+    def _rebuild_cache_face_names(self) -> None:
+        self.face_names__by_id = {n.id: n for n in self.face_names}
+        self.face_names__by_name = {n.name: n for n in self.face_names}
+        self._face_names_cache_outdated = False
 
-    @property
-    def game_variables__by_name(self) -> Mapping[str, Pmd2ScriptGameVar]:
-        return self._game_variables__by_name
+    def _rebuild_cache_face_position_modes(self) -> None:
+        self.face_position_modes__by_id = {n.id: n for n in self.face_position_modes}
+        self.face_position_modes__by_name = {n.name: n for n in self.face_position_modes}
+        self._face_position_modes_cache_outdated = False
 
-    @property
-    def objects(self) -> list[Pmd2ScriptObject]:
-        return self._objects
+    def _rebuild_cache_directions(self) -> None:
+        self.directions__by_ssb_id = {d.ssb_id: d for d in self.directions.values()}
+        self.directions__by_name = {b.name: b for b in self.directions.values()}
+        self.directions_ssb = {d.ssb_id: Pmd2ScriptDirectionSsb(d.ssb_id, d.name) for d in self.directions.values()}
+        self._directions_cache_outdated = False
 
-    @objects.setter
-    def objects(self, value: list[Pmd2ScriptObject]) -> None:
-        self._objects = value
-        self._objects__by_id = {o.id: o for o in self._objects}
-        self._objects__by_unique_name = {o.unique_name: o for o in self._objects}
+    def _rebuild_cache_common_routine_info(self) -> None:
+        self.common_routine_info__by_id = {o.id: o for o in self.common_routine_info}
+        self.common_routine_info__by_name = {o.name: o for o in self.common_routine_info}
+        self._common_routine_info_cache_outdated = False
 
-    @property
-    def objects__by_id(self) -> Mapping[u16, Pmd2ScriptObject]:
-        return self._objects__by_id
+    def _rebuild_cache_menus(self) -> None:
+        self.menus__by_id = {o.id: o for o in self.menus}
+        self.menus__by_name = {o.name: o for o in self.menus}
+        self._menus_cache_outdated = False
 
-    @property
-    def objects__by_unique_name(self) -> Mapping[str, Pmd2ScriptObject]:
-        return self._objects__by_unique_name
+    def _rebuild_cache_process_specials(self) -> None:
+        self.process_specials__by_id = {o.id: o for o in self.process_specials}
+        self.process_specials__by_name = {o.name: o for o in self.process_specials}
+        self._process_specials_cache_outdated = False
 
-    @property
-    def face_names(self) -> list[Pmd2ScriptFaceName]:
-        return self._face_names
+    def _rebuild_cache_sprite_effects(self) -> None:
+        self.sprite_effects__by_id = {o.id: o for o in self.sprite_effects}
+        self.sprite_effects__by_name = {o.name: o for o in self.sprite_effects}
+        self._sprite_effects_cache_outdated = False
 
-    @face_names.setter
-    def face_names(self, value: list[Pmd2ScriptFaceName]) -> None:
-        self._face_names = value
-        self._face_names__by_id = {n.id: n for n in self._face_names}
-        self._face_names__by_name = {n.name: n for n in self._face_names}
+    def _rebuild_cache_bgms(self) -> None:
+        self.bgms__by_id = {o.id: o for o in self.bgms}
+        self.bgms__by_name = {o.name: o for o in self.bgms}
+        self._bgms_cache_outdated = False
 
-    @property
-    def face_names__by_id(self) -> Mapping[int, Pmd2ScriptFaceName]:
-        return self._face_names__by_id
+    def _rebuild_cache_level_list(self) -> None:
+        self.level_list__by_id = {o.id: o for o in self.level_list}
+        self.level_list__by_name = {o.name: o for o in self.level_list}
+        self._level_list_cache_outdated = False
 
-    @property
-    def face_names__by_name(self) -> Mapping[str, Pmd2ScriptFaceName]:
-        return self._face_names__by_name
+    def _rebuild_cache_level_entities(self) -> None:
+        self.level_entities__by_id = {o.id: o for o in self.level_entities}
+        self.level_entities__by_name = {o.name: o for o in self.level_entities}
+        self._level_entities_cache_outdated = False
 
-    @property
-    def face_position_modes(self) -> list[Pmd2ScriptFacePositionMode]:
-        return self._face_position_modes
+    def _rebuild_cache_op_codes(self) -> None:
+        self.op_codes__by_id = {o.id: o for o in self.op_codes}
+        self.op_codes__by_name = {}
+        for o in self.op_codes:
+            if o.name not in self.op_codes__by_name:
+                self.op_codes__by_name[o.name] = []
+            self.op_codes__by_name[o.name].append(o)
+        self._op_codes_cache_outdated = False
 
-    @face_position_modes.setter
-    def face_position_modes(self, value: list[Pmd2ScriptFacePositionMode]) -> None:
-        self._face_position_modes = value
-        self._face_position_modes__by_id = {n.id: n for n in self._face_position_modes}
-        self._face_position_modes__by_name = {n.name: n for n in self._face_position_modes}
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}<{str(self)}>"
 
-    @property
-    def face_position_modes__by_id(self) -> Mapping[int, Pmd2ScriptFacePositionMode]:
-        return self._face_position_modes__by_id
-
-    @property
-    def face_position_modes__by_name(self) -> Mapping[str, Pmd2ScriptFacePositionMode]:
-        return self._face_position_modes__by_name
-
-    @property
-    def directions(self) -> dict[int, Pmd2ScriptDirection]:
-        return self._directions
-
-    @directions.setter
-    def directions(self, value: dict[int, Pmd2ScriptDirection]) -> None:
-        self._directions = value
-        self._directions__by_ssb_id = {d.ssb_id: d for d in self._directions.values()}
-        self._directions__by_name = {b.name: b for b in self.directions.values()}
-        self._directions_ssb = {d.ssb_id: Pmd2ScriptDirectionSsb(d.ssb_id, d.name) for d in self._directions.values()}
-
-    @property
-    def directions__by_ssa_id(self) -> Mapping[int, Pmd2ScriptDirection]:
-        return self.directions
-
-    @property
-    def directions__by_ssb_id(self) -> Mapping[int, Pmd2ScriptDirection]:
-        return self._directions__by_ssb_id
-
-    @property
-    def directions__by_name(self) -> Mapping[str, Pmd2ScriptDirection]:
-        return self._directions__by_name
-
-    @property
-    def common_routine_info(self) -> list[Pmd2ScriptRoutine]:
-        return self._common_routine_info
-
-    @common_routine_info.setter
-    def common_routine_info(self, value: list[Pmd2ScriptRoutine]) -> None:
-        self._common_routine_info = value
-        self._common_routine_info__by_id = {o.id: o for o in self.common_routine_info}
-        self._common_routine_info__by_name = {o.name: o for o in self.common_routine_info}
-
-    @property
-    def common_routine_info__by_id(self) -> dict[int, Pmd2ScriptRoutine]:
-        return self._common_routine_info__by_id
-
-    @property
-    def common_routine_info__by_name(self) -> dict[str, Pmd2ScriptRoutine]:
-        return self._common_routine_info__by_name
-
-    @property
-    def menus(self) -> list[Pmd2ScriptMenu]:
-        return self._menus
-
-    @menus.setter
-    def menus(self, value: list[Pmd2ScriptMenu]) -> None:
-        self._menus = value
-        self._menus__by_id = {o.id: o for o in self.menus}
-        self._menus__by_name = {o.name: o for o in self.menus}
-
-    @property
-    def menus__by_id(self) -> Mapping[int, Pmd2ScriptMenu]:
-        return self._menus__by_id
-
-    @property
-    def menus__by_name(self) -> Mapping[str, Pmd2ScriptMenu]:
-        return self._menus__by_name
-
-    @property
-    def process_specials(self) -> list[Pmd2ScriptSpecial]:
-        return self._process_specials
-
-    @process_specials.setter
-    def process_specials(self, value: list[Pmd2ScriptSpecial]) -> None:
-        self._process_specials = value
-        self._process_specials__by_id = {o.id: o for o in self.process_specials}
-        self._process_specials__by_name = {o.name: o for o in self.process_specials}
-
-    @property
-    def process_specials__by_id(self) -> Mapping[int, Pmd2ScriptSpecial]:
-        return self._process_specials__by_id
-
-    @property
-    def process_specials__by_name(self) -> Mapping[str, Pmd2ScriptSpecial]:
-        return self._process_specials__by_name
-
-    @property
-    def sprite_effects(self) -> list[Pmd2ScriptSpriteEffect]:
-        return self._sprite_effects
-
-    @sprite_effects.setter
-    def sprite_effects(self, value: list[Pmd2ScriptSpriteEffect]) -> None:
-        self._sprite_effects = value
-        self._sprite_effects__by_id = {o.id: o for o in self.sprite_effects}
-        self._sprite_effects__by_name = {o.name: o for o in self.sprite_effects}
-
-    @property
-    def sprite_effects__by_id(self) -> Mapping[int, Pmd2ScriptSpriteEffect]:
-        return self._sprite_effects__by_id
-
-    @property
-    def sprite_effects__by_name(self) -> Mapping[str, Pmd2ScriptSpriteEffect]:
-        return self._sprite_effects__by_name
-
-    @property
-    def bgms(self) -> list[Pmd2ScriptBgm]:
-        return self._bgms
-
-    @bgms.setter
-    def bgms(self, value: list[Pmd2ScriptBgm]) -> None:
-        self._bgms = value
-        self._bgms__by_id = {o.id: o for o in self.bgms}
-        self._bgms__by_name = {o.name: o for o in self.bgms}
-
-    @property
-    def bgms__by_id(self) -> Mapping[int, Pmd2ScriptBgm]:
-        return self._bgms__by_id
-
-    @property
-    def bgms__by_name(self) -> Mapping[str, Pmd2ScriptBgm]:
-        return self._bgms__by_name
-
-    @property
-    def level_list(self) -> list[Pmd2ScriptLevel]:
-        return self._level_list
-
-    @level_list.setter
-    def level_list(self, value: list[Pmd2ScriptLevel]) -> None:
-        self._level_list = value
-        self._level_list__by_id = {o.id: o for o in self.level_list}
-        self._level_list__by_name = {o.name: o for o in self.level_list}
-
-    @property
-    def level_list__by_id(self) -> Mapping[int, Pmd2ScriptLevel]:
-        return self._level_list__by_id
-
-    @property
-    def level_list__by_name(self) -> Mapping[str, Pmd2ScriptLevel]:
-        return self._level_list__by_name
-
-    @property
-    def level_entities(self) -> list[Pmd2ScriptEntity]:
-        return self._level_entities
-
-    @level_entities.setter
-    def level_entities(self, value: list[Pmd2ScriptEntity]) -> None:
-        self._level_entities = value
-        self._level_entities__by_id = {o.id: o for o in self.level_entities}
-        self._level_entities__by_name = {o.name: o for o in self.level_entities}
-
-    @property
-    def level_entities__by_id(self) -> Mapping[u16, Pmd2ScriptEntity]:
-        return self._level_entities__by_id
-
-    @property
-    def level_entities__by_name(self) -> Mapping[str, Pmd2ScriptEntity]:
-        return self._level_entities__by_name
-
-    @property
-    def op_codes(self) -> Sequence[Pmd2ScriptOpCode]:
-        return list(self._op_codes_by_id.values())
-
-    @op_codes.setter
-    def op_codes(self, value: Sequence[Pmd2ScriptOpCode]) -> None:
-        self._op_codes_by_id: dict[int, Pmd2ScriptOpCode] = {o.id: o for o in value}
-        self._op_codes_by_name: dict[str, list[Pmd2ScriptOpCode]] = {}
-        for o in value:
-            if o.name not in self._op_codes_by_name:
-                self._op_codes_by_name[o.name] = []
-            self._op_codes_by_name[o.name].append(o)
-
-    @property
-    def op_codes__by_id(self) -> Mapping[int, Pmd2ScriptOpCode]:
-        return self._op_codes_by_id
-
-    @property
-    def op_codes__by_name(self) -> Mapping[str, list[Pmd2ScriptOpCode]]:
-        return self._op_codes_by_name
-
-    @property
-    def ground_state_structs(self) -> dict[str, Pmd2ScriptGroundStateStruct]:
-        return self._ground_state_structs
-
-    @ground_state_structs.setter
-    def ground_state_structs(self, value: dict[str, Pmd2ScriptGroundStateStruct]) -> None:
-        self._ground_state_structs = value
-
-    @property
-    def all_script_constants__by_name(self) -> Mapping[str, ScriptDataConstant]:
-        return self._all_script_constants__by_name
+    def __str__(self) -> str:
+        return f"{str({k: v for k, v in self.__dict__.items() if v is not None and not '_' not in k })}"
 
 
-class Pmd2ScriptData(AutoString):
+class Pmd2ScriptData:
     def __init__(
         self,
         game_variables_table: list[Pmd2ScriptGameVar],
@@ -734,11 +672,11 @@ class Pmd2ScriptData(AutoString):
     @contextmanager
     def modify(self) -> Iterator[_ScriptDataStorage]:
         yield self._storage
-        self._storage.rebuild_constant_lookup()
+        self._storage.rebuild_cache()
 
     @property
     def game_variables(self) -> list[Pmd2ScriptGameVar]:
-        return self._storage._game_variables
+        return self._storage.game_variables
 
     @game_variables.setter
     def game_variables(self, value: list[Pmd2ScriptGameVar]) -> None:
@@ -751,15 +689,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def game_variables__by_id(self) -> Mapping[int, Pmd2ScriptGameVar]:
-        return self._storage._game_variables__by_id
+        return self._storage.game_variables__by_id
 
     @property
     def game_variables__by_name(self) -> Mapping[str, Pmd2ScriptGameVar]:
-        return self._storage._game_variables__by_name
+        return self._storage.game_variables__by_name
 
     @property
     def objects(self) -> list[Pmd2ScriptObject]:
-        return self._storage._objects
+        return self._storage.objects
 
     @objects.setter
     def objects(self, value: list[Pmd2ScriptObject]) -> None:
@@ -772,15 +710,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def objects__by_id(self) -> Mapping[u16, Pmd2ScriptObject]:
-        return self._storage._objects__by_id
+        return self._storage.objects__by_id
 
     @property
     def objects__by_unique_name(self) -> Mapping[str, Pmd2ScriptObject]:
-        return self._storage._objects__by_unique_name
+        return self._storage.objects__by_unique_name
 
     @property
     def face_names(self) -> list[Pmd2ScriptFaceName]:
-        return self._storage._face_names
+        return self._storage.face_names
 
     @face_names.setter
     def face_names(self, value: list[Pmd2ScriptFaceName]) -> None:
@@ -793,15 +731,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def face_names__by_id(self) -> Mapping[int, Pmd2ScriptFaceName]:
-        return self._storage._face_names__by_id
+        return self._storage.face_names__by_id
 
     @property
     def face_names__by_name(self) -> Mapping[str, Pmd2ScriptFaceName]:
-        return self._storage._face_names__by_name
+        return self._storage.face_names__by_name
 
     @property
     def face_position_modes(self) -> list[Pmd2ScriptFacePositionMode]:
-        return self._storage._face_position_modes
+        return self._storage.face_position_modes
 
     @face_position_modes.setter
     def face_position_modes(self, value: list[Pmd2ScriptFacePositionMode]) -> None:
@@ -814,15 +752,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def face_position_modes__by_id(self) -> Mapping[int, Pmd2ScriptFacePositionMode]:
-        return self._storage._face_position_modes__by_id
+        return self._storage.face_position_modes__by_id
 
     @property
     def face_position_modes__by_name(self) -> Mapping[str, Pmd2ScriptFacePositionMode]:
-        return self._storage._face_position_modes__by_name
+        return self._storage.face_position_modes__by_name
 
     @property
     def directions(self) -> dict[int, Pmd2ScriptDirection]:
-        return self._storage._directions
+        return self._storage.directions
 
     @directions.setter
     def directions(self, value: dict[int, Pmd2ScriptDirection]) -> None:
@@ -835,19 +773,19 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def directions__by_ssa_id(self) -> Mapping[int, Pmd2ScriptDirection]:
-        return self._storage._directions
+        return self._storage.directions
 
     @property
     def directions__by_ssb_id(self) -> Mapping[int, Pmd2ScriptDirection]:
-        return self._storage._directions__by_ssb_id
+        return self._storage.directions__by_ssb_id
 
     @property
     def directions__by_name(self) -> Mapping[str, Pmd2ScriptDirection]:
-        return self._storage._directions__by_name
+        return self._storage.directions__by_name
 
     @property
     def common_routine_info(self) -> list[Pmd2ScriptRoutine]:
-        return self._storage._common_routine_info
+        return self._storage.common_routine_info
 
     @common_routine_info.setter
     def common_routine_info(self, value: list[Pmd2ScriptRoutine]) -> None:
@@ -860,15 +798,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def common_routine_info__by_id(self) -> dict[int, Pmd2ScriptRoutine]:
-        return self._storage._common_routine_info__by_id
+        return self._storage.common_routine_info__by_id
 
     @property
     def common_routine_info__by_name(self) -> dict[str, Pmd2ScriptRoutine]:
-        return self._storage._common_routine_info__by_name
+        return self._storage.common_routine_info__by_name
 
     @property
     def menus(self) -> list[Pmd2ScriptMenu]:
-        return self._storage._menus
+        return self._storage.menus
 
     @menus.setter
     def menus(self, value: list[Pmd2ScriptMenu]) -> None:
@@ -881,15 +819,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def menus__by_id(self) -> Mapping[int, Pmd2ScriptMenu]:
-        return self._storage._menus__by_id
+        return self._storage.menus__by_id
 
     @property
     def menus__by_name(self) -> Mapping[str, Pmd2ScriptMenu]:
-        return self._storage._menus__by_name
+        return self._storage.menus__by_name
 
     @property
     def process_specials(self) -> list[Pmd2ScriptSpecial]:
-        return self._storage._process_specials
+        return self._storage.process_specials
 
     @process_specials.setter
     def process_specials(self, value: list[Pmd2ScriptSpecial]) -> None:
@@ -902,15 +840,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def process_specials__by_id(self) -> Mapping[int, Pmd2ScriptSpecial]:
-        return self._storage._process_specials__by_id
+        return self._storage.process_specials__by_id
 
     @property
     def process_specials__by_name(self) -> Mapping[str, Pmd2ScriptSpecial]:
-        return self._storage._process_specials__by_name
+        return self._storage.process_specials__by_name
 
     @property
     def sprite_effects(self) -> list[Pmd2ScriptSpriteEffect]:
-        return self._storage._sprite_effects
+        return self._storage.sprite_effects
 
     @sprite_effects.setter
     def sprite_effects(self, value: list[Pmd2ScriptSpriteEffect]) -> None:
@@ -923,15 +861,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def sprite_effects__by_id(self) -> Mapping[int, Pmd2ScriptSpriteEffect]:
-        return self._storage._sprite_effects__by_id
+        return self._storage.sprite_effects__by_id
 
     @property
     def sprite_effects__by_name(self) -> Mapping[str, Pmd2ScriptSpriteEffect]:
-        return self._storage._sprite_effects__by_name
+        return self._storage.sprite_effects__by_name
 
     @property
     def bgms(self) -> list[Pmd2ScriptBgm]:
-        return self._storage._bgms
+        return self._storage.bgms
 
     @bgms.setter
     def bgms(self, value: list[Pmd2ScriptBgm]) -> None:
@@ -944,15 +882,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def bgms__by_id(self) -> Mapping[int, Pmd2ScriptBgm]:
-        return self._storage._bgms__by_id
+        return self._storage.bgms__by_id
 
     @property
     def bgms__by_name(self) -> Mapping[str, Pmd2ScriptBgm]:
-        return self._storage._bgms__by_name
+        return self._storage.bgms__by_name
 
     @property
     def level_list(self) -> list[Pmd2ScriptLevel]:
-        return self._storage._level_list
+        return self._storage.level_list
 
     @level_list.setter
     def level_list(self, value: list[Pmd2ScriptLevel]) -> None:
@@ -965,15 +903,15 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def level_list__by_id(self) -> Mapping[int, Pmd2ScriptLevel]:
-        return self._storage._level_list__by_id
+        return self._storage.level_list__by_id
 
     @property
     def level_list__by_name(self) -> Mapping[str, Pmd2ScriptLevel]:
-        return self._storage._level_list__by_name
+        return self._storage.level_list__by_name
 
     @property
     def level_entities(self) -> list[Pmd2ScriptEntity]:
-        return self._storage._level_entities
+        return self._storage.level_entities
 
     @level_entities.setter
     def level_entities(self, value: list[Pmd2ScriptEntity]) -> None:
@@ -986,11 +924,11 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def level_entities__by_id(self) -> Mapping[u16, Pmd2ScriptEntity]:
-        return self._storage._level_entities__by_id
+        return self._storage.level_entities__by_id
 
     @property
     def level_entities__by_name(self) -> Mapping[str, Pmd2ScriptEntity]:
-        return self._storage._level_entities__by_name
+        return self._storage.level_entities__by_name
 
     @property
     def op_codes(self) -> Sequence[Pmd2ScriptOpCode]:
@@ -1003,19 +941,19 @@ class Pmd2ScriptData(AutoString):
             stacklevel=2,
         )
         with self.modify() as storage:
-            storage.op_codes = value
+            storage.op_codes = list(value)
 
     @property
     def op_codes__by_id(self) -> Mapping[int, Pmd2ScriptOpCode]:
-        return self._storage._op_codes_by_id
+        return self._storage.op_codes__by_id
 
     @property
     def op_codes__by_name(self) -> Mapping[str, list[Pmd2ScriptOpCode]]:
-        return self._storage._op_codes_by_name
+        return self._storage.op_codes__by_name
 
     @property
     def ground_state_structs(self) -> dict[str, Pmd2ScriptGroundStateStruct]:
-        return self._storage._ground_state_structs
+        return self._storage.ground_state_structs
 
     @ground_state_structs.setter
     def ground_state_structs(self, value: dict[str, Pmd2ScriptGroundStateStruct]) -> None:
@@ -1028,4 +966,10 @@ class Pmd2ScriptData(AutoString):
 
     @property
     def all_script_constants__by_name(self) -> Mapping[str, ScriptDataConstant]:
-        return self._storage._all_script_constants__by_name
+        return self._storage.all_script_constants__by_name
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}<{self._storage}>"

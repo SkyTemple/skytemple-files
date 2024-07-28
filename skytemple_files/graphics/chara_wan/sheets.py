@@ -1053,6 +1053,7 @@ def chopImgToPieceLocs(img, transparent):
                 if empty:
                     unusedParts.append((xtile, ytile))
         parts = decompSize(roundUp, unusedParts)
+        img = img.copy()
         for x, y, w, h in parts:
             fullImg = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
             elCrop = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)

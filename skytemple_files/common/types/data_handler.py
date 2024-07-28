@@ -21,8 +21,6 @@ import abc
 from pathlib import Path
 from typing import Generic, TypeVar, Sequence
 
-from ndspy.rom import NintendoDSRom
-
 from skytemple_files.common.types.file_storage import (
     Asset,
     AssetSpec,

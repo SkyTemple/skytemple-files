@@ -3,8 +3,8 @@ import shutil
 from pathlib import Path
 from unittest import TestCase, SkipTest
 
-from common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
-from common.types.file_types import FileType
+from skytemple_files.common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
+from skytemple_files.common.types.file_types import FileType
 
 SKYTEMPLE_TEST_ROM_ENV = "SKYTEMPLE_TEST_ROM"
 ASSET_PROJECT_PATH = Path("skytemple_files_test", "common", "fixtures", "asset_project")
@@ -33,7 +33,6 @@ def delete_temp_rom():
 
 
 class RomProjectTestCase(TestCase):
-
     def test_list_files_rom(self):
         project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
@@ -81,7 +80,6 @@ class RomProjectTestCase(TestCase):
 
 
 class SkyTempleProjectFileStorageTestCase(TestCase):
-
     def test_get_from_rom(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
@@ -138,14 +136,16 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
     def test_get_asset_invalid_project_file(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
-        self.assertRaises(FileNotFoundError,
-                          storage.get_asset, Path("BALANCE", "missing.json"), Path("BALANCE", "waza_p.bin"))
+        self.assertRaises(
+            FileNotFoundError, storage.get_asset, Path("BALANCE", "missing.json"), Path("BALANCE", "waza_p.bin")
+        )
 
     def test_get_asset_invalid_rom_file(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
-        self.assertRaises(FileNotFoundError,
-                          storage.get_asset, Path("pokemon", "moves.json"), Path("BALANCE", "missing.bin"))
+        self.assertRaises(
+            FileNotFoundError, storage.get_asset, Path("pokemon", "moves.json"), Path("BALANCE", "missing.bin")
+        )
 
     def test_store_asset(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
@@ -155,8 +155,7 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
         before_data = asset.data
 
         try:
-            data = storage.store_asset(
-                Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"), test_data)
+            data = storage.store_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"), test_data)
 
             self.assertEqual(test_data, data)
             asset = storage.get_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"))
@@ -167,8 +166,9 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
     def test_store_asset_invalid_project_file(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
 
-        self.assertRaises(FileNotFoundError, storage.get_asset,
-                          Path("BALANCE", "missing.json"), Path("BALANCE", "waza_p.bin"))
+        self.assertRaises(
+            FileNotFoundError, storage.get_asset, Path("BALANCE", "missing.json"), Path("BALANCE", "waza_p.bin")
+        )
 
     def test_hash_of_rom_object(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
@@ -183,5 +183,3 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
         sha1_hash = storage.hash_of_asset(Path("pokemon", "moves.json"))
 
         self.assertEqual("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", sha1_hash)
-
-

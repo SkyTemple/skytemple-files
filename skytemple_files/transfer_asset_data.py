@@ -3,6 +3,7 @@
 This is a sample script to create an asset project with the v2 file API.
 For all implemented file handlers, asset files will be created using data from the provided ROM.
 """
+
 import argparse
 from pathlib import Path
 
@@ -28,23 +29,29 @@ def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path
         file_data = project.open_file(data_handler, file_path, assets=assets, force=True)
 
         project.save_file(
-            data_handler, file_path, file_data, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir)
+            data_handler, file_path, file_data, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir
+        )
 
 
 def main():
     # noinspection PyTypeChecker
     parser = argparse.ArgumentParser(description="Transfer data between a ROM and an asset project.")
-    parser.add_argument('operation', help="'rom_to_project' or 'project_to_rom")
+    parser.add_argument("operation", help="'rom_to_project' or 'project_to_rom")
     parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
     parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
-    parser.add_argument("-e", "--extracted_rom_dir", metavar="EXTRACTED_ROM_PATH", required=False,
-                        help="Path to the extracted ROM files.")
+    parser.add_argument(
+        "-e",
+        "--extracted_rom_dir",
+        metavar="EXTRACTED_ROM_PATH",
+        required=False,
+        help="Path to the extracted ROM files.",
+    )
 
     args = parser.parse_args()
 
-    if args.operation == 'rom_to_project':
+    if args.operation == "rom_to_project":
         extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir))
-    elif args.operation == 'project_to_rom':
+    elif args.operation == "project_to_rom":
         save_project_to_rom(Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir))
     else:
         raise ValueError(f"Invalid operation: {args.operation}")

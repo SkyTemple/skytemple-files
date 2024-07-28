@@ -22,18 +22,18 @@ from pathlib import Path
 
 from range_typed_integers import u8, u16, u32
 
-from common.types.file_storage import AssetSpec, Asset
-from data.md.protocol import PokeType
-from data.waza_p._model import WazaP
 from skytemple_files.common.impl_cfg import env_use_native
+from skytemple_files.common.types.file_storage import AssetSpec, Asset
 from skytemple_files.container.sir0.handler import Sir0Handler
+from skytemple_files.data.md.protocol import PokeType
 from skytemple_files.data.waza_p.handler import WazaPHandler, MOVES, LEARNSETS
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     MoveLearnsetProtocol,
     LevelUpMoveProtocol,
     WazaMoveProtocol,
-    WazaMoveRangeSettingsProtocol, WazaMoveCategory,
+    WazaMoveRangeSettingsProtocol,
+    WazaMoveCategory,
 )
 from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
 from skytemple_files_test.data.waza_p.fixture import (
@@ -408,18 +408,8 @@ class WazaPTestCase(
             "base_power": 25484,
             "type": "STEEL",
             "category": "PHYSICAL",
-            "settings_range": {
-                "target": 14,
-                "range": 6,
-                "condition": 5,
-                "unused": 0
-            },
-            "settings_range_ai": {
-                "target": 8,
-                "range": 14,
-                "condition": 3,
-                "unused": 13
-            },
+            "settings_range": {"target": 14, "range": 6, "condition": 5, "unused": 0},
+            "settings_range_ai": {"target": 8, "range": 14, "condition": 3, "unused": 13},
             "base_pp": 233,
             "ai_weight": 129,
             "miss_accuracy": 44,
@@ -435,7 +425,7 @@ class WazaPTestCase(
             "ignores_taunted": True,
             "range_check_text": 129,
             "move_id": 8899,
-            "message_id": 179
+            "message_id": 179,
         }
 
         asset = Asset(AssetSpec(Path(), Path(), MOVES), None, None, None, None, bytes(json.dumps([move_json]), "utf-8"))
@@ -488,17 +478,11 @@ class WazaPTestCase(
         self.assertEqual(63784, learnset_data["egg_moves"][0])
 
     def test_deserialize_assets_learnsets(self):
-        learnset_json = {
-            "level_up_moves": [{
-                "move_id": 5,
-                "level_id": 6
-            }],
-            "tm_hm_moves": [1, 2],
-            "egg_moves": [3, 4]
-        }
+        learnset_json = {"level_up_moves": [{"move_id": 5, "level_id": 6}], "tm_hm_moves": [1, 2], "egg_moves": [3, 4]}
 
         asset = Asset(
-            AssetSpec(Path(), Path(), LEARNSETS), None, None, None, None, bytes(json.dumps([learnset_json]), "utf-8"))
+            AssetSpec(Path(), Path(), LEARNSETS), None, None, None, None, bytes(json.dumps([learnset_json]), "utf-8")
+        )
         waza = self.handler.deserialize_from_assets([asset])
         self.assertEqual(1, len(waza.learnsets))
 

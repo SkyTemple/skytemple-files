@@ -18,10 +18,9 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Sequence, get_args
+from typing import TYPE_CHECKING, Sequence
 import json
 
-from data.md.protocol import PokeType
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.types.file_storage import AssetSpec, Asset
 from skytemple_files.common.types.hybrid_data_handler import (
@@ -29,12 +28,14 @@ from skytemple_files.common.types.hybrid_data_handler import (
     HybridSir0DataHandler,
 )
 from skytemple_files.common.util import OptionalKwargs, serialize_enum_or_default, deserialize_enum_or_default
+from skytemple_files.data.md.protocol import PokeType
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     LevelUpMoveProtocol,
     WazaMoveProtocol,
     WazaMoveRangeSettingsProtocol,
-    MoveLearnsetProtocol, WazaMoveCategory,
+    MoveLearnsetProtocol,
+    WazaMoveCategory,
 )
 
 
@@ -145,54 +146,62 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         if path_to_rom_obj == Path("BALANCE", "waza_p.bin"):
             return [
                 AssetSpec(Path("pokemon", "moves.json"), path_to_rom_obj, MOVES),
-                AssetSpec(Path("pokemon", "learnsets.json"), path_to_rom_obj, LEARNSETS)
+                AssetSpec(Path("pokemon", "learnsets.json"), path_to_rom_obj, LEARNSETS),
             ]
         return []
 
     @classmethod
     def serialize_asset(
-            cls, spec: AssetSpec, path_to_rom_obj: Path, data: WazaPProtocol, **kwargs: OptionalKwargs) -> Asset:
+        cls, spec: AssetSpec, path_to_rom_obj: Path, data: WazaPProtocol, **kwargs: OptionalKwargs
+    ) -> Asset:
         if spec.category == MOVES:
             moves_list = []
             move: WazaMoveProtocol
             for move in data.moves:
-                moves_list.append({
-                    "base_power": move.base_power,
-                    "type": serialize_enum_or_default(PokeType, move.type),
-                    "category": serialize_enum_or_default(WazaMoveCategory, move.category),
-                    "settings_range": cls._serialize_move_range_settings(move.settings_range),
-                    "settings_range_ai": cls._serialize_move_range_settings(move.settings_range_ai),
-                    "base_pp": move.base_pp,
-                    "ai_weight": move.ai_weight,
-                    "miss_accuracy": move.miss_accuracy,
-                    "accuracy": move.accuracy,
-                    "ai_condition1_chance": move.ai_condition1_chance,
-                    "number_chained_hits": move.number_chained_hits,
-                    "max_upgrade_level": move.max_upgrade_level,
-                    "crit_chance": move.crit_chance,
-                    "affected_by_magic_coat": move.affected_by_magic_coat,
-                    "is_snatchable": move.is_snatchable,
-                    "uses_mouth": move.uses_mouth,
-                    "ai_frozen_check": move.ai_frozen_check,
-                    "ignores_taunted": move.ignores_taunted,
-                    "range_check_text": move.range_check_text,
-                    "move_id": move.move_id,
-                    "message_id": move.message_id,
-                })
+                moves_list.append(
+                    {
+                        "base_power": move.base_power,
+                        "type": serialize_enum_or_default(PokeType, move.type),
+                        "category": serialize_enum_or_default(WazaMoveCategory, move.category),
+                        "settings_range": cls._serialize_move_range_settings(move.settings_range),
+                        "settings_range_ai": cls._serialize_move_range_settings(move.settings_range_ai),
+                        "base_pp": move.base_pp,
+                        "ai_weight": move.ai_weight,
+                        "miss_accuracy": move.miss_accuracy,
+                        "accuracy": move.accuracy,
+                        "ai_condition1_chance": move.ai_condition1_chance,
+                        "number_chained_hits": move.number_chained_hits,
+                        "max_upgrade_level": move.max_upgrade_level,
+                        "crit_chance": move.crit_chance,
+                        "affected_by_magic_coat": move.affected_by_magic_coat,
+                        "is_snatchable": move.is_snatchable,
+                        "uses_mouth": move.uses_mouth,
+                        "ai_frozen_check": move.ai_frozen_check,
+                        "ignores_taunted": move.ignores_taunted,
+                        "range_check_text": move.range_check_text,
+                        "move_id": move.move_id,
+                        "message_id": move.message_id,
+                    }
+                )
 
             return Asset(spec, None, None, None, None, bytes(json.dumps(moves_list, indent=4), "utf-8"))
         elif spec.category == LEARNSETS:
             learnsets = []
             learnset: MoveLearnsetProtocol
             for learnset in data.learnsets:
-                learnsets.append({
-                    "level_up_moves": [{
-                        "move_id": level_up_move.move_id,
-                        "level_id": level_up_move.level_id,
-                    } for level_up_move in learnset.level_up_moves],
-                    "tm_hm_moves": learnset.tm_hm_moves,
-                    "egg_moves": learnset.egg_moves
-                })
+                learnsets.append(
+                    {
+                        "level_up_moves": [
+                            {
+                                "move_id": level_up_move.move_id,
+                                "level_id": level_up_move.level_id,
+                            }
+                            for level_up_move in learnset.level_up_moves
+                        ],
+                        "tm_hm_moves": learnset.tm_hm_moves,
+                        "egg_moves": learnset.egg_moves,
+                    }
+                )
 
             return Asset(spec, None, None, None, None, bytes(json.dumps(learnsets, indent=4), "utf-8"))
         else:
@@ -206,7 +215,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
     ) -> WazaPProtocol:
         protocol: WazaPProtocol = cls.get_model_cls()(bytes(), 0)
 
-        assets_by_category = {asset.spec.category : asset for asset in assets}
+        assets_by_category = {asset.spec.category: asset for asset in assets}
         if MOVES in assets_by_category:
             move_asset = assets_by_category[MOVES]
             moves = json.loads(move_asset.data)
@@ -244,10 +253,12 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
             protocol.learnsets = []
             for learnset_json in learnsets:
                 learnset = cls.get_learnset_model()(
-                    [cls.get_level_up_model()(level_up["move_id"], level_up["level_id"])
-                        for level_up in learnset_json["level_up_moves"]],
+                    [
+                        cls.get_level_up_model()(level_up["move_id"], level_up["level_id"])
+                        for level_up in learnset_json["level_up_moves"]
+                    ],
                     learnset_json["tm_hm_moves"],
-                    learnset_json["egg_moves"]
+                    learnset_json["egg_moves"],
                 )
                 protocol.learnsets.append(learnset)
 

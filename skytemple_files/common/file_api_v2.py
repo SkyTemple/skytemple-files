@@ -450,7 +450,7 @@ class SkyTempleProjectFileStorage(FileStorage):
             project_file_bytes,
         )
 
-    def store_asset(self, path: Path, for_rom_path: Path, data: bytes, custom_project_dir: Path = None) -> bytes:
+    def store_asset(self, path: Path, for_rom_path: Path, data: bytes, custom_project_dir: Path | None = None) -> bytes:
         # todo: also record hash in hash file.
         if custom_project_dir is None:
             full_path = Path(self.project_dir, path)

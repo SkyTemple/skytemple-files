@@ -997,7 +997,7 @@ def decompSize(size, unused_parts):
                             for x in range(s[0]):
                                 if matrix[cur_pos[1]+y][cur_pos[0]+x]:
                                     empty += 1
-                        if empty <= s[0]*s[1]//4 and (s[0]*s[1]-empty > cur_heur or s[0]*s[1]-empty == cur_heur and s[0]*s[1] < cur_size[0]*cur_size[1]):  # Overwrite Tolerance
+                        if empty <= max(s[0]*s[1]//4, 2) and (s[0]*s[1]-empty > cur_heur or s[0]*s[1]-empty == cur_heur and s[0]*s[1] < cur_size[0]*cur_size[1]):  # Overwrite Tolerance
                             cur_size = s
                             cur_heur = cur_size[0]*cur_size[1]-empty
                 if cur_heur>max_heur:

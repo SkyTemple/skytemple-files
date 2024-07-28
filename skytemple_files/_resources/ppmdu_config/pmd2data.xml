@@ -1067,22 +1067,28 @@
 
         <Patch id="ExpandPokeList" >
           <OpenBin filepath="arm9.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_arm9.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_arm9.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0010.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay10.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay10.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0011.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay11.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay11.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0019.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay19.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay19.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0029.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay29.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay29.asm"/>
           </OpenBin>
           <OpenBin filepath="overlay/overlay_0031.bin">
-		  <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay31.asm"/>
+		        <Include filename ="anonymous_asm_mods/expand_poke_list/selector_overlay31.asm"/>
+          </OpenBin>
+        </Patch>
+
+        <Patch id="SpriteSizeInMonsterData" >
+          <OpenBin filepath="arm9.bin">
+		        <Include filename ="anonymous_asm_mods/sprite_size/selector_arm9.asm"/>
           </OpenBin>
         </Patch>
 

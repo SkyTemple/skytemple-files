@@ -113,7 +113,7 @@ class ExpandPokeListPatchHandler(AbstractPatchHandler, DependantPatch):
     def description(self) -> str:
         return _(
             """Expand the pokemon entries allowed to 2048, and makes all the entries independent.
-Needs ChangeEvoSystem, ExternalizeWazaFile, ExternalizeMappaFile patches to work.
+Needs ChangeEvoSystem, ExternalizeWazaFile, ExternalizeMappaFile, SpriteSizeInMonsterData patches to work.
 It is strongly recommended to fix any dungeon error before applying this patch,
 and to save a backup of your ROM before applying this."""
         )
@@ -131,7 +131,7 @@ and to save a backup of your ROM before applying this."""
         return PatchCategory.IMPROVEMENT_TWEAK
 
     def depends_on(self) -> list[str]:
-        return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile"]
+        return ["ChangeEvoSystem", "ExternalizeWazaFile", "ExternalizeMappaFile", "SpriteSizeInMonsterData"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
@@ -246,19 +246,11 @@ and to save a backup of your ROM before applying this."""
                     new_entries[NUM_PREVIOUS_ENTRIES + i].entid = NUM_PREVIOUS_ENTRIES + i
                 else:
                     new_entries[NUM_PREVIOUS_ENTRIES + i].entid = i
-            block2 = bincfg.data.MONSTER_SPRITE_DATA
-            data = (
-                binary[block2.address : block2.address + block2.length]
-                + binary[block2.address : block2.address + block2.length]
-            )
-            data += b"\x00\x00" * (NUM_NEW_ENTRIES - (len(data) // 2))
-            for i in range(0, len(data), 2):
-                new_entries[i // 2].unk17 = data[i]
-                new_entries[i // 2].unk18 = data[i + 1]
-                new_entries[i // 2].bitfield1_0 = False
-                new_entries[i // 2].bitfield1_1 = False
-                new_entries[i // 2].bitfield1_2 = False
-                new_entries[i // 2].bitfield1_3 = False
+            for e in new_entries:
+                e.bitfield1_0 = False
+                e.bitfield1_1 = False
+                e.bitfield1_2 = False
+                e.bitfield1_3 = False
 
             x = table_sf
             while read_u16(rom.arm9, x) != 0:

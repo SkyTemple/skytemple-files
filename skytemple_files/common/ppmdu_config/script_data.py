@@ -21,10 +21,11 @@ from __future__ import annotations
 #
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
+from contextlib import contextmanager
 import re
 import warnings
 from enum import Enum, IntEnum
-from typing import Sequence, Mapping, Union
+from typing import Iterator, Sequence, Mapping, Union
 
 from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16
@@ -377,7 +378,7 @@ def camel_to_screaming_snake_case(string) -> str:
     return CAMEL_REGEX.sub("_", string).upper()
 
 
-class Pmd2ScriptData(AutoString):
+class _ScriptDataStorage(AutoString):
     def __init__(
         self,
         game_variables_table: list[Pmd2ScriptGameVar],
@@ -693,3 +694,338 @@ class Pmd2ScriptData(AutoString):
     @property
     def all_script_constants__by_name(self) -> Mapping[str, ScriptDataConstant]:
         return self._all_script_constants__by_name
+
+
+class Pmd2ScriptData(AutoString):
+    def __init__(
+        self,
+        game_variables_table: list[Pmd2ScriptGameVar],
+        objects_list: list[Pmd2ScriptObject],
+        face_names: list[Pmd2ScriptFaceName],
+        face_position_modes: list[Pmd2ScriptFacePositionMode],
+        directions: dict[int, Pmd2ScriptDirection],
+        common_routine_info: list[Pmd2ScriptRoutine],
+        menu_ids: list[Pmd2ScriptMenu],
+        process_special_ids: list[Pmd2ScriptSpecial],
+        sprite_effect_ids: list[Pmd2ScriptSpriteEffect],
+        bgms: list[Pmd2ScriptBgm],
+        level_list: list[Pmd2ScriptLevel],
+        level_entity_table: list[Pmd2ScriptEntity],
+        op_codes: list[Pmd2ScriptOpCode],
+        ground_state_structs: dict[str, Pmd2ScriptGroundStateStruct],
+    ):
+        self._storage = _ScriptDataStorage(
+            game_variables_table,
+            objects_list,
+            face_names,
+            face_position_modes,
+            directions,
+            common_routine_info,
+            menu_ids,
+            process_special_ids,
+            sprite_effect_ids,
+            bgms,
+            level_list,
+            level_entity_table,
+            op_codes,
+            ground_state_structs,
+        )
+
+    @contextmanager
+    def modify(self) -> Iterator[_ScriptDataStorage]:
+        yield self._storage
+        self._storage.rebuild_constant_lookup()
+
+    @property
+    def game_variables(self) -> list[Pmd2ScriptGameVar]:
+        return self._storage._game_variables
+
+    @game_variables.setter
+    def game_variables(self, value: list[Pmd2ScriptGameVar]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.game_variables = value
+
+    @property
+    def game_variables__by_id(self) -> Mapping[int, Pmd2ScriptGameVar]:
+        return self._storage._game_variables__by_id
+
+    @property
+    def game_variables__by_name(self) -> Mapping[str, Pmd2ScriptGameVar]:
+        return self._storage._game_variables__by_name
+
+    @property
+    def objects(self) -> list[Pmd2ScriptObject]:
+        return self._storage._objects
+
+    @objects.setter
+    def objects(self, value: list[Pmd2ScriptObject]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.objects = value
+
+    @property
+    def objects__by_id(self) -> Mapping[u16, Pmd2ScriptObject]:
+        return self._storage._objects__by_id
+
+    @property
+    def objects__by_unique_name(self) -> Mapping[str, Pmd2ScriptObject]:
+        return self._storage._objects__by_unique_name
+
+    @property
+    def face_names(self) -> list[Pmd2ScriptFaceName]:
+        return self._storage._face_names
+
+    @face_names.setter
+    def face_names(self, value: list[Pmd2ScriptFaceName]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.face_names = value
+
+    @property
+    def face_names__by_id(self) -> Mapping[int, Pmd2ScriptFaceName]:
+        return self._storage._face_names__by_id
+
+    @property
+    def face_names__by_name(self) -> Mapping[str, Pmd2ScriptFaceName]:
+        return self._storage._face_names__by_name
+
+    @property
+    def face_position_modes(self) -> list[Pmd2ScriptFacePositionMode]:
+        return self._storage._face_position_modes
+
+    @face_position_modes.setter
+    def face_position_modes(self, value: list[Pmd2ScriptFacePositionMode]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.face_position_modes = value
+
+    @property
+    def face_position_modes__by_id(self) -> Mapping[int, Pmd2ScriptFacePositionMode]:
+        return self._storage._face_position_modes__by_id
+
+    @property
+    def face_position_modes__by_name(self) -> Mapping[str, Pmd2ScriptFacePositionMode]:
+        return self._storage._face_position_modes__by_name
+
+    @property
+    def directions(self) -> dict[int, Pmd2ScriptDirection]:
+        return self._storage._directions
+
+    @directions.setter
+    def directions(self, value: dict[int, Pmd2ScriptDirection]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.directions = value
+
+    @property
+    def directions__by_ssa_id(self) -> Mapping[int, Pmd2ScriptDirection]:
+        return self._storage._directions
+
+    @property
+    def directions__by_ssb_id(self) -> Mapping[int, Pmd2ScriptDirection]:
+        return self._storage._directions__by_ssb_id
+
+    @property
+    def directions__by_name(self) -> Mapping[str, Pmd2ScriptDirection]:
+        return self._storage._directions__by_name
+
+    @property
+    def common_routine_info(self) -> list[Pmd2ScriptRoutine]:
+        return self._storage._common_routine_info
+
+    @common_routine_info.setter
+    def common_routine_info(self, value: list[Pmd2ScriptRoutine]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.common_routine_info = value
+
+    @property
+    def common_routine_info__by_id(self) -> dict[int, Pmd2ScriptRoutine]:
+        return self._storage._common_routine_info__by_id
+
+    @property
+    def common_routine_info__by_name(self) -> dict[str, Pmd2ScriptRoutine]:
+        return self._storage._common_routine_info__by_name
+
+    @property
+    def menus(self) -> list[Pmd2ScriptMenu]:
+        return self._storage._menus
+
+    @menus.setter
+    def menus(self, value: list[Pmd2ScriptMenu]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.menus = value
+
+    @property
+    def menus__by_id(self) -> Mapping[int, Pmd2ScriptMenu]:
+        return self._storage._menus__by_id
+
+    @property
+    def menus__by_name(self) -> Mapping[str, Pmd2ScriptMenu]:
+        return self._storage._menus__by_name
+
+    @property
+    def process_specials(self) -> list[Pmd2ScriptSpecial]:
+        return self._storage._process_specials
+
+    @process_specials.setter
+    def process_specials(self, value: list[Pmd2ScriptSpecial]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.process_specials = value
+
+    @property
+    def process_specials__by_id(self) -> Mapping[int, Pmd2ScriptSpecial]:
+        return self._storage._process_specials__by_id
+
+    @property
+    def process_specials__by_name(self) -> Mapping[str, Pmd2ScriptSpecial]:
+        return self._storage._process_specials__by_name
+
+    @property
+    def sprite_effects(self) -> list[Pmd2ScriptSpriteEffect]:
+        return self._storage._sprite_effects
+
+    @sprite_effects.setter
+    def sprite_effects(self, value: list[Pmd2ScriptSpriteEffect]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.sprite_effects = value
+
+    @property
+    def sprite_effects__by_id(self) -> Mapping[int, Pmd2ScriptSpriteEffect]:
+        return self._storage._sprite_effects__by_id
+
+    @property
+    def sprite_effects__by_name(self) -> Mapping[str, Pmd2ScriptSpriteEffect]:
+        return self._storage._sprite_effects__by_name
+
+    @property
+    def bgms(self) -> list[Pmd2ScriptBgm]:
+        return self._storage._bgms
+
+    @bgms.setter
+    def bgms(self, value: list[Pmd2ScriptBgm]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.bgms = value
+
+    @property
+    def bgms__by_id(self) -> Mapping[int, Pmd2ScriptBgm]:
+        return self._storage._bgms__by_id
+
+    @property
+    def bgms__by_name(self) -> Mapping[str, Pmd2ScriptBgm]:
+        return self._storage._bgms__by_name
+
+    @property
+    def level_list(self) -> list[Pmd2ScriptLevel]:
+        return self._storage._level_list
+
+    @level_list.setter
+    def level_list(self, value: list[Pmd2ScriptLevel]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.level_list = value
+
+    @property
+    def level_list__by_id(self) -> Mapping[int, Pmd2ScriptLevel]:
+        return self._storage._level_list__by_id
+
+    @property
+    def level_list__by_name(self) -> Mapping[str, Pmd2ScriptLevel]:
+        return self._storage._level_list__by_name
+
+    @property
+    def level_entities(self) -> list[Pmd2ScriptEntity]:
+        return self._storage._level_entities
+
+    @level_entities.setter
+    def level_entities(self, value: list[Pmd2ScriptEntity]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.level_entities = value
+
+    @property
+    def level_entities__by_id(self) -> Mapping[u16, Pmd2ScriptEntity]:
+        return self._storage._level_entities__by_id
+
+    @property
+    def level_entities__by_name(self) -> Mapping[str, Pmd2ScriptEntity]:
+        return self._storage._level_entities__by_name
+
+    @property
+    def op_codes(self) -> Sequence[Pmd2ScriptOpCode]:
+        return self._storage.op_codes
+
+    @op_codes.setter
+    def op_codes(self, value: Sequence[Pmd2ScriptOpCode]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.op_codes = value
+
+    @property
+    def op_codes__by_id(self) -> Mapping[int, Pmd2ScriptOpCode]:
+        return self._storage._op_codes_by_id
+
+    @property
+    def op_codes__by_name(self) -> Mapping[str, list[Pmd2ScriptOpCode]]:
+        return self._storage._op_codes_by_name
+
+    @property
+    def ground_state_structs(self) -> dict[str, Pmd2ScriptGroundStateStruct]:
+        return self._storage._ground_state_structs
+
+    @ground_state_structs.setter
+    def ground_state_structs(self, value: dict[str, Pmd2ScriptGroundStateStruct]) -> None:
+        warnings.warn(
+            DeprecatedToBeRemovedWarning("Script data should be modified via the `modify` context manager", (2, 0, 0)),
+            stacklevel=2,
+        )
+        with self.modify() as storage:
+            storage.ground_state_structs = value
+
+    @property
+    def all_script_constants__by_name(self) -> Mapping[str, ScriptDataConstant]:
+        return self._storage._all_script_constants__by_name

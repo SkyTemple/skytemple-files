@@ -84,14 +84,18 @@ def check_and_correct_monster_sprite_size(
             )
             max_tile_slots_needed = max(max_tile_slots_needed, max_tile_slots_needed2)
             max_file_size_needed = max(max_file_size_needed, max_file_size_needed2)
-
+    check_body_value = md_target.body_size
     if check_value != max_tile_slots_needed:
         if is_expand_poke_list_patch_applied:
             md_target.unk17 = max_tile_slots_needed
         else:
             sprite_size_table[getattr(md_gender1, effective_base_attr)].sprite_tile_slots = max_tile_slots_needed
 
-        changed.append((_("Sprite Size"), check_value, max_tile_slots_needed))
+        changed.append((_("Sprite VRAM Size"), check_value, max_tile_slots_needed))
+
+    if check_body_value * 6 < max_tile_slots_needed:
+        md_target.body_size = math.ceil(max_tile_slots_needed/6)
+        changed.append((_("Body Size"), check_body_value, md_target.body_size))
 
     if check_value_file != max_file_size_needed:
         if is_expand_poke_list_patch_applied:

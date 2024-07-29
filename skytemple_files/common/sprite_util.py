@@ -79,7 +79,9 @@ def check_and_correct_monster_sprite_size(
         check_value_file = sprite_size_table[md_gender1.md_index_base].unk1
         max_tile_slots_needed, max_file_size_needed = _get_sprite_properties(monster_bin, m_attack_bin, md_gender1)
         if md_gender2 is not None:
-            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(monster_bin, m_attack_bin, md_gender2)
+            max_tile_slots_needed2, max_file_size_needed2 = _get_sprite_properties(
+                monster_bin, m_attack_bin, md_gender2
+            )
             max_tile_slots_needed = max(max_tile_slots_needed, max_tile_slots_needed2)
             max_file_size_needed = max(max_file_size_needed, max_file_size_needed2)
 
@@ -110,10 +112,7 @@ def _get_sprite_properties(monster_bin: BinPack, m_attack_bin: BinPack, entry: M
     sprite = FileType.WAN.deserialize(sprite_bytes)
     sprite_atk = FileType.WAN.deserialize(sprite_atk_bytes)
     max_tile_slots_needed = max(
-        (6,
-         sprite.model.frame_store.max_fragment_alloc_count,
-         sprite_atk.model.frame_store.max_fragment_alloc_count
-         )
+        (6, sprite.model.frame_store.max_fragment_alloc_count, sprite_atk.model.frame_store.max_fragment_alloc_count)
     )
     max_file_size_needed = math.ceil(len(sprite_bytes) / 512)
     return max_tile_slots_needed, max_file_size_needed

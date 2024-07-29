@@ -969,45 +969,50 @@ def convertPieceToImgStrip(piece, palette_map):
     imgStrip.imgPx = strips
     return imgStrip
 
+
 def decompSize(size, unused_parts):
-    size = (size[0]//TEX_SIZE, size[1]//TEX_SIZE)
+    size = (size[0] // TEX_SIZE, size[1] // TEX_SIZE)
     matrix = [[0 for i in range(size[0])] for j in range(size[1])]
     for pos in unused_parts:
         matrix[pos[1]][pos[0]] = 1
     parts = []
-    filled=False
+    filled = False
     while not filled:
-        filled=True
-        for c in range(size[0]*size[1]):
-            if matrix[c//size[0]][c%size[0]]==0:
+        filled = True
+        for c in range(size[0] * size[1]):
+            if matrix[c // size[0]][c % size[0]] == 0:
                 filled = False
                 break
         if not filled:
             max_pos = (0, 0)
             max_size = (0, 0)
             max_heur = 0
-            for c in range(size[0]*size[1]):
-                cur_pos = (c%size[0], c//size[0])
+            for c in range(size[0] * size[1]):
+                cur_pos = (c % size[0], c // size[0])
                 cur_size = (0, 0)
                 cur_heur = 0
                 for s in DIM_TABLE:
-                    if cur_pos[0]+s[0]<=len(matrix[0]) and cur_pos[1]+s[1]<=len(matrix):
+                    if cur_pos[0] + s[0] <= len(matrix[0]) and cur_pos[1] + s[1] <= len(matrix):
                         empty = 0
                         for y in range(s[1]):
                             for x in range(s[0]):
-                                if matrix[cur_pos[1]+y][cur_pos[0]+x]:
+                                if matrix[cur_pos[1] + y][cur_pos[0] + x]:
                                     empty += 1
-                        if empty <= max(s[0]*s[1]//4, 2) and (s[0]*s[1]-empty > cur_heur or s[0]*s[1]-empty == cur_heur and s[0]*s[1] < cur_size[0]*cur_size[1]):  # Overwrite Tolerance
+                        if empty <= max(s[0] * s[1] // 4, 2) and (
+                            s[0] * s[1] - empty > cur_heur
+                            or s[0] * s[1] - empty == cur_heur
+                            and s[0] * s[1] < cur_size[0] * cur_size[1]
+                        ):  # Overwrite Tolerance
                             cur_size = s
-                            cur_heur = cur_size[0]*cur_size[1]-empty
-                if cur_heur>max_heur:
+                            cur_heur = cur_size[0] * cur_size[1] - empty
+                if cur_heur > max_heur:
                     max_pos = cur_pos
                     max_size = cur_size
                     max_heur = cur_heur
             parts.append((max_pos[0], max_pos[1], max_size[0], max_size[1]))
             for y in range(max_size[1]):
                 for x in range(max_size[0]):
-                    matrix[max_pos[1]+y][max_pos[0]+x] = 1
+                    matrix[max_pos[1] + y][max_pos[0] + x] = 1
     return parts
 
 
@@ -1016,32 +1021,38 @@ def chopImgToPieceLocs(img, transparent):
     mirror = True
     mirrorBase = img.width
     for y in range(img.height):
-        for x in range(math.ceil(img.width/2)):
-            if img.getpixel((x, y)) != img.getpixel((mirrorBase-x-1, y)):
+        for x in range(math.ceil(img.width / 2)):
+            if img.getpixel((x, y)) != img.getpixel((mirrorBase - x - 1, y)):
                 mirror = False
                 break
         if not mirror:
             break
-    #mirror = False
-    #mirrorBase = img.width
+    # mirror = False
+    # mirrorBase = img.width
     if mirror:
-        img = img.crop([0, 0, math.ceil(img.width/2), img.height])
+        img = img.crop([0, 0, math.ceil(img.width / 2), img.height])
     best_match = None
     for e in DIM_TABLE:
-        if e[0]*TEX_SIZE >= img.width and e[1]*TEX_SIZE >= img.height:
-            if best_match is None or best_match[0]*best_match[1] >= e[0]*e[1]:
+        if e[0] * TEX_SIZE >= img.width and e[1] * TEX_SIZE >= img.height:
+            if best_match is None or best_match[0] * best_match[1] >= e[0] * e[1]:
                 best_match = e
     chopped_imgs = []
-    if not best_match or best_match[0]*best_match[1] > 24:
+    if not best_match or best_match[0] * best_match[1] > 24:
         roundUp = (
             exUtils.roundUpToMult(img.size[0], TEX_SIZE),
             exUtils.roundUpToMult(img.size[1], TEX_SIZE),
         )
         unusedParts = []
-        for ytile in range(roundUp[1]//TEX_SIZE):
-            for xtile in range(roundUp[0]//TEX_SIZE):
+        for ytile in range(roundUp[1] // TEX_SIZE):
+            for xtile in range(roundUp[0] // TEX_SIZE):
                 current = img.crop(
-                    box=[xtile * TEX_SIZE, ytile * TEX_SIZE, min((xtile + 1) * TEX_SIZE, img.width), min((ytile + 1) * TEX_SIZE, img.height)])
+                    box=[
+                        xtile * TEX_SIZE,
+                        ytile * TEX_SIZE,
+                        min((xtile + 1) * TEX_SIZE, img.width),
+                        min((ytile + 1) * TEX_SIZE, img.height),
+                    ]
+                )
                 empty = True
                 for ypixel in range(current.height):
                     for xpixel in range(current.width):
@@ -1055,17 +1066,17 @@ def chopImgToPieceLocs(img, transparent):
         parts = decompSize(roundUp, unusedParts)
         img = img.copy()
         for x, y, w, h in parts:
-            fullImg = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
-            elCrop = Image.new("RGBA", (w*TEX_SIZE, h*TEX_SIZE), transparent)
-            fullImg.paste(img, (-x*TEX_SIZE, -y*TEX_SIZE), img)
-            img.paste(elCrop, (x*TEX_SIZE, y*TEX_SIZE))
+            fullImg = Image.new("RGBA", (w * TEX_SIZE, h * TEX_SIZE), transparent)
+            elCrop = Image.new("RGBA", (w * TEX_SIZE, h * TEX_SIZE), transparent)
+            fullImg.paste(img, (-x * TEX_SIZE, -y * TEX_SIZE), img)
+            img.paste(elCrop, (x * TEX_SIZE, y * TEX_SIZE))
             chopped_imgs.append((fullImg, (x * TEX_SIZE, y * TEX_SIZE), (False, False)))
             if mirror:
-                chopped_imgs.append((None, (mirrorBase - (x+w) * TEX_SIZE, y * TEX_SIZE), (True, False)))
+                chopped_imgs.append((None, (mirrorBase - (x + w) * TEX_SIZE, y * TEX_SIZE), (True, False)))
     else:
-        fullImg = Image.new("RGBA", (best_match[0]*TEX_SIZE, best_match[1]*TEX_SIZE), transparent)
+        fullImg = Image.new("RGBA", (best_match[0] * TEX_SIZE, best_match[1] * TEX_SIZE), transparent)
         fullImg.paste(img, (0, 0), img)
         chopped_imgs.append((fullImg, (0, 0), (False, False)))
         if mirror:
-            chopped_imgs.append((None, (mirrorBase - best_match[0]*TEX_SIZE, 0), (True, False)))
+            chopped_imgs.append((None, (mirrorBase - best_match[0] * TEX_SIZE, 0), (True, False)))
     return chopped_imgs

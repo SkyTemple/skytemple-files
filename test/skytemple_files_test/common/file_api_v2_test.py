@@ -6,17 +6,10 @@ from unittest import TestCase, SkipTest
 from skytemple_files.common.types.file_storage import Asset, AssetSpec
 from skytemple_files.common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
 from skytemple_files.common.types.file_types import FileType
+from skytemple_files_test.case import load_rom_path
 
-SKYTEMPLE_TEST_ROM_ENV = "SKYTEMPLE_TEST_ROM"
 ASSET_PROJECT_PATH = Path("skytemple_files_test", "common", "fixtures", "asset_project")
 ROM_COPY_PATH = Path("skytemple_files_test", "common", "fixtures", "rom_copy.nds")
-
-
-def load_rom_path() -> Path:
-    if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
-        return Path(os.environ[SKYTEMPLE_TEST_ROM_ENV])
-    else:
-        raise SkipTest("No ROM file provided or ROM not found.")
 
 
 def copy_rom_to_temp_file() -> Path:
@@ -74,8 +67,14 @@ class RomProjectTestCase(TestCase):
         extracted_rom_dir = Path(ASSET_PROJECT_PATH, "extracted_rom")
         expected_file_path = Path(extracted_rom_dir, rom_path)
         try:
-            project.save_file(FileType.WAZA_P, rom_path, file_data,
-                              skip_save_to_rom=True, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir)
+            project.save_file(
+                FileType.WAZA_P,
+                rom_path,
+                file_data,
+                skip_save_to_rom=True,
+                skip_save_to_project_dir=True,
+                extracted_rom_dir=extracted_rom_dir,
+            )
 
             self.assertTrue(expected_file_path.exists())
         finally:

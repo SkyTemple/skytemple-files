@@ -21,7 +21,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 import json
 
+from range_typed_integers import u32
+
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
+from skytemple_files.common.ppmdu_config.data import Pmd2StringBlock
 from skytemple_files.common.types.file_storage import AssetSpec, Asset
 from skytemple_files.common.types.hybrid_data_handler import (
     WriterProtocol,
@@ -29,6 +32,8 @@ from skytemple_files.common.types.hybrid_data_handler import (
 )
 from skytemple_files.common.util import OptionalKwargs, serialize_enum_or_default, deserialize_enum_or_default
 from skytemple_files.data.md.protocol import PokeType
+from skytemple_files.data.str.handler import StrHandler
+from skytemple_files.data.str.model import Str
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     LevelUpMoveProtocol,
@@ -157,51 +162,71 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         if spec.category == MOVES:
             moves_list = []
             move: WazaMoveProtocol
+
+            strings, string_blocks = cls._get_strings_from_rom(["Move Names"], **kwargs)
+
             for move in data.moves:
-                moves_list.append(
-                    {
-                        "base_power": move.base_power,
-                        "type": serialize_enum_or_default(PokeType, move.type),
-                        "category": serialize_enum_or_default(WazaMoveCategory, move.category),
-                        "settings_range": cls._serialize_move_range_settings(move.settings_range),
-                        "settings_range_ai": cls._serialize_move_range_settings(move.settings_range_ai),
-                        "base_pp": move.base_pp,
-                        "ai_weight": move.ai_weight,
-                        "miss_accuracy": move.miss_accuracy,
-                        "accuracy": move.accuracy,
-                        "ai_condition1_chance": move.ai_condition1_chance,
-                        "number_chained_hits": move.number_chained_hits,
-                        "max_upgrade_level": move.max_upgrade_level,
-                        "crit_chance": move.crit_chance,
-                        "affected_by_magic_coat": move.affected_by_magic_coat,
-                        "is_snatchable": move.is_snatchable,
-                        "uses_mouth": move.uses_mouth,
-                        "ai_frozen_check": move.ai_frozen_check,
-                        "ignores_taunted": move.ignores_taunted,
-                        "range_check_text": move.range_check_text,
-                        "move_id": move.move_id,
-                        "message_id": move.message_id,
-                    }
-                )
+                serialized_move = {
+                    "base_power": move.base_power,
+                    "type": serialize_enum_or_default(PokeType, move.type),
+                    "category": serialize_enum_or_default(WazaMoveCategory, move.category),
+                    "settings_range": cls._serialize_move_range_settings(move.settings_range),
+                    "settings_range_ai": cls._serialize_move_range_settings(move.settings_range_ai),
+                    "base_pp": move.base_pp,
+                    "ai_weight": move.ai_weight,
+                    "miss_accuracy": move.miss_accuracy,
+                    "accuracy": move.accuracy,
+                    "ai_condition1_chance": move.ai_condition1_chance,
+                    "number_chained_hits": move.number_chained_hits,
+                    "max_upgrade_level": move.max_upgrade_level,
+                    "crit_chance": move.crit_chance,
+                    "affected_by_magic_coat": move.affected_by_magic_coat,
+                    "is_snatchable": move.is_snatchable,
+                    "uses_mouth": move.uses_mouth,
+                    "ai_frozen_check": move.ai_frozen_check,
+                    "ignores_taunted": move.ignores_taunted,
+                    "range_check_text": move.range_check_text,
+                    "move_id": move.move_id,
+                    "message_id": move.message_id,
+                }
+                if strings is not None:
+                    move_name_index = string_blocks["Move Names"].begin + move.move_id
+                    if move_name_index <= string_blocks["Move Names"].end:
+                        serialized_move["name"] = strings.strings[move_name_index]
+                moves_list.append(serialized_move)
 
             return Asset(spec, None, None, None, None, bytes(json.dumps(moves_list, indent=4), "utf-8"))
         elif spec.category == LEARNSETS:
             learnsets = []
             learnset: MoveLearnsetProtocol
-            for learnset in data.learnsets:
-                learnsets.append(
-                    {
-                        "level_up_moves": [
-                            {
-                                "move_id": level_up_move.move_id,
-                                "level_id": level_up_move.level_id,
-                            }
-                            for level_up_move in learnset.level_up_moves
-                        ],
-                        "tm_hm_moves": learnset.tm_hm_moves,
-                        "egg_moves": learnset.egg_moves,
-                    }
-                )
+
+            strings, string_blocks = cls._get_strings_from_rom(["Move Names", "Pokemon Names"], **kwargs)
+
+            def get_move_value(move_id: u32) -> str | u32:
+                if strings is None:
+                    return move_id
+                else:
+                    move_name_idx = string_blocks["Move Names"].begin + move_id
+                    if move_name_idx <= string_blocks["Move Names"].end:
+                        return strings.strings[move_name_idx]
+
+            for i, learnset in enumerate(data.learnsets):
+                serialized_learnset = {
+                    "level_up_moves": [
+                        {
+                            "move_id": get_move_value(level_up_move.move_id),
+                            "level_id": level_up_move.level_id,
+                        }
+                        for level_up_move in learnset.level_up_moves
+                    ],
+                    "tm_hm_moves": [get_move_value(move_id) for move_id in learnset.tm_hm_moves],
+                    "egg_moves": [get_move_value(move_id) for move_id in learnset.egg_moves],
+                }
+
+                if strings is not None:
+                    serialized_learnset["pokemon_name"] = strings.strings[string_blocks["Pokemon Names"].begin + i]
+
+                learnsets.append(serialized_learnset)
 
             return Asset(spec, None, None, None, None, bytes(json.dumps(learnsets, indent=4), "utf-8"))
         else:
@@ -216,6 +241,9 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         protocol: WazaPProtocol = cls.get_model_cls()(bytes(), 0)
 
         assets_by_category = {asset.spec.category: asset for asset in assets}
+
+        # Keep track of move names/IDs to deserialize learnsets later.
+        move_names_to_ids: dict[str, u32] = {}
         if MOVES in assets_by_category:
             move_asset = assets_by_category[MOVES]
             moves = json.loads(move_asset.data)
@@ -247,18 +275,31 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
                 move.move_id = move_json["move_id"]
                 move.message_id = move_json["message_id"]
 
+                if "name" in move_json:
+                    move_names_to_ids[move_json["name"]] = move_json["move_id"]
+
         if LEARNSETS in assets_by_category:
             learnset_asset = assets_by_category[LEARNSETS]
             learnsets = json.loads(learnset_asset.data)
             protocol.learnsets = []
+
+            def get_move_id(move_value: str | u32) -> u32:
+                if isinstance(move_value, str):
+                    if move_value in move_names_to_ids:
+                        return move_names_to_ids[move_value]
+                    else:
+                        raise KeyError(f"Invalid move name {move_value} in learnset.")
+
+                return move_value
+
             for learnset_json in learnsets:
                 learnset = cls.get_learnset_model()(
                     [
-                        cls.get_level_up_model()(level_up["move_id"], level_up["level_id"])
+                        cls.get_level_up_model()(get_move_id(level_up["move_id"]), level_up["level_id"])
                         for level_up in learnset_json["level_up_moves"]
                     ],
-                    learnset_json["tm_hm_moves"],
-                    learnset_json["egg_moves"],
+                    [get_move_id(move_value) for move_value in learnset_json["tm_hm_moves"]],
+                    [get_move_id(move_value) for move_value in learnset_json["egg_moves"]],
                 )
                 protocol.learnsets.append(learnset)
 
@@ -281,3 +322,25 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         settings.condition = settings_json["condition"]
         settings.unused = settings_json["unused"]
         return settings
+
+    @staticmethod
+    def _get_strings_from_rom(
+        block_names: list[str], **kwargs: OptionalKwargs
+    ) -> tuple[Str | None, dict[str, Pmd2StringBlock] | None]:
+        """
+        Fetches blocks of strings from the ROM if it is specified in kwargs.
+        """
+        if "rom_project" in kwargs:
+            rom_project = kwargs["rom_project"]
+            # Default to English strings (NA/EU). Use Japanese strings if this is the JP ROM.
+            try:
+                strings_file = rom_project.rom.getFileByName("MESSAGE/text_e.str")
+            except ValueError:
+                strings_file = rom_project.rom.getFileByName("MESSAGE/text_j.str")
+            strings = StrHandler.deserialize(strings_file)
+            string_blocks = {
+                block_name: rom_project.static_data.string_index_data.string_blocks[block_name]
+                for block_name in block_names
+            }
+            return strings, string_blocks
+        return None, None

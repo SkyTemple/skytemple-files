@@ -17,7 +17,7 @@ def extract_rom_files_to_project(rom_path: Path, asset_dir: Path):
     for file_path, data_handler in rom_files.items():
         file_data = project.open_file(data_handler, file_path, force=True, load_from_rom=True)
 
-        project.save_file(data_handler, file_path, file_data, skip_save_to_rom=True)
+        project.save_file(data_handler, file_path, file_data, skip_save_to_rom=True, rom_project=project)
 
 
 def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path):

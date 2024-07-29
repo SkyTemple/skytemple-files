@@ -22,8 +22,10 @@ import os
 import sys
 import typing
 from abc import ABC
+from pathlib import Path
 from tempfile import TemporaryFile
 from typing import Any, Generic, Mapping, Optional, Protocol, Type, TypeVar
+from unittest import SkipTest
 
 from PIL import Image
 
@@ -35,6 +37,7 @@ from skytemple_files.common.util import (
 from skytemple_files_test.image import ImageTestCaseAbc
 from skytemple_files_test.xml import XmlTestCaseAbc
 
+SKYTEMPLE_TEST_ROM_ENV = "SKYTEMPLE_TEST_ROM"
 U = TypeVar("U")
 
 
@@ -144,8 +147,8 @@ def romtest(*, file_names=None, file_ext=None, path):
         from parameterized import parameterized
 
         rom = None
-        if "SKYTEMPLE_TEST_ROM" in os.environ and os.environ["SKYTEMPLE_TEST_ROM"] != "":
-            rom = NintendoDSRom.fromFile(os.environ["SKYTEMPLE_TEST_ROM"])
+        if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
+            rom = NintendoDSRom.fromFile(os.environ[SKYTEMPLE_TEST_ROM_ENV])
 
         if rom:
 
@@ -229,3 +232,10 @@ def with_fixtures(*, file_ext=None, path):
                 frame_locals[local_name] = local
 
     return _outer_wrapper
+
+
+def load_rom_path() -> Path:
+    if SKYTEMPLE_TEST_ROM_ENV in os.environ and os.environ[SKYTEMPLE_TEST_ROM_ENV] != "":
+        return Path(os.environ[SKYTEMPLE_TEST_ROM_ENV])
+    else:
+        raise SkipTest("No ROM file provided or ROM not found.")

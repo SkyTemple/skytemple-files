@@ -769,6 +769,9 @@ def deserialize_enum_or_default(enum_class: type[Enum], value: str | int) -> Enu
     If the value is an integer, returns the integer back.
     """
     if isinstance(value, str):
-        return enum_class[value].value
+        try:
+            return enum_class[value].value
+        except NameError:
+            raise NameError(f"Invalid value {value} for type {enum_class.name}")
     else:
         return value

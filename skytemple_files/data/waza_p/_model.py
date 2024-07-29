@@ -248,6 +248,8 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
 
     def __init__(self, data: bytes, waza_content_pointer: int):
         if len(data) == 0:
+            self.moves = []
+            self.learnsets = []
             return
 
         if not isinstance(data, memoryview):

@@ -3,6 +3,7 @@ import shutil
 from pathlib import Path
 from unittest import TestCase, SkipTest
 
+from skytemple_files.common.types.file_storage import Asset, AssetSpec
 from skytemple_files.common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
 from skytemple_files.common.types.file_types import FileType
 
@@ -33,6 +34,18 @@ def delete_temp_rom():
 
 
 class RomProjectTestCase(TestCase):
+    def test_load_assets(self):
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+
+        assets = project.load_assets(FileType.WAZA_P, Path("BALANCE", "waza_p.bin"))
+        self.assertEqual(2, len(assets))
+
+        self.assertEqual(Asset, assets[0].__class__)
+        self.assertEqual(Path("pokemon", "moves.json"), assets[0].spec.path)
+
+        self.assertEqual(AssetSpec, assets[1].__class__)
+        self.assertEqual(Path("pokemon", "learnsets.json"), assets[1].path)
+
     def test_list_files_rom(self):
         project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
@@ -50,6 +63,24 @@ class RomProjectTestCase(TestCase):
         expected_path = Path("BALANCE", "waza_p.bin")
         self.assertTrue(expected_path in file_list)
         self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+
+    def test_save_file_extracted_rom_dir(self):
+        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+        rom_path = Path("BALANCE", "waza_p.bin")
+        assets = project.load_assets(FileType.WAZA_P, rom_path)
+        assets = [asset for asset in assets if isinstance(asset, Asset)]
+        file_data = project.open_file(FileType.WAZA_P, rom_path, assets=assets, force=True)
+
+        extracted_rom_dir = Path(ASSET_PROJECT_PATH, "extracted_rom")
+        expected_file_path = Path(extracted_rom_dir, rom_path)
+        try:
+            project.save_file(FileType.WAZA_P, rom_path, file_data,
+                              skip_save_to_rom=True, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir)
+
+            self.assertTrue(expected_file_path.exists())
+        finally:
+            if expected_file_path.exists():
+                os.remove(str(expected_file_path))
 
     def test_load_allow_extra_skypatches(self):
         project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)

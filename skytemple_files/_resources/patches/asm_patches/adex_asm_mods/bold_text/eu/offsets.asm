@@ -7,4 +7,5 @@
 .definelabel TagCheck, 0x02020A20
 .definelabel TagCodeError, 0x02021BD4
 .definelabel AfterTagIsFound, 0x02021C64
+.definelabel ReturnCharWidth, 0x02026868
 .definelabel StackThing, 0x78

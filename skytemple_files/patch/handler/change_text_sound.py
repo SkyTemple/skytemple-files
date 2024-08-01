@@ -46,7 +46,7 @@ class ChangeTextSoundPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Adds new text tags that allow for the textbox sound to be changed. [TS:X] will use the Xth sound effect ID in textboxes. [TR] will revert the sound to default."
+        return "Adds new text tags that allow for the textbox sound to be changed. [TS:X:Y] will use the Xth sound effect ID in textboxes with a volume of Y. [TR] will revert the sound and volume to their default states, sound effect 16133 and volume 256."
 
     @property
     def author(self) -> str:

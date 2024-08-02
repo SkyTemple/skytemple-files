@@ -24,7 +24,7 @@ from skytemple_files.common.xml_util import prettify
 
 
 class XmlTestCaseAbc(unittest.TestCase, ABC):
-    def assertXmlEqual(self, xml1: str | Element, xml2: str | Element):
+    def assertXmlEqual(self, xml1: str | Element, xml2: str | Element, msg: str = "Failed"):
         from xmldiff import main
 
         xml1_text: str
@@ -47,4 +47,4 @@ class XmlTestCaseAbc(unittest.TestCase, ABC):
         if len(diff) < 1:
             return
         s = "\n".join((str(x) for x in diff))
-        raise AssertionError(f"Expected XMLs to be equal. Differences from xml1 to xml2:\n{s}")
+        raise AssertionError(f"{msg}: Expected XMLs to be equal. Differences from xml1 to xml2:\n{s}")

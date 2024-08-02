@@ -30,7 +30,6 @@ from PIL import Image
 
 import skytemple_files.graphics.chara_wan.utils as exUtils
 import skytemple_files.graphics.chara_wan.wan_utils as exWanUtils
-from skytemple_files.common.util import simple_quant
 from skytemple_files.common.xml_util import prettify
 from skytemple_files.graphics.chara_wan.model import (
     DEBUG_PRINT,
@@ -454,8 +453,8 @@ def ImportSheets(inDir, strict=False):
     # and then combine the color lists such that there are as few distinct palettes as possible
     # and that no palettes have over 16 colors (transparency included)
 
-    # then, run through simple_quant
-    reducedImg = simple_quant(combinedImg, False).convert("RGBA")
+    # then, reduce colors
+    reducedImg = combinedImg.convert("RGB").quantize(16, dither=0).convert("RGBA")
 
     datas = reducedImg.getdata()
     for idx in range(len(datas)):

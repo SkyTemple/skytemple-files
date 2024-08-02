@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import filecmp
 import functools
 import os
 import sys
@@ -24,12 +25,15 @@ from abc import ABC
 from tempfile import TemporaryFile
 from typing import Any, Generic, Mapping, Optional, Protocol, Type, TypeVar
 
+from PIL import Image
+
 from skytemple_files.common.util import (
     OptionalKwargs,
     get_files_from_rom_with_extension,
     get_ppmdu_config_for_rom,
 )
 from skytemple_files_test.image import ImageTestCaseAbc
+from skytemple_files_test.xml import XmlTestCaseAbc
 
 U = TypeVar("U")
 
@@ -45,7 +49,7 @@ class BoundDataHandler(Protocol[U]):
 T = TypeVar("T", bound=BoundDataHandler)  # type: ignore
 
 
-class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
+class SkyTempleFilesTestCase(ImageTestCaseAbc, XmlTestCaseAbc, Generic[T, U], ABC):
     handler: Type[T]
 
     @classmethod
@@ -75,6 +79,40 @@ class SkyTempleFilesTestCase(ImageTestCaseAbc, Generic[T, U], ABC):
             f.write(cls.handler.serialize(model, **ser_kwargs))  # type: ignore
             f.seek(0)
             return f.read()  # type: ignore
+
+    def assertDirsEqual(self, dir1: str, dir2: str, msg: str = "Failed", *, ignore_contents: list[str] | None = None):
+        ignore_contents = ignore_contents or []
+        cmp = filecmp.dircmp(dir1, dir2)
+        self.assertEqual(0, len(cmp.left_only), f"{msg}: Files exist in {dir1} but not in {dir2}: {cmp.left}")
+        self.assertEqual(0, len(cmp.right_only), f"{msg}: Files exist in {dir2} but not in {dir1}: {cmp.right}")
+        self.assertEqual(
+            0, len(cmp.funny_files), f"{msg}: Some files in {dir1} and {dir2} could not be compared: {cmp.funny_files}"
+        )
+        self.assertEqual(
+            0,
+            len(cmp.common_funny),
+            f"{msg}: Some files in {dir1} and {dir2} could not be compared: {cmp.common_funny}",
+        )
+
+        # For all differing files we now need to run some checks that they actually differ.
+        for file_path in cmp.diff_files:
+            if file_path in ignore_contents:
+                continue
+            if file_path.lower().endswith(".xml"):
+                self.assertXmlEqual(
+                    os.path.join(dir1, file_path),
+                    os.path.join(dir2, file_path),
+                    f"{msg}: XML File {file_path} is not equal in {dir1} and {dir2}",
+                )
+            elif file_path.lower().endswith(".png"):
+                self.assertImagesEqual(
+                    Image.open(os.path.join(dir1, file_path)),
+                    Image.open(os.path.join(dir2, file_path)),
+                    None,
+                    f"{msg}: PNG File {file_path} is not equal in {dir1} and {dir2}",
+                )
+            else:
+                assert False, f"{msg}: File {file_path} is not equal in {dir1} and {dir2}"
 
 
 @typing.no_type_check

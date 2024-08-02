@@ -16,9 +16,8 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import re
 from enum import Enum
-from typing import TypeVar, Union, Mapping
+from typing import TypeVar, Union
 from collections.abc import Iterable
 
 from explorerscript.ssb_converting.ssb_data_types import (
@@ -41,25 +40,23 @@ from skytemple_files.common.ppmdu_config.script_data import (
     Pmd2ScriptFaceName,
     Pmd2ScriptData,
     Pmd2ScriptEntity,
+    ScriptDataConstant,
+    camel_to_screaming_snake_case,
+    PREFIX_DIRECTION,
+    PREFIX_PROCESS_SPECIAL,
+    PREFIX_MENU,
+    PREFIX_LEVEL,
+    PREFIX_FACE_POS,
+    PREFIX_FACE,
+    PREFIX_OBJECT,
+    PREFIX_ACTOR,
+    PREFIX_EFFECT,
+    PREFIX_CORO,
+    PREFIX_BGM,
+    PREFIX_VAR,
+    PREFIX_DMODE,
 )
-from skytemple_files.common.util import AutoString
 from skytemple_files.user_error import UserValueError
-
-PREFIX_DIRECTION = "DIR_"
-PREFIX_PROCESS_SPECIAL = "PROCESS_SPECIAL_"
-PREFIX_MENU = "MENU_"
-PREFIX_LEVEL = "LEVEL_"
-PREFIX_FACE_POS = "FACE_POS_"
-PREFIX_FACE = "FACE_"
-PREFIX_OBJECT = "OBJECT_"
-PREFIX_ACTOR = "ACTOR_"
-PREFIX_EFFECT = "EFFECT_"
-PREFIX_CORO = "CORO_"
-PREFIX_BGM = "BGM_"
-PREFIX_VAR = "$"
-PREFIX_DMODE = "DMODE_"
-CAMEL_REGEX = re.compile(r"(?<!^)(?=[A-Z])")
-
 
 # Mappings for renamed constants, for backwards compatibility
 CONSTANT_ALIASES = {
@@ -99,26 +96,8 @@ class DungeonMode(Enum):
         raise UserValueError(f(_("Invalid DungeonMode: {string}")))
 
 
-class SsbScriptDirection(AutoString):
-    def __init__(self, id: int, name: str):
-        self.id = id
-        self.name = name
-
-
 SsbConstantPmdScriptMappable = Union[
-    Pmd2ScriptEntity,
-    Pmd2ScriptObject,
-    Pmd2ScriptRoutine,
-    Pmd2ScriptFaceName,
-    Pmd2ScriptFacePositionMode,
-    Pmd2ScriptGameVar,
-    Pmd2ScriptLevel,
-    Pmd2ScriptMenu,
-    Pmd2ScriptSpecial,
-    Pmd2ScriptDirection,
-    SsbScriptDirection,
-    Pmd2ScriptBgm,
-    Pmd2ScriptSpriteEffect,
+    ScriptDataConstant,
     DungeonMode,
 ]
 T = TypeVar("T")
@@ -135,7 +114,7 @@ class SsbConstant(SsbOpParamConstant):
 
     The constructor can be used with any string that this class represents,
     (and an instance of Pmd2ScriptData) and be converted back with convert_to_script_entity.
-    Giving it an unknown constant_as_string value will aise a ValueError.
+    Giving it an unknown constant_as_string value will raise a ValueError.
     """
 
     def __init__(
@@ -173,19 +152,14 @@ class SsbConstant(SsbOpParamConstant):
         elif isinstance(value, Pmd2ScriptLevel):
             return cls(PREFIX_LEVEL + value.name, value=value)
         elif isinstance(value, Pmd2ScriptMenu):
-            return cls(PREFIX_MENU + cls._cvrt_camel(value.name), value=value)
+            return cls(PREFIX_MENU + camel_to_screaming_snake_case(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpecial):
-            return cls(PREFIX_PROCESS_SPECIAL + cls._cvrt_camel(value.name), value=value)
+            return cls(PREFIX_PROCESS_SPECIAL + camel_to_screaming_snake_case(value.name), value=value)
         elif isinstance(value, Pmd2ScriptBgm):
-            return cls(PREFIX_BGM + cls._cvrt_camel(value.name), value=value)
+            return cls(PREFIX_BGM + camel_to_screaming_snake_case(value.name), value=value)
         elif isinstance(value, Pmd2ScriptSpriteEffect):
-            return cls(PREFIX_EFFECT + cls._cvrt_camel(value.name), value=value)
+            return cls(PREFIX_EFFECT + camel_to_screaming_snake_case(value.name), value=value)
         elif isinstance(value, Pmd2ScriptDirection):
-            return cls(
-                PREFIX_DIRECTION + value.name.upper(),
-                value=SsbScriptDirection(value.ssb_id, value.name),
-            )
-        elif isinstance(value, SsbScriptDirection):
             return cls(PREFIX_DIRECTION + value.name.upper(), value=value)
         elif isinstance(value, DungeonMode):
             return cls(PREFIX_DMODE + value.name, value=value)
@@ -197,74 +171,23 @@ class SsbConstant(SsbOpParamConstant):
         # Backwards compatibility
         if constant_as_string in CONSTANT_ALIASES:
             constant_as_string = CONSTANT_ALIASES[constant_as_string]
-        try:
-            if constant_as_string.startswith(PREFIX_ACTOR):
-                return script_data.level_entities__by_name[constant_as_string[len(PREFIX_ACTOR) :]]
-            elif constant_as_string.startswith(PREFIX_OBJECT):
-                return cls._in_dict_insensitive(
-                    script_data.objects__by_unique_name,
-                    constant_as_string[len(PREFIX_OBJECT) :],
-                )
-            elif constant_as_string.startswith(PREFIX_CORO):
-                return script_data.common_routine_info__by_name[constant_as_string[len(PREFIX_CORO) :]]
-            elif constant_as_string.startswith(PREFIX_FACE_POS):
-                return cls._in_dict_insensitive(
-                    script_data.face_position_modes__by_name,
-                    constant_as_string[len(PREFIX_FACE_POS) :],
-                )
-            elif constant_as_string.startswith(PREFIX_FACE):
-                return script_data.face_names__by_name[constant_as_string[len(PREFIX_FACE) :].replace("_", "-")]
-            elif constant_as_string.startswith(PREFIX_VAR):
-                return script_data.game_variables__by_name[constant_as_string[len(PREFIX_VAR) :]]
-            elif constant_as_string.startswith(PREFIX_LEVEL):
-                return script_data.level_list__by_name[constant_as_string[len(PREFIX_LEVEL) :]]
-            elif constant_as_string.startswith(PREFIX_MENU):
-                return cls._in_dict_insensitive(
-                    script_data.menus__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_MENU) :]),
-                )
-            elif constant_as_string.startswith(PREFIX_PROCESS_SPECIAL):
-                return cls._in_dict_insensitive(
-                    script_data.process_specials__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_PROCESS_SPECIAL) :]),
-                )
-            elif constant_as_string.startswith(PREFIX_BGM):
-                return cls._in_dict_insensitive(
-                    script_data.bgms__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_BGM) :]),
-                )
-            elif constant_as_string.startswith(PREFIX_EFFECT):
-                return cls._in_dict_insensitive(
-                    script_data.sprite_effects__by_name,
-                    cls._cvrt_camel_inverse(constant_as_string[len(PREFIX_EFFECT) :]),
-                )
-            elif constant_as_string.startswith(PREFIX_DIRECTION):
-                pmd2_dir = cls._in_dict_insensitive(
-                    script_data.directions__by_name,
-                    constant_as_string[len(PREFIX_DIRECTION) :],
-                )
-                return SsbScriptDirection(pmd2_dir.ssb_id, pmd2_dir.name)
-            elif constant_as_string.startswith(PREFIX_DMODE):
-                return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE) :])
-        except KeyError:
-            raise UserValueError(f(_("Unknown constant {constant_as_string}.")))
-        raise UserValueError(f(_("Unknown constant {constant_as_string}.")))
 
-    @staticmethod
-    def _cvrt_camel(string) -> str:
-        return CAMEL_REGEX.sub("_", string).upper()
+        try:
+            return script_data.all_script_constants__by_name[constant_as_string]
+        except KeyError:
+            pass
+
+        if constant_as_string.startswith(PREFIX_DMODE):
+            try:
+                return DungeonMode.create_for(constant_as_string[len(PREFIX_DMODE) :])
+            except KeyError:
+                pass
+
+        raise UserValueError(f(_("Unknown constant {constant_as_string}.")))
 
     @staticmethod
     def _cvrt_camel_inverse(string) -> str:
         return "".join(word.title() for word in string.split("_"))
-
-    @staticmethod
-    def _in_dict_insensitive(d: Mapping[str, T], k: str) -> T:
-        """Case-insensitive access to a string indexed dict"""
-        for dk, dv in d.items():
-            if dk.lower() == k.lower():
-                return dv
-        raise KeyError(k)
 
     def convert_to_script_entity(self):
         return self.value

@@ -21,6 +21,7 @@ import typing
 from xml.etree import ElementTree
 from tempfile import TemporaryDirectory
 
+from skytemple_files.common.impl_cfg import env_use_native
 from skytemple_files.common.ppmdu_config.data import Pmd2Sprite, Pmd2Index
 from skytemple_files.graphics.chara_wan.handler import CharaWanHandler
 from skytemple_files.graphics.chara_wan.model import WanFile
@@ -55,6 +56,10 @@ class CharaWanoTestCase(SkyTempleFilesTestCase[CharaWanHandler, WanFile]):
         self._test_import_export(self._fix_path_sheets("type_null"), not_imported_anims=["Dance"])
 
     def _test_import_export(self, fix_path: str, *, not_imported_anims: list[str] | None = None):
+        if env_use_native():
+            self.skipTest(
+                "This test is not enabled when the native implementations are tested, since no native chara_wan implementation exists."
+            )
         not_imported_anims = not_imported_anims or []
         sprite_def = self._get_sprite_def(fix_path)
         wan_after_import = self.handler.import_sheets(fix_path, strict=True)

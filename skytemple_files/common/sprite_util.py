@@ -94,7 +94,7 @@ def check_and_correct_monster_sprite_size(
         changed.append((_("Sprite VRAM Size"), check_value, max_tile_slots_needed))
 
     if check_body_value * 6 < max_tile_slots_needed:
-        md_target.body_size = math.ceil(max_tile_slots_needed/6)
+        md_target.body_size = math.ceil(max_tile_slots_needed / 6)
         changed.append((_("Body Size"), check_body_value, md_target.body_size))
 
     if check_value_file != max_file_size_needed:

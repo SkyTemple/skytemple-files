@@ -171,7 +171,7 @@ class SpriteCollabOfflineTestCase(IsolatedAsyncioTestCase, ImageTestCaseAbc):
 
     async def test_execute_query(self):
         async with self.client as session:
-            result = await session.execute_query(DSLQuery(session.ds.Query.apiVersion))
+            result = await session.execute_query(DSLQuery(session.ds.Query.meta.select(session.ds.Meta.apiVersion)))
             self.assertEqual(result, QUERY_API_VERSION_FIX)
 
     def assertSpritesEqual(

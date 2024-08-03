@@ -98,7 +98,9 @@ class SpriteCollabOnlineTestCase(IsolatedAsyncioTestCase):
 
     async def test_execute_query(self):
         async with self.client as session:
-            result = await session.execute_query(DSLQuery(session.ds.Query.apiVersion))
+            result = await session.execute_query(DSLQuery(session.ds.Query.meta.select(session.ds.Meta.apiVersion)))
             self.assertIsInstance(result, dict)
-            self.assertIn("apiVersion", result)
-            self.assertIsInstance(result["apiVersion"], str)
+            self.assertIn("meta", result)
+            self.assertIsInstance(result["meta"], dict)
+            self.assertIn("apiVersion", result["meta"])
+            self.assertIsInstance(result["meta"]["apiVersion"], str)

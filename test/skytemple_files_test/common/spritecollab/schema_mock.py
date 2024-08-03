@@ -1241,40 +1241,34 @@ monster_type = GraphQLObjectType(
     },
 )
 
-# type Query {
-#   """Version of this API."""
-#   apiVersion: String!
-#
-#   """
-#   Search for a monster by (parts) of its name. Results are sorted by best match.
-#   """
-#   searchMonster(monsterName: String!): [Monster!]!
-#
-#   """Retrieve a list of monsters."""
-#   monster(
-#     """Monster IDs to limit the request to."""
-#     filter: [Int!]
-#   ): [Monster!]!
-#
-#   """
-#   Search for a credit entry by (parts) of the ID, the author name or the contact info. Results are sorted by best match.
-#   """
-#   searchCredit(query: String!): [Credit!]!
-#
-#   """Retrieve a list of credits."""
-#   credit: [Credit!]!
-#
-#   """Configuration for this instance of SpriteCollab."""
-#   config: Config!
-# }
-#
+meta_type = GraphQLObjectType(
+    "Meta",
+    lambda: {
+        "apiVersion": GraphQLField(
+            GraphQLNonNull(GraphQLString),
+        ),
+        "serverVersion": GraphQLField(
+            GraphQLNonNull(GraphQLString),
+        ),
+        "assetCommit": GraphQLField(
+            GraphQLNonNull(GraphQLString),
+        ),
+        "assetsUpdateDate": GraphQLField(
+            GraphQLNonNull(date_time_utc_type),
+        ),
+        "updateCheckedDate": GraphQLField(
+            GraphQLNonNull(date_time_utc_type),
+        ),
+    },
+)
+
 # noinspection PyPep8Naming
 query_type = GraphQLObjectType(
     "Query",
     lambda: {
-        "apiVersion": GraphQLField(
-            GraphQLNonNull(GraphQLString),
-            resolve=lambda _source, _info: "dummy",
+        "meta": GraphQLField(
+            GraphQLNonNull(meta_type),
+            resolve=lambda _source, _info: {"apiVersion": "dummy"},
         ),
         "searchMonster": GraphQLField(
             GraphQLNonNull(GraphQLList(GraphQLNonNull(monster_type))),

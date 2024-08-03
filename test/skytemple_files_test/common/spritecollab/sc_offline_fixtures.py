@@ -557,6 +557,4 @@ MONSTER_FORM_DETAILS_FIX_MULTI_MON = [
     ),
 ] + MONSTER_FORM_DETAILS_FIX
 
-QUERY_API_VERSION_FIX = {
-    "apiVersion": "dummy",
-}
+QUERY_API_VERSION_FIX = {"meta": {"apiVersion": "dummy"}}

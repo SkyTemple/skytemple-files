@@ -269,8 +269,12 @@ class Monster(Monster_Metadata, Monster_Forms, Monster_Get, Monster_Manual):
 
 
 # noinspection PyPep8Naming
-class Query_ApiVersion(TypedDict):
+class Meta(TypedDict):
     apiVersion: str
+    serverVersion: str
+    assetsCommit: str
+    assetsUpdateDate: str
+    updateCheckedDate: str
 
 
 # noinspection PyPep8Naming
@@ -299,11 +303,10 @@ class Query_Config(TypedDict):
 
 
 class Query(
-    Query_ApiVersion,
     Query_SearchMonster,
     Query_Monster,
     Query_SearchCredit,
     Query_Credit,
     Query_Config,
 ):
-    pass
+    meta: Meta

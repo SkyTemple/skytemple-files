@@ -18,8 +18,13 @@
 from __future__ import annotations
 
 import abc
-from typing import Generic, TypeVar
+from pathlib import Path
+from typing import Generic, TypeVar, Sequence
 
+from skytemple_files.common.types.file_storage import (
+    Asset,
+    AssetSpec,
+)
 from skytemple_files.common.util import OptionalKwargs
 
 T = TypeVar("T")
@@ -28,8 +33,13 @@ T = TypeVar("T")
 class DataHandler(Generic[T], abc.ABC):
     """
     Handler base class for a file or data type.
-    Can convert it's type into high-level representations and back.
+    Can convert its binary data into high-level representations and back.
+    Can also convert the high-level representation into human and machine-readable asset files (and back).
     """
+
+    ###
+    ### Binary Serialization
+    ###
 
     @classmethod
     @abc.abstractmethod
@@ -41,4 +51,30 @@ class DataHandler(Generic[T], abc.ABC):
     @abc.abstractmethod
     def serialize(cls, data: T, **kwargs: OptionalKwargs) -> bytes:
         """Converts the internal high-level representation back into bytes."""
+        pass
+
+    ###
+    ### Asset Serialization
+    ###
+
+    @classmethod
+    @abc.abstractmethod
+    def asset_specs(cls, path_to_rom_obj: Path) -> Sequence[AssetSpec]:
+        """The specifications for the assets that make up this model given a file at `rom_path`."""
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def serialize_asset(cls, spec: AssetSpec, path_to_rom_obj: Path, data: T, **kwargs: OptionalKwargs) -> Asset:
+        """Serialize a single asset. `spec` must be an asset spec defined via `cls.assets`."""
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def deserialize_from_assets(
+        cls,
+        assets: Sequence[Asset],
+        **kwargs: OptionalKwargs,
+    ):
+        """Create a model from all loaded assets. `assets` must contain all assets defined via `cls.assets`."""
         pass

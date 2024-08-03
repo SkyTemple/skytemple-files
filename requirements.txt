@@ -19,3 +19,4 @@ parameterized
 xmldiff
 typing_extensions >= 3.9; python_version < "3.9"
 importlib_resources>=1.3; python_version < "3.9"
+click==8.1.7

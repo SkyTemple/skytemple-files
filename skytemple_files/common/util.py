@@ -472,9 +472,7 @@ def get_resources_dir(*, as_string: bool = True) -> str | Path:
     return path
 
 
-def get_ppmdu_config_for_rom(
-    rom: NintendoDSRom, *, init_from_rom: bool = True
-) -> Pmd2Data:
+def get_ppmdu_config_for_rom(rom: NintendoDSRom, *, init_from_rom: bool = True) -> Pmd2Data:
     """
     Returns the Pmd2Data for the given ROM.
     If the ROM is not a valid and supported PMD EoS ROM, raises ValueError.

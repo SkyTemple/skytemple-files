@@ -123,9 +123,11 @@ class RomProject:
     @property
     def patcher(self):
         """
-        Returns a patcher. May load aribitrary code from SkyPatches, see `self.does_allow_extra_skypatches`.
+        Returns a patcher. May load arbitrary code from SkyPatches, see `self.does_allow_extra_skypatches`.
         This may be cached until `self.set_allow_extra_skypatches` was called.
         """
+        if self.rom is None:
+            raise ValueError("No ROM available to patch")
         if not self._patcher:
             self._patcher = Patcher(self.rom, self.static_data)
             if self.does_allow_extra_skypatches():
@@ -145,10 +147,8 @@ class RomProject:
         self._file_storage = file_storage
         self._rom = rom
         if static_data is None:
-            if self._rom is None:
-                raise ValueError(
-                    "A RomProject must be provided static data if no ROM is provided."
-                )
+            if rom is None:
+                raise ValueError("A RomProject must be provided static data if no ROM is provided.")
             self._static_data = get_ppmdu_config_for_rom(rom, init_from_rom=False)
             self._enrich_static_data()
         else:
@@ -193,9 +193,7 @@ class RomProject:
         self._patcher = None
         raise NotImplementedError()
 
-    def load_assets(
-        self, handler: type[DataHandler[T]], path_to_rom_obj: Path
-    ) -> Sequence[Asset | AssetSpec]:
+    def load_assets(self, handler: type[DataHandler[T]], path_to_rom_obj: Path) -> Sequence[Asset | AssetSpec]:
         """Returns loaded bytes of assets or just the spec if it's missing."""
         assets: list[Asset | AssetSpec] = []
         for spec in handler.asset_specs(path_to_rom_obj):
@@ -244,9 +242,7 @@ class RomProject:
 
         if len(assets) < 1:
             # Force ROM deserialization if no assets exist.
-            return handler.deserialize(
-                self._file_storage.get_from_rom(path_to_rom_obj), **kwargs
-            )
+            return handler.deserialize(self._file_storage.get_from_rom(path_to_rom_obj), **kwargs)
 
         # otherwise all assets exist:
         for asset in assets:
@@ -276,9 +272,7 @@ class RomProject:
         if not skip_save_to_project_dir:
             assets = self._serialize_to_assets(handler, rom_path, data, **kwargs)
             for asset in assets:
-                self._file_storage.store_asset(
-                    asset.spec.path, asset.spec.rom_path, asset.data
-                )
+                self._file_storage.store_asset(asset.spec.path, asset.spec.rom_path, asset.data)
         if not skip_save_to_rom:
             self._file_storage.store_in_rom(rom_path, slf_bytes)
 
@@ -349,7 +343,7 @@ class SkyTempleProjectFileStorage(FileStorage):
     def __init__(self, rom_path: Path, project_dir: Path):
         self.rom_path = rom_path
         self.project_dir = project_dir
-        self.rom = NintendoDSRom.fromFile(rom_path)
+        self.rom = NintendoDSRom.fromFile(str(rom_path))
 
     def get_from_rom(self, path: Path) -> bytes:
         raise NotImplementedError()

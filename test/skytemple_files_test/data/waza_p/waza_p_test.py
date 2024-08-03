@@ -16,21 +16,27 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import json
 import typing
+from pathlib import Path
 
 from range_typed_integers import u8, u16, u32
 
+from skytemple_files.common.file_api_v2 import RomProject
 from skytemple_files.common.impl_cfg import env_use_native
+from skytemple_files.common.types.file_storage import AssetSpec, Asset
 from skytemple_files.container.sir0.handler import Sir0Handler
-from skytemple_files.data.waza_p.handler import WazaPHandler
+from skytemple_files.data.md.protocol import PokeType
+from skytemple_files.data.waza_p.handler import WazaPHandler, MOVES, LEARNSETS
 from skytemple_files.data.waza_p.protocol import (
     WazaPProtocol,
     MoveLearnsetProtocol,
     LevelUpMoveProtocol,
     WazaMoveProtocol,
     WazaMoveRangeSettingsProtocol,
+    WazaMoveCategory,
 )
-from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath
+from skytemple_files_test.case import SkyTempleFilesTestCase, romtest, fixpath, load_rom_path
 from skytemple_files_test.data.waza_p.fixture import (
     eq_move,
     eq_move_list,
@@ -350,6 +356,221 @@ class WazaPTestCase(
 
         self.assertTrue(eq_move_list(FIX_MOVES, loaded_rs_reloaded_with_py.moves))
         self.assertTrue(eq_learnset_list(FIX_LEARNSETS, loaded_rs_reloaded_with_py.learnsets))
+
+    def test_asset_specs_relevant_file(self):
+        file_path = Path("BALANCE", "waza_p.bin")
+        specs = self.handler.asset_specs(file_path)
+        self.assertEqual(2, len(specs))
+        self.assertEqual(Path("pokemon", "moves.json"), specs[0].path)
+        self.assertEqual(file_path, specs[0].rom_path)
+        self.assertEqual(MOVES, specs[0].category)
+        self.assertEqual(Path("pokemon", "learnsets.json"), specs[1].path)
+        self.assertEqual(file_path, specs[1].rom_path)
+        self.assertEqual(LEARNSETS, specs[1].category)
+
+    def test_serialize_assets_moves(self):
+        waza = self._load_main_fixture(self._fix_path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), MOVES), Path(), waza)
+
+        asset_data = json.loads(asset.data)
+        self.assertEqual(559, len(asset_data))
+
+        move_data = asset_data[0]
+        self.assertEqual(25484, move_data["base_power"])
+        self.assertEqual("STEEL", move_data["type"])
+        self.assertEqual("PHYSICAL", move_data["category"])
+        self.assertEqual(14, move_data["settings_range"]["target"])
+        self.assertEqual(6, move_data["settings_range"]["range"])
+        self.assertEqual(5, move_data["settings_range"]["condition"])
+        self.assertEqual(0, move_data["settings_range"]["unused"])
+        self.assertEqual(8, move_data["settings_range_ai"]["target"])
+        self.assertEqual(14, move_data["settings_range_ai"]["range"])
+        self.assertEqual(3, move_data["settings_range_ai"]["condition"])
+        self.assertEqual(13, move_data["settings_range_ai"]["unused"])
+        self.assertEqual(233, move_data["base_pp"])
+        self.assertEqual(129, move_data["ai_weight"])
+        self.assertEqual(44, move_data["miss_accuracy"])
+        self.assertEqual(253, move_data["accuracy"])
+        self.assertEqual(109, move_data["ai_condition1_chance"])
+        self.assertEqual(141, move_data["number_chained_hits"])
+        self.assertEqual(140, move_data["max_upgrade_level"])
+        self.assertEqual(85, move_data["crit_chance"])
+        self.assertFalse(move_data["affected_by_magic_coat"])
+        self.assertFalse(move_data["is_snatchable"])
+        self.assertTrue(move_data["uses_mouth"])
+        self.assertTrue(move_data["ai_frozen_check"])
+        self.assertTrue(move_data["ignores_taunted"])
+        self.assertEqual(129, move_data["range_check_text"])
+        self.assertEqual(8899, move_data["move_id"])
+        self.assertEqual(179, move_data["message_id"])
+
+    def test_serialize_assets_moves_with_name(self):
+        waza = self._load_main_fixture(self._fix_path())
+        waza.moves[0].move_id = 1
+        project = RomProject.new(load_rom_path(), Path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), MOVES), Path(), waza, rom_project=project)
+
+        asset_data = json.loads(asset.data)
+        self.assertEqual("Iron Tail", asset_data[0]["name"])
+
+    def test_deserialize_assets_moves(self):
+        move_json = {
+            "base_power": 25484,
+            "type": "STEEL",
+            "category": "PHYSICAL",
+            "settings_range": {"target": 14, "range": 6, "condition": 5, "unused": 0},
+            "settings_range_ai": {"target": 8, "range": 14, "condition": 3, "unused": 13},
+            "base_pp": 233,
+            "ai_weight": 129,
+            "miss_accuracy": 44,
+            "accuracy": 253,
+            "ai_condition1_chance": 109,
+            "number_chained_hits": 141,
+            "max_upgrade_level": 140,
+            "crit_chance": 85,
+            "affected_by_magic_coat": False,
+            "is_snatchable": False,
+            "uses_mouth": True,
+            "ai_frozen_check": True,
+            "ignores_taunted": True,
+            "range_check_text": 129,
+            "move_id": 8899,
+            "message_id": 179,
+        }
+
+        asset = Asset(AssetSpec(Path(), Path(), MOVES), None, None, None, None, bytes(json.dumps([move_json]), "utf-8"))
+        waza = self.handler.deserialize_from_assets([asset])
+        self.assertEqual(1, len(waza.moves))
+
+        move = waza.moves[0]
+        self.assertEqual(25484, move.base_power)
+        self.assertEqual(PokeType.STEEL.value, move.type)
+        self.assertEqual(WazaMoveCategory.PHYSICAL.value, move.category)
+        self.assertEqual(14, move.settings_range.target)
+        self.assertEqual(6, move.settings_range.range)
+        self.assertEqual(5, move.settings_range.condition)
+        self.assertEqual(0, move.settings_range.unused)
+        self.assertEqual(8, move.settings_range_ai.target)
+        self.assertEqual(14, move.settings_range_ai.range)
+        self.assertEqual(3, move.settings_range_ai.condition)
+        self.assertEqual(13, move.settings_range_ai.unused)
+        self.assertEqual(233, move.base_pp)
+        self.assertEqual(129, move.ai_weight)
+        self.assertEqual(44, move.miss_accuracy)
+        self.assertEqual(253, move.accuracy)
+        self.assertEqual(109, move.ai_condition1_chance)
+        self.assertEqual(141, move.number_chained_hits)
+        self.assertEqual(140, move.max_upgrade_level)
+        self.assertEqual(85, move.crit_chance)
+        self.assertFalse(move.affected_by_magic_coat)
+        self.assertFalse(move.is_snatchable)
+        self.assertTrue(move.uses_mouth)
+        self.assertTrue(move.ai_frozen_check)
+        self.assertTrue(move.ignores_taunted)
+        self.assertEqual(129, move.range_check_text)
+        self.assertEqual(8899, move.move_id)
+        self.assertEqual(179, move.message_id)
+
+    def test_serialize_assets_learnsets(self):
+        waza = self._load_main_fixture(self._fix_path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), LEARNSETS), Path(), waza)
+
+        asset_data = json.loads(asset.data)
+        self.assertEqual(800, len(asset_data))
+
+        learnset_data = asset_data[0]
+        self.assertEqual(219, len(learnset_data["level_up_moves"]))
+        self.assertEqual(53725, learnset_data["level_up_moves"][0]["move_id"])
+        self.assertEqual(55591, learnset_data["level_up_moves"][0]["level_id"])
+        self.assertEqual(454, len(learnset_data["tm_hm_moves"]))
+        self.assertEqual(52667, learnset_data["tm_hm_moves"][0])
+        self.assertEqual(478, len(learnset_data["egg_moves"]))
+        self.assertEqual(63784, learnset_data["egg_moves"][0])
+
+    def test_serialize_assets_learnsets_with_names(self):
+        waza = self._load_main_fixture(self._fix_path())
+        waza.learnsets[0].level_up_moves[0].move_id = 1
+        waza.learnsets[0].tm_hm_moves[0] = 2
+        waza.learnsets[0].egg_moves[0] = 3
+
+        project = RomProject.new(load_rom_path(), Path())
+        asset = self.handler.serialize_asset(AssetSpec(Path(), Path(), LEARNSETS), Path(), waza, rom_project=project)
+
+        asset_data = json.loads(asset.data)
+        learnset_data = asset_data[0]
+        self.assertEqual("??????????", learnset_data["pokemon_name"])
+        self.assertEqual("Iron Tail", learnset_data["level_up_moves"][0]["move_id"])
+        self.assertEqual("Ice Ball", learnset_data["tm_hm_moves"][0])
+        self.assertEqual("Yawn", learnset_data["egg_moves"][0])
+
+    def test_deserialize_assets_learnsets(self):
+        learnset_json = {"level_up_moves": [{"move_id": 5, "level_id": 6}], "tm_hm_moves": [1, 2], "egg_moves": [3, 4]}
+
+        asset = Asset(
+            AssetSpec(Path(), Path(), LEARNSETS), None, None, None, None, bytes(json.dumps([learnset_json]), "utf-8")
+        )
+        waza = self.handler.deserialize_from_assets([asset])
+        self.assertEqual(1, len(waza.learnsets))
+
+        learnset: MoveLearnsetProtocol = waza.learnsets[0]
+        self.assertEqual(1, len(learnset.level_up_moves))
+        self.assertEqual(5, learnset.level_up_moves[0].move_id)
+        self.assertEqual(6, learnset.level_up_moves[0].level_id)
+        self.assertEqual([1, 2], learnset.tm_hm_moves)
+        self.assertEqual([3, 4], learnset.egg_moves)
+
+    def test_deserialize_assets_learnsets_with_names(self):
+        learnset_json = {
+            "level_up_moves": [{"move_id": "Iron Tail", "level_id": 6}],
+            "tm_hm_moves": ["Ice Ball"],
+            "egg_moves": ["Yawn"],
+        }
+
+        def generate_move_json(move_id: int, move_name: str):
+            return {
+                "base_power": 25484,
+                "type": "STEEL",
+                "category": "PHYSICAL",
+                "settings_range": {"target": 14, "range": 6, "condition": 5, "unused": 0},
+                "settings_range_ai": {"target": 8, "range": 14, "condition": 3, "unused": 13},
+                "base_pp": 233,
+                "ai_weight": 129,
+                "miss_accuracy": 44,
+                "accuracy": 253,
+                "ai_condition1_chance": 109,
+                "number_chained_hits": 141,
+                "max_upgrade_level": 140,
+                "crit_chance": 85,
+                "affected_by_magic_coat": False,
+                "is_snatchable": False,
+                "uses_mouth": True,
+                "ai_frozen_check": True,
+                "ignores_taunted": True,
+                "range_check_text": 129,
+                "move_id": move_id,
+                "message_id": 179,
+                "name": move_name,
+            }
+
+        move_jsons = [
+            generate_move_json(1, "Iron Tail"),
+            generate_move_json(2, "Ice Ball"),
+            generate_move_json(3, "Yawn"),
+        ]
+
+        learnsets_asset = Asset(
+            AssetSpec(Path(), Path(), LEARNSETS), None, None, None, None, bytes(json.dumps([learnset_json]), "utf-8")
+        )
+        moves_asset = Asset(
+            AssetSpec(Path(), Path(), MOVES), None, None, None, None, bytes(json.dumps(move_jsons), "utf-8")
+        )
+        waza = self.handler.deserialize_from_assets([moves_asset, learnsets_asset])
+        self.assertEqual(1, len(waza.learnsets))
+
+        learnset: MoveLearnsetProtocol = waza.learnsets[0]
+        self.assertEqual(1, learnset.level_up_moves[0].move_id)
+        self.assertEqual([2], learnset.tm_hm_moves)
+        self.assertEqual([3], learnset.egg_moves)
 
     @romtest(file_names=["waza_p.bin", "waza_p2.bin"], path="BALANCE/")
     def test_using_rom(self, _, file):

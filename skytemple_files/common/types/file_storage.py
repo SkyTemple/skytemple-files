@@ -32,9 +32,9 @@ class AssetSpec:
     rom_path: Path
 
     # handler internal category name, to know which kind of asset to generate
-    category: str
+    category: str = ""
     # handler internal identifier, to know which kind of asset to generate
-    id: str
+    id: str = ""
 
 
 @dataclass
@@ -70,6 +70,13 @@ class Asset:
 
 class FileStorage(Protocol):
     @abc.abstractmethod
+    def get_project_dir(self) -> Path:
+        """
+        Gets the root directory of the project assets.
+        """
+        ...
+
+    @abc.abstractmethod
     def get_from_rom(self, path: Path) -> bytes:
         """
         Get the bytes of a file from ROM.
@@ -90,8 +97,18 @@ class FileStorage(Protocol):
         """
         ...
 
+    def get_asset_from_spec(self, spec: AssetSpec) -> Asset:
+        """
+        Returns the bytes of an asset file and its corresponding hash (if any).
+        Raises `FileNotFound` if the asset under the spec's path was not found
+        """
+        asset = self.get_asset(spec.path, spec.rom_path)
+        asset.spec.category = spec.category
+        asset.spec.id = spec.id
+        return asset
+
     @abc.abstractmethod
-    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes) -> bytes:
+    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes, custom_project_dir: Path = None) -> bytes:
         """Store an asset file."""
         ...
 

@@ -1,9 +1,9 @@
 """
-API to read/write files from ROMS and file storage.
+API to read/write files from ROMs and file storage.
 
 Using this API files and hardcoded in a game ROM can be manipulated
 while also storing machine and human-readable versions of those files
-out-of-ROM (so-called "assets"; eg. as YAML or PNG).
+out-of-ROM (so-called "assets"; e.g. as YAML or PNG).
 Requesting to read a file from the ROM will first try to load it from assets,
 and fall back to the ROM if no assets have been saved yet for that file.
 Writing a model back to ROM will also write the model to the asset files.
@@ -36,15 +36,19 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Sequence, TypeVar, cast
+from collections import defaultdict
+from hashlib import sha1
+import json
 
+from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
+
+from skytemple_files.common.ppmdu_config.rom_data.loader import RomDataLoader
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.patch.patches import Patcher
-
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
-
 from skytemple_files.common.types.data_handler import DataHandler
-
-from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom
+from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom, create_file_in_rom
 
 from skytemple_files.common.types.file_storage import (
     FileStorage,
@@ -55,6 +59,10 @@ from skytemple_files.common.types.file_storage import (
 )
 
 T = TypeVar("T")
+
+ASSET_CONFIG_FILE = "asset_config.json"
+SKYPATCHES_DIR = "skypatches"
+ALLOW_EXTRA_SKYPATCHES = "allow_extra_skypatches"
 
 
 def _first_missing_asset(assets: Sequence[Asset | AssetSpec]) -> AssetSpec | None:
@@ -94,7 +102,7 @@ class RomProject:
     """
     A SkyTemple Files ROM project.
 
-    A new eos-asset-sepc standard compliant project can be created with `RomProject.new`. Otherwise,
+    A new eos-asset-spec standard compliant project can be created with `RomProject.new`. Otherwise,
     a custom project can be created using `RomProject.__init__`. Custom projects can also work without
     actual ROM files, in which case all operations which would usually get/set data from/to the ROM may fail.
     """
@@ -104,6 +112,7 @@ class RomProject:
     _static_data: Pmd2Data
     _allow_extra_skypatches: bool | None
     _patcher: Patcher | None
+    _asset_config: dict
 
     @property
     def rom(self) -> NintendoDSRom | None:
@@ -155,6 +164,7 @@ class RomProject:
             self._static_data = static_data
 
         self._patcher = None
+        self._asset_config = self._load_asset_config()
         self._allow_extra_skypatches = self._load_allow_extra_skypatches()
 
     @classmethod
@@ -191,27 +201,55 @@ class RomProject:
         If `remember` is False, the next time the project is opened the value will be None again (default).
         """
         self._patcher = None
-        raise NotImplementedError()
+        self._allow_extra_skypatches = value
+        if remember:
+            self._asset_config[ALLOW_EXTRA_SKYPATCHES] = value
+            self._save_asset_config()
 
     def load_assets(self, handler: type[DataHandler[T]], path_to_rom_obj: Path) -> Sequence[Asset | AssetSpec]:
         """Returns loaded bytes of assets or just the spec if it's missing."""
         assets: list[Asset | AssetSpec] = []
         for spec in handler.asset_specs(path_to_rom_obj):
             try:
-                assets.append(self._file_storage.get_asset(spec.path, spec.rom_path))
+                assets.append(self._file_storage.get_asset_from_spec(spec))
             except FileNotFoundError:
                 assets.append(spec)
         return assets
 
     def list_files(
         self, *, search_project_dir: bool = True, search_rom: bool = True
-    ) -> list[dict[Path, type[DataHandler[T]]]]:
+    ) -> dict[Path, type[DataHandler[T]]]:
         """
-        Returns a list of all files in the project and their corresponding handlers.
+        Returns a dictionary of all files in the project and their corresponding handlers.
 
-        The list is built from information in the project directory and ROM by default.
+        The dictionary is built from information in the project directory and ROM by default.
         """
-        raise NotImplementedError()
+        files: dict[Path, type[DataHandler[T]]] = {}
+
+        # Recursively crawl the file tree to get all files in the ROM.
+        def get_files_in_folder(folder_path, folder: Folder) -> list[Path]:
+            folder_files = [Path(folder_path, folder_file) for folder_file in folder.files.copy()]
+            for subfolder in folder.folders:
+                folder_files.extend(get_files_in_folder(Path(folder_path, subfolder[0]), subfolder[1]))
+            return folder_files
+
+        rom_files = get_files_in_folder(Path(), self.rom.filenames)
+
+        for data_handler in self._load_data_handlers():
+            for rom_file in rom_files:
+                asset_specs = data_handler.asset_specs(rom_file)
+
+                if len(asset_specs) > 0:
+                    if search_rom:
+                        files[rom_file] = data_handler
+
+                    if search_project_dir:
+                        for asset_spec in asset_specs:
+                            if Path(self._file_storage.get_project_dir(), asset_spec.path).exists():
+                                files[rom_file] = data_handler
+                                break
+
+        return files
 
     def open_file(
         self,
@@ -219,6 +257,7 @@ class RomProject:
         path_to_rom_obj: Path,
         *,
         force: bool = False,
+        load_from_rom=False,
         assets: Sequence[Asset] | None = None,
         **kwargs: OptionalKwargs,
     ) -> T:
@@ -233,14 +272,14 @@ class RomProject:
 
         If `assets` is provided, the given assets are used (they must match the asset specification
         of this handler) otherwise, the assets are loaded using `cls.load_assets`. If `assets` is
-        an empty list, the model is always loaded from ROM.
+        an empty list or `load_from_rom` is `True`, the model is always loaded from ROM.
 
         Calling this repeatedly will always deserialize again, there is no caching.
         """
-        if assets is None:
+        if assets is None and not load_from_rom:
             assets = extract_assets(self.load_assets(handler, path_to_rom_obj))
 
-        if len(assets) < 1:
+        if load_from_rom or len(assets) < 1:
             # Force ROM deserialization if no assets exist.
             return handler.deserialize(self._file_storage.get_from_rom(path_to_rom_obj), **kwargs)
 
@@ -263,18 +302,29 @@ class RomProject:
         *,
         skip_save_to_rom: bool = False,
         skip_save_to_project_dir: bool = False,
+        extracted_rom_dir: Path = None,
         **kwargs: OptionalKwargs,
     ):
         """
         Stores the asset-representation of this model into asset storage and ROM.
+        If extracted_rom_dir is defined, also saves the raw ROM files to the specified path.
         """
-        slf_bytes = handler.serialize(data, **kwargs)
         if not skip_save_to_project_dir:
             assets = self._serialize_to_assets(handler, rom_path, data, **kwargs)
             for asset in assets:
                 self._file_storage.store_asset(asset.spec.path, asset.spec.rom_path, asset.data)
+
+        slf_bytes = None
         if not skip_save_to_rom:
+            slf_bytes = handler.serialize(data, **kwargs)
             self._file_storage.store_in_rom(rom_path, slf_bytes)
+
+        if extracted_rom_dir is not None:
+            if slf_bytes is None:
+                # Skip serializing again if data was already saved to the ROM.
+                slf_bytes = handler.serialize(data, **kwargs)
+
+            self._file_storage.store_asset(rom_path, rom_path, slf_bytes, custom_project_dir=extracted_rom_dir)
 
     # TODO: signature
     def symbol_info_asset(self):
@@ -296,7 +346,7 @@ class RomProject:
     def patch_info_asset(self):
         """
         Returns the asset providing information about the requested state of patches applied to the ROM, or None
-        if it doesn't exist. This can be applied to the ROM with `self.apply_symbol_info_asset`.
+        if it doesn't exist. This can be applied to the ROM with `self.apply_patch_info_asset`.
         """
         raise NotImplementedError()
 
@@ -324,15 +374,34 @@ class RomProject:
             assets.append(handler.serialize_asset(spec, rom_path, data, **kwargs))
         return assets
 
+    @staticmethod
+    def _load_data_handlers() -> list[type[DataHandler[T]]]:
+        return [
+            handler
+            for handler in vars(FileType).values()
+            if isinstance(handler, type) and issubclass(handler, DataHandler)
+        ]
+
     def _enrich_static_data(self):
-        # RomDataLoader(rom).load_into(config)
-        raise NotImplementedError()
+        RomDataLoader(self.rom).load_into(self.static_data)
 
     def _load_extra_skypatches(self):
         raise NotImplementedError()
 
-    def _load_allow_extra_skypatches(self) -> bool | None:
-        raise NotImplementedError()
+    def _load_asset_config(self) -> dict:
+        asset_config_path = Path(self._file_storage.get_project_dir(), ASSET_CONFIG_FILE)
+        if asset_config_path.exists():
+            with open(asset_config_path, "r") as asset_file:
+                return defaultdict(lambda: None, json.load(asset_file))
+        return defaultdict(lambda: None)
+
+    def _save_asset_config(self):
+        asset_config_path = Path(self._file_storage.get_project_dir(), ASSET_CONFIG_FILE)
+        with open(asset_config_path, "w") as asset_file:
+            asset_file.write(json.dumps(self._asset_config, sort_keys=True, indent=4))
+
+    def _load_allow_extra_skypatches(self) -> bool:
+        return self._asset_config[ALLOW_EXTRA_SKYPATCHES] or False
 
 
 class SkyTempleProjectFileStorage(FileStorage):
@@ -345,24 +414,59 @@ class SkyTempleProjectFileStorage(FileStorage):
         self.project_dir = project_dir
         self.rom = NintendoDSRom.fromFile(str(rom_path))
 
+    def get_project_dir(self) -> Path:
+        return self.project_dir
+
     def get_from_rom(self, path: Path) -> bytes:
-        raise NotImplementedError()
+        try:
+            return bytes(self.rom.getFileByName(str(path)))
+        except ValueError:
+            raise FileNotFoundError(f"Cannot find ROM file at {path}")
 
     def store_in_rom(self, path: Path, data: bytes) -> bytes:
-        # todo: also support creating new files!
         # todo: also record hash in hash file.
-        raise NotImplementedError()
+        try:
+            self.rom.setFileByName(str(path), data)
+        except ValueError:
+            create_file_in_rom(self.rom, str(path), data)
+        self.rom.saveToFile(str(self.rom_path))
+        return data
 
     def get_asset(self, path: Path, for_rom_path: Path) -> Asset:
         # todo: also throw hash mismatch errors
-        raise NotImplementedError()
+        full_path = Path(self.project_dir, path)
+        if not full_path.exists():
+            raise FileNotFoundError(f"Cannot find project file at {full_path}")
 
-    def store_asset(self, path: Path, for_rom_path: Path, data: bytes) -> bytes:
+        with open(Path(self.project_dir, path), "rb") as project_file:
+            project_file_bytes = project_file.read()
+
+        return Asset(
+            AssetSpec(path, for_rom_path),
+            None,
+            bytes(self.hash_of_rom_object(for_rom_path), "utf-8"),
+            None,
+            bytes(sha1(project_file_bytes).hexdigest(), "utf-8"),
+            project_file_bytes,
+        )
+
+    def store_asset(self, path: Path, for_rom_path: Path, data: bytes, custom_project_dir: Path | None = None) -> bytes:
         # todo: also record hash in hash file.
-        raise NotImplementedError()
+        if custom_project_dir is None:
+            full_path = Path(self.project_dir, path)
+        else:
+            full_path = Path(custom_project_dir, path)
+        if not full_path.parent.exists():
+            full_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(full_path, "wb+") as project_file:
+            project_file.write(data)
+
+        return data
 
     def hash_of_rom_object(self, path: Path) -> AssetHash | None:
-        raise NotImplementedError()
+        return AssetHash(str(sha1(self.get_from_rom(path)).hexdigest()))
 
     def hash_of_asset(self, path: Path) -> AssetHash | None:
-        raise NotImplementedError()
+        with open(Path(self.project_dir, path), "rb") as project_file:
+            return AssetHash(sha1(project_file.read()).hexdigest())

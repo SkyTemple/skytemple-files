@@ -114,6 +114,18 @@ class WanFile(Sir0Serializable):
             anim_req.append(len(anim_group) > 0)
         return anim_req
 
+    def get_max_blocks(self):
+        max_blocks = 0
+        for idx, metaFrame in enumerate(self.frameData):
+            cur_tile = 0
+            for piece in metaFrame:
+                if piece.imgIndex != MINUS_FRAME:
+                    twidth, theight = DIM_TABLE[piece.getResolutionType()]
+                    blocks_occupied = max(1, twidth * theight // 4)
+                    cur_tile += blocks_occupied
+            max_blocks = max(max_blocks, cur_tile)
+        return max_blocks
+
     # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
     # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero
     # m_ground_0587_0xbd0a10.wan - Latios.  Unknown difference

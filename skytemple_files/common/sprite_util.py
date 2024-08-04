@@ -110,13 +110,8 @@ def _get_sprite_properties(monster_bin: BinPack, m_attack_bin: BinPack, entry: M
     if entry.sprite_index < 0:
         return 0, 0
     sprite_bin = monster_bin[entry.sprite_index]
-    sprite_atk_bin = m_attack_bin[entry.sprite_index]
     sprite_bytes = FileType.COMMON_AT.deserialize(sprite_bin).decompress()
-    sprite_atk_bytes = FileType.COMMON_AT.deserialize(sprite_atk_bin).decompress()
     sprite = FileType.WAN.deserialize(sprite_bytes)
-    sprite_atk = FileType.WAN.deserialize(sprite_atk_bytes)
-    max_tile_slots_needed = max(
-        (6, sprite.model.frame_store.max_fragment_alloc_count, sprite_atk.model.frame_store.max_fragment_alloc_count)
-    )
+    max_tile_slots_needed = max(6, sprite.model.frame_store.max_fragment_alloc_count)
     max_file_size_needed = math.ceil(len(sprite_bytes) / 512)
     return max_tile_slots_needed, max_file_size_needed

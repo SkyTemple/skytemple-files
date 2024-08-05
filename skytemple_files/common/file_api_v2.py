@@ -61,6 +61,8 @@ from skytemple_files.common.types.file_storage import (
 T = TypeVar("T")
 
 ASSET_CONFIG_FILE = "asset_config.json"
+ROM_HASHES_FILE = "rom_hashes.sha1"
+ASSET_HASHES_FILE = "asset_hashes.sha1"
 SKYPATCHES_DIR = "skypatches"
 ALLOW_EXTRA_SKYPATCHES = "allow_extra_skypatches"
 
@@ -408,11 +410,15 @@ class SkyTempleProjectFileStorage(FileStorage):
     rom_path: Path
     project_dir: Path
     rom: NintendoDSRom
+    rom_hashes: dict[Path, AssetHash]
+    asset_hashes: dict[Path, AssetHash]
 
     def __init__(self, rom_path: Path, project_dir: Path):
         self.rom_path = rom_path
         self.project_dir = project_dir
         self.rom = NintendoDSRom.fromFile(str(rom_path))
+        self.rom_hashes = self._read_hash_file(ROM_HASHES_FILE)
+        self.asset_hashes = self._read_hash_file(ASSET_HASHES_FILE)
 
     def get_project_dir(self) -> Path:
         return self.project_dir
@@ -424,16 +430,15 @@ class SkyTempleProjectFileStorage(FileStorage):
             raise FileNotFoundError(f"Cannot find ROM file at {path}")
 
     def store_in_rom(self, path: Path, data: bytes) -> bytes:
-        # todo: also record hash in hash file.
         try:
             self.rom.setFileByName(str(path), data)
         except ValueError:
             create_file_in_rom(self.rom, str(path), data)
         self.rom.saveToFile(str(self.rom_path))
+        self._save_rom_object_hash(path, data)
         return data
 
     def get_asset(self, path: Path, for_rom_path: Path) -> Asset:
-        # todo: also throw hash mismatch errors
         full_path = Path(self.project_dir, path)
         if not full_path.exists():
             raise FileNotFoundError(f"Cannot find project file at {full_path}")
@@ -443,17 +448,17 @@ class SkyTempleProjectFileStorage(FileStorage):
 
         return Asset(
             AssetSpec(path, for_rom_path),
-            None,
-            bytes(self.hash_of_rom_object(for_rom_path), "utf-8"),
-            None,
-            bytes(sha1(project_file_bytes).hexdigest(), "utf-8"),
+            self.rom_hashes[for_rom_path],
+            self.hash_of_rom_object(for_rom_path),
+            self.asset_hashes[path],
+            self.hash_of_asset(path),
             project_file_bytes,
         )
 
     def store_asset(self, path: Path, for_rom_path: Path, data: bytes, custom_project_dir: Path | None = None) -> bytes:
-        # todo: also record hash in hash file.
         if custom_project_dir is None:
             full_path = Path(self.project_dir, path)
+            self._save_asset_hash(path, data)
         else:
             full_path = Path(custom_project_dir, path)
         if not full_path.parent.exists():
@@ -464,9 +469,41 @@ class SkyTempleProjectFileStorage(FileStorage):
 
         return data
 
-    def hash_of_rom_object(self, path: Path) -> AssetHash | None:
-        return AssetHash(str(sha1(self.get_from_rom(path)).hexdigest()))
+    def hash_of_rom_object(self, path: Path) -> AssetHash:
+        return self.hash_from_bytes(self.get_from_rom(path))
 
-    def hash_of_asset(self, path: Path) -> AssetHash | None:
+    def hash_of_asset(self, path: Path) -> AssetHash:
         with open(Path(self.project_dir, path), "rb") as project_file:
-            return AssetHash(sha1(project_file.read()).hexdigest())
+            return self.hash_from_bytes(project_file.read())
+
+    def _save_rom_object_hash(self, path: Path, data: bytes):
+        self.rom_hashes[path] = self.hash_from_bytes(data)
+        self._save_hash_file(ROM_HASHES_FILE, self.rom_hashes)
+
+    def _save_asset_hash(self, path: Path, data: bytes):
+        self.asset_hashes[path] = self.hash_from_bytes(data)
+        self._save_hash_file(ASSET_HASHES_FILE, self.asset_hashes)
+
+    def _read_hash_file(self, hash_file_name: str) -> dict[Path, AssetHash]:
+        hashes: dict[Path, AssetHash | None] = defaultdict(lambda: None)
+        hash_file_path = Path(self.project_dir, hash_file_name)
+        if hash_file_path.exists():
+            with open(hash_file_path, "r") as hash_file:
+                for line in hash_file.readlines():
+                    split_line = line.split(" ")
+                    if len(split_line) == 2:
+                        hashes[Path(split_line[1][:-1])] = AssetHash(split_line[0])
+                    elif len(split_line) != 0:
+                        print(f"Malformed hash file {hash_file_name} detected. Skipping line: {line}")
+        return hashes
+
+    def _save_hash_file(self, hash_file_name: str, hashes: dict[Path, AssetHash]):
+        lines = []
+        for file_name in sorted(hashes.keys()):
+            lines.append(f"{hashes[file_name]} {file_name}\n")
+        with open(Path(self.project_dir, hash_file_name), "w") as hash_file:
+            hash_file.writelines(lines)
+
+    @staticmethod
+    def hash_from_bytes(data: bytes) -> AssetHash:
+        return AssetHash(str(sha1(data).hexdigest()))

@@ -40,10 +40,10 @@ class AssetSpec:
 @dataclass
 class Asset:
     spec: AssetSpec
-    expected_rom_obj_hash: bytes | None  # may be None if no hash info was stored yet.
-    actual_rom_obj_hash: bytes | None  # may be None if the file does not exist in ROM.
-    expected_asset_hash: bytes | None  # may be None if no hash info was stored yet.
-    actual_asset_hash: bytes | None  # may be None if no hash info was stored yet.
+    expected_rom_obj_hash: AssetHash | None  # may be None if no hash info was stored yet.
+    actual_rom_obj_hash: AssetHash | None  # may be None if the file does not exist in ROM.
+    expected_asset_hash: AssetHash | None  # may be None if no hash info was stored yet.
+    actual_asset_hash: AssetHash | None  # may be None if no hash info was stored yet.
     data: bytes
 
     def do_rom_hashes_match(self):

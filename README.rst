@@ -73,7 +73,7 @@ for more information. The implementations are stored in ``skytemple_files.common
 - ``assets``: Manage unpacking and packing ROMs using the "File API v2".
 
 These APIs are not exposed via a command, they must be run via the Python interpreter directly, eg.
-``python -m skytemple_files.common.cli assets``. The SkyTemple GUI app will eventually expose these APIs via it's own ``skytemple`` command.
+``python -m skytemple_files.common.cli assets``. The SkyTemple GUI app will eventually expose these APIs via its own ``skytemple`` command.
 
 Classic APIs
 ~~~~~~~~~~~~

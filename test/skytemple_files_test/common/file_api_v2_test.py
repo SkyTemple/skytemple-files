@@ -1,10 +1,16 @@
 import os
 import shutil
 from pathlib import Path
-from unittest import TestCase, SkipTest
+from unittest import TestCase
 
 from skytemple_files.common.types.file_storage import Asset, AssetSpec
-from skytemple_files.common.file_api_v2 import RomProject, SkyTempleProjectFileStorage, ALLOW_EXTRA_SKYPATCHES
+from skytemple_files.common.file_api_v2 import (
+    RomProject,
+    SkyTempleProjectFileStorage,
+    ALLOW_EXTRA_SKYPATCHES,
+    ASSET_HASHES_FILE,
+    ROM_HASHES_FILE,
+)
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files_test.case import load_rom_path
 
@@ -23,7 +29,15 @@ def copy_rom_to_temp_file() -> Path:
 
 
 def delete_temp_rom():
-    os.remove(ROM_COPY_PATH)
+    if os.path.exists(ROM_COPY_PATH):
+        os.remove(ROM_COPY_PATH)
+
+
+def revert_hash_files():
+    with open(Path(ASSET_PROJECT_PATH, ASSET_HASHES_FILE), "w") as asset_hashes_file:
+        asset_hashes_file.write("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f pokemon/moves.json\n")
+    with open(Path(ASSET_PROJECT_PATH, ROM_HASHES_FILE), "w") as rom_hashes_file:
+        rom_hashes_file.write("f85089b1c47c9392c93f76f5d1baf9b28677454c BALANCE/waza_p.bin\n")
 
 
 class RomProjectTestCase(TestCase):
@@ -133,8 +147,12 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
             storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
             file_bytes = storage.get_from_rom(Path("BALANCE", "waza_p.bin"))
             self.assertEqual(test_data, file_bytes)
+            self.assertEqual(
+                "b23b62bbd22a602b113038a07217c6abcb156f06", storage.rom_hashes[Path("BALANCE", "waza_p.bin")]
+            )
         finally:
             delete_temp_rom()
+            revert_hash_files()
 
     def test_store_in_rom_new_file(self):
         try:
@@ -147,8 +165,13 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
             storage = SkyTempleProjectFileStorage(rom_path, ASSET_PROJECT_PATH)
             file_bytes = storage.get_from_rom(Path("BALANCE", "new.bin"))
             self.assertEqual(test_data, file_bytes)
+            self.assertEqual(
+                "f85089b1c47c9392c93f76f5d1baf9b28677454c", storage.rom_hashes[Path("BALANCE", "waza_p.bin")]
+            )
+            self.assertEqual("b23b62bbd22a602b113038a07217c6abcb156f06", storage.rom_hashes[Path("BALANCE", "new.bin")])
         finally:
             delete_temp_rom()
+            revert_hash_files()
 
     def test_get_asset(self):
         storage = SkyTempleProjectFileStorage(load_rom_path(), ASSET_PROJECT_PATH)
@@ -157,10 +180,10 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
 
         self.assertEqual(Path("pokemon", "moves.json"), asset.spec.path)
         self.assertEqual(Path("BALANCE", "waza_p.bin"), asset.spec.rom_path)
-        self.assertIsNone(asset.expected_rom_obj_hash)
-        self.assertEqual(b"f85089b1c47c9392c93f76f5d1baf9b28677454c", asset.actual_rom_obj_hash)
-        self.assertIsNone(asset.expected_asset_hash)
-        self.assertEqual(b"bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", asset.actual_asset_hash)
+        self.assertEqual("f85089b1c47c9392c93f76f5d1baf9b28677454c", asset.expected_rom_obj_hash)
+        self.assertEqual("f85089b1c47c9392c93f76f5d1baf9b28677454c", asset.actual_rom_obj_hash)
+        self.assertEqual("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", asset.expected_asset_hash)
+        self.assertEqual("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", asset.actual_asset_hash)
         self.assertEqual(b"{}", asset.data)
 
     def test_get_asset_invalid_project_file(self):
@@ -190,6 +213,9 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
             self.assertEqual(test_data, data)
             asset = storage.get_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"))
             self.assertEqual(test_data, asset.data)
+            self.assertEqual(
+                "31ead60c9066eefb8011f3f68aed25d004d60957", storage.asset_hashes[Path("pokemon", "moves.json")]
+            )
         finally:
             storage.store_asset(Path("pokemon", "moves.json"), Path("BALANCE", "waza_p.bin"), before_data)
 

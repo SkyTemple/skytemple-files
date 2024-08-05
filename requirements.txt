@@ -10,7 +10,7 @@ gql[aiohttp]==3.5.0
 graphql-core>=3.2.0
 aiohttp[speedups]
 lru-dict==1.3.0
-skytemple-3rdparty-typestubs==1.1.0
+skytemple-3rdparty-typestubs==1.1.1
 types-Pillow==10.2.0.20240324
 types-setuptools
 pytest

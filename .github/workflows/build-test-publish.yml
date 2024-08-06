@@ -85,6 +85,7 @@ jobs:
   typechecks:
     runs-on: ubuntu-latest
     name: Type checks
+    needs: cache
     strategy:
       fail-fast: false
       matrix:
@@ -93,13 +94,21 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: 'recursive'
-    - uses: theCapypara/mypy-check@rust-support
-      name: Run type checks
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
       with:
-        path: 'skytemple_files'
-        mypy_flags: '--config-file mypy.ini --junit-xml mypy-${{ matrix.python-version }}.xml'
-        requirements: '-r requirements.txt'
-        python_version: '${{ matrix.python-version }}'
+        python-version: ${{ matrix.python-version }}
+    - uses: actions/cache@v4
+      with:
+        path: ${{ env.pythonLocation }}
+        key: py${{ matrix.python-version }}-${{ github.run_id }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools
+        pip install -r requirements.txt mypy
+    - name: Run type checks
+      run: |
+        mypy --config-file mypy.ini --junit-xml mypy-${{ matrix.python-version }}.xml
     - name: Upload Unit Test Results
       if: always()
       uses: actions/upload-artifact@v4

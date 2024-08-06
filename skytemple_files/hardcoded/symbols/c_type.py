@@ -15,7 +15,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 import re
-from typing import List, Optional
 
 from skytemple_files.common.rw_value import DATA_PROCESSING_INSTRUCTION_TYPE
 from skytemple_files.hardcoded.symbols.manual.equivalent_types import get_size_equivalent_type
@@ -34,9 +33,9 @@ class CType:
     # String that contains the base type. Cannot be an array type.
     base_type: str
     # Size of each array dimension. Empty if the type is not an array type.
-    dim_sizes: List[int]
+    dim_sizes: list[int]
 
-    def __init__(self, base_type: str, dim_sizes: Optional[List[int]] = None):
+    def __init__(self, base_type: str, dim_sizes: list[int] | None = None):
         if dim_sizes is None:
             dim_sizes = []
         self.base_type = base_type
@@ -148,7 +147,7 @@ class CType:
         """
         return self.get_base_type_size() * self.get_total_num_elements()
 
-    def get_multi_dimension_index(self, linear_index: int) -> List[int]:
+    def get_multi_dimension_index(self, linear_index: int) -> list[int]:
         """
         Given a linear index between 0 and the product of all elements in self.array_size (upper bound exclusive),
         returns the equivalent index for each dimension.

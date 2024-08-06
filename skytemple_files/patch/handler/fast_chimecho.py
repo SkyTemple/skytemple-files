@@ -53,7 +53,7 @@ class FastChimechoPatchHandler(AbstractPatchHandler):
 
     @property
     def author(self) -> str:
-        return ""
+        return "Anonymous"
 
     @property
     def version(self) -> str:

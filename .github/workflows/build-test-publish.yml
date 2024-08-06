@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.10", "3.11", "3.12", "3.13.0-beta.4" ]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -88,7 +88,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.10", "3.11", "3.12", "3.13.0-beta.4" ]
     steps:
     - uses: actions/checkout@v4
       with:
@@ -114,7 +114,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.10", "3.11", "3.12", "3.13.0-beta.4" ]
         native: [true, false]
     steps:
     - uses: actions/checkout@v4
@@ -155,7 +155,7 @@ jobs:
    strategy:
      fail-fast: false
      matrix:
-       python-version: [ "3.9" ]
+       python-version: [ "3.10" ]
        native: [true, false]
    steps:
    - uses: actions/checkout@v4
@@ -218,9 +218,9 @@ jobs:
         run: |
           echo "PACKAGE_VERSION=$(tomlq '.project.version' pyproject.toml -r)" >> $GITHUB_ENV
       - name: Build Python wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.5.0-manylinux2014_x86_64
-        with:
-          python-versions: 'cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312'
+        run: |
+          python3 -m pip install --upgrade build
+          python3 -m build
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:

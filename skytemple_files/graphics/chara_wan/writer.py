@@ -19,8 +19,6 @@ from __future__ import annotations
 
 from io import BytesIO
 
-from skytemple_files.graphics.chara_wan.model import DIM_TABLE, MINUS_FRAME
-
 
 def ExportWan(wan):
     out_file = BytesIO()
@@ -169,15 +167,7 @@ def ExportWan(wan):
         write_ptr(out_file, img_ptr, sir0_ptrs)
 
     # compute max block space
-    max_blocks = 0
-    for idx, metaFrame in enumerate(wan.frameData):
-        cur_tile = 0
-        for piece in metaFrame:
-            if piece.imgIndex != MINUS_FRAME:
-                twidth, theight = DIM_TABLE[piece.getResolutionType()]
-                blocks_occupied = max(1, twidth * theight // 4)
-                cur_tile += blocks_occupied
-        max_blocks = max(max_blocks, cur_tile)
+    max_blocks = wan.get_max_blocks()
 
     # AnimInfo
     ptrAnimInfo = out_file.tell()

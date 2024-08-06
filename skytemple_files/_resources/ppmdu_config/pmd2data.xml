@@ -1355,6 +1355,13 @@
           </Replace>
         </SimplePatch>
 
+        <!-- A patch to make Chimecho assembly menu faster-->
+        <Patch id="FastChimecho" >
+          <OpenBin filepath="overlay/overlay_0017.bin">
+	  	<Include filename ="anonymous_asm_mods/fast_chimecho/selector_overlay17.asm"/>
+	  </OpenBin>
+        </Patch>
+
       </Game>
     </Patches>
 

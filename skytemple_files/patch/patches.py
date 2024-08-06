@@ -114,6 +114,7 @@ from skytemple_files.patch.handler.fairy_gummies import (
     ImplementFairyGummiesPatchHandler,
 )
 from skytemple_files.patch.handler.far_off_pal_overdrive import FarOffPalOverdrive
+from skytemple_files.patch.handler.fast_chimecho import FastChimechoPatchHandler
 from skytemple_files.patch.handler.fix_evolution import FixEvolutionPatchHandler
 from skytemple_files.patch.handler.fix_memory_softlock import (
     FixMemorySoftlockPatchHandler,
@@ -207,6 +208,7 @@ class PatchType(Enum):
     CHANGE_PORTRAIT = ChangePortraitPatchHandler
     NEGATIVE_ENEMY_DENSITY = NegativeEnemyDensityPatchHandler
     REMOVE_BODY_SIZE_CHECK = RemoveBodySizeCheckPatchHandler
+    FAST_CHIMECHO = FastChimechoPatchHandler
 
 
 class Patcher:

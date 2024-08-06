@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC, abstractmethod
-from typing import List, Dict
 
 from pmdsky_debug_py.protocol import Symbol
 
@@ -168,7 +167,7 @@ class RWArraySymbol(RWSymbol):
     Represents an array symbol. It contains a list of RWSymbol instances.
     """
 
-    elements: List[RWSymbol]
+    elements: list[RWSymbol]
 
     def __init__(self, name: str, offset: int, type_str: str):
         c_type = CType.from_str(type_str)
@@ -197,9 +196,9 @@ class RWStructSymbol(RWSymbol):
     Represents a struct symbol. It contains a dict of RWSymbol instances.
     """
 
-    fields: Dict[str, RWSymbol]
+    fields: dict[str, RWSymbol]
 
-    def __init__(self, name: str, offset: int, fields: List[StructField]):
+    def __init__(self, name: str, offset: int, fields: list[StructField]):
         """
         Creates a new instance of this class
         :param fields: List containing information about the fields of this struct

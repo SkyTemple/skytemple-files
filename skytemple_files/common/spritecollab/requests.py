@@ -118,6 +118,6 @@ class CachedAIOHTTPTransport(AsyncTransport):
         document: DocumentNode,
         variable_values: dict[str, Any] | None = None,
         operation_name: str | None = None,
-    ) -> AsyncGenerator[ExecutionResult, None]:
+    ) -> AsyncGenerator[ExecutionResult]:
         # We don't cache these.
         return self._transport.subscribe(document, variable_values, operation_name)

@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 import re
-from typing import List, Tuple
 
 NEXT_ARRAY_SECTION_REGEX = re.compile(r"((\[\d+])+)(.*)")
 ARRAY_SECTION_INDEX_REGEX = re.compile(r"\[(\d+)]")
@@ -37,7 +36,7 @@ class SymbolPath(str):
     def __init__(self, path_str: str):
         self.path_str = path_str
 
-    def get_next_array(self) -> Tuple[List[int], "SymbolPath"]:
+    def get_next_array(self) -> tuple[list[int], "SymbolPath"]:
         """
         Returns the next section of the path, assuming it's an array section. Also returns the rest of the path
         after removing the first section.
@@ -59,7 +58,7 @@ class SymbolPath(str):
         else:
             raise ValueError('Next section of path "' + self.path_str + '" is not an array section.')
 
-    def get_next_array_flat(self) -> Tuple[int, "SymbolPath"]:
+    def get_next_array_flat(self) -> tuple[int, "SymbolPath"]:
         """
         Same as get_next_array, but all dimensions of the array section will be merged together. Their total size
         will be returned as a single integer.
@@ -70,7 +69,7 @@ class SymbolPath(str):
             merged_size *= element
         return merged_size, rest_of_path
 
-    def get_next_field(self) -> Tuple[str, "SymbolPath"]:
+    def get_next_field(self) -> tuple[str, "SymbolPath"]:
         """
         Returns the next section of the path, assuming it's a struct field. Also returns the rest of the path
         after removing the first section.

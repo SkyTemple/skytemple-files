@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 import logging
-from typing import MutableSequence, TYPE_CHECKING
+from typing import TYPE_CHECKING
+from collections.abc import MutableSequence
 
 from explorerscript.source_map import SourceMap
 from explorerscript.ssb_converting.ssb_data_types import (

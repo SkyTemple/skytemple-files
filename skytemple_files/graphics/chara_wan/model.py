@@ -27,7 +27,7 @@ from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 CENTER_X = 256
-CENTER_Y = 0
+CENTER_Y = 512
 
 MINUS_FRAME = -1
 
@@ -39,16 +39,14 @@ OBJMODE_BITMAP = 3
 FRAME_HitMask = 0x0002  # 0000 0000 0000 0010
 FRAME_ReturnMask = 0x0001  # 0000 0000 0000 0001
 
-ATTR0_FlagBitsMask = 0xFF00  # 1111 1111 0000 0000
+ATTR0_FlagBitsMask = 0xFC00  # 1111 1100 0000 0000
 ATTR1_FlagBitsMask = 0xFE00  # 1111 1110 0000 0000
 ATTR2_FlagBitsMask = 0xFC00  # 1111 1100 0000 0000
 
 ATTR0_ColPalMask = 0x2000  # 0010 0000 0000 0000
 ATTR0_MosaicMask = 0x1000  # 0001 0000 0000 0000
 ATTR0_ObjModeMask = 0x0C00  # 0000 1100 0000 0000
-ATTR0_DblSzDisabled = 0x0200  # 0000 0010 0000 0000 (Whether the obj is disabled if rot&scaling is off, or if double sized when rot&scaling is on!)
-ATTR0_RotNScaleMask = 0x0100  # 0000 0001 0000 0000
-ATTR0_YOffsetMask = ~ATTR0_FlagBitsMask  # 0000 0000 1111 1111
+ATTR0_YOffsetMask = ~ATTR0_FlagBitsMask  # 0000 0011 1111 1111
 
 ATTR1_VFlipMask = 0x2000  # 0010 0000 0000 0000
 ATTR1_HFlipMask = 0x1000  # 0001 0000 0000 0000
@@ -300,11 +298,6 @@ class WanFile(Sir0Serializable):
                 # mosaic mode - ALWAYS 0
                 # obj mode - ALWAYS Normal
                 # obj disable -
-                updateUnusedStats(
-                    [str(len(self.frameData)), str(len(metaFrameData))],
-                    "MFDisabled",
-                    int(newFramePiece.isDisabled()),
-                )
                 # rotation and scaling - ALWAYS 1 when DISABLE is 0
                 # Y offset
 
@@ -430,31 +423,12 @@ class MetaFramePiece:
     def isMosaicOn(self):
         return (ATTR0_MosaicMask & self.attr0) != 0
 
-    def isDisabled(self):
-        return not self.isRotAndScalingOn() and ((ATTR0_DblSzDisabled & self.attr0) != 0)
-
-    def isDoubleSize(self):
-        return self.isRotAndScalingOn() and ((ATTR0_DblSzDisabled & self.attr0) != 0)
-
-    def isRotAndScalingOn(self):
-        return (ATTR0_RotNScaleMask & self.attr0) != 0
-
-    def setRotAndScalingOn(self, rns):
-        if rns:
-            self.attr0 = ATTR0_RotNScaleMask | self.attr0
-        else:
-            self.attr0 = self.attr0 & ~ATTR0_RotNScaleMask
-
     def getYOffset(self):
         rawY = ATTR0_YOffsetMask & self.attr0
-        if rawY >= 128:
-            rawY -= 256
         return rawY - CENTER_Y
 
     def setYOffset(self, yVal):
         rawY = yVal + CENTER_Y
-        if rawY < 0:
-            rawY += 256
         self.attr0 = (self.attr0 & ATTR0_FlagBitsMask) | (ATTR0_YOffsetMask & rawY)
 
     # Before checking VFlip and HFlip, make sure RnS isn't on!!!

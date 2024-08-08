@@ -22,7 +22,7 @@ def MergeWan(wan_files):
     # merge all pieces and remap the frames that reference them
     imgData = []
     for wan in wan_files:
-        mapImgData(wan.imgData, imgData, wan.frameData)
+        exWanUtils.mapImgData(wan.imgData, imgData, wan.frameData)
 
     # merge all frames and remap the animations that reference them
     frameData = []
@@ -83,43 +83,6 @@ def SplitWan(wan, anim_presence):
         new_wan.sdwSize = wan.sdwSize
         wan_files.append(new_wan)
     return wan_files
-
-
-def mapImgData(inputImgData, imgData, frameData):
-    mapping = {}
-    for idx, img in enumerate(inputImgData):
-        dupe_idx = -1
-        for check_idx, check_img in enumerate(imgData):
-            imgs_equal = True
-            # perform a check to see if they're equal
-            if len(img.imgPx) == len(check_img.imgPx):
-                for ii in range(len(img.imgPx)):
-                    if len(img.imgPx[ii]) == len(check_img.imgPx[ii]):
-                        for jj in range(len(img.imgPx[ii])):
-                            if img.imgPx[ii][jj] != check_img.imgPx[ii][jj]:
-                                imgs_equal = False
-                                break
-                    else:
-                        imgs_equal = False
-
-                    if not imgs_equal:
-                        break
-            else:
-                imgs_equal = False
-
-            if imgs_equal:
-                dupe_idx = check_idx
-                break
-        if dupe_idx > -1:
-            mapping[idx] = dupe_idx
-        else:
-            mapping[idx] = len(imgData)
-            imgData.append(img)
-
-    for frame in frameData:
-        for piece in frame:
-            if piece.imgIndex != MINUS_FRAME:
-                piece.imgIndex = mapping[piece.imgIndex]
 
 
 def mapFrameData(inputFrameData, frameData, inputOffsetData, offsetData, animGroupData):

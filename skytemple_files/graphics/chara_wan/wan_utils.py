@@ -16,7 +16,8 @@ from skytemple_files.graphics.chara_wan.model import (
     FrameOffset,
     ImgPiece,
     MetaFramePiece,
-    SequenceFrame, MINUS_FRAME,
+    SequenceFrame,
+    MINUS_FRAME,
 )
 
 

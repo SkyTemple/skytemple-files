@@ -55,6 +55,9 @@ class CharaWanoTestCase(SkyTempleFilesTestCase[CharaWanHandler, WanFile]):
         # Dance is not imported since it has no ID in the XML
         self._test_import_export(self._fix_path_sheets("type_null"), not_imported_anims=["Dance"])
 
+    def test_mega_rayquaza(self):
+        self._test_import_export(self._fix_path_sheets("mega_rayquaza"))
+
     def _test_import_export(self, fix_path: str, *, not_imported_anims: list[str] | None = None):
         if env_use_native():
             self.skipTest(

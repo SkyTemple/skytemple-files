@@ -528,8 +528,10 @@ def ImportSheets(inDir, strict=False):
         for copy_idx in copies:
             animGroupData[copy_idx] = exWanUtils.duplicateAnimGroup(animGroupData[idx])
 
+    imgDataMerge = []
+    exWanUtils.mapImgData(imgData, imgDataMerge, frameData)
     wan = WanFile()
-    wan.imgData = imgData
+    wan.imgData = imgDataMerge
     wan.frameData = frameData
     wan.animGroupData = animGroupData
     wan.offsetData = offsetData
@@ -903,8 +905,6 @@ def addImgData(imgData, frameData, palette_map, transparent, frame):
         block_size = (piece.size[0] // TEX_SIZE, piece.size[1] // TEX_SIZE)
         res_type = DIM_TABLE.index(block_size)
         metaFramePiece.setResolutionType(res_type)
-        # set RnS parameter - always true when not disabled; when reading in we are never disabled
-        metaFramePiece.setRotAndScalingOn(True)
         # set tile index
         metaFramePiece.setTileNum(use_tile)
         # priority is ALWAYS 3

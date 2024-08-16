@@ -125,6 +125,13 @@ class RomProject:
         return self._rom
 
     @property
+    def file_storage(self) -> FileStorage:
+        """
+        The underlying file storage for interacting with the ROM and asset project file systems.
+        """
+        return self._file_storage
+
+    @property
     def static_data(self) -> Pmd2Data:
         """
         PPMDU static data for this ROM project.
@@ -482,11 +489,17 @@ class SkyTempleProjectFileStorage(FileStorage):
             return self.hash_from_bytes(project_file.read())
 
     def _save_rom_object_hash(self, path: Path, data: bytes):
-        self.rom_hashes[path] = self.hash_from_bytes(data)
+        self.save_rom_object_hash(path, self.hash_from_bytes(data))
+
+    def save_rom_object_hash(self, path: Path, asset_hash: AssetHash):
+        self.rom_hashes[path] = asset_hash
         self._save_hash_file(ROM_HASHES_FILE, self.rom_hashes)
 
     def _save_asset_hash(self, path: Path, data: bytes):
-        self.asset_hashes[path] = self.hash_from_bytes(data)
+        self.save_asset_hash(path, self.hash_from_bytes(data))
+
+    def save_asset_hash(self, path: Path, asset_hash: AssetHash):
+        self.asset_hashes[path] = asset_hash
         self._save_hash_file(ASSET_HASHES_FILE, self.asset_hashes)
 
     def _read_hash_file(self, hash_file_name: str) -> dict[Path, AssetHash | None]:

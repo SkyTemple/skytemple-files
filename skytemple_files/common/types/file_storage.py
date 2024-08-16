@@ -124,6 +124,16 @@ class FileStorage(Protocol):
         """Returns the hash of an asset or None if file not found."""
         ...
 
+    @abc.abstractmethod
+    def save_rom_object_hash(self, path: Path, asset_hash: AssetHash):
+        """Saves a ROM object hash to a file."""
+        ...
+
+    @abc.abstractmethod
+    def save_asset_hash(self, path: Path, asset_hash: AssetHash):
+        """Saves an asset hash to a file."""
+        ...
+
 
 class AssetHashMismatchError(Exception):
     """

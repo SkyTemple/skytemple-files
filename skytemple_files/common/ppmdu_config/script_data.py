@@ -32,7 +32,7 @@ from range_typed_integers import i16, u8, u16
 
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import AutoString
-from skytemple_files.common.warnings import DeprecatedToBeRemovedWarning
+from skytemple_files.common.warning import DeprecatedToBeRemovedWarning
 
 
 class GameVariableType(IntEnum):

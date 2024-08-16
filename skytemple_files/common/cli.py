@@ -20,6 +20,7 @@ CLI API modules for skytemple-files. See documentation of commands.
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
+import argparse
 from pathlib import Path
 
 from skytemple_files.common.types.data_handler import DataHandler
@@ -58,3 +59,38 @@ def load_accepted_file_types(file_types: list[str] | None) -> set[type[DataHandl
     if file_types is None:
         return None
     return set([getattr(FileType, file_type) for file_type in file_types])
+
+
+def main():
+    # noinspection PyTypeChecker
+    parser = argparse.ArgumentParser(description="Transfer data between a ROM and an asset project.")
+    parser.add_argument("assets")
+    parser.add_argument("-o", "--operation", help="'rom_to_project' or 'project_to_rom")
+    parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
+    parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
+    parser.add_argument(
+        "-f", "--file_types", nargs="*", metavar="FILE_TYPES", help="File types to include when transferring."
+    )
+    parser.add_argument(
+        "-e",
+        "--extracted_rom_dir",
+        metavar="EXTRACTED_ROM_PATH",
+        required=False,
+        help="Path to the extracted ROM files.",
+    )
+
+    args = parser.parse_args()
+
+    if args.assets:
+        if args.operation == "rom_to_project":
+            extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir), args.file_types)
+        elif args.operation == "project_to_rom":
+            save_project_to_rom(
+                Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir), args.file_types
+            )
+        else:
+            raise ValueError(f"Invalid operation: {args.operation}")
+
+
+if __name__ == "__main__":
+    main()

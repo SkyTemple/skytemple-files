@@ -763,7 +763,7 @@ def serialize_enum_or_default(enum_class: type[Enum], value: int) -> str | int:
         return value
 
 
-def deserialize_enum_or_default(enum_class: type[Enum], value: str | int) -> Enum | int:
+def deserialize_enum_or_default(enum_class: type[Enum], value: str | int) -> int:
     """
     If the value is a string, returns the corresponding enum value.
     If the value is an integer, returns the integer back.

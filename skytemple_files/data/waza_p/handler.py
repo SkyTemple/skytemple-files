@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Sequence
 import json
 
-from range_typed_integers import u32
+from range_typed_integers import u8, u32, u16
 
 from skytemple_files.common.impl_cfg import get_implementation_type, ImplementationType
 from skytemple_files.common.ppmdu_config.data import Pmd2StringBlock
@@ -41,6 +41,8 @@ from skytemple_files.data.waza_p.protocol import (
     WazaMoveRangeSettingsProtocol,
     MoveLearnsetProtocol,
     WazaMoveCategory,
+    _PokeType,
+    _WazaMoveCategory,
 )
 
 
@@ -189,7 +191,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
                     "move_id": move.move_id,
                     "message_id": move.message_id,
                 }
-                if strings is not None:
+                if strings is not None and string_blocks is not None:
                     move_name_index = string_blocks["Move Names"].begin + move.move_id
                     if move_name_index <= string_blocks["Move Names"].end:
                         serialized_move["name"] = strings.strings[move_name_index]
@@ -203,12 +205,13 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
             strings, string_blocks = cls._get_strings_from_rom(["Move Names", "Pokemon Names"], **kwargs)
 
             def get_move_value(move_id: u32) -> str | u32:
-                if strings is None:
+                if strings is None or string_blocks is None:
                     return move_id
                 else:
                     move_name_idx = string_blocks["Move Names"].begin + move_id
                     if move_name_idx <= string_blocks["Move Names"].end:
                         return strings.strings[move_name_idx]
+                    return move_id
 
             for i, learnset in enumerate(data.learnsets):
                 serialized_learnset = {
@@ -223,7 +226,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
                     "egg_moves": [get_move_value(move_id) for move_id in learnset.egg_moves],
                 }
 
-                if strings is not None:
+                if strings is not None and string_blocks is not None:
                     serialized_learnset["pokemon_name"] = strings.strings[string_blocks["Pokemon Names"].begin + i]
 
                 learnsets.append(serialized_learnset)
@@ -253,8 +256,8 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
                 protocol.moves.append(move)
 
                 move.base_power = move_json["base_power"]
-                move.type = deserialize_enum_or_default(PokeType, move_json["type"])
-                move.category = deserialize_enum_or_default(WazaMoveCategory, move_json["category"])
+                move.type = _PokeType(deserialize_enum_or_default(PokeType, move_json["type"]))
+                move.category = _WazaMoveCategory(deserialize_enum_or_default(WazaMoveCategory, move_json["category"]))
                 move.settings_range = cls.get_range_settings_model()(bytes())
                 move.settings_range = cls._deserialize_move_range_settings(move_json["settings_range"])
                 move.settings_range_ai = cls._deserialize_move_range_settings(move_json["settings_range_ai"])
@@ -295,7 +298,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
             for learnset_json in learnsets:
                 learnset = cls.get_learnset_model()(
                     [
-                        cls.get_level_up_model()(get_move_id(level_up["move_id"]), level_up["level_id"])
+                        cls.get_level_up_model()(u16(get_move_id(level_up["move_id"])), level_up["level_id"])
                         for level_up in learnset_json["level_up_moves"]
                     ],
                     [get_move_id(move_value) for move_value in learnset_json["tm_hm_moves"]],
@@ -330,7 +333,7 @@ class WazaPHandler(HybridSir0DataHandler[WazaPProtocol]):
         """
         Fetches blocks of strings from the ROM if it is specified in kwargs.
         """
-        if "rom_project" in kwargs:
+        if "rom_project" in kwargs and kwargs["rom_project"] is not None:
             rom_project = kwargs["rom_project"]
             # Default to English strings (NA/EU). Use Japanese strings if this is the JP ROM.
             try:

@@ -235,8 +235,12 @@ class RomProject:
                 folder_files.extend(get_files_in_folder(Path(folder_path, subfolder[0]), subfolder[1]))
             return folder_files
 
-        rom_files = get_files_in_folder(Path(), self.rom.filenames)
+        if self.rom is None:
+            rom_files = []
+        else:
+            rom_files = get_files_in_folder(Path(), self.rom.filenames)
 
+        data_handler: type[DataHandler[T]]
         for data_handler in self._load_data_handlers():
             for rom_file in rom_files:
                 asset_specs = data_handler.asset_specs(rom_file)
@@ -281,7 +285,7 @@ class RomProject:
         if assets is None and not load_from_rom:
             assets = extract_assets(self.load_assets(handler, path_to_rom_obj))
 
-        if load_from_rom or len(assets) < 1:
+        if load_from_rom or assets is None or len(assets) < 1:
             # Force ROM deserialization if no assets exist.
             return handler.deserialize(self._file_storage.get_from_rom(path_to_rom_obj), **kwargs)
 
@@ -304,7 +308,7 @@ class RomProject:
         *,
         skip_save_to_rom: bool = False,
         skip_save_to_project_dir: bool = False,
-        extracted_rom_dir: Path = None,
+        extracted_rom_dir: Path | None = None,
         **kwargs: OptionalKwargs,
     ):
         """
@@ -385,7 +389,8 @@ class RomProject:
         ]
 
     def _enrich_static_data(self):
-        RomDataLoader(self.rom).load_into(self.static_data)
+        if self.rom is not None:
+            RomDataLoader(self.rom).load_into(self.static_data)
 
     def _load_extra_skypatches(self):
         raise NotImplementedError()
@@ -410,8 +415,8 @@ class SkyTempleProjectFileStorage(FileStorage):
     rom_path: Path
     project_dir: Path
     rom: NintendoDSRom
-    rom_hashes: dict[Path, AssetHash]
-    asset_hashes: dict[Path, AssetHash]
+    rom_hashes: dict[Path, AssetHash | None]
+    asset_hashes: dict[Path, AssetHash | None]
 
     def __init__(self, rom_path: Path, project_dir: Path):
         self.rom_path = rom_path
@@ -484,7 +489,7 @@ class SkyTempleProjectFileStorage(FileStorage):
         self.asset_hashes[path] = self.hash_from_bytes(data)
         self._save_hash_file(ASSET_HASHES_FILE, self.asset_hashes)
 
-    def _read_hash_file(self, hash_file_name: str) -> dict[Path, AssetHash]:
+    def _read_hash_file(self, hash_file_name: str) -> dict[Path, AssetHash | None]:
         hashes: dict[Path, AssetHash | None] = defaultdict(lambda: None)
         hash_file_path = Path(self.project_dir, hash_file_name)
         if hash_file_path.exists():
@@ -497,7 +502,7 @@ class SkyTempleProjectFileStorage(FileStorage):
                         print(f"Malformed hash file {hash_file_name} detected. Skipping line: {line}")
         return hashes
 
-    def _save_hash_file(self, hash_file_name: str, hashes: dict[Path, AssetHash]):
+    def _save_hash_file(self, hash_file_name: str, hashes: dict[Path, AssetHash | None]):
         lines = []
         for file_name in sorted(hashes.keys()):
             lines.append(f"{hashes[file_name]} {file_name}\n")

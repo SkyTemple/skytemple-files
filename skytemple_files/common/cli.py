@@ -22,27 +22,39 @@ CLI API modules for skytemple-files. See documentation of commands.
 
 from pathlib import Path
 
+from skytemple_files.common.types.data_handler import DataHandler
+from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.file_api_v2 import RomProject
 
 
-def extract_rom_files_to_project(rom_path: Path, asset_dir: Path):
+def extract_rom_files_to_project(rom_path: Path, asset_dir: Path, file_types: list[str] | None):
+    accepted_file_types: set[type[DataHandler]] | None = load_accepted_file_types(file_types)
     project = RomProject.new(rom_path, asset_dir)
     rom_files = project.list_files(search_project_dir=False)
 
     for file_path, data_handler in rom_files.items():
-        file_data = project.open_file(data_handler, file_path, force=True, load_from_rom=True)
+        if accepted_file_types is None or data_handler in accepted_file_types:
+            file_data = project.open_file(data_handler, file_path, force=True, load_from_rom=True)
 
-        project.save_file(data_handler, file_path, file_data, skip_save_to_rom=True, rom_project=project)
+            project.save_file(data_handler, file_path, file_data, skip_save_to_rom=True, rom_project=project)
 
 
-def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path):
+def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path, file_types: list[str] | None):
+    accepted_file_types: set[type[DataHandler]] | None = load_accepted_file_types(file_types)
     project = RomProject.new(rom_path, asset_dir)
     rom_files = project.list_files(search_rom=False)
 
     for file_path, data_handler in rom_files.items():
-        assets = project.load_assets(data_handler, file_path)
-        file_data = project.open_file(data_handler, file_path, assets=assets, force=True)
+        if accepted_file_types is None or data_handler in accepted_file_types:
+            assets = project.load_assets(data_handler, file_path)
+            file_data = project.open_file(data_handler, file_path, assets=assets, force=True)
 
-        project.save_file(
-            data_handler, file_path, file_data, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir
-        )
+            project.save_file(
+                data_handler, file_path, file_data, skip_save_to_project_dir=True, extracted_rom_dir=extracted_rom_dir
+            )
+
+
+def load_accepted_file_types(file_types: list[str] | None) -> set[type[DataHandler]] | None:
+    if file_types is None:
+        return None
+    return set([getattr(FileType, file_type) for file_type in file_types])

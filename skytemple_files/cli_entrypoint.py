@@ -13,6 +13,9 @@ def main():
     parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
     parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
     parser.add_argument(
+        "-f", "--file_types", nargs="*", metavar="FILE_TYPES", help="File types to include when transferring."
+    )
+    parser.add_argument(
         "-e",
         "--extracted_rom_dir",
         metavar="EXTRACTED_ROM_PATH",
@@ -23,9 +26,11 @@ def main():
     args = parser.parse_args()
 
     if args.operation == "rom_to_project":
-        cli.extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir))
+        cli.extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir), args.file_types)
     elif args.operation == "project_to_rom":
-        cli.save_project_to_rom(Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir))
+        cli.save_project_to_rom(
+            Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir), args.file_types
+        )
     else:
         raise ValueError(f"Invalid operation: {args.operation}")
 

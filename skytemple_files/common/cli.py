@@ -38,6 +38,7 @@ def extract_rom_files_to_project(rom_path: Path, asset_dir: Path, file_types: li
     for file_path, data_handler in rom_files.items():
         if accepted_file_types is None or data_handler in accepted_file_types:
             extract_rom_file_to_project(project, data_handler, file_path)
+            project.file_storage.save_rom_object_hash(file_path, project.file_storage.hash_of_rom_object(file_path))
 
 
 def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path | None, file_types: list[str] | None):
@@ -49,6 +50,10 @@ def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path
         if accepted_file_types is None or data_handler in accepted_file_types:
             assets = project.load_assets(data_handler, file_path)
             save_project_file_to_rom(project, data_handler, file_path, extracted_rom_dir, assets)
+            for asset in [asset for asset in assets if isinstance(asset, Asset)]:
+                project.file_storage.save_asset_hash(
+                    asset.spec.path, project.file_storage.hash_of_asset(asset.spec.path)
+                )
 
 
 def sync_project_and_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path | None, file_types: list[str] | None):
@@ -59,8 +64,9 @@ def sync_project_and_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Pat
     for file_path, data_handler in rom_files.items():
         if accepted_file_types is None or data_handler in accepted_file_types:
             assets = project.load_assets(data_handler, file_path)
-            asset_hashes_match = all(asset.do_asset_hashes_match() for asset in assets)
-            rom_hashes_match = all(asset.do_rom_hashes_match() for asset in assets)
+            asset_hashes_match = all(isinstance(asset, Asset) and asset.do_asset_hashes_match() for asset in assets)
+            assets_exist = any(isinstance(asset, Asset) for asset in assets)
+            rom_hashes_match = all(isinstance(asset, Asset) and asset.do_rom_hashes_match() for asset in assets)
 
             def extract_rom_file_to_project_and_save_hash():
                 extract_rom_file_to_project(project, data_handler, file_path)
@@ -76,10 +82,17 @@ def sync_project_and_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Pat
 
             if asset_hashes_match and not rom_hashes_match:
                 # If ROM hashes don't match, then the ROM was modified. Sync the ROM changes to assets.
+                # If no assets exist, extract the ROM to assets.
                 extract_rom_file_to_project_and_save_hash()
             elif not asset_hashes_match and rom_hashes_match:
                 # If asset hashes don't match, then the assets were modified. Sync the asset changes to ROM.
                 save_project_file_to_rom_and_save_hash()
+            elif not assets_exist:
+                extract_rom_file_to_project_and_save_hash()
+                if isinstance(assets[0], AssetSpec):
+                    project.file_storage.save_rom_object_hash(
+                        assets[0].rom_path, project.file_storage.hash_of_rom_object(assets[0].rom_path)
+                    )
             elif not asset_hashes_match and not rom_hashes_match:
                 # If both hashes don't match, there is a conflict.
                 # Ask the user which version of the files to use.

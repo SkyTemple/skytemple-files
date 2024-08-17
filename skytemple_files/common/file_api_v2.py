@@ -519,7 +519,9 @@ class SkyTempleProjectFileStorage(FileStorage):
         lines = []
         for file_name in sorted(hashes.keys()):
             lines.append(f"{hashes[file_name]} {file_name}\n")
-        with open(Path(self.project_dir, hash_file_name), "w") as hash_file:
+        if not self.project_dir.exists():
+            self.project_dir.mkdir(parents=True, exist_ok=True)
+        with open(Path(self.project_dir, hash_file_name), "w+") as hash_file:
             hash_file.writelines(lines)
 
     @staticmethod

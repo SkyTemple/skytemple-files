@@ -1,5 +1,4 @@
 import os
-import shutil
 from pathlib import Path
 from unittest import TestCase
 
@@ -13,24 +12,7 @@ from skytemple_files.common.file_api_v2 import (
 )
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files_test.case import load_rom_path
-
-ASSET_PROJECT_PATH = Path("skytemple_files_test", "common", "fixtures", "asset_project")
-ROM_COPY_PATH = Path("skytemple_files_test", "common", "fixtures", "rom_copy.nds")
-
-
-def copy_rom_to_temp_file() -> Path:
-    """
-    Copies the provided ROM to a temporary file for testing.
-    This allows testing writes to the ROM without changing the ROM supplied by the user.
-    """
-    rom_path = load_rom_path()
-    shutil.copy(rom_path, ROM_COPY_PATH)
-    return ROM_COPY_PATH
-
-
-def delete_temp_rom():
-    if os.path.exists(ROM_COPY_PATH):
-        os.remove(ROM_COPY_PATH)
+from skytemple_files_test.common.temp_rom import ASSET_PROJECT_PATH, copy_rom_to_temp_file, delete_temp_rom
 
 
 def revert_hash_files():

@@ -49,6 +49,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 test/skytemple_files_test/common/fixtures/rom_copy.nds
+test/skytemple_files_test/common/fixtures/temp_asset_project/
 
 # Translations
 *.mo

@@ -123,6 +123,7 @@
 .definelabel HookStringsPkmn2, 0x02052720
 .definelabel HookStringsPkmn3, 0x02052798
 .definelabel HookStringsPkmn4, 0x020529C8
+.definelabel HookStringsPkmnUnown, 0x020529F0
 .definelabel HookStringsPkmn5, 0x02052A0C
 .definelabel HookStringsCate1, 0x02052AB0
 .definelabel HookMdAccess1, 0x020526D8

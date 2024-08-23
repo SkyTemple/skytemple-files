@@ -53,34 +53,54 @@ def MergeWan(wan_files):
     return wan
 
 
+def ReduceWan(wan, list_anim_idx):
+    """Reduce a wan file to a list of group indices specified in list_anim_idx"""
+    animGroupData = []
+    for anim_idx in sorted(list_anim_idx):
+        while len(animGroupData) < anim_idx:
+            animGroupData.append([])
+        if anim_idx < len(wan.animGroupData):
+            new_anim = exWanUtils.duplicateAnimGroup(wan.animGroupData[anim_idx])
+            animGroupData.append(new_anim)
+        else:
+            animGroupData.append([])
+    frameData = []
+    offsetData = []
+    # adds only necessary frames to frameData, and remaps frame references in animGroupData
+    # offset data included
+    transferStrippedFrameData(wan.frameData, frameData, wan.offsetData, offsetData, animGroupData)
+    # add only necessary pieces to imgData, and remaps the image piece references in frameData
+    imgData = []
+    transferStrippedImgData(wan.imgData, imgData, frameData)
+
+    new_wan = WanFile()
+    new_wan.imgData = imgData
+    new_wan.frameData = frameData
+    new_wan.animGroupData = animGroupData
+    new_wan.offsetData = offsetData
+    new_wan.customPalette = wan.customPalette
+    new_wan.sdwSize = wan.sdwSize
+
+    return new_wan
+
+
+def ActiveGroupsWan(wan):
+    """Get all active animation groups (i.e. groups with data) in the specified wan file"""
+    list_idx = []
+    for idx, group in enumerate(wan.animGroupData):
+        if len(group) > 0:
+            list_idx.append(idx)
+    return list_idx
+
+
 def SplitWan(wan, anim_presence):
     wan_files = []
     for anim_list in anim_presence:
-        animGroupData = []
-        for anim_idx, anim_group in enumerate(anim_list):
-            if not anim_group:
-                animGroupData.append([])
-            elif anim_idx < len(wan.animGroupData):
-                new_anim = exWanUtils.duplicateAnimGroup(wan.animGroupData[anim_idx])
-                animGroupData.append(new_anim)
-            else:
-                animGroupData.append([])
-        frameData = []
-        offsetData = []
-        # adds only necessary frames to frameData, and remaps frame references in animGroupData
-        # offset data included
-        transferStrippedFrameData(wan.frameData, frameData, wan.offsetData, offsetData, animGroupData)
-        # add only necessary pieces to imgData, and remaps the image piece references in frameData
-        imgData = []
-        transferStrippedImgData(wan.imgData, imgData, frameData)
-
-        new_wan = WanFile()
-        new_wan.imgData = imgData
-        new_wan.frameData = frameData
-        new_wan.animGroupData = animGroupData
-        new_wan.offsetData = offsetData
-        new_wan.customPalette = wan.customPalette
-        new_wan.sdwSize = wan.sdwSize
+        list_idx = []
+        for idx, included in enumerate(anim_list):
+            if included:
+                list_idx.append(idx)
+        new_wan = ReduceWan(wan, list_idx)
         wan_files.append(new_wan)
     return wan_files
 

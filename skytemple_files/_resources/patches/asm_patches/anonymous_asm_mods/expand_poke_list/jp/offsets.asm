@@ -125,6 +125,7 @@
 .definelabel HookStringsPkmn2, 0x02052738
 .definelabel HookStringsPkmn3, 0x020527AC
 .definelabel HookStringsPkmn4, 0x020529CC
+.definelabel HookStringsPkmnUnown, 0x020529F4
 .definelabel HookStringsPkmn5, 0x02052A10
 .definelabel HookStringsCate1, 0x02052AB4 ; WARNING! IS ONLY 1 INSTRUCTION IN JP, BUT IS 2 IN NA/EU!
 .definelabel HookMdAccess1, 0x020526F0

@@ -446,6 +446,10 @@ CheckSecondPartRead:
 	add  r0,r1,Pkmn_StrID_L
 	add  r0,r0,Pkmn_StrID_H
 .endarea
+.org HookStringsPkmnUnown
+.area 0x4
+	.word Pkmn_StrID_H+Pkmn_StrID_L+0xC9
+.endarea
 .org HookStringsPkmn5
 .area 0x8
 	add  r0,r1,Pkmn_StrID_L

@@ -18,6 +18,8 @@ from __future__ import annotations
 
 from typing import Callable
 
+from ndspy.rom import NintendoDSRom
+
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
@@ -26,9 +28,9 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     Pmd2Data,
 )
-from skytemple_files.common.util import *
+from skytemple_files.common.util import read_u32
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 
 PATCH_CHECK_ADDR_APPLIED_US = 0x2F5BC
 PATCH_CHECK_ADDR_APPLIED_EU = 0x2F8B0
@@ -43,9 +45,7 @@ class ExpandPortraitPatchHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _(
-            "Expands portraits structure by 8 bytes, which is enough to cover all cases."
-        )
+        return _("Expands portraits structure by 8 bytes, which is enough to cover all cases.")
 
     @property
     def author(self) -> str:
@@ -62,31 +62,18 @@ class ExpandPortraitPatchHandler(AbstractPatchHandler):
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_US) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_EU:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_EU) != PATCH_CHECK_INSTR_APPLIED
             if config.game_region == GAME_REGION_JP:
-                return (
-                    read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP)
-                    != PATCH_CHECK_INSTR_APPLIED
-                )
+                return read_u32(rom.arm9, PATCH_CHECK_ADDR_APPLIED_JP) != PATCH_CHECK_INSTR_APPLIED
         raise NotImplementedError()
 
-    def apply(
-        self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         try:
             apply()
         except RuntimeError as ex:
             raise ex
 
-    def unapply(
-        self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data
-    ) -> None:
+    def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         raise NotImplementedError()

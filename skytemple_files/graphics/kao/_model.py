@@ -53,7 +53,7 @@ from skytemple_files.graphics.kao.protocol import (
 
 
 class KaoPropertiesState(_KaoPropertiesProtocol):
-    _instance: Optional[KaoPropertiesState] = None
+    _instance: KaoPropertiesState | None = None
     kao_image_limit: int
 
     def __init__(self, kao_image_limit: int):
@@ -450,9 +450,7 @@ def pil_to_kao(pil: Image.Image, allowed_compressions: list[CommonAtType] | None
     # correct image again:
     # >>> uncompressed_kao_to_pil(new_palette, new_img).show()
 
-    new_img_compressed = FileType.COMMON_AT.serialize(
-        FileType.COMMON_AT.compress(new_img, allowed_compressions)
-    )
+    new_img_compressed = FileType.COMMON_AT.serialize(FileType.COMMON_AT.compress(new_img, allowed_compressions))
     limit = KaoPropertiesState.instance().kao_image_limit
     if len(new_img_compressed) > limit:
         raise AttributeError(

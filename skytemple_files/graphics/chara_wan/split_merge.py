@@ -54,7 +54,7 @@ def MergeWan(wan_files):
 
 
 def ReduceWan(wan, list_anim_idx):
-    """ Reduce a wan file to a list of group indices specified in list_anim_idx"""
+    """Reduce a wan file to a list of group indices specified in list_anim_idx"""
     animGroupData = []
     for anim_idx in sorted(list_anim_idx):
         while len(animGroupData) < anim_idx:
@@ -85,7 +85,7 @@ def ReduceWan(wan, list_anim_idx):
 
 
 def ActiveGroupsWan(wan):
-    """ Get all active animation groups (i.e. groups with data) in the specified wan file """
+    """Get all active animation groups (i.e. groups with data) in the specified wan file"""
     list_idx = []
     for idx, group in enumerate(wan.animGroupData):
         if len(group) > 0:

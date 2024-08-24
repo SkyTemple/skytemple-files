@@ -158,9 +158,7 @@ def ImportSheets(inDir, strict=False):
 
         if index > -1:
             if index in anim_stats:
-                raise UserValueError(
-                    "{} and {} both have the an index of {}!".format(anim_stats[index].name, name, index)
-                )
+                raise UserValueError(f"{anim_stats[index].name} and {name} both have the an index of {index}!")
             anim_stats[index] = anim_stat
 
     copy_indices = {}
@@ -210,7 +208,7 @@ def ImportSheets(inDir, strict=False):
 
             # check against inconsistent sizing
             if anim_img.size != offset_img.size or anim_img.size != shadow_img.size:
-                raise UserValueError("Anim, Offset, and Shadow sheets for {} must be the same size!".format(anim_name))
+                raise UserValueError(f"Anim, Offset, and Shadow sheets for {anim_name} must be the same size!")
 
             if anim_img.size[0] % tileSize[0] != 0 or anim_img.size[1] % tileSize[1] != 0:
                 raise UserValueError(
@@ -299,9 +297,7 @@ def ImportSheets(inDir, strict=False):
                     if frame_offset[2] is None:
                         # raise warning if there's missing shadow or offsets
                         if strict:
-                            raise UserValueError(
-                                "No frame offset found in frame {} for {}".format((jj, dir), anim_name)
-                            )
+                            raise UserValueError(f"No frame offset found in frame {(jj, dir)} for {anim_name}")
                         offsets = FrameOffset(rel_center, rel_center, rel_center, rel_center)
                     else:
                         offsets.center = frame_offset[2]
@@ -317,7 +313,7 @@ def ImportSheets(inDir, strict=False):
                     if shadow_offset[4] is not None:
                         shadow = shadow_offset[4]
                     elif strict:
-                        raise UserValueError("No shadow offset found in frame {} for {}".format((jj, dir), anim_name))
+                        raise UserValueError(f"No shadow offset found in frame {(jj, dir)} for {anim_name}")
                     shadow_diff = exUtils.addLoc(shadow, rect, True)
                     shadow = exUtils.addLoc(shadow, rel_center, True)
 

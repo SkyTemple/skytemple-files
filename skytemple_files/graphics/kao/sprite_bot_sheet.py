@@ -18,7 +18,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 from collections.abc import Generator
 
 from PIL import Image
@@ -50,7 +50,7 @@ class SpriteBotSheet:
         return image.crop((0, 0, max_x, max_y))
 
     @classmethod
-    def load(cls, fn: str, portrait_name_fn: Callable[[int], str]) -> Generator[tuple[int, Image.Image], None, None]:
+    def load(cls, fn: str, portrait_name_fn: Callable[[int], str]) -> Generator[tuple[int, Image.Image]]:
         img = Image.open(fn)
         occupied = cls._verify_portraits(img, portrait_name_fn)
         for xx, column in enumerate(occupied):
@@ -72,7 +72,7 @@ class SpriteBotSheet:
     @classmethod
     def _iter_portraits(
         cls, kao: KaoProtocol[KaoImageProtocol], portrait_item_id: int
-    ) -> Generator[tuple[KaoImageProtocol | None, KaoImageProtocol | None], None, None]:
+    ) -> Generator[tuple[KaoImageProtocol | None, KaoImageProtocol | None]]:
         for i in range(0, SUBENTRIES, 2):
             yield kao.get(portrait_item_id, i), kao.get(portrait_item_id, i + 1)
 

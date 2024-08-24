@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contains information about the size and fields of some struct types
-from typing import List
 
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 
@@ -151,7 +150,7 @@ def get_struct_size(type_str: str) -> int:
         raise ValueError("The specified type is not a struct type.")
 
 
-def get_struct_fields(type_str: str) -> List[StructField]:
+def get_struct_fields(type_str: str) -> list[StructField]:
     """
     Given a string representing a struct type, returns the fields it contains
     :param type_str: Struct type

@@ -33,11 +33,7 @@ HookPush:
 	mov r0,r6
 	ldr r1,=PushStringID
 	bl SendMessageWithIDLog
-	ldr r0,=ctrl_struct
-	ldrh r0,[r0, #+0x0]
-	tst r0,#0x2
-	movne  r0,#0x0
-	moveq  r0,#0x1
+	mov  r0,#0x1
 	strb r0,[r11, #+0x4e]
 	ldrh r2,[r11, #+0x0]
 	orr  r2,r2,#0x8000

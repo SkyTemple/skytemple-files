@@ -92,6 +92,8 @@ class MoveLearnset(MoveLearnsetProtocol[LevelUpMove], AutoString):
 
 class WazaMoveRangeSettings(WazaMoveRangeSettingsProtocol, AutoString):
     def __init__(self, data: bytes):
+        if len(data) == 0:
+            return
         val = read_u16(data, 0)
         n4, n3, n2, n1 = val >> 12 & 0xF, val >> 8 & 0xF, val >> 4 & 0xF, val & 0xF
         self.target = int(n1)
@@ -137,6 +139,8 @@ class WazaMove(WazaMoveProtocol[WazaMoveRangeSettings], AutoString):
     message_id: u8
 
     def __init__(self, data: bytes):
+        if len(data) == 0:
+            return
         # 0x00	2	uint16	Base Power	The base power of the move.
         self.base_power = read_u16(data, 0x00)
         # 0x02	1	uint8	Type	The type of the move.
@@ -243,6 +247,11 @@ class WazaP(WazaPProtocol[WazaMove, MoveLearnset], Sir0Serializable, AutoString)
     learnsets: MutableSequence[MoveLearnset]
 
     def __init__(self, data: bytes, waza_content_pointer: int):
+        if len(data) == 0:
+            self.moves = []
+            self.learnsets = []
+            return
+
         if not isinstance(data, memoryview):
             data = memoryview(data)
 

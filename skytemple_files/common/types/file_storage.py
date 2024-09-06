@@ -32,18 +32,18 @@ class AssetSpec:
     rom_path: Path
 
     # handler internal category name, to know which kind of asset to generate
-    category: str
+    category: str = ""
     # handler internal identifier, to know which kind of asset to generate
-    id: str
+    id: str = ""
 
 
 @dataclass
 class Asset:
     spec: AssetSpec
-    expected_rom_obj_hash: bytes | None  # may be None if no hash info was stored yet.
-    actual_rom_obj_hash: bytes | None  # may be None if the file does not exist in ROM.
-    expected_asset_hash: bytes | None  # may be None if no hash info was stored yet.
-    actual_asset_hash: bytes | None  # may be None if no hash info was stored yet.
+    expected_rom_obj_hash: AssetHash | None  # may be None if no hash info was stored yet.
+    actual_rom_obj_hash: AssetHash | None  # may be None if the file does not exist in ROM.
+    expected_asset_hash: AssetHash | None  # may be None if no hash info was stored yet.
+    actual_asset_hash: AssetHash | None  # may be None if no hash info was stored yet.
     data: bytes
 
     def do_rom_hashes_match(self):
@@ -70,6 +70,13 @@ class Asset:
 
 class FileStorage(Protocol):
     @abc.abstractmethod
+    def get_project_dir(self) -> Path:
+        """
+        Gets the root directory of the project assets.
+        """
+        ...
+
+    @abc.abstractmethod
     def get_from_rom(self, path: Path) -> bytes:
         """
         Get the bytes of a file from ROM.
@@ -90,8 +97,20 @@ class FileStorage(Protocol):
         """
         ...
 
+    def get_asset_from_spec(self, spec: AssetSpec) -> Asset:
+        """
+        Returns the bytes of an asset file and its corresponding hash (if any).
+        Raises `FileNotFound` if the asset under the spec's path was not found
+        """
+        asset = self.get_asset(spec.path, spec.rom_path)
+        asset.spec.category = spec.category
+        asset.spec.id = spec.id
+        return asset
+
     @abc.abstractmethod
-    def store_asset(self, path: Path, for_rom_path: Path, data_asset: bytes) -> bytes:
+    def store_asset(
+        self, path: Path, for_rom_path: Path, data_asset: bytes, custom_project_dir: Path | None = None
+    ) -> bytes:
         """Store an asset file."""
         ...
 
@@ -103,6 +122,16 @@ class FileStorage(Protocol):
     @abc.abstractmethod
     def hash_of_asset(self, path: Path) -> AssetHash | None:
         """Returns the hash of an asset or None if file not found."""
+        ...
+
+    @abc.abstractmethod
+    def save_rom_object_hash(self, path: Path, asset_hash: AssetHash):
+        """Saves a ROM object hash to a file."""
+        ...
+
+    @abc.abstractmethod
+    def save_asset_hash(self, path: Path, asset_hash: AssetHash):
+        """Saves an asset hash to a file."""
         ...
 
 

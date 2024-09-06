@@ -50,7 +50,7 @@ This API provides two types of data access:
 - ROM: The actual ROM file where all of the binary serialized files are stored.
 
 If the contents of assets does not match the contents of the file in the ROM, this can be handled in different ways.
-Saving data will always always write changes to both the Assets and the ROM.
+Saving data will always always write changes to both the assets and the ROM.
 
 Information about patches applied via this API are also stored in asset files, to apply the changes again. Same goes
 for supported hardcoded data in ARM9/ARM7 or overlays. Note that most patches do not support un-applying, but it should
@@ -61,7 +61,7 @@ collaborators on a project, as well as being able to use the assets in the decom
 of reproducibility. In theory it should be possible to turn an unmodified ROM into a ROM hack just from its asset files.
 
 Note however that SkyTemple Files can only apply assets which it implements. Some other tools may support editing
-other file formats in the ROM, these need to apply their changes on their own.
+other file formats in the ROM. These need to apply their changes on their own.
 
 .. _decomp: https://github.com/pret/pmd-sky.
 
@@ -72,8 +72,27 @@ for more information. The implementations are stored in ``skytemple_files.common
 
 - ``assets``: Manage unpacking and packing ROMs using the "File API v2".
 
-These APIs are not exposed via a command, they must be run via the Python interpreter directly, eg.
-``python -m skytemple_files.common.cli assets``. The SkyTemple GUI app will eventually expose these APIs via it's own ``skytemple`` command.
+  - ``--operation`` (``-o``): Either ``export``, ``import``, or ``sync``.
+
+    - ``export``: Exports files from a ROM into an asset project. Initializes the asset project if it doesn't exist.
+    - ``import``: Imports files from an asset project into a ROM.
+    - ``sync``: The CLI will infer whether the ROM or asset project was changed, and sync changes to the other. If changes are detected with the same file in the ROM and asset project, the CLI will ask which changes should overwrite the other.
+  - ``--rom_path`` (``-r``): The file path of the ROM to use.
+  - ``--asset_dir`` (``-a``): The file path of the root directory of the asset project to use.
+  - ``--file_types`` (``-f``): Optional. File types to include when packing/unpacking. Can be any file types in file_types.py_
+  - ``--extracted_rom_dir`` (``-e``): Optional. If provided with ``project_to_rom``, NitroFS file system data will be written to this directory in addition to the ROM.
+
+These APIs are not exposed via a command. They must be run via the Python interpreter directly. E.g.
+``python -m skytemple_files.common.cli assets``. The SkyTemple GUI app will eventually expose these APIs via its own ``skytemple`` command.
+
+When an asset project is created, a ``file_config.yml`` is created at the project root.
+This file contains mappings between ROM files and skytemple-files file types.
+If you want to add or remove files from the ROM, update the file config with the added/deleted file to register the new/deleted file with SkyTemple Files.
+
+The asset project maintains two ``.sha1`` files at the project root for ROM hashes and asset hashes.
+These are used with the ``sync`` operation to track which files have changed between CLI invocations.
+
+.. _file_types.py: /skytemple_files/common/types/file_types.py
 
 Classic APIs
 ~~~~~~~~~~~~

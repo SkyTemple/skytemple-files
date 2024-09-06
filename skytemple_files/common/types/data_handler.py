@@ -61,7 +61,7 @@ class DataHandler(Generic[T], abc.ABC):
     @abc.abstractmethod
     def asset_specs(cls, path_to_rom_obj: Path) -> Sequence[AssetSpec]:
         """The specifications for the assets that make up this model given a file at `rom_path`."""
-        pass
+        return []
 
     @classmethod
     @abc.abstractmethod
@@ -75,6 +75,6 @@ class DataHandler(Generic[T], abc.ABC):
         cls,
         assets: Sequence[Asset],
         **kwargs: OptionalKwargs,
-    ):
+    ) -> T:
         """Create a model from all loaded assets. `assets` must contain all assets defined via `cls.assets`."""
         pass

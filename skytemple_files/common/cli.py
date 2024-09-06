@@ -29,11 +29,15 @@ from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.file_api_v2 import RomProject
 
+OPERATION_EXPORT = "export"
+OPERATION_IMPORT = "import"
+OPERATION_SYNC = "sync"
+
 
 def extract_rom_files_to_project(rom_path: Path, asset_dir: Path, file_types: list[str] | None):
     accepted_file_types: set[type[DataHandler]] | None = load_accepted_file_types(file_types)
     project = RomProject.new(rom_path, asset_dir)
-    rom_files = project.list_files(search_project_dir=False)
+    rom_files = project.list_files()
 
     for file_path, data_handler in rom_files.items():
         if accepted_file_types is None or data_handler in accepted_file_types:
@@ -44,7 +48,7 @@ def extract_rom_files_to_project(rom_path: Path, asset_dir: Path, file_types: li
 def save_project_to_rom(rom_path: Path, asset_dir: Path, extracted_rom_dir: Path | None, file_types: list[str] | None):
     accepted_file_types: set[type[DataHandler]] | None = load_accepted_file_types(file_types)
     project = RomProject.new(rom_path, asset_dir)
-    rom_files = project.list_files(search_rom=False)
+    rom_files = project.list_files()
 
     for file_path, data_handler in rom_files.items():
         if accepted_file_types is None or data_handler in accepted_file_types:
@@ -141,7 +145,7 @@ def main():
     # noinspection PyTypeChecker
     parser = argparse.ArgumentParser(description="Transfer data between a ROM and an asset project.")
     parser.add_argument("assets")
-    parser.add_argument("-o", "--operation", help="'rom_to_project', 'project_to_rom', or 'sync")
+    parser.add_argument("-o", "--operation", help=f"'{OPERATION_EXPORT}', '{OPERATION_IMPORT}', or '{OPERATION_SYNC}'")
     parser.add_argument("-r", "--rom_path", metavar="ROM_PATH", help="Path to the ROM file.")
     parser.add_argument("-a", "--asset_dir", metavar="ASSET_DIR", help="Directory to create the asset project in.")
     parser.add_argument(
@@ -158,13 +162,13 @@ def main():
     args = parser.parse_args()
 
     if args.assets:
-        if args.operation == "rom_to_project":
+        if args.operation == OPERATION_EXPORT:
             extract_rom_files_to_project(Path(args.rom_path), Path(args.asset_dir), args.file_types)
-        elif args.operation == "project_to_rom":
+        elif args.operation == OPERATION_IMPORT:
             save_project_to_rom(
                 Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir), args.file_types
             )
-        elif args.operation == "sync":
+        elif args.operation == OPERATION_SYNC:
             sync_project_and_rom(
                 Path(args.rom_path), Path(args.asset_dir), Path(args.extracted_rom_dir), args.file_types
             )

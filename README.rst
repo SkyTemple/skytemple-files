@@ -72,10 +72,10 @@ for more information. The implementations are stored in ``skytemple_files.common
 
 - ``assets``: Manage unpacking and packing ROMs using the "File API v2".
 
-  - ``--operation`` (``-o``): Either ``rom_to_project``, ``project_to_rom``, or ``sync``.
+  - ``--operation`` (``-o``): Either ``export``, ``import``, or ``sync``.
 
-    - ``rom_to_project``: Extracts files from a ROM into an asset project. Initializes the asset project if it doesn't exist.
-    - ``project_to_rom``: Saves files from an asset project into a ROM.
+    - ``export``: Exports files from a ROM into an asset project. Initializes the asset project if it doesn't exist.
+    - ``import``: Imports files from an asset project into a ROM.
     - ``sync``: The CLI will infer whether the ROM or asset project was changed, and sync changes to the other. If changes are detected with the same file in the ROM and asset project, the CLI will ask which changes should overwrite the other.
   - ``--rom_path`` (``-r``): The file path of the ROM to use.
   - ``--asset_dir`` (``-a``): The file path of the root directory of the asset project to use.
@@ -85,7 +85,11 @@ for more information. The implementations are stored in ``skytemple_files.common
 These APIs are not exposed via a command. They must be run via the Python interpreter directly. E.g.
 ``python -m skytemple_files.common.cli assets``. The SkyTemple GUI app will eventually expose these APIs via its own ``skytemple`` command.
 
-The asset project maintains two `.sha1` files at the project root for ROM hashes and asset hashes.
+When an asset project is created, a ``file_config.yml`` is created at the project root.
+This file contains mappings between ROM files and skytemple-files file types.
+If you want to add or remove files from the ROM, update the file config with the added/deleted file to register the new/deleted file with SkyTemple Files.
+
+The asset project maintains two ``.sha1`` files at the project root for ROM hashes and asset hashes.
 These are used with the ``sync`` operation to track which files have changed between CLI invocations.
 
 .. _file_types.py: /skytemple_files/common/types/file_types.py

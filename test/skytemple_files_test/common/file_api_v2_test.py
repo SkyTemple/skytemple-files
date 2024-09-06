@@ -9,17 +9,11 @@ from skytemple_files.common.file_api_v2 import (
     ALLOW_EXTRA_SKYPATCHES,
     ASSET_HASHES_FILE,
     ROM_HASHES_FILE,
+    FILE_CONFIG_FILE_NAME,
 )
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files_test.case import load_rom_path
 from skytemple_files_test.common.temp_rom import ASSET_PROJECT_PATH, copy_rom_to_temp_file, delete_temp_rom
-
-
-def revert_hash_files():
-    with open(Path(ASSET_PROJECT_PATH, ASSET_HASHES_FILE), "w") as asset_hashes_file:
-        asset_hashes_file.write("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f pokemon/moves.json\n")
-    with open(Path(ASSET_PROJECT_PATH, ROM_HASHES_FILE), "w") as rom_hashes_file:
-        rom_hashes_file.write("f85089b1c47c9392c93f76f5d1baf9b28677454c BALANCE/waza_p.bin\n")
 
 
 class RomProjectTestCase(TestCase):
@@ -35,23 +29,67 @@ class RomProjectTestCase(TestCase):
         self.assertEqual(AssetSpec, assets[1].__class__)
         self.assertEqual(Path("pokemon", "learnsets.json"), assets[1].path)
 
-    def test_list_files_rom(self):
-        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+    def test_list_files_default_config(self):
+        try:
+            project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
 
-        file_list = project.list_files(search_project_dir=False)
+            file_list = project.list_files()
 
-        expected_path = Path("BALANCE", "waza_p.bin")
-        self.assertTrue(expected_path in file_list)
-        self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+            expected_path = Path("BALANCE", "waza_p.bin")
+            self.assertTrue(expected_path in file_list)
+            self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+        finally:
+            delete_file_config()
 
-    def test_list_files_project(self):
-        project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+    def test_list_files_custom_config(self):
+        try:
+            project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+            create_file_config("BALANCE/waza_p2.bin: FileType.WAZA_P")
 
-        file_list = project.list_files(search_rom=False)
+            file_list = project.list_files()
 
-        expected_path = Path("BALANCE", "waza_p.bin")
-        self.assertTrue(expected_path in file_list)
-        self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+            expected_path = Path("BALANCE", "waza_p2.bin")
+            self.assertTrue(expected_path in file_list)
+            self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+        finally:
+            delete_file_config()
+
+    def test_list_files_custom_config_glob(self):
+        try:
+            project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+            create_file_config("BALANCE/waza_p*.bin: FileType.WAZA_P")
+
+            file_list = project.list_files()
+
+            self.assertEqual(2, len(file_list))
+            for file_name in ["waza_p.bin", "waza_p2.bin"]:
+                expected_path = Path("BALANCE", file_name)
+                self.assertTrue(expected_path in file_list)
+                self.assertEqual(FileType.WAZA_P, file_list[expected_path])
+        finally:
+            delete_file_config()
+
+    def test_list_files_custom_config_ignore_invalid_file_type(self):
+        try:
+            project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+            create_file_config("BALANCE/waza_p.bin: FileType.BLAH")
+
+            file_list = project.list_files()
+
+            self.assertEqual(0, len(file_list))
+        finally:
+            delete_file_config()
+
+    def test_list_files_custom_config_ignore_invalid_file_type_value(self):
+        try:
+            project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
+            create_file_config("BALANCE/waza_p.bin: BLAH")
+
+            file_list = project.list_files()
+
+            self.assertEqual(0, len(file_list))
+        finally:
+            delete_file_config()
 
     def test_save_file_extracted_rom_dir(self):
         project = RomProject.new(load_rom_path(), ASSET_PROJECT_PATH)
@@ -221,3 +259,21 @@ class SkyTempleProjectFileStorageTestCase(TestCase):
         sha1_hash = storage.hash_of_asset(Path("pokemon", "moves.json"))
 
         self.assertEqual("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f", sha1_hash)
+
+
+def revert_hash_files():
+    with open(Path(ASSET_PROJECT_PATH, ASSET_HASHES_FILE), "w") as asset_hashes_file:
+        asset_hashes_file.write("bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f pokemon/moves.json\n")
+    with open(Path(ASSET_PROJECT_PATH, ROM_HASHES_FILE), "w") as rom_hashes_file:
+        rom_hashes_file.write("f85089b1c47c9392c93f76f5d1baf9b28677454c BALANCE/waza_p.bin\n")
+
+
+def create_file_config(contents: str):
+    with open(Path(ASSET_PROJECT_PATH, FILE_CONFIG_FILE_NAME), "w") as file_config_file:
+        file_config_file.write(contents)
+
+
+def delete_file_config():
+    file_config_path = Path(ASSET_PROJECT_PATH, FILE_CONFIG_FILE_NAME)
+    if os.path.exists(file_config_path):
+        os.remove(file_config_path)

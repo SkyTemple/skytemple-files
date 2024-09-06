@@ -34,11 +34,15 @@ The entrypoint is `RomProject`.
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-from pathlib import Path
+import fnmatch
+import shutil
+from pathlib import Path, PurePosixPath
 from typing import Sequence, TypeVar, cast
 from collections import defaultdict
 from hashlib import sha1
 import json
+
+from ruamel.yaml import YAML
 
 from ndspy.fnt import Folder
 from ndspy.rom import NintendoDSRom
@@ -48,7 +52,7 @@ from skytemple_files.common.types.file_types import FileType
 from skytemple_files.patch.patches import Patcher
 from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom, create_file_in_rom
+from skytemple_files.common.util import OptionalKwargs, get_ppmdu_config_for_rom, create_file_in_rom, get_resources_dir
 
 from skytemple_files.common.types.file_storage import (
     FileStorage,
@@ -63,6 +67,9 @@ T = TypeVar("T")
 ASSET_CONFIG_FILE = "asset_config.json"
 ROM_HASHES_FILE = "rom_hashes.sha1"
 ASSET_HASHES_FILE = "asset_hashes.sha1"
+DEFAULT_FILE_CONFIG_FILE = Path("file_api_v2", "default_file_config.yml")
+FILE_CONFIG_FILE_NAME = "file_config.yml"
+
 SKYPATCHES_DIR = "skypatches"
 ALLOW_EXTRA_SKYPATCHES = "allow_extra_skypatches"
 
@@ -225,19 +232,28 @@ class RomProject:
                 assets.append(spec)
         return assets
 
-    def list_files(
-        self, *, search_project_dir: bool = True, search_rom: bool = True
-    ) -> dict[Path, type[DataHandler[T]]]:
+    def list_files(self) -> dict[Path, type[DataHandler[T]]]:
         """
         Returns a dictionary of all files in the project and their corresponding handlers.
 
-        The dictionary is built from information in the project directory and ROM by default.
+        The dictionary is built from information in the file config within the asset project.
+        A default file config is created if one doesn't exist.
         """
-        files: dict[Path, type[DataHandler[T]]] = {}
+        file_config_path = Path(self.file_storage.get_project_dir(), FILE_CONFIG_FILE_NAME)
+        if not file_config_path.exists():
+            default_file_config_path = Path(get_resources_dir(), DEFAULT_FILE_CONFIG_FILE)
+            if not file_config_path.parent.exists():
+                file_config_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(default_file_config_path, file_config_path)
+            print(f"Initialized default file config at {file_config_path}")
 
-        # Recursively crawl the file tree to get all files in the ROM.
-        def get_files_in_folder(folder_path, folder: Folder) -> list[Path]:
-            folder_files = [Path(folder_path, folder_file) for folder_file in folder.files.copy()]
+        with open(file_config_path, "r") as file_config_file:
+            yaml = YAML(typ="safe")
+            file_config_yaml: dict[str, str] = yaml.load(file_config_file.read())
+
+        def get_files_in_folder(folder_path, folder: Folder) -> list[PurePosixPath]:
+            # Since the file config supports globs, return Posix paths regardless of OS.
+            folder_files = [PurePosixPath(folder_path, folder_file) for folder_file in folder.files]
             for subfolder in folder.folders:
                 folder_files.extend(get_files_in_folder(Path(folder_path, subfolder[0]), subfolder[1]))
             return folder_files
@@ -247,20 +263,26 @@ class RomProject:
         else:
             rom_files = get_files_in_folder(Path(), self.rom.filenames)
 
-        data_handler: type[DataHandler[T]]
-        for data_handler in self._load_data_handlers():
-            for rom_file in rom_files:
-                asset_specs = data_handler.asset_specs(rom_file)
+        files: dict[Path, type[DataHandler]] = {}
+        for file_key, handler_name in file_config_yaml.items():
+            handler_class = None
+            try:
+                if isinstance(handler_name, str) and handler_name.startswith("FileType."):
+                    handler_class = getattr(FileType, handler_name[len("FileType.") :])
+            except AttributeError:
+                pass
 
-                if len(asset_specs) > 0:
-                    if search_rom:
-                        files[rom_file] = data_handler
+            if handler_class is None:
+                print(f"Skipping invalid file handler {handler_name} for file {file_key}.")
+                continue
 
-                    if search_project_dir:
-                        for asset_spec in asset_specs:
-                            if Path(self._file_storage.get_project_dir(), asset_spec.path).exists():
-                                files[rom_file] = data_handler
-                                break
+            if "*" in file_key:
+                # Evaluate the file key as a glob.
+                file_matches = [Path(file) for file in rom_files if fnmatch.fnmatch(str(file), file_key)]
+                for file in file_matches:
+                    files[file] = handler_class
+            else:
+                files[Path(file_key)] = handler_class
 
         return files
 

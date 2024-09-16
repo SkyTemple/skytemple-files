@@ -1,5 +1,5 @@
 pmdsky-debug-py==10.0.21
-ndspy==4.1.0
+ndspy==4.2.0
 range-typed-integers==1.0.1
 Pillow==10.4.0
 appdirs==1.4.4

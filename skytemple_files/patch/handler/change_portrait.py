@@ -45,7 +45,9 @@ class ChangePortraitPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return _("Implements the text tag [FACE:X], which sets the current portrait to use the Xth portrait emotion (e.g. 0 = FACE_NORMAL).\nThis allows for changing portrait emotions during dialogue!")
+        return _(
+            "Implements the text tag [FACE:X], which sets the current portrait to use the Xth portrait emotion (e.g. 0 = FACE_NORMAL).\nThis allows for changing portrait emotions during dialogue!"
+        )
 
     @property
     def author(self) -> str:

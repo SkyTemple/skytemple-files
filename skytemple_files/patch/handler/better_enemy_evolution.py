@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.util import get_binary_from_rom, read_u32
 from skytemple_files.common.ppmdu_config.data import (
     Pmd2Data,
@@ -44,7 +45,7 @@ class BetterEnemyEvolutionPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Allows changing how enemy evolution works. In particular, it allows you to choose if the evolved enemy will get the stats and/or moves from its new species, add extra stats after evolving, heal the enemy after evolving or choosing if the evolution will take place even if the target is revived."
+        return _("Allows changing how enemy evolution works. In particular, it allows you to choose if the evolved enemy will get the stats and/or moves from its new species, add extra stats after evolving, heal the enemy after evolving or choosing if the evolution will take place even if the target is revived.")
 
     @property
     def author(self) -> str:

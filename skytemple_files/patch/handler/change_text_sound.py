@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
@@ -46,7 +47,7 @@ class ChangeTextSoundPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Adds new text tags that allow for the textbox sound to be changed. [TS:X:Y] will use the Xth sound effect ID in textboxes with a volume of Y. [TR] will revert the sound and volume to their default states, sound effect 16133 and volume 256."
+        return _("Adds new text tags that allow for the textbox sound to be changed. [TS:X:Y] will use the Xth sound effect ID in textboxes with a volume of Y. [TR] will revert the sound and volume to their default states, sound effect 16133 and volume 256.")
 
     @property
     def author(self) -> str:

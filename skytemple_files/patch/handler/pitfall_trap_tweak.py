@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
@@ -44,7 +45,7 @@ class PitfallTrapTweakPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Makes Pitfall Traps send the leader back by one floor in ascending dungeons. If the leader activates a Pitfall Trap on 1F, they will restart 1F with a different seed."
+        return _("Makes Pitfall Traps send the leader back by one floor in ascending dungeons. If the leader activates a Pitfall Trap on 1F, they will restart 1F with a different seed.")
 
     @property
     def author(self) -> str:

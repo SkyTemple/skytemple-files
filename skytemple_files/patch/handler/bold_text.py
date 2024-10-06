@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
@@ -44,7 +45,7 @@ class BoldTextPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Adds new text tags that allow for bold text in strings. Encase the desired text with [BS] and [BR]."
+        return _("Adds new text tags that allow for bold text in strings. Encase the desired text with [BS] and [BR].")
 
     @property
     def author(self) -> str:

@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
@@ -44,7 +45,9 @@ class DisplayScriptVarPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return 'Displays a script variable in a string with the text tag [var:x:y], where "x" is the variable ID and "y" is the index!'
+        return _(
+            'Displays a script variable in a string with the text tag [var:x:y], where "x" is the variable ID and "y" is the index!'
+        )
 
     @property
     def author(self) -> str:

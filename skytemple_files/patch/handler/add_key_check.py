@@ -20,6 +20,7 @@ from typing import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
     GAME_REGION_US,
@@ -44,7 +45,7 @@ class AddKeyCheckPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Prevents Keys from being used on party members that are not below a Key Door!"
+        return _("Prevents Keys from being used on party members that are not below a Key Door!")
 
     @property
     def author(self) -> str:

@@ -22,9 +22,8 @@ import os
 
 from PIL import Image
 
-from skytemple_files.graphics.sma.model import (
-    TEX_SIZE
-)
+from skytemple_files.graphics.sma.model import TEX_SIZE
+
 
 def ExportSheets(outDir, effectData, paletteIndex):
     if not os.path.isdir(outDir):
@@ -35,17 +34,23 @@ def ExportSheets(outDir, effectData, paletteIndex):
             continue
         frames = []
         for idx in range(statusEffectAnim.frameCount):
-            frameImg = GenerateStatusFrame(effectData.imgData, effectData.customPalette, paletteIndex,
-                                           statusEffectAnim.byteOffset, statusEffectAnim.blockWidth, statusEffectAnim.blockHeight)
+            frameImg = GenerateStatusFrame(
+                effectData.imgData,
+                effectData.customPalette,
+                paletteIndex,
+                statusEffectAnim.byteOffset,
+                statusEffectAnim.blockWidth,
+                statusEffectAnim.blockHeight,
+            )
             frames.append(frameImg)
         animImg = CombineFramesIntoAnim(frames)
-        animImg.save(os.path.join(outDir, 'A-' + format(anim_idx, '02d') + '-' + format(paletteIndex, '02d') + '.png'))
+        animImg.save(os.path.join(outDir, "A-" + format(anim_idx, "02d") + "-" + format(paletteIndex, "02d") + ".png"))
+
 
 def GenerateStatusFrame(imgData, inPalette, paletteIndex, byteOffset, width, height):
-
     ##creates a tex piece out of the imgdata, with the specified piece index and dimensions
-    newImg = Image.new('RGBA', (width * TEX_SIZE, height * TEX_SIZE), (0, 0, 0, 0))
-    datas = [(0,0,0,0)] * (width * TEX_SIZE * height * TEX_SIZE)
+    newImg = Image.new("RGBA", (width * TEX_SIZE, height * TEX_SIZE), (0, 0, 0, 0))
+    datas = [(0, 0, 0, 0)] * (width * TEX_SIZE * height * TEX_SIZE)
 
     lengthPixels = TEX_SIZE * TEX_SIZE * width * height
     imgPx = []
@@ -72,11 +77,12 @@ def GenerateStatusFrame(imgData, inPalette, paletteIndex, byteOffset, width, hei
     newImg.putdata(datas)
     return newImg
 
+
 def CombineFramesIntoAnim(img_list):
     ##combines all frames into a horizontal animation sheet
     ##ASSUMES ALL IMGS ARE THE SAME SIZE
     size = img_list[0].size
-    imgNew = Image.new('RGBA', (size[0] * len(img_list), size[1]), (0, 0, 0, 0))
+    imgNew = Image.new("RGBA", (size[0] * len(img_list), size[1]), (0, 0, 0, 0))
     for img_index in range(len(img_list)):
         imgNew.paste(img_list[img_index], (size[0] * img_index, 0), img_list[img_index])
     return imgNew

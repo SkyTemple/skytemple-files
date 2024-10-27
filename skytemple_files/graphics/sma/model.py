@@ -56,18 +56,18 @@ class SmaFile(Sir0Serializable):
         ##Read SMA header: ptr to AnimData, ptr to ImgData, PaletteData
         in_file.seek(ptrSMA)
         updateUnusedStats([], "Unk#1", int.from_bytes(in_file.read(4), "little"))
-        ptrAnimData = int.from_bytes(in_file.read(4),'little')
-        nbFrames = int.from_bytes(in_file.read(4),'little')
-        ptrImgData = int.from_bytes(in_file.read(4),'little')
+        ptrAnimData = int.from_bytes(in_file.read(4), "little")
+        nbFrames = int.from_bytes(in_file.read(4), "little")
+        ptrImgData = int.from_bytes(in_file.read(4), "little")
         updateUnusedStats([], "Unk#2", int.from_bytes(in_file.read(4), "little"))
-        ptrPaletteDataBlock = int.from_bytes(in_file.read(4),'little')
+        ptrPaletteDataBlock = int.from_bytes(in_file.read(4), "little")
         updateUnusedStats([], "Unk#3", int.from_bytes(in_file.read(4), "little"))
         updateUnusedStats([], "Unk#4", int.from_bytes(in_file.read(4), "little"))
 
         ##Read palette info
         nbColorsPerRow = 16
         in_file.seek(ptrPaletteDataBlock)
-        totalColors = (ptrSMA-ptrPaletteDataBlock) // 4
+        totalColors = (ptrSMA - ptrPaletteDataBlock) // 4
         totalPalettes = totalColors // nbColorsPerRow
         self.customPalette = []
         for ii in range(totalPalettes):
@@ -83,29 +83,27 @@ class SmaFile(Sir0Serializable):
         ##read image data
         self.imgData = []
         in_file.seek(ptrImgData)
-        while (in_file.tell() < ptrPaletteDataBlock):
-            px = int.from_bytes(in_file.read(1),'little')
+        while in_file.tell() < ptrPaletteDataBlock:
+            px = int.from_bytes(in_file.read(1), "little")
             self.imgData.append(px % 16)
             self.imgData.append(px // 16)
 
         self.animData = []
         in_file.seek(ptrAnimData)
         for ii in range(nbFrames):
-            blockX = int.from_bytes(in_file.read(1),'little')
-            blockY = int.from_bytes(in_file.read(1),'little')
+            blockX = int.from_bytes(in_file.read(1), "little")
+            blockY = int.from_bytes(in_file.read(1), "little")
             updateUnusedStats([], "Unk#5", int.from_bytes(in_file.read(2), "little"))
-            byteOffset = int.from_bytes(in_file.read(2),'little')
+            byteOffset = int.from_bytes(in_file.read(2), "little")
             in_file.read(2)
-            blockLength = int.from_bytes(in_file.read(2),'little')
+            blockLength = int.from_bytes(in_file.read(2), "little")
             updateUnusedStats([], "Unk#6", int.from_bytes(in_file.read(2), "little"))
             anim = SmaAnim(blockX, blockY, byteOffset, blockLength)
             self.animData.append(anim)
 
 
 class SmaAnim(object):
-
     def __init__(self, blockWidth, blockHeight, byteOffset, frameCount):
-
         self.blockWidth = blockWidth
         self.blockHeight = blockHeight
         self.byteOffset = byteOffset

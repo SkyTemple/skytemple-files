@@ -21,6 +21,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.sma.model import SmaFile
 from skytemple_files.graphics.sma.sheets import ExportSheets
 
+
 class SmaHandler(DataHandler[SmaFile]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> SmaFile:

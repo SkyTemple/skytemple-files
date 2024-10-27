@@ -23,10 +23,7 @@ import os
 from PIL import Image
 
 from skytemple_files.graphics.sma.model import (
-    DEBUG_PRINT,
-    TEX_SIZE,
-    SmaAnim,
-    SmaFile
+    TEX_SIZE
 )
 
 def ExportSheets(outDir, effectData, paletteIndex):

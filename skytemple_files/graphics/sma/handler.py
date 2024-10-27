@@ -37,4 +37,3 @@ class SmaHandler(DataHandler[SmaFile]):
     @classmethod
     def export_sheets(cls, out_dir: str, sma: SmaFile, palette_idx: int) -> None:
         return ExportSheets(out_dir, sma, palette_idx)  # type: ignore
-

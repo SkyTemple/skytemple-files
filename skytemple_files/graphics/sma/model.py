@@ -112,7 +112,6 @@ class SmaAnim(object):
         self.frameCount = frameCount
 
 
-
 def updateUnusedStats(log_params, name, val):
     # stats.append([log_params[0], log_params[1], name, log_params[2:], val])
     if DEBUG_PRINT and val != 0:

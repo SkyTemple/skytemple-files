@@ -18,8 +18,6 @@
 
 from __future__ import annotations
 
-import glob
-import math
 import os
 
 from PIL import Image
@@ -30,8 +28,6 @@ from skytemple_files.graphics.sma.model import (
     SmaAnim,
     SmaFile
 )
-from skytemple_files.user_error import UserValueError
-
 
 def ExportSheets(outDir, effectData, paletteIndex):
     if not os.path.isdir(outDir):

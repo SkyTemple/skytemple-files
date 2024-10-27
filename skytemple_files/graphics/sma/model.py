@@ -17,11 +17,10 @@
 # mypy: ignore-errors
 from __future__ import annotations
 
+from range_typed_integers import u32
+
 from io import BytesIO
 
-from PIL import Image
-
-from skytemple_files.common.ppmdu_config.data import Pmd2Data
 from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 
 TEX_SIZE = 8
@@ -46,6 +45,9 @@ class SmaFile(Sir0Serializable):
     ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
+        raise NotImplementedError("Serialization not currently supported.")
+
     def ImportSma(self, data, ptrSMA=0):
         in_file = BytesIO()
         in_file.write(data)
@@ -56,7 +58,6 @@ class SmaFile(Sir0Serializable):
         updateUnusedStats([], "Unk#1", int.from_bytes(in_file.read(4), "little"))
         ptrAnimData = int.from_bytes(in_file.read(4),'little')
         nbFrames = int.from_bytes(in_file.read(4),'little')
-        print('  nbFrames:' + str(nbFrames))
         ptrImgData = int.from_bytes(in_file.read(4),'little')
         updateUnusedStats([], "Unk#2", int.from_bytes(in_file.read(4), "little"))
         ptrPaletteDataBlock = int.from_bytes(in_file.read(4),'little')

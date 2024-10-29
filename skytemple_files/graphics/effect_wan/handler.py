@@ -21,6 +21,7 @@ from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.effect_wan.model import WanFile
 from skytemple_files.graphics.effect_wan.sheets import ExportSheets
 
+
 class EffectWanHandler(DataHandler[WanFile]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> WanFile:
@@ -42,4 +43,3 @@ class EffectWanHandler(DataHandler[WanFile]):
     @classmethod
     def export_sheets(cls, out_dir: str, wan: WanFile) -> None:
         return ExportSheets(out_dir, wan)  # type: ignore
-

@@ -16,22 +16,21 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
-import os
-from typing import IO
-
-from PIL import Image
-
-from skytemple_files.common.ppmdu_config.data import Pmd2Sprite
 from skytemple_files.common.types.data_handler import DataHandler
-from skytemple_files.common.util import OptionalKwargs, list_insert_enlarge
+from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.effect_wan.model import WanFile
 from skytemple_files.graphics.effect_wan.sheets import ExportSheets
 
-class CharaWanHandler(DataHandler[WanFile]):
+class EffectWanHandler(DataHandler[WanFile]):
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> WanFile:
         from skytemple_files.common.types.file_types import FileType
 
+        sir0_data = FileType.SIR0.deserialize(data)
+        wan = WanFile()
+        wan.ImportWan(sir0_data.content, sir0_data.content_pointer_offsets, sir0_data.data_pointer)
+        return wan
+        # TODO: do this the normal way once there's a way to pass in pointer lists to the effectWAN file
         return FileType.SIR0.unwrap_obj(FileType.SIR0.deserialize(data), WanFile)  # type: ignore
 
     @classmethod

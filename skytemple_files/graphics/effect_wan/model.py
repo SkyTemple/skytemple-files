@@ -72,10 +72,13 @@ class WanFile(Sir0Serializable):
     ) -> Sir0Serializable:
         return cls(content_data, data_pointer)
 
+    def sir0_serialize_parts(self) -> tuple[bytes, list[u32], u32 | None]:
+        raise NotImplementedError()
+
     # This will accurately load all sir0 found in effect.bin with a few exceptions:
     # effect0268-00289: Not WAN.  Used for screen effects in moves and cutscenes.
     # effect0290-00291: Not Sir0
-    def ImportWan(self, data, ptrWAN=0):
+    def ImportWan(self, data, ptrOffsets, ptrWAN=0):
         in_file = BytesIO()
         in_file.write(data)
         in_file.seek(0)
@@ -92,17 +95,6 @@ class WanFile(Sir0Serializable):
             print('  Not an effect! ImgType: {0}'.format(self.imgType))
             return None
 
-        self.customPalette = []
-        # Read WAN header: ptr to AnimInfo, ptr to ImageDataInfo
-        in_file.seek(ptrWAN)
-        ptrAnimInfo = int.from_bytes(in_file.read(4), "little")
-        ptrImageDataInfo = int.from_bytes(in_file.read(4), "little")
-        if ptrAnimInfo == 0 or ptrImageDataInfo == 0:
-            raise ValueError("Null pointer in Wan Header!")
-        imgType = int.from_bytes(in_file.read(2), "little")
-        if imgType != 1:
-            raise NotImplementedError("Non-character sprite import currently not supported.")
-
         updateUnusedStats([], "Unk#12", int.from_bytes(in_file.read(2), "little"))
 
         if ptrImageDataInfo > 0:
@@ -117,7 +109,6 @@ class WanFile(Sir0Serializable):
             # Unk#13 - ALWAYS 1
             updateUnusedStats([], "Unk#13", int.from_bytes(in_file.read(2), "little"))
             self.is256Color = int.from_bytes(in_file.read(2),'little')
-            print('  Is256ColorSpr:' + str(self.is256Color))
             # Unk#11 - ALWAYS 1 except for:
             # effect_0292 - 12
             updateUnusedStats([], "Unk#11", int.from_bytes(in_file.read(2), "little"))
@@ -206,7 +197,7 @@ class WanFile(Sir0Serializable):
                 ptrImgs.append(int.from_bytes(in_file.read(4),'little'))
 
 
-            if imgType == 3:
+            if self.imgType == 3:
                 in_file.seek(ptrImgs[0])
                 imgLists = []
                 imgPx = []
@@ -244,7 +235,7 @@ class WanFile(Sir0Serializable):
                         updateUnusedStats([], "z-Sort", int.from_bytes(in_file.read(4), "little"))
 
                         pxStrip = []
-                        if (ptrPixSrc == 0):
+                        if ptrImg not in ptrOffsets:
                             for zero in range(amt):
                                 pxStrip.append(0)
                         else:
@@ -308,7 +299,7 @@ class WanFile(Sir0Serializable):
             self.frameData = []
             for frame_idx, ptrMetaFrame in enumerate(ptrMetaFrames):
                 in_file.seek(ptrMetaFrame)
-                if imgType == 3:
+                if self.imgType == 3:
                     # TODO: research metaframe format for imgtype 3
                     pass
                 else:
@@ -397,7 +388,28 @@ class MetaFrame(object):
 
         inImg.paste(imgPiece, (self.offset[0] - exOffset[0],self.offset[1] - exOffset[1]), imgPiece)
 
+def mergeWithBasePalette(effectData, basePalette):
 
+    if effectData.paletteOffset == 0:
+        return
+
+    # create a new palette data with the same values as the base
+    newPalette = []
+    for baseRow in basePalette:
+        row = [col for col in baseRow]
+        newPalette.append(row)
+
+    # overwrite the region specified by the effectdata
+    for idx, baseRow in enumerate(effectData.customPalette):
+        row = [col for col in baseRow]
+        while effectData.paletteOffset + idx >= len(newPalette):
+            newPalette.append([(0, 0, 0, 0)] * len(baseRow))
+        newPalette[effectData.paletteOffset + idx] = row
+
+    # set effectData to the palette
+    effectData.customPalette = newPalette
+    # set offset to 0
+    effectData.paletteOffset = 0
 
 def updateUnusedStats(log_params, name, val):
     # stats.append([log_params[0], log_params[1], name, log_params[2:], val])

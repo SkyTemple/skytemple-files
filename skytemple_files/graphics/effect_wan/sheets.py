@@ -342,13 +342,13 @@ def ExportEffectStep(outDir, effectData, passNum):
                                             else:
                                                 backList.append(useConfig)
                                         imgBack = GenerateFrame(effectData, backList, minBox)
-                                        if imgBack == None:
+                                        if imgBack is None:
                                             imgBack = Image.new(
                                                 "RGBA", (minBox[2] - minBox[0], minBox[3] - minBox[1]), (0, 0, 0, 0)
                                             )
                                         backFrames.append(imgBack)
                                         imgFront = GenerateFrame(effectData, frontList, minBox)
-                                        if imgFront == None:
+                                        if imgFront is None:
                                             imgFront = Image.new(
                                                 "RGBA", (minBox[2] - minBox[0], minBox[3] - minBox[1]), (0, 0, 0, 0)
                                             )
@@ -420,13 +420,13 @@ def ExportEffectStep(outDir, effectData, passNum):
                                         else:
                                             backList.append(useConfig)
                                     imgBack = GenerateFrame(effectData, backList, minBox)
-                                    if imgBack == None:
+                                    if imgBack is None:
                                         imgBack = Image.new(
                                             "RGBA", (minBox[2] - minBox[0], minBox[3] - minBox[1]), (0, 0, 0, 0)
                                         )
                                     backFrames.append(imgBack)
                                     imgFront = GenerateFrame(effectData, frontList, minBox)
-                                    if imgFront == None:
+                                    if imgFront is None:
                                         imgFront = Image.new(
                                             "RGBA", (minBox[2] - minBox[0], minBox[3] - minBox[1]), (0, 0, 0, 0)
                                         )
@@ -629,7 +629,7 @@ def GetPieceRect(effectData, useConfig):
         useConfig.res[0],
         useConfig.res[1],
     )
-    if imgPiece == None:
+    if imgPiece is None:
         return None
     box = getCoveredRect(imgPiece, useConfig.hFlip, useConfig.vFlip)
     return (

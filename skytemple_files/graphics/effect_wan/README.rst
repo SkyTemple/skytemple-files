@@ -5,13 +5,13 @@ The file ``/EFFECT/effect.bin`` contains vfx used for dungeon battle, weather ef
 
 The file contains 293 effect entries.  They contain the following data:
 
-effect0000: Only contains animation data.  Relies on the Image data of 00292 and loaded at the start.
-effect0001: Generic effects loaded at the start.
-effect0002-0259: VFX for attacks and certain ground mode cutscenes.
-effect0260-00267: VFX for ground mode cutscenes.
-effect0268-00289: Not WAN.  Used for screen effects in moves and cutscenes.
-effect0290-00291: Not Sir0
-effect0292: Only contains image data.  The palette is loaded at the start and sticks around to be used by various other effects in the list.
+* effect0000: Only contains animation data.  Relies on the Image data of 00292 and loaded at the start.
+* effect0001: Generic effects loaded at the start.
+* effect0002-0259: VFX for attacks and certain ground mode cutscenes.
+* effect0260-00267: VFX for ground mode cutscenes.
+* effect0268-00289: Not WAN.  Used for screen effects in moves and cutscenes.
+* effect0290-00291: Not Sir0
+* effect0292: Only contains image data.  The palette is loaded at the start and sticks around to be used by various other effects in the list.
 
 This parser deals with only the WAN files.
 
@@ -47,5 +47,5 @@ Based on following documentations:
 
 .. Links:
 
-.. _Project Pokémon documentation:  https://projectpokemon.org/home/docs/mystery-dungeon-nds/wanwat-file-format-r50/
+.. _Project Pokémon documentation:  https://projectpokemon.org/home/docs/mystery-dungeon-nds/wan-format-for-effectbin-r156/
 .. _psy_commando Dropbox:           https://www.dropbox.com/sh/8on92uax2mf79gv/AADCmlKOD9oC_NhHnRXVdmMSa?dl=0

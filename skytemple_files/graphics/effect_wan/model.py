@@ -385,9 +385,9 @@ class MetaFrame(object):
         return MetaFrame(self.blockOffset, self.paletteIndex, self.res, self.offset, self.hFlip, self.vFlip, self.front)
 
     def DrawOn(self, inImg, imgPiece, exOffset):
-        if self.hFlip == True:
+        if self.hFlip:
             imgPiece = imgPiece.transpose(Image.FLIP_LEFT_RIGHT)
-        if self.vFlip == True:
+        if self.vFlip:
             imgPiece = imgPiece.transpose(Image.FLIP_TOP_BOTTOM)
 
         inImg.paste(imgPiece, (self.offset[0] - exOffset[0], self.offset[1] - exOffset[1]), imgPiece)

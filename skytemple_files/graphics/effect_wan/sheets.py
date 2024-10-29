@@ -38,7 +38,7 @@ def ExportSheets(outDir, wan):
 
     if wan.imgType == 3:
         img = GenerateAtlas(wan.imgData, wan.customPalette, 0)
-        if img != None:
+        if img is not None:
             img.save(os.path.join(outDir, "Atlas.png"))
     else:
         for passNum in range(1, 4):
@@ -98,7 +98,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                     useConfig.res[0],
                     useConfig.res[1],
                 )
-                if img != None:
+                if img  is not None:
                     img.save(
                         os.path.join(
                             outDir,
@@ -137,7 +137,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                         refConfig.res[0],
                         refConfig.res[1],
                     )
-                    if img != None:
+                    if img  is not None:
                         suffix = ""
                         if len(pieceInfo) > 3:
                             suffix = "-^"
@@ -161,7 +161,7 @@ def ExportEffectStep(outDir, effectData, passNum):
         for metaFrameData in effectData.frameData:
             for useConfig in metaFrameData:
                 newRect = GetPieceRect(effectData, useConfig)
-                if newRect != None:
+                if newRect  is not None:
                     minBox = CombineExtents(minBox, newRect)
         ##don't need to worry if all frames contain only one piece!
 
@@ -175,7 +175,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                 singleConfig = [useConfig]
                 ##use the name of [metaframe index]-[piece index][^ if this needs to stay in the back]
                 img = GenerateFrame(effectData, singleConfig, minBox)
-                if img != None:
+                if img  is not None:
                     suffix = ""
                     if not useConfig.front:
                         suffix = "-^"
@@ -207,7 +207,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                     singleConfig = [useConfig]
                     ##use the name of [metaframe index]-[piece index][^ if this needs to stay in the back]
                     img = GenerateFrame(effectData, singleConfig, minBox)
-                    if img != None:
+                    if img  is not None:
                         suffix = ""
                         if not useConfig.front:
                             suffix = "-^"
@@ -304,7 +304,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                             else:
                                 backSided = True
                             newRect = GetPieceRect(effectData, useConfig)
-                            if newRect != None:
+                            if newRect  is not None:
                                 minBox = CombineExtents(minBox, newRect)
 
                     minBox = roundUpBox(minBox)
@@ -331,7 +331,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                                     newConfig.paletteIndex = recolorIndex
                                     recolorFrame.append(newConfig)
                                 imgFrame = GenerateFrame(effectData, recolorFrame, minBox)
-                                if imgFrame != None:
+                                if imgFrame  is not None:
                                     printedFrames.append(imgFrame)
                                     if backSided and frontSided:
                                         backList = []
@@ -409,7 +409,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                         for frame in anim:
                             ##create the frame from the list of useConfigs
                             imgFrame = GenerateFrame(effectData, frame, minBox)
-                            if imgFrame != None:
+                            if imgFrame  is not None:
                                 printedFrames.append(imgFrame)
                                 if backSided and frontSided:
                                     backList = []
@@ -654,7 +654,7 @@ def GenerateFrame(effectData, metaFrameData, minBox):
             useConfig.res[0],
             useConfig.res[1],
         )
-        if imgPiece != None:
+        if imgPiece  is not None:
             useConfig.DrawOn(newImg, imgPiece, (minBox[0], minBox[1]))
             drewSomething = True
     if drewSomething:

@@ -21,6 +21,7 @@ from __future__ import annotations
 import glob
 import math
 import os
+import shutil
 import xml.etree.ElementTree as ET
 
 from PIL import Image
@@ -44,8 +45,46 @@ def ExportSheets(outDir, wan):
     if not os.path.isdir(outDir):
         os.makedirs(outDir)
 
-    for passNum in range(1, 4):
-        ExportEffectStep(outDir, wan, passNum)
+    if wan.imgType == 3:
+        img = GenerateAtlas(wan.imgData, wan.customPalette, 0)
+        if img != None:
+            img.save(os.path.join(outDir, 'Atlas.png'))
+    else:
+        for passNum in range(1, 4):
+            ExportEffectStep(outDir, wan, passNum)
+
+def GenerateAtlas(imgData, inPalette, paletteIndex):
+    imgPx = []
+    for img in imgData.imageLists:
+        # flatten the list to include all strips
+        for pxStrip in img:
+            for px in pxStrip:
+                imgPx.append(px)
+
+    band_width = imgData.atlasX
+    band_height = imgData.atlasY
+    widthInTex = 1
+    heightInTex = max((len(imgPx) // (band_width * band_height) - 1) // widthInTex, 0) + 1
+
+    newImg = Image.new('RGBA', (widthInTex * band_width, heightInTex * band_height), (0, 0, 0, 0))
+    datas = [(0,0,0,0)] * (widthInTex * band_width * heightInTex * band_height)
+    for yy in range(heightInTex):
+        for xx in range(widthInTex):
+            texPosition = (yy * widthInTex + xx) * band_width * band_height
+            if texPosition < len(imgPx):
+                ##iterate the elements of the block and assign pixels
+                for py in range(band_height):
+                    for px in range(band_width):
+                        if texPosition + py * band_width + px < len(imgPx):
+                            paletteElement = imgPx[texPosition + py * band_width + px]
+                            if paletteElement == 0:
+                                color = (0,0,0,0)
+                            else:
+                                color = inPalette[paletteIndex][paletteElement]
+                            imgPosition = (xx * band_width + px, yy * band_height + py)
+                            datas[imgPosition[1] * widthInTex * band_width + imgPosition[0]] = color
+    newImg.putdata(datas)
+    return newImg
 
 def ExportEffectStep(outDir, effectData, passNum):
     ##note: these operations never remove
@@ -365,6 +404,10 @@ def ExportEffectStep(outDir, effectData, passNum):
                 if (len(img_list)):
                     printedPieces = CombineFramesIntoAnim(img_list)
                     printedPieces.save(os.path.join(outDir, 'S-' + format(int(groupIndex), '02d') + '.png'))
+
+        if not DEBUG_PRINT:
+            shutil.rmtree(os.path.join(outDir, '_pieces'))
+            shutil.rmtree(os.path.join(outDir, '_pieces_frames'))
 
         ##create a number of images equal to the number of groups
         ##with dimensions equal to the number of frames * measured frame dimensions

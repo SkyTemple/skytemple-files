@@ -78,6 +78,7 @@ from skytemple_files.compression.custom_999.handler import Custom999Handler
 from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
 from skytemple_files.graphics.w16.handler import W16Handler
+from skytemple_files.graphics.effect_screen.handler import ScreenEffectHandler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.graphics.wte.handler import WteHandler
 from skytemple_files.graphics.wtu.handler import WtuHandler
@@ -147,6 +148,7 @@ class FileType:
     WTE = WteHandler
     WTU = WtuHandler
 
+    SCREEN_FX = ScreenEffectHandler
     WAN = WanHandler
     WAT = WanHandler
 

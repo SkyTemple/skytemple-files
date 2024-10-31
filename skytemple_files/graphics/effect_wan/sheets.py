@@ -298,6 +298,7 @@ def ExportEffectStep(outDir, effectData, passNum):
                     ##get the minBox for each anim
                     minBox = (10000, 10000, -1, -1)
                     for frame in anim:
+                        # TODO: need to export duration data somehow!
                         for useConfig in frame:
                             if useConfig.front:
                                 frontSided = True

@@ -23,6 +23,7 @@ from enum import Enum
 RELEASE_WEB = "https://release.skytemple.org/"
 BANNER_LINK = "banner"
 BANNER_IMG = "banner.png"
+CONNECTION_TIMEOUT = 4
 
 
 class ReleaseType(Enum):
@@ -35,13 +36,16 @@ def check_newest_release(rtype: ReleaseType) -> str:
     Returns the newest release using release.skytemple.org.
     May fail if no connection can be established!
     """
-    return urllib.request.urlopen(RELEASE_WEB + rtype.value, context=create_context()).read().decode("utf-8").strip()
+    return (urllib.request.urlopen(RELEASE_WEB + rtype.value, context=create_context(), timeout=CONNECTION_TIMEOUT)
+            .read().decode("utf-8").strip())
 
 
 def get_event_banner() -> tuple[bytes | None, str | None]:
     try:
-        url = urllib.request.urlopen(RELEASE_WEB + BANNER_LINK, context=create_context()).read().decode("utf-8").strip()
-        img = urllib.request.urlopen(RELEASE_WEB + BANNER_IMG, context=create_context()).read()
+        url = (urllib.request.urlopen(RELEASE_WEB + BANNER_LINK, context=create_context(), timeout=CONNECTION_TIMEOUT)
+               .read().decode("utf-8").strip())
+        img = (urllib.request.urlopen(RELEASE_WEB + BANNER_IMG, context=create_context(), timeout=CONNECTION_TIMEOUT)
+               .read())
         return img, url
     except Exception:
         return None, None

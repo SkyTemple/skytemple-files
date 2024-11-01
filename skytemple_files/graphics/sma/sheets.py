@@ -39,6 +39,7 @@ def ExportSheets(outDir, effectData, paletteIndex):
                 effectData.customPalette,
                 paletteIndex,
                 statusEffectAnim.byteOffset,
+                idx,
                 statusEffectAnim.blockWidth,
                 statusEffectAnim.blockHeight,
             )
@@ -47,7 +48,7 @@ def ExportSheets(outDir, effectData, paletteIndex):
         animImg.save(os.path.join(outDir, "A-" + format(anim_idx, "02d") + "-" + format(paletteIndex, "02d") + ".png"))
 
 
-def GenerateStatusFrame(imgData, inPalette, paletteIndex, byteOffset, width, height):
+def GenerateStatusFrame(imgData, inPalette, paletteIndex, byteOffset, idx, width, height):
     ##creates a tex piece out of the imgdata, with the specified piece index and dimensions
     newImg = Image.new("RGBA", (width * TEX_SIZE, height * TEX_SIZE), (0, 0, 0, 0))
     datas = [(0, 0, 0, 0)] * (width * TEX_SIZE * height * TEX_SIZE)
@@ -56,7 +57,7 @@ def GenerateStatusFrame(imgData, inPalette, paletteIndex, byteOffset, width, hei
     imgPx = []
     # flatten the list to include all strips
     for nn in range(lengthPixels):
-        imgPx.append(imgData[byteOffset * 2 + nn])
+        imgPx.append(imgData[byteOffset * 2 + idx * lengthPixels + nn])
 
     for yy in range(height):
         for xx in range(width):

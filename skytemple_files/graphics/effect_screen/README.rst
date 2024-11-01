@@ -64,7 +64,7 @@ A: Always a multiple of section A
 B: Always a multiple of section D
 C: Number of textures per row.
 D: Number of textures per column.
-E: Unknown. Various nonzero numbers.  Never exceeds 0xFF.
+E: Frame duration in 1/60th of a second.
 F: Transparency.
 G: Unknown. One of various possible numbers: 0x00,0x40,0x60,0x7F,0x80,0xC0,0xF0,0xFF
 

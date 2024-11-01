@@ -49,9 +49,9 @@ def GenerateScreenFrame(imgData, frame, inPalette, includeAlpha):
             if includeAlpha:
                 alpha = frame.alpha // 256
             piece = GenerateScreenPiece(imgData, screenPiece, inPalette, alpha)
-            if screenPiece.flipX == True:
+            if screenPiece.flipX:
                 piece = piece.transpose(Image.FLIP_LEFT_RIGHT)
-            if screenPiece.flipY == True:
+            if screenPiece.flipY:
                 piece = piece.transpose(Image.FLIP_TOP_BOTTOM)
 
             blockX = curBlockIdx % 33

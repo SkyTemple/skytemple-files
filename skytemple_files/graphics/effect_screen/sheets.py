@@ -31,14 +31,14 @@ def ExportSheets(outDir, effectData, includeAlpha):
 
     for frameIndex, frame in enumerate(effectData.animData):
         img = GenerateScreenFrame(effectData.imgData, frame, effectData.customPalette, includeAlpha)
-        img.save(os.path.join(outDir, 'F-' + format(frameIndex, '02d') + '.png'))
+        img.save(os.path.join(outDir, "F-" + format(frameIndex, "02d") + ".png"))
+
 
 def GenerateScreenFrame(imgData, frame, inPalette, includeAlpha):
-
     screen_width = 256
     screen_height = 160
 
-    newImg = Image.new('RGBA', (screen_width, screen_height), (0, 0, 0, 0))
+    newImg = Image.new("RGBA", (screen_width, screen_height), (0, 0, 0, 0))
 
     curBlockIdx = 0
     for screenPiece in frame.pieces:
@@ -63,9 +63,8 @@ def GenerateScreenFrame(imgData, frame, inPalette, includeAlpha):
 
 
 def GenerateScreenPiece(imgData, screenPiece, inPalette, alpha):
-
-    newImg = Image.new('RGBA', (TEX_SIZE, TEX_SIZE), (0, 0, 0, 0))
-    datas = [(0,0,0,0)] * (TEX_SIZE * TEX_SIZE)
+    newImg = Image.new("RGBA", (TEX_SIZE, TEX_SIZE), (0, 0, 0, 0))
+    datas = [(0, 0, 0, 0)] * (TEX_SIZE * TEX_SIZE)
 
     texPosition = screenPiece.index * TEX_SIZE * TEX_SIZE
     ##iterate the elements of the block and assign pixels
@@ -73,7 +72,7 @@ def GenerateScreenPiece(imgData, screenPiece, inPalette, alpha):
         for px in range(TEX_SIZE):
             paletteElement = imgData[texPosition + py * TEX_SIZE + px]
             if paletteElement == 0:
-                color = (0,0,0,0)
+                color = (0, 0, 0, 0)
             else:
                 color = inPalette[0][paletteElement]
                 color = (color[0], color[1], color[2], alpha)

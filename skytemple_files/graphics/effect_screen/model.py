@@ -59,18 +59,18 @@ class ScreenEffectFile(Sir0Serializable):
 
         ##Read Effect header: ptr to AnimData, ptr to ImgData, PaletteData
         in_file.seek(ptrEffect)
-        nbFrames = int.from_bytes(in_file.read(4),'little')
-        ptrAnimData = int.from_bytes(in_file.read(4),'little')
+        nbFrames = int.from_bytes(in_file.read(4), "little")
+        ptrAnimData = int.from_bytes(in_file.read(4), "little")
         updateUnusedStats([], "Unk#3", int.from_bytes(in_file.read(4), "little"))
-        ptrImgData = int.from_bytes(in_file.read(4),'little')
-        ptrPaletteDataBlock = int.from_bytes(in_file.read(4),'little')
+        ptrImgData = int.from_bytes(in_file.read(4), "little")
+        ptrPaletteDataBlock = int.from_bytes(in_file.read(4), "little")
         updateUnusedStats([], "Unk#1", int.from_bytes(in_file.read(2), "little"))
         updateUnusedStats([], "Unk#2", int.from_bytes(in_file.read(2), "little"))
 
         ##Read palette info
         nbColorsPerRow = 16
         in_file.seek(ptrPaletteDataBlock)
-        totalColors = (ptrImgData-ptrPaletteDataBlock) // 4
+        totalColors = (ptrImgData - ptrPaletteDataBlock) // 4
         totalPalettes = totalColors // nbColorsPerRow
         self.customPalette = []
         for ii in range(totalPalettes):
@@ -86,17 +86,16 @@ class ScreenEffectFile(Sir0Serializable):
         ##read image data
         self.imgData = []
         in_file.seek(ptrImgData)
-        while (in_file.tell() < ptrEffect):
-            px = int.from_bytes(in_file.read(1),'little')
+        while in_file.tell() < ptrEffect:
+            px = int.from_bytes(in_file.read(1), "little")
             self.imgData.append(px % 16)
             self.imgData.append(px // 16)
-
 
         ptrFrames = []
         in_file.seek(ptrAnimData)
         for idx in range(nbFrames):
             ##read the location
-            ptrFrame = int.from_bytes(in_file.read(4),'little')
+            ptrFrame = int.from_bytes(in_file.read(4), "little")
             ptrFrames.append(ptrFrame)
 
         self.animData = []
@@ -108,10 +107,10 @@ class ScreenEffectFile(Sir0Serializable):
 
             # Must be 0x21 or else the animation doesn't play
             updateUnusedStats([], "Unk#6", int.from_bytes(in_file.read(2), "little"))
-            row_height = int.from_bytes(in_file.read(2),'little')
-            frame_dur = int.from_bytes(in_file.read(2),'little')
+            row_height = int.from_bytes(in_file.read(2), "little")
+            frame_dur = int.from_bytes(in_file.read(2), "little")
             in_file.read(18)
-            alpha = int.from_bytes(in_file.read(2),'little')
+            alpha = int.from_bytes(in_file.read(2), "little")
             in_file.read(3)
             updateUnusedStats([], "Unk#4", int.from_bytes(in_file.read(1), "little"))
             in_file.read(2)
@@ -119,11 +118,11 @@ class ScreenEffectFile(Sir0Serializable):
             pieces = []
             totalSlots = 0
             while True:
-                drawValue = int.from_bytes(in_file.read(2),'little')
+                drawValue = int.from_bytes(in_file.read(2), "little")
                 skip = (SCREEN_ATTR_DrawMask & drawValue) == 0
                 flipX = (SCREEN_ATTR_FlipXMask & drawValue) != 0
                 flipY = (SCREEN_ATTR_FlipYMask & drawValue) != 0
-                drawArg = (SCREEN_ATTR_ValueMask & drawValue)
+                drawArg = SCREEN_ATTR_ValueMask & drawValue
 
                 pieces.append(ScreenPiece(drawArg, flipX, flipY, skip))
                 if skip:
@@ -146,18 +145,15 @@ class ScreenEffectFile(Sir0Serializable):
 
 
 class ScreenFrame(object):
-
     def __init__(self, duration, alpha, rowHeight, pieces):
-
         self.duration = duration
         self.alpha = alpha
         self.rowHeight = rowHeight
         self.pieces = pieces
 
+
 class ScreenPiece(object):
-
     def __init__(self, index, flipX, flipY, skip):
-
         self.index = index
         self.flipX = flipX
         self.flipY = flipY

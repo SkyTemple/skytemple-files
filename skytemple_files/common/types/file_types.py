@@ -77,6 +77,7 @@ from skytemple_files.compression.px.handler import PxHandler
 from skytemple_files.compression.custom_999.handler import Custom999Handler
 from skytemple_files.compression.rle_nibble.handler import RleNibbleHandler
 from skytemple_files.graphics.bg_list_dat.handler import BgListDatHandler
+from skytemple_files.graphics.sma.handler import SmaHandler
 from skytemple_files.graphics.w16.handler import W16Handler
 from skytemple_files.graphics.wan_wat.handler import WanHandler
 from skytemple_files.graphics.wte.handler import WteHandler
@@ -154,6 +155,7 @@ class FileType:
     STR = StrHandler
     LSD = LsdHandler
 
+    SMA = SmaHandler
     SSA = SsaHandler
     SSE = SsaHandler
     SSS = SsaHandler

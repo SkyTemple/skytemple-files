@@ -115,8 +115,8 @@
         <StringBlock name="Croagunk Swap Shop Strings"                 beg="938"   end="976"/>
         <StringBlock name="Xatu Appraisal Strings"                     beg="976"   end="1000"/>
         <StringBlock name="Electivire Link Shop Strings"               beg="1000"  end="1040"/>
-        <StringBlock name="Chimecho Assembly Strings"                  beg="1040"  end="1068"/>
-        <StringBlock name="Luminous Spring Strings"                    beg="1068"  end="1097"/>
+        <StringBlock name="Chimecho Assembly Strings"                  beg="1040"  end="1066"/>
+        <StringBlock name="Luminous Spring Strings"                    beg="1066"  end="1097"/>
         <StringBlock name="Diary Strings"                              beg="1097"  end="1189"/>
         <StringBlock name="Level Up Strings"                           beg="1189"  end="1201"/>
         <StringBlock name="Exclusive Items Strings"                    beg="1201"  end="1207"/>

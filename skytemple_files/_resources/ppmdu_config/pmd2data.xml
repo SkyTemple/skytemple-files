@@ -1369,6 +1369,15 @@
 	  </OpenBin>
         </Patch>
 
+        <Patch id="TeamStatsPain">
+          <OpenBin filepath="overlay_0010.bin">
+	  	<Include filename ="chesyon_asm_mods/team_stats_pain/selector_overlay10.asm"/>
+	  </OpenBin>
+	  <OpenBin filepath="overlay/overlay_0036.bin">
+	  	<Include filename ="chesyon_asm_mods/bold_text/selector_overlay36.asm"/>
+	  </OpenBin>
+        </Patch>
+
       </Game>
     </Patches>
 

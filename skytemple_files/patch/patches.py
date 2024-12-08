@@ -147,6 +147,7 @@ from skytemple_files.patch.handler.skip_quiz import SkipQuizPatchHandler
 from skytemple_files.patch.handler.stat_disp import ChangeMoveStatDisplayPatchHandler
 from skytemple_files.patch.handler.sprite_size import SpriteSizePatchHandler
 from skytemple_files.patch.handler.support_atupx import AtupxSupportPatchHandler
+from skytemple_files.patch.handler.team_stats_pain import TeamStatsPainPatchHandler
 from skytemple_files.patch.handler.unused_dungeon_chance import UnusedDungeonChancePatch
 
 CORE_PATCHES_BASE_DIR = os.path.join(get_resources_dir(), "patches")
@@ -211,6 +212,7 @@ class PatchType(Enum):
     NEGATIVE_ENEMY_DENSITY = NegativeEnemyDensityPatchHandler
     REMOVE_BODY_SIZE_CHECK = RemoveBodySizeCheckPatchHandler
     FAST_CHIMECHO = FastChimechoPatchHandler
+    TEAM_STATS_PAIN = TeamStatsPainPatchHandler
 
 
 class Patcher:

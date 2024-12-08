@@ -24,7 +24,6 @@ from skytemple_files.common.util import read_u32, get_binary_from_rom
 from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US, GAME_REGION_EU, GAME_REGION_JP
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.common.i18n_util import f, _
 
 ORIGINAL_INSTRUCTION = 0xE3190004 # hex representation of tst r9,0x4 (which we are changing to tst r9,0x5)
 OFFSET_US = 0x22C0DE8-0x22BCA80
@@ -52,6 +51,10 @@ class TeamStatsPainPatchHandler(AbstractPatchHandler, DependantPatch):
 
     def depends_on(self) -> list[str]:
         return ["ExtraSpace"]
+
+    @property
+    def category(self) -> PatchCategory:
+        return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
          overlay10 = get_binary_from_rom(rom, config.bin_sections.overlay10)

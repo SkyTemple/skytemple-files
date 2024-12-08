@@ -23,6 +23,7 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import read_u32, get_binary_from_rom
+from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     Pmd2Data,
     GAME_VERSION_EOS,
@@ -46,7 +47,7 @@ class TeamStatsPainPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return (
+        return _(
             "If available, change a team member's portrait in the Team Stats menu to pain when in critical condition."
         )
 

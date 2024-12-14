@@ -30,7 +30,7 @@ from skytemple_files.common.ppmdu_config.data import (
 )
 from skytemple_files.common.util import read_u32
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
 
 ORIGINAL_INSTRUCTION = 0xE3A00008
 OFFSET_EU = 0x4ADD0
@@ -38,28 +38,29 @@ OFFSET_US = 0x4AA98
 OFFSET_JP = 0x4AE00
 
 
-class FixNocashSavesPatchHandler(AbstractPatchHandler):
+class FixNocashSavesPatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def name(self) -> str:
         return "FixNo$GbaSaves"
 
     @property
     def description(self) -> str:
-        return _(
-            "Fixes an issue that causes saving to fail on the No$GBA emulator. Warning: Causes saving to fail on the MelonDS emulator instead."
-        )
+        return _("Fixes an issue that causes saving to fail on the No$GBA emulator.")
 
     @property
     def author(self) -> str:
-        return "Frostbyte"
+        return "Frostbyte, Chesyon"
 
     @property
     def version(self) -> str:
-        return "0.1.0"
+        return "0.2.0"
 
     @property
     def category(self) -> PatchCategory:
         return PatchCategory.BUGFIXES
+
+    def depends_on(self) -> list[str]:
+        return ["ExtraSpace"]
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         if config.game_version == GAME_VERSION_EOS:

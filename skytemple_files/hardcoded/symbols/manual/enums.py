@@ -16,7 +16,6 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 
 # Contains information about the values of some enum types
-from typing import List
 
 from skytemple_files.hardcoded.symbols.unsupported_type_error import UnsupportedTypeError
 
@@ -239,7 +238,7 @@ KNOWN_ENUM_DATA = {
 }
 
 
-def get_enum_values(type_str: str) -> List[EnumValue]:
+def get_enum_values(type_str: str) -> list[EnumValue]:
     """
     Given a string representing an enum type, returns its possible values
     :param type_str: Enum type
@@ -258,7 +257,7 @@ def get_enum_values(type_str: str) -> List[EnumValue]:
         raise ValueError("The specified type is not an enum type.")
 
 
-def get_all_enum_types() -> List[str]:
+def get_all_enum_types() -> list[str]:
     """
     :return: List with the names of all enum types defined in this file
     """

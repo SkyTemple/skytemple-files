@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 import os
-from typing import Callable, cast
+from typing import cast
+from collections.abc import Callable
 
 from PIL import Image
 from ndspy.rom import NintendoDSRom

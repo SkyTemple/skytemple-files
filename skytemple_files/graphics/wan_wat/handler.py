@@ -20,6 +20,7 @@ from __future__ import annotations
 from skytemple_files.common.types.data_handler import DataHandler
 from skytemple_files.common.util import OptionalKwargs
 from skytemple_files.graphics.chara_wan.handler import CharaWanHandler
+from skytemple_files.graphics.effect_wan.handler import EffectWanHandler
 from skytemple_files.graphics.wan_wat.model import Wan
 
 
@@ -28,6 +29,7 @@ class WanHandler(DataHandler[Wan]):
 
     # Alternate read/write handler for character WAN files
     CHARA = CharaWanHandler
+    EFFECT = EffectWanHandler
 
     @classmethod
     def deserialize(cls, data: bytes, **kwargs: OptionalKwargs) -> Wan:

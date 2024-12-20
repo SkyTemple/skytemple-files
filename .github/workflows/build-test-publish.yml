@@ -108,7 +108,7 @@ jobs:
         pip install -r requirements.txt mypy
     - name: Run type checks
       run: |
-        mypy --config-file mypy.ini --junit-xml mypy-${{ matrix.python-version }}.xml
+        mypy --config-file mypy.ini --junit-xml mypy-${{ matrix.python-version }}.xml skytemple_files
     - name: Upload Unit Test Results
       if: always()
       uses: actions/upload-artifact@v4

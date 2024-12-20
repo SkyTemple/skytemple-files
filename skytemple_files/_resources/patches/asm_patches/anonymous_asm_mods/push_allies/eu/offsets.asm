@@ -15,6 +15,7 @@
 .definelabel ChangeString, 0x022E3418
 .definelabel SetupAction, 0x022EBDB8
 .definelabel HookPush1, 0x022F3034
+.definelabel HookPush2, 0x022F3078
 .definelabel CheckMove, 0x022F30FC
 .definelabel CheckEntityStatus, 0x022F3F98
 .definelabel CheckEntityUnk1, 0x022FC4EC

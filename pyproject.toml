@@ -4,24 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "skytemple-files"
-version = "1.8.3"
+version = "1.8.4"
 authors = [
     {name = 'Marco "Capypara" Köpcke', email = "hello@capypara.de"},
     # see About dialog or GitHub contributors list for additional people.
 ]
 description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["rom-hacking", "game-modding", "skytemple"]
 license = {text = "GPL-3.0-or-later"}
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python",
     "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
     "pmdsky-debug-py == 10.0.21",
@@ -29,8 +29,8 @@ dependencies = [
     "range-typed-integers >= 1.0.1",
     "Pillow >= 6.1.0",
     "appdirs >= 1.4.0",
-    "explorerscript >= 0.2.1, < 0.3.0",
-    "skytemple-rust >= 1.8.2, < 1.9.0",
+    "explorerscript >= 0.2.2, < 0.3.0",
+    "skytemple-rust >= 1.8.4, < 1.9.0",
     'pyobjc==10.3.2; sys_platform == "darwin"',
     "dungeon-eos==0.0.5",
 ]

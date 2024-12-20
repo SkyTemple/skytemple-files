@@ -38,12 +38,12 @@ from datetime import datetime
 from io import BytesIO
 from typing import (
     Any,
-    Callable,
     Literal,
     TypeVar,
     cast,
     overload,
 )
+from collections.abc import Callable
 from collections.abc import Coroutine, Iterable, Sequence
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element

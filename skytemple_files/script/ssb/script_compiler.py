@@ -17,7 +17,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Callable, Optional, MutableSequence, Sequence, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
+from collections.abc import Callable, MutableSequence, Sequence
 
 from explorerscript.error import ParseError, SsbCompilerError
 from explorerscript.source_map import SourceMap

@@ -435,7 +435,7 @@ class Patcher:
         self._loaded_patches[handler.name] = handler
         self._patch_dirs[handler.name] = patch_base_dir
 
-    def list(self) -> Generator[AbstractPatchHandler, None, None]:
+    def list(self) -> Generator[AbstractPatchHandler]:
         yield from self._loaded_patches.values()
 
     def get(self, name: str) -> AbstractPatchHandler:

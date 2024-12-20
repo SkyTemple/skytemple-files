@@ -23,10 +23,7 @@ from collections import OrderedDict
 
 from skytemple_files.list.level.model import LevelListBin
 
-try:
-    from typing import TypedDict
-except ImportError:
-    from typing_extensions import TypedDict
+from typing import TypedDict
 
 from ndspy.fnt import Folder
 

@@ -32,7 +32,6 @@ from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
     Optional,
     Protocol,
     TypeVar,
@@ -40,6 +39,7 @@ from typing import (
     overload,
     Literal,
 )
+from collections.abc import Callable
 from collections.abc import Generator, Iterable, Sequence
 
 from pmdsky_debug_py.protocol import SectionProtocol
@@ -711,7 +711,7 @@ def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.
 
 
 @contextlib.contextmanager
-def mutate_sequence(obj: object, attr: str) -> Generator[list[Any], None, None]:
+def mutate_sequence(obj: object, attr: str) -> Generator[list[Any]]:
     """
     This context manager provides the attribute sequence value behind the attribute as a list (copy),
     and then assigns the attribute to that list. So while you can "mutate" the "original" sequence this way,

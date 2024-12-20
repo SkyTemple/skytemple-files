@@ -25,7 +25,8 @@ from contextlib import contextmanager
 import re
 import warnings
 from enum import Enum, IntEnum
-from typing import Iterator, Sequence, Mapping, Union
+from typing import Union
+from collections.abc import Iterator, Sequence, Mapping
 
 from explorerscript.ssb_converting.ssb_data_types import SsbCoroutine, SsbOpCode
 from range_typed_integers import i16, u8, u16

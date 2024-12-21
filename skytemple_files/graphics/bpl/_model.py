@@ -16,6 +16,7 @@
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
 
+import logging
 
 from range_typed_integers import u16_checked, u16
 
@@ -29,6 +30,8 @@ from skytemple_files.graphics.bpl import (
     BPL_PAL_SIZE,
 )
 from skytemple_files.graphics.bpl.protocol import BplAnimationSpecProtocol, BplProtocol
+
+logger = logging.getLogger(__name__)
 
 
 class BplAnimationSpec(BplAnimationSpecProtocol):
@@ -138,10 +141,16 @@ class Bpl(BplProtocol[BplAnimationSpec]):
         """
         # TODO: First frame is missing: No change!
         f_palettes = []
+        already_used_colors = 0
         for i, spec in enumerate(self.animation_specs):
             if spec.number_of_frames > 0:
-                actual_frame_for_pal = frame % spec.number_of_frames
-                pal_for_frame = self.animation_palette[actual_frame_for_pal]
+                actual_frame_for_pal = already_used_colors + (frame % spec.number_of_frames)
+                already_used_colors += spec.number_of_frames
+                if actual_frame_for_pal >= len(self.animation_palette):
+                    logger.warning("palette animation frame out of bounds, using black")
+                    pal_for_frame = [0] * 3 * 15
+                else:
+                    pal_for_frame = self.animation_palette[actual_frame_for_pal]
                 f_palettes.append([0, 0, 0] + pal_for_frame)
             else:
                 f_palettes.append(self.palettes[i])

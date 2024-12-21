@@ -82,6 +82,8 @@ class AbstractPatchHandler(ABC):
 
         :raises RuntimeError: On error applying the patch. If this is raised, the ROM will not be modified.
         :raises ValueError: On error applying the patch. If this is raised, the ROM will not be modified.
+        :raises OutdatedPatchDependencyError: If one of the patches this patch depends on is applied but outdated.
+         The user will be prompted to reapply it first, and the ROM will not be modified.
         """
 
     @abstractmethod

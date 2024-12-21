@@ -20,6 +20,7 @@ from collections.abc import Callable
 
 from ndspy.rom import NintendoDSRom
 
+from skytemple_files.common.exceptions.outdated_patch_dependency import OutdatedPatchDependencyError
 from skytemple_files.common.i18n_util import _
 from skytemple_files.common.ppmdu_config.data import (
     GAME_REGION_EU,
@@ -37,8 +38,9 @@ OFFSET_EU = 0x4ADD0
 OFFSET_US = 0x4AA98
 OFFSET_JP = 0x4AE00
 
-EXTRA_SPACE_OFFSET = 0xC6C+0x34
+EXTRA_SPACE_OFFSET = 0xC6C + 0x34
 EXTRA_SPACE_ORIGINAL_INSTRUCTION = 0xE3A00000
+
 
 class FixNocashSavesPatchHandler(AbstractPatchHandler, DependantPatch):
     @property
@@ -75,10 +77,13 @@ class FixNocashSavesPatchHandler(AbstractPatchHandler, DependantPatch):
         raise NotImplementedError()
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
-        if 36 in rom.loadArm9Overlays([36]) and read_u32(rom.arm9, EXTRA_SPACE_OFFSET) == EXTRA_SPACE_ORIGINAL_INSTRUCTION: # if overlay36 exists, but the NitroMain hook to load it does not, we're on the old version of ExtraSpace
-            # TODO: prompt user to update ExtraSpace; fail to apply patch
+        if (
+            36 in rom.loadArm9Overlays([36])
+            and read_u32(rom.arm9, EXTRA_SPACE_OFFSET) == EXTRA_SPACE_ORIGINAL_INSTRUCTION
+        ):  # if overlay36 exists, but the NitroMain hook to load it does not, we're on the old version of ExtraSpace
+            raise OutdatedPatchDependencyError(self.name, ["ExtraSpace"])
         else:
-            # Apply the patch 
+            # Apply the patch
             apply()
 
     def unapply(self, unapply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:

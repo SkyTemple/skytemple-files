@@ -22,6 +22,6 @@ class OutdatedPatchDependencyError(Exception):
         )
         for dependency in self.outdated_dependencies:
             msg += f"\n- {dependency}"
-        msg += _("Please reapply these patches first.")
+        msg += _("\nPlease reapply these patches first.")
 
         return msg

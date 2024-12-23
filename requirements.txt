@@ -1,7 +1,7 @@
 pmdsky-debug-py==10.0.48
 ndspy==4.2.0
 range-typed-integers==1.0.1
-Pillow==10.4.0
+Pillow==11.0.0
 appdirs==1.4.4
 git+https://github.com/skytemple/skytemple-rust@master#egg=skytemple_rust
 explorerscript==0.2.2

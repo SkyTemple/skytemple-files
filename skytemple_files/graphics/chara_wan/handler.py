@@ -86,3 +86,10 @@ class CharaWanHandler(DataHandler[WanFile]):
     @classmethod
     def split_wan(cls, wan: WanFile) -> list[WanFile]:
         return SplitWan(wan, ANIM_PRESENCE)  # type: ignore
+
+    @classmethod
+    def delete_anim_from_wan(cls, wan: WanFile, anim_index: int) -> list[WanFile]:
+        presence_minus_one = [[True] * 44]
+        presence_minus_one[0][anim_index] = False
+        result_list = SplitWan(wan, presence_minus_one)  # type: ignore
+        return result_list[0]

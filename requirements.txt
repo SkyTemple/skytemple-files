@@ -1,4 +1,4 @@
-pmdsky-debug-py==10.0.48
+pmdsky-debug-py==10.0.49
 ndspy==4.2.0
 range-typed-integers==1.0.1
 Pillow==10.4.0

@@ -114,7 +114,9 @@ def ImportSheets(inDir, strict=False):
         if not os.path.isdir(os.path.join(inDir, "_frames_in")):
             os.makedirs(os.path.join(inDir, "_frames_in"))
 
+    # Maps indices to anim names
     anim_stats = {}
+    # Maps anim names to indices
     anim_names = {}
     tree = ET.parse(os.path.join(inDir, "AnimData.xml"))
     root = tree.getroot()
@@ -161,6 +163,7 @@ def ImportSheets(inDir, strict=False):
                 raise UserValueError(f"{anim_stats[index].name} and {name} both have the an index of {index}!")
             anim_stats[index] = anim_stat
 
+    # Maps an animation index to a list of anim indices that will copy from it
     copy_indices = {}
     for idx in anim_stats:
         stat = anim_stats[idx]
@@ -170,9 +173,12 @@ def ImportSheets(inDir, strict=False):
                 copy_indices[back_idx] = []
             copy_indices[back_idx].append(idx)
 
-    # read all sheets
+    # Sheets with no XML entry
     extra_sheets = []
+    # Maps anim indices to sheets
     anim_sheets = {}
+
+    # Read all sheets
     for filepath in glob.glob(os.path.join(inDir, "*-Anim.png")):
         _, file = os.path.split(filepath)
         anim_parts = file.split("-")

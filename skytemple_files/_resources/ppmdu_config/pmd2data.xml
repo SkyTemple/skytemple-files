@@ -1379,7 +1379,7 @@
         </Patch>
 
         <Patch id="PartyUpdatesMap">
-          <OpenBin filepath="overlay_0029.bin">
+          <OpenBin filepath="overlay/overlay_0029.bin">
 	  	<Include filename ="chesyon_asm_mods/party_updates_map/selector_overlay29.asm"/>
 	  </OpenBin>
 	  <OpenBin filepath="overlay/overlay_0036.bin">

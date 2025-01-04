@@ -1,4 +1,4 @@
-.orga 0x1C10
+.orga 0x1C00
 .area 0x20
 PartyCheck:
     popeq r4

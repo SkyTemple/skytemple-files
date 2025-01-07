@@ -47,7 +47,7 @@ class PartyUpdatesMapPatchHandler(AbstractPatchHandler, DependantPatch):
 
     @property
     def description(self) -> str:
-        return "Causes all party members to update the dungeon minimap, as they do in Super."
+        return _("Causes all party members to update the dungeon minimap, as they do in Super.")
 
     @property
     def author(self) -> str:

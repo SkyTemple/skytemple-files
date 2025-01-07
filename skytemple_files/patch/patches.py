@@ -131,7 +131,7 @@ from skytemple_files.patch.handler.obj_table import ExtractObjectTablePatchHandl
 from skytemple_files.patch.handler.partners_trigger_hidden_traps import (
     PartnersTriggerHiddenTraps,
 )
-from skytemple_files.patch.handler.party_updates_map import PartyUpdatesMap
+from skytemple_files.patch.handler.party_updates_map import PartyUpdatesMapPatchHandler
 from skytemple_files.patch.handler.pitfall_trap_tweak import (
     PitfallTrapTweakPatchHandler,
 )

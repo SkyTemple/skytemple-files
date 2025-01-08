@@ -96,7 +96,7 @@ class AiItemImprovementsHandler(AbstractPatchHandler):
         else:
             raise NotImplementedError()
         if add_types_applied
-            param["AddTypesApplied"] = 1
+            param["AddTypesApplied"] = 1 # this DOES violate convention, but the ASM code needs to change if AddTypes is applied (for reasons explained above), and this seems to be the only way to pass information from the handler to the ASM code, other than asking the user in the config, which seems redundant when AddTypesApplied can be determined automatically.
         else:
             param["AddTypesApplied"] = 0
         self.__parameters = param

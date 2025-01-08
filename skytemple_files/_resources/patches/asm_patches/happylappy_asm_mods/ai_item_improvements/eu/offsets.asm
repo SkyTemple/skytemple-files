@@ -6,6 +6,9 @@
 .definelabel GetAiUseItemProbability, 0x0231EAC4
 .definelabel AiOrbCheck, 0x230f668
 
+; Free Space End
+.definelabel AreaEnd, 0x231F358; 231E8F0
+
 ; Functions Used
 .definelabel CeilFixedPoint, 0x205139C; 2051064
 .definelabel IsAdjacentToEnemy, 0x231F358; 231E8F0

@@ -4,7 +4,7 @@
 .endarea
 
 .org GetAiUseItemProbability
-.area IsAdjacentToEnemy - GetAiUseItemProbability 
+.area AreaEnd - GetAiUseItemProbability 
 ; Changelog
 ;   - Made Gold Thorns and Rare Fossils Throwable by the Ai!
 ;   - Fixed Gravelyrock bug that only checked male Bonsly and Sudowoodo.
@@ -802,5 +802,5 @@ IsGummi:
 ; Put at the end because it has a variable amount of instructions.
 
 FreeSpaceStart:
-    .fill IsAdjacentToEnemy - FreeSpaceStart, 0
+    .fill AreaEnd - FreeSpaceStart, 0
 .endarea

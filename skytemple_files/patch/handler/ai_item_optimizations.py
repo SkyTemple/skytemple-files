@@ -47,7 +47,7 @@ class AiItemOptimizationsHandler(AbstractPatchHandler):
     @property
     def description(self) -> str:
         return _(
-            "Reduces the size of GetAiUseItemProbability without changing anything else, creating 1080 bytes of free space in overlay29."
+            "Reduces the size of GetAiUseItemProbability without changing anything else, creating 1080 bytes of free space in overlay29. Overwrites AiItemImprovements, but will NOT reset Ai item use flags."
         )
 
     @property

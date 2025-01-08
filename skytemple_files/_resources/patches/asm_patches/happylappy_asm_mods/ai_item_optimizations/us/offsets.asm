@@ -5,6 +5,9 @@
 ; Function Start
 .definelabel GetAiUseItemProbability, 0x231E05C
 
+; Free Space End
+.definelabel AreaEnd, 0x231E8F0
+
 ; Functions Used
 .definelabel CeilFixedPoint, 0x2051064
 .definelabel IsAdjacentToEnemy, 0x231E8F0

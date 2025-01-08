@@ -56,7 +56,7 @@ class AiItemImprovementsHandler(AbstractPatchHandler):
 
     @property
     def description(self) -> str:
-        return _("Tweaks team and enemy AI to use more types of items, and use them more effectively.")
+        return _("Tweaks team and enemy AI to use more types of items, and use them more effectively. Overwrites AiItemOptimizations.")
 
     @property
     def author(self) -> str:

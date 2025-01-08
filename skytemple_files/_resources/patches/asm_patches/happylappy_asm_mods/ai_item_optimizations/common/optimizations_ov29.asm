@@ -1,5 +1,5 @@
 .org GetAiUseItemProbability
-.area IsAdjacentToEnemy - GetAiUseItemProbability 
+.area AreaEnd - GetAiUseItemProbability 
 ; Changelog
 ;   - Removed Unused Warp Seed Ally Code (saved 8 instructions)
 
@@ -399,5 +399,5 @@ odds_5:
 exit:     
     ldmia sp!,{r3,r4,r5,r6,r7,r8,r9,pc} 
 FreeSpaceStart:
-    .fill IsAdjacentToEnemy - FreeSpaceStart, 0
+    .fill AreaEnd - FreeSpaceStart, 0
 .endarea

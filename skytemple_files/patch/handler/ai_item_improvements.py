@@ -27,11 +27,10 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     GAME_REGION_US,
     GAME_REGION_EU,
-    GAME_REGION_JP,
 )
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import _
 
 MODIFIED_INSTRUCTION = 0xE8BD83F8  # ldmia all the shit
 OFFSET_EU = 0x231F29C - 0x22DCB80  # location of the instruction minus starting point of overlay 29
@@ -50,7 +49,7 @@ def set_item_ai_flags(item_p_model, item_id: int, ai_flag_1: bool, ai_flag_2: bo
     item.ai_flag_3 = ai_flag_3
 
 
-class AiItemImprovementsHandler(AbstractPatchHandler, DependantPatch):
+class AiItemImprovementsHandler(AbstractPatchHandler):
     @property
     def name(self) -> str:
         return "AiItemImprovements"
@@ -67,12 +66,9 @@ class AiItemImprovementsHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "1.0.0"
 
-    def depends_on(self) -> list[str]:
-        return []
-
     @property
     def category(self) -> PatchCategory:
-        return PatchCategory.NEW_MECHANIC
+        return PatchCategory.IMPROVEMENT_TWEAK
 
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         patch_area = get_binary_from_rom(rom, config.bin_sections.overlay29)
@@ -85,7 +81,7 @@ class AiItemImprovementsHandler(AbstractPatchHandler, DependantPatch):
 
     def apply(self, apply: Callable[[], None], rom: NintendoDSRom, config: Pmd2Data) -> None:
         param = self.get_parameters()
-        # do an is_applied check for AddTypes. let's say the result is stored to bool add_types_applied
+        # do an is_applied check for AddTypes. This is necessary because the Gummi table size changes if this patch is applied!
         if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 add_types_applied = (
@@ -99,7 +95,7 @@ class AiItemImprovementsHandler(AbstractPatchHandler, DependantPatch):
                 raise NotImplementedError()
         else:
             raise NotImplementedError()
-        if add_types_applied:
+        if add_types_applied
             param["AddTypesApplied"] = 1
         else:
             param["AddTypesApplied"] = 0

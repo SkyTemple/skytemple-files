@@ -728,26 +728,28 @@ IsGravelyrock:
     cmp r4,#0x2; If Using/Throwing at a foe...   
     beq odds_0;
     ; Else continue to odds_100
+
+; This is an instruction-efficient way to get the probability for a specific label. 
 odds_100:
-    add r0,#20;
+    add r0,#20; 20 + 10 + 20 + 10 + 10 + 10 + 5 + 5 + 5 + 5 = 100
 odds_80:
-    add r0,#10;
+    add r0,#10; 10 + 20 + 10 + 10 + 10 + 5 + 5 + 5 + 5 = 80
 odds_70:
-    add r0,#20;
+    add r0,#20; 20 + 10 + 10 + 10 + 5 + 5 + 5 + 5 = 70
 odds_50:
-    add r0,#10;
+    add r0,#10; 10 + 10 + 10 + 5 + 5 + 5 + 5 = 50
 odds_40:
-    add r0,#10;
+    add r0,#10; 10 + 10 + 5 + 5 + 5 + 5 = 40
 odds_30:
-    add r0,#10;
+    add r0,#10; 10 + 5 + 5 + 5 + 5 = 30
 odds_20:
-    add r0,#5;
+    add r0,#5; 5 + 5 + 5 + 5 = 20
 odds_15:
-    add r0,#5;
+    add r0,#5; 5 + 5 + 5 = 15
 odds_10:
-    add r0,#5;
+    add r0,#5; 5 + 5 = 10
 odds_5:
-    add r0,#5;
+    add r0,#5; 5 = 5
 exit:     
     ldmia sp!,{r3,r4,r5,r6,r7,r8,r9,pc} 
 IsGummi:
@@ -762,11 +764,11 @@ IsGummi:
         ldr r4,=IQ_GUMMI_GAIN_TABLE;
         mov r5,#0x19; Waste a register and an instruction bc MUL doesn't allow immediates :(
         ; Gummi Type 1
-        smulbb r2,r2,r5; Multiply by 18 bytes (?)
+        smulbb r2,r2,r5; Multiply by 25 bytes (one table row)
         add r2,r2,r1; Add Gummi Type
         ldrb r2,[r4,r2]; Load the "r2th" entry of the Gummi IQ Table!
         ; Gummi Type 2
-        smulbb r3,r3,r5; Multiply by 18 bytes (?)
+        smulbb r3,r3,r5; Multiply by 25 bytes (one table row)
         add r3,r3,r1; Add Gummi Type
         ldrb r3,[r4,r3]; Load the "r2th" entry of the Gummi IQ Table!
         cmp r2,r3; Compare the type results
@@ -782,11 +784,11 @@ IsGummi:
         ldr r4,=IQ_GUMMI_GAIN_TABLE;
         mov r5,#0x24; Waste a register and an instruction bc MUL doesn't allow immediates :(
         ; Gummi Type 1
-        smulbb r2,r2,r5; Multiply by 18 bytes (?)
+        smulbb r2,r2,r5; Multiply by 36 bytes (one table row)
         add r2,r2,r1; Add Gummi Type
         ldrsh r2,[r4,r2]; Load the "r2th" entry of the Gummi IQ Table!
         ; Gummi Type 2
-        smulbb r3,r3,r5; Multiply by 18 bytes (?)
+        smulbb r3,r3,r5; Multiply by 36 bytes (one table row)
         add r3,r3,r1; Add Gummi Type
         ldrsh r3,[r4,r3]; Load the "r2th" entry of the Gummi IQ Table!
         cmp r2,r3; Compare the type results

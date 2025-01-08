@@ -27,11 +27,10 @@ from skytemple_files.common.ppmdu_config.data import (
     GAME_VERSION_EOS,
     GAME_REGION_US,
     GAME_REGION_EU,
-    GAME_REGION_JP,
 )
 from skytemple_files.patch.category import PatchCategory
-from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch
-from skytemple_files.common.i18n_util import f, _
+from skytemple_files.patch.handler.abstract import AbstractPatchHandler
+from skytemple_files.common.i18n_util import _
 
 MODIFIED_INSTRUCTION = 0xE8BD83F8  # ldmia all the shit
 OFFSET_EU = (
@@ -40,7 +39,7 @@ OFFSET_EU = (
 OFFSET_US = 0x231E8F0 - 1084 - 0x22DC240  # same but US HeHeHaHa
 
 
-class AiItemOptimizationsHandler(AbstractPatchHandler, DependantPatch):
+class AiItemOptimizationsHandler(AbstractPatchHandler):
     @property
     def name(self) -> str:
         return "AiItemOptimizations"
@@ -59,8 +58,6 @@ class AiItemOptimizationsHandler(AbstractPatchHandler, DependantPatch):
     def version(self) -> str:
         return "1.0.0"
 
-    def depends_on(self) -> list[str]:
-        return []
 
     @property
     def category(self) -> PatchCategory:

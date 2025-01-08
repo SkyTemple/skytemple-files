@@ -1387,8 +1387,8 @@
             <Include filename ="happylappy_asm_mods/ai_item_improvements/selector_ov29.asm"/>
           </OpenBin>
 	  <Parameters>
-	     <Param name="NeutralGummiBoost" label="Amount of IQ a neutral Gummi gives (If larger, Ai will eat the gummi!)" min="0" max="255" default="3" type="int"/>	
-            <Param name="AssignAiFlags" label="Assign AI flags (idk explanify further)" type="select">
+	     <Param name="NeutralGummiBoost" label="IQ Threshold for the AI to eat a gummi they pick up" min="0" max="255" default="3" type="int"/>	
+            <Param name="AssignAiFlags" label="Assign AI item use flags in item data? This will overwrite item flags for certain items" type="select">
               <Option label="Yes" type="int">1</Option>
               <Option label="No" type="int">0</Option>
             </Param>	     

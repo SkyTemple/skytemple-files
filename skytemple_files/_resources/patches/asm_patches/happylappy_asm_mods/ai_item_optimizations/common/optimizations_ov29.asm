@@ -155,7 +155,7 @@ Adjacent2Enemy:
     mov r0,r7; 
     bl IsAdjacentToEnemy
     cmp r0,#0x1;
-    mov r0,#0;
+    mov r0,#0; Setting r0 to zero here to ensure that non-zero probabilities will return uninflated probabilities!
     pop r15;
 
 IsOranOrSitrusBerry:
@@ -379,22 +379,23 @@ IsGravelyrock:
     cmp r5,#0x1; If Throwing...   
     beq odds_70;
     ; Else continue to odds_100
+; This is an instruction-efficient way to get the probability for a specific label. 
 odds_100:
-    add r0,#20;
+    add r0,#20; 20 + 10 + 20 + 10 + 10 + 20 + 5 + 5 = 100
 odds_80:
-    add r0,#10;
+    add r0,#10; 10 + 20 + 10 + 10 + 20 + 5 + 5 = 80
 odds_70:
-    add r0,#20;
+    add r0,#20; 20 + 10 + 10 + 20 + 5 + 5 = 70
 odds_50:
-    add r0,#10;
+    add r0,#10; 10 + 10 + 20 + 5 + 5 = 50
 odds_40:
-    add r0,#10;
+    add r0,#10; 10 + 20 + 5 + 5 = 40
 odds_30:
-    add r0,#20;
+    add r0,#20; 20 + 5 + 5 = 30
 odds_10:
-    add r0,#5;
+    add r0,#5; 5 + 5 = 10
 odds_5:
-    add r0,#5;
+    add r0,#5; 5 = 5
 exit:     
     ldmia sp!,{r3,r4,r5,r6,r7,r8,r9,pc} 
 FreeSpaceStart:

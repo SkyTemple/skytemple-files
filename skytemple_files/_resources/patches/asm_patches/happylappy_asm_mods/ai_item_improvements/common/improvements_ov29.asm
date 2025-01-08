@@ -30,7 +30,6 @@
 ;   - Will use Ginseng on themselves, rather than being forced to throw at an ally
 ;   - Oren Berries can be used or thrown on any low HP pokemon! (The Ai may eat or throw them!!!)
 ;   - Foes will only use Trawl Orbs if a Kec shop is NOT on the floor!
-;   - Secret Easter Egg if Species is Lapras :P
 
     stmdb sp!,{r3,r4,r5,r6,r7,r8,r9,lr}; Push a bunch of registers, we need room to "function"
     mov r7,r0; Keep our precious monster pointer safe
@@ -660,7 +659,7 @@ label1:
     cmpne r1,r2;
     addne r2,#8;
     cmpne r1,r2;
-    beq odds_100;
+    beq odds_0; Fine I'll remove it Ches
     b ItemChecks;
 
 IsHailOrb:

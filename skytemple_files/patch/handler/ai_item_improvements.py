@@ -33,8 +33,8 @@ from skytemple_files.patch.handler.abstract import AbstractPatchHandler
 from skytemple_files.common.i18n_util import _
 
 MODIFIED_INSTRUCTION = 0xE8BD83F8  # ldmia all the shit
-OFFSET_EU = 0x231F29C - 0x22DCB80  # location of the instruction minus starting point of overlay 29
-OFFSET_US = 0x231E834 - 0x22DC240  # same but US HeHeHaHa
+OFFSET_EU = 0x231F29C + 12 - 0x22DCB80  # location of the instruction minus starting point of overlay 29
+OFFSET_US = 0x231E834 + 12 - 0x22DC240  # same but US HeHeHaHa
 
 ADD_TYPES_ADDRESS_NA = 0x2EAA4
 ADD_TYPES_ADDRESS_EU = 0x2EBD8

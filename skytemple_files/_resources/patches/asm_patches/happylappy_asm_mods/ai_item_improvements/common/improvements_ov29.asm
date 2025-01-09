@@ -30,12 +30,16 @@
 ;   - Will use Ginseng on themselves, rather than being forced to throw at an ally
 ;   - Oren Berries can be used or thrown on any low HP pokemon! (The Ai may eat or throw them!!!)
 ;   - Foes will only use Trawl Orbs if a Kec shop is NOT on the floor!
+;   - Embargoed enemies will not try to use items!
 
     stmdb sp!,{r3,r4,r5,r6,r7,r8,r9,lr}; Push a bunch of registers, we need room to "function"
     mov r7,r0; Keep our precious monster pointer safe
     and r5,r2,0x1; If r5 is 0x1, the item is being thrown!
     and r4,r2,0x2; If r4 is 0x2, the item is being used on an enemy!
     ldr r6,[r7,#0xb4]; Extract the monster pointer, or smthn. We'll use r6 to check the monster's data  
+    mov r3,[r6,#0xD8];
+    cmp r3,#0x6; If embargoed...
+    beq odds_0;
     mov r3, r1; Retain the Item Pointer in case we need it!
     ldrsh r1,[r1,#0x4]; Extract the Item ID.
     b label1

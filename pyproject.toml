@@ -31,7 +31,7 @@ dependencies = [
     "appdirs >= 1.4.0",
     "explorerscript >= 0.2.2, < 0.3.0",
     "skytemple-rust >= 1.8.5, < 1.9.0",
-    'pyobjc==10.3.2; sys_platform == "darwin"',
+    'pyobjc==11.0; sys_platform == "darwin"',
     "dungeon-eos==0.0.5",
 ]
 

@@ -71,20 +71,20 @@ class BmaLayerNrlDecompressor:
         if cmd < CMD_ZERO_OUT:
             # cmd encodes how many 2x12 pairs to write
             if DEBUG:
-                print(f"READ 0 - WRITE {3*(cmd+1)}")
+                print(f"READ 0 - WRITE {3 * (cmd + 1)}")
             for i in range(-1, cmd):
                 self._write(0)
         elif CMD_FILL_OUT <= cmd < CMD_COPY_BYTES:
             # cmd - CMD_FILL_OUT. Copy the next three bytes
             param = self._read(3)
             if DEBUG:
-                print(f"READ 3 - WRITE {cmd - (CMD_FILL_OUT-1)}")
+                print(f"READ 3 - WRITE {cmd - (CMD_FILL_OUT - 1)}")
             for i in range(CMD_FILL_OUT - 1, cmd):
                 self._write(param)
         else:  # elif cmd > CMD_1_COPY_BYTES:
             # cmd - CMD_COPY_BYTES. Copy the next three bytes and repeat.
             if DEBUG:
-                print(f"READ {3*(cmd - (CMD_COPY_BYTES-1))} - WRITE {3*(cmd - (CMD_COPY_BYTES-1))}")
+                print(f"READ {3 * (cmd - (CMD_COPY_BYTES - 1))} - WRITE {3 * (cmd - (CMD_COPY_BYTES - 1))}")
             for i in range(CMD_COPY_BYTES - 1, cmd):
                 param = self._read(3)
                 self._write(param)

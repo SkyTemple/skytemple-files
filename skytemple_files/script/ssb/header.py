@@ -78,7 +78,7 @@ class AbstractSsbHeader(ABC):
         return str(self)
 
     def __str__(self):
-        return f"{self.__class__.__name__}<{str({k:v for k,v in self.__dict__.items() if v  is not None})}>"
+        return f"{self.__class__.__name__}<{str({k: v for k, v in self.__dict__.items() if v is not None})}>"
 
 
 class SsbHeaderUs(AbstractSsbHeader):

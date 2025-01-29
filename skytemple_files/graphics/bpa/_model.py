@@ -87,7 +87,7 @@ class Bpa(BpaProtocol[BpaFrameInfoProtocol]):
         return cls(None)
 
     def __str__(self) -> str:
-        return f"Idx: {self.number_of_tiles}, " f"#c: {self.number_of_frames}"
+        return f"Idx: {self.number_of_tiles}, #c: {self.number_of_frames}"
 
     def get_tile(self, tile_idx: int, frame_idx: int) -> bytes:
         """Returns the tile data of tile no. tile_idx for frame frame_idx."""

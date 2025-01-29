@@ -254,7 +254,7 @@ class Patcher:
                 try:
                     if not self.is_applied(patch_name):
                         raise PatchDependencyError(
-                            f(_("The patch '{patch_name}' needs to be applied before you can " "apply '{name}'."))
+                            f(_("The patch '{patch_name}' needs to be applied before you can apply '{name}'."))
                         )
                 except ValueError as err:
                     raise PatchDependencyError(
@@ -424,7 +424,7 @@ class Patcher:
             self.add_manually(handler, tmpdir.name)
         except ValueError as ex:
             raise PatchPackageError(
-                _("The patch package does not contain an entry for the handler's patch name " "in the config.xml.")
+                _("The patch package does not contain an entry for the handler's patch name in the config.xml.")
             ) from ex
         return handler
 

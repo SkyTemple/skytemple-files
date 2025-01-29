@@ -249,9 +249,9 @@ class MappaBin(MappaBinProtocol[MappaFloor], Sir0Serializable, AutoString):
     def _read_floors(cls, read: MappaBinReadContainer, pointer: int):
         # The zeroth floor is just nulls, we omit it.
         empty = bytes(FLOOR_IDX_ENTRY_LEN)
-        assert (
-            read.data[pointer : pointer + FLOOR_IDX_ENTRY_LEN] == empty
-        ), "The first floor of a dungeon must be a null floor."
+        assert read.data[pointer : pointer + FLOOR_IDX_ENTRY_LEN] == empty, (
+            "The first floor of a dungeon must be a null floor."
+        )
         floors = []
         pointer += FLOOR_IDX_ENTRY_LEN
         floor_data = read.data[pointer : pointer + FLOOR_IDX_ENTRY_LEN]

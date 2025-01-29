@@ -124,8 +124,7 @@ class PxCompressor:
         # Verify if we overflow
         if self.input_size > 2147483647:
             raise ValueError(
-                f"PX Compression: The input data is too long {self.input_size}. "
-                f"Max size: 2147483647 [max 32bit int]"
+                f"PX Compression: The input data is too long {self.input_size}. Max size: 2147483647 [max 32bit int]"
             )
 
         # Allocate at least as much memory as the input + some extra in case of dummy compression!
@@ -156,8 +155,7 @@ class PxCompressor:
         # Validate compressed size
         if self.nb_compressed_byte_written > 65536:
             raise ValueError(
-                f"PX Compression: Compressed size {self.nb_compressed_byte_written} overflows "
-                f"16 bits unsigned integer!"
+                f"PX Compression: Compressed size {self.nb_compressed_byte_written} overflows 16 bits unsigned integer!"
             )
 
         if DEBUG:
@@ -457,7 +455,7 @@ class PxCompressor:
             self.nb_compressed_byte_written += 1
             if DEBUG:
                 print(
-                    f"Writing copy seq {self.compressed_data[insert_pos]:>08b} + {self.compressed_data[insert_pos+1]:>08b}"
+                    f"Writing copy seq {self.compressed_data[insert_pos]:>08b} + {self.compressed_data[insert_pos + 1]:>08b}"
                 )
         else:
             flag = self.control_flags[operation.type.value]

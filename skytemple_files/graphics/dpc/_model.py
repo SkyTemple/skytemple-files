@@ -121,7 +121,7 @@ class Dpc(DpcProtocol[Dpci]):
         for tm in all_tilemaps:
             if tm.pal_idx > DPL_MAX_PAL - 1:
                 raise ValueError(
-                    f(_("The image to import can only use the first 12 palettes. " "Tried to use palette {tm.pal_idx}"))
+                    f(_("The image to import can only use the first 12 palettes. Tried to use palette {tm.pal_idx}"))
                 )
         self.chunks = list(chunks(all_tilemaps, DPC_TILING_DIM * DPC_TILING_DIM))
         self.re_fill_chunks()

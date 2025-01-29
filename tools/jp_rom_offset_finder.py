@@ -290,8 +290,8 @@ def main():
                                             if blk["length"]["NA"] != blk["length"]["EU"]:
                                                 print(f">> {blk['name']} in {binary_name}")
                                                 print(
-                                                    f'-- Warning: Skipped: NA [{blk["length"]["NA"]}] '
-                                                    f'and EU [{blk["length"]["EU"]}] length not the same.'
+                                                    f"-- Warning: Skipped: NA [{blk['length']['NA']}] "
+                                                    f"and EU [{blk['length']['EU']}] length not the same."
                                                 )
                                                 continue
                                     else:

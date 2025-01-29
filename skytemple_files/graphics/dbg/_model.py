@@ -110,12 +110,7 @@ class Dbg(DbgProtocol[Dpc, Dpci, Dpl]):
         expected_height = DBG_TILING_DIM * DBG_WIDTH_AND_HEIGHT * DPCI_TILE_DIM
         if img.width != expected_width:
             raise UserValueError(
-                f(
-                    _(
-                        "Can not import map background: Width of image must match the expected width: "
-                        "{expected_width}px"
-                    )
-                )
+                f(_("Can not import map background: Width of image must match the expected width: {expected_width}px"))
             )
         if img.height != expected_height:
             raise UserValueError(

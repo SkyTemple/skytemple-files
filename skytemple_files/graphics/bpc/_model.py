@@ -494,7 +494,7 @@ class Bpc(BpcProtocol[BpcLayer, BpaProtocol]):
     def set_chunk(self, layer: int, index: int, new_tilemappings: Sequence[TilemapEntryProtocol]) -> None:
         if len(new_tilemappings) < self.tiling_width * self.tiling_height:
             raise ValueError(
-                f"The new tilemapping for this chunk must contain" f"{self.tiling_width}x{self.tiling_height} tiles."
+                f"The new tilemapping for this chunk must contain{self.tiling_width}x{self.tiling_height} tiles."
             )
         mtidx = index * self.tiling_width * self.tiling_height
         self.layers[layer].tilemap[mtidx : mtidx + 9] = new_tilemappings

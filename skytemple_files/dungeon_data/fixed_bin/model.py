@@ -376,9 +376,9 @@ class FixedFloor:
             action, repeat_times = self._read_action(data, cursor)
             cursor += 4
             actions += [action] * (repeat_times + 1)
-        assert (
-            len(actions) == max_actions
-        ), "The number of actions encoded does not match the width & height of the map."
+        assert len(actions) == max_actions, (
+            "The number of actions encoded does not match the width & height of the map."
+        )
         return actions
 
     def _read_action(self, data: bytes, action_pointer: int) -> tuple[FixedFloorActionRule, int]:

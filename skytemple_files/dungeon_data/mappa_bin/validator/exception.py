@@ -71,7 +71,7 @@ class FloorReusedError(DungeonValidatorError):
         name = (  # noqa: F841
             self.reused_of_dungeon_name
             if self.reused_of_dungeon_name is not None
-            else f'{_("dungeon")} {self.reused_of_dungeon_with_id}'
+            else f"{_('dungeon')} {self.reused_of_dungeon_with_id}"
         )
         return f(_("Re-uses floors that are already used by {name}."))
 

@@ -292,10 +292,13 @@ class ScriptCompiler:
                                 # Handle the rest
                                 new_params.append(self._parse_param(param, built_strings, built_constants))
                                 op_len += 2
-                        built_ops.append(SkyTempleSsbOperation(opcode_cursor, op_code, new_params))
+
+                        actual_stored_offset = int(opcode_cursor / 2)
+
+                        built_ops.append(SkyTempleSsbOperation(actual_stored_offset, op_code, new_params))
 
                         # Create actual offset mapping for this opcode and update source map
-                        opcode_index_mem_offset_mapping[in_op.offset] = int(opcode_cursor / 2)
+                        opcode_index_mem_offset_mapping[in_op.offset] = actual_stored_offset
 
                         bytes_written_last_rtn += op_len
                         opcode_cursor += op_len

@@ -140,7 +140,7 @@ def to_pil(
             # This happens when exporting a BPCs chunk without "loading" the BPAs, because the BPA tiles
             # take up slots after the BPC slots.
             logger.warning(
-                f"TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. " f"Replaced with 0."
+                f"TiledImage: TileMappingEntry {tile_mapping} contains invalid tile reference. Replaced with 0."
             )
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
@@ -263,12 +263,7 @@ def from_pil(
         )
     if pil.width != img_width or pil.height != img_height:
         raise UserValueError(
-            f(
-                _(
-                    "Can not convert PIL image to PMD tiled image: "
-                    "Image dimensions must be {img_width}x{img_height}px."
-                )
-            )
+            f(_("Can not convert PIL image to PMD tiled image: Image dimensions must be {img_width}x{img_height}px."))
         )
 
     # Build new palette

@@ -17,8 +17,7 @@ class OutdatedPatchDependencyError(Exception):
 
     def __str__(self):
         msg = _(
-            f"The patch {self.patch_name} cannot be applied because the following patches it depends on "
-            f"are outdated:"
+            f"The patch {self.patch_name} cannot be applied because the following patches it depends on are outdated:"
         )
         for dependency in self.outdated_dependencies:
             msg += f"\n- {dependency}"

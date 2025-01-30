@@ -93,7 +93,7 @@ class SsbFlow:
                 print(f"Checking routine {i}...")
             if len(g_self.vs) == 0 or len(g_other.vs) == 0:
                 assert len(g_self.vs) == len(g_other.vs), (
-                    f"If one graph is empty, " f"the other must be too ({self._r_info(i)})"
+                    f"If one graph is empty, the other must be too ({self._r_info(i)})"
                 )
                 continue
             self_iter = iter(self.bfs_generator(g_self.vs[0]))
@@ -104,7 +104,7 @@ class SsbFlow:
                     self_v, self_distance, self_parent = next(self_iter)
                     other_v, other_distance, other_parent = next(other_iter)
                     assert self_distance == other_distance, (
-                        f"While running BFS, the distances changed unexpectedly " f"({self._r_info(i)})."
+                        f"While running BFS, the distances changed unexpectedly ({self._r_info(i)})."
                     )
                     self._assert_same_vertex(i, self_v, other_v)
                     self._assert_same_vertex(i, self_parent, other_parent)
@@ -122,9 +122,9 @@ class SsbFlow:
         other_op: SsbOperation = other_v["op"]
         # We can't really check foreign jumps
         if isinstance(self_op, SsbForeignLabel) or isinstance(other_op, SsbForeignLabel):
-            assert isinstance(self_op, SsbForeignLabel) and isinstance(
-                other_op, SsbForeignLabel
-            ), f"If one is foreign label, both must be ({self._r_info(i)})."
+            assert isinstance(self_op, SsbForeignLabel) and isinstance(other_op, SsbForeignLabel), (
+                f"If one is foreign label, both must be ({self._r_info(i)})."
+            )
             return
         # If this is a label jump, take root.
         if hasattr(self_op, "root"):

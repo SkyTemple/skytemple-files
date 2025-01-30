@@ -339,7 +339,7 @@ def pmd2_decode(binary: bytes, *args: list[Any]) -> tuple[str, int]:
                 str += _decode_table[x]
             else:
                 raise ValueError(
-                    f"Input byte stream contains unknown characters. Can not convert. " f"First unknown char: {x}"
+                    f"Input byte stream contains unknown characters. Can not convert. First unknown char: {x}"
                 )
     return str, len_str
 

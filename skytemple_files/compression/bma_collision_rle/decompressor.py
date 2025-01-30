@@ -60,7 +60,7 @@ class BmaCollisionRleDecompressor:
         times_to_write = cmd & 0x7F
         if DEBUG:
             print(f"byte_to_write: {byte_to_write}")
-            print(f"times_to_write: {times_to_write+1}")
+            print(f"times_to_write: {times_to_write + 1}")
 
         for i in range(-1, times_to_write):
             self._write(byte_to_write)

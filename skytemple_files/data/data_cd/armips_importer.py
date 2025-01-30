@@ -69,7 +69,7 @@ class ArmipsImporter:
             except FileNotFoundError as ex:
                 raise make_user_err(
                     ArmipsNotInstalledError,
-                    _("ARMIPS could not be found. Make sure, that " "'armips' is inside your system's PATH."),
+                    _("ARMIPS could not be found. Make sure, that 'armips' is inside your system's PATH."),
                 ) from ex
 
             if retcode != 0:

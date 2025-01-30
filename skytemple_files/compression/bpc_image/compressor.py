@@ -68,7 +68,7 @@ class BpcImageCompressorOperation:
     def __str__(self):
         if self.pattern_op:
             return f"PATTERN: Repeat {self.repeats} - Where?: {self.where_pattern} - {self.byte_or_sequence}"
-        return f"COPY:    Length {self.repeats+1} - {self.byte_or_sequence}"
+        return f"COPY:    Length {self.repeats + 1} - {self.byte_or_sequence}"
 
 
 # noinspection PyAttributeOutsideInit

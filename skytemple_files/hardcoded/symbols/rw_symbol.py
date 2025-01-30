@@ -55,7 +55,7 @@ class RWSymbol(ABC):
                 if 0 in c_type.dim_sizes:
                     # Unknown or variable size, unsupported
                     raise UnsupportedTypeError(
-                        'Unsupported symbol type "' + type_str + '" due to unknown or variable ' "array size."
+                        'Unsupported symbol type "' + type_str + '" due to unknown or variable array size.'
                     )
                 else:
                     return RWArraySymbol(name, offset, type_str)
@@ -63,7 +63,7 @@ class RWSymbol(ABC):
                 if c_type.is_array_type() and c_type.base_type == "char" and 0 in c_type.dim_sizes:
                     # Unknown or variable-length string, unsupported
                     raise UnsupportedTypeError(
-                        'Unsupported symbol type "' + type_str + '" due to unknown or variable ' "array string length."
+                        'Unsupported symbol type "' + type_str + '" due to unknown or variable array string length.'
                     )
 
                 # Simplify the type if possible

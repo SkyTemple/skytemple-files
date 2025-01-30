@@ -88,20 +88,20 @@ class BpcTilemapDecompressor:
         if cmd < CMD_1_ZERO_OUT:
             # cmd encodes how many 0 words to write
             if DEBUG:
-                print(f"READ 0 - WRITE {cmd+1}")
+                print(f"READ 0 - WRITE {cmd + 1}")
             for i in range(-1, cmd):
                 self._write(0)
         elif CMD_1_FILL_OUT <= cmd < CMD_1_COPY_BYTES:
             # cmd - CMD_1_FILL_OUT is the nb of words to write with the next byte as high byte
             param = self._read() << 8
             if DEBUG:
-                print(f"READ 1 - WRITE {cmd - (CMD_1_FILL_OUT-1)}")
+                print(f"READ 1 - WRITE {cmd - (CMD_1_FILL_OUT - 1)}")
             for i in range(CMD_1_FILL_OUT - 1, cmd):
                 self._write(param)
         else:  # elif cmd > CMD_1_COPY_BYTES:
             # cmd - CMD_1_COPY_BYTES is the nb of words to write with the sequence of bytes as high byte
             if DEBUG:
-                print(f"READ {cmd - (CMD_1_COPY_BYTES-1)} - WRITE {cmd - (CMD_1_COPY_BYTES-1)}")
+                print(f"READ {cmd - (CMD_1_COPY_BYTES - 1)} - WRITE {cmd - (CMD_1_COPY_BYTES - 1)}")
             for i in range(CMD_1_COPY_BYTES - 1, cmd):
                 param = self._read() << 8
                 self._write(param)
@@ -119,7 +119,7 @@ class BpcTilemapDecompressor:
         if cmd < CMD_2_SEEK_OFFSET:
             # We skip over the nb of words indicated by the cmd
             if DEBUG:
-                print(f"READ 0 - WRITE {cmd+1}")
+                print(f"READ 0 - WRITE {cmd + 1}")
             self.bytes_written += (cmd + 1) * 2
             if self.bytes_written > self.stop_when_size:
                 raise ValueError("BPC Tilemap Decompressor: Reached EOF while writing decompressed data.")
@@ -127,13 +127,13 @@ class BpcTilemapDecompressor:
             # cmd - CMD_2_SEEK_OFFSET is the nb of words to write with the next byte as low byte
             cmd_value = self._read()
             if DEBUG:
-                print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET-1)}")
+                print(f"READ 1 - WRITE {cmd - (CMD_2_SEEK_OFFSET - 1)}")
             for i in range(CMD_2_SEEK_OFFSET - 1, cmd):
                 self._write(read_u16(self.decompressed_data, self.bytes_written) | cmd_value)
         else:  # elif cmd > CMD_2_COPY_LOW:
             # cmd - CMD_2_COPY_LOW is the nb of words to write with the sequence of bytes as low byte
             if DEBUG:
-                print(f"READ {cmd - (CMD_2_COPY_LOW-1)} - WRITE {cmd - (CMD_2_COPY_LOW-1)}")
+                print(f"READ {cmd - (CMD_2_COPY_LOW - 1)} - WRITE {cmd - (CMD_2_COPY_LOW - 1)}")
             for i in range(CMD_2_COPY_LOW - 1, cmd):
                 value_at_pos = read_u16(self.decompressed_data, self.bytes_written)
                 value_at_pos |= self._read()

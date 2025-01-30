@@ -132,9 +132,9 @@ class MappaGBin(Sir0Serializable):
         assert pointer_end > pointer_beg
         # The zeroth floor is just nulls, we omit it.
         empty = bytes(G_FLOOR_IDX_ENTRY_LEN)
-        assert (
-            read.data[pointer_beg : pointer_beg + G_FLOOR_IDX_ENTRY_LEN] == empty
-        ), "The first floor of a dungeon must be a null floor."
+        assert read.data[pointer_beg : pointer_beg + G_FLOOR_IDX_ENTRY_LEN] == empty, (
+            "The first floor of a dungeon must be a null floor."
+        )
         floors = []
         pointer_beg += 4
         for i in range(pointer_beg, pointer_end, 4):

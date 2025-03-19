@@ -88,7 +88,7 @@ full_load:
 	; Get the offset in file
 	mov r0,r7
 	mov r1, r6, lsr 0x9
-	mov r1, r1, lsl #0x9
+	mov r1, r1, lsl #0xA
 	mov r2,#0x1 ; Relative seek
 	bl FStreamSeek
 	mov r0,r7

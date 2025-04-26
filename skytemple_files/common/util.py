@@ -680,7 +680,7 @@ def delete_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
         if current_folder is None:
             raise FileNotFoundError(f(_("Folder {path} does not exist.")))
         for file in current_folder.files:
-            delete_file_in_rom(rom, path + "/" + file)
+            delete_file_in_rom(rom, path + "/" + file, True)
         for folder in current_folder.folders:
             recursive_deletion_folder(path + "/" + folder[0])
         for folder in parent_folder.folders:

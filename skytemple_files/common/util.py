@@ -705,14 +705,19 @@ def create_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
     found = False
     first_id = -1
     last_child_count = -1
-    for s_name, s_folder in sorted(parent_dir.folders, key=lambda f: f[0]):
-        first_id = s_folder.firstID
-        last_child_count = len(s_folder.files)
-        if s_name > path_list[-1]:
-            found = True
-            break
-    if not found:
-        first_id = first_id + last_child_count
+    folders = parent_dir.folders
+
+    if len(folders) > 0:
+        for s_name, s_folder in sorted(folders, key=lambda f: f[0]):
+            first_id = s_folder.firstID
+            last_child_count = len(s_folder.files)
+            if s_name > path_list[-1]:
+                found = True
+                break
+        if not found:
+            first_id = first_id + last_child_count
+    else:
+        first_id = parent_dir.firstID + len(parent_dir.files)
 
     new_folder = Folder(firstID=first_id)
     parent_dir.folders.append((path_list[-1], new_folder))

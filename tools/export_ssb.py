@@ -101,7 +101,7 @@ def process_single(file_name, static_data, rom):
 
 def handle_exception(loop, context):
     # context["message"] will always be there; but context["exception"] may not
-    print(f"Exception while converting.", file=sys.stderr)
+    print("Exception while converting.", file=sys.stderr)
     if "exception" in context:
         ex = context["exception"]
         print(

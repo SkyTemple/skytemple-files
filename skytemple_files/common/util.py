@@ -603,12 +603,40 @@ def is_binary_in_rom(rom: NintendoDSRom, binary: SectionProtocol | None) -> bool
         return False
 
 
+def delete_file_in_rom(rom: NintendoDSRom, path: str, should_delete_empty_dir: bool) -> None:
+    """Delete a file in the ROM using the requested filename"""
+    if path[0] == "/":
+        path = path[1:]
+    if path[-1] == "/":
+        path = path[:-1]
+    path_list = path.split("/")
+    dir_name = "/".join(path_list[:-1])
+    file_name = path_list[-1]
+    target_id = rom.filenames.idOf(path)
+    folder: Folder | None = rom.filenames.subfolder(dir_name) if len(path_list) > 1 else rom.filenames
+    if target_id is None or folder is None:
+        raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
+    folder.files.remove(file_name)
+
+    def recursive_decrement_folder_start_idx(rfolder: Folder, target_idx: int) -> None:
+        if rfolder != folder and rfolder.firstID >= target_idx:
+            rfolder.firstID -= 1
+        for __, sfolder in rfolder.folders:
+            recursive_decrement_folder_start_idx(sfolder, target_idx)
+
+    recursive_decrement_folder_start_idx(rom.filenames, target_id)
+    rom.files.pop(target_id)
+
+    if should_delete_empty_dir and len(folder.files) == 0 and len(folder.folders) == 0:
+        delete_folder_in_rom(rom, dir_name)
+
+
 def create_file_in_rom(rom: NintendoDSRom, path: str, data: bytes) -> None:
     """Create a file in the ROM using the requested filename"""
     path_list = path.split("/")
     dir_name = "/".join(path_list[:-1])
     file_name = path_list[-1]
-    folder: Folder | None = rom.filenames.subfolder(dir_name)
+    folder: Folder | None = rom.filenames.subfolder(dir_name) if len(path_list) > 1 else rom.filenames
     if folder is None:
         raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
     folder_first_file_id = folder.firstID
@@ -632,6 +660,37 @@ def folder_in_rom_exists(rom: NintendoDSRom, path: str) -> bool:
     return rom.filenames.subfolder(path) is not None
 
 
+def delete_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
+    """Deletes a folder in the ROM."""
+    if not folder_in_rom_exists(rom, path):
+        raise FileNotFoundError(f(_("Folder {path} does not exist.")))
+
+    def recursive_deletion_folder(path: str):
+        if path[0] == "/":
+            path = path[1:]
+        if path[-1] == "/":
+            path = path[:-1]
+        path_list = path.split("/")
+        par_dir_name = "/".join(path_list[:-1])
+        current_name = path_list[-1]
+        parent_folder: Folder | None = rom.filenames.subfolder(par_dir_name) if len(path_list) > 1 else rom.filenames
+        if parent_folder is None:
+            raise FileNotFoundError(f(_("Folder {par_dir_name} does not exist.")))
+        current_folder: Folder | None = rom.filenames.subfolder(path)
+        if current_folder is None:
+            raise FileNotFoundError(f(_("Folder {path} does not exist.")))
+        for file in current_folder.files:
+            delete_file_in_rom(rom, path + "/" + file, True)
+        for folder in current_folder.folders:
+            recursive_deletion_folder(path + "/" + folder[0])
+        for folder in parent_folder.folders:
+            if folder[0] == current_name:
+                parent_folder.folders.remove(folder)
+                break
+
+    recursive_deletion_folder(path)
+
+
 def create_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
     """Creates a folder in the ROM."""
     folder = rom.filenames.subfolder(path)
@@ -639,21 +698,26 @@ def create_folder_in_rom(rom: NintendoDSRom, path: str) -> None:
         raise FileNotFoundError(f(_("Folder {path} already exists.")))
     path_list = path.split("/")
     par_dir_name = "/".join(path_list[:-1])
-    parent_dir: Folder | None = rom.filenames.subfolder(par_dir_name)
+    parent_dir: Folder | None = rom.filenames.subfolder(par_dir_name) if len(path_list) > 1 else rom.filenames
     if parent_dir is None:
-        raise FileNotFoundError(f(_("Folder {dir_name} does not exist.")))
+        raise FileNotFoundError(f(_("Folder {par_dir_name} does not exist.")))
 
     found = False
     first_id = -1
     last_child_count = -1
-    for s_name, s_folder in sorted(parent_dir.folders, key=lambda f: f[0]):
-        first_id = s_folder.firstID
-        last_child_count = len(s_folder.files)
-        if s_name > path_list[-1]:
-            found = True
-            break
-    if not found:
-        first_id = first_id + last_child_count
+    folders = parent_dir.folders
+
+    if len(folders) > 0:
+        for s_name, s_folder in sorted(folders, key=lambda f: f[0]):
+            first_id = s_folder.firstID
+            last_child_count = len(s_folder.files)
+            if s_name > path_list[-1]:
+                found = True
+                break
+        if not found:
+            first_id = first_id + last_child_count
+    else:
+        first_id = parent_dir.firstID + len(parent_dir.files)
 
     new_folder = Folder(firstID=first_id)
     parent_dir.folders.append((path_list[-1], new_folder))

@@ -6,6 +6,7 @@ Required packages (pip install):
 - skytemple-files
 - tqdm
 """
+
 #  Copyright 2022 Capypara and the SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
@@ -58,11 +59,7 @@ async def main(executor, rom_file):
     awaitables = []
     for i, file_name in enumerate(get_files_from_rom_with_extension(rom, "ssb")):
         # Run multiple in parallel with asyncio executors.
-        awaitables.append(
-            loop.run_in_executor(
-                executor, process_single, file_name, static_data, rom
-            )
-        )
+        awaitables.append(loop.run_in_executor(executor, process_single, file_name, static_data, rom))
 
     print("Exporting scripts...")
     pending = awaitables
@@ -108,11 +105,7 @@ def handle_exception(loop, context):
     if "exception" in context:
         ex = context["exception"]
         print(
-            "".join(
-                traceback.format_exception(
-                    etype=type(ex), value=ex, tb=ex.__traceback__
-                )
-            ),
+            "".join(traceback.format_exception(etype=type(ex), value=ex, tb=ex.__traceback__)),
             file=sys.stderr,
         )
     else:

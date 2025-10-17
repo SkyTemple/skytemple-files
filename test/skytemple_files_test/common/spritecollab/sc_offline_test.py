@@ -1,6 +1,6 @@
 """SpriteCollab client tests that use a local schema to mock the data."""
 
-#  Copyright 2020-2022 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2025 SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

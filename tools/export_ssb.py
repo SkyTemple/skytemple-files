@@ -7,7 +7,7 @@ Required packages (pip install):
 - tqdm
 """
 
-#  Copyright 2022 Capypara and the SkyTemple Contributors
+#  Copyright 2022-2025 SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

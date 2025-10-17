@@ -723,7 +723,7 @@ copy_of_type = GraphQLObjectType(
 #
 #   """
 #   Discord name and discriminator in the form Name#Discriminator (eg.
-#   Capypara#7887), if this is a credit for a Discord profile, and the server can
+#   Username#1234), if this is a credit for a Discord profile, and the server can
 #   resolve the ID to a Discord profile.
 #   """
 #   discordHandle: String

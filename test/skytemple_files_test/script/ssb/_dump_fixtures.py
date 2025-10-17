@@ -2,7 +2,7 @@ import os
 import shutil
 from glob import glob
 
-p = "/home/marco/dev/skytemple/skytemple/__scripts/"
+p = "/home/xxxx/dev/skytemple/skytemple/__scripts/"
 out = os.path.join(os.path.dirname(__file__), "fixtures")
 os.makedirs(out, exist_ok=True)
 

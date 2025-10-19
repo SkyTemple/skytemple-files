@@ -1,6 +1,6 @@
 """Utility module to import SpriteBot / SpriteCollab portrait sheets to Kao."""
 
-#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2025 SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

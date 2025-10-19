@@ -6,7 +6,7 @@ Types with expensive fields are split-off into partial types..
 
 from __future__ import annotations
 
-#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2025 SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

@@ -1,6 +1,6 @@
 """Module for editing the hardcoded table mapping of ground levels to dungeon tilesets."""
 
-#  Copyright 2020-2024 Capypara and the SkyTemple Contributors
+#  Copyright 2020-2025 SkyTemple Contributors
 #
 #  This file is part of SkyTemple.
 #

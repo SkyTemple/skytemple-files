@@ -1369,6 +1369,13 @@
 	  </OpenBin>
         </Patch>
 
+        <!-- A patch to fix the quicksave sprite glitch-->
+        <Patch id="FixQuicksaveSpriteGlitch" >
+          <OpenBin filepath="overlay/overlay_0030.bin">
+	  	<Include filename ="anonymous_asm_mods/fix_qs_sprite_glitch/selector_overlay30.asm"/>
+	  </OpenBin>
+        </Patch>
+
         <Patch id="TeamStatsPain">
           <OpenBin filepath="overlay/overlay_0010.bin">
 	  	<Include filename ="chesyon_asm_mods/team_stats_pain/selector_overlay10.asm"/>

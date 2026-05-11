@@ -121,6 +121,9 @@ from skytemple_files.patch.handler.fix_memory_softlock import (
     FixMemorySoftlockPatchHandler,
 )
 from skytemple_files.patch.handler.fix_nocash_saves import FixNocashSavesPatchHandler
+from skytemple_files.patch.handler.fix_qs_sprite_glitch import (
+    FixQuicksaveSpriteGlitchPatchHandler,
+)
 from skytemple_files.patch.handler.move_growth import MoveGrowthPatchHandler
 from skytemple_files.patch.handler.move_shortcuts import MoveShortcutsPatch
 from skytemple_files.patch.handler.negative_enemy_density import (
@@ -212,6 +215,7 @@ class PatchType(Enum):
     NEGATIVE_ENEMY_DENSITY = NegativeEnemyDensityPatchHandler
     REMOVE_BODY_SIZE_CHECK = RemoveBodySizeCheckPatchHandler
     FAST_CHIMECHO = FastChimechoPatchHandler
+    FIX_QS_SPRITE_GLITCH = FixQuicksaveSpriteGlitchPatchHandler
     TEAM_STATS_PAIN = TeamStatsPainPatchHandler
 
 

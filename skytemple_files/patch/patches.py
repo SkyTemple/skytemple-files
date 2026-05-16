@@ -55,6 +55,10 @@ from skytemple_files.patch.handler.add_type import AddTypePatchHandler
 from skytemple_files.patch.handler.add_key_check import (
     AddKeyCheckPatchHandler,
 )
+
+from skytemple_files.patch.handler.ai_item_optimizations import AiItemOptimizationsHandler
+from skytemple_files.patch.handler.ai_item_improvements import AiItemImprovementsHandler
+
 from skytemple_files.patch.handler.allow_unrecruitable_mons import (
     AllowUnrecruitableMonsPatchHandler,
 )
@@ -217,6 +221,8 @@ class PatchType(Enum):
     FAST_CHIMECHO = FastChimechoPatchHandler
     FIX_QS_SPRITE_GLITCH = FixQuicksaveSpriteGlitchPatchHandler
     TEAM_STATS_PAIN = TeamStatsPainPatchHandler
+    AI_ITEM_OPTIMIZATONS = AiItemOptimizationsHandler
+    AI_ITEM_IMPROVEMENTS = AiItemImprovementsHandler
 
 
 class Patcher:

@@ -17,6 +17,7 @@
 # mypy: ignore-errors
 from __future__ import annotations
 
+from functools import reduce
 from io import BytesIO
 
 
@@ -58,39 +59,74 @@ def ExportWan(wan):
 
     padUntilDiv(out_file, b"\xaa", 4)
 
+    def flushImgStatus(imgTable, buffer, allPx, mstatus, maddr, mlen):
+        if mlen <= 0:
+            return
+        if mstatus == 0:
+            imgTable.append((-1, mlen))
+        elif mstatus == 1:
+            imgTable.append((maddr, mlen))
+        elif mstatus == 2:
+            imgTable.append((len(buffer), mlen))
+            buffer.extend(allPx[maddr : maddr + mlen])
+
     # img data
-    ptrImgs = []
+    imgTable = []
+    buffer = []
+    CHUNK_LEN = 32
     for img in wan.imgData:
         zSort = img.zSort
-        imgTable = []
         # write pixel data
-        for pxStrip in img.imgPx:
-            hasNonZero = False
-            for px in pxStrip:
-                if px > 0:
-                    hasNonZero = True
-                    break
-            if hasNonZero:
-                imgTable.append((out_file.tell(), len(pxStrip)))
-                for px in pxStrip:
-                    out_file.write(px.to_bytes(1, "little"))
+        allPx = reduce(lambda x, y: x + y, img.imgPx)
+        mstatus = -1
+        mlen = 0
+        maddr = 0
+        for b in range(0, len(allPx), CHUNK_LEN):
+            t = allPx[b : b + CHUNK_LEN]
+            nstatus = 2
+            naddr = b
+            if sum(t) == 0:
+                nstatus = 0
+            elif mstatus == 1 and buffer[maddr + mlen : maddr + mlen + CHUNK_LEN] == t:
+                nstatus = 1
+                naddr = maddr + mlen
             else:
-                imgTable.append((0, len(pxStrip)))
+                for c in range(0, len(buffer), CHUNK_LEN):
+                    if buffer[c : c + CHUNK_LEN] == t:
+                        nstatus = 1
+                        naddr = c
+                        break
+            if mstatus == nstatus and naddr == maddr + mlen:
+                mlen += CHUNK_LEN
+            else:
+                flushImgStatus(imgTable, buffer, allPx, mstatus, maddr, mlen)
+                mstatus = nstatus
+                maddr = naddr
+                mlen = CHUNK_LEN
+        flushImgStatus(imgTable, buffer, allPx, mstatus, maddr, mlen)
+        imgTable.append((-1, -1))
 
-        ptrImgs.append(out_file.tell())
-        for img_write in imgTable:
-            # pixelSource
-            if img_write[0] == 0:
-                out_file.write(img_write[0].to_bytes(4, "little"))
+    bufferStart = out_file.tell()
+    out_file.write(bytes(buffer))
+    ptrImgs = []
+    newImg = True
+    for img_ptr, img_size in imgTable:
+        if newImg:
+            newImg = False
+            ptrImgs.append(out_file.tell())
+        if img_size < 0:
+            newImg = True
+            out_file.write(bytes(12))
+        else:
+            if img_ptr < 0:
+                out_file.write(bytes(4))
             else:
-                write_ptr(out_file, img_write[0], sir0_ptrs)
+                write_ptr(out_file, bufferStart + img_ptr, sir0_ptrs)
             # amt
-            out_file.write(img_write[1].to_bytes(2, "little"))
             # unk#14
-            out_file.write((0).to_bytes(2, "little"))
+            out_file.write(img_size.to_bytes(4, "little"))
             # unk#2
             out_file.write(zSort.to_bytes(4, "little"))
-        out_file.write((0).to_bytes(12, "little"))
 
     # palette data
     ptrPaletteDataBlock = out_file.tell()

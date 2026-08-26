@@ -25,7 +25,7 @@
 	mov  r1,r7
 	str r3,[r13]
 	str r9,[r13, #+0x8]
-	ldrsh r9,[r8, #+0xe]
+	nop
 	nop
 	ldr r3,[r15, #+0x80]
 	str r9,[r13, #+0x4]

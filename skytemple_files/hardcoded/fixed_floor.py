@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any
+from typing import Any, Self
 
 from pmdsky_debug_py.protocol import Overlay29Protocol, Symbol
 from range_typed_integers import u32_checked, u32, u16, u8
@@ -184,23 +184,35 @@ class MonsterSpawnType(Enum):
     def __init__(self, _: int, description: str):
         self.description = description
 
+    @classmethod
+    def get(cls, value: u8) -> Self | None:
+        """Return the entry corresponding to the value if present, None otherwise"""
+        try:
+            return cls(value)
+        except ValueError:
+            return None
+
 
 class MonsterSpawn(AutoString):
     md_idx: u16
     stats_entry: u8
+    behavior_id: u8
 
-    def __init__(self, md_idx: u16, stats_entry: u8, enemy_settings: u8):
+    def __init__(self, md_idx: u16, stats_entry: u8, behavior_id: u8):
         self.md_idx = md_idx
         self.stats_entry = stats_entry
         # 3: (?) 6 if the pokémon is an enemy, 0xA if it's an ally, 9 if the only thing that is being spawned is
         # an item. If it's 6 or 0xA, the stats of the pokémon are determined by the stats entry specified on byte 2.
-        self.enemy_settings = MonsterSpawnType(enemy_settings)  # type: ignore
+        self.behavior_id = behavior_id
+
+    def get_spawn_type(self):
+        return MonsterSpawnType.get(self.behavior_id)
 
     def to_bytes(self) -> bytes:
         buffer = bytearray(4)
         write_u16(buffer, self.md_idx, 0)
         write_u8(buffer, self.stats_entry, 2)
-        write_u8(buffer, u8(self.enemy_settings.value), 3)
+        write_u8(buffer, self.behavior_id, 3)
         return buffer
 
     def __eq__(self, other: object) -> bool:
@@ -209,7 +221,7 @@ class MonsterSpawn(AutoString):
         return (
             self.md_idx == other.md_idx
             and self.stats_entry == other.stats_entry
-            and self.enemy_settings == other.enemy_settings
+            and self.behavior_id == other.behavior_id
         )
 
 

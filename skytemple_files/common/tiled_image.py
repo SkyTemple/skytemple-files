@@ -145,7 +145,7 @@ def to_pil(
             tile_data = tiles[0]
         # Since our PIL image has one big flat palette, we need to calculate the offset to that
         pal_start_offset = number_of_cols_per_pal * tile_mapping.pal_idx
-        for idx, pal in enumerate(iter_fn(tile_data)):
+        for idx, pal in enumerate(iter_fn(bytes(tile_data))):
             real_pal = pal_start_offset + pal
             x_in_tile, y_in_tile = _px_pos_flipped(
                 idx % tile_dim,
@@ -164,7 +164,7 @@ def to_pil(
 
     im = Image.frombuffer("P", (img_width, img_height), pil_img_data, "raw", "P", 0, 1)
 
-    im.putpalette(chain.from_iterable(palettes))
+    im.putpalette(list(chain.from_iterable(palettes)))
     return im
 
 
@@ -267,7 +267,7 @@ def from_pil(
         )
 
     # Build new palette
-    new_palette = memoryview(pil.palette.palette)
+    new_palette = pil.palette.palette
     palettes: list[list[int]] = []
     for i, col in enumerate(new_palette):
         if i % (single_palette_size * 3) == 0:

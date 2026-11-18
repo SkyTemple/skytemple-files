@@ -15,6 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with SkyTemple.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import annotations
+from PIL.Image import Dither
 
 import atexit
 import bisect
@@ -758,7 +759,7 @@ def simple_quant(img: Image.Image, can_have_transparency: bool = True) -> Image.
         if img.mode != "RGB":
             img = img.convert("RGB")
         transparency_map = [False for px in img.getdata()]
-    qimg = img.quantize(15, dither=0)
+    qimg = img.quantize(15, dither=Dither.NONE)
     # Get the original palette and add the transparent color
     qimg.putpalette([0, 0, 0] + qimg.getpalette()[:762])  # type: ignore
     # Shift up all pixel values by 1 and add the transparent pixels

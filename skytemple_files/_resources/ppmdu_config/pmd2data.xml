@@ -978,9 +978,11 @@
 	  	<Include filename ="anonymous_asm_mods/dungeon_interrupt/selector_overlay29.asm"/>
 	  </OpenBin>
 	  <Parameters>
-            <Param name="InterruptOnly" label="Only interruptions don't heal HP" type="select">
-              <Option label="Yes" type="int">1</Option>
-              <Option label="No" type="int">0</Option>
+            <Param name="InterruptHeal" label="Heal team when exiting dungeon:" type="select">
+              <Option label="Never" type="int">0</Option>
+              <Option label="Only on interruptions" type="int">1</Option>
+              <Option label="Only on normal completion" type="int">2</Option>
+              <Option label="Always" type="int">3</Option>
             </Param>
           </Parameters>
         </Patch>

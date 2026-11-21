@@ -47,8 +47,12 @@ CheckEndDungeon:
 	ldr r1,=interrupted
 	ldrb r0,[r1]
 	cmp r0,#1
-	.if InterruptOnly == 1
+	.if InterruptHeal == 1
+		bleq RefillTeam
+	.elseif InterruptHeal == 2
 		blne RefillTeam
+	.elseif InterruptHeal == 3
+		bl RefillTeam
 	.else
 		nop
 	.endif

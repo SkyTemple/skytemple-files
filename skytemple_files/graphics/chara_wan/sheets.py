@@ -34,6 +34,8 @@ from skytemple_files.common.xml_util import prettify
 from skytemple_files.graphics.chara_wan.model import (
     DEBUG_PRINT,
     DIM_TABLE,
+    DRAW_CENTER_X,
+    DRAW_CENTER_Y,
     MINUS_FRAME,
     TEX_SIZE,
     AnimStat,
@@ -44,9 +46,6 @@ from skytemple_files.graphics.chara_wan.model import (
     WanFile,
 )
 from skytemple_files.user_error import UserValueError
-
-DRAW_CENTER_X = 0
-DRAW_CENTER_Y = -4
 
 MAX_ANIMS = 44
 
@@ -218,41 +217,27 @@ def ImportSheets(inDir, strict=False):
 
             if anim_img.size[0] % tileSize[0] != 0 or anim_img.size[1] % tileSize[1] != 0:
                 raise UserValueError(
-                    "Sheet for {4} is {0}x{1} pixels and is not divisible by {2}x{3} in xml!".format(
-                        anim_img.size[0],
-                        anim_img.size[1],
-                        tileSize[0],
-                        tileSize[1],
-                        anim_name,
-                    )
+                    f"Sheet for {anim_name} is {anim_img.size[0]}x{anim_img.size[1]} pixels and is not divisible by {tileSize[0]}x{tileSize[1]} in xml!"
                 )
 
             total_frames = anim_img.size[0] // tileSize[0]
             # check against inconsistent duration counts
             if total_frames != len(durations):
                 raise UserValueError(
-                    "Number of frames in {} does not match count of durations ({}) specified in xml!".format(
-                        anim_name, len(durations)
-                    )
+                    f"Number of frames in {anim_name} does not match count of durations ({len(durations)}) specified in xml!"
                 )
 
             if anim_stats[idx].rushFrame >= len(durations):
                 raise UserValueError(
-                    "RushFrame of {} is greater than the number of frames ({}) in {}!".format(
-                        anim_stats[idx].rushFrame, len(durations), anim_name
-                    )
+                    f"RushFrame of {anim_stats[idx].rushFrame} is greater than the number of frames ({len(durations)}) in {anim_name}!"
                 )
             if anim_stats[idx].hitFrame >= len(durations):
                 raise UserValueError(
-                    "HitFrame of {} is greater than the number of frames ({}) in {}!".format(
-                        anim_stats[idx].hitFrame, len(durations), anim_name
-                    )
+                    f"HitFrame of {anim_stats[idx].hitFrame} is greater than the number of frames ({len(durations)}) in {anim_name}!"
                 )
             if anim_stats[idx].returnFrame >= len(durations):
                 raise UserValueError(
-                    "ReturnFrame of {} is greater than the number of frames ({}) in {}!".format(
-                        anim_stats[idx].returnFrame, len(durations), anim_name
-                    )
+                    f"ReturnFrame of {anim_stats[idx].returnFrame} is greater than the number of frames ({len(durations)}) in {anim_name}!"
                 )
 
             group = []
@@ -562,61 +547,15 @@ def ExportSheets(outDir, sdwImg, wan, anim_name_map):
             os.makedirs(os.path.join(outDir, "_frames"))
 
     anim_stats = []
-    maxFrameBounds = (10000, 10000, -10000, -10000)
-    # get max bounds across all frames
-    for idx, metaFrame in enumerate(wan.frameData):
-        for mt_idx, metaFramePiece in enumerate(metaFrame):
-            # update bounds based on image
-            fBounds = metaFramePiece.GetBounds()
-            maxFrameBounds = exUtils.combineExtents(maxFrameBounds, fBounds)
-
-        # update bounds based on offsets
-        offset = wan.offsetData[idx]
-        maxFrameBounds = exUtils.combineExtents(maxFrameBounds, offset.GetBounds())
-
-    # round up to nearest x8
-    maxFrameBounds = exUtils.centerBounds(maxFrameBounds, (DRAW_CENTER_X, DRAW_CENTER_Y))
-    maxFrameBounds = exUtils.roundUpBox(maxFrameBounds)
+    maxFrameBounds = wan.get_max_bounds()
 
     # create all frames, and visual representation of offsets tied to each frame
     frames = []
     offsets = []
     frames_bounds_tight = []
     piece_imgs = {}
-    for idx, metaFrame in enumerate(wan.frameData):
-        draw_queue = []
-        for mt_idx, metaFramePiece in enumerate(metaFrame):
-            # create the piece
-            parent_idx = MINUS_FRAME
-            if metaFramePiece.imgIndex == MINUS_FRAME:
-                prev_idx = mt_idx - 1
-                while (
-                    metaFrame[prev_idx].imgIndex == MINUS_FRAME
-                    or metaFrame[prev_idx].getTileNum() != metaFramePiece.getTileNum()
-                ):
-                    prev_idx = prev_idx - 1
-                parent_idx = metaFrame[prev_idx].imgIndex
-            else:
-                parent_idx = metaFramePiece.imgIndex
-            if parent_idx in piece_imgs:
-                img = piece_imgs[parent_idx]
-            else:
-                img = metaFramePiece.GeneratePiece(wan.imgData, wan.customPalette, parent_idx)
-                piece_imgs[parent_idx] = img
-            draw_queue.append((img, metaFramePiece))
-
-        # create an image to represent the full metaFrameGroup
-        groupImg = Image.new(
-            "RGBA",
-            (
-                maxFrameBounds[2] - maxFrameBounds[0],
-                maxFrameBounds[3] - maxFrameBounds[1],
-            ),
-            (0, 0, 0, 0),
-        )
-        while len(draw_queue) > 0:
-            img, metaFramePiece = draw_queue.pop()
-            metaFramePiece.DrawOn(groupImg, img, (maxFrameBounds[0], maxFrameBounds[1]))
+    for idx in range(len(wan.frameData)):
+        groupImg = wan.draw_meta_frame(maxFrameBounds, idx, piece_imgs)
         if DEBUG_PRINT:
             groupImg.save(os.path.join(outDir, "_frames", "F-" + format(idx, "02d") + ".png"))
         frames.append(groupImg)

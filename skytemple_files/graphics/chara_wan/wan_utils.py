@@ -13,11 +13,11 @@
 from __future__ import annotations
 
 from skytemple_files.graphics.chara_wan.model import (
+    MINUS_FRAME,
     FrameOffset,
     ImgPiece,
     MetaFramePiece,
     SequenceFrame,
-    MINUS_FRAME,
 )
 
 

@@ -29,6 +29,9 @@ from skytemple_files.container.sir0.sir0_serializable import Sir0Serializable
 CENTER_X = 256
 CENTER_Y = 512
 
+DRAW_CENTER_X = 0
+DRAW_CENTER_Y = -4
+
 MINUS_FRAME = -1
 
 OBJMODE_NORMAL = 0
@@ -123,6 +126,60 @@ class WanFile(Sir0Serializable):
                     cur_tile += blocks_occupied
             max_blocks = max(max_blocks, cur_tile)
         return max_blocks
+
+    def get_max_bounds(self):
+        max_frame_bounds = (10000, 10000, -10000, -10000)
+        # get max bounds across all frames
+        for idx, meta_frame in enumerate(self.frameData):
+            for mt_idx, meta_frame_piece in enumerate(meta_frame):
+                # update bounds based on image
+                f_bounds = meta_frame_piece.GetBounds()
+                max_frame_bounds = exUtils.combineExtents(max_frame_bounds, f_bounds)
+
+            # update bounds based on offsets
+            offset = self.offsetData[idx]
+            max_frame_bounds = exUtils.combineExtents(max_frame_bounds, offset.GetBounds())
+        # round up to nearest x8
+        max_frame_bounds = exUtils.centerBounds(max_frame_bounds, (DRAW_CENTER_X, DRAW_CENTER_Y))
+        max_frame_bounds = exUtils.roundUpBox(max_frame_bounds)
+        return max_frame_bounds
+
+    def draw_meta_frame(self, max_frame_bounds, idx, piece_imgs=None):
+        meta_frame = self.frameData[idx]
+        if piece_imgs is None:
+            piece_imgs = {}
+        draw_queue = []
+        for mt_idx, meta_frame_piece in enumerate(meta_frame):
+            # create the piece
+            if meta_frame_piece.imgIndex == MINUS_FRAME:
+                prev_idx = mt_idx - 1
+                while (
+                    meta_frame[prev_idx].imgIndex == MINUS_FRAME
+                    or meta_frame[prev_idx].getTileNum() != meta_frame_piece.getTileNum()
+                ):
+                    prev_idx = prev_idx - 1
+                parent_idx = meta_frame[prev_idx].imgIndex
+            else:
+                parent_idx = meta_frame_piece.imgIndex
+            if parent_idx in piece_imgs:
+                img = piece_imgs[parent_idx]
+            else:
+                img = meta_frame_piece.GeneratePiece(self.imgData, self.customPalette, parent_idx)
+                piece_imgs[parent_idx] = img
+            draw_queue.append((img, meta_frame_piece))
+        # create an image to represent the full metaFrameGroup
+        group_img = Image.new(
+            "RGBA",
+            (
+                max_frame_bounds[2] - max_frame_bounds[0],
+                max_frame_bounds[3] - max_frame_bounds[1],
+            ),
+            (0, 0, 0, 0),
+        )
+        while len(draw_queue) > 0:
+            img, meta_frame_piece = draw_queue.pop()
+            meta_frame_piece.DrawOn(group_img, img, (max_frame_bounds[0], max_frame_bounds[1]))
+        return group_img
 
     # This will accurately load all sir0 found in m_ground, m_attack, and monster.bin with a few exceptions:
     # m_ground_0546_0xb01840.wan - Armaldo.  Metaframe Unk#0 is a nonzero

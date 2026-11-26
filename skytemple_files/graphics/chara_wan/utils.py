@@ -34,7 +34,7 @@ class MultipleOffsetError(UserValueError):
         super().__init__(self.message)
 
 
-def centerBounds(bounds: Bounds, center: Bounds) -> Bounds:
+def centerBounds(bounds: Bounds, center: Point) -> Bounds:
     minX = min(bounds[0] - center[0], center[0] - bounds[2])
     minY = min(bounds[1] - center[1], center[1] - bounds[3])
 
@@ -82,14 +82,10 @@ def getCoveredBounds(inImg: Image.Image, max_box: Bounds | None = None) -> Bound
     for i in range(max_box[0], max_box[2]):
         for j in range(max_box[1], max_box[3]):
             if datas[i + j * inImg.size[0]][3] != 0:
-                if i < minX:
-                    minX = i
-                if i > maxX:
-                    maxX = i
-                if j < minY:
-                    minY = j
-                if j > maxY:
-                    maxY = j
+                minX = min(minX, i)
+                maxX = max(maxX, i)
+                minY = min(minY, j)
+                maxY = max(maxY, j)
     abs_bounds = (minX, minY, maxX + 1, maxY + 1)
     return addToBounds(abs_bounds, (max_box[0], max_box[1]), True)
 
